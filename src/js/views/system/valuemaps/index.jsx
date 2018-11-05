@@ -11,13 +11,14 @@ import search from '../../../hocomponents/search';
 import withPane from '../../../hocomponents/pane';
 import { resourceSelector, querySelector } from '../../../selectors';
 import actions from '../../../store/api/actions';
-import Toolbar from '../../../components/toolbar';
 import Box from '../../../components/box';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Search from '../../../containers/search';
 import Table from './table';
 import Pane from './detail';
 import titleManager from '../../../hocomponents/TitleManager';
+import Headbar from '../../../components/Headbar';
+import Pull from '../../../components/Pull';
 
 type Props = {
   onSearchChange: Function,
@@ -39,16 +40,18 @@ const ValueMaps: Function = ({
   paneId,
 }: Props): React.Element<any> => (
   <div>
-    <Toolbar marginBottom>
+    <Headbar>
       <Breadcrumbs>
-        <Crumb>Valuemaps</Crumb>
+        <Crumb active>Valuemaps</Crumb>
       </Breadcrumbs>
-      <Search
-        onSearchUpdate={onSearchChange}
-        defaultValue={defaultSearchValue}
-        resource="valuemaps"
-      />
-    </Toolbar>
+      <Pull right>
+        <Search
+          onSearchUpdate={onSearchChange}
+          defaultValue={defaultSearchValue}
+          resource="valuemaps"
+        />
+      </Pull>
+    </Headbar>
     <Box top noPadding>
       <Table
         collection={collection}

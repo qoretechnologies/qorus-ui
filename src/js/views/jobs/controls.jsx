@@ -37,28 +37,33 @@ type Props = {
   week: string,
   scheduleOnly?: boolean,
   schedText: string,
+  remote: boolean,
+  big: boolean,
 };
 
-const ServiceControls: Function = ({
+const JobControls: Function = ({
   handleEnableClick,
   handleActivateClick,
   handleResetClick,
   handleRunClick,
   handleScheduleClick,
   handleExpiryClick,
+  // handleRemoteClick,
   active,
   enabled,
   scheduleOnly,
   schedText,
-}: Props): React.Element<any> =>
+  big,
+}: // remote,
+Props): React.Element<any> =>
   scheduleOnly ? (
     <div>
       <span>{schedText}</span>{' '}
       <Button
         text="Reschedule"
+        big={big}
         iconName="time"
         onClick={handleScheduleClick}
-        className="pt-small"
       />
     </div>
   ) : (
@@ -68,38 +73,33 @@ const ServiceControls: Function = ({
         iconName="power"
         intent={enabled ? Intent.SUCCESS : Intent.DANGER}
         onClick={handleEnableClick}
-        className="pt-small"
+        big={big}
       />
       <Button
         title={active ? 'Deactivate' : 'Activate'}
-        iconName={active ? 'small-tick' : 'remove'}
+        iconName={active ? 'small-tick' : 'cross'}
         intent={active ? Intent.PRIMARY : Intent.NONE}
         onClick={handleActivateClick}
-        className="pt-small"
+        big={big}
       />
       <Button
         title="Reset"
         iconName="refresh"
+        big={big}
         onClick={handleResetClick}
-        className="pt-small"
       />
-      <Button
-        title="Run"
-        iconName="play"
-        onClick={handleRunClick}
-        className="pt-small"
-      />
+      <Button title="Run" iconName="play" big={big} onClick={handleRunClick} />
       <Button
         title="Reschedule"
         iconName="time"
         onClick={handleScheduleClick}
-        className="pt-small"
+        big={big}
       />
       <Button
         title="Set expiry"
         iconName="tag"
         onClick={handleExpiryClick}
-        className="pt-small"
+        big={big}
       />
     </ButtonGroup>
   );
@@ -137,6 +137,12 @@ export default compose(
     },
     handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
       dispatchAction(actions.jobs.jobsAction, 'reset', id);
+    },
+    handleRemoteClick: ({
+      dispatchAction,
+      id,
+    }: Props): Function => (): void => {
+      dispatchAction(actions.jobs.jobsAction, 'remote', id);
     },
     handleScheduleClick: ({
       optimisticDispatch,
@@ -177,5 +183,5 @@ export default compose(
       );
     },
   }),
-  pure(['enabled', 'active', 'id'])
-)(ServiceControls);
+  pure(['enabled', 'active', 'id', 'big'])
+)(JobControls);

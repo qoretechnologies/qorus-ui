@@ -3,7 +3,6 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Intent } from '@blueprintjs/core';
 
 import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
@@ -17,6 +16,7 @@ type Props = {
   handleToggleEnabledClick: Function,
   handleResetClick: Function,
   handleRemoteClick: Function,
+  big: boolean,
 };
 
 const WorkflowControls: Function = ({
@@ -25,20 +25,28 @@ const WorkflowControls: Function = ({
   handleToggleEnabledClick,
   handleResetClick,
   handleRemoteClick,
+  big,
 }: Props): React.Element<any> => (
-  <Controls>
+  <Controls marginRight={big ? 3 : 0}>
     <Control
       title="Enable / Disable"
       iconName="power"
-      intent={enabled ? Intent.SUCCESS : Intent.DANGER}
+      btnStyle={enabled ? 'success' : 'danger'}
       onClick={handleToggleEnabledClick}
+      big={big}
     />
-    <Control title="Reset" iconName="refresh" onClick={handleResetClick} />
+    <Control
+      big={big}
+      title="Reset"
+      iconName="refresh"
+      onClick={handleResetClick}
+    />
     <Control
       title="Remote"
       icon="globe"
       btnStyle={remote ? 'info' : 'default'}
       onClick={handleRemoteClick}
+      big={big}
     />
   </Controls>
 );

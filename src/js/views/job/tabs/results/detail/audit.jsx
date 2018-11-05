@@ -11,6 +11,7 @@ import {
   Td,
 } from '../../../../../components/new_table';
 import showIfPassed from '../../../../../hocomponents/show-if-passed';
+import NoData from '../../../../../components/nodata';
 
 const AuditTable = ({ audit = [] }: { audit: Array<Object> }) => (
   <Table striped condensed bordered>
@@ -49,5 +50,5 @@ const AuditTable = ({ audit = [] }: { audit: Array<Object> }) => (
 
 export default showIfPassed(
   ({ audit }) => audit && audit.length > 0,
-  <div>No audit data</div>
+  <NoData />
 )(AuditTable);

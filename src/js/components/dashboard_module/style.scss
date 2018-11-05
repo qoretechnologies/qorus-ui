@@ -1,15 +1,14 @@
 .masonryTriple .dashboard-module {
-  width: 32%;
+  width: 32.8%;
 }
 
 .masonryDouble .dashboard-module {
-  width: 49%;
+  width: 49.7%;
 }
 
 .dashboard-module {
   background-color: white;
-  padding: 15px;
-  // margin-top: 15px;
+  padding: 10px;
   border-radius: 3px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.04);
   clear: both;
@@ -368,4 +367,8 @@
 
 .module-wrapper {
   overflow: hidden;
+}
+
+.masonry {
+  margin-bottom: 10px;
 }

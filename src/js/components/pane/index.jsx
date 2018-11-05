@@ -1,10 +1,12 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Button } from '@blueprintjs/core';
 
 import ResizeHandle from '../resize/handle';
-import { Breadcrumbs, Crumb } from '../breadcrumbs';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../breadcrumbs';
+import Headbar from '../Headbar';
+import Pull from '../Pull';
+import { Controls, Control } from '../controls';
 
 type Props = {
   width?: number,
@@ -12,6 +14,7 @@ type Props = {
   children: any,
   onResize?: Function,
   title?: string,
+  tabs?: Object,
 };
 
 const Pane: Function = ({
@@ -20,26 +23,30 @@ const Pane: Function = ({
   children,
   onResize,
   title,
+  tabs,
 }: Props) => (
   <div className="pane right" style={{ width }}>
-    <div className="pane-header">
+    <Headbar>
       {title && (
-        <Breadcrumbs>
+        <Breadcrumbs icon="list-detail-view">
           <Crumb active>{title}</Crumb>
+          {tabs && (
+            <CrumbTabs
+              tabs={tabs.tabs}
+              queryIdentifier={tabs.queryIdentifier}
+            />
+          )}
         </Breadcrumbs>
       )}
-      <div className="pull-right">
-        <Button
-          text="Close"
-          iconName="cross"
-          onClick={onClose}
-          className="pt-small"
-        />
-      </div>
-    </div>
+      <Pull right>
+        <Controls>
+          <Control text="Close" iconName="cross" onClick={onClose} big />
+        </Controls>
+      </Pull>
+    </Headbar>
     <div className="pane__content">{children}</div>
-    <ResizeHandle onStop={onResize} left min={{ width: 400 }} />
+    <ResizeHandle onStop={onResize} left min={{ width: 600 }} />
   </div>
 );
 
-export default pure(['width', 'children'])(Pane);
+export default pure(['width', 'children', 'tabs'])(Pane);

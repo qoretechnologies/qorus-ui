@@ -82,7 +82,7 @@ const CSVheaders = {
     warning_count: 'Warnings',
     note_count: 'Notes',
   },
-  jobResults: {
+  instances: {
     job_instanceid: 'Id',
     jobstatus: 'Status',
     name: 'Name',
@@ -96,7 +96,8 @@ const CSVheaders = {
     retry: 'Retry',
     business_error: 'Bus.Err.',
   },
-  test: {  // only test data
+  test: {
+    // only test data
     a: 'A',
     b: 'B',
   },
@@ -108,7 +109,7 @@ Object.keys(ORDER_STATES).forEach(key => {
 
 CSVheaders.workflows.total = 'Total';
 
-const getCSVHeaders = (view) => CSVheaders[view];
+const getCSVHeaders = view => CSVheaders[view];
 
 /**
  * Generates the CSV string from the collection
@@ -119,9 +120,10 @@ const getCSVHeaders = (view) => CSVheaders[view];
 const generateCSV = (collection, type) => {
   const headers = getCSVHeaders(type);
 
-  let content = Object.keys(headers).reduce((str, h) => (
-    str === '' ? headers[h] : `${str};${headers[h]}`
-  ), '');
+  let content = Object.keys(headers).reduce(
+    (str, h) => (str === '' ? headers[h] : `${str};${headers[h]}`),
+    ''
+  );
 
   for (const item of collection) {
     content += `\n${Object.keys(headers).reduce((str, h) => {
@@ -161,8 +163,12 @@ const sortFunc = (sort, v1, v2) => {
     return 1;
   }
 
-  if (val1 !== true && val2 !== true &&
-      moment(new Date(val1)).isValid() && moment(new Date(val2)).isValid()) {
+  if (
+    val1 !== true &&
+    val2 !== true &&
+    moment(new Date(val1)).isValid() &&
+    moment(new Date(val2)).isValid()
+  ) {
     if (moment(val1).isBefore(val2)) {
       return -1;
     } else if (moment(val1).isAfter(val2)) {
@@ -185,23 +191,24 @@ const sortFunc = (sort, v1, v2) => {
 
 const sortTable = (data, sort) => {
   const direction = sort.sortByKey ? sort.sortByKey.direction : 1;
-  const historyDirection = sort.historySortByKey ? sort.historySortByKey.direction : 1;
+  const historyDirection = sort.historySortByKey
+    ? sort.historySortByKey.direction
+    : 1;
 
   if (sort.historySortBy) {
-    return data.slice().sort(
-      firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction)
-        .thenBy((v1, v2) => sortFunc(sort.historySortBy, v1, v2), historyDirection)
-    );
+    return data
+      .slice()
+      .sort(
+        firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction).thenBy(
+          (v1, v2) => sortFunc(sort.historySortBy, v1, v2),
+          historyDirection
+        )
+      );
   }
 
-  return data.slice().sort(
-    firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction)
-  );
+  return data
+    .slice()
+    .sort(firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction));
 };
 
-export {
-  getCSVHeaders,
-  generateCSV,
-  sortTable,
-  buildSorting,
-};
+export { getCSVHeaders, generateCSV, sortTable, buildSorting };

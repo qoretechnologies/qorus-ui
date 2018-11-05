@@ -255,6 +255,11 @@ export default [
     transform: item => item,
   },
   {
+    name: 'instances',
+    url: `${settings.REST_BASE_URL}/jobs`,
+    transform: item => item,
+  },
+  {
     name: 'orderErrors',
     url: `${settings.REST_BASE_URL}/orders?action=listErrors`,
     transform: _.flowRight(normalizeId('workflow_instanceid')),

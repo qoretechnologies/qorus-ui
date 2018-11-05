@@ -1,6 +1,9 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
+import compose from 'recompose/compose';
+import showIfPassed from '../../hocomponents/show-if-passed';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 type Props = {
   children: any,
@@ -25,4 +28,7 @@ const FixedRow: Function = ({
   </div>
 );
 
-export default FixedRow;
+export default compose(
+  showIfPassed(({ hide }) => !hide),
+  onlyUpdateForKeys(['children', 'sortData', 'onSortChange', 'className'])
+)(FixedRow);

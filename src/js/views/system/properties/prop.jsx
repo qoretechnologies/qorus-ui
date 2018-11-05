@@ -1,16 +1,15 @@
 // @flow
 import React from 'react';
-import compose from 'recompose/compose';
-import withState from 'recompose/withState';
-import withHandlers from 'recompose/withHandlers';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import { Table, Thead, Tbody, Tr, Td, Th } from '../../../components/new_table';
 import { hasPermission } from '../../../helpers/user';
-import { Controls } from '../../../components/controls';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 import Text from '../../../components/text';
 import ConfirmDialog from '../../../components/confirm_dialog';
-import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import ExpandableItem from '../../../components/ExpandableItem';
 
 type Props = {
   data: Object,
@@ -18,9 +17,6 @@ type Props = {
   perms: Array<Object>,
   onDelete: Function,
   onEdit: Function,
-  expanded: boolean,
-  setExpanded: Function,
-  handleExpandClick: Function,
   openModal: Function,
   closeModal: Function,
 };
@@ -31,8 +27,6 @@ const Property: Function = ({
   perms,
   onDelete,
   onEdit,
-  expanded,
-  handleExpandClick,
   openModal,
   closeModal,
 }: Props): React.Element<any> => {
@@ -75,10 +69,7 @@ const Property: Function = ({
   };
 
   return (
-    <div>
-      <Breadcrumbs onClick={handleExpandClick}>
-        <Crumb active={expanded}>{title}</Crumb>
-      </Breadcrumbs>
+    <ExpandableItem title={title} show>
       {title !== 'omq' && (
         <div className="pull-right">
           <ButtonGroup>
@@ -86,9 +77,8 @@ const Property: Function = ({
               <Button
                 text="Add property"
                 iconName="add"
-                intent={Intent.PRIMARY}
                 onClick={handlePropAddClick}
-                className="pt-small"
+                big
               />
             )}
             {hasPermission(
@@ -100,73 +90,61 @@ const Property: Function = ({
                 text="Remove group"
                 iconName="cross"
                 onClick={handlePropDeleteClick}
-                className="pt-small"
+                btnStyle="danger"
+                big
               />
             )}
           </ButtonGroup>
         </div>
       )}
-      {expanded && (
-        <Table condensed striped>
-          <Thead>
-            <Tr>
-              <Th className="name large">Name</Th>
-              <Th className="text">Prop</Th>
-              <Th className="narrow">Actions</Th>
+      <Table condensed striped>
+        <Thead>
+          <Tr>
+            <Th className="name large">Name</Th>
+            <Th className="text">Prop</Th>
+            <Th className="narrow">Actions</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {Object.keys(data).map((d, key) => (
+            <Tr key={key}>
+              <Td className="name large">{d}</Td>
+              <Td className="text">
+                <Text text={data[d]} renderTree />
+              </Td>
+              <Td className="narrow">
+                {title !== 'omq' && (
+                  <ButtonGroup>
+                    {hasPermission(
+                      perms,
+                      ['SERVER-CONTROL', 'SET-PROPERTY'],
+                      'or'
+                    ) && (
+                      <Button
+                        iconName="edit"
+                        onClick={handleEditClick(d, data[d])}
+                      />
+                    )}
+                    {hasPermission(
+                      perms,
+                      ['SERVER-CONTROL', 'DELETE-PROPERTY'],
+                      'or'
+                    ) && (
+                      <Button
+                        iconName="cross"
+                        onClick={handleKeyDeleteClick(d)}
+                        btnStyle="danger"
+                      />
+                    )}
+                  </ButtonGroup>
+                )}
+              </Td>
             </Tr>
-          </Thead>
-          <Tbody>
-            {Object.keys(data).map((d, key) => (
-              <Tr key={key}>
-                <Td className="name large">{d}</Td>
-                <Td className="text">
-                  <Text text={data[d]} renderTree />
-                </Td>
-                <Td className="narrow">
-                  {title !== 'omq' && (
-                    <ButtonGroup>
-                      {hasPermission(
-                        perms,
-                        ['SERVER-CONTROL', 'SET-PROPERTY'],
-                        'or'
-                      ) && (
-                        <Button
-                          iconName="edit"
-                          onClick={handleEditClick(d, data[d])}
-                          className="pt-small"
-                        />
-                      )}
-                      {hasPermission(
-                        perms,
-                        ['SERVER-CONTROL', 'DELETE-PROPERTY'],
-                        'or'
-                      ) && (
-                        <Button
-                          iconName="cross"
-                          onClick={handleKeyDeleteClick(d)}
-                          className="pt-small"
-                        />
-                      )}
-                    </ButtonGroup>
-                  )}
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      )}
-    </div>
+          ))}
+        </Tbody>
+      </Table>
+    </ExpandableItem>
   );
 };
 
-export default compose(
-  withState('expanded', 'setExpanded', true),
-  withHandlers({
-    handleExpandClick: ({
-      expanded,
-      setExpanded,
-    }: Props): Function => (): void => {
-      setExpanded(() => !expanded);
-    },
-  })
-)(Property);
+export default Property;

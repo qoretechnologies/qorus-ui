@@ -29,11 +29,6 @@ const ReleasesToolbar: Function = ({
   compact,
 }: Props): React.Element<any> => (
   <Toolbar marginBottom>
-    {!compact && (
-      <Breadcrumbs>
-        <Crumb> Releases </Crumb>
-      </Breadcrumbs>
-    )}
     <div className="pull-left clear">
       <Dropdown id="release-sort">
         <Control> Sort by: {sort}</Control>

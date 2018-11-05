@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { Button, ButtonGroup } from '@blueprintjs/core';
 
@@ -10,6 +10,7 @@ type Props = {
   noCaret?: boolean,
   intent?: string,
   icon?: string,
+  onClick: Function,
 };
 
 export default function Control({
@@ -18,6 +19,7 @@ export default function Control({
   noCaret,
   intent,
   icon,
+  onClick,
 }: Props) {
   return (
     <ButtonGroup>
@@ -27,6 +29,7 @@ export default function Control({
         text={children}
         intent={intent}
         iconName={icon}
+        onClick={onClick}
       />
       {!noCaret && (
         <Button
@@ -34,16 +37,9 @@ export default function Control({
           iconName="caret-down"
           type="button"
           intent={intent}
+          onClick={onClick}
         />
       )}
     </ButtonGroup>
   );
 }
-
-Control.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  btnStyle: PropTypes.string,
-  small: PropTypes.bool,
-  noCaret: PropTypes.bool,
-};

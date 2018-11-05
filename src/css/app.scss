@@ -64,6 +64,9 @@ $bgcolor: #eee;
 @import '../js/components/box/style';
 @import '../js/components/instances_bar/style';
 @import '../js/components/ExpandableItem/style';
+@import '../js/components/breadcrumbs/style';
+@import '../js/components/Headbar/style';
+@import '../js/components/DataOrEmptyTable/style';
 
 @import './not-supported';
 @import './root';
@@ -97,6 +100,17 @@ body,
 .app,
 .app_wrap {
   background-color: $bgcolor;
+}
+
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1;
 }
 
 .pt-button,
@@ -388,20 +402,22 @@ p.header-detail {
   color: #555;
 }
 
-.pt-tab-panel {
-  margin-top: 10px !important;
-}
-
 .pt-tabs {
+  &:not(.pt-vertical) {
+    .pt-tab-panel {
+      margin-top: 10px !important;
+    }
+
+    .pt-tab-list {
+      box-shadow: inset 0 -3px 0 darken(#fff, 3);
+      line-height: 25px;
+    }
+  }
+
   &:not(.boxed-tabs) {
     .pt-tab-list {
       display: inline-flex;
     }
-  }
-
-  .pt-tab-list {
-    box-shadow: inset 0 -3px 0 darken(#fff, 3);
-    line-height: 25px;
   }
 }
 
@@ -412,4 +428,27 @@ p.header-detail {
   &[class*='pt-icon-']:before {
     color: $qore-purple;
   }
+}
+
+.container-fluid {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.pt-navbar {
+  padding: 0 10px;
+}
+
+span.pt-icon-standard {
+  font-size: 12px;
+}
+
+.pt-button-group {
+  &:not(:last-child) {
+    margin-right: 3px;
+  }
+}
+
+.pt-input {
+  vertical-align: baseline !important;
 }

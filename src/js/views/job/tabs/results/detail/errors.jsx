@@ -13,6 +13,7 @@ import {
   Tbody,
 } from '../../../../../components/new_table';
 import showIfPassed from '../../../../../hocomponents/show-if-passed';
+import NoData from '../../../../../components/nodata';
 
 const ErrorTable = ({ errors = [] }: { errors: Array<Object> }) => (
   <Table striped condensed bordered>
@@ -57,5 +58,5 @@ const ErrorTable = ({ errors = [] }: { errors: Array<Object> }) => (
 
 export default showIfPassed(
   ({ errors }) => errors && errors.length > 0,
-  <div>No errors</div>
+  <NoData />
 )(ErrorTable);

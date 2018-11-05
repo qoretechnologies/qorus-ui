@@ -14,7 +14,7 @@ const LogView = ({
   if (!workflow) return <Loader />;
 
   return (
-    <Box>
+    <Box top>
       <Log resource={`workflows/${workflow.id}`} location={location} />
     </Box>
   );

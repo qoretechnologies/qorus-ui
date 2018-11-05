@@ -18,6 +18,7 @@ export default class Item extends Component {
     className?: string,
     marked: number,
     intent: ?string,
+    disabled?: boolean,
   };
 
   componentDidMount() {
@@ -81,7 +82,14 @@ export default class Item extends Component {
   }
 
   render(): React.Element<any> {
-    const { className = '', selected, title, marked, multi } = this.props;
+    const {
+      className = '',
+      selected,
+      title,
+      marked,
+      multi,
+      disabled,
+    } = this.props;
     let intent = this.props.intent;
 
     if (marked) {
@@ -97,6 +105,7 @@ export default class Item extends Component {
         iconName={this.props.icon}
         onClick={this.handleClick}
         intent={intent}
+        disabled={disabled}
       />
     );
   }

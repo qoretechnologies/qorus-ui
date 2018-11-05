@@ -7,11 +7,8 @@ import pure from 'recompose/onlyUpdateForKeys';
 
 import actions from '../../../store/api/actions';
 import showIfPassed from '../../../hocomponents/show-if-passed';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../../components/controls';
 import withDispatch from '../../../hocomponents/withDispatch';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
 
 type Props = {
   selectNone: Function,
@@ -28,22 +25,11 @@ const ToolbarActions: Function = ({
   handleEnableClick,
   handleDisableClick,
 }: Props): ?React.Element<any> => (
-  <ButtonGroup>
-    <Button
-      text="Enable"
-      btnStyle="success"
-      iconName="power"
-      onClick={handleEnableClick}
-      big
-    />
-    <Button
-      text="Disable"
-      btnStyle="danger"
-      iconName="remove"
-      onClick={handleDisableClick}
-      big
-    />
-  </ButtonGroup>
+  <Dropdown>
+    <Control icon="cog">With selected</Control>
+    <Item title="Enable" icon="power" onClick={handleEnableClick} />
+    <Item title="Disable" icon="power" onClick={handleDisableClick} />
+  </Dropdown>
 );
 
 export default compose(

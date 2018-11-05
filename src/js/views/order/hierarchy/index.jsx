@@ -3,9 +3,6 @@ import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
-
-import checkNoData from '../../../hocomponents/check-no-data';
 import withLoadMore from '../../../hocomponents/loadMore';
 import Box from '../../../components/box';
 import {
@@ -16,6 +13,9 @@ import {
   Th,
 } from '../../../components/new_table';
 import HierarchyRow from './row';
+import Pull from '../../../components/Pull';
+import LoadMore from '../../../components/LoadMore';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 
 type Props = {
   hierarchy: Object,
@@ -30,6 +30,7 @@ type Props = {
   handleLoadAll: Function,
   isTablet: boolean,
   loadMoreTotal: number,
+  limit: number,
 };
 
 const HierarchyTable: Function = ({
@@ -40,11 +41,23 @@ const HierarchyTable: Function = ({
   handleLoadMore,
   handleLoadAll,
   isTablet,
-  loadMoreTotal,
+  limit,
 }: Props): React.Element<any> => (
-  <Box noPadding>
+  <Box noPadding top>
     <Table fixed hover condensed striped>
       <Thead>
+        <FixedRow className="toolbar-row" hide={!canLoadMore}>
+          <Th colspan="full">
+            <Pull right>
+              <LoadMore
+                canLoadMore={canLoadMore}
+                handleLoadMore={handleLoadMore}
+                handleLoadAll={handleLoadAll}
+                limit={limit}
+              />
+            </Pull>
+          </Th>
+        </FixedRow>
         <FixedRow>
           <Th className="normal">ID</Th>
           {!isTablet && <Th className="name">Workflow</Th>}
@@ -60,46 +73,35 @@ const HierarchyTable: Function = ({
           {!compact && <Th className="medium">Warnings</Th>}
         </FixedRow>
       </Thead>
-      <Tbody>
-        {hierarchyKeys.map(
-          (id: string | number, index: number): ?React.Element<any> => {
-            const item: Object = hierarchy[id];
-            const parentId: ?number = item.parent_workflow_instanceid;
+      <DataOrEmptyTable
+        condition={hierarchyKeys.length !== 0}
+        cols={isTablet ? (compact ? 6 : 10) : compact ? 7 : 12}
+        small={compact}
+      >
+        {props => (
+          <Tbody {...props}>
+            {hierarchyKeys.map(
+              (id: string | number, index: number): ?React.Element<any> => {
+                const item: Object = hierarchy[id];
+                const parentId: ?number = item.parent_workflow_instanceid;
 
-            return (
-              <HierarchyRow
-                key={id}
-                first={index === 0}
-                id={item.workflow_instanceid}
-                compact={compact}
-                item={item}
-                hasParent={parentId}
-                isTablet={isTablet}
-              />
-            );
-          }
+                return (
+                  <HierarchyRow
+                    key={id}
+                    first={index === 0}
+                    id={item.workflow_instanceid}
+                    compact={compact}
+                    item={item}
+                    hasParent={parentId}
+                    isTablet={isTablet}
+                  />
+                );
+              }
+            )}
+          </Tbody>
         )}
-      </Tbody>
+      </DataOrEmptyTable>
     </Table>
-    {canLoadMore && (
-      <ButtonGroup style={{ padding: '15px' }}>
-        <Button
-          text={`Showing ${hierarchyKeys.length} of ${loadMoreTotal}`}
-          intent={Intent.NONE}
-          className="pt-minimal"
-        />
-        <Button
-          text={'Show 50 more...'}
-          intent={Intent.PRIMARY}
-          onClick={handleLoadMore}
-        />
-        <Button
-          text="Show all"
-          intent={Intent.PRIMARY}
-          onClick={handleLoadAll}
-        />
-      </ButtonGroup>
-    )}
   </Box>
 );
 
@@ -111,7 +113,6 @@ export default compose(
       ...rest,
     })
   ),
-  checkNoData(({ hierarchy }) => hierarchy && Object.keys(hierarchy).length),
   withLoadMore('hierarchyKeys', null, true, 50),
   pure(['hierarchy', 'hierarchyKeys', 'canLoadMore', 'isTablet'])
 )(HierarchyTable);

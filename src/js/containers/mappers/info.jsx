@@ -17,6 +17,7 @@ import InfoTable from '../../components/info_table';
 import Releases from '../releases';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Box from '../../components/box';
+import Headbar from '../../components/Headbar';
 
 const MapperInfo = ({
   mapper,
@@ -30,13 +31,16 @@ const MapperInfo = ({
 
   return (
     <div>
-      <Breadcrumbs>
-        <Crumb>
-          {mapper.name} <small>({mapper.version})</small>
-        </Crumb>
-      </Breadcrumbs>
+      <Headbar>
+        <Breadcrumbs>
+          <Crumb>Mappers</Crumb>
+          <Crumb active>
+            {mapper.name} v{mapper.version}
+          </Crumb>
+        </Breadcrumbs>
+      </Headbar>
       <Box top>
-        <Tabs active="diagram" type="pills">
+        <Tabs active="diagram">
           <Pane name="Diagram">
             <div className="view-content">
               {!mapper.valid && (

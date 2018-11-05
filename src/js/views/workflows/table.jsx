@@ -19,6 +19,7 @@ import Filters from './toolbar/filters';
 import Dropdown, { Control, Item } from '../../components/dropdown';
 import LoadMore from '../../components/LoadMore';
 import { Icon } from '@blueprintjs/core';
+import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 
 type Props = {
   sortData: Object,
@@ -144,7 +145,7 @@ const WorkflowsTable: Function = ({
         <Th className="narrow" name="id">
           ID
         </Th>
-        <Th className="name" name="name">
+        <Th className="name big" name="name">
           Name
         </Th>
         {deprecated && (
@@ -162,28 +163,35 @@ const WorkflowsTable: Function = ({
         <Th className="normal">SLA (%)</Th>
       </FixedRow>
     </Thead>
-    <Tbody>
-      {collection.map(
-        (workflow: Object, index: number): React.Element<Row> => (
-          <Row
-            first={index === 0}
-            key={`worfkflow_${workflow.id}`}
-            isActive={workflow.id === parseInt(paneId, 10)}
-            openPane={openPane}
-            closePane={closePane}
-            date={date}
-            select={select}
-            updateDone={updateDone}
-            states={states}
-            showDeprecated={deprecated}
-            expanded={expanded}
-            isTablet={isTablet}
-            setRemote={setRemote}
-            {...workflow}
-          />
-        )
+    <DataOrEmptyTable
+      condition={collection.length === 0}
+      cols={isTablet ? 10 : 11}
+    >
+      {props => (
+        <Tbody {...props}>
+          {collection.map(
+            (workflow: Object, index: number): React.Element<Row> => (
+              <Row
+                first={index === 0}
+                key={`worfkflow_${workflow.id}`}
+                isActive={workflow.id === parseInt(paneId, 10)}
+                openPane={openPane}
+                closePane={closePane}
+                date={date}
+                select={select}
+                updateDone={updateDone}
+                states={states}
+                showDeprecated={deprecated}
+                expanded={expanded}
+                isTablet={isTablet}
+                setRemote={setRemote}
+                {...workflow}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
@@ -194,9 +202,6 @@ export default compose(
       updateDone: actions.workflows.updateDone,
       select: actions.workflows.select,
     }
-  ),
-  checkData(
-    ({ collection }: Props): boolean => collection && collection.length > 0
   ),
   withModal(),
   queryControl('disposition'),

@@ -70,7 +70,6 @@ export default class ValuemapRow extends Component {
 
     return (
       <Tr first={first} className={isActive ? 'row-active' : ''}>
-        <Td className="tiny"> - </Td>
         <Td className="narrow">
           <DetailButton active={isActive} onClick={this.handleDetailClick} />
         </Td>

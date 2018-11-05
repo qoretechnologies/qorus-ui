@@ -7,7 +7,7 @@ import { NonIdealState } from '@blueprintjs/core';
 
 import actions from '../../../store/api/actions';
 import DetailPane from '../../../components/pane';
-import Tabs, { Pane } from '../../../components/tabs';
+import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import DetailTab from './detail_tab';
 import Code from '../../../components/code';
 import StepsTab from '../../order/diagram/graph';
@@ -21,6 +21,7 @@ import InfoTable from '../../../components/info_table/index';
 import Box from '../../../components/box';
 import StatsTab from './stats';
 import titleManager from '../../../hocomponents/TitleManager';
+import Container from '../../../components/container';
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
@@ -115,88 +116,102 @@ export default class WorkflowsDetail extends Component {
         width={this.props.width || 600}
         onClose={this.handleClose}
         onResize={this.props.onResize}
-        title={workflow.normalizedName}
+        title={`Workflow ${this.props.workflow.id}`}
+        tabs={{
+          tabs: [
+            'Detail',
+            'Steps',
+            'Order Stats',
+            'Process',
+            'Releases',
+            'Valuemaps',
+            'Mappers',
+            'Errors',
+            'Code',
+            'Log',
+            'Info',
+          ],
+          queryIdentifier: 'paneTab',
+        }}
       >
         <Box top>
-          <Tabs
-            active={paneTab}
-            id="workflowsPaneNav"
-            onChange={this.props.changePaneTab}
-          >
-            <Pane name="Detail">
-              <DetailTab
-                key={workflow.name}
-                workflow={workflow}
-                systemOptions={systemOptions}
-              />
-            </Pane>
-            <Pane name="Code">
-              <Code
-                data={workflow.lib}
-                heightUpdater={this.getHeight}
-                location={this.props.location}
-              />
-            </Pane>
-            <Pane name="Steps">
-              <div
-                style={{
-                  height: '100%',
-                  overflow: 'auto',
-                }}
-                ref={this.diagramRef}
-              >
-                <StepsTab workflow={workflow} />
-              </div>
-            </Pane>
-            <Pane name="Log">
-              <LogTab
-                resource={`workflows/${workflow.id}`}
-                location={this.props.location}
-              />
-            </Pane>
-            <Pane name="Errors">
-              <ErrorsTab location={this.props.location} workflow={workflow} />
-            </Pane>
-            <Pane name="Mappers">
-              <MappersTable mappers={workflow.mappers} />
-            </Pane>
-            <Pane name="Valuemaps">
-              <Valuemaps vmaps={workflow.vmaps} />
-            </Pane>
-            <Pane name="Releases">
-              <Releases
-                component={workflow.name}
-                compact
-                location={this.props.location}
-                key={workflow.name}
-              />
-            </Pane>
-            {workflow && workflow.process ? (
-              <Pane name="Process">
-                <InfoTable
-                  object={{
-                    ...workflow.process,
-                    ...{ memory: workflow.process.priv_str },
+          <Container fill>
+            <SimpleTabs activeTab={paneTab}>
+              <SimpleTab name="detail">
+                <DetailTab
+                  key={workflow.name}
+                  workflow={workflow}
+                  systemOptions={systemOptions}
+                />
+              </SimpleTab>
+              <SimpleTab name="code">
+                <Code
+                  data={workflow.lib}
+                  heightUpdater={this.getHeight}
+                  location={this.props.location}
+                />
+              </SimpleTab>
+              <SimpleTab name="steps">
+                <div
+                  style={{
+                    height: '100%',
+                    overflow: 'auto',
                   }}
-                  omit={['priv', 'rss', 'vsz', 'priv_str']}
+                  ref={this.diagramRef}
+                >
+                  <StepsTab workflow={workflow} />
+                </div>
+              </SimpleTab>
+              <SimpleTab name="log">
+                <LogTab
+                  resource={`workflows/${workflow.id}`}
+                  location={this.props.location}
                 />
-              </Pane>
-            ) : (
-              <Pane name="Process">
-                <NonIdealState
-                  title="Process unavailable"
-                  description="This workflow is not running under a process"
-                  visual="warning-sign"
+              </SimpleTab>
+              <SimpleTab name="errors">
+                <ErrorsTab location={this.props.location} workflow={workflow} />
+              </SimpleTab>
+              <SimpleTab name="mappers">
+                <MappersTable mappers={workflow.mappers} />
+              </SimpleTab>
+              <SimpleTab name="valuemaps">
+                <Valuemaps vmaps={workflow.vmaps} />
+              </SimpleTab>
+              <SimpleTab name="releases">
+                <Releases
+                  component={workflow.name}
+                  compact
+                  location={this.props.location}
+                  key={workflow.name}
                 />
-              </Pane>
-            )}
-            <Pane name="Order stats">
-              <StatsTab orderStats={workflow.order_stats} />
-            </Pane>
-            <Pane name="Info">
-              <InfoTab workflow={workflow} />
-            </Pane>
-          </Tabs>
+              </SimpleTab>
+              {workflow && workflow.process ? (
+                <SimpleTab name="process">
+                  <InfoTable
+                    object={{
+                      ...workflow.process,
+                      ...{ memory: workflow.process.priv_str },
+                    }}
+                    omit={['priv', 'rss', 'vsz', 'priv_str']}
+                  />
+                </SimpleTab>
+              ) : (
+                <SimpleTab name="process">
+                  <NonIdealState
+                    title="Process unavailable"
+                    description="This workflow is not running under a process"
+                    visual="warning-sign"
+                  />
+                </SimpleTab>
+              )}
+              <SimpleTab name="order stats">
+                <StatsTab orderStats={workflow.order_stats} />
+              </SimpleTab>
+              <SimpleTab name="info">
+                <InfoTab workflow={workflow} />
+              </SimpleTab>
+            </SimpleTabs>
+          </Container>
         </Box>
       </DetailPane>
     );

@@ -15,6 +15,7 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../../../components/controls';
+import Dropdown, { Control, Item } from '../../../../components/dropdown';
 
 type Props = {
   optimisticDispatch: Function,
@@ -48,15 +49,15 @@ const ActionButton: Function = ({
     onActionClick(actionName);
   };
 
-  return (
+  return compact ? (
     <Button
-      text={compact ? null : actionName.toUpperCase()}
       disabled={disabled}
       title={name}
       iconName={icon}
-      className="pt-small"
       onClick={handleClick}
     />
+  ) : (
+    <Item onClick={handleClick} icon={icon} title={name} disabled={disabled} />
   );
 };
 
@@ -65,34 +66,63 @@ const OrderControls: Function = ({
   handleActionClick,
   compact,
   availableActions,
-}: Props): React.Element<any> => (
-  <ButtonGroup>
-    <ActionButton
-      action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
-      onActionClick={handleActionClick}
-      compact={compact}
-      availableActions={availableActions}
-    />
-    <ActionButton
-      action={workflowstatus === 'CANCELED' ? 'uncancel' : 'cancel'}
-      onActionClick={handleActionClick}
-      compact={compact}
-      availableActions={availableActions}
-    />
-    <ActionButton
-      action="retry"
-      onActionClick={handleActionClick}
-      compact={compact}
-      availableActions={availableActions}
-    />
-    <ActionButton
-      action="schedule"
-      onActionClick={handleActionClick}
-      compact={compact}
-      availableActions={availableActions}
-    />
-  </ButtonGroup>
-);
+}: Props): React.Element<any> =>
+  compact ? (
+    <ButtonGroup>
+      <ActionButton
+        action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
+        onActionClick={handleActionClick}
+        compact={compact}
+        availableActions={availableActions}
+      />
+      <ActionButton
+        action={workflowstatus === 'CANCELED' ? 'uncancel' : 'cancel'}
+        onActionClick={handleActionClick}
+        compact={compact}
+        availableActions={availableActions}
+      />
+      <ActionButton
+        action="retry"
+        onActionClick={handleActionClick}
+        compact={compact}
+        availableActions={availableActions}
+      />
+      <ActionButton
+        action="schedule"
+        onActionClick={handleActionClick}
+        compact={compact}
+        availableActions={availableActions}
+      />
+    </ButtonGroup>
+  ) : (
+    <Dropdown>
+      <Control>Actions</Control>
+      <ActionButton
+        action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
+        onActionClick={handleActionClick}
+        compact={compact}
+        availableActions={availableActions}
+      />
+      <ActionButton
+        action={workflowstatus === 'CANCELED' ? 'uncancel' : 'cancel'}
+        onActionClick={handleActionClick}
+        compact={compact}
+        availableActions={availableActions}
+      />
+      <ActionButton
+        action="retry"
+        onActionClick={handleActionClick}
+        compact={compact}
+        availableActions={availableActions}
+      />
+      <ActionButton
+        action="schedule"
+        onActionClick={handleActionClick}
+        compact={compact}
+        availableActions={availableActions}
+      />
+    </Dropdown>
+  );
 
 export default compose(
   withDispatch(),

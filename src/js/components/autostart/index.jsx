@@ -3,8 +3,10 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup } from '@blueprintjs/core';
-import { Control as Button } from '../../components/controls';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 import mapProps from 'recompose/mapProps';
 
 type Props = {
@@ -15,6 +17,7 @@ type Props = {
   onDecrementClick: Function,
   handleDecrementClick: Function,
   btnStyle: string,
+  big?: boolean,
 };
 
 const AutoStart = ({
@@ -23,15 +26,22 @@ const AutoStart = ({
   btnStyle,
   handleIncrementClick,
   handleDecrementClick,
+  big,
 }: Props): React.Element<any> => (
-  <ButtonGroup>
+  <ButtonGroup marginRight={big ? 3 : 0}>
     <Button
       title="Decrement autostart"
       iconName="small-minus"
       onClick={handleDecrementClick}
+      big={big}
     />
-    <Button text={`${autostart} / ${execCount}`} btnStyle={btnStyle} />
     <Button
+      big={big}
+      text={`${autostart} / ${execCount}`}
+      btnStyle={btnStyle}
+    />
+    <Button
+      big={big}
       title="Increment autostart"
       iconName="small-plus"
       onClick={handleIncrementClick}

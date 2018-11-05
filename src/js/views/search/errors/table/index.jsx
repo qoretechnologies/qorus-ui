@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import { createSelector } from 'reselect';
-import { Button, ButtonGroup, Intent } from '@blueprintjs/core';
 
 import actions from '../../../../store/api/actions';
 import { querySelector, resourceSelector } from '../../../../selectors';
@@ -17,7 +16,6 @@ import withCSV from '../../../../hocomponents/csv';
 import loadMore from '../../../../hocomponents/loadMore';
 import withSort from '../../../../hocomponents/sort';
 import { sortDefaults } from '../../../../constants/sort';
-import Toolbar from './toolbar';
 import Table from './table';
 
 type Props = {
@@ -34,46 +32,30 @@ type Props = {
   sortData: Object,
   onSortChange: Function,
   filter: string,
+  children: any,
 };
 
 const WorkflowOrders: Function = ({
   onCSVClick,
-  location,
+  children,
   orderErrors,
-  searchPage,
   limit,
   canLoadMore,
   handleLoadMore,
   sortData,
   onSortChange,
 }: Props): React.Element<any> => (
-  <div>
-    <Toolbar
-      onCSVClick={onCSVClick}
-      location={location}
-      searchPage={searchPage}
-    />
-    <Table
-      collection={orderErrors}
-      sortData={sortData}
-      onSortChange={onSortChange}
-      canLoadMore={canLoadMore}
-    />
-    {canLoadMore && (
-      <ButtonGroup style={{ padding: '15px 0 0 0' }}>
-        <Button
-          text={`Showing ${orderErrors.length}`}
-          intent={Intent.NONE}
-          className="pt-minimal"
-        />
-        <Button
-          text={`load ${limit} more...`}
-          intent={Intent.PRIMARY}
-          onClick={handleLoadMore}
-        />
-      </ButtonGroup>
-    )}
-  </div>
+  <Table
+    collection={orderErrors}
+    sortData={sortData}
+    onSortChange={onSortChange}
+    canLoadMore={canLoadMore}
+    handleLoadMore={handleLoadMore}
+    limit={limit}
+    onCSVClick={onCSVClick}
+  >
+    {children}
+  </Table>
 );
 
 const viewSelector: Function = createSelector(

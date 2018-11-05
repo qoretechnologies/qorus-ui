@@ -11,9 +11,7 @@ import Checkbox from '../../components/checkbox';
 import Date from '../../components/date';
 import JobControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
-import Badge from '../../components/badge';
 import DetailButton from '../../components/detail_button';
-import { formatCount } from '../../helpers/orders';
 import InstancesBar from '../../components/instances_bar';
 
 type Props = {
@@ -32,7 +30,6 @@ type Props = {
   id: number,
   type?: string,
   name: string,
-  version: string,
   desc: string,
   enabled: boolean,
   active: boolean,
@@ -49,8 +46,10 @@ type Props = {
   day: string,
   month: string,
   wday: string,
+  normalizedName: string,
   isTablet: boolean,
   first: boolean,
+  remote: boolean,
 };
 
 const ServiceRow: Function = ({
@@ -65,7 +64,6 @@ const ServiceRow: Function = ({
   date,
   id,
   name,
-  version,
   enabled,
   active,
   last_executed: executed,
@@ -80,17 +78,18 @@ const ServiceRow: Function = ({
   day,
   month,
   wday,
-  isTablet,
   first,
+  normalizedName,
+  remote,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
     className={classnames({
-      'row-active': isActive,
       'row-alert': hasAlerts,
       'row-selected': _selected,
+      'row-active': isActive,
     })}
     onClick={handleCheckboxClick}
   >
@@ -103,20 +102,19 @@ const ServiceRow: Function = ({
     <Td className="narrow">
       <DetailButton active={isActive} onClick={handleDetailClick} />
     </Td>
-    {!isTablet && (
-      <Td className="big">
-        <JobControls
-          enabled={enabled}
-          active={active}
-          id={id}
-          minute={minute}
-          hour={hour}
-          day={day}
-          month={month}
-          week={wday}
-        />
-      </Td>
-    )}
+    <Td className="big">
+      <JobControls
+        enabled={enabled}
+        active={active}
+        id={id}
+        minute={minute}
+        hour={hour}
+        day={day}
+        month={month}
+        week={wday}
+        remote={remote}
+      />
+    </Td>
     <Td className="narrow">
       {hasAlerts && (
         <Controls>
@@ -136,28 +134,25 @@ const ServiceRow: Function = ({
         className="resource-name-link"
         title={name}
       >
-        {name}
+        {normalizedName}
       </Link>
     </Td>
-    <Td className="normal text">{version}</Td>
     <Td className="big">
       <Date date={executed} />
     </Td>
     <Td className="big">
       <Date date={next} />
     </Td>
-    {!isTablet && (
-      <Td className="big">
-        <Date date={expiry} />
-      </Td>
-    )}
-    <Td className="huge">
+    <Td className="big">
+      <Date date={expiry} />
+    </Td>
+    <Td className="huge separated-cell">
       <InstancesBar
         states={[
-          { name: 'COMPLETE', label: 'complete', title: 'complete' },
-          { name: 'ERROR', label: 'error', title: 'error' },
-          { name: 'PROGRESS', label: 'waiting', title: 'in-progress' },
-          { name: 'CRASHED', label: 'blocked', title: 'crashed' },
+          { name: 'COMPLETE', label: 'complete', title: 'Complete' },
+          { name: 'ERROR', label: 'error', title: 'Error' },
+          { name: 'PROGRESS', label: 'waiting', title: 'In-progress' },
+          { name: 'CRASHED', label: 'blocked', title: 'Crashed' },
         ]}
         instances={{
           COMPLETE,
@@ -214,5 +209,6 @@ export default compose(
     'PROGRESS',
     'CRASHED',
     'isTablet',
+    'remote',
   ])
 )(ServiceRow);

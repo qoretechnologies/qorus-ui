@@ -8,7 +8,6 @@ th * {
 }
 
 table.text-table {
-  span,
   th,
   td {
     text-align: left !important;
@@ -154,9 +153,11 @@ th.has-sort:hover {
 }
 
 .toolbar-row {
-  .fixed-table-header {
-    padding-top: 6px;
-    padding-bottom: 6px;
+  padding-top: 0px;
+  padding-bottom: 3px;
+
+  &:first-of-type {
+    padding-top: 3px;
   }
 }
 

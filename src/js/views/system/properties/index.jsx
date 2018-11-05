@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
 import { includes, flowRight, omit } from 'lodash';
-import { Button, Intent } from '@blueprintjs/core';
 
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import actions from '../../../store/api/actions';
@@ -15,11 +14,16 @@ import sync from '../../../hocomponents/sync';
 import search from '../../../hocomponents/search';
 import modal from '../../../hocomponents/modal';
 import withDispatch from '../../../hocomponents/withDispatch';
-import Toolbar from '../../../components/toolbar';
+import Headbar from '../../../components/Headbar';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 import Container from '../../../components/container';
 import Box from '../../../components/box';
 import { hasPermission } from '../../../helpers/user';
 import titleManager from '../../../hocomponents/TitleManager';
+import Pull from '../../../components/Pull';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
 const querySelector: Function = (state: Object, props: Object): Object =>
@@ -146,29 +150,34 @@ export default class PropertiesView extends Component {
   render() {
     return (
       <div>
-        <Toolbar marginBottom>
+        <Headbar>
           <Breadcrumbs>
-            <Crumb> Properties </Crumb>
+            <Crumb active> Properties </Crumb>
           </Breadcrumbs>
-          <Search
-            onSearchUpdate={this.props.onSearchChange}
-            defaultValue={this.props.query}
-            resource="properties"
-          />{' '}
-          {hasPermission(
-            this.props.user.data.permissions,
-            ['SERVER-CONTROL', 'SET-PROPERTY'],
-            'or'
-          ) && (
-            <Button
-              text="Add property"
-              intent={Intent.PRIMARY}
-              iconName="add"
-              className="pull-right"
-              onClick={this.handleAddClick}
+          <Pull right>
+            <ButtonGroup marginRight={3}>
+              <Button
+                disabled={
+                  !hasPermission(
+                    this.props.user.data.permissions,
+                    ['SERVER-CONTROL', 'SET-PROPERTY'],
+                    'or'
+                  )
+                }
+                text="Add property"
+                iconName="add"
+                onClick={this.handleAddClick}
+                big
+              />
+            </ButtonGroup>
+
+            <Search
+              onSearchUpdate={this.props.onSearchChange}
+              defaultValue={this.props.query}
+              resource="properties"
             />
-          )}{' '}
-        </Toolbar>
+          </Pull>
+        </Headbar>
         <Container>{this.renderProperties()}</Container>
       </div>
     );

@@ -1,42 +1,21 @@
-.job-results {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+.job-result-info {
+  position: fixed;
+  bottom: 27px;
+  left: 42px;
+  right: 0;
+  z-index: 7;
+  min-height: 200px;
+  padding: 10px;
+  background-color: darken($bgcolor, 5);
+  box-shadow: 0 -2px 5px 2px rgba(#bbb, 0.9); /* [4] */
 
-  .job-results-table {
-    overflow-y: auto;
-  }
-
-  .job-result-info {
-    position: fixed;
-    bottom: 29px;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    z-index: 500;
-    min-height: 50px;
-
-    .resize-handle {
-      background: #cdcdcd;
-      height: 10px!important;
-      text-align: center;
-      color: #fff;
-    }
-
-    .inner {
-      margin-top: 18px;
-      padding: 20px;
-    }
-  }
-
-  .button--copy {
-    position: inherit;
+  &.sidebar-open {
+    left: 180px;
   }
 }
 
-
 .error-info {
   text-align: left !important;
-  color: #999999!important;
+  color: #999999 !important;
   font-style: italic;
 }

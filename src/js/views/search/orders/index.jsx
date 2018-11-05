@@ -44,15 +44,14 @@ const SearchView: Function = ({
   searchData,
   ...rest
 }: Props): React.Element<any> => (
-  <div>
+  <OrdersView
+    location={location}
+    linkDate={mindateQuery}
+    searchData={searchData}
+    searchPage
+  >
     <SearchToolbar mindateQuery={mindateQuery} {...rest} />
-    <OrdersView
-      location={location}
-      linkDate={mindateQuery}
-      searchData={searchData}
-      searchPage
-    />
-  </div>
+  </OrdersView>
 );
 
 export default compose(

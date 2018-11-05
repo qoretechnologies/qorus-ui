@@ -6,9 +6,15 @@ import { connect } from 'react-redux';
 import checkData from '../../hocomponents/check-no-data';
 
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
-import Icon from '../../components/icon';
 import Row from './row';
 import actions from '../../store/api/actions';
+import Pull from '../../components/Pull';
+import Selector from './toolbar/selector';
+import Actions from './toolbar/actions';
+import LoadMore from '../../components/LoadMore';
+import queryControl from '../../hocomponents/queryControl';
+import DatePicker from '../../components/datepicker';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   sortData: Object,
@@ -22,6 +28,13 @@ type Props = {
   updateDone: Function,
   canLoadMore: boolean,
   isTablet: boolean,
+  handleLoadMore: Function,
+  handleLoadAll: Function,
+  limit: number,
+  selected: string,
+  selectedIds: Array<number>,
+  dateQuery: string,
+  changeDateQuery: Function,
 };
 
 const JobsTable: Function = ({
@@ -36,6 +49,13 @@ const JobsTable: Function = ({
   updateDone,
   canLoadMore,
   isTablet,
+  selected,
+  selectedIds,
+  limit,
+  handleLoadMore,
+  handleLoadAll,
+  dateQuery,
+  changeDateQuery,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -43,16 +63,38 @@ const JobsTable: Function = ({
     condensed
     fixed
     className="resource-table"
-    marginBottom={canLoadMore ? 20 : 0}
     key={collection.length}
   >
     <Thead>
+      <FixedRow className="toolbar-row">
+        <Th colspan={9}>
+          <Pull>
+            <Selector selected={selected} selectedCount={selectedIds.length} />
+            <Actions selectedIds={selectedIds} show={selected !== 'none'} />
+          </Pull>
+          <Pull right>
+            <LoadMore
+              handleLoadAll={handleLoadAll}
+              handleLoadMore={handleLoadMore}
+              limit={limit}
+              canLoadMore={canLoadMore}
+            />
+          </Pull>
+        </Th>
+        <Th className="separated-cell">
+          <DatePicker date={dateQuery || '24h'} onApplyDate={changeDateQuery} />
+        </Th>
+      </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny checker">-</Th>
-        <Th className="narrow">-</Th>
-        {!isTablet && <Th className="big">Actions</Th>}
+        <Th className="tiny checker">
+          <Icon iconName="small-tick" />
+        </Th>
+        <Th className="narrow">
+          <Icon iconName="list-detail-view" />
+        </Th>
+        <Th className="big">Actions</Th>
         <Th className="narrow" name="has_alerts">
-          <Icon iconName="warning" />
+          <Icon iconName="warning-sign" />
         </Th>
         <Th className="narrow" name="id">
           ID
@@ -60,21 +102,16 @@ const JobsTable: Function = ({
         <Th className="name" name="name">
           Name
         </Th>
-        <Th className="normal text" name="version">
-          Version
-        </Th>
         <Th className="big" name="last_executed">
-          Last
+          <Icon iconName="time" /> Last run
         </Th>
         <Th className="big" name="next">
-          Next
+          <Icon iconName="time" /> Next run
         </Th>
-        {!isTablet && (
-          <Th className="big" name="expiry_date">
-            Expiry Date
-          </Th>
-        )}
-        <Th className="big">Instances</Th>
+        <Th className="big" name="expiry_date">
+          <Icon iconName="calendar" /> Expiry Date
+        </Th>
+        <Th className="big separated-cell">Instances</Th>
       </FixedRow>
     </Thead>
     <Tbody>
@@ -101,7 +138,7 @@ const JobsTable: Function = ({
 
 export default compose(
   connect(
-    () => ({}),
+    null,
     {
       updateDone: actions.jobs.updateDone,
       select: actions.jobs.select,
@@ -110,5 +147,16 @@ export default compose(
   checkData(
     ({ collection }: Props): boolean => collection && collection.length > 0
   ),
-  pure(['sortData', 'collection', 'paneId', 'date', 'isTablet'])
+  queryControl('date'),
+  pure([
+    'sortData',
+    'collection',
+    'paneId',
+    'date',
+    'isTablet',
+    'dateQuery',
+    'selected',
+    'selectedIds',
+    'canLoadMore',
+  ])
 )(JobsTable);

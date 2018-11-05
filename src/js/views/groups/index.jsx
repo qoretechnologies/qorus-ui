@@ -5,7 +5,6 @@ import withProps from 'recompose/withProps';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import actions from '../../store/api/actions';
 import { querySelector, resourceSelector } from '../../selectors';
@@ -18,12 +17,16 @@ import selectable from '../../hocomponents/selectable';
 import withCSV from '../../hocomponents/csv';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import { sortDefaults } from '../../constants/sort';
-import GroupsToolbar from './toolbar';
 import GroupsTable from './table';
 import GroupsDetail from './detail';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Box from '../../components/box';
+import Headbar from '../../components/Headbar';
+import Pull from '../../components/Pull';
+import CsvControl from '../../components/CsvControl';
 import titleManager from '../../hocomponents/TitleManager';
+import Search from '../../containers/search';
+import queryControl from '../../hocomponents/queryControl';
 
 type Props = {
   sortData: Object,
@@ -42,13 +45,14 @@ type Props = {
   infoTotalCount: number,
   infoEnabled: number,
   infoWithAlerts: number,
+  searchQuery: string,
+  changeSearchQuery: Function,
 };
 
 const GroupsView: Function = ({
   selected,
   selectedIds,
   onCSVClick,
-  location,
   groups,
   sortData,
   onSortChange,
@@ -58,65 +62,50 @@ const GroupsView: Function = ({
   handleLoadMore,
   handleLoadAll,
   isTablet,
-  infoEnabled,
-  infoTotalCount,
-  infoWithAlerts,
+  searchQuery,
+  changeSearchQuery,
 }: Props): React.Element<any> =>
   group ? (
     <div>
-      <Breadcrumbs>
-        <Crumb link="/groups">Groups</Crumb>
-        <Crumb>
-          {group.name} ({group.id})
-        </Crumb>
-      </Breadcrumbs>
+      <Headbar>
+        <Breadcrumbs>
+          <Crumb link="/groups">Groups</Crumb>
+          <Crumb active>
+            {group.name} ({group.id})
+          </Crumb>
+        </Breadcrumbs>
+      </Headbar>
       <GroupsDetail {...group} />
     </div>
   ) : (
     <div>
-      <Breadcrumbs>
-        <Crumb>Groups</Crumb>
-      </Breadcrumbs>
-      <Box top>
-        <GroupsToolbar
-          selected={selected}
-          selectedIds={selectedIds}
-          onCSVClick={onCSVClick}
-          location={location}
-          collectionCount={groups.length}
-          collectionTotal={infoTotalCount}
-          withAlertsCount={infoWithAlerts}
-          enabledCount={infoEnabled}
-        />
-      </Box>
-      <Box noPadding>
+      <Headbar>
+        <Breadcrumbs>
+          <Crumb active>Groups</Crumb>
+        </Breadcrumbs>
+        <Pull right>
+          <CsvControl onClick={onCSVClick} />
+          <Search
+            defaultValue={searchQuery}
+            onSearchUpdate={changeSearchQuery}
+            resource="groups"
+          />
+        </Pull>
+      </Headbar>
+      <Box top noPadding>
         <GroupsTable
           collection={groups}
           sortData={sortData}
           onSortChange={onSortChange}
           canLoadMore={canLoadMore}
           isTablet={isTablet}
+          selected={selected}
+          selectedIds={selectedIds}
+          handleLoadMore={handleLoadMore}
+          handleLoadAll={handleLoadAll}
+          limit={limit}
         />
       </Box>
-      {canLoadMore && (
-        <ButtonGroup style={{ padding: '0 15px 15px 15px' }}>
-          <Button
-            text={`Showing ${groups.length} of ${infoTotalCount}`}
-            intent={Intent.NONE}
-            className="pt-minimal"
-          />
-          <Button
-            text={`Show ${limit} more...`}
-            intent={Intent.PRIMARY}
-            onClick={handleLoadMore}
-          />
-          <Button
-            text="Show all"
-            intent={Intent.PRIMARY}
-            onClick={handleLoadAll}
-          />
-        </ButtonGroup>
-      )}
     </div>
   );
 
@@ -183,6 +172,7 @@ export default compose(
   }),
   patch('load', ['fetchParams']),
   sync('meta'),
+  queryControl('search'),
   selectable('groups'),
   withCSV('groups', 'groups'),
   titleManager('Groups'),
@@ -194,5 +184,6 @@ export default compose(
     'selectedIds',
     'canLoadMore',
     'isTablet',
+    'searchQuery',
   ])
 )(GroupsView);

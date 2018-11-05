@@ -6,13 +6,12 @@ import { createSelector } from 'reselect';
 import { flowRight, pickBy, includes } from 'lodash';
 import { Intent } from '@blueprintjs/core';
 
-import Toolbar from '../../../components/toolbar';
+import Headbar from '../../../components/Headbar';
 import Container from '../../../components/container';
 import Box from '../../../components/box';
 import NoData from '../../../components/nodata';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import Search from '../../../containers/search';
-import search from '../../../hocomponents/search';
 import withDispatch from '../../../hocomponents/withDispatch';
 import sync from '../../../hocomponents/sync';
 import withModal from '../../../hocomponents/modal';
@@ -20,11 +19,16 @@ import Table from './table';
 import actions from '../../../store/api/actions';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import titleManager from '../../../hocomponents/TitleManager';
-import { Control as Button } from '../../../components/controls';
+import {
+  Control as Button,
+  Controls as ButtonGroup,
+} from '../../../components/controls';
+import Pull from '../../../components/Pull';
+import queryControl from '../../../hocomponents/queryControl';
 
 const sqlcacheSelector: Function = (state: Object) => state.api.sqlcache;
 const querySelector: Function = (state: Object, props: Object): ?string =>
-  props.location.query.q;
+  props.location.query.search;
 const filterData: Function = (query: ?string): Function => (
   collection: Object
 ) => {
@@ -61,8 +65,8 @@ class SQLCache extends Component {
   props: {
     location: Object,
     collection: Object,
-    query: ?string,
-    onSearchChange: Function,
+    searchQuery: ?string,
+    changeSearchQuery: Function,
     optimisticDispatch: Function,
     openModal: Function,
     closeModal: Function,
@@ -123,24 +127,27 @@ class SQLCache extends Component {
 
     return (
       <div>
-        <Toolbar marginBottom>
+        <Headbar>
           <Breadcrumbs>
-            <Crumb> SQL Cache </Crumb>
+            <Crumb active> SQL Cache </Crumb>
           </Breadcrumbs>
-          <Search
-            defaultValue={this.props.query}
-            onSearchUpdate={this.props.onSearchChange}
-            resource="sqlcache"
-          />
-          <Button
-            intent={Intent.DANGER}
-            text="Clear All"
-            iconName="trash"
-            onClick={this.handleClearAllClick}
-            className="pull-right"
-            big
-          />
-        </Toolbar>
+          <Pull right>
+            <ButtonGroup marginRight={3}>
+              <Button
+                intent={Intent.DANGER}
+                text="Clear All"
+                iconName="trash"
+                onClick={this.handleClearAllClick}
+                big
+              />
+            </ButtonGroup>
+            <Search
+              defaultValue={this.props.searchQuery}
+              onSearchUpdate={this.props.changeSearchQuery}
+              resource="sqlcache"
+            />
+          </Pull>
+        </Headbar>
         <Container>
           {colLength > 0 ? (
             Object.keys(this.props.collection).map((col, index) => (
@@ -172,7 +179,7 @@ export default compose(
     }
   ),
   withDispatch(),
-  search(),
+  queryControl('search'),
   sync('sqlcache'),
   withModal(),
   titleManager('SQL Cache')

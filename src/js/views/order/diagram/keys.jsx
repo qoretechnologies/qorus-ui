@@ -12,7 +12,7 @@ const DiagramKeysTable: Function = ({
 }): React.Element<any> => (
   <PaneItem title="Keys">
     {data ? (
-      <Table bordered condensed>
+      <Table striped condensed>
         <Thead>
           <Tr>
             <Th> Key </Th>

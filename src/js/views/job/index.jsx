@@ -4,7 +4,6 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import Box from '../../components/box';
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
 import actions from '../../store/api/actions';
@@ -12,82 +11,138 @@ import JobLog from './tabs/log/index';
 import JobCode from './tabs/code';
 import JobResults from './tabs/results/index';
 import JobMappers from './tabs/mappers/index';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';
 import Controls from '../jobs/controls';
-import Tabs, { Pane } from '../../components/tabs';
+import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import withTabs from '../../hocomponents/withTabs';
 import titleManager from '../../hocomponents/TitleManager';
+import Headbar from '../../components/Headbar';
+import Pull from '../../components/Pull';
+import { normalizeName } from '../../components/utils';
+import queryControl from '../../hocomponents/queryControl';
+import Search from '../../containers/search';
+import mapProps from 'recompose/mapProps';
+import { DATES, DATE_FORMATS } from '../../constants/dates';
+import { formatDate } from '../../helpers/date';
+import {
+  resourceSelector,
+  querySelector,
+  paramSelector,
+} from '../../selectors';
+import lifecycle from 'recompose/lifecycle';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import unsync from '../../hocomponents/unsync';
 
-const jobSelector = (state, props) => {
-  const {
-    api: {
-      jobs: { data },
-    },
-  } = state;
-  const {
-    routeParams: { id },
-  } = props;
-
-  const jobId = parseInt(id, 10);
-  const job = data.find(item => parseInt(item.jobid, 10) === jobId);
-
-  return job || { id, loading: false, sync: false };
+type Props = {
+  job: Object,
+  location: Object,
+  children: ?Object,
+  tabQuery: string,
+  searchQuery?: string,
+  changeSearchQuery: Function,
 };
-
-const selector = createSelector([jobSelector], job => ({ job }));
 
 const JobPage = ({
   job,
   location,
-  handleTabChange,
   tabQuery,
-}: {
-  job: Object,
-  location: Object,
-  children: ?Object,
-  handleTabChange: Function,
-  tabQuery?: string,
-}) => (
+  searchQuery,
+  changeSearchQuery,
+  date,
+  linkDate,
+}: Props) => (
   <div>
-    <Breadcrumbs>
-      <Crumb link="/jobs"> Jobs </Crumb>
-      <Crumb>
-        {job.name} <small>{job.version}</small> <small>({job.id})</small>
-      </Crumb>
-    </Breadcrumbs>
-    <div className="pull-right">
-      <Controls {...job} />
-    </div>
-    <Box top>
-      <Tabs active={tabQuery} onChange={handleTabChange} noContainer>
-        <Pane name="List">
-          <JobResults job={job} location={location} />
-        </Pane>
-        <Pane name="Code">
-          <JobCode job={job} location={location} />
-        </Pane>
-        <Pane name="Log">
-          <JobLog job={job} location={location} />
-        </Pane>
-        <Pane name="Mappers">
-          <JobMappers job={job} location={location} />
-        </Pane>
-      </Tabs>
-    </Box>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb link="/jobs"> Jobs </Crumb>
+        <Crumb>{normalizeName(job)}</Crumb>
+        <CrumbTabs tabs={['Instances', 'Mappers', 'Code', 'Log']} />
+      </Breadcrumbs>
+      <Pull right>
+        <Controls {...job} big />
+        {tabQuery === 'instances' && (
+          <Search
+            defaultValue={searchQuery}
+            onSearchUpdate={changeSearchQuery}
+            resource="job"
+          />
+        )}
+      </Pull>
+    </Headbar>
+    <SimpleTabs activeTab={tabQuery}>
+      <SimpleTab name="instances">
+        <JobResults {...{ job, date, location, linkDate }} />
+      </SimpleTab>
+      <SimpleTab name="code">
+        <JobCode {...{ job, date, location, linkDate }} />
+      </SimpleTab>
+      <SimpleTab name="log">
+        <JobLog {...{ job, date, location, linkDate }} />
+      </SimpleTab>
+      <SimpleTab name="mappers">
+        <JobMappers {...{ job, date, location, linkDate }} />
+      </SimpleTab>
+    </SimpleTabs>
   </div>
 );
 
-export { JobLog, JobResults, JobMappers, JobCode };
+const jobSelector: Function = (state: Object, props: Object): Object =>
+  state.api.jobs.data.find(
+    (job: Object) => parseInt(props.params.id, 10) === parseInt(job.id, 10)
+  );
+
+const selector: Object = createSelector(
+  [
+    resourceSelector('jobs'),
+    jobSelector,
+    querySelector('date'),
+    paramSelector('id'),
+  ],
+  (meta, job, date, id) => ({
+    meta,
+    job,
+    date,
+    id: parseInt(id, 10),
+  })
+);
 
 export default compose(
   connect(
     selector,
     {
-      load: actions.jobs.fetchLibSources,
+      load: actions.jobs.fetch,
+      fetch: actions.jobs.fetch,
+      unsync: actions.jobs.unsync,
     }
   ),
-  patch('load', ['job']),
-  sync('job'),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      date: date || DATES.PREV_DAY,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      fetchParams: { lib_source: true, date: formatDate(date).format() },
+      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+      date,
+      ...rest,
+    })
+  ),
+  patch('load', ['fetchParams', 'id']),
+  sync('meta'),
+  lifecycle({
+    componentWillReceiveProps(nextProps: Props) {
+      const { date, fetch, id }: Props = this.props;
+
+      if (date !== nextProps.date || id !== nextProps.id) {
+        fetch(nextProps.fetchParams, nextProps.id);
+      }
+    },
+  }),
   titleManager(({ job }): string => job.name),
-  withTabs('list')
+  queryControl('search'),
+  withTabs('instances'),
+  unsync(),
+  onlyUpdateForKeys(['job', 'location', 'children'])
 )(JobPage);

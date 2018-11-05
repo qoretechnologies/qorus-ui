@@ -41,7 +41,7 @@ const SLAMethods: Function = ({
   onSortChange,
 }: Props): React.Element<any> => (
   <div>
-    <Toolbar>
+    <Toolbar mb>
       <Search
         onSearchUpdate={changeSearchQuery}
         defaultValue={searchQuery}

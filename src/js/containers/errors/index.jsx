@@ -5,7 +5,6 @@ import defaultProps from 'recompose/defaultProps';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Button, Intent } from '@blueprintjs/core';
 
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
@@ -16,12 +15,17 @@ import withDispatch from '../../hocomponents/withDispatch';
 import { findBy } from '../../helpers/search';
 import actions from '../../store/api/actions';
 import Search from '../../containers/search';
-import Toolbar from '../../components/toolbar';
 import ConfirmDialog from '../../components/confirm_dialog';
 import Table from './table';
 import ErrorModal from './modal';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Box from '../../components/box';
+import Pull from '../../components/Pull';
+import Headbar from '../../components/Headbar';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 
 type Props = {
   onSearchChange: Function,
@@ -92,26 +96,29 @@ const ErrorsContainer: Function = ({
   };
 
   return (
-    <div>
-      <Toolbar mb mt>
+    <div className="errors-container-wrapper">
+      <Headbar>
         {title && (
           <Breadcrumbs collapsed={!compact}>
-            <Crumb>{title}</Crumb>
+            <Crumb active>{title}</Crumb>
           </Breadcrumbs>
         )}
-        <Search
-          onSearchUpdate={onSearchChange}
-          defaultValue={query}
-          resource={`${type}Errors`}
-        />
-        <Button
-          className="pull-right"
-          text="Add error"
-          iconName="plus"
-          onClick={handleCreateClick}
-          intent={Intent.PRIMARY}
-        />
-      </Toolbar>
+        <Pull right>
+          <ButtonGroup marginRight={3}>
+            <Button
+              text="Add error"
+              iconName="plus"
+              onClick={handleCreateClick}
+              big
+            />
+          </ButtonGroup>
+          <Search
+            onSearchUpdate={onSearchChange}
+            defaultValue={query}
+            resource={`${type}Errors`}
+          />
+        </Pull>
+      </Headbar>
       {compact ? (
         <Table
           className="clear"

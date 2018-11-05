@@ -1,10 +1,8 @@
 /* @flow */
 import React from 'react';
 import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 
-import { findBy } from '../../../../helpers/search';
 import {
   Table,
   Thead,
@@ -13,33 +11,92 @@ import {
   Th,
 } from '../../../../components/new_table';
 import InstanceRow from './row';
-import sort from '../../../../hocomponents/sort';
-import showIfPassed from '../../../../hocomponents/show-if-passed';
-import { sortDefaults } from '../../../../constants/sort';
+import queryControl from '../../../../hocomponents/queryControl';
+import withHandlers from 'recompose/withHandlers';
+import { connect } from 'react-redux';
+import actions from '../../../../store/api/actions';
+import Pull from '../../../../components/Pull';
+import LoadMore from '../../../../components/LoadMore';
+import CsvControl from '../../../../components/CsvControl';
+import DatePicker from '../../../../components/datepicker';
+import { Controls as ButtonGroup } from '../../../../components/controls';
+import Filters from '../../../workflow/tabs/list/toolbar/filters';
+import { JOB_STATES } from '../../../../constants/jobs';
+import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
+import InstancesBar from '../../../../components/instances_bar';
 
-const ResultTable = ({
-  data = [],
-  sortData,
-  onSortChange,
-  jobQuery,
-  changeJobQuery,
-}: {
-  data: Array<Object>,
+type Props = {
+  collection: Array<Object>,
   sortData: Object,
   onSortChange: Function,
   jobQuery: string | number,
   changeJobQuery: Function,
-}) => (
-  <Table
-    fixed
-    condensed
-    hover
-    striped
-    className="resource-table"
-    marginBottom={20}
-    key={data.length}
-  >
+  handleHeaderClick: Function,
+  sort: Function,
+  canLoadMore: Function,
+  onLoadMore: Function,
+  limit: number,
+  onCSVClick: Function,
+  dateQuery: string,
+  changeDateQuery: Function,
+  job: Object,
+};
+
+const ResultTable = ({
+  collection = [],
+  sortData,
+  onSortChange,
+  jobQuery,
+  changeJobQuery,
+  handleHeaderClick,
+  canLoadMore,
+  onLoadMore,
+  limit,
+  onCSVClick,
+  dateQuery: dateQuery = '24h',
+  changeDateQuery,
+  job: { COMPLETE = 0, ERROR = 0, PROGRESS = 0, CRASHED = 0, id },
+}: Props) => (
+  <Table fixed condensed hover striped key={collection.length}>
     <Thead>
+      <FixedRow className="toolbar-row">
+        <Th colspan="full">
+          <Pull>
+            <ButtonGroup>
+              <DatePicker date={dateQuery} onApplyDate={changeDateQuery} />
+            </ButtonGroup>
+            <Filters items={JOB_STATES} />
+            <CsvControl onClick={onCSVClick} />
+          </Pull>
+          <Pull right>
+            <LoadMore
+              canLoadMore={canLoadMore}
+              handleLoadMore={onLoadMore}
+              limit={limit}
+            />
+            <InstancesBar
+              states={[
+                { name: 'COMPLETE', label: 'complete', title: 'Complete' },
+                { name: 'ERROR', label: 'error', title: 'Error' },
+                { name: 'PROGRESS', label: 'waiting', title: 'In-progress' },
+                { name: 'CRASHED', label: 'blocked', title: 'Crashed' },
+              ]}
+              instances={{
+                COMPLETE,
+                ERROR,
+                PROGRESS,
+                CRASHED,
+              }}
+              type="job"
+              totalInstances={COMPLETE + ERROR + PROGRESS + CRASHED}
+              id={id}
+              date={dateQuery}
+              wrapperWidth={300}
+              big
+            />
+          </Pull>
+        </Th>
+      </FixedRow>
       <FixedRow onSortChange={onSortChange} sortData={sortData}>
         <Th name="job_instanceid" className="normal">
           ID
@@ -48,53 +105,47 @@ const ResultTable = ({
         <Th name="jobstatus" className="medium">
           Status
         </Th>
-        <Th name="started" className="big">
+        <Th name="started" className="big" onClick={handleHeaderClick}>
           Started
         </Th>
         <Th name="modified" className="big">
           Modified
         </Th>
-        <Th name="completed" className="big">
+        <Th name="completed" className="big" onClick={handleHeaderClick}>
           Completed
         </Th>
       </FixedRow>
     </Thead>
-    <Tbody>
-      {data.map(
-        (item: Object, idx: number): React.Element<InstanceRow> => (
-          <InstanceRow
-            first={idx === 0}
-            key={`item_${item.job_instanceid}`}
-            active={item.job_instanceid === parseInt(jobQuery, 10)}
-            changeJobQuery={changeJobQuery}
-            {...item}
-          />
-        )
+    <DataOrEmptyTable cols={6} condition={collection.length === 0}>
+      {props => (
+        <Tbody {...props}>
+          {collection.map(
+            (item: Object, idx: number): React.Element<InstanceRow> => (
+              <InstanceRow
+                first={idx === 0}
+                key={`item_${item.job_instanceid}`}
+                active={item.job_instanceid === parseInt(jobQuery, 10)}
+                changeJobQuery={changeJobQuery}
+                {...item}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
-const hideWhileLoading = showIfPassed(({ results }) => results && results.data);
-
-const filterResults = mapProps(props => ({
-  ...props,
-  data: findBy(
-    ['job_instanceid', 'name'],
-    props.searchQuery,
-    props.results.data
-  ),
-}));
-
-const showNoData = showIfPassed(
-  ({ data }) => data.length > 0,
-  <p className="data-not-found">Data not found</p>
-);
-
 export default compose(
-  hideWhileLoading,
-  filterResults,
-  showNoData,
-  sort('job-results', 'data', sortDefaults.jobResults),
-  pure(['jobQuery', 'sortData', 'data'])
+  connect(
+    null,
+    { sort: actions.instances.changeServerSort }
+  ),
+  withHandlers({
+    handleHeaderClick: ({ sort }: Props): Function => (name: string): void => {
+      sort(name);
+    },
+  }),
+  queryControl('date'),
+  pure(['jobQuery', 'sortData', 'collection', 'canLoadMore', 'date', 'job'])
 )(ResultTable);

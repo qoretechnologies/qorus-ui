@@ -4,22 +4,13 @@ import { includes } from 'lodash';
 
 import ErrorsTable from './table';
 import ErrorsToolbar from './toolbar';
-import CSVModal from '../../errors/csv';
 import { pureRender } from 'components/utils';
 import PaneItem from '../../../../components/pane_item';
-
-import { generateCSV, sortTable } from 'helpers/table';
 
 @pureRender
 export default class DiagramErrors extends Component {
   static propTypes = {
     data: PropTypes.array,
-  };
-
-  static contextTypes = {
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-    selectModalText: PropTypes.func,
   };
 
   componentWillMount() {
@@ -57,36 +48,6 @@ export default class DiagramErrors extends Component {
     });
   };
 
-  handleCSVClick = () => {
-    this.openCSVModal(generateCSV(this.props.data, 'order_errors_pane'));
-  };
-
-  handleCopyLastClick = () => {
-    const sorted = sortTable(this.props.data, {
-      sortBy: 'created',
-      sortByKey: { direction: -1 },
-    });
-    const data = this.stringifyError(sorted[0]);
-
-    this.openCSVModal(data);
-  };
-
-  openCSVModal = data => {
-    this._modal = (
-      <CSVModal
-        onMount={this.context.selectModalText}
-        onClose={this.handleModalCloseClick}
-        data={data}
-      />
-    );
-
-    this.context.openModal(this._modal);
-  };
-
-  handleModalCloseClick = () => {
-    this.context.closeModal(this._modal);
-  };
-
   stringifyError: Function = (data: Object): string =>
     Object.keys(data).reduce(
       (str, key) => `${str}${key}: ${data[key]}\r\n`,
@@ -99,7 +60,6 @@ export default class DiagramErrors extends Component {
         <ErrorsToolbar
           data={this.props.data}
           showDetail={this.state.showDetail}
-          onCSVClick={this.handleCSVClick}
           onShowDetailClick={this.handleShowDetailClick}
           onHideDetailClick={this.handleHideDetailClick}
           onSubmit={this.handleDropdownSubmit}

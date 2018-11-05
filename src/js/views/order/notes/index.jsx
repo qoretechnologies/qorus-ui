@@ -85,7 +85,7 @@ export default class NotesView extends Component {
 
   render() {
     return (
-      <Box>
+      <Box top>
         {this.state.error && (
           <Callout
             intent={Intent.DANGER}

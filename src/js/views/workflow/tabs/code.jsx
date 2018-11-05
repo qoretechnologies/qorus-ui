@@ -3,6 +3,7 @@ import React from 'react';
 import Code from '../../../components/code';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
+import Box from '../../../components/box';
 
 type Props = {
   workflow: Object,
@@ -15,7 +16,13 @@ const CodeTab: Function = ({
   heightUpdater,
   location,
 }: Props): React.Element<any> => (
-  <Code data={workflow.lib} heightUpdater={heightUpdater} location={location} />
+  <Box top>
+    <Code
+      data={workflow.lib}
+      heightUpdater={heightUpdater}
+      location={location}
+    />
+  </Box>
 );
 
 export default compose(

@@ -17,7 +17,7 @@ import {
   FixedRow,
   Th,
 } from '../../../components/new_table';
-import Toolbar from '../../../components/toolbar';
+import Headbar from '../../../components/Headbar';
 import Box from '../../../components/box';
 import NoData from '../../../components/nodata';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
@@ -25,6 +25,7 @@ import Search from '../../../containers/search';
 import { querySelector, resourceSelector } from '../../../selectors';
 import OptionRow from './row';
 import titleManager from '../../../hocomponents/TitleManager';
+import Pull from '../../../components/Pull';
 
 type Props = {
   load: Function,
@@ -48,17 +49,19 @@ const OptionsView: Function = ({
   collection,
 }: Props): React.Element<any> => (
   <div>
-    <Toolbar>
+    <Headbar>
       <Breadcrumbs>
-        <Crumb> Options </Crumb>
+        <Crumb active> Options </Crumb>
       </Breadcrumbs>
-      <Search
-        defaultValue={searchQuery}
-        onSearchUpdate={changeSearchQuery}
-        resource="options"
-      />
-    </Toolbar>
-    <Box noPadding>
+      <Pull right>
+        <Search
+          defaultValue={searchQuery}
+          onSearchUpdate={changeSearchQuery}
+          resource="options"
+        />
+      </Pull>
+    </Headbar>
+    <Box top noPadding>
       {collection.length ? (
         <Table fixed condensed striped key={collection.length}>
           <Thead>

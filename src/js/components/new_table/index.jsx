@@ -23,7 +23,6 @@ type Props = {
   info?: boolean,
   height?: string | number,
   marginBottom?: number,
-  hasFooter?: boolean,
 };
 
 let Table: Function = ({
@@ -36,7 +35,6 @@ let Table: Function = ({
   className,
   height,
   marginBottom,
-  hasFooter,
   info,
 }: Props): React.Element<any> =>
   fixed ? (
@@ -52,7 +50,6 @@ let Table: Function = ({
             bordered,
             className,
             height,
-            hasFooter,
             marginBottom: marginBottom || 0,
           })
       )}
@@ -81,15 +78,6 @@ let Table: Function = ({
   );
 
 Table = compose(
-  mapProps(
-    ({ children, ...rest }: Props): Props => ({
-      hasFooter: React.Children.toArray(children).some(
-        (child: Object): boolean => child.type.displayName === 'Tfoot'
-      ),
-      children,
-      ...rest,
-    })
-  ),
   updateOnlyForKeys(['children', 'className', 'marginBottom', 'height'])
 )(Table);
 

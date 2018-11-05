@@ -25,62 +25,36 @@ const ToolbarFilters: Function = ({
   changeLatestQuery,
   deprecatedQuery,
   changeDeprecatedQuery,
-  isTablet,
-}: Props): React.Element<any> =>
-  isTablet ? (
-    <Dropdown>
-      <Control
-        intent={
-          deprecatedQuery || runningQuery || latestQuery
-            ? Intent.PRIMARY
-            : Intent.NONE
-        }
-        iconName="filter-list"
-      >
-        {' '}
-        Filter
-      </Control>
-      <Item
-        title="Running"
-        iconName={runningQuery ? 'selection' : 'circle'}
-        onClick={changeRunningQuery}
-      />
-      <Item
-        title="Latest"
-        iconName={latestQuery ? 'selection' : 'circle'}
-        onClick={changeLatestQuery}
-      />
-      <Item
-        title="Deprecated"
-        iconName={deprecatedQuery ? 'selection' : 'circle'}
-        onClick={changeDeprecatedQuery}
-      />
-    </Dropdown>
-  ) : (
-    <Controls>
-      <Button
-        text="Running"
-        onClick={changeRunningQuery}
-        iconName={runningQuery ? 'selection' : 'circle'}
-        intent={runningQuery ? Intent.PRIMARY : Intent.NONE}
-        big
-      />
-      <Button
-        text="Last version"
-        onClick={changeLatestQuery}
-        iconName={latestQuery ? 'selection' : 'circle'}
-        intent={latestQuery ? Intent.PRIMARY : Intent.NONE}
-        big
-      />
-      <Button
-        text="Deprecated"
-        onClick={changeDeprecatedQuery}
-        iconName={deprecatedQuery ? 'selection' : 'circle'}
-        intent={deprecatedQuery ? Intent.PRIMARY : Intent.NONE}
-        big
-      />
-    </Controls>
-  );
+}: Props): React.Element<any> => (
+  <Dropdown>
+    <Control
+      intent={
+        deprecatedQuery || runningQuery || latestQuery
+          ? Intent.PRIMARY
+          : Intent.NONE
+      }
+      icon="filter-list"
+    >
+      {' '}
+      Filter
+    </Control>
+    <Item
+      title="Running"
+      iconName={runningQuery ? 'selection' : 'circle'}
+      onClick={changeRunningQuery}
+    />
+    <Item
+      title="Latest"
+      iconName={latestQuery ? 'selection' : 'circle'}
+      onClick={changeLatestQuery}
+    />
+    <Item
+      title="Deprecated"
+      iconName={deprecatedQuery ? 'selection' : 'circle'}
+      onClick={changeDeprecatedQuery}
+    />
+  </Dropdown>
+);
 
 export default compose(
   queryControl('running', null, true),

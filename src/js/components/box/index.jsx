@@ -55,4 +55,4 @@ const Box: Function = ({
     </Transition>
   );
 
-export default pure(['noPadding', 'children'])(Box);
+export default pure(['noPadding', 'children', 'top'])(Box);

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
+import withMutationObserver from '../../hocomponents/withMutationObserver';
 
 type Props = {
   children?: any,
@@ -15,9 +16,18 @@ type Props = {
   first?: boolean,
   title?: string,
   key?: any,
+  lastObserverChange?: string | number,
 };
 
-@updateOnlyForKeys(['children', 'className', 'sortData', 'highlight', 'first'])
+@withMutationObserver('.sidebar')
+@updateOnlyForKeys([
+  'children',
+  'className',
+  'sortData',
+  'highlight',
+  'first',
+  'lastObserverChange',
+])
 export default class Tr extends Component {
   props: Props;
 
@@ -33,9 +43,16 @@ export default class Tr extends Component {
 
   componentWillReceiveProps(nextProps: Object): void {
     this.startHighlight(nextProps.highlight);
+
+    if (
+      nextProps.first &&
+      this.props.lastObserverChange !== nextProps.lastObserverChange
+    ) {
+      this.recalculateSizes();
+    }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     this.recalculateSizes();
   }
 
@@ -104,10 +121,7 @@ export default class Tr extends Component {
         );
         const { width: rowWidth } = ref.getBoundingClientRect();
 
-        headerWrapper[0].setAttribute(
-          'style',
-          `width: ${rowWidth}px !important`
-        );
+        headerWrapper[0].setAttribute('style', 'width: 100% !important');
 
         if (footerWrapper.length) {
           footerWrapper[0].setAttribute(
@@ -120,53 +134,57 @@ export default class Tr extends Component {
           (header: any): void => {
             const headCells = header.querySelectorAll('.fixed-table-header');
 
-            // * this tells us if we need to increment the current index because of a colspan
-            let colspanIncrementer: number = 0;
+            if (headCells.length === 1) {
+              headCells[0].setAttribute('style', 'width: 100% !important');
+            } else {
+              // * this tells us if we need to increment the current index because of a colspan
+              let colspanIncrementer: number = 0;
 
-            headCells.forEach(
-              (cell: any, index: number): void => {
-                // * Create the current bodycell index by adding the index + any colspan
-                const newIndex: number = index + colspanIncrementer;
-                let { width } = bodyCells[newIndex].getBoundingClientRect();
+              headCells.forEach(
+                (cell: any, index: number): void => {
+                  // * Create the current bodycell index by adding the index + any colspan
+                  const newIndex: number = index + colspanIncrementer;
+                  let { width } = bodyCells[newIndex].getBoundingClientRect();
 
-                // * Check if the cell has the data-colspan attr
-                // * If it has, it means we need to stretch the cell by the width
-                // * of the number of leading columns
-                let colspan: ?number = cell.getAttribute('data-colspan');
+                  // * Check if the cell has the data-colspan attr
+                  // * If it has, it means we need to stretch the cell by the width
+                  // * of the number of leading columns
+                  let colspan: ?number = cell.getAttribute('data-colspan');
 
-                if (colspan) {
-                  colspan = parseInt(colspan, 10);
-                  // * Calculate the width of this cell by going through
-                  // * the forward cells to the length of the colspan
-                  width = bodyCells.reduce(
-                    (newWidth: number, bCell: any, idx: number): number => {
-                      if (idx >= newIndex && idx <= newIndex + colspan - 1) {
-                        return newWidth + bCell.getBoundingClientRect().width;
-                      }
+                  if (colspan) {
+                    colspan = parseInt(colspan, 10);
+                    // * Calculate the width of this cell by going through
+                    // * the forward cells to the length of the colspan
+                    width = bodyCells.reduce(
+                      (newWidth: number, bCell: any, idx: number): number => {
+                        if (idx >= newIndex && idx <= newIndex + colspan - 1) {
+                          return newWidth + bCell.getBoundingClientRect().width;
+                        }
 
-                      return newWidth + 0;
-                    },
-                    0
-                  );
+                        return newWidth + 0;
+                      },
+                      0
+                    );
 
-                  colspanIncrementer = colspanIncrementer + colspan - 1;
+                    colspanIncrementer = colspanIncrementer + colspan - 1;
+                  }
+
+                  cell.setAttribute('style', `width: ${width}px !important`);
+
+                  if (footCells.length) {
+                    footCells[index].setAttribute(
+                      'style',
+                      `width: ${width}px !important`
+                    );
+                  }
                 }
-
-                cell.setAttribute('style', `width: ${width}px !important`);
-
-                if (footCells.length) {
-                  footCells[index].setAttribute(
-                    'style',
-                    `width: ${width}px !important`
-                  );
-                }
-              }
-            );
+              );
+            }
           }
         );
 
         this._resizeTimeout = null;
-      }, 1500);
+      }, 1);
     }
   };
 
@@ -197,12 +215,9 @@ export default class Tr extends Component {
 
     return (
       <tr
-        className={classNames(
-          {
-            'row-highlight': highlight,
-          },
-          className
-        )}
+        className={classNames(className, {
+          'row-highlight': highlight,
+        })}
         onClick={this.handleClick}
         ref={this.handleRef}
         title={title}

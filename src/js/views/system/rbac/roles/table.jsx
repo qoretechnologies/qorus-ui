@@ -14,6 +14,8 @@ import {
 import sort from '../../../../hocomponents/sort';
 import check from '../../../../hocomponents/check-no-data';
 import { sortDefaults } from '../../../../constants/sort';
+import Pull from '../../../../components/Pull';
+import { Control as Button } from '../../../../components/controls';
 
 type Props = {
   collection: Array<Object>,
@@ -25,16 +27,31 @@ type Props = {
   canCreate: boolean,
   onSortChange: Function,
   sortData: Object,
+  onAddRoleClick: Function,
 };
 
 const RolesTable: Function = ({
   collection,
   onSortChange,
   sortData,
+  onAddRoleClick,
   ...rest
 }: Props): React.Element<Table> => (
   <Table striped condensed fixed key={`roles_table-${collection.length}`}>
     <Thead>
+      <FixedRow className="toolbar-row">
+        <Th colspan="full">
+          <Pull>
+            <Button
+              disabled={!rest.canCreate}
+              text="Add role"
+              iconName="plus"
+              onClick={onAddRoleClick}
+              big
+            />
+          </Pull>
+        </Th>
+      </FixedRow>
       <FixedRow {...{ onSortChange, sortData }}>
         <Th className="name" name="role">
           Name

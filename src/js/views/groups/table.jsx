@@ -8,6 +8,10 @@ import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
 import Row from './row';
 import Icon from '../../components/icon';
+import Selectors from './toolbar/selectors';
+import Actions from './toolbar/actions';
+import Pull from '../../components/Pull';
+import LoadMore from '../../components/LoadMore';
 
 type Props = {
   sortData: Object,
@@ -17,6 +21,11 @@ type Props = {
   updateDone: Function,
   canLoadMore: boolean,
   isTablet: boolean,
+  selected: string,
+  selectedIds: Array<Number>,
+  handleLoadMore: Function,
+  handleLoadAll: Function,
+  limit: number,
 };
 
 const GroupsTable: Function = ({
@@ -27,6 +36,11 @@ const GroupsTable: Function = ({
   updateDone,
   canLoadMore,
   isTablet,
+  selected,
+  selectedIds,
+  limit,
+  handleLoadMore,
+  handleLoadAll,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -34,10 +48,25 @@ const GroupsTable: Function = ({
     condensed
     striped
     className="resource-table"
-    marginBottom={canLoadMore ? 20 : 0}
     key={collection.length}
   >
     <Thead>
+      <FixedRow className="toolbar-row">
+        <Th colspan={11}>
+          <Pull>
+            <Selectors selected={selected} selectedCount={selectedIds.length} />
+            <Actions selectedIds={selectedIds} show={selected !== 'none'} />
+          </Pull>
+          <Pull right>
+            <LoadMore
+              canLoadMore={canLoadMore}
+              handleLoadAll={handleLoadAll}
+              handleLoadMore={handleLoadMore}
+              limit={limit}
+            />
+          </Pull>
+        </Th>
+      </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <Th className="tiny">-</Th>
         <Th className="narrow" name="enabled">

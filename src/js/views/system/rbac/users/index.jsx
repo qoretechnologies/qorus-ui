@@ -6,11 +6,9 @@ import { createSelector } from 'reselect';
 import flowRight from 'lodash/flowRight';
 import { Button, Intent } from '@blueprintjs/core';
 
-import search from '../../../../hocomponents/search';
 import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
 import withDispatch from '../../../../hocomponents/withDispatch';
-import Search from '../../../../containers/search';
 import Toolbar from '../../../../components/toolbar';
 import ConfirmDialog from '../../../../components/confirm_dialog';
 import { findBy } from '../../../../helpers/search';
@@ -23,7 +21,7 @@ const currentUserSelector: Function = (state: Object): Object =>
   state.api.currentUser;
 const usersSelector: Function = (state: Object): Object => state.api.users;
 const querySelector: Function = (state: Object, props: Object): ?string =>
-  props.location.query.q;
+  props.location.query.search;
 const filterData: Function = (query: ?string): Function => (
   collection: Array<*>
 ) => findBy(['name', 'username'], query, collection);
@@ -51,14 +49,11 @@ const viewSelector: Function = createSelector(
     }
   ),
   withDispatch(),
-  search(),
   modal(),
   sync('users')
 )
 export default class RBACUsers extends Component {
   props: {
-    onSearchChange: Function,
-    query: string,
     usersModel: Array<*>,
     user: Object,
     openModal: Function,
@@ -147,35 +142,22 @@ export default class RBACUsers extends Component {
       'or'
     );
 
+    const canAdd = hasPermission(
+      permissions,
+      ['USER-CONTROL', 'ADD-USER'],
+      'or'
+    );
+
     return (
-      <div>
-        <Toolbar marginBottom>
-          {hasPermission(permissions, ['USER-CONTROL', 'ADD-USER'], 'or') && (
-            <div className="pull-left">
-              <Button
-                text="Add user"
-                iconName="plus"
-                intent={Intent.PRIMARY}
-                onClick={this.handleAddUserClick}
-              />
-            </div>
-          )}
-
-          <Search
-            onSearchUpdate={this.props.onSearchChange}
-            defaultValue={this.props.query}
-            resource="rbacusers"
-          />
-        </Toolbar>
-
-        <Table
-          collection={this.props.usersModel}
-          canEdit={canEdit}
-          canDelete={canDelete}
-          onDeleteClick={this.handleRemoveUserClick}
-          onEditClick={this.handleEditUserClick}
-        />
-      </div>
+      <Table
+        collection={this.props.usersModel}
+        canAdd={canAdd}
+        canEdit={canEdit}
+        canDelete={canDelete}
+        onAddUserClick={this.handleAddUserClick}
+        onDeleteClick={this.handleRemoveUserClick}
+        onEditClick={this.handleEditUserClick}
+      />
     );
   }
 }

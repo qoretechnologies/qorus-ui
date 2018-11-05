@@ -8,7 +8,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import { withRouter } from 'react-router';
-import { Button, Intent } from '@blueprintjs/core';
+import { Button, Icon } from '@blueprintjs/core';
 import titleManager from '../../../hocomponents/TitleManager';
 import capitalize from 'lodash/capitalize';
 
@@ -21,7 +21,6 @@ import {
 } from '../../../components/new_table';
 import sync from '../../../hocomponents/sync';
 import patch from '../../../hocomponents/patchFuncArgs';
-import Icon from '../../../components/icon';
 import actions from '../../../store/api/actions';
 import withSort from '../../../hocomponents/sort';
 import withLoadMore from '../../../hocomponents/loadMore';
@@ -32,17 +31,16 @@ import withModal from '../../../hocomponents/modal';
 import ConnectionPane from './pane';
 import ConnectionRow from './row';
 import ManageModal from './modals/manage';
-import Toolbar from '../../../components/toolbar';
 import {
   CONN_MAP,
   ADD_PERMS_MAP,
   DELETE_PERMS_MAP,
   EDIT_PERMS_MAP,
 } from '../../../constants/remotes';
-import Search from '../../../containers/search';
-import queryControl from '../../../hocomponents/queryControl';
 import { findBy } from '../../../helpers/search';
 import { hasPermission } from '../../../helpers/user';
+import Pull from '../../../components/Pull';
+import LoadMore from '../../../components/LoadMore';
 
 type Props = {
   location: Object,
@@ -59,12 +57,12 @@ type Props = {
   type: string,
   canLoadMore?: boolean,
   handleLoadMore: Function,
+  handleLoadAdd: Function,
+  limit: number,
   handleAddClick: Function,
   openModal: Function,
   closeModal: Function,
   manage: Function,
-  searchQuery: ?string,
-  changeSearchQuery: Function,
   perms: Array<string>,
   canDelete: boolean,
   canAdd: boolean,
@@ -114,88 +112,84 @@ const ConnectionTable: Function = ({
   type,
   canLoadMore,
   handleLoadMore,
+  handleLoadAll,
+  limit,
   handleAddClick,
-  searchQuery,
-  changeSearchQuery,
   canDelete,
   canAdd,
 }: Props): React.Element<any> => (
-  <div>
-    <Toolbar marginBottom>
-      {canAdd && (
-        <Button
-          onClick={handleAddClick}
-          intent={Intent.PRIMARY}
-          iconName="add"
-          text="Add new"
-        />
-      )}
-      <Search
-        onSearchUpdate={changeSearchQuery}
-        defaultValue={searchQuery}
-        resource={type}
-      />
-    </Toolbar>
-    <Table
-      fixed
-      striped
-      key={`${type}-${remotes.length}`}
-      marginBottom={canLoadMore ? 40 : 0}
-    >
-      <Thead>
-        <FixedRow sortData={sortData} onSortChange={onSortChange}>
-          <Th className="normal" name="up">
-            Status
-          </Th>
-          <Th className="narrow">-</Th>
-          {canDelete && <Th className="narrow">Delete</Th>}
-          <Th className="tiny">
-            <Icon iconName="exclamation-triangle" />
-          </Th>
-          <Th className="name" name="name">
-            Name
-          </Th>
-          {type === 'datasources' ? (
-            <Th className="text">Options</Th>
-          ) : (
-            <Th className="text" name="url">
-              URL
-            </Th>
-          )}
-          <Th className="text" name="desc">
-            Description
-          </Th>
-          {type === 'qorus' && <Th className="normal">Loopback</Th>}
-          <Th className="normal">-</Th>
-        </FixedRow>
-      </Thead>
-      <Tbody>
-        {remotes.map(
-          (remote: Object, index: number): React.Element<any> => (
-            <ConnectionRow
-              first={index === 0}
-              key={`connection_${remote.name}`}
-              isActive={remote.name === paneId}
-              hasAlerts={remote.alerts.length > 0}
-              openPane={openPane}
-              closePane={closePane}
-              remoteType={type}
-              canDelete={canDelete}
-              {...remote}
+  <Table
+    fixed
+    striped
+    key={`${type}-${remotes.length}`}
+    marginBottom={canLoadMore ? 40 : 0}
+  >
+    <Thead>
+      <FixedRow className="toolbar-row">
+        <Th colspan="full">
+          <Pull>
+            <Button
+              disabled={!canAdd}
+              onClick={handleAddClick}
+              iconName="add"
+              text="Add new"
             />
-          )
+          </Pull>
+          <Pull right>
+            <LoadMore
+              canLoadMore={canLoadMore}
+              handleLoadMore={handleLoadMore}
+              handleLoadAll={handleLoadAll}
+              limit={limit}
+            />
+          </Pull>
+        </Th>
+      </FixedRow>
+      <FixedRow sortData={sortData} onSortChange={onSortChange}>
+        <Th className="normal" name="up">
+          Status
+        </Th>
+        <Th className="narrow">
+          <Icon iconName="list-detail-view" />
+        </Th>
+        <Th className="narrow">Actions</Th>
+        <Th className="tiny">
+          <Icon iconName="error" />
+        </Th>
+        <Th className="name" name="name">
+          Name
+        </Th>
+        {type === 'datasources' ? (
+          <Th className="text">Options</Th>
+        ) : (
+          <Th className="text" name="url">
+            URL
+          </Th>
         )}
-      </Tbody>
-    </Table>
-    {canLoadMore && (
-      <Button
-        label="Load 30 more..."
-        btnStyle="success"
-        onClick={handleLoadMore}
-        big
-      />
-    )}
-  </div>
+        <Th className="text" name="desc">
+          Description
+        </Th>
+        {type === 'qorus' && <Th className="normal">Loopback</Th>}
+      </FixedRow>
+    </Thead>
+    <Tbody>
+      {remotes.map(
+        (remote: Object, index: number): React.Element<any> => (
+          <ConnectionRow
+            first={index === 0}
+            key={`connection_${remote.name}`}
+            isActive={remote.name === paneId}
+            hasAlerts={remote.alerts.length > 0}
+            openPane={openPane}
+            closePane={closePane}
+            remoteType={type}
+            canDelete={canDelete}
+            {...remote}
+          />
+        )
+      )}
+    </Tbody>
+  </Table>
 );
 
 export default compose(
@@ -233,7 +227,6 @@ export default compose(
       openModal(<ManageModal onClose={closeModal} remoteType={type} />);
     },
   }),
-  queryControl('search'),
   titleManager(
     ({ remoteType }: Props): string => `${capitalize(remoteType)} connections`
   ),

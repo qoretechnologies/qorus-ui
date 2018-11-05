@@ -266,6 +266,34 @@ const removeSLAJob = createAction(
   }
 );
 
+const setRemote = createAction(
+  'JOBS_SETREMOTE',
+  async (id, value, dispatch) => {
+    if (!dispatch) {
+      return { id, value };
+    }
+
+    const result = await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/jobs/${id}?action=setRemote&remote=${
+            value ? 1 : 0
+          }`
+        ),
+      `Setting job as ${!value ? 'not' : ''} remote...`,
+      `Service job as ${!value ? 'not' : ''} remote`,
+      dispatch
+    );
+
+    if (result.err) {
+      return { id, value: !value };
+    }
+
+    return { id, value };
+  }
+);
+
 const selectAll = createAction('JOBS_SELECTALL');
 const selectNone = createAction('JOBS_SELECTNONE');
 const selectInvert = createAction('JOBS_SELECTINVERT');
@@ -300,4 +328,5 @@ export {
   selectAlerts,
   setSLAJob,
   removeSLAJob,
+  setRemote,
 };

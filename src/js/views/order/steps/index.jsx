@@ -8,6 +8,7 @@ import { groupInstances } from '../../../helpers/orders';
 import checkNoData from '../../../hocomponents/check-no-data';
 import { Table, Thead, Tr, Th } from '../../../components/new_table';
 import Box from '../../../components/box';
+import NoData from '../../../components/nodata';
 
 type Props = {
   order: Object,
@@ -15,7 +16,7 @@ type Props = {
 };
 
 const StepsTable: Function = ({ steps }: Props): React.Element<Table> => (
-  <Box noPadding>
+  <Box noPadding top>
     <Table condensed hover striped>
       <Thead>
         <Tr>
@@ -56,6 +57,7 @@ export default compose(
     })
   ),
   checkNoData(
-    ({ steps }: Object): boolean => steps && Object.keys(steps).length
+    ({ steps }: Object): boolean => steps && Object.keys(steps).length,
+    <NoData big inBox top />
   )
 )(StepsTable);

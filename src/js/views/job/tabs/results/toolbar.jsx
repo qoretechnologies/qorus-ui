@@ -5,19 +5,15 @@ import compose from 'recompose/compose';
 import ResultsFilter from './filter';
 import applyDate from '../../../../hocomponents/apply-date';
 import applyJobFilter from '../../../../hocomponents/jobs/apply-job-filter';
-import search from '../../../../hocomponents/search';
 import Toolbar from '../../../../components/toolbar';
 import DatePicker from '../../../../components/datepicker';
-import Search from '../../../../containers/search';
 import CsvExport from '../../../../components/csv_export';
 
 const ResultsToolbar = ({
   date,
   job,
-  defaultSearchValue,
   jobFilter,
   onApplyDate,
-  onSearchChange,
   onApplyJobFilter,
 }: {
   date: string,
@@ -35,18 +31,10 @@ const ResultsToolbar = ({
       collection={(job.results && job.results.data) || []}
       type="jobResults"
     />
-    <Search
-      defaultValue={defaultSearchValue}
-      onSearchUpdate={onSearchChange}
-      resource="job"
-    />
   </Toolbar>
 );
 
 const toolbar = (name: string, path: string): Function =>
   compose(...[applyDate, applyJobFilter].map(func => func(name, path)));
 
-export default compose(
-  toolbar('job', 'job/(:id)/results'),
-  search()
-)(ResultsToolbar);
+export default compose(toolbar('job', 'job/(:id)/results'))(ResultsToolbar);

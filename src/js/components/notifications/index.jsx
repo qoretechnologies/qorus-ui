@@ -67,7 +67,7 @@ class NotificationPanel extends React.Component {
       panel = (
         <div className="pane right notifications-list">
           <div className="pane__content">
-            <Box>
+            <Box top>
               {ongoingNotifications.length > 0 ? (
                 <NotificationList
                   title="Ongoing"

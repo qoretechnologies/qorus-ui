@@ -45,7 +45,7 @@ class Container extends Component {
       const { top } = this._el.getBoundingClientRect();
       const winHeight: number = window.innerHeight;
       const mb: number = this.props.marginBottom || 0;
-      const height: number = winHeight - top - 55 - mb;
+      const height: number = winHeight - top - 47 - mb;
 
       this.setState({
         height,

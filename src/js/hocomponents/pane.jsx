@@ -7,6 +7,8 @@ import compose from 'recompose/compose';
 
 import { changeQuery } from '../helpers/router';
 import actions from '../store/api/actions';
+import withTabs from './withTabs';
+import queryControl from './queryControl';
 
 /**
  * A high-order component that provides a side panel
@@ -32,6 +34,8 @@ export default (
       location: Object,
       username: string,
       width?: number,
+      tabQuery?: string,
+      changeTabQuery: Function,
     };
 
     handleClose: Function = (omitQueries: Array<String> = []): void => {
@@ -52,16 +56,14 @@ export default (
     };
 
     handleOpen: Function = (paneId: number, openOnTab: string): void => {
-      const defTab = openOnTab || defaultTab;
-      const query = defTab ? { paneId, paneTab: defTab } : { paneId };
+      const { tabQuery, handleTabChange, changePaneIdQuery } = this.props;
+      const openOn: ?string = openOnTab || tabQuery;
 
-      changeQuery(this.context.router, this.props.location, query);
-    };
+      changePaneIdQuery(paneId);
 
-    handleTabChange: Function = (paneTab: number | string): void => {
-      changeQuery(this.context.router, this.props.location, {
-        paneTab,
-      });
+      if (openOn) {
+        handleTabChange(openOn);
+      }
     };
 
     handlePaneSizeChange: Function = (width: number): void => {
@@ -71,9 +73,9 @@ export default (
     };
 
     renderPane() {
-      const { storage, location: { query }, width } = this.props;
+      const { storage, paneIdQuery, tabQuery, width } = this.props;
 
-      if (!query || !query.paneId) return undefined;
+      if (!paneIdQuery || paneIdQuery === '') return undefined;
 
       const props: Object = propNames
         ? propNames.reduce(
@@ -90,9 +92,8 @@ export default (
         <Pane
           {...props}
           onClose={this.handleClose}
-          changePaneTab={this.handleTabChange}
-          paneId={query.paneId}
-          paneTab={query.paneTab}
+          paneId={paneIdQuery}
+          paneTab={tabQuery}
           onResize={this.handlePaneSizeChange}
           width={newWidth}
         />
@@ -100,7 +101,7 @@ export default (
     }
 
     render() {
-      const { query } = this.props.location;
+      const { paneIdQuery, tabQuery } = this.props;
 
       return (
         <div>
@@ -108,8 +109,8 @@ export default (
             {...this.props}
             openPane={this.handleOpen}
             closePane={this.handleClose}
-            paneId={query.paneId}
-            paneTab={query.paneTab}
+            paneId={paneIdQuery}
+            paneTab={tabQuery}
           />
           {this.renderPane()}
         </div>
@@ -128,6 +129,8 @@ export default (
       {
         storePaneSize: actions.currentUser.storePaneSize,
       }
-    )
+    ),
+    withTabs(() => defaultTab, 'paneTab'),
+    queryControl('paneId')
   )(ComponentWithPanel);
 };

@@ -14,12 +14,15 @@ import unsync from '../../hocomponents/unsync';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import titleManager from '../../hocomponents/TitleManager';
 import NoDataIf from '../../components/NoDataIf';
+import Headbar from '../../components/Headbar';
 
 const Extensions = ({ extensions }: { extensions: Object }) => (
   <div>
-    <Breadcrumbs>
-      <Crumb>Extensions</Crumb>
-    </Breadcrumbs>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb active>Extensions</Crumb>
+      </Breadcrumbs>
+    </Headbar>
     <Box top>
       <NoDataIf
         condition={Object.keys(extensions).length === 0}

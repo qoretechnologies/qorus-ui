@@ -5,10 +5,8 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 
 import Dropdown, { Item, Control } from '../../../components/dropdown';
-import Checkbox from '../../../components/checkbox';
-import { CHECKBOX_STATES } from '../../../constants/checkbox';
 import actions from '../../../store/api/actions';
-import { ButtonGroup } from '@blueprintjs/core';
+import { Controls as ButtonGroup } from '../../../components/controls';
 
 type Props = {
   selected: string,
@@ -27,16 +25,18 @@ const ToolbarSelector: Function = ({
   selectInvert,
   selectedCount,
 }: Props): React.Element<any> => (
-  <ButtonGroup>
-    <Dropdown id="selection" className="pull-left">
-      <Control>
-        <Checkbox
-          action={
-            selected === 'none' || selected === 'some' ? selectAll : selectNone
-          }
-          checked={CHECKBOX_STATES[selected]}
-        />{' '}
-        {selectedCount || ''}
+  <ButtonGroup marginRight={3}>
+    <Dropdown id="selection">
+      <Control
+        icon={
+          selected === 'all'
+            ? 'selection'
+            : selected === 'some'
+              ? 'remove'
+              : 'circle'
+        }
+      >
+        {selectedCount}
       </Control>
       <Item action={selectAll} title="All" />
       <Item action={selectNone} title="None" />

@@ -1,65 +1,50 @@
 import React from 'react';
 import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
 
 import LogContainer from '../../../containers/log';
-import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
-import Tabs, { Pane } from '../../../components/tabs';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
+import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import Box from '../../../components/box';
-import queryControl from '../../../hocomponents/queryControl';
+import Headbar from '../../../components/Headbar';
 import titleManager from '../../../hocomponents/TitleManager';
+import withTabs from '../../../hocomponents/withTabs';
 
 type Props = {
-  tabQuery?: string,
-  changeTabQuery: Function,
-  handleTabChange: Function,
+  tabQuery: string,
   location: Object,
 };
 
-const Log: Function = ({
-  handleTabChange,
-  tabQuery: tabQuery = 'system',
-}: Props) => (
+const Log: Function = ({ tabQuery }: Props) => (
   <div>
-    <Breadcrumbs>
-      <Crumb>Logs</Crumb>
-    </Breadcrumbs>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb>Logs</Crumb>
+        <CrumbTabs tabs={['System', 'Http', 'Audit', 'Alert', 'Monitor']} />
+      </Breadcrumbs>
+    </Headbar>
     <Box top>
-      <Tabs
-        active={tabQuery}
-        id="logs"
-        onChange={handleTabChange}
-        noContainer
-        vertical
-      >
-        <Pane name="System">
+      <SimpleTabs activeTab={tabQuery}>
+        <SimpleTab name="system">
           <LogContainer resource="system" />
-        </Pane>
-        <Pane name="Http">
+        </SimpleTab>
+        <SimpleTab name="http">
           <LogContainer resource="http" />
-        </Pane>
-        <Pane name="Audit">
+        </SimpleTab>
+        <SimpleTab name="audit">
           <LogContainer resource="audit" />
-        </Pane>
-        <Pane name="Alert">
+        </SimpleTab>
+        <SimpleTab name="alert">
           <LogContainer resource="alert" />
-        </Pane>
-        <Pane name="Monitor">
+        </SimpleTab>
+        <SimpleTab name="monitor">
           <LogContainer resource="monitor" />
-        </Pane>
-      </Tabs>
+        </SimpleTab>
+      </SimpleTabs>
     </Box>
   </div>
 );
 
 export default compose(
-  queryControl('tab'),
-  withHandlers({
-    handleTabChange: ({ changeTabQuery }: Props): Function => (
-      tabId: string
-    ): void => {
-      changeTabQuery(tabId);
-    },
-  }),
+  withTabs('system'),
   titleManager('Logs')
 )(Log);

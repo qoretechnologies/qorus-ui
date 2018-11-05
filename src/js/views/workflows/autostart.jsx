@@ -15,6 +15,7 @@ type Props = {
   handleAutostartChange: Function,
   dispatchAction: Function,
   withExec?: boolean,
+  big?: boolean,
 };
 
 const WorkflowAutostart: Function = ({
@@ -22,8 +23,10 @@ const WorkflowAutostart: Function = ({
   execCount,
   handleAutostartChange,
   withExec,
+  big,
 }: Props): React.Element<any> => (
   <AutoStart
+    big={big}
     autostart={autostart}
     execCount={execCount}
     onIncrementClick={handleAutostartChange}

@@ -2,17 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import { Button, ButtonGroup } from '@blueprintjs/core';
 
 import ErrorsTable from './table';
 import Box from 'components/box';
-import Dropdown, {
-  Control as DropdownToggle,
-  Item as DropdownItem,
-} from 'components/dropdown';
-import CSVModal from './csv';
-import { sortTable, generateCSV } from 'helpers/table';
-import checkNoData from '../../../hocomponents/check-no-data';
+import { sortTable } from 'helpers/table';
+import csv from '../../../hocomponents/csv';
 
 const orderSelector = (state, props) => props.order;
 
@@ -44,21 +38,14 @@ const selector = createSelector(
   })
 );
 
-@compose(
-  connect(selector),
-  checkNoData(props => props.errors && props.errors.length)
-)
+@compose(connect(selector))
+@csv('errors', 'order_errors')
 export default class ErrorsView extends Component {
   static propTypes = {
     errors: PropTypes.array,
     steps: PropTypes.array,
     order: PropTypes.object,
-  };
-
-  static contextTypes = {
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-    selectModalText: PropTypes.func,
+    onCSVClick: PropTypes.func,
   };
 
   componentWillMount() {
@@ -73,24 +60,10 @@ export default class ErrorsView extends Component {
     });
   };
 
-  handleCSVClick = () => {
-    this._modal = (
-      <CSVModal
-        onMount={this.context.selectModalText}
-        onClose={this.handleModalCloseClick}
-        data={generateCSV(this.props.errors, 'order_errors')}
-      />
-    );
-
-    this.context.openModal(this._modal);
-  };
-
-  handleModalCloseClick = () => {
-    this.context.closeModal(this._modal);
-  };
-
   renderTable() {
-    let errors = sortTable(this.props.errors, {
+    let errors = this.props.errors || [];
+
+    errors = sortTable(errors, {
       sortBy: 'created',
       sortByKey: {
         direction: -1,
@@ -108,27 +81,20 @@ export default class ErrorsView extends Component {
       errors = errors.slice(0, this.state.limit);
     }
 
-    return <ErrorsTable collection={errors} steps={this.props.steps} />;
+    return (
+      <ErrorsTable
+        collection={errors}
+        steps={this.props.steps}
+        onItemClick={this.handleItemClick}
+        onCSVClick={this.props.onCSVClick}
+        limit={this.state.limit}
+      />
+    );
   }
 
   render() {
     return (
-      <Box>
-        <div className="pull-right">
-          <Dropdown id="show">
-            <DropdownToggle>Showing: {this.state.limit}</DropdownToggle>
-            <DropdownItem title="10" action={this.handleItemClick} />
-            <DropdownItem title="25" action={this.handleItemClick} />
-            <DropdownItem title="50" action={this.handleItemClick} />
-            <DropdownItem title="100" action={this.handleItemClick} />
-            <DropdownItem title="500" action={this.handleItemClick} />
-            <DropdownItem title="1000" action={this.handleItemClick} />
-            <DropdownItem title="All" action={this.handleItemClick} />
-          </Dropdown>{' '}
-          <ButtonGroup>
-            <Button text="CSV" onClick={this.handleCSVClick} />
-          </ButtonGroup>
-        </div>
+      <Box top noPadding>
         {this.renderTable()}
       </Box>
     );

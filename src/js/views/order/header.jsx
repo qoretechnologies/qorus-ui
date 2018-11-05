@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import { Callout, Intent } from '@blueprintjs/core';
 
 import OrderControls from '../workflow/tabs/list/controls';
 import WorkflowControls from '../workflows/controls';
@@ -8,13 +6,18 @@ import WorkflowAutostart from '../workflows/autostart';
 import Lock from '../workflow/tabs/list/lock';
 import Reschedule from '../workflow/tabs/list/modals/schedule';
 import Dropdown, { Control, Item } from 'components/dropdown';
-import Alert from '../../components/alert';
-import { pureRender } from '../../components/utils';
-import Icon from '../../components/icon';
 import queryControl from '../../hocomponents/queryControl';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import {
+  Breadcrumbs,
+  Crumb,
+  CrumbTabs,
+  CollapsedCrumb,
+} from '../../components/breadcrumbs';
+import Headbar from '../../components/Headbar';
+import Pull from '../../components/Pull';
+import { normalizeName } from '../../components/utils';
+import { Intent, Icon } from '@blueprintjs/core';
 
-@pureRender
 @queryControl('target')
 @queryControl('prevQuery')
 export default class OrderHeader extends Component {
@@ -89,17 +92,9 @@ export default class OrderHeader extends Component {
     history.go(-1);
   };
 
-  renderIcon() {
-    if (this.props.workflow.enabled) {
-      return <i className="fa fa-check-circle icon-success" />;
-    }
-
-    return <i className="fa fa-times-circle icon-danger" />;
-  }
-
   render() {
     const { prevQueryQuery, targetQuery, workflow } = this.props;
-    const target = targetQuery || `/workflow/${workflow.id}/list`;
+    const target = targetQuery || `/workflow/${workflow.id}?tab=orders`;
 
     const backQueriesObj = prevQueryQuery
       ? JSON.parse(JSON.parse(this.props.prevQueryQuery))
@@ -110,62 +105,63 @@ export default class OrderHeader extends Component {
 
         return `${cur}${next}=${backQueriesObj[next]}${last ? '' : '&'}`;
       },
-      `${target}?`
+      `${target}&`
     );
 
+    const workflowName: string = normalizeName(this.props.workflow);
+
     return (
-      <div className="order-header">
+      <Headbar>
         <Breadcrumbs>
-          <Crumb link="/workflows">Workflows</Crumb>
-          <Crumb link={backQueriesStr}>
-            {this.props.data.name}
-            <small>
-              {' '}
-              v{this.props.workflow.version} ({this.props.workflow.id})
-            </small>
-          </Crumb>
+          <CollapsedCrumb
+            links={{ Workflows: '/workflows', [workflowName]: backQueriesStr }}
+          />
           <Crumb>
-            {this.renderIcon()} ORDER{' '}
+            ORDER{' '}
             <small>
               {this.props.data.id} v{this.props.data.version}
             </small>
           </Crumb>
+          <CrumbTabs
+            tabs={[
+              'Overview',
+              'Steps',
+              'Data',
+              'Errors',
+              'Hierarchy',
+              'Audit',
+              'Info',
+              'Notes',
+              'Log',
+              'Code',
+            ]}
+          />
         </Breadcrumbs>
-        <div className="order-actions pull-right">
+        <Pull right>
           <WorkflowControls
             id={this.props.workflow.id}
             enabled={this.props.workflow.enabled}
+            remote={this.props.workflow.remote}
+            big
           />
           <WorkflowAutostart
             id={this.props.workflow.id}
             autostart={this.props.workflow.autostart}
             execCount={this.props.workflow.exec_count}
             withExec
-          />{' '}
+            big
+          />
           <OrderControls
             id={this.props.data.id}
             workflowstatus={this.props.data.workflowstatus}
           />
-          <Lock id={this.props.data.id} lock={this.props.data.operator_lock} />
-        </div>
-        {this.props.workflow.has_alerts && (
-          <Callout
-            intent={Intent.DANGER}
-            iconName="warning-sign"
-            title="Workflow with alerts"
-          >
-            the parent workflow has alerts raised against it that may prevent it
-            from operating properly.{' '}
-            <Link
-              to={`/workflows?date=${this.props.linkDate}&paneId=${
-                this.props.workflow.id
-              }`}
-            >
-              View alerts ({this.props.workflow.alerts.length}).
-            </Link>
-          </Callout>
-        )}
-      </div>
+          <Lock
+            id={this.props.data.id}
+            lock={this.props.data.operator_lock}
+            big
+          />
+        </Pull>
+      </Headbar>
     );
   }
 }

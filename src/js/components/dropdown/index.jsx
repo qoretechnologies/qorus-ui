@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Item from './item';
 import CustomItem from './custom_item';
@@ -9,7 +9,6 @@ import {
   Position,
   Button as Btn,
   ButtonGroup,
-  ControlGroup,
 } from '@blueprintjs/core';
 
 import { pureRender } from '../utils';
@@ -221,7 +220,10 @@ export default class Dropdown extends Component {
    * Renders the seleciton dropdown to the component
    */
   renderDropdown(): ?React.Element<any> {
-    if (!this.props.disabled) {
+    if (
+      !this.props.disabled &&
+      React.Children.toArray(this.props.children).length > 1
+    ) {
       return <Menu>{this.renderDropdownList()}</Menu>;
     }
 
@@ -230,7 +232,7 @@ export default class Dropdown extends Component {
 
   renderDropdownList(): ?React.Element<any> {
     return React.Children.map(this.props.children, (c, index) => {
-      if (!c || (c.type !== Item && c.type !== CustomItem)) return null;
+      if (!c || c.type === Control) return null;
 
       if (c.type === CustomItem) {
         return c;
@@ -295,6 +297,11 @@ export default class Dropdown extends Component {
           position={Position.BOTTOM}
           content={this.renderDropdown()}
           popoverDidOpen={this.handleOpen}
+          popoverClassName="popover-dropdown"
+          isOpen={this.state.showDropdown}
+          enforceFocus={false}
+          autoFocus={false}
+          onInteraction={inter => !inter && this.hideToggle()}
         >
           {this.renderDropdownControl()}
         </Popover>
@@ -303,18 +310,5 @@ export default class Dropdown extends Component {
     );
   }
 }
-
-Dropdown.propTypes = {
-  children: PropTypes.node,
-  id: PropTypes.string,
-  multi: PropTypes.bool,
-  def: PropTypes.string,
-  selectedIcon: PropTypes.string,
-  onSubmit: PropTypes.func,
-  submitLabel: PropTypes.string,
-  selected: PropTypes.array,
-  disabled: PropTypes.bool,
-  onHide: PropTypes.func,
-};
 
 export { Item, CustomItem, Control };

@@ -41,3 +41,8 @@
     background-color: #f5f5f5;
   }
 }
+
+.pt-popover.popover-dropdown .pt-popover-content {
+  max-height: 200px;
+  overflow-y: auto;
+}

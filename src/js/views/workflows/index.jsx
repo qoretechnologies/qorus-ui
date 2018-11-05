@@ -9,7 +9,6 @@ import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { Intent } from '@blueprintjs/core';
 
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
@@ -43,11 +42,9 @@ import { querySelector, resourceSelector } from '../../selectors';
 import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
 import titleManager from '../../hocomponents/TitleManager';
-import Toolbar from '../../components/toolbar';
-import { CenterWrapper } from '../../components/layout';
 import Search from '../../containers/search';
 import queryControl from '../../hocomponents/queryControl';
-import LoadMore from '../../components/LoadMore';
+import Headbar from '../../components/Headbar';
 
 const filterSearch: Function = (search: string): Function => (
   workflows: Array<Object>
@@ -265,9 +262,9 @@ const Workflows: Function = ({
   changeSearchQuery,
 }: Props): React.Element<any> => (
   <div>
-    <Toolbar>
+    <Headbar>
       <Breadcrumbs>
-        <Crumb> Workflows </Crumb>
+        <Crumb active> Workflows </Crumb>
       </Breadcrumbs>
       <div className="pull-right">
         <ButtonGroup marginRight={3}>
@@ -284,8 +281,8 @@ const Workflows: Function = ({
           resource="workflows"
         />
       </div>
-    </Toolbar>
-    <Box noPadding>
+    </Headbar>
+    <Box top noPadding>
       <WorkflowsTable
         collection={workflows}
         paneId={paneId}
