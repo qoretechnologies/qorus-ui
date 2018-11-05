@@ -3,12 +3,22 @@ import compose from 'recompose/compose';
 import queryControl from './queryControl';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
+import upperFirst from 'lodash/upperFirst';
 
-export default (defaultTab: string | Function): Function => (
+export default (defaultTab: string | Function, queryName: string): Function => (
   Component: any
 ): Function =>
   compose(
-    queryControl('tab'),
+    queryControl(queryName || 'tab'),
+    mapProps(
+      (props): Object => ({
+        tabQuery: queryName ? props[`${queryName}Query`] : props.tabQuery,
+        changeTabQuery: queryName
+          ? props[`change${upperFirst(queryName)}Query`]
+          : props.changeTabQuery,
+        ...props,
+      })
+    ),
     mapProps(
       ({ tabQuery, ...rest }: Object): Object => ({
         tabQuery: tabQuery

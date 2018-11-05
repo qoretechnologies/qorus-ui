@@ -1,7 +1,7 @@
 /* @flow */
 import React, { PropTypes } from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
-import capitalize from 'lodash/capitalize';
+import upperFirst from 'lodash/upperFirst';
 
 import { changeQuery } from '../helpers/router';
 
@@ -56,7 +56,7 @@ export default (
       const newProps = {
         ...{
           [`${qName}Query`]: query,
-          [`change${capitalize(qName)}Query`]: func,
+          [`change${upperFirst(qName)}Query`]: func,
         },
         ...this.props,
       };
