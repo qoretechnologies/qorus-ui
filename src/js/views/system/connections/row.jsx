@@ -66,6 +66,8 @@ const ConnectionRow: Function = ({
   canDelete,
   first,
   loopback,
+  enabled,
+  handleToggleClick,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -85,8 +87,16 @@ const ConnectionRow: Function = ({
       <DetailButton onClick={handleDetailClick} active={isActive} />
     </Td>
 
-    <Td className="narrow">
+    <Td className="medium">
       <ButtonGroup>
+        {remoteType === 'user' && (
+          <Button
+            title={enabled ? 'Disable' : 'Enable'}
+            iconName="power"
+            onClick={handleToggleClick}
+            btnStyle={enabled ? 'success' : 'danger'}
+          />
+        )}
         <Button title="Ping" iconName="exchange" onClick={handlePingClick} />
         <Button
           disabled={!canDelete}
@@ -166,6 +176,13 @@ export default compose(
       openModal(
         <PingModal name={name} onClose={closeModal} type={remoteType} />
       );
+    },
+    handleToggleClick: ({
+      name,
+      enabled,
+      dispatchAction,
+    }: Props): Function => (): void => {
+      dispatchAction(actions.remotes.toggleConnection, name, !enabled);
     },
     handleDeleteClick: ({
       dispatchAction,

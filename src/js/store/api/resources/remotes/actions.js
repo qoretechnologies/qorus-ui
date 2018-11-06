@@ -112,6 +112,26 @@ const deleteConnection: Function = createAction(
   }
 );
 
+const toggleConnection: Function = createAction(
+  'REMOTES_TOGGLECONNECTION',
+  (name: string, value: boolean, dispatch: Function): void => {
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'POST',
+          `${settings.REST_BASE_URL}/remote/user/${name}?action=${
+            value ? 'enable' : 'disable'
+          }`
+        ),
+      `${value ? 'Enabling' : 'Disabling'} ${name}`,
+      `${name} successfuly ${value ? 'enabled' : 'disabled'}`,
+      dispatch
+    );
+
+    return;
+  }
+);
+
 export {
   pingRemote,
   connectionChange,
@@ -120,4 +140,5 @@ export {
   clearAlert,
   manageConnection,
   deleteConnection,
+  toggleConnection,
 };

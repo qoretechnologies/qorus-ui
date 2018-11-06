@@ -19,6 +19,15 @@ const pingRemote = {
   },
 };
 
+const toggleConnection = {
+  next(state: Object = initialState): Object {
+    return state;
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
 const connectionChange = {
   next(
     state: Object = initialState,
@@ -229,4 +238,5 @@ export {
   clearAlert as CLEARALERT,
   manageConnection as MANAGECONNECTION,
   deleteConnection as DELETECONNECTION,
+  toggleConnection as TOGGLECONNECTION,
 };
