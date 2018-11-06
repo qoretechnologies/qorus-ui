@@ -1,6 +1,5 @@
 $resize-handle-width: 10px;
 
-
 /**
  * Resize handle stretches on the respective border of its (resizable)
  * parent.
@@ -8,10 +7,40 @@ $resize-handle-width: 10px;
 .resize-handle {
   position: absolute;
 
+  &.bottom.right {
+    .pt-icon-standard.pt-icon-drag-handle-vertical {
+      transform: rotateZ(45deg);
+      top: -2px;
+      left: -2px;
+    }
+  }
+
+  &.bottom.left {
+    .pt-icon-standard.pt-icon-drag-handle-vertical {
+      transform: rotateZ(-45deg);
+      top: -2px;
+      left: 2px;
+    }
+  }
+
+  .pt-icon-standard {
+    font-size: 10px;
+    color: darken($bgcolor, 32);
+    position: absolute;
+    &.pt-icon-drag-handle-vertical {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    &.pt-icon-drag-handle-horizontal {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   &.top {
     top: 0;

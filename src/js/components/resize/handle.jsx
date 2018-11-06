@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
+import { Icon } from '@blueprintjs/core';
+
 /**
  * Top handle position.
  */
@@ -177,9 +179,11 @@ export default class Handle extends Component {
    * @return {DOMRect|null}
    */
   getParentRect() {
-    return this._handle &&
+    return (
+      this._handle &&
       this._handle.parentElement &&
-      this._handle.parentElement.getBoundingClientRect();
+      this._handle.parentElement.getBoundingClientRect()
+    );
   }
 
   /**
@@ -201,9 +205,9 @@ export default class Handle extends Component {
       is = this._min.height >= rect.height;
     }
     if (rect && this._min.width && this._position & (LEFT | RIGHT)) {
-      is = is ?
-        (is && this._min.width >= rect.width) :
-        this._min.width >= rect.width;
+      is = is
+        ? is && this._min.width >= rect.width
+        : this._min.width >= rect.width;
     }
 
     return is;
@@ -219,7 +223,7 @@ export default class Handle extends Component {
    *
    * @param {MouseEvent} ev
    */
-  start = (ev) => {
+  start = ev => {
     ev.preventDefault();
 
     this._resizeListener = this.resize;
@@ -239,7 +243,6 @@ export default class Handle extends Component {
     this._originalCursor = this._handle.ownerDocument.body.style.cursor;
   };
 
-
   /**
    * Resizes the parent element by setting new style properties.
    *
@@ -257,7 +260,7 @@ export default class Handle extends Component {
    *
    * @param {MouseEvent} ev
    */
-  resize = (ev) => {
+  resize = ev => {
     ev.preventDefault();
 
     const style = this.computeNewStyle(ev);
@@ -280,8 +283,9 @@ export default class Handle extends Component {
       this._handle.classList.remove('min');
     }
 
-    this._handle.ownerDocument.body.style.cursor =
-      window.getComputedStyle(this._handle).cursor;
+    this._handle.ownerDocument.body.style.cursor = window.getComputedStyle(
+      this._handle
+    ).cursor;
   };
 
   /**
@@ -319,7 +323,7 @@ export default class Handle extends Component {
    *
    * @param {?MouseEvent} ev
    */
-  stop = (ev) => {
+  stop = ev => {
     if (ev) ev.preventDefault();
 
     if (this.props.onStop) {
@@ -351,7 +355,7 @@ export default class Handle extends Component {
    *
    * @param {HTMLElement} el
    */
-  refHandle = (el) => {
+  refHandle = el => {
     this._handle = el;
   };
 
@@ -361,20 +365,28 @@ export default class Handle extends Component {
    * @return {ReactElement}
    */
   render() {
+    const top = this._position & TOP;
+    const right = this._position & RIGHT;
+    const bottom = this._position & BOTTOM;
+    const left = this._position & LEFT;
+
     return (
       <div
         className={classNames({
           'resize-handle': true,
           min: this.isMin(),
-          top: this._position & TOP,
-          right: this._position & RIGHT,
-          bottom: this._position & BOTTOM,
-          left: this._position & LEFT,
+          top,
+          right,
+          bottom,
+          left,
         })}
         onMouseDown={this.start}
         ref={this.refHandle}
         aria-hidden="true"
       >
+        <Icon
+          iconName={`drag-handle-${left || right ? 'vertical' : 'horizontal'}`}
+        />
         {this.props.children}
       </div>
     );
