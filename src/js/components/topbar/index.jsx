@@ -24,11 +24,13 @@ import cz from '../../../img/country_flags/cz.png';
 import en from '../../../img/country_flags/us.png';
 
 import withModal from '../../hocomponents/modal';
+import withPane from '../../hocomponents/pane';
 import logo from '../../../img/qore_logo.png';
 import actions from '../../store/api/actions';
 import { LANGS } from '../../intl/messages';
 import settings from '../../settings';
 import { HEALTH_KEYS } from '../../constants/dashboard';
+import Notifications from '../notifications';
 
 const flags: Object = {
   'cs-CZ': cz,
@@ -52,40 +54,30 @@ export type Props = {
   onNotificationClick: Function,
   storeLocale: Function,
   user: Object,
+  openPane: Function,
+  notificationCount: number,
 };
 
 /**
  * Display info about Qorus instance and logged in user.
  */
 @connect(
-  null,
+  (state: Object): Object => ({
+    notificationCount: state.ui.notifications.count,
+  }),
   {
     storeLocale: actions.currentUser.storeLocale,
   }
 )
 @withModal()
+@withPane(Notifications, null, 'all', 'notifications', 'notificationsPane')
 export default class Topbar extends Component {
   props: Props;
 
-  /**
-   * Sets up default expanded state to false.
-   */
-  componentWillMount() {
-    this.setState({ expanded: false });
-  }
-
-  /**
-   * Toggle expanded state value.
-   */
-  handleExpand = () => {
-    this.setState({ expanded: !this.state.expanded });
+  handleNotificationsClick: Function = () => {
+    this.props.openPane();
   };
 
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
   render() {
     const {
       light,
@@ -211,10 +203,10 @@ export default class Topbar extends Component {
                 </ButtonGroup>
               </Popover>
             )}
-          <ButtonGroup minimal>
+          <ButtonGroup minimal className="notification-wrapper">
             <Button
               iconName="notifications"
-              onClick={this.props.onNotificationClick}
+              onClick={this.handleNotificationsClick}
             />
           </ButtonGroup>
           <ButtonGroup minimal>
