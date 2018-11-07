@@ -11,7 +11,9 @@ import * as groups from '../api/resources/groups/actions';
 import * as remotes from '../api/resources/remotes/actions';
 import * as system from '../api/resources/system/actions';
 import * as health from '../api/resources/health/actions';
+import { notifications } from '../ui/actions';
 import { pipeline } from '../../helpers/apievents';
+import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
 
 const handleEvent = (url, data, dispatch, state) => {
   const dt = JSON.parse(data);
@@ -182,6 +184,22 @@ const handleEvent = (url, data, dispatch, state) => {
             break;
           default:
             break;
+        }
+
+        if (state.api.system.sync) {
+          pipeline(
+            'ADDING_NOTIFICATIONS',
+            notifications.addNotification,
+            {
+              ...info,
+              ...{
+                when: d.time,
+                alerttype: 'ONGOING',
+                notificationType: ALERT_NOTIFICATION_TYPES[info.type],
+              },
+            },
+            dispatch
+          );
         }
 
         if (state.api.alerts.sync) {
