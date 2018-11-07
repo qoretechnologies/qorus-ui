@@ -3,63 +3,60 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import { getAlertObjectLink } from '../../helpers/system';
-import { Control } from '../controls';
-import DateComponent from '../date';
 import PaneItem from '../pane_item';
+import Box from '../box';
+import NoDataIf from '../NoDataIf';
+import Container from '../container';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import moment from 'moment';
 
-class NotificationList extends React.Component {
-  props: {
-    title: string,
-    type: string,
-    className: string,
-    notifications: Array<*>,
-    clearNotifications: Function,
-  };
+type Props = {
+  collection: Array<Object>,
+  paneTab: string,
+};
 
-  clear = () => {
-    const { type, clearNotifications } = this.props;
-    clearNotifications(type);
-  };
-
-  render() {
-    const { title, className, notifications } = this.props;
-
-    return (
-      <div className={`${className} notifications-group`}>
-        <PaneItem
-          title={title}
-          label={
-            <Control
-              btnStyle="danger"
-              className="clear-button pull-right"
-              onClick={this.clear}
-              stopPropagation
-              label="Clear"
-            />
-          }
-        >
-          {notifications.map(item => (
-            <div key={`notification_${item.alertid}`} className="notification">
-              <Link
-                to={getAlertObjectLink(item.type, {
-                  name: item.name,
-                  id: item.id,
-                })}
-                title={item.object}
-              >
-                {item.object}
+const NotificationList: Function = ({ collection }: Props) => (
+  <NoDataIf condition={collection.length === 0}>
+    {() => (
+      <Container>
+        {collection.map((alert: Object, index: number) => (
+          <Box top={index === 0}>
+            <PaneItem
+              title={alert.alert}
+              label={
+                <div className="text-muted">
+                  {moment(alert.when)
+                    .startOf('second')
+                    .fromNow()}
+                </div>
+              }
+            >
+              <Link to={getAlertObjectLink(alert.type, alert)}>
+                {alert.object}
               </Link>
               <div>
-                <strong>Date:</strong>{' '}
-                <DateComponent date={item.when} format="YYYY-MM-DD HH:mm:ss" />
+                <small>{alert.reason}</small>
               </div>
-              <p>{item.name}</p>
-            </div>
-          ))}
-        </PaneItem>
-      </div>
-    );
-  }
-}
+            </PaneItem>
+          </Box>
+        ))}
+      </Container>
+    )}
+  </NoDataIf>
+);
 
-export default NotificationList;
+export default compose(
+  mapProps(
+    ({ collection, paneTab, ...rest }: Props): Props => ({
+      collection:
+        paneTab !== 'all'
+          ? collection.filter(
+              (alert: Object) => alert.notificationType === paneTab
+            )
+          : collection,
+      paneTab,
+      ...rest,
+    })
+  )
+)(NotificationList);
