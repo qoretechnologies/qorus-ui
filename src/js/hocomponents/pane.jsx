@@ -2,12 +2,15 @@
 import React, { PropTypes } from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 import omit from 'lodash/omit';
+import upperFirst from 'lodash/upperFirst';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 
 import actions from '../store/api/actions';
 import withTabs from './withTabs';
 import queryControl from './queryControl';
+import { functionOrStringExp } from '../helpers/functions';
+import mapProps from 'recompose/mapProps';
 
 /**
  * A high-order component that provides a side panel
@@ -20,11 +23,16 @@ export default (
   Pane: ReactClass<*>,
   propNames: ?Array<string>,
   defaultTab: ?string,
-  resource: ?string
+  resource: ?string,
+  paneQuery: ?string
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
+  const paneTabQueryName = paneQuery ? `${paneQuery}Tab` : 'paneTab';
+  const paneQueryName = paneQuery || 'paneId';
+
   class ComponentWithPanel extends React.Component {
     static contextTypes = {
       router: PropTypes.object,
+      location: PropTypes.object,
     };
 
     props: {
@@ -38,13 +46,12 @@ export default (
     };
 
     handleClose: Function = (omitQueries: Array<String> = []): void => {
-      const {
-        query,
-        pathname,
-      }: { query: Object, pathname: string } = this.props.location;
+      const { query, pathname }: { query: Object, pathname: string } =
+        this.props.location || this.context.location;
+
       const newQuery: Object = omit(query, [
-        'paneTab',
-        'paneId',
+        paneTabQueryName,
+        paneQueryName,
         ...omitQueries,
       ]);
 
@@ -54,7 +61,10 @@ export default (
       });
     };
 
-    handleOpen: Function = (paneId: number, openOnTab: string): void => {
+    handleOpen: Function = (
+      paneId: number | string = 'open',
+      openOnTab: string
+    ): void => {
       const { tabQuery, handleTabChange, changePaneIdQuery } = this.props;
       const openOn: ?string = openOnTab || tabQuery;
 
@@ -103,7 +113,7 @@ export default (
       const { paneIdQuery, tabQuery } = this.props;
 
       return (
-        <div>
+        <div className="floating-pane-wrapper">
           <Component
             {...this.props}
             openPane={this.handleOpen}
@@ -129,7 +139,17 @@ export default (
         storePaneSize: actions.currentUser.storePaneSize,
       }
     ),
-    withTabs(() => defaultTab, 'paneTab'),
-    queryControl('paneId')
+    withTabs(defaultTab, paneTabQueryName),
+    queryControl(paneQueryName),
+    mapProps(
+      (props): Object => ({
+        paneIdQuery: props[`${functionOrStringExp(paneQuery, props)}Query`],
+        changePaneIdQuery:
+          props[
+            `change${upperFirst(functionOrStringExp(paneQuery, props))}Query`
+          ],
+        ...props,
+      })
+    )
   )(ComponentWithPanel);
 };
