@@ -11,6 +11,7 @@ export type State = {
 const initialState: State = {
   data: [],
   count: 0,
+  read: true,
 };
 
 export default handleActions(
@@ -24,7 +25,25 @@ export default handleActions(
 
       const count: number = size(data);
 
-      return { ...state, ...{ data, count } };
+      return { ...state, ...{ data, count, read: false } };
+    },
+    [ACTIONS.READ]: (state: State) => ({ ...state, ...{ read: true } }),
+    [ACTIONS.DISMISS]: (state: State, { payload: { id } }) => {
+      const data: Array<Object> = [...state.data].map(
+        (datum: Object): Object => {
+          const newDatum: Object = { ...datum };
+
+          console.log(id);
+
+          if (datum.alert === id || id === 'all') {
+            newDatum.read = true;
+          }
+
+          return newDatum;
+        }
+      );
+
+      return { ...state, ...{ data } };
     },
   },
   initialState

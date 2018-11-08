@@ -1,67 +1,18 @@
-.bubbles {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  z-index: 1150;
-  right: 50px;
-  top: 50px;
-  max-height: 80%;
-  overflow: hidden;
-
-  .bubble {
-    min-width: 200px;
-    max-width: 600px;
-    padding: 15px;
-    min-height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    opacity: 0.9;
-    margin-top: 10px;
-
-    &.success {
-      background: $qore-green;
-    }
-
-    &.warning {
-      background: $qore-warning;
-    }
-
-    &.error {
-      background: $qore-danger;
-    }
-  }
+.pt-toast .pt-icon-standard {
+  font-size: 16px;
 }
 
-.bubble-enter {
-  opacity: 0.01;
-}
-
-.bubble-enter.bubble-enter-active {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-
-.bubble-appear {
-  margin-top: -70px;
-  opacity: 0.01;
-}
-
-.bubble-appear.bubble-appear-active {
-  opacity: 1;
-  transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.bubble-leave {
-  opacity: 1;
-}
-
-.bubble-leave.bubble-leave-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
+.toast-notification-count {
+  width: 18px;
+  height: 18px;
+  background-color: $qore-danger;
+  border-radius: 99px;
+  position: absolute;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 18px;
+  text-align: center;
+  margin-left: -8px;
+  margin-top: -8px;
 }

@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 import startsWith from 'lodash/startsWith';
 import { browserHistory } from 'react-router';
+import shortid from 'shortid';
 
 import * as alerts from '../api/resources/alerts/actions';
 import * as services from '../api/resources/services/actions/specials';
@@ -196,6 +197,7 @@ const handleEvent = (url, data, dispatch, state) => {
                 when: d.time,
                 alerttype: 'ONGOING',
                 notificationType: ALERT_NOTIFICATION_TYPES[info.type],
+                notificationId: shortid.generate(),
               },
             },
             dispatch

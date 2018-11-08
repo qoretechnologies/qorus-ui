@@ -17,6 +17,8 @@ import { Manager as ModalManager } from '../components/modal';
 import actions from 'store/api/actions';
 import { settings } from '../store/ui/actions';
 import messages from '../intl/messages';
+import Bubbles from '../containers/bubbles';
+import Notifications from '../containers/notifications';
 
 addLocaleData([...en, ...cs, ...de]);
 
@@ -296,6 +298,8 @@ export default class Root extends Component {
             info={this.props.info.data}
           />
           <ModalManager ref={this.refModal} />
+          <Notifications />
+          <Bubbles />
         </div>
       </IntlProvider>
     );

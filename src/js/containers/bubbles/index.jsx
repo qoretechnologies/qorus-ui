@@ -1,9 +1,7 @@
 /* @flow */
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 
-import { BubbleList } from '../../components/bubbles';
 import BubbleItem from './item';
 
 export const Bubbles = ({ bubbleList }: { bubbleList: Array<*> }) => {

@@ -55,7 +55,7 @@ export type Props = {
   storeLocale: Function,
   user: Object,
   openPane: Function,
-  notificationCount: number,
+  notificationStatus: boolean,
 };
 
 /**
@@ -63,7 +63,7 @@ export type Props = {
  */
 @connect(
   (state: Object): Object => ({
-    notificationCount: state.ui.notifications.count,
+    notificationStatus: state.ui.notifications.read,
   }),
   {
     storeLocale: actions.currentUser.storeLocale,
@@ -153,59 +153,62 @@ export default class Topbar extends Component {
           </Popover>
           <NavbarDivider />
           {settings.PROTOCOL === 'http' && (
-            <Tooltip
-              intent={Intent.DANGER}
-              content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
-              position={Position.LEFT}
-            >
-              <ButtonGroup minimal>
-                <Button iconName="warning-sign" intent={Intent.DANGER} />
-              </ButtonGroup>
-            </Tooltip>
-          )}
-          <Popover
-            position={Position.BOTTOM_RIGHT}
-            content={
-              <Menu>
-                <MenuDivider title="System health" />
-                <MenuItem
-                  text={`Status: ${data.health}`}
-                  intent={HEALTH_KEYS[data.health]}
-                />
-                <MenuItem text="Ongoing alerts" label={data.ongoing} />
-                <MenuItem text="Transient alerts" label={data.transient} />
-              </Menu>
-            }
-          >
             <ButtonGroup minimal>
-              <Button iconName="build" intent={Intent.WARNING} />
+              <Tooltip
+                intent={Intent.DANGER}
+                content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
+                position={Position.LEFT}
+              >
+                <Button iconName="warning-sign" intent={Intent.DANGER} />
+              </Tooltip>
             </ButtonGroup>
-          </Popover>
+          )}
+          <ButtonGroup minimal>
+            <Popover
+              position={Position.BOTTOM_RIGHT}
+              content={
+                <Menu>
+                  <MenuDivider title="System health" />
+                  <MenuItem
+                    text={`Status: ${data.health}`}
+                    intent={HEALTH_KEYS[data.health]}
+                  />
+                  <MenuItem text="Ongoing alerts" label={data.ongoing} />
+                  <MenuItem text="Transient alerts" label={data.transient} />
+                </Menu>
+              }
+            >
+              <Button iconName="build" intent={Intent.WARNING} />
+            </Popover>
+          </ButtonGroup>
           {data.remote &&
             data.remote.length !== 0 && (
-              <Popover
-                position={Position.BOTTOM_RIGHT}
-                content={
-                  <Menu>
-                    <MenuDivider title="Remotes" />
-                    {data.remote.map((remote: Object) => (
-                      <MenuItem
-                        key={remote.name}
-                        text={`${remote.name} - ${remote.health}`}
-                        intent={HEALTH_KEYS[remote.health]}
-                      />
-                    ))}
-                  </Menu>
-                }
-              >
-                <ButtonGroup minimal>
+              <ButtonGroup minimal>
+                <Popover
+                  position={Position.BOTTOM_RIGHT}
+                  content={
+                    <Menu>
+                      <MenuDivider title="Remotes" />
+                      {data.remote.map((remote: Object) => (
+                        <MenuItem
+                          key={remote.name}
+                          text={`${remote.name} - ${remote.health}`}
+                          intent={HEALTH_KEYS[remote.health]}
+                        />
+                      ))}
+                    </Menu>
+                  }
+                >
                   <Button iconName="share" />
-                </ButtonGroup>
-              </Popover>
+                </Popover>
+              </ButtonGroup>
             )}
-          <ButtonGroup minimal className="notification-wrapper">
+          <ButtonGroup minimal>
             <Button
               iconName="notifications"
+              intent={
+                this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY
+              }
               onClick={this.handleNotificationsClick}
             />
           </ButtonGroup>

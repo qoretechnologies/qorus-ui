@@ -21,7 +21,7 @@ const NotificationList: Function = ({ collection }: Props) => (
     {() => (
       <Container>
         {collection.map((alert: Object, index: number) => (
-          <Box top={index === 0}>
+          <Box top={index === 0} key={alert.notificationId}>
             <PaneItem
               title={alert.alert}
               label={

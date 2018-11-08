@@ -8,6 +8,7 @@ import { notifications } from '../../store/ui/actions';
 import compose from 'recompose/compose';
 import { NOTIFICATION_TYPES } from '../../constants/notifications';
 import NotificationList from './list';
+import lifecycle from 'recompose/lifecycle';
 
 type Props = {
   width?: number,
@@ -16,6 +17,7 @@ type Props = {
   paneTab: string,
   collection: Array<Object>,
   collectionLen: number,
+  read: Function,
 };
 
 const Notifications: Function = ({
@@ -68,6 +70,15 @@ export default compose(
     }),
     {
       add: notifications.addNotification,
+      read: notifications.readNotifications,
     }
-  )
+  ),
+  lifecycle({
+    componentDidMount() {
+      this.props.read();
+    },
+    componentDidUpdate() {
+      this.props.read();
+    },
+  })
 )(Notifications);
