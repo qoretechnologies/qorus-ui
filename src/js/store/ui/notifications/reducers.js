@@ -33,8 +33,6 @@ export default handleActions(
         (datum: Object): Object => {
           const newDatum: Object = { ...datum };
 
-          console.log(id);
-
           if (datum.alert === id || id === 'all') {
             newDatum.read = true;
           }

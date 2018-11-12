@@ -1,18 +1,19 @@
 /* @flow */
 import React from 'react';
 import { connect } from 'react-redux';
-
-import { bubbles, notifications } from '../../store/ui/actions';
-import { Bubble } from '../../components/bubbles';
+import shortid from 'shortid';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
+
+import { bubbles, notifications } from '../../store/ui/actions';
+import { Bubble } from '../../components/bubbles';
 import queryControl from '../../hocomponents/queryControl';
 
 const timeoutByBubbleType = {
   WARNING: '60000',
-  DANGER: '6000',
-  SUCCESS: '3000',
+  DANGER: '5000',
+  SUCCESS: '5000',
   INFO: '5000',
 };
 
@@ -34,7 +35,7 @@ export class BubbleItem extends React.Component {
     const timeoutByType = timeout || timeoutByBubbleType[bubble.type];
 
     if (bubble.type !== 'WARNING') {
-      // this._timeout = setTimeout(this.handleDelete, timeoutByType);
+      this._timeout = setTimeout(this.handleDelete, timeoutByType);
     }
   }
 
@@ -48,14 +49,24 @@ export class BubbleItem extends React.Component {
 
       this._timeout = setTimeout(this.handleDelete, timeoutByType);
     }
+
+    if (this.props.stack < nextProps.stack) {
+      this.cancelTimeout();
+
+      const timeoutByType = timeoutByBubbleType[nextProps.bubble.type];
+
+      this._timeout = setTimeout(this.handleDelete, timeoutByType);
+    }
   }
+
+  cancelTimeout: Function = () => {
+    clearTimeout(this._timeout);
+    this._timeout = null;
+  };
 
   handleView: Function = () => {
     this.props.changeNotificationsPaneQuery('open');
-
-    clearTimeout(this._timeout);
-    this._timeout = null;
-
+    this.cancelTimeout();
     this.handleDelete('all');
   };
 
@@ -79,6 +90,8 @@ export class BubbleItem extends React.Component {
         onViewClick={type === 'notification' && this.handleView}
         type={item.type.toLowerCase()}
         stack={stack}
+        notification={type === 'notification'}
+        id={shortid.generate()}
       >
         {message}
       </Bubble>

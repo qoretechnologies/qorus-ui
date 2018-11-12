@@ -1,3 +1,53 @@
+.notification-toast {
+  animation: notificationAnimation 5s ease-out;
+  animation-iteration-count: 1;
+}
+
+.info-toast {
+  animation: toastAnimation 5s ease-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes toastAnimation {
+  0% {
+    opacity: 0;
+    filter: blur(0.5rem);
+    transform: translateY(-150%);
+  }
+
+  3% {
+    opacity: 1;
+    filter: blur(0);
+    transform: initial;
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: initial;
+  }
+}
+
+@keyframes notificationAnimation {
+  0% {
+    opacity: 0;
+    filter: blur(0.5rem);
+    transform: translateX(50%);
+  }
+
+  3% {
+    opacity: 1;
+    filter: blur(0);
+    transform: initial;
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: initial;
+  }
+}
+
 .pt-toast .pt-icon-standard {
   font-size: 16px;
 }
