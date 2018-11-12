@@ -198,6 +198,8 @@ const handleEvent = (url, data, dispatch, state) => {
                 alerttype: 'ONGOING',
                 notificationType: ALERT_NOTIFICATION_TYPES[info.type],
                 notificationId: shortid.generate(),
+                read: !state.api.currentUser.data.storage.settings
+                  .notificationsEnabled,
               },
             },
             dispatch

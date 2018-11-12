@@ -22,6 +22,7 @@ const Bubble = ({
   stack,
   notification,
   id,
+  notificationsSound,
 }: {
   type: 'success' | 'warning' | 'danger' | 'info',
   children?: string,
@@ -30,6 +31,7 @@ const Bubble = ({
   stack: number,
   notification?: boolean,
   id?: any,
+  notificationsSound: boolean,
 }): React.Element<any> => (
   <div
     className={classnames('pt-toast', 'pt-overlay-content', {
@@ -42,7 +44,8 @@ const Bubble = ({
       cursor: onViewClick ? 'pointer' : 'initial',
     }}
   >
-    {notification && <audio src={notificationSound} id={id} autoPlay />}
+    {notification &&
+      notificationsSound && <audio src={notificationSound} id={id} autoPlay />}
     {stack > 1 && (
       <div className="toast-notification-count">{stack > 9 ? '9+' : stack}</div>
     )}

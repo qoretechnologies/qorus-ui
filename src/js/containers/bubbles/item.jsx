@@ -24,6 +24,7 @@ type Props = {
   type?: string,
   changeNotificationsPaneQuery: Function,
   stack: number,
+  notificationsSound: boolean,
 };
 
 export class BubbleItem extends React.Component {
@@ -81,7 +82,7 @@ export class BubbleItem extends React.Component {
   };
 
   render() {
-    const { bubble: item, type, stack } = this.props;
+    const { bubble: item, type, stack, notificationsSound } = this.props;
     const message: string = item.notificationType || item.message;
 
     return (
@@ -91,6 +92,7 @@ export class BubbleItem extends React.Component {
         type={item.type.toLowerCase()}
         stack={stack}
         notification={type === 'notification'}
+        notificationsSound={notificationsSound}
         id={shortid.generate()}
       >
         {message}
@@ -101,7 +103,15 @@ export class BubbleItem extends React.Component {
 
 export default compose(
   connect(
-    null,
+    ({
+      api: {
+        currentUser: {
+          data: { storage },
+        },
+      },
+    }) => ({
+      notificationsSound: storage.settings.notificationsSound,
+    }),
     {
       ...bubbles,
       ...notifications,
@@ -115,5 +125,5 @@ export default compose(
     ...props,
   })),
   queryControl('notificationsPane'),
-  onlyUpdateForKeys(['bubble', 'timeout'])
+  onlyUpdateForKeys(['bubble', 'timeout', 'notificationsSound'])
 )(BubbleItem);
