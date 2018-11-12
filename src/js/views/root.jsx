@@ -77,6 +77,8 @@ const optionsSelector = state => state.api.systemOptions;
   'children',
   'isTablet',
   'sidebarOpen',
+  'health',
+  'children',
 ])
 export default class Root extends Component {
   static propTypes = {
@@ -252,19 +254,17 @@ export default class Root extends Component {
    */
   render() {
     const { currentUser, info, isTablet, health, options } = this.props;
-    const locale =
-      currentUser.sync && currentUser.data.storage.locale
-        ? currentUser.data.storage.locale
-        : navigator.locale
-          ? navigator.locale
-          : 'en-US';
-
-    const isLightTheme =
-      currentUser.sync && currentUser.data.storage.theme === 'light';
 
     if (!currentUser.sync || !info.sync || !health.sync || !options.sync) {
       return <Preloader />;
     }
+    const locale = currentUser.data.storage.locale
+      ? currentUser.data.storage.locale
+      : navigator.locale
+        ? navigator.locale
+        : 'en-US';
+
+    const isLightTheme = currentUser.data.storage.theme === 'light';
 
     return (
       <IntlProvider locale={locale} messages={messages(locale)}>
