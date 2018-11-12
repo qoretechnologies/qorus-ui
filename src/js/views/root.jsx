@@ -8,7 +8,6 @@ import en from 'react-intl/locale-data/en';
 import cs from 'react-intl/locale-data/cs';
 import de from 'react-intl/locale-data/de';
 import mapProps from 'recompose/mapProps';
-import moment from 'moment';
 
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
@@ -18,27 +17,10 @@ import { Manager as ModalManager } from '../components/modal';
 import actions from 'store/api/actions';
 import { settings } from '../store/ui/actions';
 import messages from '../intl/messages';
-import NotificationPanel from '../containers/system/alerts';
+import Bubbles from '../containers/bubbles';
+import Notifications from '../containers/notifications';
 
 addLocaleData([...en, ...cs, ...de]);
-moment.updateLocale('en', {
-  relativeTime: {
-    future: 'in %s',
-    past: '%s ago',
-    s: '%ds',
-    ss: '%ds',
-    m: '1m',
-    mm: '%dm',
-    h: '1h',
-    hh: '%dh',
-    d: 'a day',
-    dd: '%d days',
-    M: 'a month',
-    MM: '%d months',
-    y: 'a year',
-    yy: '%d years',
-  },
-});
 
 const systemSelector = state => state.api.system;
 const currentUserSelector = state => state.api.currentUser;
@@ -95,6 +77,8 @@ const optionsSelector = state => state.api.systemOptions;
   'children',
   'isTablet',
   'sidebarOpen',
+  'health',
+  'children',
 ])
 export default class Root extends Component {
   static propTypes = {
@@ -270,19 +254,17 @@ export default class Root extends Component {
    */
   render() {
     const { currentUser, info, isTablet, health, options } = this.props;
-    const locale =
-      currentUser.sync && currentUser.data.storage.locale
-        ? currentUser.data.storage.locale
-        : navigator.locale
-          ? navigator.locale
-          : 'en-US';
-
-    const isLightTheme =
-      currentUser.sync && currentUser.data.storage.theme === 'light';
 
     if (!currentUser.sync || !info.sync || !health.sync || !options.sync) {
       return <Preloader />;
     }
+    const locale = currentUser.data.storage.locale
+      ? currentUser.data.storage.locale
+      : navigator.locale
+        ? navigator.locale
+        : 'en-US';
+
+    const isLightTheme = currentUser.data.storage.theme === 'light';
 
     return (
       <IntlProvider locale={locale} messages={messages(locale)}>
@@ -296,6 +278,7 @@ export default class Root extends Component {
             onThemeClick={this.onThemeChange}
             onNotificationClick={this.handleNotificationsClick}
             user={currentUser.data}
+            location={this.props.location}
           />
           <div className="root__center">
             <Sidebar
@@ -307,7 +290,6 @@ export default class Root extends Component {
             <section>
               <div className="container-fluid" id="content-wrapper">
                 {this.props.children}
-                <NotificationPanel isOpen={this.state.notificationsOpen} />
               </div>
             </section>
           </div>
@@ -316,6 +298,8 @@ export default class Root extends Component {
             info={this.props.info.data}
           />
           <ModalManager ref={this.refModal} />
+          <Notifications />
+          <Bubbles />
         </div>
       </IntlProvider>
     );

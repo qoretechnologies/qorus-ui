@@ -8,8 +8,12 @@ const initialState: Object = {
   tablet: false,
 };
 
-export default handleActions({
-  [ACTIONS.SETTINGS_SAVEDIMENSIONS]: (state: Object, { payload: { width, height } }) => (
-    { ...state, ...{ width, height, tablet: width < 1400 } }
-  ),
-}, initialState);
+export default handleActions(
+  {
+    [ACTIONS.SETTINGS_SAVEDIMENSIONS]: (
+      state: Object,
+      { payload: { width, height } }
+    ) => ({ ...state, ...{ width, height, tablet: width < 1400 } }),
+  },
+  initialState
+);

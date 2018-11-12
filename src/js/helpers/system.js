@@ -30,14 +30,14 @@ const alertTypeToResource: Object = {
     query: 'paneId',
   },
   'USER-CONNECTION': {
-    resource: 'system/remote/user',
+    resource: 'system/remote',
     uses: 'name',
-    query: 'paneId',
+    query: 'tab=user&paneId',
   },
   REMOTE: {
-    resource: 'system/remote/qorus',
+    resource: 'system/remote',
     uses: 'name',
-    query: 'paneId',
+    query: 'tab=qorus&paneId',
   },
   GROUP: {
     resource: 'groups',
@@ -50,7 +50,7 @@ const alertTypeToResource: Object = {
     suffix: '/19700101',
   },
   DATASOURCE: {
-    resource: 'system/remote/datasources',
+    resource: 'system/remote',
     uses: 'name',
     query: 'paneId',
   },
@@ -115,7 +115,7 @@ const typeToString: Function = (val: any): any => {
 const getProcessObjectLink: Function = (process: Object) => {
   switch (process.type) {
     case 'qdsp':
-      return `/system/remote/datasources?paneId=${process.client_id}`;
+      return `/system/remote?paneId=${process.client_id}`;
     case 'qwf':
       return `/workflows?paneId=${process.wfid}&paneTab=details`;
     case 'qsvc':

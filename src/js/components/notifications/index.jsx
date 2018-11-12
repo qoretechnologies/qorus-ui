@@ -1,128 +1,84 @@
 /* @flow */
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+import Pane from '../pane';
+import { SimpleTabs, SimpleTab } from '../SimpleTabs';
+import { connect } from 'react-redux';
+import { notifications } from '../../store/ui/actions';
+import compose from 'recompose/compose';
+import { NOTIFICATION_TYPES } from '../../constants/notifications';
 import NotificationList from './list';
-import ResizeHandle from '../resize/handle';
-import Box from '../box';
+import lifecycle from 'recompose/lifecycle';
 
 type Props = {
-  alerts: Object,
-  clearNotifications: Function,
-  isOpen?: boolean,
+  width?: number,
+  onClose: Function,
+  onResize: Function,
+  paneTab: string,
+  collection: Array<Object>,
+  collectionLen: number,
+  read: Function,
 };
 
-class NotificationPanel extends React.Component {
-  static defaultProps = {
-    alerts: { data: [], isOpen: false },
-  };
+const Notifications: Function = ({
+  width,
+  onClose,
+  onResize,
+  paneTab,
+  collection,
+}: Props) => (
+  <Pane
+    width={width || 600}
+    onClose={onClose}
+    onResize={onResize}
+    title="Notifications"
+    tabs={{
+      tabs: [
+        'All',
+        'Workflows',
+        'Services',
+        'Jobs',
+        'Groups',
+        'Remotes',
+        'Users',
+        'Datasources',
+        'Orders',
+      ],
+      queryIdentifier: 'notificationsPaneTab',
+    }}
+  >
+    <SimpleTabs activeTab={paneTab}>
+      <SimpleTab name="all">
+        <NotificationList collection={collection} paneTab={paneTab} />
+      </SimpleTab>
+      {NOTIFICATION_TYPES.map(
+        (notificationType: string): React.Element<SimpleTab> => (
+          <SimpleTab key={notificationType} name={notificationType}>
+            <NotificationList collection={collection} paneTab={paneTab} />
+          </SimpleTab>
+        )
+      )}
+    </SimpleTabs>
+  </Pane>
+);
 
-  props: Props;
-
-  state: {
-    isOpen: boolean,
-  };
-
-  state = {
-    isOpen: this.props.isOpen,
-  };
-
-  componentWillReceiveProps(newProps: Props) {
-    if (this.state.isOpen !== newProps.isOpen) {
-      this.setState({ isOpen: newProps.isOpen });
+export default compose(
+  connect(
+    (state: Object): Object => ({
+      collection: state.ui.notifications.data,
+      collectionLen: state.ui.notifications.count,
+    }),
+    {
+      add: notifications.addNotification,
+      read: notifications.readNotifications,
     }
-  }
-
-  handleClick = () => {
-    this.setState({ isOpen: !this.state.isOpen });
-  };
-
-  handleOutsideClick = (event: Object): void => {
-    const el: Object = ReactDOM.findDOMNode(this.refs.panel);
-
-    if (el && !el.contains(event.target)) {
-      this.setState({
-        isOpen: false,
-      });
-    }
-  };
-
-  render() {
-    const {
-      clearNotifications,
-      alerts: { data = [] },
-    } = this.props;
-    const notificationList = data.filter(item => !item._read);
-    let panel = null;
-
-    if (this.state.isOpen && notificationList.length > 0) {
-      const ongoingNotifications = notificationList.filter(
-        item => item.alerttype === 'ONGOING'
-      );
-      const transientNotifications = notificationList.filter(
-        item => item.alerttype === 'TRANSIENT'
-      );
-
-      panel = (
-        <div className="pane right notifications-list">
-          <div className="pane__content">
-            <Box top>
-              {ongoingNotifications.length > 0 ? (
-                <NotificationList
-                  title="Ongoing"
-                  type="ONGOING"
-                  className={`ongoing ${
-                    transientNotifications.length === 0 ? 'full-grp' : ''
-                  }`}
-                  clearNotifications={clearNotifications}
-                  notifications={ongoingNotifications}
-                />
-              ) : null}
-              {transientNotifications.length > 0 ? (
-                <NotificationList
-                  title="Transient"
-                  type="TRANSIENT"
-                  className={`transient ${
-                    ongoingNotifications.length === 0 ? 'full-grp' : ''
-                  }`}
-                  clearNotifications={clearNotifications}
-                  notifications={transientNotifications}
-                />
-              ) : null}
-            </Box>
-          </div>
-          <ResizeHandle left min={{ width: 400 }} />
-        </div>
-      );
-    }
-
-    if (this.state.isOpen && notificationList.length === 0) {
-      panel = (
-        <div className="pane right notifications-list">
-          <div className="pane__content">
-            <Box>
-              <div className="full-grp notifications-group">
-                <h5 className="notifications-header">No notifications</h5>
-              </div>
-            </Box>
-          </div>
-          <ResizeHandle left min={{ width: 400 }} />
-        </div>
-      );
-    }
-
-    return (
-      <ReactCSSTransitionGroup
-        transitionName="notification-list"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}
-        component="div"
-      >
-        {panel}
-      </ReactCSSTransitionGroup>
-    );
-  }
-}
-
-export default NotificationPanel;
+  ),
+  lifecycle({
+    componentDidMount() {
+      this.props.read();
+    },
+    componentDidUpdate() {
+      this.props.read();
+    },
+  })
+)(Notifications);

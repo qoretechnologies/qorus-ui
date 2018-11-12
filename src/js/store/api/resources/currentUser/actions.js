@@ -116,6 +116,17 @@ const storeTheme: Function = (theme: string): Function => (
   dispatch(updateStorage(storage, username));
 };
 
+const storeSettings: Function = (setting: string, value: any): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
+  const { storage: storage = {}, username } = getState().api.currentUser.data;
+
+  storage.settings[setting] = value;
+
+  dispatch(updateStorage(storage, username));
+};
+
 const clearStorage: Function = (): Function => (
   dispatch: Function,
   getState: Function
@@ -135,4 +146,5 @@ export {
   storeSidebar,
   storeTheme,
   clearStorage,
+  storeSettings,
 };

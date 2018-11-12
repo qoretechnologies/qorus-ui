@@ -4,7 +4,6 @@ import setupStore from 'store';
 import { browserHistory } from 'react-router';
 
 import Routes from './routes';
-import Notifications from './containers/bubbles';
 import Preloader from './components/preloader';
 
 require('normalize.css/normalize.css');
@@ -207,7 +206,6 @@ export default class App extends Component {
     return (
       <Provider store={this.state.store}>
         <div className="app__wrap">
-          <Notifications />
           <Routes routerProps={this.getRouterProps()} />
           {/* this.renderDevTools() */}
         </div>

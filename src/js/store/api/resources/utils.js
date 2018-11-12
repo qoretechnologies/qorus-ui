@@ -91,3 +91,16 @@ export const processRESTResponse = (
     dispatch(success(successMsg, notificationId));
   }
 };
+
+export const injectStorageDefaults = (currentUserData: Object): Object => {
+  const { storage } = currentUserData;
+
+  if (!storage.settings) {
+    storage.settings = {
+      notificationsEnabled: true,
+      notificationsSound: true,
+    };
+  }
+
+  return currentUserData;
+};

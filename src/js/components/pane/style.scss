@@ -1,4 +1,5 @@
-$zindex-pane: 18;
+$zindex-pane: 17;
+$zindex-notifications-pane: 18;
 $pane-padding: 10px;
 $pane-bg-color: rgba(245, 245, 245, 0.9);
 $pane-font-color: #000;
@@ -20,6 +21,13 @@ $pane-font-color: #000;
  *    default Bootstrap white), black font color and overlay
  *    tab content area border so tab the tab and the area look solid.
  */
+
+// If the pane is outside of content wrapper, add top;
+.root > .floating-pane-wrapper > .pane {
+  top: 50px;
+  z-index: $zindex-notifications-pane;
+}
+
 .pane {
   position: absolute; /* [1] */
   top: 0; /* [1] */

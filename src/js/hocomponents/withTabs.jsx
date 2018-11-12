@@ -8,26 +8,23 @@ import { functionOrStringExp } from '../helpers/functions';
 
 export default (
   defaultTab: string | Function,
-  queryName: string | Function
+  queryName: string | Function = 'tab'
 ): Function => (Component: any): Function =>
   compose(
-    queryControl(props => functionOrStringExp(queryName, props) || 'tab'),
+    queryControl(props => functionOrStringExp(queryName, props)),
     mapProps(
       (props): Object => ({
-        tabQuery: queryName
-          ? props[`${functionOrStringExp(queryName, props)}Query`]
-          : props.tabQuery,
-        changeTabQuery: queryName
-          ? props[
-              `change${upperFirst(functionOrStringExp(queryName, props))}Query`
-            ]
-          : props.changeTabQuery,
+        tabQuery: props[`${functionOrStringExp(queryName, props)}Query`],
+        changeTabQuery:
+          props[
+            `change${upperFirst(functionOrStringExp(queryName, props))}Query`
+          ],
         ...props,
       })
     ),
     mapProps(
       ({ tabQuery, ...rest }: Object): Object => ({
-        tabQuery: tabQuery ? tabQuery : functionOrStringExp(defaultTab, rest),
+        tabQuery: tabQuery || functionOrStringExp(defaultTab, rest),
         ...rest,
       })
     ),

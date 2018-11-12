@@ -52,7 +52,7 @@ module.exports = function compilerConfig() {
           loader: 'url?limit=100000',
         },
         {
-          test: /\.jpg$/,
+          test: /\.(jpg|mp3)$/,
           loader: 'file',
         },
         {

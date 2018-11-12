@@ -8,6 +8,7 @@ import {
   normalizeWorkflowLib,
   findMissingBand,
   addHasAlerts,
+  injectStorageDefaults,
 } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 import { DEFAULTS as servicesDefaults } from './services';
@@ -130,7 +131,10 @@ export default [
     name: 'currentUser',
     url: `${settings.REST_BASE_URL}/users?action=current`,
     initialState: { data: {} },
-    transform: item => (item.storage ? item : { ...item, ...{ storage: {} } }),
+    transform: item =>
+      item.storage
+        ? injectStorageDefaults(item)
+        : { ...item, ...{ storage: { settings: {} } } },
   },
   {
     name: 'services',

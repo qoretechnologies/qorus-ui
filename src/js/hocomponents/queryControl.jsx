@@ -4,12 +4,14 @@ import wrapDisplayName from 'recompose/wrapDisplayName';
 import upperFirst from 'lodash/upperFirst';
 
 import { changeQuery } from '../helpers/router';
+import { withRouter } from 'react-router';
 
 export default (
   queryName: ?string | ?Function,
   customFunc: ?Function,
   toggle: ?boolean
 ): Function => (Component: any): ?ReactClass<*> => {
+  @withRouter
   class WrappedComponent extends React.Component {
     static contextTypes = {
       router: PropTypes.object,

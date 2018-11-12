@@ -7,3 +7,22 @@
 .topbar {
   z-index: 19;
 }
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-count {
+  position: absolute;
+  font-size: 9px;
+  background-color: red;
+  border-radius: 99px;
+  width: 12px;
+  height: 12px;
+  text-align: center;
+  font-weight: 600;
+  line-height: 12px;
+  right: 15px;
+  top: 3px;
+  z-index: 15;
+}
