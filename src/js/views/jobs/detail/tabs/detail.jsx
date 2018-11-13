@@ -19,6 +19,7 @@ import { hasPermission } from '../../../../helpers/user';
 import PaneItem from '../../../../components/pane_item';
 import withDispatch from '../../../../hocomponents/withDispatch';
 import withHandlers from 'recompose/withHandlers';
+import ProcessSummary from '../../../../components/ProcessSummary';
 
 type Props = {
   model: Object,
@@ -78,6 +79,7 @@ const DetailTab = ({
         type="job"
       />
     </PaneItem>
+    <ProcessSummary process={model.process} />
     <AlertsTable alerts={model.alerts} />
     <Groups>
       {(model.groups || []).map(g => (

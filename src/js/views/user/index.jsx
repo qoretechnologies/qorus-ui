@@ -47,70 +47,69 @@ const UserView: Function = ({
   userData: Object,
   clearStorage: Function,
   tabQuery: string,
-}) =>
-  console.log(userData.storage) || (
-    <div>
-      <Headbar>
-        <Breadcrumbs>
-          <Crumb>
-            {userData.name} <small>({userData.provider})</small>
-          </Crumb>
-          <CrumbTabs tabs={['Overview', 'Settings']} />
-        </Breadcrumbs>
-        <Pull right>
-          <Button
-            intent={Intent.DANGER}
-            iconName="cross"
-            text="Clear storage"
-            onClick={clearStorage}
-          />
-        </Pull>
-      </Headbar>
-      <Box top>
-        <Container>
-          <SimpleTabs activeTab={tabQuery}>
-            <SimpleTab name="overview">
-              {interfaces.map((intrf: string) => (
-                <PaneItem title={capitalize(intrf)}>
-                  {userData[intrf].length ? (
-                    userData[intrf]
-                      .map((datum: string | Object) => {
-                        if (typeof datum === 'string') {
-                          return datum;
-                        }
+}) => (
+  <div>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb>
+          {userData.name} <small>({userData.provider})</small>
+        </Crumb>
+        <CrumbTabs tabs={['Overview', 'Settings']} />
+      </Breadcrumbs>
+      <Pull right>
+        <Button
+          intent={Intent.DANGER}
+          iconName="cross"
+          text="Clear storage"
+          onClick={clearStorage}
+        />
+      </Pull>
+    </Headbar>
+    <Box top>
+      <Container>
+        <SimpleTabs activeTab={tabQuery}>
+          <SimpleTab name="overview">
+            {interfaces.map((intrf: string) => (
+              <PaneItem title={capitalize(intrf)}>
+                {userData[intrf].length ? (
+                  userData[intrf]
+                    .map((datum: string | Object) => {
+                      if (typeof datum === 'string') {
+                        return datum;
+                      }
 
-                        return normalizeName(datum, interfaceIds[intrf]);
-                      })
-                      .map(
-                        (datum: string): React.Element<Tag> => (
-                          <span>
-                            <Tag className="tag-with-margin">{datum}</Tag>{' '}
-                          </span>
-                        )
+                      return normalizeName(datum, interfaceIds[intrf]);
+                    })
+                    .map(
+                      (datum: string): React.Element<Tag> => (
+                        <span>
+                          <Tag className="tag-with-margin">{datum}</Tag>{' '}
+                        </span>
                       )
-                  ) : userData.has_default ? (
-                    <Alert bsStyle="warning" iconName="info-sign">
-                      {' '}
-                      Member of DEFAULT group with no restrictions; all
-                      interfaces are accessible
-                    </Alert>
-                  ) : (
-                    <NoData />
-                  )}
-                </PaneItem>
-              ))}
-              <PaneItem title="Storage data">
-                <Tree data={userData.storage} />
+                    )
+                ) : userData.has_default ? (
+                  <Alert bsStyle="warning" iconName="info-sign">
+                    {' '}
+                    Member of DEFAULT group with no restrictions; all interfaces
+                    are accessible
+                  </Alert>
+                ) : (
+                  <NoData />
+                )}
               </PaneItem>
-            </SimpleTab>
-            <SimpleTab name="settings">
-              <UserSettings {...userData.storage.settings} />
-            </SimpleTab>
-          </SimpleTabs>
-        </Container>
-      </Box>
-    </div>
-  );
+            ))}
+            <PaneItem title="Storage data">
+              <Tree data={userData.storage} />
+            </PaneItem>
+          </SimpleTab>
+          <SimpleTab name="settings">
+            <UserSettings {...userData.storage.settings} />
+          </SimpleTab>
+        </SimpleTabs>
+      </Container>
+    </Box>
+  </div>
+);
 
 export default compose(
   connect(

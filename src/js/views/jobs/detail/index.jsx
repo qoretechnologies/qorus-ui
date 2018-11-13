@@ -21,6 +21,8 @@ import LogTab from '../../workflows/detail/log_tab';
 import show from '../../../hocomponents/show-if-passed';
 import titleManager from '../../../hocomponents/TitleManager';
 import Container from '../../../components/container';
+import { NonIdealState } from '@blueprintjs/core';
+import InfoTable from '../../../components/info_table';
 
 const Detail = ({
   location,
@@ -50,7 +52,15 @@ const Detail = ({
     onClose={onClose}
     title={`Job ${model.id}`}
     tabs={{
-      tabs: ['Detail', 'Mappers', 'Valuemaps', 'Releases', 'Code', 'Log'],
+      tabs: [
+        'Detail',
+        'Process',
+        'Mappers',
+        'Valuemaps',
+        'Releases',
+        'Code',
+        'Log',
+      ],
       queryIdentifier: 'paneTab',
     }}
   >
@@ -78,6 +88,26 @@ const Detail = ({
               <Loader />
             )}
           </SimpleTab>
+
+          {model.process ? (
+            <SimpleTab name="process">
+              <InfoTable
+                object={{
+                  ...model.process,
+                  ...{ memory: model.process.priv_str },
+                }}
+                omit={['priv', 'rss', 'vsz', 'priv_str']}
+              />
+            </SimpleTab>
+          ) : (
+            <SimpleTab name="process">
+              <NonIdealState
+                title="Process unavailable"
+                description="This job is not running under a process"
+                visual="warning-sign"
+              />
+            </SimpleTab>
+          )}
           <SimpleTab name="log">
             <LogTab resource={`jobs/${model.id}`} location={location} />
           </SimpleTab>
