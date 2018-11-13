@@ -13,6 +13,10 @@ import JobControls from './controls';
 import { Controls, Control as Button } from '../../components/controls';
 import DetailButton from '../../components/detail_button';
 import InstancesBar from '../../components/instances_bar';
+import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
+import Box from '../../components/box';
+import PaneItem from '../../components/pane_item';
+import ProcessSummary from '../../components/ProcessSummary';
 
 type Props = {
   openPane: Function,
@@ -81,6 +85,7 @@ const ServiceRow: Function = ({
   first,
   normalizedName,
   remote,
+  ...rest
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -129,13 +134,28 @@ const ServiceRow: Function = ({
     </Td>
     <Td className="narrow">{id}</Td>
     <Td className="name">
-      <Link
-        to={`/job/${id}?date=${date}`}
-        className="resource-name-link"
-        title={name}
+      <Popover
+        hoverOpenDelay={300}
+        content={
+          <Box top>
+            <PaneItem title={normalizedName}>{rest.description}</PaneItem>
+            <ProcessSummary process={rest.process} />
+          </Box>
+        }
+        interactionKind={PopoverInteractionKind.HOVER}
+        position={Position.TOP}
+        rootElementTag="div"
+        className="block"
+        useSmartPositioning
       >
-        {normalizedName}
-      </Link>
+        <Link
+          to={`/job/${id}?date=${date}`}
+          className="resource-name-link"
+          title={name}
+        >
+          {normalizedName}
+        </Link>
+      </Popover>
     </Td>
     <Td className="big">
       <Date date={executed} />
