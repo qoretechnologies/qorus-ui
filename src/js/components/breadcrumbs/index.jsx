@@ -5,25 +5,32 @@ import Crumb from './crumb';
 import CrumbTabs from './tabs';
 import CollapsedCrumb from './collapsedCrumb';
 import { Icon } from '@blueprintjs/core';
+import qoreLogo from '../../../img/qore_logo.png';
 
 type Props = {
   children?: any,
   collapsed?: boolean,
   onClick?: Function,
   noFloat?: boolean,
-  icon: string,
+  icon?: string,
 };
 
 const Breadcrumbs: Function = ({
   children,
   onClick,
   noFloat,
-  icon: icon = 'home',
+  icon,
 }: Props): React.Element<any> => (
   <ul className={`pt-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
-    <li>
-      <Icon className="pt-breadcrumb" iconName={icon} />
-    </li>
+    {icon ? (
+      <li onClick={onClick}>
+        <Icon className="pt-breadcrumb" iconName={icon} />
+      </li>
+    ) : (
+      <li onClick={onClick}>
+        <img src={qoreLogo} style={{ width: '15px' }} />
+      </li>
+    )}
     {children}
   </ul>
 );
