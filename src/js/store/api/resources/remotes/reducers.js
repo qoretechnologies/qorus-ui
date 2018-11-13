@@ -43,7 +43,7 @@ const connectionChange = {
       events.forEach((dt: Object) => {
         newData = updateItemWithName(
           dt.name,
-          { up: dt.up, _updated: true },
+          { up: dt.up, enabled: dt.enabled, _updated: true },
           newData
         );
       });
