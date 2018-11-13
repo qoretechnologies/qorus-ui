@@ -15,6 +15,9 @@ import {
   MenuItem,
   Tooltip,
   MenuDivider,
+  InputGroup,
+  ControlGroup,
+  Classes,
 } from '@blueprintjs/core';
 import map from 'lodash/map';
 
@@ -37,6 +40,28 @@ const flags: Object = {
   'en-GB': gb,
   'en-US': en,
   'de-DE': de,
+};
+
+const searchableViews = {
+  Workflows: 'workflows?',
+  Services: 'services?',
+  Jobs: 'jobs?',
+  Groups: 'groups?',
+  ['Ongoing Alerts']: 'system/alerts?',
+  ['Transient Alerts']: 'system/alerts?tab=transient&',
+  Options: 'system/options?',
+  Datasources: 'system/remote?',
+  ['User Connections']: 'system/remote?tab=user&',
+  ['Qorus Connections']: 'system/remote?tab=qorus&',
+  Properties: 'system/props?',
+  SLAs: 'system/slas?',
+  Users: 'system/rbac?',
+  Roles: 'system/rbac?tab=roles&',
+  Permissions: 'system/rbac?tab=permissions&',
+  Errors: 'system/errors?',
+  ['SQL Cache']: 'system/sqlcache?',
+  ['Value Maps']: 'system/values?',
+  ['Code Library']: 'library?',
 };
 
 export type Props = {
@@ -74,8 +99,55 @@ export type Props = {
 export default class Topbar extends Component {
   props: Props;
 
+  state: {
+    quickSearchType: string,
+    quickSearchValue: string,
+  } = {
+    quickSearchType: 'Workflows',
+    quickSearchValue: '',
+  };
+
   handleNotificationsClick: Function = () => {
     this.props.openPane();
+  };
+
+  handleSubmit: Function = (e: Object): void => {
+    e.preventDefault();
+
+    browserHistory.push(
+      `/${searchableViews[this.state.quickSearchType]}search=${
+        this.state.quickSearchValue
+      }`
+    );
+  };
+
+  renderSearchMenu: Function = () => {
+    const interfaces: Array<string> = Object.keys(searchableViews);
+    const sortedInterfaces: Array<string> = interfaces.sort();
+
+    return (
+      <Popover
+        content={
+          <Menu>
+            {sortedInterfaces.map(
+              (key: string): React.Element<MenuItem> => (
+                <MenuItem
+                  text={key}
+                  onClick={() => this.setState({ quickSearchType: key })}
+                />
+              )
+            )}
+          </Menu>
+        }
+        position={Position.BOTTOM}
+      >
+        <Button
+          className={Classes.MINIMAL}
+          text={`in ${this.state.quickSearchType}`}
+          rightIconName="caret-down"
+        />
+      </Popover>
+    );
   };
 
   render() {
@@ -95,6 +167,18 @@ export default class Topbar extends Component {
           </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
+          <form onSubmit={this.handleSubmit}>
+            <InputGroup
+              leftIconName="search"
+              placeholder="Quick search"
+              rightElement={this.renderSearchMenu()}
+              value={this.state.quickSearchValue}
+              onChange={e =>
+                this.setState({ quickSearchValue: e.target.value })
+              }
+            />
+          </form>
+          <NavbarDivider />
           <Popover
             position={Position.BOTTOM}
             useSmartPositioning
@@ -151,7 +235,6 @@ export default class Topbar extends Component {
               </Button>
             </ButtonGroup>
           </Popover>
-          <NavbarDivider />
           {settings.PROTOCOL === 'http' && (
             <ButtonGroup minimal>
               <Tooltip
@@ -212,6 +295,7 @@ export default class Topbar extends Component {
               onClick={this.handleNotificationsClick}
             />
           </ButtonGroup>
+          <NavbarDivider />
           <ButtonGroup minimal>
             <Button
               iconName={light ? 'moon' : 'flash'}
