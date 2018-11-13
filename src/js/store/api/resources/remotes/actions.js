@@ -118,7 +118,7 @@ const toggleConnection: Function = createAction(
     fetchWithNotifications(
       async () =>
         await fetchJson(
-          'POST',
+          'PUT',
           `${settings.REST_BASE_URL}/remote/user/${name}?action=${
             value ? 'enable' : 'disable'
           }`

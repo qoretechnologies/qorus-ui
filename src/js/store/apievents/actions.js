@@ -671,6 +671,7 @@ const handleEvent = (url, data, dispatch, state) => {
             {
               name: info.name,
               up: true,
+              enabled: info.enabled,
             },
             dispatch
           );
@@ -684,6 +685,7 @@ const handleEvent = (url, data, dispatch, state) => {
             {
               name: info.name,
               up: false,
+              enabled: info.enabled,
             },
             dispatch
           );
