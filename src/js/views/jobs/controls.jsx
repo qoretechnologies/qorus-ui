@@ -23,6 +23,7 @@ type Props = {
   handleRunClick: Function,
   handleScheduleClick: Function,
   handleExpiryClick: Function,
+  handleRemoteClick: Function,
   enabled?: boolean,
   active?: boolean,
   dispatchAction: Function,
@@ -48,14 +49,14 @@ const JobControls: Function = ({
   handleRunClick,
   handleScheduleClick,
   handleExpiryClick,
-  // handleRemoteClick,
+  handleRemoteClick,
   active,
   enabled,
   scheduleOnly,
   schedText,
   big,
-}: // remote,
-Props): React.Element<any> =>
+  remote,
+}: Props): React.Element<any> =>
   scheduleOnly ? (
     <div>
       <span>{schedText}</span>{' '}
@@ -88,7 +89,6 @@ Props): React.Element<any> =>
         big={big}
         onClick={handleResetClick}
       />
-      <Button title="Run" iconName="play" big={big} onClick={handleRunClick} />
       <Button
         title="Reschedule"
         iconName="time"
@@ -99,6 +99,13 @@ Props): React.Element<any> =>
         title="Set expiry"
         iconName="tag"
         onClick={handleExpiryClick}
+        big={big}
+      />
+      <Button
+        title="Set remote"
+        iconName="globe"
+        intent={remote ? Intent.PRIMARY : Intent.NONE}
+        onClick={handleRemoteClick}
         big={big}
       />
     </ButtonGroup>
@@ -141,8 +148,9 @@ export default compose(
     handleRemoteClick: ({
       dispatchAction,
       id,
+      remote,
     }: Props): Function => (): void => {
-      dispatchAction(actions.jobs.jobsAction, 'remote', id);
+      dispatchAction(actions.jobs.setRemote, id, !remote);
     },
     handleScheduleClick: ({
       optimisticDispatch,
@@ -183,5 +191,5 @@ export default compose(
       );
     },
   }),
-  pure(['enabled', 'active', 'id', 'big'])
+  pure(['enabled', 'active', 'id', 'big', 'remote'])
 )(JobControls);

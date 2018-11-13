@@ -55,6 +55,7 @@ const DetailTab = ({
         day={model.day}
         month={model.month}
         week={model.wday}
+        remote={model.remote}
       />
       <JobControls
         scheduleOnly

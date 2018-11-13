@@ -277,12 +277,15 @@ const setRemote = createAction(
       async () =>
         await fetchJson(
           'PUT',
-          `${settings.REST_BASE_URL}/jobs/${id}?action=setRemote&remote=${
-            value ? 1 : 0
-          }`
+          `${settings.REST_BASE_URL}/jobs/${id}/setRemote`,
+          {
+            body: JSON.stringify({
+              remote: value,
+            }),
+          }
         ),
-      `Setting job as ${!value ? 'not' : ''} remote...`,
-      `Service job as ${!value ? 'not' : ''} remote`,
+      `Setting job ${id} as ${!value ? 'not' : ''} remote...`,
+      `Set job ${id} as ${!value ? 'not' : ''} remote`,
       dispatch
     );
 
