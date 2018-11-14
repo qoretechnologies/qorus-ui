@@ -108,11 +108,8 @@ export default compose(
       openModal,
       closeModal,
       method,
-      service,
     }: Props): Function => (): void => {
-      openModal(
-        <ModalCode method={method} service={service} onClose={closeModal} />
-      );
+      openModal(<ModalCode method={method} onClose={closeModal} />);
     },
     handleSLAChange: ({ dispatchAction }: Props): Function => (
       modelName,

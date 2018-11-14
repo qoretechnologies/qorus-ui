@@ -5,6 +5,7 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 
 import { Icon } from '@blueprintjs/core';
+import lifecycle from 'recompose/lifecycle';
 
 type Props = {
   children: any,
@@ -38,6 +39,13 @@ export default compose(
   withHandlers({
     toggleExpand: ({ setExpanded }: Props): Function => (): void => {
       setExpanded(expanded => !expanded);
+    },
+  }),
+  lifecycle({
+    componentWillReceiveProps(nextProps: Props) {
+      if (this.props.show !== nextProps.show) {
+        nextProps.setExpanded(() => nextProps.show);
+      }
     },
   }),
   onlyUpdateForKeys(['children', 'expanded'])
