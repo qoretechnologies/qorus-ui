@@ -5,7 +5,7 @@ import mapProps from 'recompose/mapProps';
 import DetailPane from 'components/pane';
 import Box from 'components/box';
 import { DetailTab, MethodsTab, ResourceTab } from './tabs';
-import Code from 'components/code';
+import Code from '../../../components/code';
 import LogTab from '../../workflows/detail/log_tab';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
@@ -27,9 +27,43 @@ import Container from '../../../components/container';
 )
 @mapProps(
   ({ service, ...rest }: Object): Object => ({
-    data: service.lib
-      ? Object.assign(service.lib, { methods: service.methods })
+    methods: service.lib
+      ? service.class_based
+        ? service.methods.map(
+            (method: Object): Object => ({
+              ...method,
+              ...{ body: service.class_source.class_source },
+            })
+          )
+        : service.methods
       : {},
+    service,
+    ...rest,
+  })
+)
+@mapProps(
+  ({ service, methods, ...rest }: Object): Object => ({
+    data: service.lib ? Object.assign(service.lib, { methods }) : {},
+    service,
+    methods,
+    ...rest,
+  })
+)
+@mapProps(
+  ({ data, service, ...rest }: Object): Object => ({
+    data: service.class_based
+      ? {
+          ...{
+            code: [
+              {
+                name: 'Service code',
+                body: service.class_source.class_source,
+              },
+            ],
+          },
+          ...data,
+        }
+      : data,
     service,
     ...rest,
   })
@@ -73,8 +107,7 @@ export default class ServicesDetail extends Component {
 
   render() {
     const { service, paneTab, systemOptions } = this.props;
-
-    if (!service) return null;
+    const loaded: boolean = service && service.created;
 
     return (
       <DetailPane
@@ -96,55 +129,57 @@ export default class ServicesDetail extends Component {
           queryIdentifier: 'paneTab',
         }}
       >
-        <Box top>
-          <Container fill>
-            <SimpleTabs activeTab={paneTab}>
-              <SimpleTab name="detail">
-                <DetailTab
-                  key={service.name}
-                  service={service}
-                  systemOptions={systemOptions}
-                />
-              </SimpleTab>
-              <SimpleTab name="code">
-                <Code
-                  data={this.props.data}
-                  heightUpdater={this.getHeight}
-                  location={this.props.location}
-                />
-              </SimpleTab>
-              <SimpleTab name="methods">
-                <MethodsTab service={service} />
-              </SimpleTab>
-              <SimpleTab name="log">
-                <LogTab
-                  resource={`services/${service.id}`}
-                  location={this.props.location}
-                />
-              </SimpleTab>
-              <SimpleTab name="mappers">
-                <MappersTable mappers={service.mappers} />
-              </SimpleTab>
-              <SimpleTab name="valuemaps">
-                <Valuemaps vmaps={service.vmaps} />
-              </SimpleTab>
-              <SimpleTab name="resources">
-                <ResourceTab
-                  resources={service.resources}
-                  resourceFiles={service.resource_files}
-                />
-              </SimpleTab>
-              <SimpleTab name="releases">
-                <Releases
-                  component={service.name}
-                  compact
-                  key={service.name}
-                  location={this.props.location}
-                />
-              </SimpleTab>
-            </SimpleTabs>
-          </Container>
-        </Box>
+        {loaded && (
+          <Box top>
+            <Container fill>
+              <SimpleTabs activeTab={paneTab}>
+                <SimpleTab name="detail">
+                  <DetailTab
+                    key={service.name}
+                    service={service}
+                    systemOptions={systemOptions}
+                  />
+                </SimpleTab>
+                <SimpleTab name="code">
+                  <Code
+                    data={this.props.data}
+                    heightUpdater={this.getHeight}
+                    location={this.props.location}
+                  />
+                </SimpleTab>
+                <SimpleTab name="methods">
+                  <MethodsTab service={service} methods={this.props.methods} />
+                </SimpleTab>
+                <SimpleTab name="log">
+                  <LogTab
+                    resource={`services/${service.id}`}
+                    location={this.props.location}
+                  />
+                </SimpleTab>
+                <SimpleTab name="mappers">
+                  <MappersTable mappers={service.mappers} />
+                </SimpleTab>
+                <SimpleTab name="valuemaps">
+                  <Valuemaps vmaps={service.vmaps} />
+                </SimpleTab>
+                <SimpleTab name="resources">
+                  <ResourceTab
+                    resources={service.resources}
+                    resourceFiles={service.resource_files}
+                  />
+                </SimpleTab>
+                <SimpleTab name="releases">
+                  <Releases
+                    component={service.name}
+                    compact
+                    key={service.name}
+                    location={this.props.location}
+                  />
+                </SimpleTab>
+              </SimpleTabs>
+            </Container>
+          </Box>
+        )}
       </DetailPane>
     );
   }
