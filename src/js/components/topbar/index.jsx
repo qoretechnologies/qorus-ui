@@ -16,7 +16,6 @@ import {
   Tooltip,
   MenuDivider,
   InputGroup,
-  ControlGroup,
   Classes,
 } from '@blueprintjs/core';
 import map from 'lodash/map';
@@ -76,16 +75,12 @@ export type Props = {
   locale: string,
   light: boolean,
   onThemeClick: Function,
-  onNotificationClick: Function,
   storeLocale: Function,
   user: Object,
   openPane: Function,
   notificationStatus: boolean,
 };
 
-/**
- * Display info about Qorus instance and logged in user.
- */
 @connect(
   (state: Object): Object => ({
     notificationStatus: state.ui.notifications.read,
