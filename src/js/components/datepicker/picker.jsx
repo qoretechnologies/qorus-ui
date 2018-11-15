@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Controls, Control } from '../controls';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Intent, InputGroup, ControlGroup } from '@blueprintjs/core';
 
 @pure(['minutes', 'hours', 'children', 'futureOnly'])
 export default class Picker extends Component {
@@ -41,7 +42,7 @@ export default class Picker extends Component {
     if (this.props.futureOnly) return undefined;
 
     return (
-      <Controls grouped noControls>
+      <Controls>
         <Control
           label="24h"
           btnStyle="default"
@@ -60,46 +61,41 @@ export default class Picker extends Component {
     return (
       <div className="datepicker" ref="datepicker">
         {this.props.children}
-        <div className="hours row-fluid">
-          <div className="input-group input-group-sm">
-            <div className="input-group-addon">
-              <i className="fa fa-clock-o" />
-            </div>
-            <input
-              type="number"
-              name="hours"
-              max="23"
-              min="0"
-              value={this.props.hours}
-              onChange={this.props.onHoursChange}
-              className="text-center form-control"
-            />
-            <div className="input-group-addon">:</div>
-            <input
-              type="number"
-              name="minutes"
-              max="59"
-              min="0"
-              value={this.props.minutes}
-              onChange={this.props.onMinutesChange}
-              className="text-center form-control"
-            />
-            <div className="input-group-btn">
-              <Control
-                iconName="times"
-                btnStyle="danger"
-                action={this.props.onResetClick}
-              />
-            </div>
-          </div>
-        </div>
+        <ControlGroup fill>
+          <Control iconName="time" big />
+          <InputGroup
+            type="number"
+            name="hours"
+            max="23"
+            min="0"
+            value={this.props.hours}
+            onChange={this.props.onHoursChange}
+          />
+          <Control text=":" big />
+          <InputGroup
+            type="number"
+            name="minutes"
+            max="59"
+            min="0"
+            value={this.props.minutes}
+            onChange={this.props.onMinutesChange}
+          />
+          <Control
+            iconName="undo"
+            title="Reset"
+            action={this.props.onResetClick}
+            big
+          />
+        </ControlGroup>
         {this.renderControls()}
-        <button
-          className="btn btn-primary btn-xs pull-right"
+        <Control
+          className="pull-right"
+          intent={Intent.PRIMARY}
           onClick={this.props.onApplyClick}
+          iconName="small-tick"
         >
           Apply
-        </button>
+        </Control>
       </div>
     );
   }

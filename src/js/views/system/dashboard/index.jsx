@@ -235,7 +235,7 @@ export default class Dashboard extends Component {
             <PaneItem
               title="Global Order Stats"
               label={
-                <Dropdown>
+                <Dropdown key="order_stats_dropdown">
                   <Control small>{this.state.chartTab}</Control>
                   <Item
                     title="1 hour band"
