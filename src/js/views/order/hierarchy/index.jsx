@@ -74,7 +74,7 @@ const HierarchyTable: Function = ({
         </FixedRow>
       </Thead>
       <DataOrEmptyTable
-        condition={hierarchyKeys.length !== 0}
+        condition={hierarchyKeys.length === 0}
         cols={isTablet ? (compact ? 6 : 10) : compact ? 7 : 12}
         small={compact}
       >
