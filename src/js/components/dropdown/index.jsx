@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import pure from 'recompose/onlyUpdateForKeys';
+
 import Item from './item';
 import CustomItem from './custom_item';
 import Control from './control';
@@ -11,7 +13,6 @@ import {
   ButtonGroup,
 } from '@blueprintjs/core';
 
-import { pureRender } from '../utils';
 import { includes, remove, xor } from 'lodash';
 
 type Props = {
@@ -27,11 +28,11 @@ type Props = {
   selected?: Array<?string>,
   show?: ?boolean,
   className?: string,
-  diabled?: boolean,
+  disabled?: boolean,
   onHide?: Function,
 };
 
-@pureRender
+@pure(['show', 'selected', 'disabled', 'className'])
 export default class Dropdown extends Component {
   static defaultProps = {
     selectedIcon: 'selection',
