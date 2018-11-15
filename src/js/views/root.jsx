@@ -1,3 +1,4 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -12,13 +13,17 @@ import mapProps from 'recompose/mapProps';
 import Topbar from '../components/topbar';
 import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
-import Preloader from '../components/preloader';
+import Box from '../components/box';
+import CenterWrapper from '../components/layout/center';
 import { Manager as ModalManager } from '../components/modal';
-import actions from 'store/api/actions';
+import actions from '../store/api/actions';
 import { settings } from '../store/ui/actions';
 import messages from '../intl/messages';
 import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
+import { Spinner, Classes, Icon, Intent } from '@blueprintjs/core';
+import qorusLogo from '../../img/qorus_engine_logo.png';
+import elementsLogo from '../../img/elements.png';
 
 addLocaleData([...en, ...cs, ...de]);
 
@@ -97,6 +102,7 @@ export default class Root extends Component {
     storeSidebar: PropTypes.func,
     fetchHealth: PropTypes.func,
     options: PropTypes.array,
+    storeTheme: PropTypes.func,
   };
 
   static childContextTypes = {
@@ -106,35 +112,8 @@ export default class Root extends Component {
     selectModalText: PropTypes.func,
   };
 
-  state: {
-    notificationsOpen: boolean,
-  } = {
-    notificationsOpen: false,
-  };
+  _modal = null;
 
-  /**
-   * Initializes internal state.
-   *
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
-
-    this._modal = null;
-    this._defaultTitle = '';
-  }
-
-  /**
-   * Provides modal control function and title.
-   *
-   * Modal is controlled via `openModal` and `closeModal` functions
-   * which delegate to modal manager's open and close respectively.
-   *
-   * Title computed by {@link titleFromInfo} can be retrieved from
-   * `getTitle` to create title hierarchies.
-   *
-   * @return {object}
-   */
   getChildContext() {
     return {
       openModal: (...args) => this._modal.open(...args),
@@ -144,19 +123,8 @@ export default class Root extends Component {
     };
   }
 
-  /**
-   * Sets default document title and fetches global data.
-   *
-   * @see fetchGlobalData
-   */
-  componentWillMount() {
-    this._defaultTitle = document.title;
-    this.fetchGlobalData();
-  }
-
   componentDidMount() {
-    // All tests were written for non-responsive sizes
-    // ZombieJS automatically sets the innerWidth to 1024
+    this.fetchGlobalData();
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
   }
@@ -166,10 +134,8 @@ export default class Root extends Component {
   }, 100);
 
   handleResize: Function = () => {
-    const width = process.env.TESTINST ? 1600 : window.innerWidth;
-
     this.props.saveDimensions({
-      width,
+      width: window.innerWidth,
       height: window.innerHeight,
     });
   };
@@ -190,38 +156,6 @@ export default class Root extends Component {
     this.props.storeSidebar(sidebarOpen);
   };
 
-  handleNotificationsClick: Function = () => {
-    this.setState({ notificationsOpen: !this.state.notificationsOpen });
-  };
-
-  /**
-   * Sets document title from system information.
-   *
-   * @see titleFromInfo
-   */
-
-  selectCSVContent = () => {
-    document.getElementById('csv-text').select();
-  };
-
-  /**
-   * Computes title from system info or uses default title.
-   *
-   * Default title is read in {@link componentWillMount} from
-   * document's title at that time.
-   *
-   * @return {string}
-   */
-  titleFromInfo() {
-    return this.props.info.sync
-      ? `${this.props.info.data['instance-key']} | ` +
-          `${this.props.info.data['omq-version']}`
-      : this._defaultTitle;
-  }
-
-  /**
-   * Fetches data used here or by child components.
-   */
   fetchGlobalData() {
     this.props.fetchSystem();
     this.props.fetchSystemOptions();
@@ -229,11 +163,6 @@ export default class Root extends Component {
     this.props.fetchHealth();
   }
 
-  /**
-   * Stores ref to modal manager to provide control via context.
-   *
-   * @param {ModalManager} modal
-   */
   refModal = modal => {
     this._modal = modal;
   };
@@ -247,17 +176,86 @@ export default class Root extends Component {
     storeTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
+  renderSpinnerOrIcon: Function = (synced: boolean): React.Element<any> =>
+    synced ? (
+      <Icon iconName="tick" intent={Intent.SUCCESS} iconSize={20} />
+    ) : (
+      <Spinner className={Classes.SMALL} />
+    );
+
   render() {
     const { currentUser, info, isTablet, health, options } = this.props;
+    const isSynced: boolean =
+      currentUser.sync && info.sync && health.sync && options.sync;
 
-    if (!currentUser.sync || !info.sync || !health.sync || !options.sync) {
-      return <Preloader />;
+    if (!isSynced) {
+      return (
+        <div
+          className="root"
+          style={{
+            background: `url(${elementsLogo})`,
+            backgroundPosition: 'bottom right',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          <CenterWrapper>
+            <div
+              style={{
+                width: '600px',
+                textAlign: 'center',
+                paddingBottom: '40px',
+              }}
+            >
+              <img src={qorusLogo} className="loading-logo" />
+              <Box width={250} style={{ margin: '0 auto' }}>
+                <div className="loading-section">
+                  <div className="loading-spinner">
+                    {this.renderSpinnerOrIcon(currentUser.sync)}
+                  </div>
+                  <div className="loading-text">
+                    {currentUser.sync
+                      ? 'User data loaded!'
+                      : 'Loading user data...'}
+                  </div>
+                </div>
+                <div className="loading-section">
+                  <div className="loading-spinner">
+                    {this.renderSpinnerOrIcon(health.sync)}
+                  </div>
+                  <div className="loading-text">
+                    {health.sync
+                      ? 'Health data loaded!'
+                      : 'Loading health data...'}
+                  </div>
+                </div>
+                <div className="loading-section">
+                  <div className="loading-spinner">
+                    {this.renderSpinnerOrIcon(options.sync)}
+                  </div>
+                  <div className="loading-text">
+                    {info.sync
+                      ? 'Options data loaded!'
+                      : 'Loading system options...'}
+                  </div>
+                </div>
+
+                <div className="loading-section">
+                  <div className="loading-spinner">
+                    {this.renderSpinnerOrIcon(info.sync)}
+                  </div>
+                  <div className="loading-text">
+                    {info.sync
+                      ? 'System data loaded!'
+                      : 'Loading system data...'}
+                  </div>
+                </div>
+              </Box>
+            </div>
+          </CenterWrapper>
+        </div>
+      );
     }
+
     const locale = currentUser.data.storage.locale
       ? currentUser.data.storage.locale
       : navigator.locale
@@ -270,13 +268,12 @@ export default class Root extends Component {
       <IntlProvider locale={locale} messages={messages(locale)}>
         <div className="root">
           <Topbar
-            info={this.props.info}
-            health={this.props.health}
+            info={info}
+            health={health}
             locale={locale}
             isTablet={isTablet}
             light={isLightTheme}
             onThemeClick={this.onThemeChange}
-            onNotificationClick={this.handleNotificationsClick}
             user={currentUser.data}
             location={this.props.location}
           />
@@ -293,10 +290,7 @@ export default class Root extends Component {
               </div>
             </section>
           </div>
-          <Footer
-            path={this.props.location.pathname}
-            info={this.props.info.data}
-          />
+          <Footer path={this.props.location.pathname} info={info.data} />
           <ModalManager ref={this.refModal} />
           <Notifications />
           <Bubbles />

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import remove from 'lodash/remove';
 
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
-import { normalizeId } from '../utils';
+import { normalizeId, normalizeName } from '../utils';
 import {
   select,
   selectAll,
@@ -127,7 +127,7 @@ const addNew = {
     if (state.sync) {
       const data = [
         ...state.data,
-        { ...normalizeId('jobid', job), ...{ _updated: true } },
+        { ...normalizeName(normalizeId('jobid', job)), ...{ _updated: true } },
       ];
 
       return { ...state, ...{ data } };

@@ -90,6 +90,7 @@ body,
   height: 100%;
   font-size: $font-size-base - 2 !important;
   font-family: 'Roboto', 'Arial';
+  background-color: $bgcolor;
 }
 
 *:focus,
@@ -451,4 +452,26 @@ span.pt-icon-standard {
 
 .pt-input {
   vertical-align: baseline !important;
+}
+
+.tac {
+  text-align: center;
+}
+
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 10000ms ease-in;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity 8000ms ease-in;
 }

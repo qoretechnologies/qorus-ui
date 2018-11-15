@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import Transition from 'react-addons-css-transition-group';
 
 type Props = {
   noPadding: boolean,
@@ -10,6 +9,7 @@ type Props = {
   children: any,
   column: number,
   style?: Object,
+  width: string | number,
 };
 
 const Box: Function = ({
@@ -19,6 +19,7 @@ const Box: Function = ({
   column,
   noTransition,
   style,
+  width: width = 'initial',
 }: Props): React.Element<any> =>
   noTransition ? (
     <div
@@ -26,33 +27,24 @@ const Box: Function = ({
       style={{
         padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
-        width: column ? `${100 / column - 0.3 * column}%` : 'initial',
+        width: column ? `${100 / column - 0.3 * column}%` : width,
         ...style,
       }}
     >
       {children}
     </div>
   ) : (
-    <Transition
-      transitionName="bubble"
-      transitionAppear
-      transitionAppearTimeout={500000}
-      transitionEnter={false}
-      transitionLeave={false}
-      component="div"
+    <div
+      className="white-box"
+      style={{
+        padding: noPadding ? 0 : null,
+        marginTop: top ? 0 : null,
+        width: column ? `${100 / (column + column * 0.1)}%` : width,
+        ...style,
+      }}
     >
-      <div
-        className="white-box"
-        style={{
-          padding: noPadding ? 0 : null,
-          marginTop: top ? 0 : null,
-          width: column ? `${100 / (column + column * 0.1)}%` : 'initial',
-          ...style,
-        }}
-      >
-        {children}
-      </div>
-    </Transition>
+      {children}
+    </div>
   );
 
 export default pure(['noPadding', 'children', 'top'])(Box);

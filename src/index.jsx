@@ -7,15 +7,8 @@ import isSupported from './js/helpers/is_supported';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 require('./index.html');
-global.env = process.env;
 
-// Uncomment when work on performance
-/*
-if (process.env.NODE_ENV !== 'production') {
-  const { whyDidYouUpdate } = require('why-did-you-update');
-  whyDidYouUpdate(React, { exclude: /^(Connect|Route|DockMonitor)/ });
-}
-*/
+global.env = process.env;
 
 if (isSupported(window.navigator.userAgent)) {
   ReactDOM.render(
@@ -24,20 +17,6 @@ if (isSupported(window.navigator.userAgent)) {
     </MuiThemeProvider>,
     document.body.firstElementChild
   );
-
-  // Hot Module Replacement API
-  /* if (module.hot && !process.env.TESTINST) {
-    module.hot.decline('./js/routes.jsx');
-    module.hot.accept('./js/app', () => {
-      const NextApp = require('./js/app').default;
-      ReactDOM.render(
-        <MuiThemeProvider>
-          <NextApp env={process.env} />
-        </MuiThemeProvider>,
-        document.body.firstElementChild
-      );
-    });
-  }*/
 } else {
   const notSupported = document.getElementById('not-supported');
   notSupported.style.display = 'block';

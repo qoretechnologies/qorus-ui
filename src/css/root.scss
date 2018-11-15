@@ -106,3 +106,30 @@
 #content-wrapper div:first-child {
   // height: 100%;
 }
+
+.loading-logo {
+  width: 520px;
+}
+
+.loading-section {
+  clear: both;
+  width: 210px;
+  margin: 0 auto;
+
+  .loading-spinner {
+    float: right;
+    height: 50px;
+    line-height: 50px;
+
+    .pt-spinner {
+      vertical-align: middle;
+    }
+  }
+
+  .loading-text {
+    float: left;
+    font-size: 14px;
+    height: 50px;
+    line-height: 50px;
+  }
+}

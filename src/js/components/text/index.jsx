@@ -39,13 +39,13 @@ const Text: Function = ({
   }
 
   return (
-    <p
+    <div
       title={placeholder || text}
       onClick={handleClick}
       className="text-component"
     >
       {placeholder || text}
-    </p>
+    </div>
   );
 };
 

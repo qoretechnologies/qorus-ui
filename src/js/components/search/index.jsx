@@ -12,6 +12,7 @@ import {
   Position,
   InputGroup,
   ControlGroup,
+  Classes,
 } from '@blueprintjs/core';
 
 @pureRender
@@ -143,15 +144,18 @@ export default class Search extends Component {
             value={this.state.query}
             autoComplete="off"
             placeholder="Search..."
+            rightElement={
+              this.state.query && (
+                <Button
+                  className={Classes.MINIMAL}
+                  type="button"
+                  iconName="cross"
+                  onClick={this.handleClearClick}
+                />
+              )
+            }
           />
           <Button type="submit" iconName="search" />
-          {this.state.query && (
-            <Button
-              type="button"
-              iconName="cross"
-              onClick={this.handleClearClick}
-            />
-          )}
         </ControlGroup>
       </form>
     );

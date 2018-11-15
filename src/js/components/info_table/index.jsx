@@ -57,7 +57,7 @@ export default class InfoTable extends Component {
           {this.getData().map(
             (datum: Object): React.Element<Tr> => (
               <Tr>
-                <Th>{_.capitalize(datum.attr)}</Th>
+                <Th>{_.upperFirst(datum.attr.replace(/_/g, ' '))}</Th>
                 <Td>
                   <AutoComponent>{datum.value}</AutoComponent>
                 </Td>
