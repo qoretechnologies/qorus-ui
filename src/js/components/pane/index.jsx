@@ -27,17 +27,17 @@ const Pane: Function = ({
 }: Props) => (
   <div className="pane right" style={{ width }}>
     <Headbar>
-      {title && (
-        <Breadcrumbs icon="list-detail-view">
-          <Crumb active>{title}</Crumb>
-          {tabs && (
-            <CrumbTabs
-              tabs={tabs.tabs}
-              queryIdentifier={tabs.queryIdentifier}
-            />
-          )}
-        </Breadcrumbs>
-      )}
+      <Breadcrumbs icon="list-detail-view">
+        {title && <Crumb active>{title}</Crumb>}
+        {tabs && (
+          <CrumbTabs
+            tabs={tabs.tabs}
+            queryIdentifier={tabs.queryIdentifier}
+            //! Send pane width to resize the tabs
+            width={width}
+          />
+        )}
+      </Breadcrumbs>
       <Pull right>
         <Controls>
           <Control text="Close" iconName="cross" onClick={onClose} big />

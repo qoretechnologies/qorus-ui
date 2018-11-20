@@ -124,7 +124,7 @@ export default class WorkflowsDetail extends Component {
             'Order Stats',
             'Process',
             'Releases',
-            'Valuemaps',
+            'Value maps',
             'Mappers',
             'Errors',
             'Code',
@@ -174,7 +174,7 @@ export default class WorkflowsDetail extends Component {
               <SimpleTab name="mappers">
                 <MappersTable mappers={workflow.mappers} />
               </SimpleTab>
-              <SimpleTab name="valuemaps">
+              <SimpleTab name="value maps">
                 <Valuemaps vmaps={workflow.vmaps} />
               </SimpleTab>
               <SimpleTab name="releases">

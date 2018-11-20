@@ -10,6 +10,8 @@ type Props = {
   Tag: string,
   children: React.Element<any>,
   className?: string,
+  handleRef: Function,
+  style?: Object,
 };
 
 const Pull: Function = ({
@@ -17,8 +19,14 @@ const Pull: Function = ({
   Tag,
   children,
   className,
+  handleRef,
+  style,
 }: Props): React.Element<HTMLElement> => (
-  <Tag className={classnames(className, `pull-${right ? 'right' : 'left'}`)}>
+  <Tag
+    className={classnames(className, `pull-${right ? 'right' : 'left'}`)}
+    ref={handleRef}
+    style={style}
+  >
     {children}
   </Tag>
 );

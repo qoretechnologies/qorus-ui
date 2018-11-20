@@ -8,10 +8,19 @@
 }
 
 .breadcrumb-tabs {
+  .pt-popover-target:not(:first-child) {
+    .breadcrumb-tab {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+
   .breadcrumb-tab {
     display: inline-block;
     line-height: 19px;
     font-size: 16px;
+    width: 117px;
+    text-align: center;
     color: $qore-blue;
     padding: 5px 10px;
     padding-right: 10px;
