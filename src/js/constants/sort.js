@@ -1,4 +1,5 @@
 import keyMirror from 'keymirror';
+import { ORDER_STATES_ARRAY } from './orders';
 
 export default keyMirror({
   CHANGE_SORT: null,
@@ -135,5 +136,29 @@ export const sortDefaults = {
   orderSLAModal: {
     sortBy: 'name',
     sortByKey: { ignoreCase: true, direction: 1 },
+  },
+};
+
+export const sortKeys = {
+  workflows: {
+    Author: 'author',
+    Autostart: 'autostart',
+    Created: 'created',
+    Deprecated: 'deprecated',
+    Enabled: 'enabled',
+    ['Exec Count']: 'exec_count',
+    Modified: 'modified',
+    Name: 'name',
+    Remote: 'remote',
+    ['SLA Threshold']: 'sla_threshold',
+    Version: 'version',
+    ID: 'id',
+    ...ORDER_STATES_ARRAY.reduce(
+      (states: Object, state: string): Object => ({
+        ...states,
+        [state]: state,
+      }),
+      {}
+    ),
   },
 };

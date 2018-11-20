@@ -20,6 +20,7 @@ import Dropdown, { Control, Item } from '../../components/dropdown';
 import LoadMore from '../../components/LoadMore';
 import { Icon } from '@blueprintjs/core';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
+import SortingDropdown from '../../components/SortingDropdown';
 
 type Props = {
   sortData: Object,
@@ -52,6 +53,7 @@ type Props = {
   handleLoadMore: Function,
   handleLoadAll: Function,
   limit: number,
+  sortKeysObj: Object,
 };
 
 const WorkflowsTable: Function = ({
@@ -81,6 +83,7 @@ const WorkflowsTable: Function = ({
   limit,
   handleLoadMore,
   handleLoadAll,
+  sortKeysObj,
 }: Props): React.Element<any> => (
   <Table
     striped
@@ -95,13 +98,18 @@ const WorkflowsTable: Function = ({
       <FixedRow className="toolbar-row">
         <Th colspan={isTablet ? 6 : 7}>
           <div className="pull-left">
-            <Selector selected={selected} selectedCount={selectedIds.length} />{' '}
+            <Selector selected={selected} selectedCount={selectedIds.length} />
             <Actions
               selectedIds={selectedIds}
               show={selected !== 'none'}
               isTablet={isTablet}
-            />{' '}
-            <Filters location={location} isTablet={isTablet} />{' '}
+            />
+            <Filters location={location} isTablet={isTablet} />
+            <SortingDropdown
+              onSortChange={onSortChange}
+              sortData={sortData}
+              sortKeys={sortKeysObj}
+            />
           </div>
           <div className="pull-right">
             <LoadMore
