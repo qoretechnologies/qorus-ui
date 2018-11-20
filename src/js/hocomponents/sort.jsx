@@ -5,6 +5,8 @@ import wrapDisplayName from 'recompose/wrapDisplayName';
 
 import { sort } from '../store/ui/actions';
 import { sortTable } from '../helpers/table';
+import { functionOrStringExp } from '../helpers/functions';
+import { sortKeys } from '../constants/sort';
 
 type Props = {
   changeSort: Function,
@@ -77,16 +79,27 @@ export default (
     };
 
     render() {
+      const collectionPropSelected = functionOrStringExp(
+        collectionProp,
+        this.props
+      );
       const { sortData } = this.props;
-      let collection = this.props[collectionProp];
+      let collection = this.props[collectionPropSelected];
       const newProps = { ...this.props };
+      const sortKeysObj = sortKeys[tableName] || {};
 
       if (sortData && collection) {
-        collection = sortTable(this.props[collectionProp], sortData);
-        newProps[collectionProp] = collection;
+        collection = sortTable(this.props[collectionPropSelected], sortData);
+        newProps[collectionPropSelected] = collection;
       }
 
-      return <Component {...newProps} onSortChange={this.handleSortChange} />;
+      return (
+        <Component
+          {...newProps}
+          sortKeysObj={sortKeysObj}
+          onSortChange={this.handleSortChange}
+        />
+      );
     }
   }
 

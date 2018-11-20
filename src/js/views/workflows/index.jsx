@@ -40,7 +40,7 @@ import { findBy } from '../../helpers/search';
 import { formatCount } from '../../helpers/orders';
 import { querySelector, resourceSelector } from '../../selectors';
 import withSort from '../../hocomponents/sort';
-import { sortDefaults } from '../../constants/sort';
+import { sortDefaults, sortKeys } from '../../constants/sort';
 import titleManager from '../../hocomponents/TitleManager';
 import Search from '../../containers/search';
 import queryControl from '../../hocomponents/queryControl';
@@ -236,9 +236,11 @@ type Props = {
   user: Object,
   searchQuery: string,
   changeSearchQuery: Function,
+  sortKeysObj: Object,
 };
 
 const Workflows: Function = ({
+  sortKeysObj,
   selected,
   onCSVClick,
   expanded,
@@ -284,6 +286,7 @@ const Workflows: Function = ({
     </Headbar>
     <Box top noPadding>
       <WorkflowsTable
+        sortKeysObj={sortKeysObj}
         collection={workflows}
         paneId={paneId}
         openPane={openPane}
