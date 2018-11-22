@@ -28,6 +28,7 @@ export default class Tree extends Component {
   componentWillMount() {
     this.setState({
       mode: 'normal',
+      items: {},
     });
   }
 
@@ -68,31 +69,11 @@ export default class Tree extends Component {
   };
 
   handleExpandClick = () => {
-    const st = Object.keys(this.props.data).reduce(
-      (nw: Object, cur: string) => ({
-        ...nw,
-        ...{
-          [cur]: true,
-        },
-      }),
-      {}
-    );
-
-    this.setState(st);
+    this.setState({ items: {}, allExpanded: true });
   };
 
   handleCollapseClick = () => {
-    const st = Object.keys(this.props.data).reduce(
-      (nw: Object, cur: string) => ({
-        ...nw,
-        ...{
-          [cur]: false,
-        },
-      }),
-      {}
-    );
-
-    this.setState(st);
+    this.setState({ items: {}, allExpanded: false });
   };
 
   renderTree(data, top, k, topKey) {
@@ -106,17 +87,27 @@ export default class Tree extends Component {
       const stateKey = k ? `${k}_${key}` : key;
       const isObject = typeof data[key] === 'object' && data[key] !== null;
       const isExpandable =
-        typeof data[key] !== 'object' || this.state[stateKey];
+        typeof data[key] !== 'object' ||
+        this.state.items[stateKey] ||
+        (this.state.allExpanded && this.state.items[stateKey] !== false);
 
       const handleClick = () => {
+        const { items } = this.state;
+
+        items[stateKey] = !isExpandable;
+
         this.setState({
-          [stateKey]: !this.state[stateKey],
+          items,
         });
       };
 
       const handleEditDone = () => {
+        const { items } = this.state;
+
+        items[stateKey] = false;
+
         this.setState({
-          [stateKey]: false,
+          items,
         });
 
         this.props.closeModal();
@@ -145,13 +136,12 @@ export default class Tree extends Component {
           >
             {isObject ? key : `${key}:`}
           </span>
-          {this.props.editableKeys &&
-            topKey && (
-              <span onClick={handleEditClick}>
-                {' '}
-                <Icon iconName="pencil" tooltip="Edit data" />
-              </span>
-            )}{' '}
+          {this.props.editableKeys && topKey && (
+            <span onClick={handleEditClick}>
+              {' '}
+              <Icon iconName="pencil" tooltip="Edit data" />
+            </span>
+          )}{' '}
           {isExpandable &&
             (isObject
               ? this.renderTree(data[key], false, stateKey, top ? key : null)
