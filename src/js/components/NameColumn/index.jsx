@@ -74,8 +74,9 @@ type NameColumnHeaderProps = {
 const NameColumnHeader: Function = ({
   name: name = 'name',
   title: title = 'Name',
+  ...rest
 }: NameColumnHeaderProps): React.Element<any> => (
-  <Th className="name" name={name}>
+  <Th className="name" name={name} {...rest}>
     {title}
   </Th>
 );

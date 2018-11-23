@@ -27,6 +27,7 @@ import NoDataIf from '../../../components/NoDataIf';
 import LoadMore from '../../../components/LoadMore';
 import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
+import { NameColumnHeader } from '../../../components/NameColumn';
 
 type Props = {
   type: string,
@@ -88,9 +89,7 @@ const AlertsTable: Function = ({
             <Th className="text alerts-large" name="alert">
               Alert
             </Th>
-            <Th className="name" name="object">
-              Object
-            </Th>
+            <NameColumnHeader name="object" title="Object" />
             <Th className="big" name="when">
               When
             </Th>
