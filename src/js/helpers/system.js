@@ -117,9 +117,11 @@ const getProcessObjectLink: Function = (process: Object) => {
     case 'qdsp':
       return `/system/remote?paneId=${process.client_id}`;
     case 'qwf':
-      return `/workflows?paneId=${process.wfid}&paneTab=details`;
+      return `/workflows?paneId=${process.wfid}&paneTab=detail`;
     case 'qsvc':
-      return `/services?paneId=${process.svcid}&paneTab=details`;
+      return `/services?paneId=${process.svcid}&paneTab=detail`;
+    case 'qjob':
+      return `/jobs?paneId=${process.jobid}&paneTab=detail`;
     default:
       return '#';
   }
