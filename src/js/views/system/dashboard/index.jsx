@@ -26,6 +26,7 @@ import { DISPOSITIONS } from '../../../constants/dashboard';
 import DispositionChart from '../../../components/disposition_chart';
 import titleManager from '../../../hocomponents/TitleManager';
 import { COLORS } from '../../../constants/ui';
+import MultiDispositionChart from '../../../components/MultiDispositionChart';
 
 const viewSelector = createSelector(
   [
@@ -232,68 +233,42 @@ export default class Dashboard extends Component {
       >
         {system.order_stats && (
           <DashboardModule>
-            <PaneItem
-              title="Global Order Stats"
-              label={
-                <Dropdown key="order_stats_dropdown">
-                  <Control small>{this.state.chartTab}</Control>
-                  <Item
-                    title="1 hour band"
-                    action={this.handleChartTabChange}
+            <MultiDispositionChart
+              title="Global order stats"
+              orderStats={system.order_stats}
+              onDispositionChartClick={() => {
+                this.props.openModal(
+                  <GlobalModal
+                    onClose={this.props.closeModal}
+                    text="Global chart data"
+                    band={this.state.chartTab}
                   />
-                  <Item
-                    title="4 hour band"
-                    action={this.handleChartTabChange}
-                  />
-                  <Item
-                    title="24 hour band"
-                    action={this.handleChartTabChange}
-                  />
-                </Dropdown>
-              }
-            >
-              {system.order_stats.map(
-                stats =>
-                  stats.label.replace(/_/g, ' ') === this.state.chartTab && (
-                    <DispositionChart
-                      key={stats.label}
-                      stats={stats}
-                      onDispositionChartClick={() => {
-                        this.props.openModal(
-                          <GlobalModal
-                            onClose={this.props.closeModal}
-                            text="Global chart data"
-                            band={this.state.chartTab}
-                          />
-                        );
-                      }}
-                      dispositionLegendHandlers={map(
-                        DISPOSITIONS,
-                        (label, disp) => () => {
-                          this.props.openModal(
-                            <StatsModal
-                              onClose={this.props.closeModal}
-                              disposition={disp}
-                              text={label}
-                              band={this.state.chartTab}
-                            />
-                          );
-                        }
-                      )}
-                      onSLAChartClick={() => {
-                        this.props.openModal(
-                          <SLAModal
-                            onClose={this.props.closeModal}
-                            in_sla
-                            text="In SLA"
-                            band={this.state.chartTab}
-                          />
-                        );
-                      }}
+                );
+              }}
+              dispositionLegendHandlers={map(
+                DISPOSITIONS,
+                (label, disp) => () => {
+                  this.props.openModal(
+                    <StatsModal
+                      onClose={this.props.closeModal}
+                      disposition={disp}
+                      text={label}
+                      band={this.state.chartTab}
                     />
-                  )
+                  );
+                }
               )}
-            </PaneItem>
+              onSLAChartClick={() => {
+                this.props.openModal(
+                  <SLAModal
+                    onClose={this.props.closeModal}
+                    in_sla
+                    text="In SLA"
+                    band={this.state.chartTab}
+                  />
+                );
+              }}
+            />
           </DashboardModule>
         )}
         <DashboardModule>
