@@ -5,7 +5,6 @@ import { createSelector } from 'reselect';
 import { flowRight } from 'lodash';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Callout, Icon } from '@blueprintjs/core';
 
 import {
   Table,
@@ -14,7 +13,6 @@ import {
   Th,
   FixedRow,
 } from '../../../components/new_table';
-import { Control as Button } from '../../../components/controls';
 import withSort from '../../../hocomponents/sort';
 import withLoadMore from '../../../hocomponents/loadMore';
 import sync from '../../../hocomponents/sync';
@@ -71,7 +69,7 @@ const AlertsTable: Function = ({
         <Thead>
           {canLoadMore && (
             <FixedRow className="toolbar-row">
-              <Th colspan={5}>
+              <Th>
                 <Pull right>
                   <LoadMore
                     canLoadMore={canLoadMore}
@@ -84,9 +82,6 @@ const AlertsTable: Function = ({
             </FixedRow>
           )}
           <FixedRow sortData={sortData} onSortChange={onSortChange}>
-            <Th className="narrow">
-              <Icon iconName="list-detail-view" />
-            </Th>
             <Th className="text big" name="type">
               Type
             </Th>

@@ -13,6 +13,7 @@ import Icon from '../../../components/icon';
 import DetailButton from '../../../components/detail_button';
 import { getAlertObjectLink } from '../../../helpers/system';
 import actions from '../../../store/api/actions';
+import NameColumn from '../../../components/NameColumn';
 
 type Props = {
   alertid: number,
@@ -51,24 +52,18 @@ const AlertRow: Function = ({
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
   >
-    <Td className="narrow">
-      <DetailButton onClick={handleDetailClick} active={isActive} />
-    </Td>
     <Td className="big text">
       <Text text={type} />
     </Td>
     <Td className="alerts-large text">
       <Text text={alert} />
     </Td>
-    <Td className="name">
-      <Link
-        className="resource-name-link"
-        to={getAlertObjectLink(type, { name, id })}
-        title={object}
-      >
-        {object}
-      </Link>
-    </Td>
+    <NameColumn
+      link={getAlertObjectLink(type, { name, id })}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+      name={object}
+    />
     <Td className="big">
       <Date date={when} />
     </Td>
