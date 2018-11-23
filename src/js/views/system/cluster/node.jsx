@@ -11,6 +11,7 @@ import ProcessRow from './row';
 import withSort from '../../../hocomponents/sort';
 import { sortDefaults } from '../../../constants/sort';
 import ExpandableItem from '../../../components/ExpandableItem';
+import { NameColumnHeader } from '../../../components/NameColumn';
 
 type Props = {
   node: string,
@@ -47,30 +48,21 @@ const ClusterNode: Function = ({
     <Table condensed striped>
       <Thead>
         <Tr sortData={sortData} onSortChange={onSortChange}>
-          <Th className="narrow"> Detail </Th>
           <Th className="text" name="node">
-            {' '}
-            Node{' '}
+            Node
           </Th>
           <Th className="text medium" name="type">
-            {' '}
-            Type{' '}
+            Type
           </Th>
-          <Th className="text" name="client_id">
-            {' '}
-            Client ID{' '}
-          </Th>
+          <NameColumnHeader name="client_id" title="Client ID" />
           <Th className="medium" name="pid">
-            {' '}
-            PID{' '}
+            PID
           </Th>
           <Th className="medium" name="priv">
-            {' '}
             Memory
           </Th>
           <Th className="text" name="status">
-            {' '}
-            Status{' '}
+            Status
           </Th>
         </Tr>
       </Thead>

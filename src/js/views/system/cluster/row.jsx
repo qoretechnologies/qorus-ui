@@ -1,13 +1,12 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 
 import { Tr, Td } from '../../../components/new_table';
-import DetailButton from '../../../components/detail_button';
+import NameColumn from '../../../components/NameColumn';
 import actions from '../../../store/api/actions';
 
 type Props = {
@@ -53,16 +52,16 @@ const ProcessRow: Function = ({
   isActive,
 }: Props): React.Element<any> => (
   <Tr highlight={_updated} onHighlightEnd={updateDone}>
-    <Td className="narrow">
-      <DetailButton active={isActive} onClick={handleDetailClick} />
-    </Td>
     <Td className="text">{node}</Td>
     <Td className="text medium" title={typeNames[type]}>
       {type}
     </Td>
-    <Td className="text">
-      {link ? <Link to={link}>{clientId}</Link> : clientId}
-    </Td>
+    <NameColumn
+      link={link}
+      name={clientId}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+    />
     <Td className="medium"> {pid} </Td>
     <Td className="medium"> {privStr} </Td>
     <Td className="text"> {statusString} </Td>
@@ -84,6 +83,9 @@ export default compose(
       }
     },
   }),
-  connect(null, { updateDone: actions.system.updateDone }),
+  connect(
+    null,
+    { updateDone: actions.system.updateDone }
+  ),
   pure(['priv_str', 'status_string', 'isActive'])
 )(ProcessRow);
