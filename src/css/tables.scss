@@ -122,16 +122,16 @@ table.table--data {
   }
 
   tr.row-alert {
-    td {
-      border-bottom: 1px solid lighten($qore-danger, 38);
-    }
-
     &:nth-of-type(even) {
-      background-color: lighten($qore-danger, 42);
+      td.table-name-has-alerts {
+        background-color: lighten($qore-danger, 42);
+      }
     }
 
     &:nth-of-type(odd) {
-      background-color: lighten($qore-danger, 48);
+      td.table-name-has-alerts {
+        background-color: lighten($qore-danger, 48);
+      }
     }
   }
 
@@ -415,16 +415,28 @@ table.table-header {
   }
 }
 
-.table-name-wrapper {
+td.table-name-has-alerts {
+  border-bottom: 1px solid lighten($qore-danger, 38);
+
+  &:nth-of-type(even) {
+    background-color: lighten($qore-danger, 42);
+  }
+
+  &:nth-of-type(odd) {
+    background-color: lighten($qore-danger, 48);
+  }
+}
+
+div.table-name-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  .table-name-popover-wrapper {
+  div.table-name-popover-wrapper {
     display: inline-flex;
     flex-grow: 2;
 
-    .table-name-popover {
+    div.table-name-popover {
       width: 100%;
       display: block;
     }

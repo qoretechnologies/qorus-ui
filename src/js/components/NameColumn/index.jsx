@@ -13,6 +13,7 @@ type NameColumnProps = {
   link?: string,
   onDetailClick?: Function,
   isActive?: boolean,
+  hasAlerts?: boolean,
 };
 
 type NameProps = {
@@ -35,8 +36,9 @@ const NameColumn: Function = ({
   link,
   isActive,
   onDetailClick,
+  hasAlerts,
 }: NameColumnProps): React.Element<any> => (
-  <Td className="name">
+  <Td className={`name ${hasAlerts ? 'table-name-has-alerts' : ''}`}>
     <div className="table-name-wrapper">
       <div className="table-name-popover-wrapper">
         {popoverContent ? (
