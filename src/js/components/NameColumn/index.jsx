@@ -2,7 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import { Td } from '../new_table';
+import { Td, Th } from '../new_table';
 import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 import { Link } from 'react-router';
 import DetailButton from '../detail_button';
@@ -66,6 +66,22 @@ const NameColumn: Function = ({
   </Td>
 );
 
+type NameColumnHeaderProps = {
+  name?: string,
+  title?: string,
+};
+
+const NameColumnHeader: Function = ({
+  name: name = 'name',
+  title: title = 'Name',
+}: NameColumnHeaderProps): React.Element<any> => (
+  <Th className="name" name={name}>
+    {title}
+  </Th>
+);
+
 export default compose(
   onlyUpdateForKeys(['link', 'name', 'popoverContent', 'isActive'])
 )(NameColumn);
+
+export { NameColumnHeader };
