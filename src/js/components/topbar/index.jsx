@@ -61,6 +61,14 @@ const searchableViews = {
   ['SQL Cache']: 'system/sqlcache?',
   ['Value Maps']: 'system/values?',
   ['Code Library']: 'library?',
+  ['Orders by ID']: {
+    link: 'search?',
+    queryName: 'ids',
+  },
+  ['Orders by value']: {
+    link: 'search?',
+    queryName: 'keyvalue',
+  },
 };
 
 export type Props = {
@@ -109,11 +117,14 @@ export default class Topbar extends Component {
   handleSubmit: Function = (e: Object): void => {
     e.preventDefault();
 
-    browserHistory.push(
-      `/${searchableViews[this.state.quickSearchType]}search=${
-        this.state.quickSearchValue
-      }`
-    );
+    const { quickSearchType, quickSearchValue } = this.state;
+    const searchable = searchableViews[quickSearchType];
+    const link: string =
+      typeof searchable === 'object' ? searchable.link : searchable;
+    const queryName: string =
+      typeof searchable === 'object' ? searchable.queryName : 'search';
+
+    browserHistory.push(`/${link}${queryName}=${quickSearchValue}`);
   };
 
   renderSearchMenu: Function = () => {
@@ -259,28 +270,27 @@ export default class Topbar extends Component {
               <Button iconName="build" intent={Intent.WARNING} />
             </Popover>
           </ButtonGroup>
-          {data.remote &&
-            data.remote.length !== 0 && (
-              <ButtonGroup minimal>
-                <Popover
-                  position={Position.BOTTOM_RIGHT}
-                  content={
-                    <Menu>
-                      <MenuDivider title="Remotes" />
-                      {data.remote.map((remote: Object) => (
-                        <MenuItem
-                          key={remote.name}
-                          text={`${remote.name} - ${remote.health}`}
-                          intent={HEALTH_KEYS[remote.health]}
-                        />
-                      ))}
-                    </Menu>
-                  }
-                >
-                  <Button iconName="share" />
-                </Popover>
-              </ButtonGroup>
-            )}
+          {data.remote && data.remote.length !== 0 && (
+            <ButtonGroup minimal>
+              <Popover
+                position={Position.BOTTOM_RIGHT}
+                content={
+                  <Menu>
+                    <MenuDivider title="Remotes" />
+                    {data.remote.map((remote: Object) => (
+                      <MenuItem
+                        key={remote.name}
+                        text={`${remote.name} - ${remote.health}`}
+                        intent={HEALTH_KEYS[remote.health]}
+                      />
+                    ))}
+                  </Menu>
+                }
+              >
+                <Button iconName="share" />
+              </Popover>
+            </ButtonGroup>
+          )}
           <ButtonGroup minimal>
             <Button
               iconName="notifications"
