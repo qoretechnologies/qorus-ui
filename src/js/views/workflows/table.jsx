@@ -6,7 +6,6 @@ import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 
 import { Table, Thead, Tbody, Th, FixedRow } from '../../components/new_table';
-import checkData from '../../hocomponents/check-no-data';
 import withModal from '../../hocomponents/modal';
 import Row from './row';
 import SortModal from './modals/sort_modal';
@@ -21,6 +20,7 @@ import LoadMore from '../../components/LoadMore';
 import { Icon } from '@blueprintjs/core';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import SortingDropdown from '../../components/SortingDropdown';
+import { AlertColumnHeader } from '../../components/AlertColumn';
 
 type Props = {
   sortData: Object,
@@ -147,9 +147,7 @@ const WorkflowsTable: Function = ({
         <Th className="medium" name="autostart">
           Auto / Execs
         </Th>
-        <Th className="tiny" name="has_alerts">
-          <Icon iconName="warning-sign" />
-        </Th>
+        <AlertColumnHeader name="has_alerts" />
         <Th className="narrow" name="id">
           ID
         </Th>

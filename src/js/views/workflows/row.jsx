@@ -28,6 +28,7 @@ import InstancesChart from '../../components/instances_chart';
 import ProcessSummary from '../../components/ProcessSummary';
 import mapProps from 'recompose/mapProps';
 import withDispatch from '../../hocomponents/withDispatch';
+import { AlertColumn } from '../../components/AlertColumn';
 
 type Props = {
   isActive?: boolean,
@@ -39,7 +40,6 @@ type Props = {
   handleHighlightEnd: Function,
   handleDetailClick: Function,
   handleAutostartChange: Function,
-  handleWarningClick: Function,
   updateDone: Function,
   id: number,
   _selected: boolean,
@@ -71,7 +71,6 @@ const TableRow: Function = ({
   handleCheckboxClick,
   handleDetailClick,
   handleHighlightEnd,
-  handleWarningClick,
   id,
   _selected,
   _updated,
@@ -121,18 +120,7 @@ const TableRow: Function = ({
     <Td key="autostart" name="autostart" className="medium">
       <AutoStart id={id} autostart={autostart} execCount={execs} />
     </Td>
-    <Td className="tiny">
-      {hasAlerts && (
-        <Controls>
-          <Button
-            iconName="warning-sign"
-            btnStyle="danger"
-            onClick={handleWarningClick}
-            title="Show alerts"
-          />
-        </Controls>
-      )}
-    </Td>
+    <AlertColumn hasAlerts={hasAlerts} onClick={handleDetailClick} />
     <Td className="narrow">{id}</Td>
     <Td className="name">
       <Popover
@@ -236,9 +224,6 @@ export default compose(
       } else {
         openPane(id);
       }
-    },
-    handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
-      openPane(id, 'detail');
     },
   }),
   mapProps(
