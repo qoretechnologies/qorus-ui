@@ -414,3 +414,19 @@ table.table-header {
     }
   }
 }
+
+.table-name-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .table-name-popover-wrapper {
+    display: inline-flex;
+    flex-grow: 2;
+
+    .table-name-popover {
+      width: 100%;
+      display: block;
+    }
+  }
+}
