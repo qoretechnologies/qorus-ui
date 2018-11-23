@@ -15,6 +15,7 @@ import LoadMore from '../../components/LoadMore';
 import queryControl from '../../hocomponents/queryControl';
 import DatePicker from '../../components/datepicker';
 import { Icon } from '@blueprintjs/core';
+import { AlertColumnHeader } from '../../components/AlertColumn';
 
 type Props = {
   sortData: Object,
@@ -93,9 +94,7 @@ const JobsTable: Function = ({
           <Icon iconName="list-detail-view" />
         </Th>
         <Th className="big">Actions</Th>
-        <Th className="narrow" name="has_alerts">
-          <Icon iconName="warning-sign" />
-        </Th>
+        <AlertColumnHeader name="has_alerts" />
         <Th className="narrow" name="id">
           ID
         </Th>

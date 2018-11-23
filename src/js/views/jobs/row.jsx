@@ -10,13 +10,13 @@ import { Tr, Td } from '../../components/new_table';
 import Checkbox from '../../components/checkbox';
 import Date from '../../components/date';
 import JobControls from './controls';
-import { Controls, Control as Button } from '../../components/controls';
 import DetailButton from '../../components/detail_button';
 import InstancesBar from '../../components/instances_bar';
 import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 import Box from '../../components/box';
 import PaneItem from '../../components/pane_item';
 import ProcessSummary from '../../components/ProcessSummary';
+import { AlertColumn } from '../../components/AlertColumn';
 
 type Props = {
   openPane: Function,
@@ -29,7 +29,6 @@ type Props = {
   handleHighlightEnd: Function,
   handleCheckboxClick: Function,
   handleDetailClick: Function,
-  handleWarningClick: Function,
   _selected?: boolean,
   id: number,
   type?: string,
@@ -63,7 +62,6 @@ const ServiceRow: Function = ({
   handleHighlightEnd,
   handleCheckboxClick,
   handleDetailClick,
-  handleWarningClick,
   _selected,
   date,
   id,
@@ -120,18 +118,7 @@ const ServiceRow: Function = ({
         remote={remote}
       />
     </Td>
-    <Td className="narrow">
-      {hasAlerts && (
-        <Controls>
-          <Button
-            iconName="warning-sign"
-            btnStyle="danger"
-            onClick={handleWarningClick}
-            title="Show alerts"
-          />
-        </Controls>
-      )}
-    </Td>
+    <AlertColumn onClick={handleDetailClick} hasAlerts={hasAlerts} />
     <Td className="narrow">{id}</Td>
     <Td className="name">
       <Popover
@@ -208,9 +195,6 @@ export default compose(
       } else {
         openPane(id);
       }
-    },
-    handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
-      openPane(id, 'detail');
     },
   }),
   pure([
