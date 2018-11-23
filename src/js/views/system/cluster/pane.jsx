@@ -5,8 +5,11 @@ import mapProps from 'recompose/mapProps';
 import compose from 'recompose/compose';
 
 import Pane from '../../../components/pane';
+import PaneItem from '../../../components/pane_item';
+import Box from '../../../components/box';
 import Tree from '../../../components/tree';
 import titleManager from '../../../hocomponents/TitleManager';
+import Alert from '../../../components/alert';
 
 type Props = {
   onClose: Function,
@@ -21,16 +24,16 @@ const ClusterPane: Function = ({
   urls,
   process,
 }: Props): React.Element<any> => (
-  <Pane onClose={onClose} width={600}>
-    <article>
-      <h3>{process || 'Error: process not found'}</h3>
-      {urls && (
-        <div>
-          <h4> Urls</h4>
+  <Pane onClose={onClose} width={600} title="Node item detail">
+    <Box top>
+      {process ? (
+        <PaneItem title={process}>
           <Tree data={urls} />
-        </div>
+        </PaneItem>
+      ) : (
+        <Alert bsStyle="danger"> Process not found! </Alert>
       )}
-    </article>
+    </Box>
   </Pane>
 );
 
