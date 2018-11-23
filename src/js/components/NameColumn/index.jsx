@@ -27,7 +27,7 @@ const Name: Function = ({ link, name }: NameProps): any =>
       {name}
     </Link>
   ) : (
-    name
+    <span>{name}</span>
   );
 
 const NameColumn: Function = ({
