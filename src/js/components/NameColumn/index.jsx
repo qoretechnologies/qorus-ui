@@ -6,6 +6,7 @@ import { Td, Th } from '../new_table';
 import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 import { Link } from 'react-router';
 import DetailButton from '../detail_button';
+import Text from '../text';
 
 type NameColumnProps = {
   popoverContent?: React.Element<any>,
@@ -27,7 +28,7 @@ const Name: Function = ({ link, name }: NameProps): any =>
       {name}
     </Link>
   ) : (
-    <span>{name}</span>
+    <Text text={name} />
   );
 
 const NameColumn: Function = ({
