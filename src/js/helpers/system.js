@@ -123,7 +123,7 @@ const getProcessObjectLink: Function = (process: Object) => {
     case 'qjob':
       return `/jobs?paneId=${process.jobid}&paneTab=detail`;
     default:
-      return '#';
+      return null;
   }
 };
 
