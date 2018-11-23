@@ -41,6 +41,7 @@ import { findBy } from '../../../helpers/search';
 import { hasPermission } from '../../../helpers/user';
 import Pull from '../../../components/Pull';
 import LoadMore from '../../../components/LoadMore';
+import { AlertColumnHeader } from '../../../components/AlertColumn';
 
 type Props = {
   location: Object,
@@ -153,9 +154,7 @@ const ConnectionTable: Function = ({
           <Icon iconName="list-detail-view" />
         </Th>
         <Th className="narrow">Actions</Th>
-        <Th className="tiny">
-          <Icon iconName="error" />
-        </Th>
+        <AlertColumnHeader name="has_alerts" />
         <Th className="name" name="name">
           Name
         </Th>

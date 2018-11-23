@@ -20,6 +20,7 @@ import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import withDispatch from '../../../hocomponents/withDispatch';
+import { AlertColumn } from '../../../components/AlertColumn';
 
 type Props = {
   name: string,
@@ -106,17 +107,7 @@ const ConnectionRow: Function = ({
         />
       </ButtonGroup>
     </Td>
-
-    <Td className="tiny">
-      {hasAlerts && (
-        <Button
-          iconName="warning-sign"
-          intent={Intent.DANGER}
-          onClick={handleDetailClick}
-          className="pt-small"
-        />
-      )}
-    </Td>
+    <AlertColumn hasAlerts={hasAlerts} onClick={handleDetailClick} />
     <Td className="name">
       <Text text={name} />
     </Td>
