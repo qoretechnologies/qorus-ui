@@ -17,6 +17,8 @@ import Autostart from '../autostart';
 import withDispatch from '../../../hocomponents/withDispatch';
 import InfoHeader from '../../../components/InfoHeader';
 import NoDataIf from '../../../components/NoDataIf';
+import DispositionChart from '../../../components/disposition_chart';
+import MultiDispositionChart from '../../../components/MultiDispositionChart';
 
 @connect(
   null,
@@ -66,6 +68,8 @@ export default class DetailTab extends Component {
   render() {
     const { workflow, systemOptions } = this.props;
 
+    console.log(workflow);
+
     return (
       <div>
         <InfoHeader model={workflow} />
@@ -98,6 +102,12 @@ export default class DetailTab extends Component {
             </form>
           </ButtonGroup>
         </PaneItem>
+        {workflow.order_stats && (
+          <MultiDispositionChart
+            title="Order Stats"
+            orderStats={workflow.order_stats}
+          />
+        )}
         <AlertsTab alerts={workflow.alerts} />
         <ProcessSummary process={workflow.process} />
         <PaneItem title="Instances">

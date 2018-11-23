@@ -32,7 +32,7 @@ type Props = {
   onHide?: Function,
 };
 
-@pure(['show', 'selected', 'disabled', 'className'])
+@pure(['children', 'show', 'selected', 'disabled', 'className'])
 export default class Dropdown extends Component {
   static defaultProps = {
     selectedIcon: 'selection',

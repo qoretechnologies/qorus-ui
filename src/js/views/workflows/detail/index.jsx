@@ -109,7 +109,7 @@ export default class WorkflowsDetail extends Component {
   render() {
     const { workflow, systemOptions, paneTab } = this.props;
 
-    if (!workflow) return null;
+    if (!workflow.created) return null;
 
     return (
       <DetailPane
