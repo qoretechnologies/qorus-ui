@@ -23,7 +23,7 @@ type NameProps = {
 
 const Name: Function = ({ link, name }: NameProps): any =>
   link ? (
-    <Link to={link} className="resource-name-link">
+    <Link to={link} className="resource-name-link" title={name}>
       {name}
     </Link>
   ) : (
@@ -54,7 +54,9 @@ const NameColumn: Function = ({
             <Name {...{ name, link }} />
           </Popover>
         ) : (
-          <Name {...{ name, link }} />
+          <div className="table-name-popover">
+            <Name {...{ name, link }} />
+          </div>
         )}
       </div>
       {onDetailClick && (
