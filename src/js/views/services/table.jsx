@@ -13,6 +13,7 @@ import Selector from './toolbar/selector';
 import Actions from './toolbar/actions';
 import LoadMore from '../../components/LoadMore';
 import { Icon } from '@blueprintjs/core';
+import { AlertColumnHeader } from '../../components/AlertColumn';
 
 type Props = {
   sortData: Object,
@@ -86,9 +87,7 @@ const ServicesTable: Function = ({
         <Th className="narrow" name="threads">
           Threads
         </Th>
-        <Th className="tiny" name="has_alerts">
-          <Icon iconName="warning-sign" />
-        </Th>
+        <AlertColumnHeader name="has_alerts" />
         <Th className="narrow" name="id">
           ID
         </Th>
