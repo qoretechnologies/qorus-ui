@@ -13,6 +13,7 @@ import ServiceControls from './controls';
 import withDispatch from '../../hocomponents/withDispatch';
 import { Icon } from '@blueprintjs/core';
 import { AlertColumn } from '../../components/AlertColumn';
+import NameColumn from '../../components/NameColumn';
 
 type Props = {
   openPane: Function,
@@ -80,9 +81,6 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">
-      <DetailButton onClick={handleDetailClick} active={isActive} />
-    </Td>
-    <Td className="narrow">
       <Icon
         iconName={type === 'system' ? 'cog' : 'user'}
         title={type === 'system' ? 'System' : 'User'}
@@ -99,11 +97,13 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">{threads}</Td>
-    <AlertColumn onClick={handleDetailClick} hasAlerts={hasAlerts} />
     <Td className="narrow">{id}</Td>
-    <Td className="name" title={name}>
-      {normalizedName}
-    </Td>
+    <NameColumn
+      name={normalizedName}
+      hasAlerts={hasAlerts}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+    />
     <Td className="text">
       <Text text={desc} />
     </Td>
