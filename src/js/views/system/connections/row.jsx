@@ -20,6 +20,8 @@ import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import withDispatch from '../../../hocomponents/withDispatch';
+import { AlertColumn } from '../../../components/AlertColumn';
+import NameColumn from '../../../components/NameColumn';
 
 type Props = {
   name: string,
@@ -38,6 +40,8 @@ type Props = {
   openPane: Function,
   closePane: Function,
   dispatchAction: Function,
+  handleToggleClick: Function,
+  enabled: boolean,
   up?: boolean,
   safe_url?: string,
   url?: string,
@@ -83,10 +87,6 @@ const ConnectionRow: Function = ({
         {up ? 'UP' : 'DOWN'}
       </Tag>
     </Td>
-    <Td className="narrow">
-      <DetailButton onClick={handleDetailClick} active={isActive} />
-    </Td>
-
     <Td className="medium">
       <ButtonGroup>
         {remoteType === 'user' && (
@@ -106,20 +106,12 @@ const ConnectionRow: Function = ({
         />
       </ButtonGroup>
     </Td>
-
-    <Td className="tiny">
-      {hasAlerts && (
-        <Button
-          iconName="warning-sign"
-          intent={Intent.DANGER}
-          onClick={handleDetailClick}
-          className="pt-small"
-        />
-      )}
-    </Td>
-    <Td className="name">
-      <Text text={name} />
-    </Td>
+    <NameColumn
+      name={name}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+      hasAlerts={hasAlerts}
+    />
     {remoteType === 'datasources' ? (
       <Td className="text">
         <Text text={options} renderTree />

@@ -6,7 +6,6 @@ import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 
 import { Table, Thead, Tbody, Th, FixedRow } from '../../components/new_table';
-import checkData from '../../hocomponents/check-no-data';
 import withModal from '../../hocomponents/modal';
 import Row from './row';
 import SortModal from './modals/sort_modal';
@@ -21,6 +20,7 @@ import LoadMore from '../../components/LoadMore';
 import { Icon } from '@blueprintjs/core';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import SortingDropdown from '../../components/SortingDropdown';
+import { NameColumnHeader } from '../../components/NameColumn';
 
 type Props = {
   sortData: Object,
@@ -96,7 +96,7 @@ const WorkflowsTable: Function = ({
   >
     <Thead>
       <FixedRow className="toolbar-row">
-        <Th colspan={isTablet ? 6 : 7}>
+        <Th colspan={isTablet ? 4 : 5}>
           <div className="pull-left">
             <Selector selected={selected} selectedCount={selectedIds.length} />
             <Actions
@@ -140,22 +140,14 @@ const WorkflowsTable: Function = ({
         <Th className="tiny">
           <Icon iconName="small-tick" />
         </Th>
-        <Th className="narrow">
-          <Icon iconName="list-detail-view" />
-        </Th>
         {!isTablet && <Th className="normal">Actions</Th>}
         <Th className="medium" name="autostart">
           Auto / Execs
         </Th>
-        <Th className="tiny" name="has_alerts">
-          <Icon iconName="warning-sign" />
-        </Th>
         <Th className="narrow" name="id">
           ID
         </Th>
-        <Th className="name big" name="name">
-          Name
-        </Th>
+        <NameColumnHeader />
         {deprecated && (
           <Th className="medium" name="deprecated">
             Deprecated
@@ -173,7 +165,7 @@ const WorkflowsTable: Function = ({
     </Thead>
     <DataOrEmptyTable
       condition={collection.length === 0}
-      cols={isTablet ? 10 : 11}
+      cols={isTablet ? 8 : 9}
     >
       {props => (
         <Tbody {...props}>

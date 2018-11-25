@@ -11,6 +11,7 @@ import {
 } from '../../../store/api/resources/valuemaps/actions';
 import { utf8ToB64 } from '../../../helpers/system';
 import DetailButton from '../../../components/detail_button';
+import NameColumn from '../../../components/NameColumn';
 
 type Props = {
   openPane: Function,
@@ -70,10 +71,11 @@ export default class ValuemapRow extends Component {
 
     return (
       <Tr first={first} className={isActive ? 'row-active' : ''}>
-        <Td className="narrow">
-          <DetailButton active={isActive} onClick={this.handleDetailClick} />
-        </Td>
-        <Td className="name">{data.name}</Td>
+        <NameColumn
+          name={data.name}
+          isActive={isActive}
+          onDetailClick={this.handleDetailClick}
+        />
         <Td className="text">{data.description}</Td>
         <Td className="text">{data.author}</Td>
         <Td className="medium">

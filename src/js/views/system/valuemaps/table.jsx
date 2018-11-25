@@ -15,6 +15,7 @@ import {
 } from '../../../components/new_table';
 import ValueRow from './row';
 import { Icon } from '@blueprintjs/core';
+import { NameColumnHeader } from '../../../components/NameColumn';
 
 type Props = {
   collection: Array<Object>,
@@ -38,12 +39,7 @@ const ValuemapsTable: Function = ({
   <Table striped condensed fixed key={collection.length}>
     <Thead>
       <FixedRow {...{ sortData, onSortChange }}>
-        <Th className="narrow">
-          <Icon iconName="list-detail-view" />
-        </Th>
-        <Th name="name" className="name">
-          Name
-        </Th>
+        <NameColumnHeader />
         <Th name="desc" className="text">
           Description
         </Th>

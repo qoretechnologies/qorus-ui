@@ -5,13 +5,18 @@ import { connect } from 'react-redux';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
-import { Tag, Icon, Intent, Button } from '@blueprintjs/core';
+import { Tag, Icon, Intent } from '@blueprintjs/core';
 
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 import { Tr, Td } from '../../../components/new_table';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
 import OptionModal from './modal';
 import Text from '../../../components/text';
+import NameColumn from '../../../components/NameColumn';
 import { hasPermission } from '../../../helpers/user';
 import { typeToString } from '../../../helpers/system';
 import withDispatch from '../../../hocomponents/withDispatch';
@@ -53,9 +58,7 @@ const OptionRow: Function = ({
     <Td className="narrow">
       <Icon iconName={status === 'locked' ? 'lock' : 'unlock'} />
     </Td>
-    <Td className="name">
-      <Text text={name} />
-    </Td>
+    <NameColumn name={name} />
     <Td className="big">
       <Tag
         title="Workflow"
@@ -83,13 +86,15 @@ const OptionRow: Function = ({
     <Td className="text">
       <Text text={stringVal} renderTree />
     </Td>
-    <Td className="narrow">
+    <Td className="tiny">
       {canEdit && (
-        <Button
-          iconName="edit"
-          onClick={handleEditClick}
-          className="pt-small"
-        />
+        <ButtonGroup>
+          <Button
+            iconName="edit"
+            onClick={handleEditClick}
+            className="pt-small"
+          />
+        </ButtonGroup>
       )}
     </Td>
   </Tr>

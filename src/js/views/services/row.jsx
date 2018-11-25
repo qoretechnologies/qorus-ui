@@ -10,10 +10,10 @@ import Text from '../../components/text';
 import Checkbox from '../../components/checkbox';
 import DetailButton from '../../components/detail_button';
 import ServiceControls from './controls';
-import { Controls, Control as Button } from '../../components/controls';
 import withDispatch from '../../hocomponents/withDispatch';
-import actions from '../../store/api/actions';
 import { Icon } from '@blueprintjs/core';
+import { AlertColumn } from '../../components/AlertColumn';
+import NameColumn from '../../components/NameColumn';
 
 type Props = {
   openPane: Function,
@@ -26,7 +26,6 @@ type Props = {
   handleHighlightEnd: Function,
   handleCheckboxClick: Function,
   handleDetailClick: Function,
-  handleWarningClick: Function,
   _selected?: boolean,
   id: number,
   type?: string,
@@ -51,7 +50,6 @@ const ServiceRow: Function = ({
   handleHighlightEnd,
   handleCheckboxClick,
   handleDetailClick,
-  handleWarningClick,
   _selected,
   type,
   threads,
@@ -83,9 +81,6 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">
-      <DetailButton onClick={handleDetailClick} active={isActive} />
-    </Td>
-    <Td className="narrow">
       <Icon
         iconName={type === 'system' ? 'cog' : 'user'}
         title={type === 'system' ? 'System' : 'User'}
@@ -102,22 +97,13 @@ const ServiceRow: Function = ({
       />
     </Td>
     <Td className="narrow">{threads}</Td>
-    <Td className="tiny">
-      {hasAlerts && (
-        <Controls>
-          <Button
-            iconName="warning-sign"
-            btnStyle="danger"
-            onClick={handleWarningClick}
-            title="Show alerts"
-          />
-        </Controls>
-      )}
-    </Td>
     <Td className="narrow">{id}</Td>
-    <Td className="name" title={name}>
-      {normalizedName}
-    </Td>
+    <NameColumn
+      name={normalizedName}
+      hasAlerts={hasAlerts}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+    />
     <Td className="text">
       <Text text={desc} />
     </Td>
@@ -144,9 +130,6 @@ export default compose(
       } else {
         openPane(id);
       }
-    },
-    handleWarningClick: ({ openPane, id }: Props): Function => (): void => {
-      openPane(id, 'detail');
     },
   }),
   pure([

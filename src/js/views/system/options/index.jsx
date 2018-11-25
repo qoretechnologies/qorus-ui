@@ -26,6 +26,7 @@ import { querySelector, resourceSelector } from '../../../selectors';
 import OptionRow from './row';
 import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
+import { NameColumnHeader } from '../../../components/NameColumn';
 
 type Props = {
   load: Function,
@@ -69,9 +70,7 @@ const OptionsView: Function = ({
               <Th className="narrow" name="status">
                 Status
               </Th>
-              <Th className="name" name="name">
-                Name
-              </Th>
+              <NameColumnHeader />
               <Th className="big">Type</Th>
               <Th className="text" name="default">
                 Default value
@@ -79,7 +78,7 @@ const OptionsView: Function = ({
               <Th className="text" name="value">
                 Current value
               </Th>
-              <Th className="narrow">-</Th>
+              <Th className="tiny">-</Th>
             </FixedRow>
           </Thead>
           <Tbody>

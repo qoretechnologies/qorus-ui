@@ -41,6 +41,8 @@ import { findBy } from '../../../helpers/search';
 import { hasPermission } from '../../../helpers/user';
 import Pull from '../../../components/Pull';
 import LoadMore from '../../../components/LoadMore';
+import { AlertColumnHeader } from '../../../components/AlertColumn';
+import { NameColumnHeader } from '../../../components/NameColumn';
 
 type Props = {
   location: Object,
@@ -57,7 +59,7 @@ type Props = {
   type: string,
   canLoadMore?: boolean,
   handleLoadMore: Function,
-  handleLoadAdd: Function,
+  handleLoadAll: Function,
   limit: number,
   handleAddClick: Function,
   openModal: Function,
@@ -149,16 +151,8 @@ const ConnectionTable: Function = ({
         <Th className="normal" name="up">
           Status
         </Th>
-        <Th className="narrow">
-          <Icon iconName="list-detail-view" />
-        </Th>
         <Th className="narrow">Actions</Th>
-        <Th className="tiny">
-          <Icon iconName="error" />
-        </Th>
-        <Th className="name" name="name">
-          Name
-        </Th>
+        <NameColumnHeader />
         {type === 'datasources' ? (
           <Th className="text">Options</Th>
         ) : (
