@@ -27,7 +27,8 @@ import en from '../../../img/country_flags/us.png';
 
 import withModal from '../../hocomponents/modal';
 import withPane from '../../hocomponents/pane';
-import logo from '../../../img/qore_logo.png';
+import logo from '../../../img/qorus_engine_logo.png';
+import whiteLogo from '../../../img/qorus_engine_logo_white.png';
 import actions from '../../store/api/actions';
 import { LANGS } from '../../intl/messages';
 import settings from '../../settings';
@@ -145,6 +146,7 @@ export default class Topbar extends Component {
             )}
           </Menu>
         }
+        popoverClassName="popover-dropdown"
         position={Position.BOTTOM}
       >
         <Button
@@ -168,11 +170,10 @@ export default class Topbar extends Component {
       <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
         <NavbarGroup>
           <NavbarHeading className="nunito">
-            <img src={logo} className="qore-small-logo" /> Qorus Integration
-            Engine | {this.props.info.data['instance-key']}{' '}
+            <img src={light ? logo : whiteLogo} className="qore-small-logo" />
           </NavbarHeading>
         </NavbarGroup>
-        <NavbarGroup align="right">
+        <NavbarGroup className="quick-search-wrapper">
           <form onSubmit={this.handleSubmit}>
             <InputGroup
               leftIconName="search"
@@ -184,12 +185,14 @@ export default class Topbar extends Component {
               }
             />
           </form>
-          <NavbarDivider />
+        </NavbarGroup>
+        <NavbarGroup align="right">
           <Popover
             position={Position.BOTTOM}
             useSmartPositioning
             content={
               <Menu>
+                <MenuDivider title={this.props.user.name} />
                 <MenuItem
                   text="My profile"
                   iconName="info-sign"
@@ -204,13 +207,70 @@ export default class Topbar extends Component {
             }
           >
             <ButtonGroup minimal>
-              <Button
-                iconName="user"
-                text={this.props.user.name}
-                rightIconName="caret-down"
-              />
+              <Button iconName="user" />
             </ButtonGroup>
           </Popover>
+          {settings.PROTOCOL === 'http' && (
+            <ButtonGroup minimal>
+              <Tooltip
+                intent={Intent.DANGER}
+                content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
+                position={Position.LEFT}
+              >
+                <Button iconName="warning-sign" intent={Intent.DANGER} />
+              </Tooltip>
+            </ButtonGroup>
+          )}
+          <ButtonGroup minimal>
+            <Popover
+              position={Position.BOTTOM_RIGHT}
+              content={
+                <Menu>
+                  <MenuDivider title="System health" />
+                  <MenuItem
+                    text="Status"
+                    label={data.health}
+                    intent={HEALTH_KEYS[data.health]}
+                  />
+                  <MenuItem text="Ongoing alerts" label={data.ongoing} />
+                  <MenuItem text="Transient alerts" label={data.transient} />
+                </Menu>
+              }
+            >
+              <Button iconName="build" intent={HEALTH_KEYS[data.health]} />
+            </Popover>
+          </ButtonGroup>
+          {data.remote && data.remote.length !== 0 && (
+            <ButtonGroup minimal>
+              <Popover
+                position={Position.BOTTOM_RIGHT}
+                content={
+                  <Menu>
+                    <MenuDivider title="Remote connections" />
+                    {data.remote.map((remote: Object) => (
+                      <MenuItem
+                        key={remote.name}
+                        text={`${remote.name} - ${remote.health}`}
+                        intent={HEALTH_KEYS[remote.health]}
+                      />
+                    ))}
+                  </Menu>
+                }
+              >
+                <Button iconName="share" />
+              </Popover>
+            </ButtonGroup>
+          )}
+          <ButtonGroup minimal>
+            <Button
+              iconName="notifications"
+              intent={
+                this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY
+              }
+              onClick={this.handleNotificationsClick}
+            />
+          </ButtonGroup>
+          <NavbarDivider />
           <Popover
             position={Position.BOTTOM_RIGHT}
             content={
@@ -236,71 +296,10 @@ export default class Topbar extends Component {
           >
             <ButtonGroup minimal>
               <Button>
-                <img src={flags[this.props.locale]} />{' '}
-                {countryCode.toUpperCase()}
+                <img src={flags[this.props.locale]} />
               </Button>
             </ButtonGroup>
           </Popover>
-          {settings.PROTOCOL === 'http' && (
-            <ButtonGroup minimal>
-              <Tooltip
-                intent={Intent.DANGER}
-                content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
-                position={Position.LEFT}
-              >
-                <Button iconName="warning-sign" intent={Intent.DANGER} />
-              </Tooltip>
-            </ButtonGroup>
-          )}
-          <ButtonGroup minimal>
-            <Popover
-              position={Position.BOTTOM_RIGHT}
-              content={
-                <Menu>
-                  <MenuDivider title="System health" />
-                  <MenuItem
-                    text={`Status: ${data.health}`}
-                    intent={HEALTH_KEYS[data.health]}
-                  />
-                  <MenuItem text="Ongoing alerts" label={data.ongoing} />
-                  <MenuItem text="Transient alerts" label={data.transient} />
-                </Menu>
-              }
-            >
-              <Button iconName="build" intent={Intent.WARNING} />
-            </Popover>
-          </ButtonGroup>
-          {data.remote && data.remote.length !== 0 && (
-            <ButtonGroup minimal>
-              <Popover
-                position={Position.BOTTOM_RIGHT}
-                content={
-                  <Menu>
-                    <MenuDivider title="Remotes" />
-                    {data.remote.map((remote: Object) => (
-                      <MenuItem
-                        key={remote.name}
-                        text={`${remote.name} - ${remote.health}`}
-                        intent={HEALTH_KEYS[remote.health]}
-                      />
-                    ))}
-                  </Menu>
-                }
-              >
-                <Button iconName="share" />
-              </Popover>
-            </ButtonGroup>
-          )}
-          <ButtonGroup minimal>
-            <Button
-              iconName="notifications"
-              intent={
-                this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY
-              }
-              onClick={this.handleNotificationsClick}
-            />
-          </ButtonGroup>
-          <NavbarDivider />
           <ButtonGroup minimal>
             <Button
               iconName={light ? 'moon' : 'flash'}

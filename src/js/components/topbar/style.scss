@@ -26,3 +26,9 @@
   top: 3px;
   z-index: 15;
 }
+
+.quick-search-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}

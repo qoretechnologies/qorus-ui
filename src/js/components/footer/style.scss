@@ -13,11 +13,13 @@ footer {
   bottom: 0; /* [1] */
   width: 100%; /* [1] */
 
-  background-color: $panel-footer-bg;
+  background-color: darken($bgcolor, 3) !important;
 
   white-space: nowrap; /* [3] */
   overflow-x: auto; /* [3] */
   overflow-y: hidden; /* [3] */
+
+  padding: 0 10px;
 
   z-index: 19;
 

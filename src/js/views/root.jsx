@@ -233,7 +233,7 @@ export default class Root extends Component {
                     {this.renderSpinnerOrIcon(options.sync)}
                   </div>
                   <div className="loading-text">
-                    {info.sync
+                    {options.sync
                       ? 'Options data loaded!'
                       : 'Loading system options...'}
                   </div>
@@ -259,8 +259,8 @@ export default class Root extends Component {
     const locale = currentUser.data.storage.locale
       ? currentUser.data.storage.locale
       : navigator.locale
-        ? navigator.locale
-        : 'en-US';
+      ? navigator.locale
+      : 'en-US';
 
     const isLightTheme = currentUser.data.storage.theme === 'light';
 

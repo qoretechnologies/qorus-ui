@@ -5,7 +5,7 @@ import Crumb from './crumb';
 import CrumbTabs from './tabs';
 import CollapsedCrumb from './collapsedCrumb';
 import { Icon } from '@blueprintjs/core';
-import qoreLogo from '../../../img/qore_logo.png';
+import qoreLogo from '../../../img/qore_logo_purple.png';
 
 type Props = {
   children?: any,

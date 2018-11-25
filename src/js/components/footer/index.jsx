@@ -6,6 +6,8 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withModal from '../../hocomponents/modal';
 import { HELP_DATA } from '../../constants/help';
 import Modal from '../../components/modal';
+import Pull from '../Pull';
+import { Tag, Intent } from '@blueprintjs/core';
 
 type Props = {
   info: Object,
@@ -26,28 +28,23 @@ const HelpModal: Function = ({
       Help for "{path.replace('/', '')}" page
     </Modal.Header>
     <Modal.Body>
-      {helpData.overview && (
-        <p className="lead">{helpData.overview}</p>
+      {helpData.overview && <p className="lead">{helpData.overview}</p>}
+      {Object.keys(helpData.data).map(
+        (header: string): React.Element<any> => (
+          <div key={header}>
+            <h4>{header}</h4>
+            <p>{helpData.data[header]}</p>
+          </div>
+        )
       )}
-      {Object.keys(helpData.data).map((header: string): React.Element<any> => (
-        <div key={header}>
-          <h4>{header}</h4>
-          <p>{helpData.data[header]}</p>
-        </div>
-      ))}
     </Modal.Body>
   </Modal>
 );
 
-const Footer: Function = ({
-  info,
-  path,
-  openModal,
-  closeModal,
-}: Props) => {
-  const helpItem = Object.keys(HELP_DATA).find((res: string): boolean => (
-    path.startsWith(res)
-  ));
+const Footer: Function = ({ info, path, openModal, closeModal }: Props) => {
+  const helpItem = Object.keys(HELP_DATA).find(
+    (res: string): boolean => path.startsWith(res)
+  );
 
   const handleHelpClick = () => {
     if (helpItem) {
@@ -63,49 +60,49 @@ const Footer: Function = ({
 
   return (
     <footer>
-      <div className="container-fluid">
-        <p className="text-right text-muted">
-          {'Qorus Integration Engine '}
-          {info['omq-schema'] && (
-            <small>{`(Schema: ${info['omq-schema']})`}</small>
-          )}
-          {info['omq-schema'] && ' '}
-          {info['omq-version'] && (
-            <small>
-              {'(Version: '}
-              {info['omq-version']}
-              {info['omq-build'] && `.${info['omq-build']}`}
-              {')'}
-            </small>
-          )}
-          {info['omq-version'] && ' '}
-          &copy;
-          {' '}
-          <a href="http://qoretechnologies.com">Qore Technologies</a>
-          {helpItem && (
-            <span>
-              {' | '}
-              <a onClick={handleHelpClick} href="#">
-                Help
-              </a>
-            </span>
-          )}
-          {' | '}
-          <a
-            href={'http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new'}
-          >
-            Report Bug
-          </a>
+      <Pull>
+        <p style={{ fontWeight: 'bold' }}>
+          Qorus instance: <Tag>{info['instance-key']}</Tag>
         </p>
-      </div>
+      </Pull>
+      <p className="text-right text-muted">
+        {'Qorus Integration Engine '}
+        {info['omq-schema'] && (
+          <small>{`(Schema: ${info['omq-schema']})`}</small>
+        )}
+        {info['omq-schema'] && ' '}
+        {info['omq-version'] && (
+          <small>
+            {'(Version: '}
+            {info['omq-version']}
+            {info['omq-build'] && `.${info['omq-build']}`}
+            {')'}
+          </small>
+        )}
+        {info['omq-version'] && ' '}
+        &copy; <a href="http://qoretechnologies.com">Qore Technologies</a>
+        {helpItem && (
+          <span>
+            {' | '}
+            <a onClick={handleHelpClick} href="#">
+              Help
+            </a>
+          </span>
+        )}
+        {' | '}
+        <a
+          href={
+            'http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new'
+          }
+        >
+          Report Bug
+        </a>
+      </p>
     </footer>
   );
 };
 
 export default compose(
   withModal(),
-  pure([
-    'info',
-    'location',
-  ])
+  pure(['info', 'location'])
 )(Footer);
