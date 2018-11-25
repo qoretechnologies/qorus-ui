@@ -20,7 +20,7 @@ import LoadMore from '../../components/LoadMore';
 import { Icon } from '@blueprintjs/core';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import SortingDropdown from '../../components/SortingDropdown';
-import { AlertColumnHeader } from '../../components/AlertColumn';
+import { NameColumnHeader } from '../../components/NameColumn';
 
 type Props = {
   sortData: Object,
@@ -96,7 +96,7 @@ const WorkflowsTable: Function = ({
   >
     <Thead>
       <FixedRow className="toolbar-row">
-        <Th colspan={isTablet ? 5 : 6}>
+        <Th colspan={isTablet ? 4 : 5}>
           <div className="pull-left">
             <Selector selected={selected} selectedCount={selectedIds.length} />
             <Actions
@@ -144,13 +144,10 @@ const WorkflowsTable: Function = ({
         <Th className="medium" name="autostart">
           Auto / Execs
         </Th>
-        <AlertColumnHeader name="has_alerts" />
         <Th className="narrow" name="id">
           ID
         </Th>
-        <Th className="name big" name="name">
-          Name
-        </Th>
+        <NameColumnHeader />
         {deprecated && (
           <Th className="medium" name="deprecated">
             Deprecated
@@ -168,7 +165,7 @@ const WorkflowsTable: Function = ({
     </Thead>
     <DataOrEmptyTable
       condition={collection.length === 0}
-      cols={isTablet ? 9 : 10}
+      cols={isTablet ? 8 : 9}
     >
       {props => (
         <Tbody {...props}>

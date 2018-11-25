@@ -108,7 +108,6 @@ const TableRow: Function = ({
     <Td key="autostart" name="autostart" className="medium">
       <AutoStart id={id} autostart={autostart} execCount={execs} />
     </Td>
-    <AlertColumn hasAlerts={hasAlerts} onClick={handleDetailClick} />
     <Td className="narrow">{id}</Td>
     <NameColumn
       popoverContent={
