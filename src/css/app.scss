@@ -479,3 +479,13 @@ span.pt-icon-standard {
 .pane-item {
   clear: both;
 }
+
+.pt-navbar.pt-dark,
+.pt-dark .pt-menu {
+  background-color: #383c44;
+}
+
+.pt-popover.pt-dark .pt-popover-arrow-border,
+.pt-popover.pt-dark .pt-popover-arrow-fill {
+  fill: #383c44;
+}
