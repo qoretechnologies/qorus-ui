@@ -4,19 +4,16 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import classnames from 'classnames';
-import { Link } from 'react-router';
 
 import { Tr, Td } from '../../components/new_table';
 import Checkbox from '../../components/checkbox';
 import Date from '../../components/date';
 import JobControls from './controls';
-import DetailButton from '../../components/detail_button';
 import InstancesBar from '../../components/instances_bar';
-import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 import Box from '../../components/box';
 import PaneItem from '../../components/pane_item';
 import ProcessSummary from '../../components/ProcessSummary';
-import { AlertColumn } from '../../components/AlertColumn';
+import NameColumn from '../../components/NameColumn';
 
 type Props = {
   openPane: Function,
@@ -102,9 +99,6 @@ const ServiceRow: Function = ({
         checked={_selected ? 'CHECKED' : 'UNCHECKED'}
       />
     </Td>
-    <Td className="narrow">
-      <DetailButton active={isActive} onClick={handleDetailClick} />
-    </Td>
     <Td className="big">
       <JobControls
         enabled={enabled}
@@ -118,32 +112,20 @@ const ServiceRow: Function = ({
         remote={remote}
       />
     </Td>
-    <AlertColumn onClick={handleDetailClick} hasAlerts={hasAlerts} />
     <Td className="narrow">{id}</Td>
-    <Td className="name">
-      <Popover
-        hoverOpenDelay={300}
-        content={
-          <Box top>
-            <PaneItem title={normalizedName}>{rest.description}</PaneItem>
-            <ProcessSummary process={rest.process} />
-          </Box>
-        }
-        interactionKind={PopoverInteractionKind.HOVER}
-        position={Position.TOP}
-        rootElementTag="div"
-        className="block"
-        useSmartPositioning
-      >
-        <Link
-          to={`/job/${id}?date=${date}`}
-          className="resource-name-link"
-          title={name}
-        >
-          {normalizedName}
-        </Link>
-      </Popover>
-    </Td>
+    <NameColumn
+      popoverContent={
+        <Box top>
+          <PaneItem title={normalizedName}>{rest.description}</PaneItem>
+          <ProcessSummary process={rest.process} />
+        </Box>
+      }
+      link={`/job/${id}?date=${date}`}
+      name={normalizedName}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+      hasAlerts={hasAlerts}
+    />
     <Td className="big">
       <Date date={executed} />
     </Td>

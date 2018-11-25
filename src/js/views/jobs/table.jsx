@@ -16,6 +16,7 @@ import queryControl from '../../hocomponents/queryControl';
 import DatePicker from '../../components/datepicker';
 import { Icon } from '@blueprintjs/core';
 import { AlertColumnHeader } from '../../components/AlertColumn';
+import { NameColumnHeader } from '../../components/NameColumn';
 
 type Props = {
   sortData: Object,
@@ -68,7 +69,7 @@ const JobsTable: Function = ({
   >
     <Thead>
       <FixedRow className="toolbar-row">
-        <Th colspan={9}>
+        <Th colspan={7}>
           <Pull>
             <Selector selected={selected} selectedCount={selectedIds.length} />
             <Actions selectedIds={selectedIds} show={selected !== 'none'} />
@@ -90,17 +91,11 @@ const JobsTable: Function = ({
         <Th className="tiny checker">
           <Icon iconName="small-tick" />
         </Th>
-        <Th className="narrow">
-          <Icon iconName="list-detail-view" />
-        </Th>
         <Th className="big">Actions</Th>
-        <AlertColumnHeader name="has_alerts" />
         <Th className="narrow" name="id">
           ID
         </Th>
-        <Th className="name" name="name">
-          Name
-        </Th>
+        <NameColumnHeader />
         <Th className="big" name="last_executed">
           <Icon iconName="time" /> Last run
         </Th>
