@@ -152,7 +152,6 @@ const ConnectionTable: Function = ({
           Status
         </Th>
         <Th className="narrow">Actions</Th>
-        <AlertColumnHeader name="has_alerts" />
         <NameColumnHeader />
         {type === 'datasources' ? (
           <Th className="text">Options</Th>

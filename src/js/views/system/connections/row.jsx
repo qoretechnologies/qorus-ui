@@ -106,7 +106,6 @@ const ConnectionRow: Function = ({
         />
       </ButtonGroup>
     </Td>
-    <AlertColumn hasAlerts={hasAlerts} onClick={handleDetailClick} />
     <NameColumn
       name={name}
       isActive={isActive}
