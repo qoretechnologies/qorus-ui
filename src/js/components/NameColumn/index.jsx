@@ -7,6 +7,7 @@ import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 import { Link } from 'react-router';
 import DetailButton from '../detail_button';
 import Text from '../text';
+import { Controls as ButtonGroup, Control as Button } from '../controls';
 
 type NameColumnProps = {
   popoverContent?: React.Element<any>,
@@ -60,9 +61,14 @@ const NameColumn: Function = ({
           </div>
         )}
       </div>
-      {onDetailClick && (
-        <DetailButton active={isActive} onClick={onDetailClick} />
-      )}
+      <ButtonGroup>
+        {hasAlerts && (
+          <Button iconName="error" btnStyle="danger" onClick={onDetailClick} />
+        )}
+        {onDetailClick && (
+          <DetailButton active={isActive} onClick={onDetailClick} />
+        )}
+      </ButtonGroup>
     </div>
   </Td>
 );

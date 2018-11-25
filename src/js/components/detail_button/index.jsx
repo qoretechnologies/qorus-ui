@@ -3,7 +3,7 @@ import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
-import { Controls as ButtonGroup, Control as Button } from '../controls';
+import { Control as Button } from '../controls';
 import { Intent } from '@blueprintjs/core';
 
 type Props = {
@@ -16,13 +16,11 @@ const DetailButton: Function = ({
   active,
   handleClick,
 }: Props): React.Element<any> => (
-  <ButtonGroup>
-    <Button
-      intent={active ? Intent.PRIMARY : Intent.NONE}
-      onClick={handleClick}
-      iconName="list-detail-view"
-    />
-  </ButtonGroup>
+  <Button
+    intent={active ? Intent.PRIMARY : Intent.NONE}
+    onClick={handleClick}
+    iconName="list-detail-view"
+  />
 );
 
 export default compose(
