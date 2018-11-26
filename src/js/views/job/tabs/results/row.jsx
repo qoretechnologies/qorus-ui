@@ -8,7 +8,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { Tr, Td } from '../../../../components/new_table';
 import Date from '../../../../components/date';
 import actions from '../../../../store/api/actions';
-import DetailButton from '../../../../components/detail_button';
+import NameColumn from '../../../../components/NameColumn';
 
 type Props = {
   id: number,
@@ -44,10 +44,11 @@ const JobInstanceRow: Function = ({
     onHighlightEnd={handleUpdateDone}
     className={active ? 'row-active' : ''}
   >
-    <Td className="normal">{instanceId}</Td>
-    <Td className="narrow">
-      <DetailButton onClick={handleDetailClick} active={active} />
-    </Td>
+    <NameColumn
+      name={instanceId}
+      isActive={active}
+      onDetailClick={handleDetailClick}
+    />
     <Td className="medium">
       <span className={`label status-${jobstatus.toLowerCase()}`}>
         {jobstatus}
