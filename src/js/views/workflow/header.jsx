@@ -2,7 +2,8 @@
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
-import { Link, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
+import size from 'lodash/size';
 
 import WorkflowControls from '../workflows/controls';
 import WorkflowAutostart from '../workflows/autostart';
@@ -15,7 +16,6 @@ import {
   Control as Button,
 } from '../../components/controls';
 import withHandlers from 'recompose/withHandlers';
-import { Tooltip } from '@blueprintjs/core';
 
 type Props = {
   id: number,
@@ -50,13 +50,21 @@ const WorkflowHeader: Function = ({
   tab,
   handleAlertClick,
   normalizedName,
+  mappers,
 }: Props): React.Element<any> => (
   <Headbar>
     <Breadcrumbs>
       <Crumb link="/workflows"> Workflows </Crumb>
       <Crumb>{normalizedName}</Crumb>
       <CrumbTabs
-        tabs={['Orders', 'Performance', 'Mappers', 'Code', 'Log', 'Info']}
+        tabs={[
+          'Orders',
+          'Performance',
+          { title: 'Mappers', suffix: `(${size(mappers)})` },
+          'Code',
+          'Log',
+          'Info',
+        ]}
       />
     </Breadcrumbs>
     <Pull right>
