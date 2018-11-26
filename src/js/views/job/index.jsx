@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import size from 'lodash/size';
 
 import sync from '../../hocomponents/sync';
 import patch from '../../hocomponents/patchFuncArgs';
@@ -56,7 +57,14 @@ const JobPage = ({
       <Breadcrumbs>
         <Crumb link="/jobs"> Jobs </Crumb>
         <Crumb>{normalizeName(job)}</Crumb>
-        <CrumbTabs tabs={['Instances', 'Mappers', 'Code', 'Log']} />
+        <CrumbTabs
+          tabs={[
+            'Instances',
+            { title: 'Mappers', suffix: `(${size(job.mappers)})` },
+            'Code',
+            'Log',
+          ]}
+        />
       </Breadcrumbs>
       <Pull right>
         <Controls {...job} big />
