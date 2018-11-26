@@ -108,8 +108,7 @@ export default class WorkflowsDetail extends Component {
 
   render() {
     const { workflow, systemOptions, paneTab } = this.props;
-
-    if (!workflow.created) return null;
+    const loaded: boolean = workflow && workflow.created;
 
     return (
       <DetailPane
@@ -140,85 +139,90 @@ export default class WorkflowsDetail extends Component {
           queryIdentifier: 'paneTab',
         }}
       >
-        <Box top>
-          <Container fill>
-            <SimpleTabs activeTab={paneTab}>
-              <SimpleTab name="detail">
-                <DetailTab
-                  key={workflow.name}
-                  workflow={workflow}
-                  systemOptions={systemOptions}
-                />
-              </SimpleTab>
-              <SimpleTab name="code">
-                <Code
-                  data={workflow.lib}
-                  heightUpdater={this.getHeight}
-                  location={this.props.location}
-                />
-              </SimpleTab>
-              <SimpleTab name="steps">
-                <div
-                  style={{
-                    height: '100%',
-                    overflow: 'auto',
-                  }}
-                  ref={this.diagramRef}
-                >
-                  <StepsTab workflow={workflow} />
-                </div>
-              </SimpleTab>
-              <SimpleTab name="log">
-                <LogTab
-                  resource={`workflows/${workflow.id}`}
-                  location={this.props.location}
-                />
-              </SimpleTab>
-              <SimpleTab name="errors">
-                <ErrorsTab location={this.props.location} workflow={workflow} />
-              </SimpleTab>
-              <SimpleTab name="mappers">
-                <MappersTable mappers={workflow.mappers} />
-              </SimpleTab>
-              <SimpleTab name="value maps">
-                <Valuemaps vmaps={workflow.vmaps} />
-              </SimpleTab>
-              <SimpleTab name="releases">
-                <Releases
-                  component={workflow.name}
-                  compact
-                  location={this.props.location}
-                  key={workflow.name}
-                />
-              </SimpleTab>
-              {workflow && workflow.process ? (
-                <SimpleTab name="process">
-                  <InfoTable
-                    object={{
-                      ...workflow.process,
-                      ...{ memory: workflow.process.priv_str },
+        {loaded && (
+          <Box top>
+            <Container fill>
+              <SimpleTabs activeTab={paneTab}>
+                <SimpleTab name="detail">
+                  <DetailTab
+                    key={workflow.name}
+                    workflow={workflow}
+                    systemOptions={systemOptions}
+                  />
+                </SimpleTab>
+                <SimpleTab name="code">
+                  <Code
+                    data={workflow.lib}
+                    heightUpdater={this.getHeight}
+                    location={this.props.location}
+                  />
+                </SimpleTab>
+                <SimpleTab name="steps">
+                  <div
+                    style={{
+                      height: '100%',
+                      overflow: 'auto',
                     }}
-                    omit={['priv', 'rss', 'vsz', 'priv_str']}
+                    ref={this.diagramRef}
+                  >
+                    <StepsTab workflow={workflow} />
+                  </div>
+                </SimpleTab>
+                <SimpleTab name="log">
+                  <LogTab
+                    resource={`workflows/${workflow.id}`}
+                    location={this.props.location}
                   />
                 </SimpleTab>
-              ) : (
-                <SimpleTab name="process">
-                  <NonIdealState
-                    title="Process unavailable"
-                    description="This workflow is not running under a process"
-                    visual="warning-sign"
+                <SimpleTab name="errors">
+                  <ErrorsTab
+                    location={this.props.location}
+                    workflow={workflow}
                   />
                 </SimpleTab>
-              )}
-              <SimpleTab name="order stats">
-                <StatsTab orderStats={workflow.order_stats} />
-              </SimpleTab>
-              <SimpleTab name="info">
-                <InfoTab workflow={workflow} />
-              </SimpleTab>
-            </SimpleTabs>
-          </Container>
-        </Box>
+                <SimpleTab name="mappers">
+                  <MappersTable mappers={workflow.mappers} />
+                </SimpleTab>
+                <SimpleTab name="value maps">
+                  <Valuemaps vmaps={workflow.vmaps} />
+                </SimpleTab>
+                <SimpleTab name="releases">
+                  <Releases
+                    component={workflow.name}
+                    compact
+                    location={this.props.location}
+                    key={workflow.name}
+                  />
+                </SimpleTab>
+                {workflow && workflow.process ? (
+                  <SimpleTab name="process">
+                    <InfoTable
+                      object={{
+                        ...workflow.process,
+                        ...{ memory: workflow.process.priv_str },
+                      }}
+                      omit={['priv', 'rss', 'vsz', 'priv_str']}
+                    />
+                  </SimpleTab>
+                ) : (
+                  <SimpleTab name="process">
+                    <NonIdealState
+                      title="Process unavailable"
+                      description="This workflow is not running under a process"
+                      visual="warning-sign"
+                    />
+                  </SimpleTab>
+                )}
+                <SimpleTab name="order stats">
+                  <StatsTab orderStats={workflow.order_stats} />
+                </SimpleTab>
+                <SimpleTab name="info">
+                  <InfoTab workflow={workflow} />
+                </SimpleTab>
+              </SimpleTabs>
+            </Container>
+          </Box>
+        )}
       </DetailPane>
     );
   }

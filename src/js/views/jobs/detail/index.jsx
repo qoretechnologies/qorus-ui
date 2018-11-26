@@ -6,6 +6,7 @@ import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/pure';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
+import size from 'lodash/size';
 
 import { DetailTab } from './tabs';
 import MappersTable from '../../../containers/mappers';
@@ -55,8 +56,8 @@ const Detail = ({
       tabs: [
         'Detail',
         'Process',
-        'Mappers',
-        'Valuemaps',
+        { title: 'Mappers', suffix: `(${size(model.mappers)})` },
+        { title: 'Value maps', suffix: `(${size(model.vmaps)})` },
         'Releases',
         'Code',
         'Log',
@@ -114,7 +115,7 @@ const Detail = ({
           <SimpleTab name="mappers">
             <MappersTable mappers={model.mappers} />
           </SimpleTab>
-          <SimpleTab name="valuemaps">
+          <SimpleTab name="value maps">
             <Valuemaps vmaps={model.vmaps} />
           </SimpleTab>
           <SimpleTab name="releases">
