@@ -5,15 +5,17 @@ import Pull from '../../Pull';
 import withTabs from '../../../hocomponents/withTabs';
 import capitalize from 'lodash/capitalize';
 import includes from 'lodash/includes';
+import isArray from 'lodash/isArray';
+import map from 'lodash/map';
 
 import CrumbTab from './tab';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
-import lifecycle from 'recompose/lifecycle';
+import mapProps from 'recompose/mapProps';
 
 type Props = {
-  tabs: Array<string>,
+  tabs: Array<string> | Object,
   handleTabChange: Function,
   tabQuery?: string,
   compact?: boolean,
@@ -45,7 +47,7 @@ class CrumbTabs extends React.Component {
     }
   };
 
-  handleTabsResize: Function = (props: Props): void => {
+  handleTabsResize: Function = (): void => {
     if (this._tabsWrapper) {
       const parent: any = findDOMNode(this._tabsWrapper).parentNode.parentNode;
 
@@ -72,9 +74,10 @@ class CrumbTabs extends React.Component {
   };
 
   render() {
-    const { tabs, handleTabChange, tabQuery, compact }: Props = this.props;
+    const { tabs, handleTabChange, tabQuery }: Props = this.props;
     const { tabsLen } = this.state;
     const tabsCollapsed = tabs.length > tabsLen;
+
     let newTabs: Array<string> = tabs;
     let leftoverTabs: Array<string> = [];
 
@@ -84,18 +87,19 @@ class CrumbTabs extends React.Component {
       leftoverTabs = tabs.slice(tabsLen - 1, tabs.length);
     }
 
-    const leftoverTabSelected = includes(leftoverTabs, capitalize(tabQuery));
-
-    console.log(leftoverTabSelected);
+    const leftoverTabSelected = leftoverTabs.find(
+      (tab: Object): boolean => tab.tabId === capitalize(tabQuery)
+    );
 
     return (
       <Pull className="breadcrumb-tabs" handleRef={this.handleRef}>
         {newTabs.map(
-          (tab: string): React.Element<CrumbTab> => (
+          (tab: Object): React.Element<CrumbTab> => (
             <CrumbTab
-              key={tab}
-              active={tab.toLowerCase() === tabQuery}
-              title={tab}
+              key={tab.title}
+              active={tab.tabId.toLowerCase() === tabQuery}
+              title={tab.title}
+              tabId={tab.tabId}
               onClick={handleTabChange}
             />
           )
@@ -109,14 +113,15 @@ class CrumbTabs extends React.Component {
               <Menu>
                 {leftoverTabs
                   .filter(
-                    (tab: string): boolean => tab.toLowerCase() !== tabQuery
+                    (tab: Object): boolean =>
+                      tab.tabId.toLowerCase() !== tabQuery
                   )
                   .map(
                     (tab: string): React.Element<MenuItem> => (
                       <MenuItem
-                        key={tab}
-                        text={tab}
-                        onClick={() => handleTabChange(tab.toLowerCase())}
+                        key={tab.title}
+                        text={tab.title}
+                        onClick={() => handleTabChange(tab.tabId.toLowerCase())}
                       />
                     )
                   )}
@@ -136,8 +141,19 @@ class CrumbTabs extends React.Component {
 }
 
 export default compose(
+  mapProps(
+    ({ tabs, ...rest }: Props): Props => ({
+      tabs: isArray(tabs)
+        ? tabs.map((tab: string): Object => ({ title: tab, tabId: tab }))
+        : map(tabs, (data: Object, title: string) => ({
+            tabId: title,
+            title: data.suffix ? `${title} ${suffix}` : title,
+          })),
+      ...rest,
+    })
+  ),
   withTabs(
-    ({ defaultTab, tabs }) => defaultTab || tabs[0].toLowerCase(),
+    ({ defaultTab, tabs }) => defaultTab || tabs[0].tabId.toLowerCase(),
     ({ queryIdentifier }) => queryIdentifier || 'tab'
   ),
   onlyUpdateForKeys(['tabQuery', 'tabs', 'parentRef'])
