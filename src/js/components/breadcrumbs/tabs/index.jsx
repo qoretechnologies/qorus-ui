@@ -5,7 +5,7 @@ import Pull from '../../Pull';
 import withTabs from '../../../hocomponents/withTabs';
 import capitalize from 'lodash/capitalize';
 import includes from 'lodash/includes';
-import isArray from 'lodash/isArray';
+import isString from 'lodash/isString';
 import map from 'lodash/map';
 
 import CrumbTab from './tab';
@@ -15,7 +15,7 @@ import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
 
 type Props = {
-  tabs: Array<string> | Object,
+  tabs: Array<string>,
   handleTabChange: Function,
   tabQuery?: string,
   compact?: boolean,
@@ -143,12 +143,15 @@ class CrumbTabs extends React.Component {
 export default compose(
   mapProps(
     ({ tabs, ...rest }: Props): Props => ({
-      tabs: isArray(tabs)
-        ? tabs.map((tab: string): Object => ({ title: tab, tabId: tab }))
-        : map(tabs, (data: Object, title: string) => ({
-            tabId: title,
-            title: data.suffix ? `${title} ${suffix}` : title,
-          })),
+      tabs: tabs.map(
+        (tab: string | Object): Object =>
+          isString(tab)
+            ? { title: tab, tabId: tab }
+            : {
+                title: `${tab.title}${tab.suffix ? ` ${tab.suffix}` : ''}`,
+                tabId: tab.title,
+              }
+      ),
       ...rest,
     })
   ),
