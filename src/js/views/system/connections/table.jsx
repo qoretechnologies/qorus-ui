@@ -1,14 +1,11 @@
 /* @flow */
 import React from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import defaultProps from 'recompose/defaultProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import { withRouter } from 'react-router';
-import { Button, Icon } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import titleManager from '../../../hocomponents/TitleManager';
 import capitalize from 'lodash/capitalize';
 
@@ -19,20 +16,15 @@ import {
   FixedRow,
   Th,
 } from '../../../components/new_table';
-import sync from '../../../hocomponents/sync';
-import patch from '../../../hocomponents/patchFuncArgs';
-import actions from '../../../store/api/actions';
 import withSort from '../../../hocomponents/sort';
 import withLoadMore from '../../../hocomponents/loadMore';
 import { sortDefaults } from '../../../constants/sort';
-import { resourceSelector, querySelector } from '../../../selectors';
 import withPane from '../../../hocomponents/pane';
 import withModal from '../../../hocomponents/modal';
 import ConnectionPane from './pane';
 import ConnectionRow from './row';
 import ManageModal from './modals/manage';
 import {
-  CONN_MAP,
   ADD_PERMS_MAP,
   DELETE_PERMS_MAP,
   EDIT_PERMS_MAP,
@@ -41,8 +33,8 @@ import { findBy } from '../../../helpers/search';
 import { hasPermission } from '../../../helpers/user';
 import Pull from '../../../components/Pull';
 import LoadMore from '../../../components/LoadMore';
-import { AlertColumnHeader } from '../../../components/AlertColumn';
 import { NameColumnHeader } from '../../../components/NameColumn';
+import queryControl from '../../../hocomponents/queryControl';
 
 type Props = {
   location: Object,
@@ -69,40 +61,9 @@ type Props = {
   canDelete: boolean,
   canAdd: boolean,
   canEdit: boolean,
+  searchQuery?: string,
+  remoteType: string,
 };
-
-const remotesSelector: Function = (state: Object, props: Object): Array<*> =>
-  state.api.remotes.data.filter(
-    a => a.conntype.toLowerCase() === CONN_MAP[props.type].toLowerCase()
-  );
-
-const filterRemotes: Function = (query: string): Function => (
-  remotes: Array<Object>
-) =>
-  findBy(
-    ['name', 'url', 'desc', 'options', 'type', 'status', 'user', 'db', 'pass'],
-    query,
-    remotes
-  );
-
-const filteredRemotes: Function = createSelector(
-  [remotesSelector, querySelector('search')],
-  (remotes: Array<Object>, query: ?string): Array<Object> =>
-    filterRemotes(query)(remotes)
-);
-
-const viewSelector: Function = createSelector(
-  [
-    resourceSelector('remotes'),
-    filteredRemotes,
-    resourceSelector('currentUser'),
-  ],
-  (meta, remotes, currentUser) => ({
-    meta,
-    perms: currentUser.data.permissions,
-    remotes,
-  })
-);
 
 const ConnectionTable: Function = ({
   sortData,
@@ -188,15 +149,24 @@ const ConnectionTable: Function = ({
 
 export default compose(
   withRouter,
-  connect(
-    viewSelector,
-    {
-      load: actions.remotes.fetch,
-    }
-  ),
-  defaultProps({ query: { action: 'all', with_passwords: true } }),
+  queryControl('search'),
   mapProps(
-    ({ type, perms, ...rest }: Props): Props => ({
+    ({ type, perms, remotes, searchQuery, ...rest }: Props): Props => ({
+      remotes: findBy(
+        [
+          'name',
+          'url',
+          'desc',
+          'options',
+          'type',
+          'status',
+          'user',
+          'db',
+          'pass',
+        ],
+        searchQuery,
+        remotes
+      ),
       remoteType: type,
       canDelete: hasPermission(perms, DELETE_PERMS_MAP[type], 'or'),
       canAdd: hasPermission(perms, ADD_PERMS_MAP[type], 'or'),
@@ -206,8 +176,6 @@ export default compose(
       ...rest,
     })
   ),
-  patch('load', ['query']),
-  sync('meta'),
   withSort(({ type }: Props): string => type, 'remotes', sortDefaults.remote),
   withLoadMore('remotes', 'remotes', true, 50),
   withPane(ConnectionPane, ['remoteType', 'canEdit'], null, 'connections'),
