@@ -34,22 +34,24 @@ const AuditTable: Function = ({
     <Thead>
       {collection.length !== 0 && (
         <FixedRow className="toolbar-row">
-          <Pull right>
-            <Dropdown id="show">
-              <DropdownToggle>Showing: {limit}</DropdownToggle>
-              <DropdownItem title="10" action={onItemClick} />
-              <DropdownItem title="25" action={onItemClick} />
-              <DropdownItem title="50" action={onItemClick} />
-              <DropdownItem title="100" action={onItemClick} />
-              <DropdownItem title="500" action={onItemClick} />
-              <DropdownItem title="1000" action={onItemClick} />
-              <DropdownItem title="All" action={onItemClick} />
-            </Dropdown>
-          </Pull>
+          <Th>
+            <Pull right>
+              <Dropdown id="show">
+                <DropdownToggle>Showing: {limit}</DropdownToggle>
+                <DropdownItem title="10" action={onItemClick} />
+                <DropdownItem title="25" action={onItemClick} />
+                <DropdownItem title="50" action={onItemClick} />
+                <DropdownItem title="100" action={onItemClick} />
+                <DropdownItem title="500" action={onItemClick} />
+                <DropdownItem title="1000" action={onItemClick} />
+                <DropdownItem title="All" action={onItemClick} />
+              </Dropdown>
+            </Pull>
+          </Th>
         </FixedRow>
       )}
       <FixedRow>
-        <Th className="narrow">Event code</Th>
+        <Th className="narrow">Code</Th>
         <Th className="narrow">Event ID</Th>
         <Th>Created</Th>
         <Th className="name">Event</Th>
@@ -64,7 +66,7 @@ const AuditTable: Function = ({
         <Tbody {...props}>
           {collection.map(
             (step: Object, index: number): React.Element<any> => (
-              <Tr key={index}>
+              <Tr key={index} first={index === 0}>
                 <Td className="narrow">{step.audit_event_code}</Td>
                 <Td className="narrow">{step.audit_eventid}</Td>
                 <Td>
