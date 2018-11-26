@@ -14,12 +14,16 @@ import titleManager from '../../../hocomponents/TitleManager';
 import withTabs from '../../../hocomponents/withTabs';
 import Pull from '../../../components/Pull';
 import queryControl from '../../../hocomponents/queryControl';
+import { connect } from 'react-redux';
 
 type Props = {
   tabQuery: string,
   location: Object,
   changeSearchQuery: Function,
   searchQuery?: string,
+  users: Array<string>,
+  roles: Array<string>,
+  perms: Array<string>,
 };
 
 const RBAC: Function = ({
@@ -27,12 +31,21 @@ const RBAC: Function = ({
   location,
   changeSearchQuery,
   searchQuery,
+  users,
+  roles,
+  perms,
 }: Props): React.Element<any> => (
   <div>
     <Headbar>
       <Breadcrumbs>
         <Crumb>RBAC</Crumb>
-        <CrumbTabs tabs={['Users', 'Roles', 'Permissions']} />
+        <CrumbTabs
+          tabs={[
+            { title: 'Users', suffix: `(${users.length})` },
+            { title: 'Roles', suffix: `(${roles.length})` },
+            { title: 'Permissions', suffix: `(${perms.length})` },
+          ]}
+        />
       </Breadcrumbs>
       <Pull right>
         <Search
@@ -59,6 +72,13 @@ const RBAC: Function = ({
 );
 
 export default compose(
+  connect(
+    (state: Object): Object => ({
+      users: state.api.users.data,
+      roles: state.api.roles.data,
+      perms: state.api.perms.data,
+    })
+  ),
   withTabs('users'),
   queryControl('search'),
   titleManager('RBAC')

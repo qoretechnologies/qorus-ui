@@ -4,12 +4,10 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import flowRight from 'lodash/flowRight';
-import { Button, Intent } from '@blueprintjs/core';
 
 import sync from '../../../../hocomponents/sync';
 import modal from '../../../../hocomponents/modal';
 import withDispatch from '../../../../hocomponents/withDispatch';
-import Toolbar from '../../../../components/toolbar';
 import ConfirmDialog from '../../../../components/confirm_dialog';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
