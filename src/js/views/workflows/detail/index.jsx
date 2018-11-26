@@ -124,8 +124,14 @@ export default class WorkflowsDetail extends Component {
             'Order Stats',
             'Process',
             'Releases',
-            'Value maps',
-            'Mappers',
+            {
+              title: 'Value maps',
+              suffix: `(${workflow.vmaps ? workflow.vmaps.length : 0})`,
+            },
+            {
+              title: 'Mappers',
+              suffix: `(${workflow.mappers ? workflow.mappers.length : 0})`,
+            },
             'Errors',
             'Code',
             'Log',
