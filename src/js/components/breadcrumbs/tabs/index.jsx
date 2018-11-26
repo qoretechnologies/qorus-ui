@@ -4,9 +4,7 @@ import { findDOMNode } from 'react-dom';
 import Pull from '../../Pull';
 import withTabs from '../../../hocomponents/withTabs';
 import capitalize from 'lodash/capitalize';
-import includes from 'lodash/includes';
 import isString from 'lodash/isString';
-import map from 'lodash/map';
 
 import CrumbTab from './tab';
 import compose from 'recompose/compose';
@@ -15,7 +13,7 @@ import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
 
 type Props = {
-  tabs: Array<string>,
+  tabs: Array<string | Object>,
   handleTabChange: Function,
   tabQuery?: string,
   compact?: boolean,
