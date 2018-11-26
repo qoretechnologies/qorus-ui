@@ -1,8 +1,5 @@
 // @flow
 import React from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import { flowRight } from 'lodash';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 
@@ -15,12 +12,9 @@ import {
 } from '../../../components/new_table';
 import withSort from '../../../hocomponents/sort';
 import withLoadMore from '../../../hocomponents/loadMore';
-import sync from '../../../hocomponents/sync';
 import withPane from '../../../hocomponents/pane';
-import actions from '../../../store/api/actions';
 import { sortDefaults } from '../../../constants/sort';
 import { findBy } from '../../../helpers/search';
-import { resourceSelector } from '../../../selectors';
 import AlertsPane from './pane';
 import AlertRow from './row';
 import NoDataIf from '../../../components/NoDataIf';
@@ -28,6 +22,7 @@ import LoadMore from '../../../components/LoadMore';
 import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
 import { NameColumnHeader } from '../../../components/NameColumn';
+import mapProps from 'recompose/mapProps';
 
 type Props = {
   type: string,
@@ -43,6 +38,7 @@ type Props = {
   paneId: string,
   location: Object,
   limit: number,
+  query: string,
 };
 
 const AlertsTable: Function = ({
@@ -114,48 +110,16 @@ const AlertsTable: Function = ({
   </div>
 );
 
-const filterCollection: Function = (type: string): Function => (
-  alerts: Array<Object>
-): Array<Object> =>
-  alerts.filter(
-    (alert: Object): boolean => alert.alerttype.toLowerCase() === type
-  );
-
-const searchCollection: Function = (query: string): Function => (
-  collection: Array<Object>
-): Array<Object> => findBy(['alerttype', 'alert', 'name'], query, collection);
-
-const collectionSelector = createSelector(
-  [
-    resourceSelector('alerts'),
-    (state, props) => props.type,
-    (state, props) => props.location.query[`${props.type}Search`],
-  ],
-  (alerts, type, search) =>
-    flowRight(
-      filterCollection(type),
-      searchCollection(search)
-    )(alerts.data)
-);
-
-const viewSelector = createSelector(
-  [resourceSelector('alerts'), collectionSelector],
-  (meta, alerts) => ({
-    meta,
-    alerts,
-  })
-);
-
 export default compose(
-  connect(
-    viewSelector,
-    {
-      load: actions.alerts.fetch,
-    }
+  mapProps(
+    ({ alerts, query, ...rest }: Props): Props => ({
+      alerts: findBy(['alerttype', 'alert', 'name'], query, alerts),
+      query,
+      ...rest,
+    })
   ),
   withSort(({ type }: Props): string => type, 'alerts', sortDefaults.alerts),
   withLoadMore('alerts', 'alerts', true, 50),
-  sync('meta'),
   withPane(AlertsPane, null, null, 'alerts'),
   titleManager(({ type }): string => `Alerts ${type}`),
   pure(['alerts', 'location', 'paneId', 'canLoadMore', 'sortData'])

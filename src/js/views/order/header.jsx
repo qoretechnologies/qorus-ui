@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import size from 'lodash/size';
 
 import OrderControls from '../workflow/tabs/list/controls';
 import WorkflowControls from '../workflows/controls';
@@ -16,7 +17,6 @@ import {
 import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
 import { normalizeName } from '../../components/utils';
-import { Intent, Icon } from '@blueprintjs/core';
 
 @queryControl('target')
 @queryControl('prevQuery')
@@ -93,7 +93,7 @@ export default class OrderHeader extends Component {
   };
 
   render() {
-    const { prevQueryQuery, targetQuery, workflow } = this.props;
+    const { prevQueryQuery, targetQuery, workflow, data } = this.props;
     const target = targetQuery || `/workflow/${workflow.id}?tab=orders`;
 
     const backQueriesObj = prevQueryQuery
@@ -125,13 +125,13 @@ export default class OrderHeader extends Component {
           <CrumbTabs
             tabs={[
               'Overview',
-              'Steps',
+              { title: 'Steps', suffix: `(${size(data.StepInstances)})` },
               'Data',
-              'Errors',
-              'Hierarchy',
-              'Audit',
+              { title: 'Errors', suffix: `(${size(data.ErrorInstances)})` },
+              { title: 'Hierarchy', suffix: `(${size(data.HierarchyInfo)})` },
+              { title: 'Audit', suffix: `(${size(data.AuditEvents)})` },
               'Info',
-              'Notes',
+              { title: 'Notes', suffix: `(${size(data.notes)})` },
               'Log',
               'Code',
             ]}

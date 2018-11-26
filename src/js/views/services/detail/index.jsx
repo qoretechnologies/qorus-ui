@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
+import size from 'lodash/size';
 
 import DetailPane from 'components/pane';
 import Box from 'components/box';
@@ -106,7 +107,7 @@ export default class ServicesDetail extends Component {
   };
 
   render() {
-    const { service, paneTab, systemOptions } = this.props;
+    const { service, paneTab, systemOptions, methods } = this.props;
     const loaded: boolean = service && service.created;
 
     return (
@@ -119,10 +120,10 @@ export default class ServicesDetail extends Component {
           tabs: [
             'Detail',
             'Code',
-            'Methods',
+            { title: 'Methods', suffix: `(${size(methods)})` },
             'Log',
-            'Mappers',
-            'Valuemaps',
+            { title: 'Mappers', suffix: `(${size(service.mappers)})` },
+            { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
             'Resources',
             'Releases',
           ],
@@ -159,7 +160,7 @@ export default class ServicesDetail extends Component {
                 <SimpleTab name="mappers">
                   <MappersTable mappers={service.mappers} />
                 </SimpleTab>
-                <SimpleTab name="valuemaps">
+                <SimpleTab name="value maps">
                   <Valuemaps vmaps={service.vmaps} />
                 </SimpleTab>
                 <SimpleTab name="resources">

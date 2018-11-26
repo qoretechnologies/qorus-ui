@@ -24,6 +24,7 @@ import Filters from '../../../workflow/tabs/list/toolbar/filters';
 import { JOB_STATES } from '../../../../constants/jobs';
 import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 import InstancesBar from '../../../../components/instances_bar';
+import { NameColumnHeader } from '../../../../components/NameColumn';
 
 type Props = {
   collection: Array<Object>,
@@ -98,10 +99,7 @@ const ResultTable = ({
         </Th>
       </FixedRow>
       <FixedRow onSortChange={onSortChange} sortData={sortData}>
-        <Th name="job_instanceid" className="normal">
-          ID
-        </Th>
-        <Th className="narrow">Detail</Th>
+        <NameColumnHeader title="Instance ID" name="job_instanceid" />
         <Th name="jobstatus" className="medium">
           Status
         </Th>

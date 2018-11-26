@@ -9,6 +9,7 @@ import mapProps from 'recompose/mapProps';
 
 type Props = {
   title: string,
+  tabId: string,
   active: boolean,
   onClick: Function,
   handleClick: Function,
@@ -37,8 +38,8 @@ const CrumbTab: Function = ({
 
 export default compose(
   withHandlers({
-    handleClick: ({ title, active, onClick }): Function => (): any =>
-      active ? null : onClick ? onClick(title.toLowerCase()) : null,
+    handleClick: ({ tabId, active, onClick }): Function => (): any =>
+      active ? null : onClick ? onClick(tabId.toLowerCase()) : null,
   }),
   mapProps(
     ({ title, ...rest }): Props => ({
