@@ -8,6 +8,7 @@ type Props = {
   className?: string,
   width?: number,
   fill?: boolean,
+  noOverflow?: boolean,
 };
 
 @pure(['children'])
@@ -54,7 +55,7 @@ class Container extends Component {
   };
 
   render() {
-    const { className, children, width, fill } = this.props;
+    const { className, children, width, fill, noOverflow } = this.props;
     const { height } = this.state;
 
     return (
@@ -64,6 +65,7 @@ class Container extends Component {
         style={{
           [fill ? 'height' : 'maxHeight']: height,
           width: width || '100%',
+          overflowY: noOverflow ? 'hidden' : 'auto',
         }}
       >
         {children}
