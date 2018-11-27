@@ -988,6 +988,7 @@ export default class StepsTab extends Component {
         ref={this.wrapperRef}
         className="diagram-inner"
         style={{
+          margin: '0 auto',
           width: diaWidth,
         }}
       >
