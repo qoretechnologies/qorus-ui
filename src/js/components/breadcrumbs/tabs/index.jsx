@@ -13,7 +13,7 @@ import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
 
 type Props = {
-  tabs: Array<string | Object>,
+  tabs: Array<any>,
   handleTabChange: Function,
   tabQuery?: string,
   compact?: boolean,
@@ -28,6 +28,7 @@ class CrumbTabs extends React.Component {
   _tabsWrapper: any;
 
   state = {
+    showTabs: false,
     tabsLen: 0,
   };
 
@@ -66,6 +67,7 @@ class CrumbTabs extends React.Component {
       });
 
       this.setState(() => ({
+        showTabs: true,
         tabsLen: Math.floor((parentWidth - childrenWidth) / 117),
       }));
     }
@@ -73,7 +75,7 @@ class CrumbTabs extends React.Component {
 
   render() {
     const { tabs, handleTabChange, tabQuery }: Props = this.props;
-    const { tabsLen } = this.state;
+    const { tabsLen, showTabs } = this.state;
     const tabsCollapsed = tabs.length > tabsLen;
 
     let newTabs: Array<Object> = tabs;
@@ -91,48 +93,52 @@ class CrumbTabs extends React.Component {
 
     return (
       <Pull className="breadcrumb-tabs" handleRef={this.handleRef}>
-        {newTabs.map(
-          (tab: Object): React.Element<CrumbTab> => (
-            <CrumbTab
-              key={tab.title}
-              active={tab.tabId.toLowerCase() === tabQuery}
-              title={tab.title}
-              tabId={tab.tabId}
-              onClick={handleTabChange}
-            />
-          )
-        )}
-        {leftoverTabs.length !== 0 && (
-          <Popover
-            position={Position.BOTTOM}
-            useSmartPositioning
-            useSmartArrowPositioning
-            content={
-              <Menu>
-                {leftoverTabs
-                  .filter(
-                    (tab: Object): boolean =>
-                      tab.tabId.toLowerCase() !== tabQuery
-                  )
-                  .map(
-                    (tab: string): React.Element<MenuItem> => (
-                      <MenuItem
-                        key={tab.title}
-                        text={tab.title}
-                        onClick={() => handleTabChange(tab.tabId.toLowerCase())}
-                      />
+        {showTabs && [
+          newTabs.map(
+            (tab: Object): React.Element<CrumbTab> => (
+              <CrumbTab
+                key={tab.title}
+                active={tab.tabId.toLowerCase() === tabQuery}
+                title={tab.title}
+                tabId={tab.tabId}
+                onClick={handleTabChange}
+              />
+            )
+          ),
+          leftoverTabs.length !== 0 && (
+            <Popover
+              position={Position.BOTTOM}
+              useSmartPositioning
+              useSmartArrowPositioning
+              content={
+                <Menu>
+                  {leftoverTabs
+                    .filter(
+                      (tab: Object): boolean =>
+                        tab.tabId.toLowerCase() !== tabQuery
                     )
-                  )}
-              </Menu>
-            }
-          >
-            <CrumbTab
-              title={leftoverTabSelected ? capitalize(tabQuery) : 'More...'}
-              active={leftoverTabSelected}
-              compact
-            />
-          </Popover>
-        )}
+                    .map(
+                      (tab: string): React.Element<MenuItem> => (
+                        <MenuItem
+                          key={tab.title}
+                          text={tab.title}
+                          onClick={() =>
+                            handleTabChange(tab.tabId.toLowerCase())
+                          }
+                        />
+                      )
+                    )}
+                </Menu>
+              }
+            >
+              <CrumbTab
+                title={leftoverTabSelected ? capitalize(tabQuery) : 'More...'}
+                active={leftoverTabSelected}
+                compact
+              />
+            </Popover>
+          ),
+        ]}
       </Pull>
     );
   }
