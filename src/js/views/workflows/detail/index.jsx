@@ -108,16 +108,24 @@ export default class WorkflowsDetail extends Component {
   };
 
   render() {
-    const { workflow, systemOptions, paneTab, errors } = this.props;
+    const {
+      workflow,
+      systemOptions,
+      paneTab,
+      errors,
+      band,
+      width,
+      onResize,
+    } = this.props;
     const loaded: boolean =
       workflow && 'lib' in workflow && errors[`workflow/${workflow.id}`];
 
     return (
       <DetailPane
-        width={this.props.width || 600}
+        width={width || 600}
         onClose={this.handleClose}
-        onResize={this.props.onResize}
-        title={`Workflow ${this.props.workflow.id}`}
+        onResize={onResize}
+        title={`Workflow ${workflow.id}`}
         tabs={{
           tabs: [
             'Detail',
@@ -150,6 +158,7 @@ export default class WorkflowsDetail extends Component {
                     key={workflow.name}
                     workflow={workflow}
                     systemOptions={systemOptions}
+                    band={band}
                   />
                 </SimpleTab>
                 <SimpleTab name="code">

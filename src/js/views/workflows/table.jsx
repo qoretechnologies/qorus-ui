@@ -78,7 +78,7 @@ const WorkflowsTable: Function = ({
   selected,
   selectedIds,
   location,
-  dispositionQuery: dispositionQuery = '24 hour band',
+  band,
   handleDispositionChange,
   limit,
   handleLoadMore,
@@ -129,7 +129,7 @@ const WorkflowsTable: Function = ({
         </Th>
         <Th className="separated-cell" colspan={2}>
           <Dropdown>
-            <Control icon="time">{dispositionQuery}</Control>
+            <Control icon="time">{band}</Control>
             <Item title="1 hour band" onClick={handleDispositionChange} />
             <Item title="4 hour band" onClick={handleDispositionChange} />
             <Item title="24 hour band" onClick={handleDispositionChange} />
@@ -185,7 +185,7 @@ const WorkflowsTable: Function = ({
                 expanded={expanded}
                 isTablet={isTablet}
                 setRemote={setRemote}
-                band={dispositionQuery.replace(/ /g, '_')}
+                band={band.replace(/ /g, '_')}
                 {...workflow}
               />
             )
@@ -205,7 +205,6 @@ export default compose(
     }
   ),
   withModal(),
-  queryControl('disposition'),
   withHandlers({
     handleInstancesClick: ({
       sortData,
@@ -239,6 +238,6 @@ export default compose(
     'isTablet',
     'totalInstances',
     'dateQuery',
-    'dispositionQuery',
+    'band',
   ])
 )(WorkflowsTable);

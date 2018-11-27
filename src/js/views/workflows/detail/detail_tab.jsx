@@ -1,10 +1,11 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
-import { Groups, Group } from 'components/groups';
+import { Groups, Group } from '../../../components/groups';
 import Options from '../../../components/options';
 import { connect } from 'react-redux';
 
 import AlertsTab from '../../../components/alerts_table';
-import actions from 'store/api/actions';
+import actions from '../../../store/api/actions';
 import { ORDER_STATES } from '../../../constants/orders';
 import PaneItem from '../../../components/pane_item';
 
@@ -17,8 +18,15 @@ import Autostart from '../autostart';
 import withDispatch from '../../../hocomponents/withDispatch';
 import InfoHeader from '../../../components/InfoHeader';
 import NoDataIf from '../../../components/NoDataIf';
-import DispositionChart from '../../../components/disposition_chart';
-import MultiDispositionChart from '../../../components/MultiDispositionChart';
+import {
+  buildOrderStatsDisposition,
+  buildOrderStatsSLA,
+} from '../../../helpers/workflows';
+import InstancesBar from '../../../components/instances_bar';
+import Dropdown, {
+  Item,
+  Control as DControl,
+} from '../../../components/dropdown';
 
 @connect(
   null,
@@ -33,12 +41,17 @@ export default class DetailTab extends Component {
     systemOptions: PropTypes.array.isRequired,
     setOptions: PropTypes.func.isRequired,
     dispatchAction: PropTypes.func.isRequired,
+    band: PropTypes.string.isRequired,
   };
 
   state: {
     slaThreshold: string,
+    dispositionBand: string,
+    slaBand: string,
   } = {
     slaThreshold: this.props.workflow.sla_threshold,
+    dispositionBand: this.props.band,
+    slaBand: this.props.band,
   };
 
   setOption = opt => {
@@ -51,6 +64,17 @@ export default class DetailTab extends Component {
 
   handleThresholdChange = event => {
     this.setState({ slaThreshold: event.target.value });
+  };
+
+  handleDispositionBandChange: Function = (
+    event: Object,
+    dispositionBand: string
+  ): void => {
+    this.setState({ dispositionBand });
+  };
+
+  handleSlaBandChange: Function = (event: Object, slaBand: string): void => {
+    this.setState({ slaBand });
   };
 
   handleSubmit: Function = e => {
@@ -67,6 +91,18 @@ export default class DetailTab extends Component {
 
   render() {
     const { workflow, systemOptions } = this.props;
+    const { dispositionBand, slaBand } = this.state;
+
+    const dispositionStats: ?Object =
+      workflow.order_stats &&
+      buildOrderStatsDisposition(
+        workflow.order_stats,
+        dispositionBand.replace(/ /g, '_')
+      );
+
+    const slaStats: ?Object =
+      workflow.order_stats &&
+      buildOrderStatsSLA(workflow.order_stats, slaBand.replace(/ /g, '_'));
 
     return (
       <div>
@@ -103,10 +139,68 @@ export default class DetailTab extends Component {
           </ButtonGroup>
         </PaneItem>
         {workflow.order_stats && (
-          <MultiDispositionChart
-            title="Order Stats"
-            orderStats={workflow.order_stats}
-          />
+          <PaneItem
+            title="Order Stats - Disposition (%)"
+            label={
+              <Dropdown>
+                <DControl small icon="time">
+                  {dispositionBand}
+                </DControl>
+                <Item
+                  title="1 hour band"
+                  action={this.handleDispositionBandChange}
+                />
+                <Item
+                  title="4 hour band"
+                  action={this.handleDispositionBandChange}
+                />
+                <Item
+                  title="24 hour band"
+                  action={this.handleDispositionBandChange}
+                />
+              </Dropdown>
+            }
+          >
+            <InstancesBar
+              states={[
+                { name: 'completed', label: 'complete' },
+                { name: 'automatically', label: 'automatic' },
+                { name: 'manually', label: 'error' },
+              ]}
+              instances={dispositionStats}
+              totalInstances={dispositionStats.total}
+              workflowId={workflow.id}
+              showPct
+              minWidth={25}
+            />
+          </PaneItem>
+        )}
+        {workflow.order_stats && (
+          <PaneItem
+            title="Order Stats - SLA (%)"
+            label={
+              <Dropdown>
+                <DControl small icon="time">
+                  {slaBand}
+                </DControl>
+                <Item title="1 hour band" action={this.handleSlaBandChange} />
+                <Item title="4 hour band" action={this.handleSlaBandChange} />
+                <Item title="24 hour band" action={this.handleSlaBandChange} />
+              </Dropdown>
+            }
+          >
+            <InstancesBar
+              states={[
+                { name: 'In SLA', label: 'complete' },
+                { name: 'Out of SLA', label: 'error' },
+              ]}
+              showPct
+              minWidth={25}
+              instances={slaStats}
+              totalInstances={slaStats.total}
+              workflowId={workflow.id}
+            />
+          </PaneItem>
         )}
         <AlertsTab alerts={workflow.alerts} />
         <ProcessSummary process={workflow.process} />
