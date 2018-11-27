@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, Intent } from '@blueprintjs/core';
 
 import { pureRender } from '../utils';
 import Toolbar from '../toolbar';
+import { Controls as ButtonGroup, Control as Button } from '../controls';
 
 /**
  * Drop-down component with a button to add options.
@@ -68,31 +68,31 @@ export default class SystemOptions extends Component {
   renderOptions() {
     return (
       <form className="form-inline" onSubmit={::this.commit}>
-        <select
-          className="form-control"
-          value={this.state.selected && this.state.selected.name}
-          onChange={::this.onChange}
-        >
-          {this.props.options.map(opt => (
-            <option key={opt.name} value={opt.name}>
-              {opt.name}
-            </option>
-          ))}
-        </select>
-        <Button
-          type="submit"
-          intent={Intent.PRIMARY}
-          className="pt-small"
-          iconName="plus"
-          text="Submit"
-        />
-        <Button
-          type="button"
-          className="pt-small"
-          onClick={::this.cancel}
-          iconName="cross"
-          text="Cancel"
-        />
+        <ButtonGroup>
+          <select
+            className="form-control"
+            value={this.state.selected && this.state.selected.name}
+            onChange={::this.onChange}
+          >
+            {this.props.options.map(opt => (
+              <option key={opt.name} value={opt.name}>
+                {opt.name}
+              </option>
+            ))}
+          </select>
+          <Button
+            type="submit"
+            btnStyle="primary"
+            iconName="plus"
+            text="Submit"
+          />
+          <Button
+            type="button"
+            onClick={::this.cancel}
+            iconName="cross"
+            text="Cancel"
+          />
+        </ButtonGroup>
       </form>
     );
   }
@@ -104,13 +104,16 @@ export default class SystemOptions extends Component {
    */
   renderButton() {
     return (
-      <Button
-        intent={Intent.PRIMARY}
-        onClick={::this.start}
-        disabled={!this.props.options.length}
-        text="Add option"
-        iconName="plus"
-      />
+      <ButtonGroup>
+        <Button
+          btnStyle="primary"
+          onClick={::this.start}
+          disabled={!this.props.options.length}
+          text="Add option"
+          iconName="plus"
+          big
+        />
+      </ButtonGroup>
     );
   }
 
