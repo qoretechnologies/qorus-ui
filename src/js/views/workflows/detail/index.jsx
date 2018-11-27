@@ -22,6 +22,7 @@ import Box from '../../../components/box';
 import StatsTab from './stats';
 import titleManager from '../../../hocomponents/TitleManager';
 import Container from '../../../components/container';
+import PaneItem from '../../../components/pane_item';
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
@@ -158,15 +159,17 @@ export default class WorkflowsDetail extends Component {
                   />
                 </SimpleTab>
                 <SimpleTab name="steps">
-                  <div
-                    style={{
-                      height: '100%',
-                      overflow: 'auto',
-                    }}
-                    ref={this.diagramRef}
-                  >
-                    <StepsTab workflow={workflow} />
-                  </div>
+                  <PaneItem title={workflow.normalizedName}>
+                    <div
+                      style={{
+                        height: '100%',
+                        overflow: 'auto',
+                      }}
+                      ref={this.diagramRef}
+                    >
+                      <StepsTab workflow={workflow} />
+                    </div>
+                  </PaneItem>
                 </SimpleTab>
                 <SimpleTab name="log">
                   <LogTab

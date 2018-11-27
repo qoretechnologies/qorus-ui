@@ -7,6 +7,7 @@ import StepModal from '../../../workflows/detail/step_modal';
 import { pureRender } from '../../../../components/utils';
 import { groupInstances } from '../../../../helpers/orders';
 import { graph } from '../../../../lib/graph';
+import { COLORS } from '../../../../constants/ui';
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -672,10 +673,13 @@ export default class StepsTab extends Component {
         className={`diagram__box status-${css}-diagram`}
         transform={this.getBoxTransform(colIdx, rowIdx)}
       >
-        <ellipse {...this.getStartParams()} />
-        <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
-          {this.getStepFullname(stepId)}
-        </text>
+        <circle
+          transform={`translate(${this.getBoxWidth() / 2 - 22} 22)`}
+          cx="22"
+          cy="22"
+          r="22"
+          fill={COLORS.cobalt}
+        />
       </g>
     );
   }
