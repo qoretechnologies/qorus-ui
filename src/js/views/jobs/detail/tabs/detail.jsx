@@ -20,6 +20,7 @@ import PaneItem from '../../../../components/pane_item';
 import withDispatch from '../../../../hocomponents/withDispatch';
 import withHandlers from 'recompose/withHandlers';
 import ProcessSummary from '../../../../components/ProcessSummary';
+import Container from '../../../../components/container';
 
 type Props = {
   model: Object,
@@ -40,59 +41,60 @@ const DetailTab = ({
 }: Props) => (
   <div>
     <InfoHeader model={model} />
-    {isTablet &&
-      model.expiry_date && (
+    <Container fill>
+      {isTablet && model.expiry_date && (
         <PaneItem title="Expiry date">
           <Date date={model.expiry_date} />
         </PaneItem>
       )}
-    <PaneItem title="Schedule">
-      <JobControls
-        enabled={model.enabled}
-        active={model.active}
-        id={model.id}
-        minute={model.minute}
-        hour={model.hour}
-        day={model.day}
-        month={model.month}
-        week={model.wday}
-        remote={model.remote}
-      />
-      <JobControls
-        scheduleOnly
-        id={model.id}
-        schedText={model.sched_txt}
-        minute={model.minute}
-        hour={model.hour}
-        day={model.day}
-        month={model.month}
-        week={model.wday}
-      />
-    </PaneItem>
-    <PaneItem title="SLA">
-      <SLAControl
-        model={model}
-        setSla={handleSetSLAChange}
-        removeSla={handleRemoveSLAChange}
-        slas={slas}
-        canModify={hasPermission(perms, ['MODIFY-SLA', 'SLA-CONTROL'], 'or')}
-        type="job"
-      />
-    </PaneItem>
-    <ProcessSummary process={model.process} />
-    <AlertsTable alerts={model.alerts} />
-    <Groups>
-      {(model.groups || []).map(g => (
-        <Group
-          key={g.name}
-          name={g.name}
-          url={`/groups?group=${g.name}`}
-          size={g.size}
-          disabled={!g.enabled}
+      <PaneItem title="Schedule">
+        <JobControls
+          enabled={model.enabled}
+          active={model.active}
+          id={model.id}
+          minute={model.minute}
+          hour={model.hour}
+          day={model.day}
+          month={model.month}
+          week={model.wday}
+          remote={model.remote}
         />
-      ))}
-    </Groups>
-    <Options model={model} />
+        <JobControls
+          scheduleOnly
+          id={model.id}
+          schedText={model.sched_txt}
+          minute={model.minute}
+          hour={model.hour}
+          day={model.day}
+          month={model.month}
+          week={model.wday}
+        />
+      </PaneItem>
+      <PaneItem title="SLA">
+        <SLAControl
+          model={model}
+          setSla={handleSetSLAChange}
+          removeSla={handleRemoveSLAChange}
+          slas={slas}
+          canModify={hasPermission(perms, ['MODIFY-SLA', 'SLA-CONTROL'], 'or')}
+          type="job"
+        />
+      </PaneItem>
+      <ProcessSummary process={model.process} />
+      <AlertsTable alerts={model.alerts} />
+      <Groups>
+        {(model.groups || []).map(g => (
+          <Group
+            key={g.name}
+            name={g.name}
+            url={`/groups?group=${g.name}`}
+            size={g.size}
+            disabled={!g.enabled}
+          />
+        ))}
+      </Groups>
+      <Options model={model} />
+    </Container>
   </div>
 );
 

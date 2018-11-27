@@ -66,12 +66,12 @@ const Detail = ({
     }}
   >
     <Box top>
-      <Container fill>
-        <SimpleTabs activeTab={paneTab}>
-          <SimpleTab name="detail">
-            <DetailTab key={model.name} model={model} isTablet={isTablet} />
-          </SimpleTab>
-          <SimpleTab name="code">
+      <SimpleTabs activeTab={paneTab}>
+        <SimpleTab name="detail">
+          <DetailTab key={model.name} model={model} isTablet={isTablet} />
+        </SimpleTab>
+        <SimpleTab name="code">
+          <Container fill>
             {model.code ? (
               <Code
                 selected={{
@@ -88,10 +88,12 @@ const Detail = ({
             ) : (
               <Loader />
             )}
-          </SimpleTab>
+          </Container>
+        </SimpleTab>
 
-          {model.process ? (
-            <SimpleTab name="process">
+        {model.process ? (
+          <SimpleTab name="process">
+            <Container fill>
               <InfoTable
                 object={{
                   ...model.process,
@@ -99,35 +101,45 @@ const Detail = ({
                 }}
                 omit={['priv', 'rss', 'vsz', 'priv_str']}
               />
-            </SimpleTab>
-          ) : (
-            <SimpleTab name="process">
+            </Container>
+          </SimpleTab>
+        ) : (
+          <SimpleTab name="process">
+            <Container fill>
               <NonIdealState
                 title="Process unavailable"
                 description="This job is not running under a process"
                 visual="warning-sign"
               />
-            </SimpleTab>
-          )}
-          <SimpleTab name="log">
+            </Container>
+          </SimpleTab>
+        )}
+        <SimpleTab name="log">
+          <Container fill>
             <LogTab resource={`jobs/${model.id}`} location={location} />
-          </SimpleTab>
-          <SimpleTab name="mappers">
+          </Container>
+        </SimpleTab>
+        <SimpleTab name="mappers">
+          <Container fill>
             <MappersTable mappers={model.mappers} />
-          </SimpleTab>
-          <SimpleTab name="value maps">
+          </Container>
+        </SimpleTab>
+        <SimpleTab name="value maps">
+          <Container fill>
             <Valuemaps vmaps={model.vmaps} />
-          </SimpleTab>
-          <SimpleTab name="releases">
+          </Container>
+        </SimpleTab>
+        <SimpleTab name="releases">
+          <Container fill>
             <Releases
               component={model.name}
               compact
               key={model.name}
               location={location}
             />
-          </SimpleTab>
-        </SimpleTabs>
-      </Container>
+          </Container>
+        </SimpleTab>
+      </SimpleTabs>
     </Box>
   </DetailPane>
 );
