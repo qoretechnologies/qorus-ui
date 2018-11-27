@@ -78,8 +78,8 @@ class CrumbTabs extends React.Component {
     const { tabsLen, showTabs } = this.state;
     const tabsCollapsed = tabs.length > tabsLen;
 
-    let newTabs: Array<Object> = tabs;
-    let leftoverTabs: Array<Object> = [];
+    let newTabs: Array<any> = tabs;
+    let leftoverTabs: Array<any> = [];
 
     //* There is more tabs than we can display
     if (tabsCollapsed) {
@@ -118,7 +118,7 @@ class CrumbTabs extends React.Component {
                         tab.tabId.toLowerCase() !== tabQuery
                     )
                     .map(
-                      (tab: string): React.Element<MenuItem> => (
+                      (tab: Object): React.Element<MenuItem> => (
                         <MenuItem
                           key={tab.title}
                           text={tab.title}
@@ -148,7 +148,7 @@ export default compose(
   mapProps(
     ({ tabs, ...rest }: Props): Props => ({
       tabs: tabs.map(
-        (tab: string | Object): Object =>
+        (tab: any): Object =>
           isString(tab)
             ? { title: tab, tabId: tab }
             : {
