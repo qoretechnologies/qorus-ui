@@ -76,8 +76,8 @@ class CrumbTabs extends React.Component {
     const { tabsLen } = this.state;
     const tabsCollapsed = tabs.length > tabsLen;
 
-    let newTabs: Array<string> = tabs;
-    let leftoverTabs: Array<string> = [];
+    let newTabs: Array<Object> = tabs;
+    let leftoverTabs: Array<Object> = [];
 
     //* There is more tabs than we can display
     if (tabsCollapsed) {
