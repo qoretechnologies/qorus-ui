@@ -73,44 +73,58 @@ const getFetchParams = (filter, date = DATES.PREV_DAY) => {
 const buildOrderStatsDisposition = (
   orderStats: Object,
   band: string
-): Object => ({
-  completed: orderStats
-    .find(stat => stat.label === band)
-    .l.find(disp => disp.disposition === 'C').count,
-  automatically: orderStats
-    .find(stat => stat.label === band)
-    .l.find(disp => disp.disposition === 'A').count,
-  manually: orderStats
-    .find(stat => stat.label === band)
-    .l.find(disp => disp.disposition === 'M').count,
-  completedPct: orderStats
-    .find(stat => stat.label === band)
-    .l.find(disp => disp.disposition === 'C').pct,
-  automaticallyPct: orderStats
-    .find(stat => stat.label === band)
-    .l.find(disp => disp.disposition === 'A').pct,
-  manuallyPct: orderStats
-    .find(stat => stat.label === band)
-    .l.find(disp => disp.disposition === 'M').pct,
-});
+): Object => {
+  const stats: Object = {
+    completed: orderStats
+      .find(stat => stat.label === band)
+      .l.find(disp => disp.disposition === 'C').count,
+    automatically: orderStats
+      .find(stat => stat.label === band)
+      .l.find(disp => disp.disposition === 'A').count,
+    manually: orderStats
+      .find(stat => stat.label === band)
+      .l.find(disp => disp.disposition === 'M').count,
+    completedPct: orderStats
+      .find(stat => stat.label === band)
+      .l.find(disp => disp.disposition === 'C').pct,
+    automaticallyPct: orderStats
+      .find(stat => stat.label === band)
+      .l.find(disp => disp.disposition === 'A').pct,
+    manuallyPct: orderStats
+      .find(stat => stat.label === band)
+      .l.find(disp => disp.disposition === 'M').pct,
+  };
+
+  return {
+    ...stats,
+    ...{ total: stats.automatically + stats.completed + stats.manually },
+  };
+};
 
 const buildOrderStatsSLA: Function = (
   orderStats: Object,
   band: string
-): Object => ({
-  ['In SLA']: orderStats
-    .find(stat => stat.label === band)
-    .sla.find(sla => sla.in_sla).count,
-  ['Out of SLA']: orderStats
-    .find(stat => stat.label === band)
-    .sla.find(sla => sla.in_sla === false).count,
-  ['In SLA %']: orderStats
-    .find(stat => stat.label === band)
-    .sla.find(sla => sla.in_sla).pct,
-  ['Out of SLA %']: orderStats
-    .find(stat => stat.label === band)
-    .sla.find(sla => sla.in_sla === false).pct,
-});
+): Object => {
+  const stats: Object = {
+    ['In SLA']: orderStats
+      .find(stat => stat.label === band)
+      .sla.find(sla => sla.in_sla).count,
+    ['Out of SLA']: orderStats
+      .find(stat => stat.label === band)
+      .sla.find(sla => sla.in_sla === false).count,
+    ['In SLA %']: orderStats
+      .find(stat => stat.label === band)
+      .sla.find(sla => sla.in_sla).pct,
+    ['Out of SLA %']: orderStats
+      .find(stat => stat.label === band)
+      .sla.find(sla => sla.in_sla === false).pct,
+  };
+
+  return {
+    ...stats,
+    ...{ total: stats['In SLA'] + stats['Out of SLA'] },
+  };
+};
 
 export {
   filterArray,
