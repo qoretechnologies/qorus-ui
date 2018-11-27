@@ -68,12 +68,10 @@ export default class DetailTab extends Component {
   render() {
     const { workflow, systemOptions } = this.props;
 
-    console.log(workflow);
-
     return (
       <div>
         <InfoHeader model={workflow} />
-        <PaneItem title="Actions, Autostart, SLA Threshold">
+        <PaneItem title="Controls">
           <WorkflowsControls
             id={this.props.workflow.id}
             enabled={this.props.workflow.enabled}
@@ -87,6 +85,8 @@ export default class DetailTab extends Component {
             withExec
             big
           />
+        </PaneItem>
+        <PaneItem title="SLA Threshold">
           <ButtonGroup>
             <form onSubmit={this.handleSubmit}>
               <ControlGroup>
