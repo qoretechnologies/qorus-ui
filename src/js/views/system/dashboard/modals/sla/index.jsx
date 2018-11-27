@@ -12,6 +12,7 @@ import Tabs, { Pane } from '../../../../../components/tabs';
 import SLATable from './table';
 import { sortDefaults } from '../../../../../constants/sort';
 import sort from '../../../../../hocomponents/sort';
+import { orderStatsPct } from '../../../../../helpers/orders';
 
 type Props = {
   onClose: Function,
@@ -108,6 +109,24 @@ export default compose(
           .sla.find(sla => sla.in_sla === false).count,
       })),
       band,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ workflows, totalOrderStats, ...rest }: Props): Props => ({
+      workflows: workflows.map(workflow => ({
+        ...workflow,
+        inSlaTotalPct: orderStatsPct(workflow.inSla, totalOrderStats) / 100,
+        outOfSlaTotalPct:
+          orderStatsPct(workflow.outOfSla, totalOrderStats) / 100,
+        inSlaLocalPct:
+          orderStatsPct(workflow.inSla, workflow.inSla + workflow.outOfSla) /
+          100,
+        outOfSlaLocalPct:
+          orderStatsPct(workflow.outOfSla, workflow.inSla + workflow.outOfSla) /
+          100,
+      })),
+      totalOrderStats,
       ...rest,
     })
   ),

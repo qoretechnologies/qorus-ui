@@ -37,9 +37,15 @@ const GlobalModalTable: Function = ({
         <Th className="name" name="name">
           Name
         </Th>
-        <Th name="completed">C (No errors)</Th>
-        <Th name="automatically">A (Recovered Automatically)</Th>
-        <Th name="manually">M (Recovered Manually)</Th>
+        <Th name={local ? 'completedLocalPct' : 'completedTotalPct'}>
+          C (No errors)
+        </Th>
+        <Th name={local ? 'automaticallyLocalPct' : 'automaticallyTotalPct'}>
+          A (Recovered Automatically)
+        </Th>
+        <Th name={local ? 'manuallyLocalPct' : 'manuallyTotalPct'}>
+          M (Recovered Manually)
+        </Th>
       </Tr>
     </Thead>
     <Tbody>
