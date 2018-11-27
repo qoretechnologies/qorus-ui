@@ -132,53 +132,65 @@ export default class ServicesDetail extends Component {
       >
         {loaded && (
           <Box top>
-            <Container fill>
-              <SimpleTabs activeTab={paneTab}>
-                <SimpleTab name="detail">
-                  <DetailTab
-                    key={service.name}
-                    service={service}
-                    systemOptions={systemOptions}
-                  />
-                </SimpleTab>
-                <SimpleTab name="code">
+            <SimpleTabs activeTab={paneTab}>
+              <SimpleTab name="detail">
+                <DetailTab
+                  key={service.name}
+                  service={service}
+                  systemOptions={systemOptions}
+                />
+              </SimpleTab>
+              <SimpleTab name="code">
+                <Container fill>
                   <Code
                     data={this.props.data}
                     heightUpdater={this.getHeight}
                     location={this.props.location}
                   />
-                </SimpleTab>
-                <SimpleTab name="methods">
+                </Container>
+              </SimpleTab>
+              <SimpleTab name="methods">
+                <Container fill>
                   <MethodsTab service={service} methods={this.props.methods} />
-                </SimpleTab>
-                <SimpleTab name="log">
+                </Container>
+              </SimpleTab>
+              <SimpleTab name="log">
+                <Container fill>
                   <LogTab
                     resource={`services/${service.id}`}
                     location={this.props.location}
                   />
-                </SimpleTab>
-                <SimpleTab name="mappers">
+                </Container>
+              </SimpleTab>
+              <SimpleTab name="mappers">
+                <Container fill>
                   <MappersTable mappers={service.mappers} />
-                </SimpleTab>
-                <SimpleTab name="value maps">
+                </Container>
+              </SimpleTab>
+              <SimpleTab name="value maps">
+                <Container fill>
                   <Valuemaps vmaps={service.vmaps} />
-                </SimpleTab>
-                <SimpleTab name="resources">
+                </Container>
+              </SimpleTab>
+              <SimpleTab name="resources">
+                <Container fill>
                   <ResourceTab
                     resources={service.resources}
                     resourceFiles={service.resource_files}
                   />
-                </SimpleTab>
-                <SimpleTab name="releases">
+                </Container>
+              </SimpleTab>
+              <SimpleTab name="releases">
+                <Container fill>
                   <Releases
                     component={service.name}
                     compact
                     key={service.name}
                     location={this.props.location}
                   />
-                </SimpleTab>
-              </SimpleTabs>
-            </Container>
+                </Container>
+              </SimpleTab>
+            </SimpleTabs>
           </Box>
         )}
       </DetailPane>

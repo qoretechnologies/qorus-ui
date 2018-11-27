@@ -18,6 +18,7 @@ import Autostart from '../autostart';
 import withDispatch from '../../../hocomponents/withDispatch';
 import InfoHeader from '../../../components/InfoHeader';
 import NoDataIf from '../../../components/NoDataIf';
+import Container from '../../../components/container';
 import {
   buildOrderStatsDisposition,
   buildOrderStatsSLA,
@@ -107,131 +108,136 @@ export default class DetailTab extends Component {
     return (
       <div>
         <InfoHeader model={workflow} />
-        <PaneItem title="Controls">
-          <WorkflowsControls
-            id={this.props.workflow.id}
-            enabled={this.props.workflow.enabled}
-            remote={this.props.workflow.remote}
-            big
-          />
-          <Autostart
-            autostart={this.props.workflow.autostart}
-            execCount={this.props.workflow.exec_count}
-            id={this.props.workflow.id}
-            withExec
-            big
-          />
-        </PaneItem>
-        <PaneItem title="SLA Threshold">
-          <ButtonGroup>
-            <form onSubmit={this.handleSubmit}>
-              <ControlGroup>
-                <InputGroup
-                  type="text"
-                  value={`${this.state.slaThreshold}`}
-                  onChange={this.handleThresholdChange}
-                  className="pt-small"
-                  style={{ width: '50px' }}
-                />
-                <Control icon="floppy-disk" type="submit" big />
-              </ControlGroup>
-            </form>
-          </ButtonGroup>
-        </PaneItem>
-        {workflow.order_stats && (
-          <PaneItem
-            title="Order Stats - Disposition (%)"
-            label={
-              <Dropdown>
-                <DControl small icon="time">
-                  {dispositionBand}
-                </DControl>
-                <Item
-                  title="1 hour band"
-                  action={this.handleDispositionBandChange}
-                />
-                <Item
-                  title="4 hour band"
-                  action={this.handleDispositionBandChange}
-                />
-                <Item
-                  title="24 hour band"
-                  action={this.handleDispositionBandChange}
-                />
-              </Dropdown>
-            }
-          >
-            <InstancesBar
-              states={[
-                { name: 'completed', label: 'complete' },
-                { name: 'automatically', label: 'automatic' },
-                { name: 'manually', label: 'error' },
-              ]}
-              instances={dispositionStats}
-              totalInstances={dispositionStats.total}
-              workflowId={workflow.id}
-              showPct
-              minWidth={25}
+        <Container fill>
+          <PaneItem title="Controls">
+            <WorkflowsControls
+              id={this.props.workflow.id}
+              enabled={this.props.workflow.enabled}
+              remote={this.props.workflow.remote}
+              big
+            />
+            <Autostart
+              autostart={this.props.workflow.autostart}
+              execCount={this.props.workflow.exec_count}
+              id={this.props.workflow.id}
+              withExec
+              big
             />
           </PaneItem>
-        )}
-        {workflow.order_stats && (
-          <PaneItem
-            title="Order Stats - SLA (%)"
-            label={
-              <Dropdown>
-                <DControl small icon="time">
-                  {slaBand}
-                </DControl>
-                <Item title="1 hour band" action={this.handleSlaBandChange} />
-                <Item title="4 hour band" action={this.handleSlaBandChange} />
-                <Item title="24 hour band" action={this.handleSlaBandChange} />
-              </Dropdown>
-            }
-          >
-            <InstancesBar
-              states={[
-                { name: 'In SLA', label: 'complete' },
-                { name: 'Out of SLA', label: 'error' },
-              ]}
-              showPct
-              minWidth={25}
-              instances={slaStats}
-              totalInstances={slaStats.total}
-              workflowId={workflow.id}
-            />
+          <PaneItem title="SLA Threshold">
+            <ButtonGroup>
+              <form onSubmit={this.handleSubmit}>
+                <ControlGroup>
+                  <InputGroup
+                    type="text"
+                    value={`${this.state.slaThreshold}`}
+                    onChange={this.handleThresholdChange}
+                    className="pt-small"
+                    style={{ width: '50px' }}
+                  />
+                  <Control icon="floppy-disk" type="submit" big />
+                </ControlGroup>
+              </form>
+            </ButtonGroup>
           </PaneItem>
-        )}
-        <AlertsTab alerts={workflow.alerts} />
-        <ProcessSummary process={workflow.process} />
-        <PaneItem title="Instances">
-          <NoDataIf condition={workflow.TOTAL === 0}>
-            {() => (
-              <InstancesChart
-                width="100%"
-                states={ORDER_STATES}
-                instances={workflow}
+          {workflow.order_stats && (
+            <PaneItem
+              title="Order Stats - Disposition (%)"
+              label={
+                <Dropdown>
+                  <DControl small icon="time">
+                    {dispositionBand}
+                  </DControl>
+                  <Item
+                    title="1 hour band"
+                    action={this.handleDispositionBandChange}
+                  />
+                  <Item
+                    title="4 hour band"
+                    action={this.handleDispositionBandChange}
+                  />
+                  <Item
+                    title="24 hour band"
+                    action={this.handleDispositionBandChange}
+                  />
+                </Dropdown>
+              }
+            >
+              <InstancesBar
+                states={[
+                  { name: 'completed', label: 'complete' },
+                  { name: 'automatically', label: 'automatic' },
+                  { name: 'manually', label: 'error' },
+                ]}
+                instances={dispositionStats}
+                totalInstances={dispositionStats.total}
+                workflowId={workflow.id}
+                showPct
+                minWidth={25}
               />
-            )}
-          </NoDataIf>
-        </PaneItem>
-        <Groups>
-          {(workflow.groups || []).map(g => (
-            <Group
-              key={g.name}
-              name={g.name}
-              url={`/groups?group=${g.name}`}
-              size={g.size}
-              disabled={!g.enabled}
-            />
-          ))}
-        </Groups>
-        <Options
-          model={workflow}
-          systemOptions={systemOptions}
-          onSet={this.setOption}
-          onDelete={this.deleteOption}
-        />
+            </PaneItem>
+          )}
+          {workflow.order_stats && (
+            <PaneItem
+              title="Order Stats - SLA (%)"
+              label={
+                <Dropdown>
+                  <DControl small icon="time">
+                    {slaBand}
+                  </DControl>
+                  <Item title="1 hour band" action={this.handleSlaBandChange} />
+                  <Item title="4 hour band" action={this.handleSlaBandChange} />
+                  <Item
+                    title="24 hour band"
+                    action={this.handleSlaBandChange}
+                  />
+                </Dropdown>
+              }
+            >
+              <InstancesBar
+                states={[
+                  { name: 'In SLA', label: 'complete' },
+                  { name: 'Out of SLA', label: 'error' },
+                ]}
+                showPct
+                minWidth={25}
+                instances={slaStats}
+                totalInstances={slaStats.total}
+                workflowId={workflow.id}
+              />
+            </PaneItem>
+          )}
+          <AlertsTab alerts={workflow.alerts} />
+          <ProcessSummary process={workflow.process} />
+          <PaneItem title="Instances">
+            <NoDataIf condition={workflow.TOTAL === 0}>
+              {() => (
+                <InstancesChart
+                  width="100%"
+                  states={ORDER_STATES}
+                  instances={workflow}
+                />
+              )}
+            </NoDataIf>
+          </PaneItem>
+          <Groups>
+            {(workflow.groups || []).map(g => (
+              <Group
+                key={g.name}
+                name={g.name}
+                url={`/groups?group=${g.name}`}
+                size={g.size}
+                disabled={!g.enabled}
+              />
+            ))}
+          </Groups>
+          <Options
+            model={workflow}
+            systemOptions={systemOptions}
+            onSet={this.setOption}
+            onDelete={this.deleteOption}
+          />
+        </Container>
       </div>
     );
   }

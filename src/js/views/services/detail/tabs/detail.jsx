@@ -9,6 +9,7 @@ import PaneItem from '../../../../components/pane_item';
 import ServicesControls from '../../controls';
 import ProcessSummary from '../../../../components/ProcessSummary';
 import InfoHeader from '../../../../components/InfoHeader';
+import Container from '../../../../components/container';
 
 @connect(
   () => ({}),
@@ -35,35 +36,37 @@ export default class DetailTab extends Component {
     return (
       <div>
         <InfoHeader model={service} />
-        <PaneItem title="Controls">
-          <ServicesControls
-            status={service.status}
-            enabled={service.enabled}
-            autostart={service.autostart}
-            id={service.id}
-            remote={service.remote}
-            type={service.type}
-          />
-        </PaneItem>
-        <AlertsTable alerts={service.alerts} />
-        <ProcessSummary process={service.process} />
-        <Groups>
-          {(service.groups || []).map(g => (
-            <Group
-              key={g.name}
-              name={g.name}
-              url={`/groups?group=${g.name}`}
-              size={g.size}
-              disabled={!g.enabled}
+        <Container fill>
+          <PaneItem title="Controls">
+            <ServicesControls
+              status={service.status}
+              enabled={service.enabled}
+              autostart={service.autostart}
+              id={service.id}
+              remote={service.remote}
+              type={service.type}
             />
-          ))}
-        </Groups>
-        <Options
-          model={service}
-          systemOptions={this.props.systemOptions}
-          onSet={::this.setOption}
-          onDelete={::this.deleteOption}
-        />
+          </PaneItem>
+          <AlertsTable alerts={service.alerts} />
+          <ProcessSummary process={service.process} />
+          <Groups>
+            {(service.groups || []).map(g => (
+              <Group
+                key={g.name}
+                name={g.name}
+                url={`/groups?group=${g.name}`}
+                size={g.size}
+                disabled={!g.enabled}
+              />
+            ))}
+          </Groups>
+          <Options
+            model={service}
+            systemOptions={this.props.systemOptions}
+            onSet={::this.setOption}
+            onDelete={::this.deleteOption}
+          />
+        </Container>
       </div>
     );
   }
