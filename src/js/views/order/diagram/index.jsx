@@ -91,13 +91,15 @@ export default class DiagramView extends Component {
     const top: boolean = !this.props.isTablet;
 
     return [
-      <Box column={boxColumns} noTransition top style={{ overflowX: 'auto' }}>
-        <PaneItem title="Steps graph">
-          <Graph
-            workflow={this.props.workflow}
-            order={this.props.order}
-            onStepClick={this.handleStepClick}
-          />
+      <Box column={boxColumns} noTransition top>
+        <PaneItem title={this.props.workflow.normalizedName}>
+          <div style={{ overflowX: 'auto' }} ref={this.diagramRef}>
+            <Graph
+              workflow={this.props.workflow}
+              order={this.props.order}
+              onStepClick={this.handleStepClick}
+            />
+          </div>
         </PaneItem>
       </Box>,
       <Box column={boxColumns} noTransition top={top}>
