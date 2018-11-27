@@ -12,6 +12,7 @@ import {
   Th,
 } from '../../components/new_table';
 import withSort from '../../hocomponents/sort';
+import { NameColumnHeader } from '../../components/NameColumn';
 import checkData from '../../hocomponents/check-no-data';
 import ErrorRow from './row';
 import { sortDefaults } from '../../constants/sort';
@@ -44,7 +45,7 @@ const ErrorsTable: Function = ({
   <Table striped condensed fixed={fixed} height={height} key={data.length}>
     <Thead>
       <RowComponent sortData={sortData} onSortChange={onSortChange}>
-        <Th name="error">Error</Th>
+        <NameColumnHeader name="error" />
         {!compact && <Th name="description">Description</Th>}
         <Th className="medium" name="severity">
           Severity

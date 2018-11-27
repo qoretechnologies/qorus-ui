@@ -1,7 +1,6 @@
 /* @flow */
 import React, { PropTypes } from 'react';
-
-import showIfLoaded from './show-if-loaded';
+import Container from '../components/container';
 
 /**
  * Returns high order component that need to sync data.
@@ -13,12 +12,9 @@ import showIfLoaded from './show-if-loaded';
  */
 export default (
   propName: string,
-  showLoader : boolean = true,
-  loadFunc : ?string = null,
-  bigLoader: boolean = false,
+  showLoader: boolean = true,
+  loadFunc: ?string = null
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
-  const LoadComponent = showLoader ? showIfLoaded(propName, bigLoader)(Component) : Component;
-
   class WrappedComponent extends React.Component {
     componentDidMount() {
       const load = this.props[loadFunc] || this.props.load;
@@ -30,7 +26,27 @@ export default (
     }
 
     render() {
-      return <LoadComponent {...this.props} />;
+      if (showLoader && !this.props[propName].sync) {
+        return (
+          <Container noOverflow fill>
+            <p className="pt-skeleton" style={{ width: '30%', height: '5%' }} />
+            <p
+              className="pt-skeleton"
+              style={{ width: '80%', height: '15%' }}
+            />
+            <p
+              className="pt-skeleton"
+              style={{ width: '100%', height: '54%' }}
+            />
+            <p
+              className="pt-skeleton"
+              style={{ width: '60%', height: '20%' }}
+            />
+          </Container>
+        );
+      }
+
+      return <Component {...this.props} />;
     }
   }
   WrappedComponent.propTypes = {

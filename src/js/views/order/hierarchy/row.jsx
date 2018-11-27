@@ -34,7 +34,7 @@ const HierarchyRow: Function = ({
     {!isTablet && (
       <Td className="name">
         <Link
-          to={`/order/${id}/24h`}
+          to={`/workflow/${item.workflowid}`}
           className="resource-name-link"
           title={item.name}
         >
@@ -50,12 +50,11 @@ const HierarchyRow: Function = ({
     </Td>
     <Td className="narrow">{item.error_count}</Td>
     <Td className="narrow">{item.priority}</Td>
-    {!compact &&
-      !isTablet && (
-        <Td className="big">
-          <Date date={item.scheduled} />
-        </Td>
-      )}
+    {!compact && !isTablet && (
+      <Td className="big">
+        <Date date={item.scheduled} />
+      </Td>
+    )}
     {!compact && (
       <Td className="big">
         <Date date={item.started} />
