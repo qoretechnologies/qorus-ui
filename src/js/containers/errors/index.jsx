@@ -99,7 +99,7 @@ const ErrorsContainer: Function = ({
     <div className="errors-container-wrapper">
       <Headbar>
         {title && (
-          <Breadcrumbs collapsed={!compact}>
+          <Breadcrumbs icon={compact && 'error'}>
             <Crumb active>{title}</Crumb>
           </Breadcrumbs>
         )}
