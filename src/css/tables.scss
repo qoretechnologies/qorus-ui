@@ -21,7 +21,8 @@
 
 $padding-xs-vertical: 2px;
 
-.fixed-table-header {
+.fixed-table-header,
+th {
   font-weight: 400;
   text-align: center; /* [2] */
 
