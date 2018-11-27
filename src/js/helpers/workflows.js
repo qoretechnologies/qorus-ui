@@ -11,7 +11,7 @@ import { formatDate } from '../helpers/date';
  * @param {String} filter
  * @returns {Array}
  */
-const filterArray = (filter) => {
+const filterArray = filter => {
   if (typeof filter === 'undefined' || filter === '') {
     return [WORKFLOW_FILTERS.ALL];
   }
@@ -70,10 +70,53 @@ const getFetchParams = (filter, date = DATES.PREV_DAY) => {
   return params;
 };
 
+const buildOrderStatsDisposition = (
+  orderStats: Object,
+  band: string
+): Object => ({
+  completed: orderStats
+    .find(stat => stat.label === band)
+    .l.find(disp => disp.disposition === 'C').count,
+  automatically: orderStats
+    .find(stat => stat.label === band)
+    .l.find(disp => disp.disposition === 'A').count,
+  manually: orderStats
+    .find(stat => stat.label === band)
+    .l.find(disp => disp.disposition === 'M').count,
+  completedPct: orderStats
+    .find(stat => stat.label === band)
+    .l.find(disp => disp.disposition === 'C').pct,
+  automaticallyPct: orderStats
+    .find(stat => stat.label === band)
+    .l.find(disp => disp.disposition === 'A').pct,
+  manuallyPct: orderStats
+    .find(stat => stat.label === band)
+    .l.find(disp => disp.disposition === 'M').pct,
+});
+
+const buildOrderStatsSLA: Function = (
+  orderStats: Object,
+  band: string
+): Object => ({
+  ['In SLA']: orderStats
+    .find(stat => stat.label === band)
+    .sla.find(sla => sla.in_sla).count,
+  ['Out of SLA']: orderStats
+    .find(stat => stat.label === band)
+    .sla.find(sla => sla.in_sla === false).count,
+  ['In SLA %']: orderStats
+    .find(stat => stat.label === band)
+    .sla.find(sla => sla.in_sla).pct,
+  ['Out of SLA %']: orderStats
+    .find(stat => stat.label === band)
+    .sla.find(sla => sla.in_sla === false).pct,
+});
+
 export {
   filterArray,
   handleFilterChange,
   formatDate,
   getFetchParams,
+  buildOrderStatsDisposition,
+  buildOrderStatsSLA,
 };
-
