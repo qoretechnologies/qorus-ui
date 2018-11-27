@@ -8,6 +8,8 @@
 }
 
 .breadcrumb-tabs {
+  overflow: hidden;
+
   .pt-popover-target:not(:first-child) {
     .breadcrumb-tab {
       border-top-left-radius: 0px;
