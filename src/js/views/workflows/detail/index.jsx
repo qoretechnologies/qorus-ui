@@ -108,8 +108,9 @@ export default class WorkflowsDetail extends Component {
   };
 
   render() {
-    const { workflow, systemOptions, paneTab } = this.props;
-    const loaded: boolean = workflow && workflow.created;
+    const { workflow, systemOptions, paneTab, errors } = this.props;
+    const loaded: boolean =
+      workflow && 'lib' in workflow && errors[`workflow/${workflow.id}`];
 
     return (
       <DetailPane
