@@ -20,8 +20,11 @@ import InstancesChart from '../../components/instances_chart';
 import ProcessSummary from '../../components/ProcessSummary';
 import mapProps from 'recompose/mapProps';
 import withDispatch from '../../hocomponents/withDispatch';
-import { AlertColumn } from '../../components/AlertColumn';
 import NameColumn from '../../components/NameColumn';
+import {
+  buildOrderStatsDisposition,
+  buildOrderStatsSLA,
+} from '../../helpers/workflows';
 
 type Props = {
   isActive?: boolean,
@@ -156,7 +159,6 @@ const TableRow: Function = ({
         instances={orderStats}
         totalInstances={totalOrderStats}
         workflowId={id}
-        date={date}
         showPct
         minWidth={25}
         link={`/workflows?paneId=${id}&paneTab=order+stats`}
@@ -173,7 +175,6 @@ const TableRow: Function = ({
         instances={slaStats}
         totalInstances={totalSlaStats}
         workflowId={id}
-        date={date}
         link={`/workflows?paneId=${id}&paneTab=order+stats`}
       />
     </Td>
@@ -203,26 +204,9 @@ export default compose(
     },
   }),
   mapProps(
-    ({ order_stats, ...rest }: Props): Props => ({
-      orderStats: order_stats && {
-        completed: order_stats
-          .find(stat => stat.label === '24_hour_band')
-          .l.find(disp => disp.disposition === 'C').count,
-        automatically: order_stats
-          .find(stat => stat.label === '24_hour_band')
-          .l.find(disp => disp.disposition === 'A').count,
-        manually: order_stats
-          .find(stat => stat.label === '24_hour_band')
-          .l.find(disp => disp.disposition === 'M').count,
-      },
-      slaStats: order_stats && {
-        ['In SLA']: order_stats
-          .find(stat => stat.label === '24_hour_band')
-          .sla.find(sla => sla.in_sla).count,
-        ['Out of SLA']: order_stats
-          .find(stat => stat.label === '24_hour_band')
-          .sla.find(sla => sla.in_sla === false).count,
-      },
+    ({ order_stats: orderStats, band, ...rest }: Props): Props => ({
+      orderStats: orderStats && buildOrderStatsDisposition(orderStats, band),
+      slaStats: orderStats && buildOrderStatsSLA(orderStats, band),
       ...rest,
     })
   ),
@@ -254,6 +238,7 @@ export default compose(
     'remote',
     'order_stats',
     'orderStats',
+    'band',
     ...ORDER_STATES_ARRAY,
   ])
 )(TableRow);
