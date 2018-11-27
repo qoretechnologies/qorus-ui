@@ -59,6 +59,7 @@ type Props = {
   slaStats?: Object,
   totalOrderStats: number,
   totalSlaStats: number,
+  band: string,
 };
 
 const TableRow: Function = ({
