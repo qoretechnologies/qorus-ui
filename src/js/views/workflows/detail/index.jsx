@@ -29,14 +29,10 @@ const workflowSelector: Function = (state: Object, props: Object): Object =>
     (wf: Object) => wf.id === parseInt(props.paneId, 10)
   );
 
-const errorSelector: Function = (state: Object): Array<Object> =>
-  state.api.errors;
-
 const selector = createSelector(
-  [workflowSelector, errorSelector],
-  (workflow, errors) => ({
+  [workflowSelector],
+  workflow => ({
     workflow,
-    errors,
   })
 );
 
@@ -45,7 +41,6 @@ const selector = createSelector(
     selector,
     {
       load: actions.workflows.fetchLibSources,
-      loadErrors: actions.errors.fetch,
     }
   )
 )
@@ -56,7 +51,6 @@ const selector = createSelector(
 )
 export default class WorkflowsDetail extends Component {
   props: {
-    errors: Object,
     systemOptions: Array<Object>,
     globalErrors: Array<Object>,
     paneTab: string | number,
@@ -71,11 +65,11 @@ export default class WorkflowsDetail extends Component {
     onResize: Function,
     width: number,
     fetchParams: Object,
+    band: string,
   };
 
   componentWillMount() {
     this.props.load(this.props.paneId, this.props.fetchParams.date);
-    this.props.loadErrors(`workflow/${this.props.paneId}`);
   }
 
   componentWillReceiveProps(nextProps: Object) {
@@ -112,13 +106,11 @@ export default class WorkflowsDetail extends Component {
       workflow,
       systemOptions,
       paneTab,
-      errors,
       band,
       width,
       onResize,
     } = this.props;
-    const loaded: boolean =
-      workflow && 'lib' in workflow && errors[`workflow/${workflow.id}`];
+    const loaded: boolean = workflow && 'lib' in workflow;
 
     return (
       <DetailPane
