@@ -12,6 +12,7 @@ import Box from '../../../../../components/box';
 import sort from '../../../../../hocomponents/sort';
 import { sortDefaults } from '../../../../../constants/sort';
 import GlobalTable from './table';
+import { orderStatsPct } from '../../../../../helpers/orders';
 
 type Props = {
   onClose: Function,
@@ -112,6 +113,36 @@ export default compose(
           .l.find(disp => disp.disposition === 'M').count,
       })),
       band,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ workflows, totalOrderStats, ...rest }: Props): Props => ({
+      workflows: workflows.map(workflow => ({
+        ...workflow,
+        completedTotalPct:
+          orderStatsPct(workflow.completed, totalOrderStats) / 100,
+        automaticallyTotalPct:
+          orderStatsPct(workflow.automatically, totalOrderStats) / 100,
+        manuallyTotalPct:
+          orderStatsPct(workflow.manually, totalOrderStats) / 100,
+        completedLocalPct:
+          orderStatsPct(
+            workflow.completed,
+            workflow.completed + workflow.automatically + workflow.manually
+          ) / 100,
+        automaticallyLocalPct:
+          orderStatsPct(
+            workflow.automatically,
+            workflow.completed + workflow.automatically + workflow.manually
+          ) / 100,
+        manuallyLocalPct:
+          orderStatsPct(
+            workflow.manually,
+            workflow.completed + workflow.automatically + workflow.manually
+          ) / 100,
+      })),
+      totalOrderStats,
       ...rest,
     })
   ),

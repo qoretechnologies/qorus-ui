@@ -37,8 +37,10 @@ const GlobalModalTable: Function = ({
         <Th className="name" name="name">
           Name
         </Th>
-        <Th name="completed">In SLA</Th>
-        <Th name="automatically">Out of SLA</Th>
+        <Th name={local ? 'inSlaLocalPct' : 'inSlaTotalPct'}>In SLA</Th>
+        <Th name={local ? 'outOfSlaLocalPct' : 'outOfSlaTotalPct'}>
+          Out of SLA
+        </Th>
       </Tr>
     </Thead>
     <Tbody>
