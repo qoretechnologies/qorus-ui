@@ -33,7 +33,9 @@ const MultiDispostionChart: Function = ({
     title={title}
     label={
       <Dropdown>
-        <Control small>{chartTab}</Control>
+        <Control small icon="time">
+          {chartTab}
+        </Control>
         <Item title="1 hour band" action={handleChartTabChange} />
         <Item title="4 hour band" action={handleChartTabChange} />
         <Item title="24 hour band" action={handleChartTabChange} />
@@ -56,7 +58,11 @@ const MultiDispostionChart: Function = ({
 );
 
 export default compose(
-  withState('chartTab', 'changeChartTab', '1 hour band'),
+  withState(
+    'chartTab',
+    'changeChartTab',
+    ({ defaultBand }) => defaultBand || '1 hour band'
+  ),
   withHandlers({
     handleChartTabChange: ({ changeChartTab }: Props): Function => (
       event,
