@@ -116,7 +116,7 @@ export default class Dashboard extends Component {
     let { remotes, canLoadMoreRemotes } = this.state;
 
     remotes = remotes || [];
-    canLoadMoreRemotes = canLoadMoreRemotes || 'null';
+    canLoadMoreRemotes = canLoadMoreRemotes || null;
 
     const clusterMemory = Object.keys(system.cluster_info).reduce(
       (cur, node: string) => cur + system.cluster_info[node].node_priv,

@@ -29,14 +29,10 @@ const workflowSelector: Function = (state: Object, props: Object): Object =>
     (wf: Object) => wf.id === parseInt(props.paneId, 10)
   );
 
-const errorSelector: Function = (state: Object): Array<Object> =>
-  state.api.errors;
-
 const selector = createSelector(
-  [workflowSelector, errorSelector],
-  (workflow, errors) => ({
+  [workflowSelector],
+  workflow => ({
     workflow,
-    errors,
   })
 );
 
@@ -45,7 +41,6 @@ const selector = createSelector(
     selector,
     {
       load: actions.workflows.fetchLibSources,
-      loadErrors: actions.errors.fetch,
     }
   )
 )
@@ -56,7 +51,6 @@ const selector = createSelector(
 )
 export default class WorkflowsDetail extends Component {
   props: {
-    errors: Object,
     systemOptions: Array<Object>,
     globalErrors: Array<Object>,
     paneTab: string | number,
@@ -71,11 +65,11 @@ export default class WorkflowsDetail extends Component {
     onResize: Function,
     width: number,
     fetchParams: Object,
+    band: string,
   };
 
   componentWillMount() {
     this.props.load(this.props.paneId, this.props.fetchParams.date);
-    this.props.loadErrors(`workflow/${this.props.paneId}`);
   }
 
   componentWillReceiveProps(nextProps: Object) {
@@ -108,15 +102,22 @@ export default class WorkflowsDetail extends Component {
   };
 
   render() {
-    const { workflow, systemOptions, paneTab } = this.props;
-    const loaded: boolean = workflow && workflow.created;
+    const {
+      workflow,
+      systemOptions,
+      paneTab,
+      band,
+      width,
+      onResize,
+    } = this.props;
+    const loaded: boolean = workflow && 'lib' in workflow;
 
     return (
       <DetailPane
-        width={this.props.width || 600}
+        width={width || 600}
         onClose={this.handleClose}
-        onResize={this.props.onResize}
-        title={`Workflow ${this.props.workflow.id}`}
+        onResize={onResize}
+        title={`Workflow ${workflow.id}`}
         tabs={{
           tabs: [
             'Detail',
@@ -149,6 +150,7 @@ export default class WorkflowsDetail extends Component {
                     key={workflow.name}
                     workflow={workflow}
                     systemOptions={systemOptions}
+                    band={band}
                   />
                 </SimpleTab>
                 <SimpleTab name="code">

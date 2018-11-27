@@ -259,18 +259,17 @@ export default class ChartComponent extends Component {
           this.props.type === 'doughnut' ? 'pie' : ''
         }`}
       >
-        {this.props.title && <h5>{this.props.title}</h5>}
+        {this.props.title && <p>{this.props.title}</p>}
         <div
           className="chart-box"
           style={{ width: this.props.width, height: this.props.height }}
           onClick={!this.props.empty && this.props.onClick}
         >
-          {this.props.empty &&
-            this.props.type === 'doughnut' && (
-              <div className="pie-chart-placeholder">
-                <NonIdealState title="No data" visual="warning-sign" />
-              </div>
-            )}
+          {this.props.empty && this.props.type === 'doughnut' && (
+            <div className="pie-chart-placeholder">
+              <NonIdealState title="No data" visual="warning-sign" />
+            </div>
+          )}
           <canvas
             style={{
               display:

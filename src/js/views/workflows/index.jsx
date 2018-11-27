@@ -237,6 +237,8 @@ type Props = {
   searchQuery: string,
   changeSearchQuery: Function,
   sortKeysObj: Object,
+  band: string,
+  changeDispositionQuery: Function,
 };
 
 const Workflows: Function = ({
@@ -262,6 +264,8 @@ const Workflows: Function = ({
   totalInstances,
   searchQuery,
   changeSearchQuery,
+  band,
+  changeDispositionQuery,
 }: Props): React.Element<any> => (
   <div>
     <Headbar>
@@ -306,6 +310,8 @@ const Workflows: Function = ({
         selected={selected}
         selectedIds={selectedIds}
         location={location}
+        band={band}
+        changeDispositionQuery={changeDispositionQuery}
       />
     </Box>
   </div>
@@ -343,13 +349,15 @@ export default compose(
   patch('load', ['fetchParams']),
   sync('meta'),
   withState('expanded', 'toggleExpand', false),
-  mapProps(({ toggleExpand, isTablet, ...rest }: Props) => ({
+  queryControl('disposition'),
+  mapProps(({ toggleExpand, isTablet, dispositionQuery, ...rest }: Props) => ({
     onToggleExpand: (): Function =>
       toggleExpand((val: boolean): boolean => !val),
     groupedStates: isTablet
       ? GROUPED_ORDER_STATES_COMPACT
       : GROUPED_ORDER_STATES,
     isTablet,
+    band: dispositionQuery || '24 hour band',
     ...rest,
   })),
   withHandlers({
@@ -369,7 +377,14 @@ export default compose(
   }),
   withPane(
     WorkflowsDetail,
-    ['errors', 'systemOptions', 'globalErrors', 'location', 'fetchParams'],
+    [
+      'errors',
+      'systemOptions',
+      'globalErrors',
+      'location',
+      'fetchParams',
+      'band',
+    ],
     'detail',
     'workflows'
   ),
@@ -391,6 +406,7 @@ export default compose(
     'isTablet',
     'withAlertsCount',
     'totalInstances',
+    'dispositionQuery',
   ]),
   unsync()
 )(Workflows);

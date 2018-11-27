@@ -11,6 +11,7 @@ const intentTransform = {
   success: Intent.SUCCESS,
   danger: Intent.DANGER,
   info: Intent.PRIMARY,
+  primary: Intent.PRIMARY,
   default: null,
   warning: Intent.WARNING,
 };
