@@ -142,7 +142,7 @@ export default compose(
   defaultProps({
     url: 'apievents',
   }),
-  sync('info', false, null, true),
+  sync('info', false),
   websocket(
     {
       onMessage: 'message',
