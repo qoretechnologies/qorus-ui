@@ -1,85 +1,98 @@
 import React, { Component, PropTypes } from 'react';
 import yaml from 'js-yaml';
+import { connect } from 'react-redux';
 
 import Modal from '../../../../../components/modal';
-import Tabs, { Pane } from '../../../../../components/tabs';
 import Alert from '../../../../../components/alert';
+import Box from '../../../../../components/box';
+import PaneItem from '../../../../../components/pane_item';
 import settings from '../../../../../settings';
-import { fetchJson } from '../../../../../store/api/utils';
-import { pureRender } from '../../../../../components/utils';
+import {
+  fetchJson,
+  fetchWithNotifications,
+} from '../../../../../store/api/utils';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../../../components/controls';
+import Dropdown, { Item, Control } from '../../../../../components/dropdown';
 
-@pureRender
+@connect()
 export default class ModalRun extends Component {
   static propTypes = {
     method: PropTypes.object.isRequired,
     service: PropTypes.object.isRequired,
     response: PropTypes.object,
     onClose: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
 
-  componentWillMount() {
-    this._select = null;
+  state = {
+    activeMethod: this.props.method,
+    response: false,
+    error: null,
+    requestHeight: null,
+    responseHeight: null,
+    responseType: 'YAML',
+  };
 
-    this.setState({
-      activeMethod: this.props.method,
-      response: false,
-      error: null,
-      requestHeight: null,
-      responseHeight: null,
-    });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.error !== prevState.error) {
-      this.handleModalResize();
-    }
-  }
-
-  _request = null;
-  _response = null;
+  _request;
+  _response;
 
   handleCancel = ev => {
     ev.preventDefault();
     this.props.onClose();
   };
 
-  handleCommit = ev => {
+  handleCommit = async (ev): Promise<Object> => {
     const request = this._request.value;
-    const { service } = this.props;
+    const { service, dispatch } = this.props;
     const { activeMethod } = this.state;
 
     ev.preventDefault();
 
-    // fetch()
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/services/${service.name}/${activeMethod.name}`,
-      { body: JSON.stringify({ action: 'call', parse_args: request }) },
-      true
-    ).then(response => {
-      if (!response) {
-        this.setState({
-          error: 'Server returned null',
-        });
-      } else if (response.err && response.desc) {
-        this.setState({
-          error: response.desc,
-        });
-      } else {
-        this.setState({
-          response,
-          request,
-          error: null,
-        });
-      }
+    this.setState({
+      response: null,
+    });
+
+    const response = await fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/services/${service.name}/${
+            activeMethod.name
+          }`,
+          { body: JSON.stringify({ action: 'call', parse_args: request }) }
+        ),
+      `'Executing ${activeMethod.name}...`,
+      `${activeMethod.name} successfuly executed`,
+      dispatch
+    );
+
+    if (response.err && response.desc) {
+      this.setState({
+        error: true,
+        response: response.desc,
+      });
+    } else {
+      this.setState({
+        response,
+        error: null,
+      });
+    }
+  };
+
+  handleMethodChange = (ev: Object, methodName: string): void => {
+    this.setState({
+      activeMethod: this.props.service.methods.find(
+        (method: Object): boolean => method.name === methodName
+      ),
     });
   };
 
-  handleMethodChange = ev => {
+  handleResponseTypeChange = (ev: Object, responseType: string): void => {
     this.setState({
-      activeMethod: this.props.service.methods.find(
-        m => m.name === ev.target.value
-      ),
+      responseType,
     });
   };
 
@@ -97,8 +110,8 @@ export default class ModalRun extends Component {
       const { height: responseHeight } = this._response.getBoundingClientRect();
 
       this.setState({
-        requestHeight: requestHeight + difference / 2 - 70,
-        responseHeight: responseHeight + difference / 2 - 70,
+        requestHeight: requestHeight + difference / 2 - 20,
+        responseHeight: responseHeight + difference / 2 - 20,
       });
     }
   };
@@ -106,32 +119,6 @@ export default class ModalRun extends Component {
   requestRef = s => {
     this._request = s;
   };
-
-  selectRef = s => {
-    this._select = s;
-  };
-
-  renderOptions() {
-    const { service, method } = this.props;
-    const { activeMethod } = this.state;
-
-    return (
-      <select
-        name="method"
-        id="method"
-        value={activeMethod ? activeMethod.name : method.name}
-        onChange={this.handleMethodChange}
-        ref={this.selectRef}
-        className="form-control"
-      >
-        {service.methods.map((mtd, idx) => (
-          <option value={mtd.name} key={idx}>
-            {mtd.name}
-          </option>
-        ))}
-      </select>
-    );
-  }
 
   respRef = el => {
     if (el) {
@@ -143,7 +130,8 @@ export default class ModalRun extends Component {
    * @return {ReactElement}
    */
   render() {
-    const { response, request, activeMethod, error } = this.state;
+    const { response, request, activeMethod, error, responseType } = this.state;
+    const { service } = this.props;
 
     return (
       <Modal hasFooter onResizeStop={this.handleModalResize}>
@@ -151,92 +139,110 @@ export default class ModalRun extends Component {
           titleId="errorsTableModalLabel"
           onClose={this.handleCancel}
         >
-          Method execution for {this.props.service.name} service
+          Method execution for {service.name} service
         </Modal.Header>
         <Modal.Body>
-          <div className="content">
-            {error && (
-              <Alert bsStyle="danger" title="Error occured">
-                {error}
-              </Alert>
-            )}
+          <Box top>
             <form
               onSubmit={this.handleCommit}
               noValidate
               className="method-form"
             >
-              <div className="form-group">
-                <label htmlFor="method">Method</label>
-                {this.renderOptions()}
-              </div>
-              <p>
-                <em className="text-muted">{activeMethod.description}</em>
-              </p>
+              <PaneItem
+                title="Method"
+                label={
+                  <Dropdown>
+                    <Control small>{activeMethod.name}</Control>
+                    {service.methods.map(
+                      (method: Object): React.Element<Item> => (
+                        <Item
+                          key={method.name}
+                          title={method.name}
+                          onClick={this.handleMethodChange}
+                        />
+                      )
+                    )}
+                  </Dropdown>
+                }
+              >
+                <p className="text-muted">{activeMethod.description}</p>
+              </PaneItem>
+
               <div ref={this.textWrapRef}>
                 <div style={{ overflow: 'hidden' }}>
-                  <label htmlFor="args">Arguments</label>
+                  <PaneItem title="Arguments">
+                    <textarea
+                      id="args"
+                      name="args"
+                      className="pt-input pt-fill"
+                      rows="5"
+                      ref={this.requestRef}
+                      defaultValue={request || ''}
+                      style={{
+                        height: this.state.requestHeight || 'auto',
+                      }}
+                    />
+                  </PaneItem>
+                </div>
+                <PaneItem
+                  title="Response"
+                  label={
+                    <Dropdown>
+                      <Control small>{responseType}</Control>
+                      <Item
+                        title="YAML"
+                        onClick={this.handleResponseTypeChange}
+                      />
+                      <Item
+                        title="JSON"
+                        onClick={this.handleResponseTypeChange}
+                      />
+                    </Dropdown>
+                  }
+                >
                   <textarea
-                    id="args"
-                    name="args"
-                    className="col-md-12 form-control"
+                    className={`pt-input pt-fill ${
+                      error
+                        ? 'pt-intent-danger'
+                        : response
+                        ? 'pt-intent-success'
+                        : ''
+                    }`}
+                    placeholder="Response"
+                    readOnly
                     rows="5"
-                    ref={this.requestRef}
-                    defaultValue={request || ''}
+                    ref={this.respRef}
+                    value={
+                      response
+                        ? responseType === 'YAML'
+                          ? yaml.dump(response)
+                          : JSON.stringify(response, null, 4)
+                        : ''
+                    }
                     style={{
-                      height: this.state.requestHeight || 'auto',
+                      height: this.state.responseHeight || 'auto',
                     }}
                   />
-                </div>
-                <div>
-                  <Tabs active="yaml" noContainer>
-                    <Pane name="YAML">
-                      <textarea
-                        id="response-yaml"
-                        name="response-yaml"
-                        className="col-md-12 form-control"
-                        placeholder="Response"
-                        readOnly
-                        rows="5"
-                        ref={this.respRef}
-                        value={response ? yaml.dump(response) : ''}
-                        style={{
-                          height: this.state.responseHeight || 'auto',
-                        }}
-                      />
-                    </Pane>
-                    <Pane name="JSON">
-                      <textarea
-                        id="response-json"
-                        name="response-json"
-                        className="col-md-12 form-control"
-                        placeholder="Response"
-                        readOnly
-                        rows="5"
-                        value={
-                          response ? JSON.stringify(response, null, 4) : ''
-                        }
-                        style={{
-                          height: this.state.responseHeight || 'auto',
-                        }}
-                      />
-                    </Pane>
-                  </Tabs>
-                </div>
+                </PaneItem>
               </div>
             </form>
-          </div>
+          </Box>
         </Modal.Body>
         <Modal.Footer>
-          <button className="btn" onClick={this.handleCancel}>
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="btn btn-success"
-            onClick={this.handleCommit}
-          >
-            Call
-          </button>
+          <ButtonGroup>
+            <Button onClick={this.handleCancel} iconName="cross" big>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              btnStyle="success"
+              big
+              onClick={this.handleCommit}
+              iconName="small-tick"
+            >
+              Call
+            </Button>
+          </ButtonGroup>
         </Modal.Footer>
       </Modal>
     );
