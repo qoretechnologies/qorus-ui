@@ -199,15 +199,22 @@ export async function fetchJson(
   redirectOnError
 ) {
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
+  let jsonRes;
+
+  try {
+    jsonRes = await res.json();
+  } catch (e) {
+    jsonRes = 'success';
+  }
 
   if (res.status >= 500 && res.status <= 600) {
     return {
       err: true,
-      desc: await res.json(),
+      desc: jsonRes,
     };
   }
 
-  return res.json();
+  return jsonRes;
 }
 
 export async function fetchYaml(
