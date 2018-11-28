@@ -30,6 +30,7 @@ type Props = {
   datasources: Array<Object>,
   qorus: Array<Object>,
   users: Array<Object>,
+  perms: Array<string>,
 };
 
 const Connections: Function = ({
@@ -40,6 +41,7 @@ const Connections: Function = ({
   datasources,
   qorus,
   users,
+  perms,
 }: Props): React.Element<any> => (
   <div>
     <Headbar>
@@ -69,13 +71,24 @@ const Connections: Function = ({
             type="datasources"
             location={location}
             remotes={datasources}
+            perms={perms}
           />
         </SimpleTab>
         <SimpleTab name="qorus">
-          <ConnectionsTable type="qorus" location={location} remotes={qorus} />
+          <ConnectionsTable
+            type="qorus"
+            location={location}
+            remotes={qorus}
+            perms={perms}
+          />
         </SimpleTab>
         <SimpleTab name="user">
-          <ConnectionsTable type="user" location={location} remotes={users} />
+          <ConnectionsTable
+            type="user"
+            location={location}
+            remotes={users}
+            perms={perms}
+          />
         </SimpleTab>
       </SimpleTabs>
     </Box>
