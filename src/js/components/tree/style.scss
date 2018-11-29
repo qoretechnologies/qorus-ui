@@ -2,39 +2,51 @@
 * Wrapper for the tree view in the order detail data tab
 */
 
-$color: #a9a9a9;
+$padding: 5px;
+$leftPadding: 20px;
+$pseudoSizesAndPosTop: $padding + 12;
+$pseudoSizesAndPosLeft: $leftPadding;
+$leftMargin: 0px;
 
 .tree-wrapper {
   span {
-    font-weight: bold;
-
     &.data-control {
       display: inline-block;
-      padding-left: 20px;
-      margin-left: -20px;
-      cursor: pointer;
-    }
-
-    &.data-control:before {
-      font-family: FontAwesome;
-      display: table;
-      color: $color;
-      left: 0;
-      position: absolute;
-      top: 7px;
-    }
-
-    &.data-control.expand:before {
-      content: '\f196';
-    }
-
-    &.data-control.clps:before {
-      content: '\f147';
     }
   }
 
-  div {
-    padding: 5px 0 5px 20px;
+  div.tree-key {
+    padding: 5px 8px 5px 2px;
+
+    &.object {
+      padding-left: 8px;
+      cursor: pointer;
+      color: $qore-cobalt;
+      background-color: lighten($qore-cobalt, 50);
+      border-radius: 5px;
+
+      &:hover {
+        transition: all linear 0.2s;
+        background-color: lighten($qore-cobalt, 45);
+      }
+
+      &.expanded {
+        background-color: lighten($qore-cobalt, 35);
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  div.tree-component {
+    padding: $padding 0 0px $leftPadding;
+
+    &.tree-top {
+      padding-left: 0px;
+    }
+
     position: relative;
     word-break: break-all;
 
@@ -43,36 +55,80 @@ $color: #a9a9a9;
     }
   }
 
-  div:not(.tree-top) {
-    &.last {
-      margin-left: 6px;
-      border-left: 1px dotted $color;
-    }
+  div.tree-component:not(.last):not(.tree-top) {
+    margin-left: $leftMargin;
 
-    &.last:last-child {
-      border-left: 0;
-    }
-
-    span:not(.data-control):before {
+    &:before {
       content: '';
       display: table;
       position: absolute;
-      width: 15px;
+      width: $pseudoSizesAndPosLeft;
       height: 1px;
-      border-top: 1px dotted $color;
-      top: 15px;
+      top: $pseudoSizesAndPosTop;
       left: 0;
     }
+  }
 
-    &:last-child > span:not(.data-control):after {
+  @for $i from 1 through 20 {
+    div.tree-component:not(.last):not(.tree-top).level-#{$i} {
+      border-left: 2px solid darken($bgcolor, $i * 5);
+
+      &:before {
+        border-top: 2px solid darken($bgcolor, $i * 5);
+      }
+    }
+
+    div.tree-component:not(.tree-top).level-#{$i} {
+      &.last {
+        border-left: 2px solid darken($bgcolor, $i * 5);
+      }
+
+      .tree-key {
+        span:not(.data-control):not(.pt-icon-standard).level-#{$i}:before {
+          border-top: 2px solid darken($bgcolor, $i * 5);
+        }
+      }
+    }
+
+    div.tree-component:not(.tree-top):last-of-type.level-#{$i}:after {
+      border-left: 2px solid darken($bgcolor, $i * 5);
+    }
+  }
+
+  div.tree-component:not(.tree-top) {
+    &.last {
+      margin-left: $leftMargin;
+    }
+
+    &.last .tree-key:last-child {
+      border-left: 0;
+    }
+
+    .tree-key {
+      span:not(.data-control):not(.pt-icon-standard):before {
+        content: '';
+        display: table;
+        position: absolute;
+        width: $pseudoSizesAndPosLeft;
+        height: 1px;
+        top: $pseudoSizesAndPosTop;
+        left: 0;
+      }
+    }
+  }
+
+  div.tree-component:not(.tree-top):last-of-type {
+    border-left: 0 !important;
+    margin-left: 2px;
+
+    &:after {
       content: '';
       display: table;
       position: absolute;
       width: 1px;
-      height: 15px;
-      left: 0;
+      height: $pseudoSizesAndPosTop + 2;
+      left: -2px;
       top: 0;
-      border-left: 1px dotted $color;
     }
   }
 }
