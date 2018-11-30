@@ -46,7 +46,7 @@ const HelpModal: Function = ({
 
 const Footer: Function = ({ info, path, openModal, closeModal }: Props) => {
   const helpItem = Object.keys(HELP_DATA).find(
-    (res: string): boolean => console.log(path, res) || path.startsWith(res)
+    (res: string): boolean => path.startsWith(res)
   );
 
   const handleHelpClick = () => {
