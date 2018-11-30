@@ -271,26 +271,20 @@ export default class DatePicker extends Component {
           />
         </Popover>
 
-        {!futureOnly &&
-          !noButtons && <Button text="All" onClick={this.handleAllClick} />}
-        {!futureOnly &&
-          !noButtons && (
-            <Popover
-              position={Position.BOTTOM}
-              content={
-                <Menu>
-                  <MenuItem text="Now" onClick={this.handleNowClick} />
-                  <MenuItem text="Today" onClick={this.handleTodayClick} />
-                  <MenuItem text="24h" onClick={this.handle24hClick} />
-                  <MenuItem text="Week" onClick={this.handleWeekClick} />
-                  <MenuItem text="This month" onClick={this.handleMonthClick} />
-                  <MenuItem text="30 days" onClick={this.handleThirtyClick} />
-                </Menu>
-              }
-            >
-              <Button iconName="caret-down" />
-            </Popover>
-          )}
+        {!futureOnly && !noButtons && (
+          <Button text="All" onClick={this.handleAllClick} />
+        )}
+        {!futureOnly && !noButtons && (
+          <Dropdown>
+            <DropdownControl />
+            <DropdownItem title="Now" onClick={this.handleNowClick} />
+            <DropdownItem title="Today" onClick={this.handleTodayClick} />
+            <DropdownItem title="24h" onClick={this.handle24hClick} />
+            <DropdownItem title="Week" onClick={this.handleWeekClick} />
+            <DropdownItem title="This month" onClick={this.handleMonthClick} />
+            <DropdownItem title="30 days" onClick={this.handleThirtyClick} />
+          </Dropdown>
+        )}
         {this.renderDatepicker()}
       </ControlGroup>
     );

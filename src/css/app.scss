@@ -96,6 +96,7 @@ body,
 *:focus,
 *:active {
   outline: none !important;
+  text-decoration: none !important;
 }
 
 .app,
@@ -444,10 +445,25 @@ span.pt-icon-standard {
   font-size: 12px;
 }
 
-.pt-button-group {
+.pt-button-group,
+.pt-control-group {
   &:not(:last-child) {
     margin-right: 3px;
   }
+}
+
+.pt-control-group .qorus-dropdown:not(:last-child) {
+  margin-right: -1px;
+}
+
+.qorus-dropdown:first-child .pt-popover-target:first-child button {
+  border-top-left-radius: 3px !important;
+  border-bottom-left-radius: 3px !important;
+}
+
+.qorus-dropdown:last-child .pt-popover-target:last-child button {
+  border-top-right-radius: 3px !important;
+  border-bottom-right-radius: 3px !important;
 }
 
 .pt-input {

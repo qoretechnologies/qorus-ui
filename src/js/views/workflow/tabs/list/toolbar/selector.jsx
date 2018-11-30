@@ -23,24 +23,22 @@ const ToolbarSelector: Function = ({
   selectInvert,
   selectedCount,
 }: Props): React.Element<any> => (
-  <ButtonGroup>
-    <Dropdown id="selection">
-      <Control
-        icon={
-          selected === 'all'
-            ? 'selection'
-            : selected === 'some'
-              ? 'remove'
-              : 'circle'
-        }
-      >
-        {selectedCount}
-      </Control>
-      <Item action={selectAll} title="All" />
-      <Item action={selectNone} title="None" />
-      <Item action={selectInvert} title="Invert" />
-    </Dropdown>
-  </ButtonGroup>
+  <Dropdown id="selection">
+    <Control
+      icon={
+        selected === 'all'
+          ? 'selection'
+          : selected === 'some'
+          ? 'remove'
+          : 'circle'
+      }
+    >
+      {selectedCount}
+    </Control>
+    <Item action={selectAll} title="All" />
+    <Item action={selectNone} title="None" />
+    <Item action={selectInvert} title="Invert" />
+  </Dropdown>
 );
 
 export default compose(

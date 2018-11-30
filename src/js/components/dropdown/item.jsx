@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { pureRender } from '../utils';
-import { MenuItem, Intent } from '@blueprintjs/core';
+import { MenuItem, Intent, Icon } from '@blueprintjs/core';
 
 @pureRender
 export default class Item extends Component {
@@ -82,14 +82,7 @@ export default class Item extends Component {
   }
 
   render(): React.Element<any> {
-    const {
-      className = '',
-      selected,
-      title,
-      marked,
-      multi,
-      disabled,
-    } = this.props;
+    const { selected, title, marked, multi, disabled, icon } = this.props;
     let intent = this.props.intent;
 
     if (marked) {
@@ -102,10 +95,11 @@ export default class Item extends Component {
       <MenuItem
         shouldDismissPopover={!multi}
         text={title}
-        iconName={this.props.icon}
+        iconName={icon}
         onClick={this.handleClick}
         intent={intent}
         disabled={disabled}
+        label={selected && <Icon iconName="small-tick" />}
       />
     );
   }
