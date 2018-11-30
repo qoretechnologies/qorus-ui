@@ -1,71 +1,15 @@
 /**
 * Colors for the different states of orders
 **/
-.badge-black,
-.label-black,
-.btn-black {
-  background-color: #333;
-  color: #fff;
-
-  &.btn-black:hover {
-    background-color: #000;
-    color: #fff;
-  }
-}
-
-.badge-gray,
-.label-gray,
-.btn-gray {
-  background-color: #a9a9a9;
-  color: #fff;
-
-  &.btn-gray:hover {
-    background-color: darken(#a9a9a9, 10);
-    color: #fff;
-  }
-}
-
-.badge-ready,
-.label-ready,
-.btn-ready {
-  background-color: #c5e08c;
-  color: #fff;
-
-  &.btn-ready:hover {
-    background-color: darken(#c5e08c, 10);
-    color: #fff;
-  }
-}
-
-.badge-waiting,
-.label-waiting,
-.btn-waiting {
-  background-color: #e5c737;
-  color: #fff;
-
-  &.btn-waiting:hover {
-    background-color: darken(#e5c737, 10);
-    color: #fff;
-  }
-}
-
-.badge-canceled,
-.label-canceled,
-.btn-canceled {
-  background-color: #f2dede;
-  color: #fff;
-
-  &.btn-canceled:hover {
-    background-color: darken(#f2dede, 10);
-    color: #fff;
-  }
+.label {
+  padding-bottom: 0.2em;
+  line-height: unset;
 }
 
 .status {
   &-complete {
     background-color: $status-complete;
     color: #fff;
-    text-shadow: -1px -1px 0 darken($status-complete, 20);
   }
 
   &-complete-diagram {
@@ -81,7 +25,6 @@
   &-ready {
     background-color: $status-ready;
     color: #fff;
-    text-shadow: -1px -1px 0 darken($status-ready, 4);
   }
 
   &-ready-diagram {
@@ -97,7 +40,6 @@
   &-scheduled {
     background-color: $status-scheduled;
     color: #fff;
-    text-shadow: -1px -1px 0 darken($status-scheduled, 20);
   }
 
   &-scheduled-diagram {
@@ -113,7 +55,6 @@
   &-waiting {
     background-color: $status-waiting;
     color: #fff;
-    text-shadow: -1px -1px 0 darken($status-waiting, 10);
   }
 
   &-waiting-diagram,
@@ -132,7 +73,6 @@
   &-incomplete {
     background-color: $status-incomplete;
     color: #fff;
-    text-shadow: -1px -1px 0 $status-incomplete;
   }
 
   &-incomplete-diagram,
@@ -149,7 +89,6 @@
   &-retry {
     background-color: $status-retry;
     color: #fff;
-    text-shadow: -1px -1px 0 darken($status-retry, 5);
   }
 
   &-retry-diagram {
@@ -165,7 +104,6 @@
   &-error {
     background-color: $status-error;
     color: #fff;
-    text-shadow: -1px -1px 0 darken($status-error, 10);
   }
 
   &-error-diagram {
@@ -181,7 +119,6 @@
   &-in-progress {
     background-color: $status-in-progress;
     color: #fff;
-    text-shadow: -1px -1px 0 darken($status-in-progress, 10);
   }
 
   &-in-progress-diagram {
@@ -197,7 +134,6 @@
   &-canceled {
     background-color: $status-canceled;
     color: #fff;
-    text-shadow: -1px -1px 0 darken($status-canceled, 10);
   }
 
   &-canceled-diagram {
@@ -213,7 +149,6 @@
   &-blocked {
     background-color: $status-blocked;
     color: #fff;
-    text-shadow: -1px -1px 0 #000;
   }
 
   &-blocked-diagram {
