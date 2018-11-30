@@ -3,17 +3,17 @@ import React, { Component } from 'react';
 import { pureRender } from '../utils';
 import { debounce, includes } from 'lodash';
 import {
-  ButtonGroup,
   Button,
   Popover,
   Menu,
   MenuItem,
-  Intent,
   Position,
   InputGroup,
   ControlGroup,
   Classes,
 } from '@blueprintjs/core';
+
+import Dropdown, { Item, Control } from '../dropdown';
 
 @pureRender
 export default class Search extends Component {
@@ -109,9 +109,9 @@ export default class Search extends Component {
 
     return searches.map(
       (qry: string, index: number): React.Element<any> => (
-        <MenuItem
+        <Item
           key={`${qry}_${index}`}
-          text={qry}
+          title={qry}
           onClick={this.handleHistoryClick}
         />
       )
@@ -127,15 +127,12 @@ export default class Search extends Component {
         className={`${this.props.pullLeft ? '' : 'pull-right'}`}
       >
         <ControlGroup>
-          {searches &&
-            searches.length !== 0 && (
-              <Popover
-                position={Position.BOTTOM}
-                content={<Menu>{this.renderHistoryItems()}</Menu>}
-              >
-                <Button iconName="history" />
-              </Popover>
-            )}
+          {searches && searches.length !== 0 && (
+            <Dropdown>
+              <Control icon="history" noCaret />
+              {this.renderHistoryItems()}
+            </Dropdown>
+          )}
           <InputGroup
             ref="input"
             type="text"
