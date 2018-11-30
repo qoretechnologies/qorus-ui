@@ -5,6 +5,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import Item from './item';
 import CustomItem from './custom_item';
 import Control from './control';
+import Divider from './divider';
 import {
   Menu,
   Popover,
@@ -30,6 +31,7 @@ type Props = {
   className?: string,
   disabled?: boolean,
   onHide?: Function,
+  position?: string,
 };
 
 @pure(['children', 'show', 'selected', 'disabled', 'className'])
@@ -235,7 +237,7 @@ export default class Dropdown extends Component {
     return React.Children.map(this.props.children, (c, index) => {
       if (!c || c.type === Control) return null;
 
-      if (c.type === CustomItem) {
+      if (c.type === CustomItem || c.type === Divider) {
         return c;
       }
 
@@ -295,7 +297,7 @@ export default class Dropdown extends Component {
     return (
       <ButtonGroup className={`${this.props.className} qorus-dropdown`}>
         <Popover
-          position={Position.BOTTOM}
+          position={this.props.position || Position.BOTTOM}
           content={this.renderDropdown()}
           popoverDidOpen={this.handleOpen}
           popoverClassName="popover-dropdown"
@@ -312,4 +314,4 @@ export default class Dropdown extends Component {
   }
 }
 
-export { Item, CustomItem, Control };
+export { Item, CustomItem, Control, Divider };
