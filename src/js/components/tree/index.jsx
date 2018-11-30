@@ -1,12 +1,16 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
+import { Intent, Icon } from '@blueprintjs/core';
+import isArray from 'lodash/isArray';
+import size from 'lodash/size';
 
 import Alert from '../alert';
 import NoData from '../nodata';
-import Icon from '../icon';
+import Pull from '../Pull';
 import withModal from '../../hocomponents/modal';
 import EditModal from './modal';
+import { Controls as ButtonGroup, Control as Button } from '../controls';
 
 @withModal()
 export default class Tree extends Component {
@@ -23,14 +27,15 @@ export default class Tree extends Component {
     closeModal: PropTypes.func,
     id: PropTypes.number,
     editableKeys: PropTypes.bool,
+    expanded: PropTypes.bool,
   };
 
-  componentWillMount() {
-    this.setState({
-      mode: 'normal',
-      items: {},
-    });
-  }
+  state = {
+    mode: 'normal',
+    items: {},
+    allExpanded: this.props.expanded,
+    showTypes: false,
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.forceEdit) {
@@ -49,6 +54,12 @@ export default class Tree extends Component {
   handleCopyClick = () => {
     this.setState({
       mode: 'copy',
+    });
+  };
+
+  handleTypesClick = () => {
+    this.setState({
+      showTypes: !this.state.showTypes,
     });
   };
 
@@ -76,13 +87,21 @@ export default class Tree extends Component {
     this.setState({ items: {}, allExpanded: false });
   };
 
-  renderTree(data, top, k, topKey) {
+  renderTree(data, top, k, topKey, level = 1) {
     return Object.keys(data).map((key, index) => {
       const wrapperClass = classNames({
+        'tree-component': true,
         'tree-top': top,
         last: typeof data[key] !== 'object' || data[key] === null,
         nopad: !this.isDeep(),
+        [`level-${level}`]: true,
       });
+
+      let dataType: string = typeof data[key];
+
+      if (isArray(data[key])) {
+        dataType = 'array';
+      }
 
       const stateKey = k ? `${k}_${key}` : key;
       const isObject = typeof data[key] === 'object' && data[key] !== null;
@@ -126,25 +145,45 @@ export default class Tree extends Component {
 
       return (
         <div key={index} className={wrapperClass}>
-          <span
+          <div
+            className={`${isObject ? 'object' : ''} ${
+              isExpandable ? 'expanded' : ''
+            } tree-key`}
             onClick={handleClick}
-            className={classNames({
-              'data-control': isObject,
-              expand: isObject && !isExpandable,
-              clps: isObject && isExpandable,
-            })}
           >
-            {isObject ? key : `${key}:`}
-          </span>
+            {isObject && (
+              <Icon iconName={isExpandable ? 'small-minus' : 'small-plus'} />
+            )}{' '}
+            <span
+              className={classNames({
+                'data-control': isObject,
+                expand: isObject && !isExpandable,
+                clps: isObject && isExpandable,
+                [`level-${level}`]: true,
+              })}
+            >
+              {isObject ? key : `${key}:`}{' '}
+              {this.state.showTypes && <code>{dataType}</code>}
+            </span>
+          </div>
           {this.props.editableKeys && topKey && (
-            <span onClick={handleEditClick}>
+            <span
+              onClick={handleEditClick}
+              className={classNames({ [`level-${level}`]: true })}
+            >
               {' '}
-              <Icon iconName="pencil" tooltip="Edit data" />
+              <Icon iconName="edit" tooltip="Edit data" />
             </span>
           )}{' '}
           {isExpandable &&
             (isObject
-              ? this.renderTree(data[key], false, stateKey, top ? key : null)
+              ? this.renderTree(
+                  data[key],
+                  false,
+                  stateKey,
+                  top ? key : null,
+                  level + 1
+                )
               : data[key] && data[key].toString())}
         </div>
       );
@@ -175,8 +214,16 @@ export default class Tree extends Component {
       return 'Loading data...';
     }
 
-    return JSON.stringify(data, null, 4);
+    return JSON.stringify(data, null, 20);
   }
+
+  getLineCount: Function = (str: string): number => {
+    try {
+      return str.match(/[^\n]*\n[^\n]*/gi).length;
+    } catch (e) {
+      return 0;
+    }
+  };
 
   handleUpdateClick = () => {
     this.props.onUpdateClick(this.refs.editedData.value);
@@ -192,52 +239,64 @@ export default class Tree extends Component {
 
   render() {
     const { data, withEdit } = this.props;
+    const { mode, showTypes, allExpanded, items } = this.state;
 
     if (!data || !Object.keys(data).length) {
       return <NoData />;
     }
 
+    const textData: string = this.renderText(data);
+    const lineCount: number = this.getLineCount(textData);
+
     return (
       <div className="tree-component">
         <div className="row">
           <div className="col-lg-12">
-            {this.isDeep() && (
-              <div className="pull-left">
-                <ButtonGroup>
+            <Pull>
+              <ButtonGroup>
+                {this.isDeep() && [
                   <Button
-                    className="button--expand pt-small"
+                    iconName="expand-all"
                     text="Expand all"
                     onClick={this.handleExpandClick}
-                  />
-                  <Button
-                    className="button--collapse pt-small"
-                    text="Collapse all"
-                    onClick={this.handleCollapseClick}
-                  />
-                </ButtonGroup>
-              </div>
-            )}
+                  />,
+                  allExpanded || size(items) > 0 ? (
+                    <Button
+                      iconName="collapse-all"
+                      text="Collapse all"
+                      onClick={this.handleCollapseClick}
+                    />
+                  ) : null,
+                ]}
+                <Button
+                  iconName="code"
+                  text="Show types"
+                  btnStyle={showTypes && 'primary'}
+                  onClick={this.handleTypesClick}
+                />
+              </ButtonGroup>
+            </Pull>
             {!this.props.noControls && (
               <div className="pull-right">
                 <ButtonGroup>
                   <Button
-                    className="button--copy pt-small"
                     text="Tree view"
-                    disabled={this.state.mode === 'normal'}
+                    btnStyle={mode === 'normal' && 'primary'}
                     onClick={this.handleTreeClick}
+                    iconName="diagram-tree"
                   />
                   <Button
-                    className="button--copy pt-small"
                     text="Copy view"
-                    disabled={this.state.mode === 'copy'}
+                    btnStyle={mode === 'copy' && 'primary'}
                     onClick={this.handleCopyClick}
+                    iconName="clipboard"
                   />
                   {withEdit && (
                     <Button
-                      className="button--copy pt-small"
                       text="Edit mode"
-                      disabled={this.state.mode === 'edit'}
+                      btnStyle={mode === 'edit' && 'primary'}
                       onClick={this.handleEditClick}
+                      iconName="edit"
                     />
                   )}
                 </ButtonGroup>
@@ -253,9 +312,9 @@ export default class Tree extends Component {
         {this.state.mode === 'copy' && (
           <textarea
             id="tree-content"
-            className="form-control"
-            defaultValue={this.renderText(this.props.data)}
-            rows="20"
+            className="pt-input pt-fill"
+            defaultValue={textData}
+            rows={lineCount > 20 ? 20 : lineCount}
             cols="50"
             readOnly
           />
@@ -266,20 +325,22 @@ export default class Tree extends Component {
               key={this.props.customEditData}
               ref="editedData"
               id="tree-content"
-              className="form-control"
+              className="pt-input pt-fill"
               defaultValue={this.renderEdit(this.props.data)}
-              rows="20"
+              rows={lineCount > 20 ? 20 : lineCount}
               cols="50"
             />
             <Alert bsStyle="warning" title="Warning!">
               Posting new staticdata replaces original content and it can be
               fatal for business processing.
             </Alert>
-            <Button
-              text="Update data"
-              intent={Intent.PRIMARY}
-              onClick={this.handleUpdateClick}
-            />
+            <ButtonGroup>
+              <Button
+                text="Update data"
+                intent={Intent.PRIMARY}
+                onClick={this.handleUpdateClick}
+              />
+            </ButtonGroup>
           </div>
         )}
       </div>

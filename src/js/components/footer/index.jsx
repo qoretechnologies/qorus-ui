@@ -5,9 +5,11 @@ import pure from 'recompose/onlyUpdateForKeys';
 
 import withModal from '../../hocomponents/modal';
 import { HELP_DATA } from '../../constants/help';
-import Modal from '../../components/modal';
+import Modal from '../modal';
+import PaneItem from '../pane_item';
+import Box from '../box';
 import Pull from '../Pull';
-import { Tag, Intent } from '@blueprintjs/core';
+import { Tag } from '@blueprintjs/core';
 
 type Props = {
   info: Object,
@@ -28,15 +30,16 @@ const HelpModal: Function = ({
       Help for "{path.replace('/', '')}" page
     </Modal.Header>
     <Modal.Body>
-      {helpData.overview && <p className="lead">{helpData.overview}</p>}
-      {Object.keys(helpData.data).map(
-        (header: string): React.Element<any> => (
-          <div key={header}>
-            <h4>{header}</h4>
-            <p>{helpData.data[header]}</p>
-          </div>
-        )
-      )}
+      <Box top>
+        {helpData.overview && <p className="lead">{helpData.overview}</p>}
+        {Object.keys(helpData.data).map(
+          (header: string): React.Element<any> => (
+            <PaneItem title={header} key={header}>
+              {helpData.data[header]}
+            </PaneItem>
+          )
+        )}
+      </Box>
     </Modal.Body>
   </Modal>
 );

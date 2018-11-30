@@ -1,3 +1,4 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 import size from 'lodash/size';
 
@@ -6,7 +7,7 @@ import WorkflowControls from '../workflows/controls';
 import WorkflowAutostart from '../workflows/autostart';
 import Lock from '../workflow/tabs/list/lock';
 import Reschedule from '../workflow/tabs/list/modals/schedule';
-import Dropdown, { Control, Item } from 'components/dropdown';
+import Dropdown, { Control, Item, Divider } from '../../components/dropdown';
 import queryControl from '../../hocomponents/queryControl';
 import {
   Breadcrumbs,
@@ -17,6 +18,7 @@ import {
 import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
 import { normalizeName } from '../../components/utils';
+import { ALL_ORDER_STATES } from '../../constants/orders';
 
 @queryControl('target')
 @queryControl('prevQuery')
@@ -109,18 +111,19 @@ export default class OrderHeader extends Component {
     );
 
     const workflowName: string = normalizeName(this.props.workflow);
+    const label = ALL_ORDER_STATES.find(
+      (state: Object): boolean => state.name === this.props.data.workflowstatus
+    ).label;
 
     return (
       <Headbar>
         <Breadcrumbs>
-          <CollapsedCrumb
-            links={{ Workflows: '/workflows', [workflowName]: backQueriesStr }}
-          />
-          <Crumb>
-            ORDER{' '}
-            <small>
-              {this.props.data.id} v{this.props.data.version}
-            </small>
+          <CollapsedCrumb links={{ Workflows: '/workflows' }} />
+          <Crumb link={backQueriesStr}>
+            {workflowName} <strong>#{this.props.data.id}</strong>{' '}
+            <span className={`label status-${label}`}>
+              {this.props.data.workflowstatus}
+            </span>
           </Crumb>
           <CrumbTabs
             tabs={[
