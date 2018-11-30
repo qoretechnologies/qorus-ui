@@ -214,8 +214,16 @@ export default class Tree extends Component {
       return 'Loading data...';
     }
 
-    return JSON.stringify(data, null, 4);
+    return JSON.stringify(data, null, 20);
   }
+
+  getLineCount: Function = (str: string): number => {
+    try {
+      return str.match(/[^\n]*\n[^\n]*/gi).length;
+    } catch (e) {
+      return 0;
+    }
+  };
 
   handleUpdateClick = () => {
     this.props.onUpdateClick(this.refs.editedData.value);
@@ -236,6 +244,9 @@ export default class Tree extends Component {
     if (!data || !Object.keys(data).length) {
       return <NoData />;
     }
+
+    const textData: string = this.renderText(data);
+    const lineCount: number = this.getLineCount(textData);
 
     return (
       <div className="tree-component">
@@ -301,9 +312,9 @@ export default class Tree extends Component {
         {this.state.mode === 'copy' && (
           <textarea
             id="tree-content"
-            className="form-control"
-            defaultValue={this.renderText(this.props.data)}
-            rows="20"
+            className="pt-input pt-fill"
+            defaultValue={textData}
+            rows={lineCount > 20 ? 20 : lineCount}
             cols="50"
             readOnly
           />
@@ -314,20 +325,22 @@ export default class Tree extends Component {
               key={this.props.customEditData}
               ref="editedData"
               id="tree-content"
-              className="form-control"
+              className="pt-input pt-fill"
               defaultValue={this.renderEdit(this.props.data)}
-              rows="20"
+              rows={lineCount > 20 ? 20 : lineCount}
               cols="50"
             />
             <Alert bsStyle="warning" title="Warning!">
               Posting new staticdata replaces original content and it can be
               fatal for business processing.
             </Alert>
-            <Button
-              text="Update data"
-              intent={Intent.PRIMARY}
-              onClick={this.handleUpdateClick}
-            />
+            <ButtonGroup>
+              <Button
+                text="Update data"
+                intent={Intent.PRIMARY}
+                onClick={this.handleUpdateClick}
+              />
+            </ButtonGroup>
           </div>
         )}
       </div>
