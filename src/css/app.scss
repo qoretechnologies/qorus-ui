@@ -455,12 +455,12 @@ span.pt-icon-standard {
   margin-right: -1px;
 }
 
-.qorus-dropdown:first-child button:first-of-type {
+.qorus-dropdown:first-child .pt-popover-target:first-child button {
   border-top-left-radius: 3px !important;
   border-bottom-left-radius: 3px !important;
 }
 
-.qorus-dropdown:last-child button:last-of-type {
+.qorus-dropdown:last-child .pt-popover-target:last-child button {
   border-top-right-radius: 3px !important;
   border-bottom-right-radius: 3px !important;
 }
