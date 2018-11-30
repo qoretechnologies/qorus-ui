@@ -21,25 +21,20 @@ export default function Control({
   icon,
   onClick,
 }: Props) {
-  return (
+  const iconName: ?string = !icon && !children ? 'caret-down' : icon;
+  const rightIconName: ?string = !icon && !children ? undefined : 'caret-down';
+
+  return children || icon || !noCaret ? (
     <ButtonGroup>
       <Button
         className={classNames(small ? 'pt-small' : '')}
         type="button"
         text={children}
         intent={intent}
-        iconName={icon}
+        iconName={iconName}
+        rightIconName={!noCaret ? rightIconName : null}
         onClick={onClick}
       />
-      {!noCaret && (
-        <Button
-          className={classNames(small ? 'pt-small' : '')}
-          iconName="caret-down"
-          type="button"
-          intent={intent}
-          onClick={onClick}
-        />
-      )}
     </ButtonGroup>
-  );
+  ) : null;
 }
