@@ -6,13 +6,9 @@ import Item from './item';
 import CustomItem from './custom_item';
 import Control from './control';
 import Divider from './divider';
-import {
-  Menu,
-  Popover,
-  Position,
-  Button as Btn,
-  ButtonGroup,
-} from '@blueprintjs/core';
+import { Menu, Popover, Position, InputGroup } from '@blueprintjs/core';
+
+import { Controls as ButtonGroup, Control as Button } from '../controls';
 
 import { includes, remove, xor } from 'lodash';
 
@@ -48,6 +44,7 @@ export default class Dropdown extends Component {
     showDropdown: ?boolean,
     selected: Array<*>,
     marked: number,
+    filterValue: string,
   };
 
   componentWillMount(): void {
@@ -64,6 +61,7 @@ export default class Dropdown extends Component {
       showDropdown: this.props.show,
       selected: sel,
       marked: 1,
+      filterValue: '',
     });
   }
 
@@ -207,6 +205,16 @@ export default class Dropdown extends Component {
     }
   };
 
+  handleFilterChange: Function = (event: Object): void => {
+    const { value } = event.target;
+
+    this.setState({ filterValue: value });
+  };
+
+  handleFilterClearClick: Function = (): void => {
+    this.setState({ filterValue: '' });
+  };
+
   /**
    * Hides the control dropdown
    * based on the current state
@@ -223,11 +231,32 @@ export default class Dropdown extends Component {
    * Renders the seleciton dropdown to the component
    */
   renderDropdown(): ?React.Element<any> {
+    const { filterValue } = this.state;
+
     if (
       !this.props.disabled &&
       React.Children.toArray(this.props.children).length > 1
     ) {
-      return <Menu>{this.renderDropdownList()}</Menu>;
+      return [
+        <div className="dropdown-filter">
+          <InputGroup
+            className="pt-fill"
+            onChange={this.handleFilterChange}
+            value={filterValue}
+            rightElement={
+              filterValue !== '' && (
+                <Button
+                  className="pt-minimal"
+                  iconName="cross"
+                  onClick={this.handleFilterClearClick}
+                />
+              )
+            }
+            placeholder="Filter..."
+          />
+        </div>,
+        <Menu className="popover-dropdown">{this.renderDropdownList()}</Menu>,
+      ];
     }
 
     return null;
@@ -239,6 +268,15 @@ export default class Dropdown extends Component {
 
       if (c.type === CustomItem || c.type === Divider) {
         return c;
+      }
+
+      const { filterValue } = this.state;
+
+      if (
+        filterValue !== '' &&
+        !c.props.title.toLowerCase().includes(filterValue.toLowerCase())
+      ) {
+        return null;
       }
 
       let selected: boolean = false;
@@ -285,9 +323,11 @@ export default class Dropdown extends Component {
     });
   }
 
-  renderSubmit(): ?React.Element<Btn> {
+  renderSubmit(): ?React.Element<Button> {
     if (this.props.multi && this.props.onSubmit) {
-      return <Btn text={this.props.submitLabel} onClick={this.handleSubmit} />;
+      return (
+        <Button text={this.props.submitLabel} onClick={this.handleSubmit} />
+      );
     }
 
     return undefined;
@@ -300,7 +340,6 @@ export default class Dropdown extends Component {
           position={this.props.position || Position.BOTTOM}
           content={this.renderDropdown()}
           popoverDidOpen={this.handleOpen}
-          popoverClassName="popover-dropdown"
           isOpen={this.state.showDropdown}
           enforceFocus={false}
           autoFocus={false}
