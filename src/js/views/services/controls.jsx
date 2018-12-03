@@ -128,5 +128,5 @@ export default compose(
       dispatchAction(actions.services.serviceAction, 'reset', id, null);
     },
   }),
-  pure(['enabled', 'loaded', 'autostart'])
+  pure(['enabled', 'loaded', 'autostart', 'remote'])
 )(ServiceControls);
