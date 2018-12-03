@@ -403,7 +403,7 @@ const updateConfigItemWs = {
       payload: { events },
     }
   ) {
-    const newData: Array<Object> = [...state.data];
+    let newData: Array<Object> = [...state.data];
 
     events.forEach((dt: Object) => {
       const service: Object = newData.find(
@@ -414,6 +414,8 @@ const updateConfigItemWs = {
         const { config } = service;
 
         config[dt.item].value = dt.value;
+
+        newData = updateItemWithId(dt.serviceid, { _updated: true }, newData);
       }
     });
 

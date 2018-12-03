@@ -665,7 +665,7 @@ const updateConfigItemWs = {
       payload: { events },
     }
   ) {
-    const newData: Array<Object> = [...state.data];
+    let newData: Array<Object> = [...state.data];
 
     events.forEach((dt: Object) => {
       const workflow: Object = newData.find(
@@ -678,6 +678,8 @@ const updateConfigItemWs = {
         );
 
         step.config[dt.item].value = dt.value;
+
+        newData = updateItemWithId(dt.workflowid, { _updated: true }, newData);
       }
     });
 

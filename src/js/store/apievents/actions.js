@@ -677,6 +677,13 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       }
+      case 'JOB_CONFIG_ITEM_CHANGE': {
+        if (state.api.jobs.sync) {
+          pipeline(eventstr, jobs.updateConfigItemWs, info, dispatch);
+        }
+
+        break;
+      }
       case 'CONNECTION_UP':
         if (state.api.remotes.sync) {
           pipeline(
