@@ -249,7 +249,7 @@ export default class WorkflowsDetail extends Component {
             )}
             <SimpleTab name="config">
               <Container fill>
-                <ConfigItemsTable items={configItems} />
+                <ConfigItemsTable items={configItems} intrf="workflows" />
               </Container>
             </SimpleTab>
             <SimpleTab name="order stats">
