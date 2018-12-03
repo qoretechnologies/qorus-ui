@@ -3,6 +3,7 @@ import isArray from 'lodash/isArray';
 
 import { fetchJson, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
+import { updateConfigItemAction } from '../../../common/actions';
 
 function setOptionsPayload(workflow, name, value) {
   return fetchJson(
@@ -65,11 +66,8 @@ const setExecCount = createAction('WORKFLOWS_SETEXECCOUNT', events => ({
 }));
 
 const setEnabled = createAction('WORKFLOWS_SETENABLED', events => ({ events }));
-
 const unselectAll = createAction('WORKFLOWS_UNSELECTALL');
-
 const updateDone = createAction('WORKFLOWS_UPDATEDONE', id => ({ id }));
-
 const addOrder = createAction('WORKFLOWS_ADDORDER', events => ({ events }));
 
 const processOrderEvent = createAction(
@@ -248,6 +246,12 @@ const setRemote = createAction('WORKFLOWS_SETREMOTE', (id, value, dispatch) => {
   return { id, value };
 });
 
+const updateConfigItem: Function = updateConfigItemAction('WORKFLOWS');
+const updateConfigItemWs = createAction(
+  'WORKFLOWS_UPDATECONFIGITEMWS',
+  events => ({ events })
+);
+
 const unsync = createAction('WORKFLOWS_UNSYNC');
 
 export {
@@ -282,4 +286,6 @@ export {
   setThreshold,
   setRemote,
   fixOrders,
+  updateConfigItem,
+  updateConfigItemWs,
 };

@@ -658,6 +658,33 @@ const fetchList = {
   },
 };
 
+const updateConfigItemWs = {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
+    const newData: Array<Object> = [...state.data];
+
+    events.forEach((dt: Object) => {
+      const workflow: Object = newData.find(
+        (wf: Object): boolean => wf.id === dt.workflowid
+      );
+
+      if (workflow) {
+        const step: Object = workflow.stepinfo.find(
+          (stp: Object) => stp.stepid === dt.stepid
+        );
+
+        step.config[dt.item].value = dt.value;
+      }
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -686,4 +713,5 @@ export {
   setThreshold as SETTHRESHOLD,
   setRemote as SETREMOTE,
   fixOrders as FIXORDERS,
+  updateConfigItemWs as UPDATECONFIGITEMWS,
 };

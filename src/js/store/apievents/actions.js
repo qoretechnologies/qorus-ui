@@ -598,6 +598,11 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       }
+      case 'WORKFLOW_STEP_CONFIG_ITEM_CHANGE': {
+        pipeline(eventstr, workflows.updateConfigItemWs, info, dispatch);
+
+        break;
+      }
       case 'JOB_STOP': {
         const job = state.api.jobs.data.find(
           jb => jb.id === parseInt(info.jobid, 10)

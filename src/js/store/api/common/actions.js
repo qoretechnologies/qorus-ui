@@ -12,8 +12,6 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       newValue: any,
       dispatch: Function
     ): void => {
-      console.log(dispatch);
-
       const intfcToApiPath: Object = {
         WORKFLOWS: 'steps',
         SERVICES: 'services',
