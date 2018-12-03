@@ -24,6 +24,8 @@ import titleManager from '../../../hocomponents/TitleManager';
 import Container from '../../../components/container';
 import { NonIdealState } from '@blueprintjs/core';
 import InfoTable from '../../../components/info_table';
+import { rebuildConfigHash } from '../../../helpers/interfaces';
+import ConfigItemsTable from '../../../components/ConfigItemsTable';
 
 const Detail = ({
   location,
@@ -35,6 +37,7 @@ const Detail = ({
   width,
   onResize,
   isTablet,
+  configItems,
 }: {
   location: Object,
   paneTab: string,
@@ -46,6 +49,7 @@ const Detail = ({
   width: number,
   onResize: Function,
   isTablet: boolean,
+  configItems: Array<Object>,
 }): React.Element<*> => (
   <DetailPane
     width={width || 600}
@@ -59,7 +63,7 @@ const Detail = ({
         { title: 'Mappers', suffix: `(${size(model.mappers)})` },
         { title: 'Value maps', suffix: `(${size(model.vmaps)})` },
         'Releases',
-        'Code',
+        { title: 'Config', suffix: `(${size(configItems)})` },
         'Log',
       ],
       queryIdentifier: 'paneTab',
@@ -139,6 +143,11 @@ const Detail = ({
             />
           </Container>
         </SimpleTab>
+        <SimpleTab name="config">
+          <Container fill>
+            <ConfigItemsTable items={configItems} intrf="jobs" />
+          </Container>
+        </SimpleTab>
       </SimpleTabs>
     </Box>
   </DetailPane>
@@ -174,7 +183,6 @@ export default compose(
     }
   ),
   show((props: Object) => props.jobsLoaded),
-  pure,
   fetchLibSourceOnMountAndOnChange,
   mapProps(
     (props: Object): Object => ({
@@ -190,6 +198,7 @@ export default compose(
         },
         ...props.model.lib,
       },
+      configItems: rebuildConfigHash(props.model.config, props.model.id),
     })
   ),
   withHandlers({

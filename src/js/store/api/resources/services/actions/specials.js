@@ -4,6 +4,7 @@ import isArray from 'lodash/isArray';
 import { fetchJson, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
 import { error } from '../../../../ui/bubbles/actions';
+import { updateConfigItemAction } from '../../../common/actions';
 
 function setOptionsPayload(service, name, value) {
   return fetchJson('PUT', `${settings.REST_BASE_URL}/services/${service.id}`, {
@@ -176,6 +177,12 @@ const setRemote = createAction(
   }
 );
 
+const updateConfigItem: Function = updateConfigItemAction('SERVICES');
+const updateConfigItemWs = createAction(
+  'SERVICES_UPDATECONFIGITEMWS',
+  events => ({ events })
+);
+
 const unsync = createAction('SERVICES_UNSYNC');
 
 export {
@@ -199,4 +206,6 @@ export {
   setSLAMethod,
   removeSLAMethod,
   setRemote,
+  updateConfigItem,
+  updateConfigItemWs,
 };

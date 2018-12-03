@@ -9,7 +9,7 @@ import {
   fetchWithNotifications,
 } from '../../../utils';
 import settings from '../../../../../settings';
-import { error } from '../../../../ui/bubbles/actions';
+import { updateConfigItemAction } from '../../../common/actions';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
 
@@ -297,6 +297,11 @@ const setRemote = createAction(
   }
 );
 
+const updateConfigItem: Function = updateConfigItemAction('JOBS');
+const updateConfigItemWs = createAction('JOBS_UPDATECONFIGITEMWS', events => ({
+  events,
+}));
+
 const selectAll = createAction('JOBS_SELECTALL');
 const selectNone = createAction('JOBS_SELECTNONE');
 const selectInvert = createAction('JOBS_SELECTINVERT');
@@ -332,4 +337,6 @@ export {
   setSLAJob,
   removeSLAJob,
   setRemote,
+  updateConfigItem,
+  updateConfigItemWs,
 };

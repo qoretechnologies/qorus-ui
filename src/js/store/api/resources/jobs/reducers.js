@@ -37,8 +37,8 @@ const setOptions = {
     }
 
     if (oldOption) {
-      newOptions = options.map(
-        item => (item.name === option.name ? option : item)
+      newOptions = options.map(item =>
+        item.name === option.name ? option : item
       );
     } else {
       newOptions = [...options, option];
@@ -665,6 +665,33 @@ const setRemote = {
   },
 };
 
+const updateConfigItemWs = {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
+    let newData: Array<Object> = [...state.data];
+
+    events.forEach((dt: Object) => {
+      const job: Object = newData.find(
+        (jb: Object): boolean => jb.id === dt.jobid
+      );
+
+      if (job) {
+        const { config } = job;
+
+        config[dt.item].value = dt.value;
+
+        newData = updateItemWithId(dt.jobid, { _updated: true }, newData);
+      }
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -694,4 +721,5 @@ export {
   setSLAJob as SETSLAJOB,
   removeSLAJob as REMOVESLAJOB,
   setRemote as SETREMOTE,
+  updateConfigItemWs as UPDATECONFIGITEMWS,
 };

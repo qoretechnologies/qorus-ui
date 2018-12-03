@@ -217,6 +217,18 @@ export async function fetchJson(
   return jsonRes;
 }
 
+export async function put(...args): Promise<any> {
+  return await fetchJson('PUT', ...args);
+}
+
+export async function get(...args): Promise<any> {
+  return await fetchJson('GET', ...args);
+}
+
+export async function post(...args): Promise<any> {
+  return await fetchJson('POST', ...args);
+}
+
 export async function fetchYaml(
   method,
   url,

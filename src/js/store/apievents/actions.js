@@ -419,6 +419,13 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
+      case 'SERVICE_CONFIG_ITEM_CHANGE': {
+        if (state.api.services.sync) {
+          pipeline(eventstr, services.updateConfigItemWs, info, dispatch);
+        }
+
+        break;
+      }
       case 'WORKFLOW_STOP':
         if (state.api.workflows.sync) {
           pipeline(
@@ -598,6 +605,13 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       }
+      case 'WORKFLOW_STEP_CONFIG_ITEM_CHANGE': {
+        if (state.api.workflows.sync) {
+          pipeline(eventstr, workflows.updateConfigItemWs, info, dispatch);
+        }
+
+        break;
+      }
       case 'JOB_STOP': {
         const job = state.api.jobs.data.find(
           jb => jb.id === parseInt(info.jobid, 10)
@@ -661,6 +675,13 @@ const handleEvent = (url, data, dispatch, state) => {
             dispatch
           );
         }
+        break;
+      }
+      case 'JOB_CONFIG_ITEM_CHANGE': {
+        if (state.api.jobs.sync) {
+          pipeline(eventstr, jobs.updateConfigItemWs, info, dispatch);
+        }
+
         break;
       }
       case 'CONNECTION_UP':
