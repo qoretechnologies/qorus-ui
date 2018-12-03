@@ -21,11 +21,13 @@ import withDispatch from '../../hocomponents/withDispatch';
 type ConfigItemsContainerProps = {
   items: Array<Object>,
   dispatchAction: Function,
+  intrf: string,
 };
 
 const ConfigItemsContainer: Function = ({
   items,
   dispatchAction,
+  intrf,
 }: ConfigItemsContainerProps): React.Element<any> => (
   <Table fixed striped condensed>
     <Thead>
@@ -52,7 +54,7 @@ const ConfigItemsContainer: Function = ({
                 value={item.value}
                 onSave={(newValue: any) =>
                   dispatchAction(
-                    actions.workflows.updateConfigItem,
+                    actions[intrf].updateConfigItem,
                     item.id,
                     item.name,
                     newValue
