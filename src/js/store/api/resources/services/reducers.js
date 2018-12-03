@@ -396,6 +396,31 @@ const unsync = {
   },
 };
 
+const updateConfigItemWs = {
+  next(
+    state = initialState,
+    {
+      payload: { events },
+    }
+  ) {
+    const newData: Array<Object> = [...state.data];
+
+    events.forEach((dt: Object) => {
+      const service: Object = newData.find(
+        (wf: Object): boolean => wf.id === dt.serviceid
+      );
+
+      if (service) {
+        const { config } = service;
+
+        config[dt.item].value = dt.value;
+      }
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -415,4 +440,5 @@ export {
   addNew as ADDNEW,
   selectWithAlerts as SELECTALERTS,
   setRemote as SETREMOTE,
+  updateConfigItemWs as UPDATECONFIGITEMWS,
 };
