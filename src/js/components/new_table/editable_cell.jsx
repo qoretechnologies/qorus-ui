@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 
-import { pureRender } from '../utils';
 import { Control } from '../controls';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 /**
  * Table data cell component which allows editing value.
@@ -16,7 +16,7 @@ import { Control } from '../controls';
  * Nothing is updated (except for internal state) so parent component
  * must trigger app state change.
  */
-@pureRender
+@onlyUpdateForKeys(['value', 'className'])
 export default class EditableCell extends Component {
   static propTypes = {
     value: React.PropTypes.oneOfType([
@@ -87,8 +87,10 @@ export default class EditableCell extends Component {
       document.addEventListener('click', this.handleOutsideClick);
 
       if (this.props.type !== 'number') {
-        this._editField.setSelectionRange(this._editField.value.length,
-          this._editField.value.length);
+        this._editField.setSelectionRange(
+          this._editField.value.length,
+          this._editField.value.length
+        );
       }
     }
 
@@ -107,7 +109,7 @@ export default class EditableCell extends Component {
    * Close editable if click outside cell
    * @param e
    */
-  handleOutsideClick = (e) => {
+  handleOutsideClick = e => {
     if (this._cell && !this._cell.contains(e.target)) {
       this.cancel();
     }
@@ -118,9 +120,9 @@ export default class EditableCell extends Component {
    *
    * @param {Event} ev
    */
-  onChange = (ev) => {
+  onChange = ev => {
     this.setState({ value: ev.target.value });
-  }
+  };
 
   /**
    * Translates key presses to edit lifecycle methods.
@@ -129,7 +131,7 @@ export default class EditableCell extends Component {
    *
    * @param {KeyboardEvent} ev
    */
-  onKeyUp = (ev) => {
+  onKeyUp = ev => {
     switch (ev.key) {
       case 'Escape':
         this.cancel();
@@ -145,7 +147,7 @@ export default class EditableCell extends Component {
    *
    * @param {HTMLTableCellElement} c
    */
-  cellDidRender = (c) => {
+  cellDidRender = c => {
     this._cell = c;
 
     if (this._cell && this.state.edit) {
@@ -165,7 +167,7 @@ export default class EditableCell extends Component {
   /**
    * Starts edit mode.
    */
-  start = (event) => {
+  start = event => {
     event.stopPropagation();
 
     this.setState({
@@ -179,12 +181,14 @@ export default class EditableCell extends Component {
    *
    * It also stops the edit mode.
    */
-  commit = (ev) => {
+  commit = ev => {
     if (ev) ev.preventDefault();
 
-    if (this.props.type === 'number' &&
-        (this.props.min && this.state.value < this.props.min) ||
-        (this.props.max && this.state.value > this.props.max)) {
+    if (
+      (this.props.type === 'number' &&
+        (this.props.min && this.state.value < this.props.min)) ||
+      (this.props.max && this.state.value > this.props.max)
+    ) {
       this.setState({
         error: true,
       });
@@ -197,7 +201,7 @@ export default class EditableCell extends Component {
         error: false,
       });
     }
-  }
+  };
 
   /**
    * Stops edit mode and revert state value to prop value.
@@ -216,7 +220,7 @@ export default class EditableCell extends Component {
    *
    * @param {HTMLInputElement} el
    */
-  refEditField = (el) => {
+  refEditField = el => {
     this._editField = el;
   };
 
@@ -226,7 +230,13 @@ export default class EditableCell extends Component {
    * @return {ReactElement}
    */
   render() {
-    const props = omit(this.props, ['value', 'onSave', 'startEdit', 'onCancel', 'showControl']);
+    const props = omit(this.props, [
+      'value',
+      'onSave',
+      'startEdit',
+      'onCancel',
+      'showControl',
+    ]);
 
     return (
       <td
@@ -240,10 +250,7 @@ export default class EditableCell extends Component {
         ref={this.cellDidRender}
       >
         {this.canEdit() ? (
-          <form
-            onSubmit={this.commit}
-            className="editable-form"
-          >
+          <form onSubmit={this.commit} className="editable-form">
             <input
               key="input"
               name="newValue"
