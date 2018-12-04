@@ -9,10 +9,20 @@
     }
 
     padding: 5px 8px 5px 5px;
-    margin-bottom: 5px;
     display: inline-block;
     background-color: lighten($qore-cobalt, 50);
     border-radius: 5px;
+    transition: all linear 0.2s;
+
+    &.expanded {
+      border-bottom-left-radius: 0;
+      color: inherit;
+      background-color: lighten($qore-cobalt, 35);
+
+      h5 {
+        font-weight: 500;
+      }
+    }
 
     &:hover {
       transition: all linear 0.2s;
@@ -33,7 +43,8 @@
   }
 
   .expandable-item_content {
+    padding-top: 5px;
     padding-left: 7px;
-    border-left: 3px solid lighten($qore-cobalt, 50);
+    border-left: 3px solid lighten($qore-cobalt, 35);
   }
 }

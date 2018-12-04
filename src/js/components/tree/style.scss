@@ -17,8 +17,10 @@ $leftMargin: 0px;
 
   div.tree-key {
     padding: 5px 8px 5px 2px;
+    font-weight: bold;
 
     &.object {
+      font-weight: normal;
       padding-left: 8px;
       cursor: pointer;
       color: $qore-cobalt;
@@ -31,12 +33,13 @@ $leftMargin: 0px;
       }
 
       &.expanded {
+        color: inherit;
+        font-weight: 500;
         background-color: lighten($qore-cobalt, 35);
         border-bottom-left-radius: 0;
       }
     }
 
-    font-weight: bold;
     display: inline-block;
   }
 
