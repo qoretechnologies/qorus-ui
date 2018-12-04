@@ -159,15 +159,13 @@ Object.keys(sqlcacheActions).forEach(a => {
 
 actions.system.withDispatchInjected = (action: Function, ...args) => (
   dispatch: Function
-) => {
-  dispatch(action(...args, dispatch));
-};
+) => dispatch(action(...args, dispatch));
 
 actions.system.withDispatchOptimisticInjected = (action: Function, ...args) => (
   dispatch: Function
 ) => {
   dispatch(action(...args));
-  dispatch(action(...args, dispatch));
+  return dispatch(action(...args, dispatch));
 };
 
 export default actions;
