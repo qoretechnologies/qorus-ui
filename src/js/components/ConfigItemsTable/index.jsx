@@ -60,7 +60,7 @@ const ConfigItemsContainer: Function = ({
                       <NameColumn name={item.name} />
                       <Td className="text">{item.default_value}</Td>
                       {item.type === 'date' ? (
-                        <Td className="text">
+                        <Td className="large">
                           <DatePicker
                             date={item.value}
                             onApplyDate={(newValue: any) =>
@@ -77,7 +77,7 @@ const ConfigItemsContainer: Function = ({
                         </Td>
                       ) : (
                         <EditableCell
-                          className="text"
+                          className="text large"
                           value={item.value}
                           onSave={(newValue: any) =>
                             dispatchAction(
