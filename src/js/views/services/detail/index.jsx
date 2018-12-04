@@ -7,6 +7,8 @@ import DetailPane from 'components/pane';
 import Box from 'components/box';
 import { DetailTab, MethodsTab, ResourceTab } from './tabs';
 import Code from '../../../components/code';
+// ! Why workflows
+// TODO: Change the log tab to container?
 import LogTab from '../../workflows/detail/log_tab';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
@@ -17,6 +19,7 @@ import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import Container from '../../../components/container';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
+import { countArrayItemsInObject } from '../../../utils';
 
 @connect(
   (state, props) => ({
@@ -110,16 +113,13 @@ export default class ServicesDetail extends Component {
 
   render() {
     const { service, paneTab, systemOptions, methods } = this.props;
-    const loaded: boolean = service && 'lib' in service;
+    const loaded: boolean = service && 'author' in service;
 
     if (!loaded) {
       return null;
     }
 
-    const configItems: Array<Object> = rebuildConfigHash(
-      service.config,
-      service.id
-    );
+    const configItems: Array<Object> = rebuildConfigHash(service);
 
     return (
       <DetailPane
@@ -137,7 +137,10 @@ export default class ServicesDetail extends Component {
             { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
             'Resources',
             'Releases',
-            { title: 'Config', suffix: `(${size(configItems)})` },
+            {
+              title: 'Config',
+              suffix: `(${countArrayItemsInObject(configItems)})`,
+            },
           ],
           queryIdentifier: 'paneTab',
         }}
