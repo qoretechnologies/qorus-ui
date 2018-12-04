@@ -2,15 +2,19 @@
 import { createAction } from 'redux-actions';
 import pickBy from 'lodash/pickBy';
 
-import { fetchJson, fetchWithNotifications } from '../../utils';
+import { fetchJson, fetchWithNotifications, put } from '../../utils';
 import settings from '../../../../settings';
-import { error } from '../../../ui/bubbles/actions';
 import { attrsSelector } from '../../../../helpers/remotes';
 
-const ping: Function = (model: string, type: string) =>
-  fetchJson(
-    'PUT',
-    `${settings.REST_BASE_URL}/remote/${type}/${model}?action=ping`
+const ping: Function = (model: string, type: string, dispatch: Function) =>
+  fetchWithNotifications(
+    async () =>
+      await put(
+        `${settings.REST_BASE_URL}/remote/${type}/${model}?action=ping`
+      ),
+    `Requesting ping for ${model}...`,
+    `Successfuly requested ping for ${model}`,
+    dispatch
   );
 
 const pingRemote = createAction('REMOTES_PINGREMOTE', ping);
