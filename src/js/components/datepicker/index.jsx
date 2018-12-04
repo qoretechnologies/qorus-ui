@@ -3,14 +3,8 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { formatDate } from '../../helpers/workflows';
 import pure from 'recompose/onlyUpdateForKeys';
-import {
-  ControlGroup,
-  Popover,
-  Position,
-  Button,
-  Menu,
-  MenuItem,
-} from '@blueprintjs/core';
+import { ControlGroup, Popover, Position } from '@blueprintjs/core';
+import Button from '../controls/control';
 
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 
@@ -33,6 +27,7 @@ type Props = {
   className?: string,
   id?: string,
   name?: string,
+  small?: boolean,
 };
 
 @pure(['date', 'futureOnly', 'className'])
@@ -229,11 +224,15 @@ export default class DatePicker extends Component {
   }
 
   render(): React.Element<any> {
-    const { futureOnly, noButtons } = this.props;
+    const { futureOnly, noButtons, small } = this.props;
 
     return (
       <ControlGroup className="vab">
-        <Button iconName="timeline-events" onClick={this.showDatepicker} />
+        <Button
+          iconName="timeline-events"
+          big={!small}
+          onClick={this.showDatepicker}
+        />
         <Popover
           isOpen={this.state.showDatepicker}
           position={Position.BOTTOM}
@@ -268,6 +267,7 @@ export default class DatePicker extends Component {
             placeholder={this.props.placeholder}
             id={this.props.id}
             name={this.props.name}
+            className={small && 'pt-small'}
           />
         </Popover>
 

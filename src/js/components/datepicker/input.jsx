@@ -15,6 +15,7 @@ type Props = {
   onInputClick: (event: Object) => void,
   id?: string,
   name?: string,
+  className?: string,
 };
 
 const Input = (props: Props) => (
@@ -28,6 +29,7 @@ const Input = (props: Props) => (
     placeholder={props.placeholder}
     id={props.id}
     name={props.name}
+    className={props.className}
   />
 );
 
