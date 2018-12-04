@@ -13,6 +13,7 @@ type Props = {
   toggleExpand: Function,
   setExpanded: Function,
   title?: string,
+  show?: boolean,
 };
 
 const ExpandableItem: Function = ({
@@ -22,7 +23,10 @@ const ExpandableItem: Function = ({
   title,
 }: Props): React.Element<HTMLDivElement> => (
   <div className="expandable-item">
-    <div className="expandable-item_title" onClick={toggleExpand}>
+    <div
+      className={`expandable-item_title ${expanded && 'expanded'}`}
+      onClick={toggleExpand}
+    >
       <Icon iconName={expanded ? 'small-minus' : 'small-plus'} />{' '}
       <h5>{title}</h5>
     </div>

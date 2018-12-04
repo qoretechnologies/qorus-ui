@@ -1,6 +1,7 @@
 /* @flow */
 import React, { Component } from 'react';
 import compose from 'recompose/compose';
+import size from 'lodash/size';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { NonIdealState } from '@blueprintjs/core';
@@ -25,6 +26,7 @@ import Container from '../../../components/container';
 import PaneItem from '../../../components/pane_item';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
+import { countArrayItemsInObject } from '../../../utils';
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
@@ -118,11 +120,7 @@ export default class WorkflowsDetail extends Component {
       return null;
     }
 
-    const configItems: Array<Object> = rebuildConfigHash(
-      workflow.stepinfo,
-      null,
-      true
-    );
+    const configItems: Array<Object> = rebuildConfigHash(workflow, true);
 
     return (
       <DetailPane
@@ -138,16 +136,16 @@ export default class WorkflowsDetail extends Component {
             'Process',
             {
               title: 'Config',
-              suffix: `(${configItems.length})`,
+              suffix: `(${countArrayItemsInObject(configItems)})`,
             },
             'Releases',
             {
               title: 'Value maps',
-              suffix: `(${workflow.vmaps ? workflow.vmaps.length : 0})`,
+              suffix: `(${size(workflow.vmaps)})`,
             },
             {
               title: 'Mappers',
-              suffix: `(${workflow.mappers ? workflow.mappers.length : 0})`,
+              suffix: `(${size(workflow.mappers)})`,
             },
             'Errors',
             'Code',
