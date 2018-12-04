@@ -1,6 +1,7 @@
 // @flow
 import size from 'lodash/size';
 import map from 'lodash/map';
+import { normalizeName } from '../components/utils';
 
 const mapConfigToArray = (id: number): Function => (
   configItem: Object,
@@ -11,10 +12,8 @@ const mapConfigToArray = (id: number): Function => (
   id,
 });
 
-const pullConfigFromStepinfo: Function = (
-  stepArray: Array<Object>
-): Array<Object> => {
-  const resultArray: Array<Object> = [];
+const pullConfigFromStepinfo: Function = (stepArray: Array<Object>): Object => {
+  const resultObj: Object = {};
 
   stepArray
     .filter((step: Object): boolean => step.config)
@@ -22,30 +21,41 @@ const pullConfigFromStepinfo: Function = (
       (step: Object): void => {
         const newConfig: Array<Object> = map(
           step.config,
-          mapConfigToArray(step.stepid)
+          mapConfigToArray(step.stepid, true, step)
         );
 
-        resultArray.push(...newConfig);
+        const belongsTo: string = `${step.name} v${step.version} (${
+          step.stepid
+        })`;
+
+        resultObj[belongsTo] = newConfig;
       }
     );
 
-  return resultArray;
+  return resultObj;
 };
 
 const rebuildConfigHash: Function = (
-  configHash: Object,
-  id: number,
+  model: Object,
   pullConfigValues: boolean
-): Array<Object> => {
-  if (!size(configHash)) {
-    return [];
+): Object => {
+  const configHash = pullConfigValues ? model.stepinfo : model.config || {};
+  const configObj: Object = pullConfigValues
+    ? pullConfigFromStepinfo(configHash)
+    : {
+        [normalizeName(model)]: map(
+          configHash,
+          mapConfigToArray(model.id, false, model)
+        ),
+      };
+
+  console.log(configObj);
+
+  if (!size(configObj)) {
+    return {};
   }
 
-  const configArray: Array<Object> = pullConfigValues
-    ? pullConfigFromStepinfo(configHash)
-    : map(configHash, mapConfigToArray(id));
-
-  return configArray;
+  return configObj;
 };
 
 export { pullConfigFromStepinfo, rebuildConfigHash };
