@@ -13,6 +13,7 @@ type Props = {
   toggleExpand: Function,
   setExpanded: Function,
   title?: string,
+  show?: boolean,
 };
 
 const ExpandableItem: Function = ({
