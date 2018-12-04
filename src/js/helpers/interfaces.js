@@ -49,8 +49,6 @@ const rebuildConfigHash: Function = (
         ),
       };
 
-  console.log(configObj);
-
   if (!size(configObj)) {
     return {};
   }
