@@ -1,28 +1,17 @@
 /* @flow */
 import React, { Component } from 'react';
 import Modal from '../../../../components/modal';
-import Loader from '../../../../components/loader';
 import Alert from '../../../../components/alert';
-import AutoComponent from '../../../../components/autocomponent';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-} from '../../../../components/new_table';
+
 import { Controls, Control as Button } from '../../../../components/controls';
 
 import actions from '../../../../store/api/actions';
 import { connect } from 'react-redux';
+import Box from '../../../../components/box';
+import { Spinner, Intent, Icon } from '@blueprintjs/core';
+import withDispatch from '../../../../hocomponents/withDispatch';
 
-@connect(
-  state => state,
-  {
-    pingRemote: actions.remotes.pingRemote,
-  }
-)
+@withDispatch()
 export default class Ping extends Component {
   props: {
     pingRemote?: Function,
@@ -44,8 +33,9 @@ export default class Ping extends Component {
   }
 
   ping: Function = async (): Promise<*> => {
-    if (this.props.pingRemote) {
-      const payload: Object = await this.props.pingRemote(
+    if (this.props.dispatchAction) {
+      const payload: Object = await this.props.dispatchAction(
+        actions.remotes.pingRemote,
         this.props.name,
         this.props.type
       );
@@ -58,41 +48,29 @@ export default class Ping extends Component {
   };
 
   renderBody() {
-    if (!this.state.data) return <Loader />;
-
-    if (this.state.error) {
-      return <Alert bsStyle="danger">{this.state.data.desc}</Alert>;
+    if (!this.state.data) {
+      return (
+        <Box top>
+          <Spinner className="pt-small" />
+        </Box>
+      );
     }
 
-    const { url, time, ok, info } = this.state.data;
+    if (this.state.error || !this.state.data.ok) {
+      return (
+        <Box top>
+          <Alert bsStyle="danger">{this.state.data.info}</Alert>
+        </Box>
+      );
+    }
+
+    const { url, result } = this.state.data;
 
     return (
-      <Table condensed bordered className="text-table">
-        <Tbody>
-          <Tr>
-            <Th> URL </Th>
-            <Td>{url}</Td>
-          </Tr>
-          <Tr>
-            <Th> Status </Th>
-            <Td>
-              <AutoComponent>{ok}</AutoComponent>
-            </Td>
-          </Tr>
-          {!ok && (
-            <Tr>
-              <Th tag="th"> Error </Th>
-              <Td> {info} </Td>
-            </Tr>
-          )}
-          {ok && (
-            <Tr>
-              <Th> Response Time </Th>
-              <Td> {time} </Td>
-            </Tr>
-          )}
-        </Tbody>
-      </Table>
+      <Box top>
+        <Icon iconName="small-tick" intent={Intent.SUCCESS} /> The ping request
+        against {url} took <strong>{result}</strong>.
+      </Box>
     );
   }
 
