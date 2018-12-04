@@ -26,7 +26,7 @@ const pullConfigFromStepinfo: Function = (stepArray: Array<Object>): Object => {
 
         const belongsTo: string = `${step.name} v${step.version} (${
           step.stepid
-        })`;
+        }) [${step.steptype}]`;
 
         resultObj[belongsTo] = newConfig;
       }
