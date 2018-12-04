@@ -272,11 +272,11 @@ export default class DatePicker extends Component {
         </Popover>
 
         {!futureOnly && !noButtons && (
-          <Button text="All" onClick={this.handleAllClick} />
+          <Button text="All" onClick={this.handleAllClick} big={!small} />
         )}
         {!futureOnly && !noButtons && (
           <Dropdown>
-            <DropdownControl />
+            <DropdownControl small={small} />
             <DropdownItem title="Now" onClick={this.handleNowClick} />
             <DropdownItem title="Today" onClick={this.handleTodayClick} />
             <DropdownItem title="24h" onClick={this.handle24hClick} />
