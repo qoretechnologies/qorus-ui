@@ -234,10 +234,6 @@ pre.line-numbers {
   float: left;
 }
 
-p.text-component {
-  cursor: zoom-in;
-}
-
 .pt-menu.sidebar {
   border-radius: 0;
   height: 100%;
@@ -254,7 +250,6 @@ p.text-component {
 }
 
 div.text-component {
-  cursor: zoom-out;
   word-wrap: break-word;
 }
 
@@ -504,4 +499,9 @@ span.pt-icon-standard {
 .pt-popover.pt-dark .pt-popover-arrow-border,
 .pt-popover.pt-dark .pt-popover-arrow-fill {
   fill: #383c44;
+}
+
+.popover-ellipsize-content {
+  width: 100%;
+  display: inline-block;
 }
