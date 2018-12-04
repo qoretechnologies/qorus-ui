@@ -26,6 +26,7 @@ import { NonIdealState } from '@blueprintjs/core';
 import InfoTable from '../../../components/info_table';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
+import { countArrayItemsInObject } from '../../../utils';
 
 const Detail = ({
   location,
@@ -63,7 +64,10 @@ const Detail = ({
         { title: 'Mappers', suffix: `(${size(model.mappers)})` },
         { title: 'Value maps', suffix: `(${size(model.vmaps)})` },
         'Releases',
-        { title: 'Config', suffix: `(${size(configItems)})` },
+        {
+          title: 'Config',
+          suffix: `(${countArrayItemsInObject(configItems)})`,
+        },
         'Log',
       ],
       queryIdentifier: 'paneTab',
@@ -198,7 +202,7 @@ export default compose(
         },
         ...props.model.lib,
       },
-      configItems: rebuildConfigHash(props.model.config, props.model.id),
+      configItems: rebuildConfigHash(props.model),
     })
   ),
   withHandlers({
