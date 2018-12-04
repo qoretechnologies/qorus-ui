@@ -52,19 +52,12 @@ export const whenDefaultEnabled = fn => (ev, ...rest) =>
   !ev.defaultPrevented && fn.apply(this, [ev, ...rest]);
 
 export const countArrayItemsInObject: Function = (obj: Object): number =>
-  reduce(
-    obj,
-    (count: number, items: Array<Object>) =>
-      console.log(items) || count + items.length,
-    0
-  );
+  reduce(obj, (count: number, items: Array<Object>) => count + items.length, 0);
 
 export const flattenObject = (obj: Object): Object =>
   Object.assign(
     {},
     ...(function _flatten(o) {
-      console.log(o);
-
       return [].concat(
         ...Object.keys(o).map(k =>
           typeof o[k] === 'object' ? _flatten(o[k]) : { [k]: o[k] }
