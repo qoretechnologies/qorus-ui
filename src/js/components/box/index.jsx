@@ -33,8 +33,8 @@ const Box: Function = ({
         padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
         width: column ? `${100 / column - 0.3 * column}%` : width,
-        overflowX: scrollX ? 'auto' : 'hidden',
-        overflowY: scrollY ? 'auto' : 'hidden',
+        overflowX: scrollX ? 'auto' : 'initial',
+        overflowY: scrollY ? 'auto' : 'initial',
         ...style,
       }}
     >
@@ -44,12 +44,12 @@ const Box: Function = ({
     <Flex
       className="white-box"
       flex="0 1 auto"
+      scrollX={scrollX}
+      scrollY={scrollY}
       style={{
         padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
         width: column ? `${100 / (column + column * 0.1)}%` : width,
-        overflowX: scrollX ? 'auto' : 'hidden',
-        overflowY: scrollY ? 'auto' : 'hidden',
         ...style,
       }}
     >
