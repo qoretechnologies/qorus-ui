@@ -238,7 +238,7 @@ export default class Dropdown extends Component {
       React.Children.toArray(this.props.children).length > 1
     ) {
       return [
-        <div className="dropdown-filter">
+        <div className="dropdown-filter" key="dropdown-filter">
           <InputGroup
             className="pt-fill"
             onChange={this.handleFilterChange}
@@ -255,7 +255,9 @@ export default class Dropdown extends Component {
             placeholder="Filter..."
           />
         </div>,
-        <Menu className="popover-dropdown">{this.renderDropdownList()}</Menu>,
+        <Menu key="dropdown-menu" className="popover-dropdown">
+          {this.renderDropdownList()}
+        </Menu>,
       ];
     }
 
