@@ -64,9 +64,6 @@ export default class Tr extends Component {
     }
 
     window.removeEventListener('resize', this.recalculateSizes);
-    document
-      .querySelector('#content-wrapper')
-      .removeEventListener('resize', this.recalculateSizes);
   }
 
   _el: any;
@@ -80,9 +77,6 @@ export default class Tr extends Component {
       if (this.props.first) {
         this.recalculateSizes();
         window.addEventListener('resize', this.recalculateSizes);
-        document
-          .querySelector('#content-wrapper')
-          .addEventListener('resize', this.recalculateSizes);
       }
     }
   };
@@ -94,7 +88,7 @@ export default class Tr extends Component {
   };
 
   recalculateSizes: Function = (): void => {
-    if (this.props.first) {
+    if (this.props.first && this._el) {
       if (this._resizeTimeout) {
         this._resizeTimeout = null;
 
@@ -223,12 +217,10 @@ export default class Tr extends Component {
         title={title}
       >
         {sortData && onSortChange
-          ? React.Children.map(
-              children,
-              (child: any, key) =>
-                child
-                  ? React.cloneElement(child, { key, sortData, onSortChange })
-                  : undefined
+          ? React.Children.map(children, (child: any, key) =>
+              child
+                ? React.cloneElement(child, { key, sortData, onSortChange })
+                : undefined
             )
           : children}
       </tr>
