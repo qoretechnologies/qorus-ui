@@ -9,6 +9,8 @@ type FlexProps = {
   height?: any,
   className?: string,
   style?: Object,
+  scrollX?: boolean,
+  scrollY?: boolean,
 };
 
 const Flex: Function = ({
@@ -19,6 +21,8 @@ const Flex: Function = ({
   height,
   style,
   className,
+  scrollX,
+  scrollY,
 }: FlexProps): React.Element<any> => (
   <div
     style={{
@@ -27,6 +31,8 @@ const Flex: Function = ({
       flexFlow,
       flex,
       height,
+      overflowX: scrollX ? 'auto' : 'hidden',
+      overflowY: scrollY ? 'auto' : 'hidden',
     }}
     className={className}
   >
