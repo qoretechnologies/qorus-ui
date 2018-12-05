@@ -110,6 +110,7 @@ class CrumbTabs extends React.Component {
               position={Position.BOTTOM}
               useSmartPositioning
               useSmartArrowPositioning
+              key="crumbtabs-popover"
               content={
                 <Menu>
                   {leftoverTabs
