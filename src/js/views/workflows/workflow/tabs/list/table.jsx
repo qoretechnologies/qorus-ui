@@ -11,22 +11,25 @@ import {
   Tbody,
   FixedRow,
   Th,
-} from '../../../../components/new_table';
+} from '../../../../../components/new_table';
 import Row from './row';
-import actions from '../../../../store/api/actions';
-import Pull from '../../../../components/Pull';
-import CsvControl from '../../../../components/CsvControl';
+import actions from '../../../../../store/api/actions';
+import Pull from '../../../../../components/Pull';
+import CsvControl from '../../../../../components/CsvControl';
 import { Icon, ButtonGroup } from '@blueprintjs/core';
-import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
-import { ORDER_STATES, ORDER_STATES_ARRAY } from '../../../../constants/orders';
-import InstancesBar from '../../../../components/instances_bar/index';
-import LoadMore from '../../../../components/LoadMore';
+import DataOrEmptyTable from '../../../../../components/DataOrEmptyTable';
+import {
+  ORDER_STATES,
+  ORDER_STATES_ARRAY,
+} from '../../../../../constants/orders';
+import InstancesBar from '../../../../../components/instances_bar/index';
+import LoadMore from '../../../../../components/LoadMore';
 
 import Actions from './toolbar/actions';
 import Selector from './toolbar/selector';
 import Filters from './toolbar/filters';
-import DatePicker from '../../../../components/datepicker';
-import queryControl from '../../../../hocomponents/queryControl';
+import DatePicker from '../../../../../components/datepicker';
+import queryControl from '../../../../../hocomponents/queryControl';
 
 type Props = {
   sortData: Object,

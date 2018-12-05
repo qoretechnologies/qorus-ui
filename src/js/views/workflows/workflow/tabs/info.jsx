@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 
-import { ORDER_STATES } from '../../../constants/orders';
-import InfoTable from '../../../components/info_table';
-import Container from '../../../components/container';
+import { ORDER_STATES } from '../../../../constants/orders';
+import InfoTable from '../../../../components/info_table';
+import Container from '../../../../components/container';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import Box from '../../../components/box';
+import Box from '../../../../components/box';
 
 type Props = {
   workflow: Object,

@@ -1,14 +1,17 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
-import settings from '../../../../settings';
-import { fetchJson } from 'store/api/utils';
+import settings from '../../../../../settings';
+import { fetchJson } from '../../../../../store/api/utils';
 import moment from 'moment';
 import qs from 'qs';
 
-
-import Loader from '../../../../components/loader';
-import Chart from '../../../../components/chart';
-import Editable from '../../../../components/editable';
-import { createLineDatasets, createDoughDatasets } from '../../../../helpers/chart';
+import Loader from '../../../../../components/loader';
+import Chart from '../../../../../components/chart';
+import Editable from '../../../../../components/editable';
+import {
+  createLineDatasets,
+  createDoughDatasets,
+} from '../../../../../helpers/chart';
 
 export default class ChartView extends Component {
   static propTypes = {
@@ -31,7 +34,7 @@ export default class ChartView extends Component {
     });
   }
 
-  handleEditableSubmit = (value) => {
+  handleEditableSubmit = value => {
     this.setState({
       days: value,
     });
@@ -39,11 +42,13 @@ export default class ChartView extends Component {
     this.fetchData(value);
   };
 
-  fetchData = async (days) => {
+  fetchData = async days => {
     const id = this.props.workflow ? this.props.workflow.workflowid : '';
     const query = {
       grouping: days > 1 ? 'daily' : 'hourly',
-      mindate: moment().add(-days, 'days').format('YYYY-MM-DD HH:mm:ss'),
+      mindate: moment()
+        .add(-days, 'days')
+        .format('YYYY-MM-DD HH:mm:ss'),
       wfids: id,
       id,
       global: this.props.global || false,
@@ -82,17 +87,24 @@ export default class ChartView extends Component {
     this.setState(state);
   };
 
-  errorChecker = (value) => !(!/^-?\d+$/.test(value) || value > 90 || value < 1);
+  errorChecker = value => !(!/^-?\d+$/.test(value) || value > 90 || value < 1);
 
   render() {
-    if (!this.state.lineLabels.length || (this.props.workflow && !this.state.doughLabels.length)) {
+    if (
+      !this.state.lineLabels.length ||
+      (this.props.workflow && !this.state.doughLabels.length)
+    ) {
       return <Loader />;
     }
 
     return (
       <div className="chart-view">
         <Editable
-          text={this.state.days > 1 ? `Last ${this.state.days} days` : 'Last 24 hours'}
+          text={
+            this.state.days > 1
+              ? `Last ${this.state.days} days`
+              : 'Last 24 hours'
+          }
           value={this.state.days}
           onSubmit={this.handleEditableSubmit}
           errorChecker={this.errorChecker}

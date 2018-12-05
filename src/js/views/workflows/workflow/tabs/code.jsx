@@ -1,9 +1,9 @@
 /* @flow */
 import React from 'react';
-import Code from '../../../components/code';
+import Code from '../../../../components/code';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
-import Box from '../../../components/box';
+import Box from '../../../../components/box';
 
 type Props = {
   workflow: Object,

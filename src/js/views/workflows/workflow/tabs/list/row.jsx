@@ -7,14 +7,14 @@ import mapProps from 'recompose/mapProps';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import { Tr, Td } from '../../../../components/new_table';
-import Checkbox from '../../../../components/checkbox';
-import actions from '../../../../store/api/actions';
+import { Tr, Td } from '../../../../../components/new_table';
+import Checkbox from '../../../../../components/checkbox';
+import actions from '../../../../../store/api/actions';
 import OrderControls from './controls';
-import Date from '../../../../components/date';
-import AutoComp from '../../../../components/autocomponent';
-import { ALL_ORDER_STATES } from '../../../../constants/orders';
-import queryControl from '../../../../hocomponents/queryControl';
+import Date from '../../../../../components/date';
+import AutoComp from '../../../../../components/autocomponent';
+import { ALL_ORDER_STATES } from '../../../../../constants/orders';
+import queryControl from '../../../../../hocomponents/queryControl';
 import Lock from './lock';
 
 type Props = {
@@ -61,8 +61,6 @@ const TableRow: Function = ({
   normalizedName,
   started,
   completed,
-  modified,
-  scheduled,
   error_count: errCnt,
   warning_count: warnCnt,
   operator_lock: operLock,
@@ -89,18 +87,17 @@ const TableRow: Function = ({
         checked={_selected ? 'CHECKED' : 'UNCHECKED'}
       />
     </Td>
-    {!isTablet &&
-      searchPage && (
-        <Td className="name">
-          <Link
-            to={`/workflow/${workflowid}?date=${date}`}
-            className="resource-name-link"
-            title={normalizedName}
-          >
-            {normalizedName}
-          </Link>
-        </Td>
-      )}
+    {!isTablet && searchPage && (
+      <Td className="name">
+        <Link
+          to={`/workflow/${workflowid}?date=${date}`}
+          className="resource-name-link"
+          title={normalizedName}
+        >
+          {normalizedName}
+        </Link>
+      </Td>
+    )}
     <Td className="medium">
       <Link
         to={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(

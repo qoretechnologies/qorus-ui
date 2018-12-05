@@ -1,9 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 
-import Modal from '../../../../../components/modal';
-import { Control as Button } from '../../../../../components/controls';
-import actions from '../../../../../store/api/actions';
+import Modal from '../../../../../../components/modal';
+import { Control as Button } from '../../../../../../components/controls';
+import actions from '../../../../../../store/api/actions';
 
 export default class extends Component {
   props: {

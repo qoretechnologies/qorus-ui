@@ -7,28 +7,28 @@ import lifecycle from 'recompose/lifecycle';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import sync from '../../hocomponents/sync';
-import withTabs from '../../hocomponents/withTabs';
-import unsync from '../../hocomponents/unsync';
-import patch from '../../hocomponents/patchFuncArgs';
+import sync from '../../../hocomponents/sync';
+import withTabs from '../../../hocomponents/withTabs';
+import unsync from '../../../hocomponents/unsync';
+import patch from '../../../hocomponents/patchFuncArgs';
 import {
   querySelector,
   resourceSelector,
   paramSelector,
-} from '../../selectors';
-import actions from '../../store/api/actions';
-import { DATES, DATE_FORMATS } from '../../constants/dates';
-import { formatDate } from '../../helpers/workflows';
+} from '../../../selectors';
+import actions from '../../../store/api/actions';
+import { DATES, DATE_FORMATS } from '../../../constants/dates';
+import { formatDate } from '../../../helpers/workflows';
 import Header from './header';
-import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
+import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import List from './tabs/list';
 import Performance from './tabs/performance';
 import Log from './tabs/log';
 import Code from './tabs/code';
 import Info from './tabs/info';
 import Mappers from './tabs/mappers';
-import titleManager from '../../hocomponents/TitleManager';
-import queryControl from '../../hocomponents/queryControl';
+import titleManager from '../../../hocomponents/TitleManager';
+import queryControl from '../../../hocomponents/queryControl';
 
 type Props = {
   workflow: Object,

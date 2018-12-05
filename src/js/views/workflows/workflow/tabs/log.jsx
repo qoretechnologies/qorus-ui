@@ -1,10 +1,10 @@
 /* @flow */
 import React from 'react';
 
-import LogContainer from '../../../containers/log';
+import LogContainer from '../../../../containers/log';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
-import Box from '../../../components/box';
+import Box from '../../../../components/box';
 
 type Props = {
   workflow: Object,

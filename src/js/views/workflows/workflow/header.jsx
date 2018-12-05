@@ -5,16 +5,16 @@ import compose from 'recompose/compose';
 import { withRouter } from 'react-router';
 import size from 'lodash/size';
 
-import WorkflowControls from '../workflows/controls';
-import WorkflowAutostart from '../workflows/autostart';
-import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';
-import Pull from '../../components/Pull';
-import Headbar from '../../components/Headbar';
-import Search from '../../containers/search';
+import WorkflowControls from '../controls';
+import WorkflowAutostart from '../autostart';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
+import Pull from '../../../components/Pull';
+import Headbar from '../../../components/Headbar';
+import Search from '../../../containers/search';
 import {
   Controls as ButtonGroup,
   Control as Button,
-} from '../../components/controls';
+} from '../../../components/controls';
 import withHandlers from 'recompose/withHandlers';
 
 type Props = {
@@ -35,6 +35,7 @@ type Props = {
   handleAlertClick: Function,
   searchQuery?: string,
   tab: string,
+  mappers: Array<Object>,
 };
 
 const WorkflowHeader: Function = ({

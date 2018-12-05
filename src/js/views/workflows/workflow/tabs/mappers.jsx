@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 
-import Mappers from '../../../containers/mappers';
-import Box from '../../../components/box';
+import Mappers from '../../../../containers/mappers';
+import Box from '../../../../components/box';
 
 type Props = {
   workflow: Object,

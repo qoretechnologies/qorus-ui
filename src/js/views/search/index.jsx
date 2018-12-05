@@ -11,7 +11,6 @@ import compose from 'recompose/compose';
 import titleManager from '../../hocomponents/TitleManager';
 import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
-import Dropdown, { Item, Control } from '../../components/dropdown';
 import {
   Controls as ButtonGroup,
   Control as Button,
