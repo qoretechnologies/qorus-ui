@@ -23,6 +23,8 @@ import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
 import { NameColumnHeader } from '../../../components/NameColumn';
 import mapProps from 'recompose/mapProps';
+import Flex from '../../../components/Flex';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 
 type Props = {
   type: string,
@@ -54,60 +56,56 @@ const AlertsTable: Function = ({
   type,
   limit,
 }: Props): React.Element<any> => (
-  <div>
-    <NoDataIf condition={alerts.length === 0}>
-      <Table
-        fixed
-        hover
-        striped
-        key={`${type}-${alerts.length}`}
-        className="clear"
-      >
-        <Thead>
-          {canLoadMore && (
-            <FixedRow className="toolbar-row">
-              <Th>
-                <Pull right>
-                  <LoadMore
-                    canLoadMore={canLoadMore}
-                    handleLoadMore={handleLoadMore}
-                    handleLoadAll={handleLoadAll}
-                    limit={limit}
-                  />
-                </Pull>
-              </Th>
-            </FixedRow>
-          )}
-          <FixedRow sortData={sortData} onSortChange={onSortChange}>
-            <Th className="text big" name="type">
-              Type
-            </Th>
-            <Th className="text alerts-large" name="alert">
-              Alert
-            </Th>
-            <NameColumnHeader name="object" title="Object" />
-            <Th className="big" name="when">
-              When
+  <Flex>
+    <Table fixed hover striped key={`${type}-${alerts.length}`}>
+      <Thead>
+        {canLoadMore && (
+          <FixedRow className="toolbar-row">
+            <Th>
+              <Pull right>
+                <LoadMore
+                  canLoadMore={canLoadMore}
+                  handleLoadMore={handleLoadMore}
+                  handleLoadAll={handleLoadAll}
+                  limit={limit}
+                />
+              </Pull>
             </Th>
           </FixedRow>
-        </Thead>
-        <Tbody>
-          {alerts.map(
-            (alert: Object, index: number): React.Element<any> => (
-              <AlertRow
-                first={index === 0}
-                key={`alert_${alert.alert}_${alert.name}_${alert.alertid}`}
-                openPane={openPane}
-                closePane={closePane}
-                isActive={paneId === `${alert.type}:${alert.id}`}
-                {...alert}
-              />
-            )
-          )}
-        </Tbody>
-      </Table>
-    </NoDataIf>
-  </div>
+        )}
+        <FixedRow sortData={sortData} onSortChange={onSortChange}>
+          <Th className="text big" name="type">
+            Type
+          </Th>
+          <Th className="text alerts-large" name="alert">
+            Alert
+          </Th>
+          <NameColumnHeader name="object" title="Object" />
+          <Th className="big" name="when">
+            When
+          </Th>
+        </FixedRow>
+      </Thead>
+      <DataOrEmptyTable condition={!alerts || alerts.length === 0} cols={4}>
+        {props => (
+          <Tbody {...props}>
+            {alerts.map(
+              (alert: Object, index: number): React.Element<any> => (
+                <AlertRow
+                  first={index === 0}
+                  key={index}
+                  openPane={openPane}
+                  closePane={closePane}
+                  isActive={paneId === `${alert.type}:${alert.id}`}
+                  {...alert}
+                />
+              )
+            )}
+          </Tbody>
+        )}
+      </DataOrEmptyTable>
+    </Table>
+  </Flex>
 );
 
 export default compose(
