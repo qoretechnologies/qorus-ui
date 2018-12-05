@@ -101,7 +101,7 @@ export default class Root extends Component {
     sidebarOpen: PropTypes.bool,
     storeSidebar: PropTypes.func,
     fetchHealth: PropTypes.func,
-    options: PropTypes.array,
+    options: PropTypes.object,
     storeTheme: PropTypes.func,
   };
 
