@@ -22,6 +22,7 @@ import { sortTable } from '../../helpers/table';
 import titleManager from '../../hocomponents/TitleManager';
 import Headbar from '../../components/Headbar';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import Flex from '../../components/Flex';
 
 type Props = {
   data: Object,
@@ -46,7 +47,7 @@ const Releases: Function = ({
   sortDir,
   compact,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     {!compact && (
       <Headbar>
         <Breadcrumbs>
@@ -55,16 +56,18 @@ const Releases: Function = ({
       </Headbar>
     )}
     {compact ? (
-      <div>
-        <ReleasesToolbar sort={sort} sortDir={sortDir} compact />
-        <Tree data={data} />
-      </div>
+      [
+        <ReleasesToolbar sort={sort} sortDir={sortDir} compact />,
+        <Flex display="initial" scrollY>
+          <Tree data={data} />
+        </Flex>,
+      ]
     ) : (
       <Box top>
         <ReleasesToolbar sort={sort} sortDir={sortDir} />
-        <Container marginBottom={10}>
+        <Flex display="initial" scrollY>
           <Tree data={data} />
-        </Container>
+        </Flex>
       </Box>
     )}
     {canLoadMore && (
@@ -74,7 +77,7 @@ const Releases: Function = ({
         onClick={handleLoadMore}
       />
     )}
-  </div>
+  </Flex>
 );
 
 const formatReleases: Function = (): Function => (

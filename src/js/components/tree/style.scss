@@ -46,6 +46,10 @@ $leftMargin: 0px;
   div.tree-component {
     padding: $padding 0 0px $leftPadding;
 
+    &:first-child {
+      padding-top: 0;
+    }
+
     &.tree-top {
       padding-left: 0px;
     }
