@@ -83,7 +83,7 @@ let Section: Function = ({
   );
 };
 
-// Section = updateOnlyForKeys(['children', 'height'])(Section);
+Section = updateOnlyForKeys(['children', 'height'])(Section);
 
 const Thead = compose(
   setDisplayName('Thead'),
