@@ -16,6 +16,7 @@ import { resourceSelector, querySelector } from '../../../selectors';
 import { findBy } from '../../../helpers/search';
 import { sortDefaults } from '../../../constants/sort';
 import titleManager from '../../../hocomponents/TitleManager';
+import Flex from '../../../components/Flex';
 
 type Props = {
   location: Object,
@@ -34,7 +35,7 @@ const Slas: Function = ({
   create,
   perms,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <SLAToolbar location={location} onCreate={create} perms={perms} />
     <Box top noPadding>
       <SLATable
@@ -44,7 +45,7 @@ const Slas: Function = ({
         perms={perms}
       />
     </Box>
-  </div>
+  </Flex>
 );
 
 const filterSearch: Function = (search: string): Function => (

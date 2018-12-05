@@ -18,6 +18,7 @@ import { Control as Button } from '../../../../../components/controls';
 import { sortDefaults } from '../../../../../constants/sort';
 import EventsTable from './table';
 import NoData from '../../../../../components/nodata';
+import Flex from '../../../../../components/Flex';
 
 type Props = {
   location: Object,
@@ -44,7 +45,7 @@ const EventsView: Function = ({
   onSortChange,
   collection,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex display="initial">
     {collection.length ? (
       <EventsTable
         sortData={sortData}
@@ -63,7 +64,7 @@ const EventsView: Function = ({
         onClick={handleLoadMore}
       />
     )}
-  </div>
+  </Flex>
 );
 
 const viewSelector: Function = createSelector(

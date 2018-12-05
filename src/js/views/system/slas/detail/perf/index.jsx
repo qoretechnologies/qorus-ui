@@ -9,6 +9,7 @@ import queryControl from '../../../../../hocomponents/queryControl';
 import { DATE_FORMATS } from '../../../../../constants/dates';
 import EventsToolbar from './toolbar';
 import PerfView from './view';
+import Flex from '../../../../../components/Flex';
 
 type Props = {
   location: Object,
@@ -32,10 +33,10 @@ type Props = {
 };
 
 const SLAPerf: Function = ({ ...rest }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <EventsToolbar {...rest} />
     <PerfView {...rest} />
-  </div>
+  </Flex>
 );
 
 export default compose(

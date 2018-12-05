@@ -23,6 +23,7 @@ import {
 import Toolbar from '../../../../../components/toolbar';
 import { sortDefaults } from '../../../../../constants/sort';
 import NoData from '../../../../../components/nodata';
+import Flex from '../../../../../components/Flex';
 
 type Props = {
   sla: Object,
@@ -40,7 +41,7 @@ const SLAMethods: Function = ({
   sortData,
   onSortChange,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Toolbar mb>
       <Search
         onSearchUpdate={changeSearchQuery}
@@ -92,7 +93,7 @@ const SLAMethods: Function = ({
     ) : (
       <NoData />
     )}
-  </div>
+  </Flex>
 );
 
 const selectMethods: Function = (
