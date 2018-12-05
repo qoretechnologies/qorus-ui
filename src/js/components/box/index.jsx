@@ -37,6 +37,7 @@ const Box: Function = ({
   ) : (
     <Flex
       className="white-box"
+      flex="0 1 auto"
       style={{
         padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
