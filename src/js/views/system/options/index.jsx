@@ -27,6 +27,7 @@ import OptionRow from './row';
 import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
 import { NameColumnHeader } from '../../../components/NameColumn';
+import Flex from '../../../components/Flex';
 
 type Props = {
   load: Function,
@@ -49,7 +50,7 @@ const OptionsView: Function = ({
   onSortChange,
   collection,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active> Options </Crumb>
@@ -93,7 +94,7 @@ const OptionsView: Function = ({
         <NoData />
       )}
     </Box>
-  </div>
+  </Flex>
 );
 
 const filterOptions = srch => collection =>
