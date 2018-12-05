@@ -6,6 +6,8 @@ import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 import Toolbar from '../toolbar';
 import { getControlChar } from '../../helpers/document';
 import Icon from '../../components/icon';
+import Flex from '../Flex';
+import Pull from '../Pull';
 
 @pure(['messages', 'height'])
 export default class LogComponent extends Component {
@@ -17,29 +19,16 @@ export default class LogComponent extends Component {
 
   state: {
     autoScroll: boolean,
-    height: any,
   } = {
     autoScroll: true,
-    height: 0,
   };
 
   componentDidMount() {
     this.setScroll();
-
-    window.addEventListener('resize', () => {
-      this.recalculateHeight();
-    });
   }
 
   componentWillReceiveProps() {
     this.setScroll();
-    this.recalculateHeight();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', () => {
-      this.recalculateHeight();
-    });
   }
 
   scroll: any = null;
@@ -48,8 +37,6 @@ export default class LogComponent extends Component {
   scrollRef: Function = el => {
     this.scroll = el;
     this.el = el;
-
-    this.recalculateHeight();
   };
 
   setScroll: Function = () => {
@@ -68,25 +55,13 @@ export default class LogComponent extends Component {
     });
   };
 
-  recalculateHeight: Function = () => {
-    if (this.el) {
-      const { top } = this.el.getBoundingClientRect();
-      const winHeight = window.innerHeight;
-      const height: number = winHeight - top - 60;
-
-      this.setState({
-        height,
-      });
-    }
-  };
-
   render() {
     const { onClearClick, height, messages } = this.props;
 
     return (
-      <div>
-        <Toolbar>
-          <div className="pull-left">
+      <Flex>
+        <Toolbar mb>
+          <Pull>
             <ButtonGroup>
               <Button
                 text="Autoscroll"
@@ -96,17 +71,17 @@ export default class LogComponent extends Component {
               />
               <Button text="Clear" iconName="cross" onClick={onClearClick} />
             </ButtonGroup>
-          </div>
-          <p className="pull-right log-search">
+          </Pull>
+          <Pull right>
             <Icon iconName="info-circle" /> Use{' '}
             <strong>"{getControlChar()} + f"</strong> to search the log
-          </p>
+          </Pull>
         </Toolbar>
-        <div className="log-area">
+        <Flex className="log-area" scrollY>
           <pre
             className="language-log"
             style={{
-              height: `${height === 'auto' ? height : this.state.height}px`,
+              height: `${height || 'auto'}`,
             }}
             ref={this.scrollRef}
           >
@@ -118,8 +93,8 @@ export default class LogComponent extends Component {
               ))}
             </code>
           </pre>
-        </div>
-      </div>
+        </Flex>
+      </Flex>
     );
   }
 }
