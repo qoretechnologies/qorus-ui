@@ -140,6 +140,7 @@ export default class Topbar extends Component {
               (key: string): React.Element<MenuItem> => (
                 <MenuItem
                   text={key}
+                  key={key}
                   onClick={() => this.setState({ quickSearchType: key })}
                 />
               )
