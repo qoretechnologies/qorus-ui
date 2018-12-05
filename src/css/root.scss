@@ -44,7 +44,7 @@
 
     -ms-flex: 1 1 auto;
     -webkit-flex: auto;
-    flex: auto;
+    flex: 1 1 auto;
     overflow-x: auto;
     overflow-y: hidden;
 
@@ -52,7 +52,7 @@
 
     > nav,
     > section {
-      margin-bottom: 27px; /* [2], [4] */
+      margin-bottom: 30px; /* [2], [4] */
     }
 
     > nav {
@@ -64,12 +64,12 @@
     }
 
     > section {
-      -ms-flex: 1 1 auto;
-      -webkit-flex: auto;
-      flex: auto;
-      overflow: auto; /* [4] */
-
-      padding-top: 10px; /* [3] */
+      height: calc(100vh - 80px);
+      flex: 1 1 auto;
+      overflow: auto;
+      display: flex;
+      flex-flow: column;
+      padding: 10px;
     }
   }
 }

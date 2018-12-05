@@ -11,6 +11,7 @@ import FixedRow from './fixed_row';
 import Th from './th';
 import Td from './td';
 import EditableCell from './editable_cell';
+import Flex from '../Flex';
 
 type Props = {
   children: any,
@@ -38,7 +39,7 @@ let Table: Function = ({
   info,
 }: Props): React.Element<any> =>
   fixed ? (
-    <div className="table-wrapper">
+    <Flex className="table-wrapper">
       {React.Children.map(
         children,
         (child: Object): React.Element<any> =>
@@ -53,7 +54,7 @@ let Table: Function = ({
             marginBottom: marginBottom || 0,
           })
       )}
-    </div>
+    </Flex>
   ) : (
     <table
       className={classnames(

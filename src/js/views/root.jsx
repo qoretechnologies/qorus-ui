@@ -284,11 +284,7 @@ export default class Root extends Component {
               toggleMenu={this.toggleMenu}
               isTablet={isTablet}
             />
-            <section>
-              <div className="container-fluid" id="content-wrapper">
-                {this.props.children}
-              </div>
-            </section>
+            <section>{this.props.children}</section>
           </div>
           <Footer path={this.props.location.pathname} info={info.data} />
           <ModalManager ref={this.refModal} />

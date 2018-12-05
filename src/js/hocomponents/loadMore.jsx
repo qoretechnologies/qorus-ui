@@ -14,7 +14,7 @@ export default (
   collectionProp: string,
   resource: ?string,
   local: ?boolean,
-  localLimit: ?number,
+  localLimit: ?number
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
   type Props = {
     localOffset: number,
@@ -30,20 +30,18 @@ export default (
   };
 
   const WrappedComponent: Function = (props: Props): React.Element<any> => {
-    const length = isArray(props[collectionProp]) ?
-      props[collectionProp].length :
-      Object.keys(props[collectionProp]).length;
+    const length = isArray(props[collectionProp])
+      ? props[collectionProp].length
+      : Object.keys(props[collectionProp]).length;
 
     return (
-      <div>
-        <Component
-          {...props}
-          canLoadMore={props.offsetLimit <= length}
-          handleLoadMore={props.handleLoadMore}
-          handleLoadAll={props.handleLoadAll}
-          loadMoreTotal={props.total}
-        />
-      </div>
+      <Component
+        {...props}
+        canLoadMore={props.offsetLimit <= length}
+        handleLoadMore={props.handleLoadMore}
+        handleLoadAll={props.handleLoadAll}
+        loadMoreTotal={props.total}
+      />
     );
   };
 
@@ -58,17 +56,18 @@ export default (
       }
     ),
     withState('localOffset', 'setLocalOffset', 0),
-    mapProps(({ localOffset, setLocalOffset, offset, limit, ...rest }: Props) => ({
-      changeLocalOffset: (loadAll: boolean): Function => (
-        setLocalOffset((offs: number) => (
-          loadAll ? rest[collectionProp].length : offs + localLimit
-        ))
-      ),
-      offset: local ? localOffset : offset,
-      limit: local ? localLimit : limit,
-      localOffset,
-      ...rest,
-    })),
+    mapProps(
+      ({ localOffset, setLocalOffset, offset, limit, ...rest }: Props) => ({
+        changeLocalOffset: (loadAll: boolean): Function =>
+          setLocalOffset((offs: number) =>
+            loadAll ? rest[collectionProp].length : offs + localLimit
+          ),
+        offset: local ? localOffset : offset,
+        limit: local ? localLimit : limit,
+        localOffset,
+        ...rest,
+      })
+    ),
     mapProps(({ offset, limit, ...rest }: Props) => ({
       offsetLimit: offset + limit,
       offset,
@@ -79,10 +78,15 @@ export default (
       offsetLimit,
       ...rest,
       total: rest[collectionProp].length,
-      [collectionProp]: local ? rest[collectionProp].slice(0, offsetLimit): rest[collectionProp],
+      [collectionProp]: local
+        ? rest[collectionProp].slice(0, offsetLimit)
+        : rest[collectionProp],
     })),
     withHandlers({
-      handleLoadMore: ({ changeLocalOffset, changeOffset }): Function => (): void => {
+      handleLoadMore: ({
+        changeLocalOffset,
+        changeOffset,
+      }): Function => (): void => {
         if (local) {
           changeLocalOffset();
         } else {
@@ -95,6 +99,6 @@ export default (
         }
       },
     }),
-    setDisplayName('withLoadMore'),
+    setDisplayName('withLoadMore')
   )(WrappedComponent);
 };

@@ -11,6 +11,7 @@ import withTabs from './withTabs';
 import queryControl from './queryControl';
 import { functionOrStringExp } from '../helpers/functions';
 import mapProps from 'recompose/mapProps';
+import Flex from '../components/Flex';
 
 /**
  * A high-order component that provides a side panel
@@ -113,7 +114,7 @@ export default (
       const { paneIdQuery, tabQuery } = this.props;
 
       return (
-        <div className="floating-pane-wrapper">
+        <Flex className="floating-pane-wrapper">
           <Component
             {...this.props}
             openPane={this.handleOpen}
@@ -122,7 +123,7 @@ export default (
             paneTab={tabQuery}
           />
           {this.renderPane()}
-        </div>
+        </Flex>
       );
     }
   }

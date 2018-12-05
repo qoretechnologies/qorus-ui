@@ -1,5 +1,7 @@
+// @flow
 import React from 'react';
 import SimpleTab from './tab';
+import Flex from '../Flex';
 
 type Props = {
   activeTab: string,
@@ -7,7 +9,7 @@ type Props = {
 };
 
 const SimpleTabs: Function = ({ activeTab, children }: Props) => (
-  <div className="simple-tabs">
+  <Flex>
     {React.Children.map(
       children,
       (child: Object): React.Element<any> =>
@@ -15,7 +17,7 @@ const SimpleTabs: Function = ({ activeTab, children }: Props) => (
           activeTab,
         })
     )}
-  </div>
+  </Flex>
 );
 
 export { SimpleTabs, SimpleTab };

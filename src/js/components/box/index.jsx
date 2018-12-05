@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
+import Flex from '../Flex';
 
 type Props = {
   noPadding: boolean,
@@ -34,17 +35,18 @@ const Box: Function = ({
       {children}
     </div>
   ) : (
-    <div
+    <Flex
       className="white-box"
       style={{
         padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
         width: column ? `${100 / (column + column * 0.1)}%` : width,
+        overflow: 'hidden',
         ...style,
       }}
     >
       {children}
-    </div>
+    </Flex>
   );
 
 export default pure(['noPadding', 'children', 'top'])(Box);
