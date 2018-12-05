@@ -45,6 +45,7 @@ import titleManager from '../../hocomponents/TitleManager';
 import Search from '../../containers/search';
 import queryControl from '../../hocomponents/queryControl';
 import Headbar from '../../components/Headbar';
+import Flex from '../../components/Flex';
 
 const filterSearch: Function = (search: string): Function => (
   workflows: Array<Object>
@@ -267,7 +268,7 @@ const Workflows: Function = ({
   band,
   changeDispositionQuery,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active> Workflows </Crumb>
@@ -314,7 +315,7 @@ const Workflows: Function = ({
         changeDispositionQuery={changeDispositionQuery}
       />
     </Box>
-  </div>
+  </Flex>
 );
 
 export default compose(
