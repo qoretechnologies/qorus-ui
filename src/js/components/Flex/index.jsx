@@ -1,7 +1,5 @@
 // @flow
 import React from 'react';
-import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 type FlexProps = {
   children: any,

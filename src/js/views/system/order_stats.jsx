@@ -7,20 +7,21 @@ import NoDataIf from '../../components/NoDataIf';
 import Box from '../../components/box';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Headbar from '../../components/Headbar';
+import Flex from '../../components/Flex';
 
 const OrderStats = ({ orderStats }: Object): any => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active> Global order stats</Crumb>
       </Breadcrumbs>
     </Headbar>
-    <Box top>
+    <Box top scrollY>
       <NoDataIf condition={!orderStats}>
         {() => <StatsView orderStats={orderStats} />}
       </NoDataIf>
     </Box>
-  </div>
+  </Flex>
 );
 
 export default connect((state: Object) => ({
