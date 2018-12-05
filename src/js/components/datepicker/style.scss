@@ -100,7 +100,15 @@
   float: left;
 }
 
-.pt-input-group.pt-small .pt-input {
-  height: 24px;
-  line-height: 24px;
+.pt-input-group.pt-small,
+.pt-control-group.pt-small {
+  .pt-input {
+    height: 24px;
+    line-height: 24px;
+  }
+}
+
+.datepicker-submit {
+  margin-top: 5px;
+  clear: both;
 }
