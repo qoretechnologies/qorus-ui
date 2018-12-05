@@ -44,8 +44,9 @@ const Bubble = ({
       cursor: onViewClick ? 'pointer' : 'initial',
     }}
   >
-    {notification &&
-      notificationsSound && <audio src={notificationSound} id={id} autoPlay />}
+    {notification && notificationsSound && (
+      <audio src={notificationSound} id={id && `audio_${id}`} autoPlay />
+    )}
     {stack > 1 && (
       <div className="toast-notification-count">{stack > 9 ? '9+' : stack}</div>
     )}
@@ -62,7 +63,7 @@ export default compose(
   lifecycle({
     componentDidMount() {
       if (this.props.notification) {
-        const audioEl: any = document.querySelector(`#${this.props.id}`);
+        const audioEl: any = document.querySelector(`#audio_${this.props.id}`);
 
         if (audioEl) {
           audioEl.volume = 0.1;
