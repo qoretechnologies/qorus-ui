@@ -48,6 +48,7 @@ let Section: Function = ({
     return (
       <Flex
         className="table-body-wrapper"
+        scrollY
         style={{
           maxHeight: height || 'auto',
         }}
