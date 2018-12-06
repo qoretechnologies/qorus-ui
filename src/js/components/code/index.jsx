@@ -2,7 +2,6 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
-import mapProps from 'recompose/mapProps';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
@@ -14,11 +13,10 @@ import Tabs, { Pane } from '../tabs';
 import DependenciesList from './dependencies';
 import InfoTable from '../info_table';
 import Alert from '../alert';
+import Flex from '../Flex';
 
 type Props = {
   data: Object,
-  height: string | number,
-  heightUpdated: Function,
   selected: Object,
   onItemClick: Function,
   handleItemClick: Function,
@@ -28,13 +26,12 @@ type Props = {
 
 const Code: Function = ({
   data,
-  height,
   handleItemClick,
   selected,
   location,
 }: Props): React.Element<any> => (
-  <div className="code">
-    <div className="code-list" style={{ height }}>
+  <Flex className="code" flexFlow="row">
+    <Flex className="code-list" scrollY>
       {Object.keys(data).map(
         (name: string, index: number): React.Element<any> => (
           <Section
@@ -46,15 +43,15 @@ const Code: Function = ({
           />
         )
       )}
-    </div>
-    <div className="code-source">
+    </Flex>
+    <Flex className="code-source">
       {selected ? (
-        <div>
+        <Flex>
           {selected.type &&
           (selected.type !== 'code' && selected.type !== 'methods') ? (
             <Tabs active="code">
               <Pane name="Code">
-                <CodeTab selected={selected} height={height} />
+                <CodeTab selected={selected} />
               </Pane>
               <Pane name="Info">
                 <InfoTable
@@ -88,29 +85,18 @@ const Code: Function = ({
               ) : null}
             </Tabs>
           ) : (
-            <CodeTab selected={selected} height={height} />
+            <CodeTab selected={selected} />
           )}
-        </div>
+        </Flex>
       ) : (
         <Alert bsStyle="info"> Please select an item from the list </Alert>
       )}
-    </div>
-  </div>
+    </Flex>
+  </Flex>
 );
 
 export default compose(
-  withState('height', 'setHeight', 'auto'),
   withState('selected', 'setSelected', ({ selected }) => selected || null),
-  mapProps(
-    ({ heightUpdater, setHeight, ...rest }): Object => ({
-      calculateHeight: () =>
-        setHeight(
-          (height: string | number) =>
-            heightUpdater ? heightUpdater() : height
-        ),
-      ...rest,
-    })
-  ),
   withHandlers({
     handleItemClick: ({ setSelected, onItemClick }: Props): Function => (
       name: string,
@@ -140,11 +126,6 @@ export default compose(
     },
   }),
   lifecycle({
-    componentWillMount() {
-      this.props.calculateHeight();
-
-      window.addEventListener('resize', this.props.calculateHeight);
-    },
     componentWillReceiveProps(nextProps) {
       if (this.props.data !== nextProps.data) {
         this.props.setSelected(selected => {
@@ -168,9 +149,6 @@ export default compose(
         });
       }
     },
-    componentWillUnmount() {
-      window.removeEventListener('resize', this.props.calculateHeight);
-    },
   }),
-  pure(['data', 'selected', 'height'])
+  pure(['data', 'selected'])
 )(Code);

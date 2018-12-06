@@ -8,6 +8,7 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers';
 
 import classNames from 'classnames';
 import { pureRender } from '../utils';
+import Flex from '../Flex';
 
 /**
  * Source code uses Prism to format text.
@@ -63,7 +64,7 @@ export default class SourceCode extends Component {
    */
   render() {
     return (
-      <div className="source-code" ref={this.props.handleRef}>
+      <Flex scrollY className="source-code" ref={this.props.handleRef}>
         <button
           type="button"
           className={classNames({
@@ -94,7 +95,7 @@ export default class SourceCode extends Component {
             {this.props.children}
           </code>
         </pre>
-      </div>
+      </Flex>
     );
   }
 }
