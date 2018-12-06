@@ -26,6 +26,7 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../components/controls';
+import Flex from '../../components/Flex';
 
 type Props = {
   onSearchChange: Function,
@@ -96,7 +97,7 @@ const ErrorsContainer: Function = ({
   };
 
   return (
-    <div className="errors-container-wrapper">
+    <Flex>
       <Headbar>
         {title && (
           <Breadcrumbs icon={compact && 'error'}>
@@ -104,7 +105,7 @@ const ErrorsContainer: Function = ({
           </Breadcrumbs>
         )}
         <Pull right>
-          <ButtonGroup marginRight={3}>
+          <ButtonGroup>
             <Button
               text="Add error"
               iconName="plus"
@@ -127,7 +128,6 @@ const ErrorsContainer: Function = ({
           compact={compact}
           onEditClick={handleEditClick}
           onDeleteClick={handleDeleteClick}
-          fixed={fixed}
           height={height}
         />
       ) : (
@@ -139,12 +139,11 @@ const ErrorsContainer: Function = ({
             compact={compact}
             onEditClick={handleEditClick}
             onDeleteClick={handleDeleteClick}
-            fixed={fixed}
             height={height}
           />
         </Box>
       )}
-    </div>
+    </Flex>
   );
 };
 
