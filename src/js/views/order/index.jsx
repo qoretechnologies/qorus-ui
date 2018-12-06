@@ -20,6 +20,7 @@ import CodeView from './code';
 import DiagramView from './diagram';
 import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import titleManager from '../../hocomponents/TitleManager';
+import Flex from '../../components/Flex';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
@@ -119,7 +120,7 @@ export default class Order extends Component {
     }
 
     return (
-      <div>
+      <Flex>
         <Header
           data={this.props.order}
           workflow={this.props.workflow}
@@ -229,7 +230,7 @@ export default class Order extends Component {
             />
           </SimpleTab>
         </SimpleTabs>
-      </div>
+      </Flex>
     );
   }
 }

@@ -14,6 +14,7 @@ import Box from '../../../components/box';
 import NoData from '../../../components/nodata';
 import Container from '../../../components/container';
 import withDispatch from '../../../hocomponents/withDispatch';
+import Flex from '../../../components/Flex';
 
 @withDispatch()
 export default class DiagramView extends Component {
@@ -38,12 +39,6 @@ export default class DiagramView extends Component {
     });
   };
 
-  handleResizeStop = (width, height) => {
-    this.setState({
-      paneSize: height,
-    });
-  };
-
   handleSkipSubmit = (step, value, noretry) => {
     this.props.dispatchAction(
       actions.orders.skipStep,
@@ -52,17 +47,6 @@ export default class DiagramView extends Component {
       value,
       noretry
     );
-  };
-
-  diagramRef = el => {
-    if (el) {
-      const copy = el;
-      copy.scrollLeft = el.scrollWidth;
-      const diff = (el.scrollWidth - el.scrollLeft) / 2;
-      const middle = el.scrollWidth / 2 - diff;
-
-      copy.scrollLeft = middle;
-    }
   };
 
   renderErrorPane(top, columns) {
@@ -80,7 +64,7 @@ export default class DiagramView extends Component {
 
     return (
       <Box column={columns} noTransition top={top}>
-        <Errors data={errors} paneSize={this.state.paneSize} />
+        <Errors data={errors} />
       </Box>
     );
   }
@@ -92,15 +76,11 @@ export default class DiagramView extends Component {
 
     return [
       <Box column={boxColumns} noTransition top>
-        <PaneItem title={this.props.workflow.normalizedName}>
-          <div style={{ overflowX: 'auto' }} ref={this.diagramRef}>
-            <Graph
-              workflow={this.props.workflow}
-              order={this.props.order}
-              onStepClick={this.handleStepClick}
-            />
-          </div>
-        </PaneItem>
+        <Graph
+          workflow={this.props.workflow}
+          order={this.props.order}
+          onStepClick={this.handleStepClick}
+        />
       </Box>,
       <Box column={boxColumns} noTransition top={top}>
         <Info {...this.props.order} />
@@ -138,7 +118,7 @@ export default class DiagramView extends Component {
     if (!this.props.workflow) return <Loader />;
 
     return (
-      <Container>
+      <Flex scrollY>
         {!this.props.isTablet ? (
           <Masonry
             id="order-masonry"
@@ -151,7 +131,7 @@ export default class DiagramView extends Component {
         ) : (
           this.renderContent()
         )}
-      </Container>
+      </Flex>
     );
   }
 }
