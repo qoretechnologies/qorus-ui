@@ -1,10 +1,14 @@
 import React from 'react';
-import compose from 'recompose/compose';
+import { functionOrStringExp } from '../helpers/functions';
 
-const withMutationObserver: Function = (element: string): Function => (
-  Component: React.Element<any>
-): React.Element<any> => {
+const withMutationObserver: Function = (
+  element: string | Function
+): Function => (Component: React.Element<any>): React.Element<any> => {
   class WrappedComponent extends React.Component {
+    props: {
+      first?: boolean,
+    };
+
     state: {
       lastChange?: string,
     } = {
@@ -29,8 +33,9 @@ const withMutationObserver: Function = (element: string): Function => (
 
     handleObserverInit: Function = props => {
       this.handleObserverDisconnect();
+      const domElement: any = functionOrStringExp(element, props);
 
-      if (props.first) {
+      if (props.first && domElement) {
         this._observer = new MutationObserver(
           (mutations: Array<Object>): void => {
             mutations.forEach(
@@ -41,7 +46,7 @@ const withMutationObserver: Function = (element: string): Function => (
           }
         );
 
-        this._observer.observe(document.querySelector(element), {
+        this._observer.observe(document.querySelector(domElement), {
           attributes: true,
         });
       }
