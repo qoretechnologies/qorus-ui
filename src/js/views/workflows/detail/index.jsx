@@ -198,9 +198,7 @@ export default class WorkflowsDetail extends Component {
               </Container>
             </SimpleTab>
             <SimpleTab name="errors">
-              <Container fill>
-                <ErrorsTab location={this.props.location} workflow={workflow} />
-              </Container>
+              <ErrorsTab location={this.props.location} workflow={workflow} />
             </SimpleTab>
             <SimpleTab name="mappers">
               <Container fill>
