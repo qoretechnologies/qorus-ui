@@ -11,6 +11,7 @@ type FlexProps = {
   style?: Object,
   scrollX?: boolean,
   scrollY?: boolean,
+  flexRef?: Function,
 };
 
 const Flex: Function = ({
@@ -23,6 +24,7 @@ const Flex: Function = ({
   className,
   scrollX,
   scrollY,
+  flexRef,
 }: FlexProps): React.Element<any> => (
   <div
     style={{
@@ -34,6 +36,7 @@ const Flex: Function = ({
       overflowX: scrollX ? 'auto' : 'hidden',
       overflowY: scrollY ? 'auto' : 'hidden',
     }}
+    ref={ref => flexRef && flexRef(ref)}
     className={className}
   >
     {children}
