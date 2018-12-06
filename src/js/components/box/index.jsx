@@ -13,6 +13,7 @@ type Props = {
   width: string | number,
   scrollX?: boolean,
   scrollY?: boolean,
+  fill?: boolean,
 };
 
 const Box: Function = ({
@@ -24,6 +25,7 @@ const Box: Function = ({
   style,
   scrollX,
   scrollY,
+  fill,
   width: width = 'initial',
 }: Props): React.Element<any> =>
   noTransition ? (
@@ -43,7 +45,7 @@ const Box: Function = ({
   ) : (
     <Flex
       className="white-box"
-      flex="0 1 auto"
+      flex={fill ? '1 1 auto' : '0 1 auto'}
       scrollX={scrollX}
       scrollY={scrollY}
       style={{
