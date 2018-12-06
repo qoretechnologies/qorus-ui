@@ -69,6 +69,7 @@ class CrumbTabs extends React.Component {
       let tabsLen: number = 0;
       const spaceWidth: number = parentWidth - childrenWidth;
       let tabsWidth: number = 0;
+      let collapsed: boolean = false;
 
       this.props.tabs.forEach(
         (tab: any): void => {
@@ -76,13 +77,15 @@ class CrumbTabs extends React.Component {
           if (strLen * 10.5 + tabsWidth < spaceWidth) {
             tabsLen = tabsLen + 1;
             tabsWidth = tabsWidth + strLen * 10.5;
+          } else {
+            collapsed = true;
           }
         }
       );
 
       this.setState(() => ({
         showTabs: true,
-        tabsLen: tabsLen - 1,
+        tabsLen: collapsed ? tabsLen - 1 : tabsLen,
       }));
     }
   };
