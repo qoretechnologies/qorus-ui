@@ -15,7 +15,9 @@ import mapProps from 'recompose/mapProps';
 type Props = {
   tabs: Array<any>,
   handleTabChange: Function,
+  onChange?: Function,
   tabQuery?: string,
+  activeTab?: string,
   compact?: boolean,
   queryIdentifier?: string,
   parentRef: HTMLDivElement,
@@ -93,7 +95,7 @@ class CrumbTabs extends React.Component {
   render() {
     const { tabs, handleTabChange, tabQuery }: Props = this.props;
     const { tabsLen, showTabs } = this.state;
-    const tabsCollapsed = tabs.length > tabsLen;
+    const tabsCollapsed: boolean = tabs.length > tabsLen;
 
     let newTabs: Array<any> = tabs;
     let leftoverTabs: Array<any> = [];
@@ -180,6 +182,20 @@ export default compose(
   withTabs(
     ({ defaultTab, tabs }) => defaultTab || tabs[0].tabId.toLowerCase(),
     ({ queryIdentifier }) => queryIdentifier || 'tab'
+  ),
+  mapProps(
+    ({
+      local,
+      tabQuery,
+      handleTabChange,
+      activeTab,
+      onChange,
+      ...rest
+    }: Props): Props => ({
+      tabQuery: local ? activeTab : tabQuery,
+      handleTabChange: local ? onChange : handleTabChange,
+      ...rest,
+    })
   ),
   onlyUpdateForKeys(['tabQuery', 'tabs', 'parentRef'])
 )(CrumbTabs);

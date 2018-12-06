@@ -1,24 +1,24 @@
 import React from 'react';
-import { Tabs2, Tab2 } from '@blueprintjs/core';
-import classNames from 'classnames';
+import upperFirst from 'lodash/upperFirst';
 
-import Container from '../container';
+import Flex from '../Flex';
+import { SimpleTabs, SimpleTab } from '../SimpleTabs';
+import Headbar from '../Headbar';
 import Pane from './pane';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Breadcrumbs, CrumbTabs } from '../breadcrumbs';
+import Pull from '../Pull';
 
 type Props = {
   children?: any,
   active?: string,
-  id?: string,
-  className: string,
   onChange: Function,
   onChangeEnd?: Function,
-  vertical?: boolean,
-  noContainer?: boolean,
-  boxed?: boolean,
+  tabs: Array<any>,
+  rightElement?: any,
 };
 
-@pure(['children', 'active', 'vertical', 'noContainer'])
+@pure(['children', 'active', 'vertical', 'noContainer', 'tabs', 'rightElement'])
 class Tabs extends React.Component {
   props: Props;
   state: {
@@ -50,38 +50,43 @@ class Tabs extends React.Component {
   };
 
   render() {
-    const { children, id, className, vertical, noContainer } = this.props;
+    const { children, tabs, rightElement } = this.props;
     const { active } = this.state;
+    const getTabs: Array<string> =
+      tabs ||
+      React.Children.map(
+        children,
+        (child: any) => child && upperFirst(child.props.name)
+      );
 
     return (
-      <Tabs2
-        className={classNames(className, {
-          ['boxed-tabs']: this.props.boxed,
-        })}
-        selectedTabId={active.toLowerCase()}
-        id={id}
-        onChange={this.handleChange}
-        renderActiveTabPanelOnly
-        vertical={vertical}
-      >
-        {React.Children.map(
-          children,
-          child =>
-            child && (
-              <Tab2
-                id={child.props.name.toLowerCase()}
-                title={child.props.name}
-                panel={
-                  noContainer ? (
-                    child.props.children
-                  ) : (
-                    <Container fill>{child.props.children}</Container>
-                  )
-                }
-              />
-            )
-        )}
-      </Tabs2>
+      <Flex>
+        <Headbar>
+          <Breadcrumbs collapsed>
+            <CrumbTabs
+              tabs={getTabs}
+              activeTab={active}
+              onChange={this.handleChange}
+              local
+            />
+          </Breadcrumbs>
+          {rightElement && <Pull right>{rightElement}</Pull>}
+        </Headbar>
+        <SimpleTabs activeTab={active}>
+          {React.Children.map(
+            children,
+            child =>
+              child && (
+                <SimpleTab
+                  key={child.props.name}
+                  name={child.props.name.toLowerCase()}
+                >
+                  {child.props.children}
+                </SimpleTab>
+              )
+          )}
+        </SimpleTabs>
+      </Flex>
     );
   }
 }

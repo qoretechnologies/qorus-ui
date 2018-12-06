@@ -17,7 +17,6 @@ type Props = {
   fontSize: number,
 };
 
-const MAX_TITLE_LEN: number = 8;
 const TITLE_BASE_SIZE: number = 16;
 
 const CrumbTab: Function = ({
