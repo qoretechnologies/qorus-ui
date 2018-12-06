@@ -18,7 +18,6 @@ import Autostart from '../autostart';
 import withDispatch from '../../../hocomponents/withDispatch';
 import InfoHeader from '../../../components/InfoHeader';
 import NoDataIf from '../../../components/NoDataIf';
-import Container from '../../../components/container';
 import {
   buildOrderStatsDisposition,
   buildOrderStatsSLA,
@@ -28,6 +27,8 @@ import Dropdown, {
   Item,
   Control as DControl,
 } from '../../../components/dropdown';
+import Flex from '../../../components/Flex';
+import Box from '../../../components/box';
 
 @connect(
   null,
@@ -106,9 +107,9 @@ export default class DetailTab extends Component {
       buildOrderStatsSLA(workflow.order_stats, slaBand.replace(/ /g, '_'));
 
     return (
-      <div>
+      <Box scrollY top>
         <InfoHeader model={workflow} />
-        <Container fill>
+        <Flex scrollY>
           <PaneItem title="Controls">
             <WorkflowsControls
               id={this.props.workflow.id}
@@ -237,8 +238,8 @@ export default class DetailTab extends Component {
             onSet={this.setOption}
             onDelete={this.deleteOption}
           />
-        </Container>
-      </div>
+        </Flex>
+      </Box>
     );
   }
 }
