@@ -43,10 +43,7 @@ export default compose(
   }),
   mapProps(
     ({ title, ...rest }): Props => ({
-      fontSize:
-        title.length > MAX_TITLE_LEN
-          ? TITLE_BASE_SIZE - (title.length - MAX_TITLE_LEN) / 1.5
-          : TITLE_BASE_SIZE,
+      fontSize: TITLE_BASE_SIZE,
       title,
       ...rest,
     })

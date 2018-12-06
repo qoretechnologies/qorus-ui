@@ -66,9 +66,23 @@ class CrumbTabs extends React.Component {
         }
       });
 
+      let tabsLen: number = 0;
+      const spaceWidth: number = parentWidth - childrenWidth;
+      let tabsWidth: number = 0;
+
+      this.props.tabs.forEach(
+        (tab: any): void => {
+          const strLen: number = tab.title.length;
+          if (strLen * 10.5 + tabsWidth < spaceWidth) {
+            tabsLen = tabsLen + 1;
+            tabsWidth = tabsWidth + strLen * 10.5;
+          }
+        }
+      );
+
       this.setState(() => ({
         showTabs: true,
-        tabsLen: Math.floor((parentWidth - childrenWidth) / 117),
+        tabsLen: tabsLen - 1,
       }));
     }
   };
