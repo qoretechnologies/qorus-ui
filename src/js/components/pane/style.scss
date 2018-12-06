@@ -31,11 +31,9 @@ $pane-font-color: #000;
 .pane {
   position: absolute; /* [1] */
   top: 0; /* [1] */
-  bottom: 27px; /* [1] */
+  bottom: 30px; /* [1] */
   z-index: $zindex-pane;
-  padding-top: 10px;
-  padding-left: $pane-padding; /* [7] */
-  padding-right: $pane-padding; /* [7] */
+  padding: 10px;
   max-width: 80%; /* [2] */
   overflow-y: auto; /* [3] */
   background-color: darken($bgcolor, 5);
