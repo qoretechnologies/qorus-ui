@@ -17,9 +17,11 @@ type Props = {
   title?: string,
   key?: any,
   lastObserverChange?: string | number,
+  observeElement?: string,
 };
 
 @withMutationObserver('.sidebar')
+@withMutationObserver(({ observeElement }) => observeElement)
 @updateOnlyForKeys([
   'children',
   'className',
@@ -27,6 +29,7 @@ type Props = {
   'highlight',
   'first',
   'lastObserverChange',
+  'observeElement',
 ])
 export default class Tr extends Component {
   props: Props;
