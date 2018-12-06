@@ -25,6 +25,8 @@ import {
 } from '../../../components/controls';
 import Pull from '../../../components/Pull';
 import queryControl from '../../../hocomponents/queryControl';
+import Flex from '../../../components/Flex';
+import NoDataIf from '../../../components/NoDataIf';
 
 const sqlcacheSelector: Function = (state: Object) => state.api.sqlcache;
 const querySelector: Function = (state: Object, props: Object): ?string =>
@@ -126,7 +128,7 @@ class SQLCache extends Component {
     const colLength = Object.keys(collection).length;
 
     return (
-      <div>
+      <Flex>
         <Headbar>
           <Breadcrumbs>
             <Crumb active> SQL Cache </Crumb>
@@ -148,10 +150,11 @@ class SQLCache extends Component {
             />
           </Pull>
         </Headbar>
-        <Container>
-          {colLength > 0 ? (
-            Object.keys(this.props.collection).map((col, index) => (
-              <Box top={index === 0}>
+
+        <NoDataIf condition={colLength === 0} big inBox>
+          {() => (
+            <Box top scrollY>
+              {Object.keys(this.props.collection).map((col, index) => (
                 <Table
                   key={index}
                   name={col}
@@ -160,13 +163,11 @@ class SQLCache extends Component {
                   onClick={this.handleClearDatasourceClick}
                   onSingleClick={this.handleClearSingleClick}
                 />
-              </Box>
-            ))
-          ) : (
-            <NoData />
+              ))}
+            </Box>
           )}
-        </Container>
-      </div>
+        </NoDataIf>
+      </Flex>
     );
   }
 }
