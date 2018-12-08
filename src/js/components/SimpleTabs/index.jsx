@@ -13,6 +13,7 @@ const SimpleTabs: Function = ({ activeTab, children }: Props) => (
     {React.Children.map(
       children,
       (child: Object): React.Element<any> =>
+        child &&
         React.cloneElement(child, {
           activeTab,
         })
