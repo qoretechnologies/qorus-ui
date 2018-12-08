@@ -1,17 +1,17 @@
 // @flow
 import React, { Component, PropTypes } from 'react';
-import settings from '../../../../../settings';
-import { fetchJson } from '../../../../../store/api/utils';
+import settings from '../../../../settings';
+import { fetchJson } from '../../../../store/api/utils';
 import moment from 'moment';
 import qs from 'qs';
 
-import Loader from '../../../../../components/loader';
-import Chart from '../../../../../components/chart';
-import Editable from '../../../../../components/editable';
+import Loader from '../../../../components/loader';
+import Chart from '../../../../components/chart';
+import Editable from '../../../../components/editable';
 import {
   createLineDatasets,
   createDoughDatasets,
-} from '../../../../../helpers/chart';
+} from '../../../../helpers/chart';
 
 export default class ChartView extends Component {
   static propTypes = {

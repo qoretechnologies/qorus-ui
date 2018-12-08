@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import ChartView from './chart';
-import Container from '../../../../../components/container';
+import Container from '../../../../components/container';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import Box from '../../../../../components/box';
+import Box from '../../../../components/box';
 
 const PerformanceTab: Function = ({
   workflow,

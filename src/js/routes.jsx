@@ -29,7 +29,7 @@ import groupsRoutes from './routes/groups';
 import ErrorView from './error';
 import * as events from './store/apievents/actions';
 
-import Workflow from './views/workflows/workflow';
+import Workflow from './views/workflows/detail';
 
 class AppInfo extends React.Component {
   /**

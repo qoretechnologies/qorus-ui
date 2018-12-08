@@ -7,14 +7,14 @@ import mapProps from 'recompose/mapProps';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import { Tr, Td } from '../../../../../components/new_table';
-import Checkbox from '../../../../../components/checkbox';
-import actions from '../../../../../store/api/actions';
+import { Tr, Td } from '../../../../components/new_table';
+import Checkbox from '../../../../components/checkbox';
+import actions from '../../../../store/api/actions';
 import OrderControls from './controls';
-import Date from '../../../../../components/date';
-import AutoComp from '../../../../../components/autocomponent';
-import { ALL_ORDER_STATES } from '../../../../../constants/orders';
-import queryControl from '../../../../../hocomponents/queryControl';
+import Date from '../../../../components/date';
+import AutoComp from '../../../../components/autocomponent';
+import { ALL_ORDER_STATES } from '../../../../constants/orders';
+import queryControl from '../../../../hocomponents/queryControl';
 import Lock from './lock';
 
 type Props = {

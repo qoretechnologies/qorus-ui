@@ -6,16 +6,16 @@ import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 import includes from 'lodash/includes';
 
-import withModal from '../../../../../hocomponents/modal';
-import actions from '../../../../../store/api/actions';
-import { ORDER_ACTIONS } from '../../../../../constants/orders';
+import withModal from '../../../../hocomponents/modal';
+import actions from '../../../../store/api/actions';
+import { ORDER_ACTIONS } from '../../../../constants/orders';
 import Schedule from './modals/schedule';
-import withDispatch from '../../../../../hocomponents/withDispatch';
+import withDispatch from '../../../../hocomponents/withDispatch';
 import {
   Controls as ButtonGroup,
   Control as Button,
-} from '../../../../../components/controls';
-import Dropdown, { Control, Item } from '../../../../../components/dropdown';
+} from '../../../../components/controls';
+import Dropdown, { Control, Item } from '../../../../components/dropdown';
 
 type Props = {
   optimisticDispatch: Function,

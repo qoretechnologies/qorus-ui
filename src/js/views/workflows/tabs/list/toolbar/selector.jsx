@@ -4,8 +4,8 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 
-import Dropdown, { Item, Control } from '../../../../../../components/dropdown';
-import actions from '../../../../../../store/api/actions';
+import Dropdown, { Item, Control } from '../../../../../components/dropdown';
+import actions from '../../../../../store/api/actions';
 
 type Props = {
   selected: string,

@@ -5,10 +5,10 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import moment from 'moment';
 
-import Modal from '../../../../../../components/modal';
-import Datepicker from '../../../../../../components/datepicker';
-import { DATE_FORMATS } from '../../../../../../constants/dates';
-import actions from '../../../../../../store/api/actions';
+import Modal from '../../../../../components/modal';
+import Datepicker from '../../../../../components/datepicker';
+import { DATE_FORMATS } from '../../../../../constants/dates';
+import actions from '../../../../../store/api/actions';
 
 type Props = {
   id: number,

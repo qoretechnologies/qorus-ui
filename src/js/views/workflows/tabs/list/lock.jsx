@@ -5,11 +5,11 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 
-import Dropdown, { Control, Item } from '../../../../../components/dropdown';
-import Icon from '../../../../../components/icon';
-import withModal from '../../../../../hocomponents/modal';
+import Dropdown, { Control, Item } from '../../../../components/dropdown';
+import Icon from '../../../../components/icon';
+import withModal from '../../../../hocomponents/modal';
 import Lock from './modals/lock';
-import withDispatch from '../../../../../hocomponents/withDispatch';
+import withDispatch from '../../../../hocomponents/withDispatch';
 
 type Props = {
   lock?: string,

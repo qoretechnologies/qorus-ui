@@ -1,266 +1,133 @@
-/* @flow */
-import React, { Component } from 'react';
+// @flow
+import React from 'react';
 import compose from 'recompose/compose';
-import size from 'lodash/size';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
+import lifecycle from 'recompose/lifecycle';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { NonIdealState } from '@blueprintjs/core';
 
+import sync from '../../../hocomponents/sync';
+import withTabs from '../../../hocomponents/withTabs';
+import unsync from '../../../hocomponents/unsync';
+import patch from '../../../hocomponents/patchFuncArgs';
+import {
+  querySelector,
+  resourceSelector,
+  paramSelector,
+} from '../../../selectors';
 import actions from '../../../store/api/actions';
-import DetailPane from '../../../components/pane';
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
-import DetailTab from './detail_tab';
-import Code from '../../../components/code';
-import StepsTab from '../../order/diagram/graph';
-import LogTab from './log_tab';
-import ErrorsTab from './errors_tab';
-import InfoTab from './info_tab';
-import MappersTable from '../../../containers/mappers';
-import Valuemaps from '../../../containers/valuemaps';
-import Releases from '../../../containers/releases';
-import InfoTable from '../../../components/info_table/index';
-import Box from '../../../components/box';
-import StatsTab from './stats';
+import { DATES, DATE_FORMATS } from '../../../constants/dates';
+import { formatDate } from '../../../helpers/workflows';
+import Header from './header';
 import titleManager from '../../../hocomponents/TitleManager';
-import Container from '../../../components/container';
-import PaneItem from '../../../components/pane_item';
-import { rebuildConfigHash } from '../../../helpers/interfaces';
-import ConfigItemsTable from '../../../components/ConfigItemsTable';
-import { countArrayItemsInObject } from '../../../utils';
+import queryControl from '../../../hocomponents/queryControl';
+import Flex from '../../../components/Flex';
+import WorkflowDetailTabs from '../tabs';
+
+type Props = {
+  workflow: Object,
+  date: string,
+  linkDate: string,
+  fetchParams: Object,
+  id: number,
+  unselectAll: Function,
+  fetch: Function,
+  location: Object,
+  children: any,
+  tabQuery: string,
+  searchQuery: string,
+  changeSearchQuery: Function,
+};
+
+const Workflow: Function = ({
+  workflow,
+  date,
+  location,
+  linkDate,
+  tabQuery,
+  searchQuery,
+  changeSearchQuery,
+}: Props): React.Element<any> => (
+  <Flex>
+    <Header
+      workflow={workflow}
+      date={date}
+      location={location}
+      onSearch={changeSearchQuery}
+      searchQuery={searchQuery}
+      tab={tabQuery}
+    />
+    <WorkflowDetailTabs
+      workflow={workflow}
+      location={location}
+      date={date}
+      linkDate={linkDate}
+      activeTab={tabQuery}
+    />
+  </Flex>
+);
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
-    (wf: Object) => wf.id === parseInt(props.paneId, 10)
+    (workflow: Object) =>
+      parseInt(props.params.id, 10) === parseInt(workflow.id, 10)
   );
 
-const selector = createSelector(
-  [workflowSelector],
-  workflow => ({
+const selector: Object = createSelector(
+  [
+    resourceSelector('workflows'),
+    workflowSelector,
+    querySelector('date'),
+    paramSelector('id'),
+  ],
+  (meta, workflow, date, id) => ({
+    meta,
     workflow,
+    date,
+    id: parseInt(id, 10),
   })
 );
 
-@compose(
+export default compose(
   connect(
     selector,
     {
-      load: actions.workflows.fetchLibSources,
+      load: actions.workflows.fetch,
+      fetch: actions.workflows.fetch,
+      unsync: actions.workflows.unsync,
+      unselectAll: actions.orders.unselectAll,
     }
-  )
-)
-@titleManager(
-  (props: Object): string => props.workflow.normalizedName,
-  'Workflows',
-  'prefix'
-)
-export default class WorkflowsDetail extends Component {
-  props: {
-    systemOptions: Array<Object>,
-    globalErrors: Array<Object>,
-    paneTab: string | number,
-    paneId: string | number,
-    query: string,
-    changePaneTab: Function,
-    workflow: Object,
-    onClose: Function,
-    location: Object,
-    loadErrors: Function,
-    load: Function,
-    onResize: Function,
-    width: number,
-    fetchParams: Object,
-    band: string,
-  };
+  ),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      date: date || DATES.PREV_DAY,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      fetchParams: { lib_source: true, date: formatDate(date).format() },
+      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+      date,
+      ...rest,
+    })
+  ),
+  patch('load', ['fetchParams', 'id']),
+  sync('meta'),
+  lifecycle({
+    componentWillReceiveProps(nextProps: Props) {
+      const { date, unselectAll, fetch, id }: Props = this.props;
 
-  componentWillMount() {
-    this.props.load(this.props.paneId, this.props.fetchParams.date);
-  }
-
-  componentWillReceiveProps(nextProps: Object) {
-    if (this.props.paneId !== nextProps.paneId) {
-      this.props.load(nextProps.paneId, this.props.fetchParams.date);
-    }
-  }
-
-  getHeight: Function = (): number => {
-    const { top } = document
-      .querySelector('.pane__content .container-resizable')
-      .getBoundingClientRect();
-
-    return window.innerHeight - top - 60;
-  };
-
-  handleClose: Function = (): void => {
-    this.props.onClose(['globalErrQuery', 'workflowErrQuery']);
-  };
-
-  diagramRef = (el: Object) => {
-    if (el) {
-      const copy = el;
-      copy.scrollLeft = el.scrollWidth;
-      const diff = (el.scrollWidth - el.scrollLeft) / 2;
-      const middle = el.scrollWidth / 2 - diff;
-
-      copy.scrollLeft = middle;
-    }
-  };
-
-  render() {
-    const {
-      workflow,
-      systemOptions,
-      paneTab,
-      band,
-      width,
-      onResize,
-    } = this.props;
-    const loaded: boolean = workflow && 'lib' in workflow;
-
-    if (!loaded) {
-      return null;
-    }
-
-    const configItems: Array<Object> = rebuildConfigHash(workflow, true);
-
-    return (
-      <DetailPane
-        width={width || 600}
-        onClose={this.handleClose}
-        onResize={onResize}
-        title={`Workflow ${workflow.id}`}
-        tabs={{
-          tabs: [
-            'Detail',
-            'Steps',
-            'Order Stats',
-            'Process',
-            {
-              title: 'Config',
-              suffix: `(${countArrayItemsInObject(configItems)})`,
-            },
-            'Releases',
-            {
-              title: 'Value maps',
-              suffix: `(${size(workflow.vmaps)})`,
-            },
-            {
-              title: 'Mappers',
-              suffix: `(${size(workflow.mappers)})`,
-            },
-            'Errors',
-            'Code',
-            'Log',
-            'Info',
-          ],
-          queryIdentifier: 'paneTab',
-        }}
-      >
-        <Box top>
-          <SimpleTabs activeTab={paneTab}>
-            <SimpleTab name="detail">
-              <DetailTab
-                key={workflow.name}
-                workflow={workflow}
-                systemOptions={systemOptions}
-                band={band}
-              />
-            </SimpleTab>
-            <SimpleTab name="code">
-              <Container fill>
-                <Code
-                  data={workflow.lib}
-                  heightUpdater={this.getHeight}
-                  location={this.props.location}
-                />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="steps">
-              <PaneItem title={workflow.normalizedName}>
-                <Container fill>
-                  <div
-                    style={{
-                      height: '100%',
-                      overflow: 'auto',
-                    }}
-                    ref={this.diagramRef}
-                  >
-                    <StepsTab workflow={workflow} />
-                  </div>
-                </Container>
-              </PaneItem>
-            </SimpleTab>
-            <SimpleTab name="log">
-              <Container fill>
-                <LogTab
-                  resource={`workflows/${workflow.id}`}
-                  location={this.props.location}
-                />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="errors">
-              <ErrorsTab location={this.props.location} workflow={workflow} />
-            </SimpleTab>
-            <SimpleTab name="mappers">
-              <Container fill>
-                <MappersTable mappers={workflow.mappers} />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="value maps">
-              <Container fill>
-                <Valuemaps vmaps={workflow.vmaps} />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="releases">
-              <Container fill>
-                <Releases
-                  component={workflow.name}
-                  compact
-                  location={this.props.location}
-                  key={workflow.name}
-                />
-              </Container>
-            </SimpleTab>
-            {workflow && workflow.process ? (
-              <SimpleTab name="process">
-                <Container fill>
-                  <InfoTable
-                    object={{
-                      ...workflow.process,
-                      ...{ memory: workflow.process.priv_str },
-                    }}
-                    omit={['priv', 'rss', 'vsz', 'priv_str']}
-                  />
-                </Container>
-              </SimpleTab>
-            ) : (
-              <SimpleTab name="process">
-                <Container fill>
-                  <NonIdealState
-                    title="Process unavailable"
-                    description="This workflow is not running under a process"
-                    visual="warning-sign"
-                  />
-                </Container>
-              </SimpleTab>
-            )}
-            <SimpleTab name="config">
-              <Container fill>
-                <ConfigItemsTable items={configItems} intrf="workflows" />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="order stats">
-              <Container fill>
-                <StatsTab orderStats={workflow.order_stats} />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="info">
-              <Container fill>
-                <InfoTab workflow={workflow} />
-              </Container>
-            </SimpleTab>
-          </SimpleTabs>
-        </Box>
-      </DetailPane>
-    );
-  }
-}
+      if (date !== nextProps.date || id !== nextProps.id) {
+        unselectAll();
+        fetch(nextProps.fetchParams, nextProps.id);
+      }
+    },
+  }),
+  withTabs('orders'),
+  queryControl('search'),
+  titleManager(({ workflow }: Props): string => workflow.name),
+  pure(['workflow', 'date', 'id', 'location', 'tabQuery']),
+  unsync()
+)(Workflow);

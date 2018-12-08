@@ -5,14 +5,14 @@ import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
 
-import actions from '../../../../../../store/api/actions';
+import actions from '../../../../../store/api/actions';
 import Dropdown, {
   Item as DropdownItem,
   Control as DropdownControl,
-} from '../../../../../../components/dropdown';
-import { Controls as ButtonGroup } from '../../../../../../components/controls';
-import showIfPassed from '../../../../../../hocomponents/show-if-passed';
-import withDispatch from '../../../../../../hocomponents/withDispatch';
+} from '../../../../../components/dropdown';
+import { Controls as ButtonGroup } from '../../../../../components/controls';
+import showIfPassed from '../../../../../hocomponents/show-if-passed';
+import withDispatch from '../../../../../hocomponents/withDispatch';
 
 type Props = {
   unselectAll: Function,

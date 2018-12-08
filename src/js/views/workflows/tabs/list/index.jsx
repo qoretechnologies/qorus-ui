@@ -8,18 +8,18 @@ import flowRight from 'lodash/flowRight';
 import lifecycle from 'recompose/lifecycle';
 import { createSelector } from 'reselect';
 
-import actions from '../../../../../store/api/actions';
-import { querySelector, resourceSelector } from '../../../../../selectors';
-import { findBy } from '../../../../../helpers/search';
-import sync from '../../../../../hocomponents/sync';
-import patch from '../../../../../hocomponents/patchFuncArgs';
-import selectable from '../../../../../hocomponents/selectable';
-import unsync from '../../../../../hocomponents/unsync';
-import withCSV from '../../../../../hocomponents/csv';
-import loadMore from '../../../../../hocomponents/loadMore';
-import withSort from '../../../../../hocomponents/sort';
-import { sortDefaults } from '../../../../../constants/sort';
-import Box from '../../../../../components/box';
+import actions from '../../../../store/api/actions';
+import { querySelector, resourceSelector } from '../../../../selectors';
+import { findBy } from '../../../../helpers/search';
+import sync from '../../../../hocomponents/sync';
+import patch from '../../../../hocomponents/patchFuncArgs';
+import selectable from '../../../../hocomponents/selectable';
+import unsync from '../../../../hocomponents/unsync';
+import withCSV from '../../../../hocomponents/csv';
+import loadMore from '../../../../hocomponents/loadMore';
+import withSort from '../../../../hocomponents/sort';
+import { sortDefaults } from '../../../../constants/sort';
+import Box from '../../../../components/box';
 import Table from './table';
 
 type Props = {

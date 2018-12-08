@@ -16,52 +16,53 @@ import {
   Control as Button,
 } from '../../../components/controls';
 import withHandlers from 'recompose/withHandlers';
+import { rebuildConfigHash } from '../../../helpers/interfaces';
+import { countArrayItemsInObject } from '../../../utils';
 
 type Props = {
-  id: number,
-  enabled: boolean,
-  remote: boolean,
-  autostart: number,
-  execCount: number,
-  exec_count: number,
-  name: string,
-  version: string,
-  has_alerts: boolean,
-  alerts: Array<Object>,
   setAutostart: Function,
   date: string,
-  normalizedName: string,
   onSearch: Function,
   handleAlertClick: Function,
   searchQuery?: string,
   tab: string,
-  mappers: Array<Object>,
+  workflow: Object,
 };
 
 const WorkflowHeader: Function = ({
-  id,
-  enabled,
-  autostart,
-  exec_count: execCount,
-  has_alerts: hasAlerts,
-  alerts,
-  remote,
+  workflow,
   onSearch,
   searchQuery,
   tab,
   handleAlertClick,
-  normalizedName,
-  mappers,
 }: Props): React.Element<any> => (
   <Headbar>
     <Breadcrumbs>
       <Crumb link="/workflows"> Workflows </Crumb>
-      <Crumb>{normalizedName}</Crumb>
+      <Crumb>{workflow.normalizedName}</Crumb>
       <CrumbTabs
         tabs={[
           'Orders',
           'Performance',
-          { title: 'Mappers', suffix: `(${size(mappers)})` },
+          'Steps',
+          'Order Stats',
+          'Process',
+          {
+            title: 'Config',
+            suffix: `(${countArrayItemsInObject(
+              rebuildConfigHash(workflow, true)
+            )})`,
+          },
+          'Releases',
+          {
+            title: 'Value maps',
+            suffix: `(${size(workflow.vmaps)})`,
+          },
+          {
+            title: 'Mappers',
+            suffix: `(${size(workflow.mappers)})`,
+          },
+          'Errors',
           'Code',
           'Log',
           'Info',
@@ -69,7 +70,7 @@ const WorkflowHeader: Function = ({
       />
     </Breadcrumbs>
     <Pull right>
-      {hasAlerts && (
+      {workflow.hasAlerts && (
         <ButtonGroup>
           <Button
             big
@@ -78,16 +79,21 @@ const WorkflowHeader: Function = ({
             onClick={handleAlertClick}
             title="This workflow has alerts raised against it which may prevent it from working properly"
           >
-            {alerts.length}
+            {workflow.alerts.length}
           </Button>
         </ButtonGroup>
       )}
-      <WorkflowControls big id={id} enabled={enabled} remote={remote} />
+      <WorkflowControls
+        big
+        id={workflow.id}
+        enabled={workflow.enabled}
+        remote={workflow.remote}
+      />
       <WorkflowAutostart
         big
-        id={id}
-        autostart={autostart}
-        execCount={execCount}
+        id={workflow.id}
+        autostart={workflow.autostart}
+        execCount={workflow.execCount}
         withExec
       />
       {tab === 'orders' && (
@@ -104,18 +110,11 @@ const WorkflowHeader: Function = ({
 export default compose(
   withRouter,
   withHandlers({
-    handleAlertClick: ({ router, date, id }): Function => (): void => {
-      router.push(`/workflows?date=${date}&paneTab=detail&paneId=${id}`);
+    handleAlertClick: ({ router, date, workflow }): Function => (): void => {
+      router.push(
+        `/workflows?date=${date}&paneTab=detail&paneId=${workflow.id}`
+      );
     },
   }),
-  pure([
-    'alerts',
-    'has_alerts',
-    'enabled',
-    'autostart',
-    'exec_count',
-    '_updated',
-    'location',
-    'tab',
-  ])
+  pure(['workflow', '_updated', 'location', 'tab'])
 )(WorkflowHeader);

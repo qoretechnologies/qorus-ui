@@ -54,6 +54,7 @@ type Props = {
   handleLoadAll: Function,
   limit: number,
   sortKeysObj: Object,
+  band: string,
 };
 
 const WorkflowsTable: Function = ({

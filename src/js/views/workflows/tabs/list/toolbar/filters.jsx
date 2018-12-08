@@ -4,9 +4,9 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 
-import queryControl from '../../../../../../hocomponents/queryControl';
-import Dropdown, { Item, Control } from '../../../../../../components/dropdown';
-import { ORDER_STATES } from '../../../../../../constants/orders';
+import queryControl from '../../../../../hocomponents/queryControl';
+import Dropdown, { Item, Control } from '../../../../../components/dropdown';
+import { ORDER_STATES } from '../../../../../constants/orders';
 import { ButtonGroup } from '@blueprintjs/core';
 
 type Props = {
