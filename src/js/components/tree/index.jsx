@@ -305,9 +305,9 @@ export default class Tree extends Component {
           )}
         </Toolbar>
         {this.state.mode === 'normal' && (
-          <div className="tree-wrapper" ref="tree">
+          <Flex scrollY className="tree-wrapper">
             {this.renderTree(this.props.data, true)}
-          </div>
+          </Flex>
         )}
         {this.state.mode === 'copy' && (
           <textarea
