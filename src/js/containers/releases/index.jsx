@@ -58,14 +58,14 @@ const Releases: Function = ({
     {compact ? (
       [
         <ReleasesToolbar sort={sort} sortDir={sortDir} compact />,
-        <Flex display="initial" scrollY>
+        <Flex>
           <Tree data={data} />
         </Flex>,
       ]
     ) : (
       <Box top>
         <ReleasesToolbar sort={sort} sortDir={sortDir} />
-        <Flex display="initial" scrollY>
+        <Flex>
           <Tree data={data} />
         </Flex>
       </Box>
