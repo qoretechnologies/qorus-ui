@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
 import {
   Table,
@@ -14,9 +15,9 @@ import {
   FixedRow,
 } from '../components/new_table';
 import AutoComponent from '../components/autocomponent';
-import checkNoData from '../hocomponents/check-no-data';
 import withSort from '../hocomponents/sort';
 import { sortDefaults } from '../constants/sort';
+import DataOrEmptyTable from '../components/DataOrEmptyTable';
 
 const MappersTable = ({
   vmaps,
@@ -47,34 +48,37 @@ const MappersTable = ({
         </Th>
       </FixedRow>
     </Thead>
-    <Tbody>
-      {vmaps.map(
-        (item: Object, index: number): React.Element<any> => (
-          <Tr
-            key={`vmap_${item.id}`}
-            first={index === 0}
-            observeElement={index === 0 && '.pane'}
-          >
-            <Td className="narrow">{item.id}</Td>
-            <Td className="narrow">{item.mapsize}</Td>
-            <Td className="name">
-              <Link to={`/system/values?paneId=${item.id}`}>{item.name}</Link>
-            </Td>
-            <Td className="narrow">
-              <AutoComponent>{item.throws_exception}</AutoComponent>
-            </Td>
-            <Td className="narrow">{item.valuetype}</Td>
-          </Tr>
-        )
+    <DataOrEmptyTable condition={!vmaps || size(vmaps) === 0} cols={5}>
+      {props => (
+        <Tbody {...props}>
+          {vmaps.map(
+            (item: Object, index: number): React.Element<any> => (
+              <Tr
+                key={`vmap_${item.id}`}
+                first={index === 0}
+                observeElement={index === 0 && '.pane'}
+              >
+                <Td className="narrow">{item.id}</Td>
+                <Td className="narrow">{item.mapsize}</Td>
+                <Td className="name">
+                  <Link to={`/system/values?paneId=${item.id}`}>
+                    {item.name}
+                  </Link>
+                </Td>
+                <Td className="narrow">
+                  <AutoComponent>{item.throws_exception}</AutoComponent>
+                </Td>
+                <Td className="narrow">{item.valuetype}</Td>
+              </Tr>
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
 export default compose(
-  checkNoData(
-    ({ vmaps }: { vmaps?: Array<Object> }) => vmaps && vmaps.length > 0
-  ),
   withSort('valuemapsCompact', 'vmaps', sortDefaults.valuemapsCompact),
   pure(['vmaps', 'sortData'])
 )(MappersTable);
