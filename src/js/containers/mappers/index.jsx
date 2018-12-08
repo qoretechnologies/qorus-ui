@@ -13,7 +13,6 @@ import {
   Td,
   FixedRow,
 } from '../../components/new_table';
-import checkNoData from '../../hocomponents/check-no-data';
 import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
@@ -46,7 +45,11 @@ const MappersTable = ({
         <Tbody {...props}>
           {mappers.map(
             (item: Object, index: number): React.Element<any> => (
-              <Tr key={`mapper_${item.mapperid}`} first={index === 0}>
+              <Tr
+                key={`mapper_${item.mapperid}`}
+                first={index === 0}
+                observeElement={index === 0 && '.pane'}
+              >
                 <Td className="narrow">{item.mapperid}</Td>
                 <Td className="name">
                   <Link to={`/mappers/${item.mapperid}`}>
