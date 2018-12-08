@@ -107,7 +107,7 @@ export default class DetailTab extends Component {
       buildOrderStatsSLA(workflow.order_stats, slaBand.replace(/ /g, '_'));
 
     return (
-      <Box scrollY top>
+      <Box top fill>
         <InfoHeader model={workflow} />
         <Flex scrollY>
           <PaneItem title="Controls">
