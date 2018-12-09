@@ -2,7 +2,12 @@
 import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
 
-import { fetchJson, fetchYaml, fetchWithNotifications } from '../../../utils';
+import {
+  fetchJson,
+  fetchYaml,
+  fetchWithNotifications,
+  post,
+} from '../../../utils';
 import settings from '../../../../../settings';
 import { error } from '../../../../ui/bubbles/actions';
 
@@ -378,6 +383,26 @@ const fetchYamlData: Function = (type: string, id: number): Function => (
   dispatch(fetchYamlAction(type, id, dispatch));
 };
 
+const addNote: Function = (
+  id: number,
+  note: string,
+  username: string,
+  dispatch: Function
+): void => {
+  fetchWithNotifications(
+    async () =>
+      await post(`${settings.REST_BASE_URL}/orders/${id}?action=notes`, {
+        body: JSON.stringify({
+          note,
+          username,
+        }),
+      }),
+    'Adding note...',
+    'Note successfuly added',
+    dispatch
+  );
+};
+
 const unsync = createAction('ORDERS_UNSYNC');
 
 export {
@@ -407,4 +432,5 @@ export {
   fetchYamlData,
   fetchYamlAction,
   updateSensitiveData,
+  addNote,
 };
