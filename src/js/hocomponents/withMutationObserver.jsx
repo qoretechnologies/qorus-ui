@@ -36,19 +36,23 @@ const withMutationObserver: Function = (
       const domElement: any = functionOrStringExp(element, props);
 
       if (props.first && domElement) {
-        this._observer = new MutationObserver(
-          (mutations: Array<Object>): void => {
-            mutations.forEach(
-              (): void => {
-                this.setState({ lastChange: new Date() });
-              }
-            );
-          }
-        );
+        const el = document.querySelector(domElement);
 
-        this._observer.observe(document.querySelector(domElement), {
-          attributes: true,
-        });
+        if (el && el.length) {
+          this._observer = new MutationObserver(
+            (mutations: Array<Object>): void => {
+              mutations.forEach(
+                (): void => {
+                  this.setState({ lastChange: new Date() });
+                }
+              );
+            }
+          );
+
+          this._observer.observe(document.querySelector(domElement), {
+            attributes: true,
+          });
+        }
       }
     };
 
