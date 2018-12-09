@@ -12,7 +12,6 @@ import Errors from './errors';
 import PaneItem from '../../../components/pane_item';
 import Box from '../../../components/box';
 import NoData from '../../../components/nodata';
-import Container from '../../../components/container';
 import withDispatch from '../../../hocomponents/withDispatch';
 import Flex from '../../../components/Flex';
 
