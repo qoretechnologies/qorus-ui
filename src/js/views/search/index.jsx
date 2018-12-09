@@ -20,6 +20,7 @@ import actions from '../../store/api/actions';
 import queryControl from '../../hocomponents/queryControl';
 import { connect } from 'react-redux';
 import HistoryModal from './modals/history';
+import Flex from '../../components/Flex';
 
 type Props = {
   location: Object,
@@ -36,7 +37,7 @@ const Search: Function = ({
   onSaveClick,
   onHistoryClick,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb>Search</Crumb>
@@ -68,7 +69,7 @@ const Search: Function = ({
         <Errors location={location} />
       </SimpleTab>
     </SimpleTabs>
-  </div>
+  </Flex>
 );
 
 export default compose(
