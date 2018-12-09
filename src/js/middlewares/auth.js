@@ -6,17 +6,17 @@
  * we will use localStoage. if action has got token then replace it with
  * "ok" status.
  */
-const auth: Function = () => (next: Function) => (action: Object): Object => {
+const auth: Function = () => (next: Function) => (action: Object): ?Object => {
+  if (!action) return;
+
   const { type, payload = {} }: { type: string, payload: Object } = action;
 
   if (type === 'AUTH_UPDATE') {
     if (payload.token) {
       localStorage.setItem('token', payload.token);
-      const updatedAction: Object = Object.assign(
-        {},
-        action,
-        { payload: { status: 'ok' } }
-      );
+      const updatedAction: Object = Object.assign({}, action, {
+        payload: { status: 'ok' },
+      });
       return next(updatedAction);
     }
   }
