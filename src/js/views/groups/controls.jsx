@@ -17,11 +17,13 @@ type Props = {
   name: string,
   dispatchAction: Function,
   handleEnableClick: Function,
+  big?: boolean,
 };
 
 const GroupsControls: Function = ({
   enabled,
   handleEnableClick,
+  big,
 }: Props): React.Element<any> => (
   <ButtonGroup>
     <Button
@@ -29,7 +31,7 @@ const GroupsControls: Function = ({
       iconName="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
-      className="pt-small"
+      big={big}
     />
   </ButtonGroup>
 );
