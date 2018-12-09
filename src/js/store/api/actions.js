@@ -125,9 +125,6 @@ Object.assign(actions.slaevents, slaEventsActions);
 
 Object.assign(actions.slaperf, slaPerfActions);
 
-Object.keys(orderActions.delegates).forEach(a => {
-  actions.orders[a] = orderActions.delegates[a](actions);
-});
 Object.assign(actions.orders, orderActions.specials);
 
 Object.assign(actions.groups, groupsActions);
