@@ -6,7 +6,6 @@ import DynamicView from './dynamic';
 import SensitiveView from './sensitive';
 import KeysView from './keys';
 import Tabs, { Pane } from '../../../components/tabs';
-import Container from '../../../components/container';
 
 type Props = {
   location: Object,
@@ -14,32 +13,22 @@ type Props = {
 };
 
 const DataView = (props: Props) => (
-  <Box top>
+  <Box top fill>
     <Tabs id="orderDataTabs" active="static" noContainer>
       <Pane name="Static">
-        <Container fill>
-          <StaticView {...props} />
-        </Container>
+        <StaticView {...props} />
       </Pane>
       <Pane name="Dynamic">
-        <Container fill>
-          <DynamicView {...props} />
-        </Container>
+        <DynamicView {...props} />
       </Pane>
       <Pane name="Sensitive">
-        <Container fill>
-          <SensitiveView {...props} />
-        </Container>
+        <SensitiveView {...props} />
       </Pane>
       <Pane name="Keys">
-        <Container fill>
-          <KeysView {...props} />
-        </Container>
+        <KeysView {...props} />
       </Pane>
     </Tabs>
   </Box>
 );
 
 export default DataView;
-
-export { StaticView, DynamicView, KeysView, SensitiveView };
