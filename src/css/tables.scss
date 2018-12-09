@@ -21,6 +21,10 @@
 
 $padding-xs-vertical: 2px;
 
+th {
+  border: 0 !important;
+}
+
 .fixed-table-header,
 th {
   font-weight: 400;
