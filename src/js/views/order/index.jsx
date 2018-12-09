@@ -218,6 +218,7 @@ export default class Order extends Component {
                 workflow: this.props.workflow,
                 dispatch: this.props.dispatch,
                 isTablet: this.props.isTablet,
+                location: this.props.location,
               }}
             />
           </SimpleTab>

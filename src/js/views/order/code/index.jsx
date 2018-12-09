@@ -10,17 +10,9 @@ const LibraryView = ({
   workflow: Object,
   location: Object,
 }) => {
-  const getHeight: Function = (): number => {
-    const { top } = document
-      .querySelector('.code-list')
-      .getBoundingClientRect();
-
-    return window.innerHeight - top - 60;
-  };
-
   return (
     <Box top>
-      <Code data={workflow.lib} heightUpdater={getHeight} location={location} />
+      <Code data={workflow.lib} location={location} />
     </Box>
   );
 };
