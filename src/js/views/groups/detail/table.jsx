@@ -4,8 +4,8 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { Link } from 'react-router';
 
 import { Table, Thead, Tbody, Tr, Th, Td } from '../../../components/new_table';
-import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
-import NoData from '../../../components/nodata';
+import NoDataIf from '../../../components/NoDataIf';
+import PaneItem from '../../../components/pane_item';
 
 type Props = {
   data: Array<Object>,
@@ -53,33 +53,30 @@ const GroupDetailTable: Function = ({
     });
 
   return (
-    <div>
-      <Breadcrumbs collapsed={false} noFloat>
-        <Crumb>{type}</Crumb>
-      </Breadcrumbs>
-      {data.length > 0 ? (
-        <Table condensed striped>
-          <Thead>
-            <Tr>
-              {columns.map((column, index) => (
-                <Th key={index} className="text">
-                  {column}
-                </Th>
-              ))}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.map(
-              (item: Object, index: number): React.Element<Tr> => (
-                <Tr key={index}>{renderColumns(item)}</Tr>
-              )
-            )}
-          </Tbody>
-        </Table>
-      ) : (
-        <NoData />
-      )}
-    </div>
+    <PaneItem title={type}>
+      <NoDataIf condition={!data || data.length === 0}>
+        {() => (
+          <Table condensed striped>
+            <Thead>
+              <Tr>
+                {columns.map((column, index) => (
+                  <Th key={index} className="text">
+                    {column}
+                  </Th>
+                ))}
+              </Tr>
+            </Thead>
+            <Tbody>
+              {data.map(
+                (item: Object, index: number): React.Element<Tr> => (
+                  <Tr key={index}>{renderColumns(item)}</Tr>
+                )
+              )}
+            </Tbody>
+          </Table>
+        )}
+      </NoDataIf>
+    </PaneItem>
   );
 };
 
