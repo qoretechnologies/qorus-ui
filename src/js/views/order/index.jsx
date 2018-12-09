@@ -81,7 +81,7 @@ export default class Order extends Component {
     };
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     const { id } = this.props.params;
 
     this.fetch(id);
@@ -97,19 +97,21 @@ export default class Order extends Component {
   }
 
   componentWillUnmount() {
-    this.props.dispatch(actions.orders.unsync());
+    const { dispatch } = this.props;
 
-    this.props.dispatch(actions.workflows.unsync());
+    dispatch(actions.orders.unsync());
+    dispatch(actions.workflows.unsync());
   }
 
   fetch: Function = async (id: number): void => {
-    this.props.dispatch(actions.orders.unsync());
+    const { dispatch } = this.props;
 
-    this.props.dispatch(actions.workflows.unsync());
+    dispatch(actions.orders.unsync());
+    dispatch(actions.workflows.unsync());
 
-    const order = await this.props.dispatch(actions.orders.fetch({}, id));
+    const order = await dispatch(actions.orders.fetch({}, id));
 
-    this.props.dispatch(
+    dispatch(
       actions.workflows.fetch({ lib_source: true }, order.payload.workflowid)
     );
   };
