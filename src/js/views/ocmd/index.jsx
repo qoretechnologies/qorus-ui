@@ -30,6 +30,7 @@ import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import titleManager from '../../hocomponents/TitleManager';
 import Pull from '../../components/Pull';
 import Alert from '../../components/alert';
+import Flex from '../../components/Flex';
 
 const ocmdSelector: Function = (state: Object): Object => state.api.ocmd;
 
@@ -239,7 +240,7 @@ export default class OCMDView extends Component {
     if (size(this.state.collection) === 0) return <Loader />;
 
     return (
-      <div>
+      <Flex>
         <Headbar>
           <Breadcrumbs>
             <Crumb active>OCMD</Crumb>
@@ -284,14 +285,14 @@ export default class OCMDView extends Component {
           </Pull>
         </Headbar>
         <Box top>
-          <Container>
-            {this.state.lastCommand && (
+          {this.state.lastCommand && (
+            <Toolbar mb>
               <h4>Showing output for: {this.state.lastCommand}</h4>
-            )}
-            {this.state.output && this.renderOutput()}
-          </Container>
+            </Toolbar>
+          )}
+          {this.state.output && this.renderOutput()}
         </Box>
-      </div>
+      </Flex>
     );
   }
 }
