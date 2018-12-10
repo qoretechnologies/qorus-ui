@@ -6,10 +6,10 @@ import { getAlertObjectLink } from '../../helpers/system';
 import PaneItem from '../pane_item';
 import Box from '../box';
 import NoDataIf from '../NoDataIf';
-import Container from '../container';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import moment from 'moment';
+import Flex from '../Flex';
 
 type Props = {
   collection: Array<Object>,
@@ -17,31 +17,30 @@ type Props = {
 };
 
 const NotificationList: Function = ({ collection }: Props) => (
-  <NoDataIf condition={collection.length === 0}>
+  <NoDataIf condition={collection.length === 0} big inBox>
     {() => (
-      <Container>
+      <Box top scrollY>
         {collection.map((alert: Object, index: number) => (
-          <Box top={index === 0} key={alert.notificationId}>
-            <PaneItem
-              title={alert.alert}
-              label={
-                <div className="text-muted">
-                  {moment(alert.when)
-                    .startOf('second')
-                    .fromNow()}
-                </div>
-              }
-            >
-              <Link to={getAlertObjectLink(alert.type, alert)}>
-                {alert.object}
-              </Link>
-              <div>
-                <small>{alert.reason}</small>
+          <PaneItem
+            key={alert.notificationId}
+            title={alert.alert}
+            label={
+              <div className="text-muted">
+                {moment(alert.when)
+                  .startOf('second')
+                  .fromNow()}
               </div>
-            </PaneItem>
-          </Box>
+            }
+          >
+            <Link to={getAlertObjectLink(alert.type, alert)}>
+              {alert.object}
+            </Link>
+            <div>
+              <small>{alert.reason}</small>
+            </div>
+          </PaneItem>
         ))}
-      </Container>
+      </Box>
     )}
   </NoDataIf>
 );
