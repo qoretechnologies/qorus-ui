@@ -2,16 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import {
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  EditableCell,
-  Td,
-  FixedRow,
-} from '../new_table';
+import { Table, Thead, Tr, Th, Tbody, EditableCell, Td } from '../new_table';
 import map from 'lodash/map';
 import size from 'lodash/size';
 
@@ -42,16 +33,16 @@ const ConfigItemsContainer: Function = ({
         {map(items, (configItems: Array<Object>, belongsTo: string) => (
           <ExpandableItem title={belongsTo} key={belongsTo} show>
             {() => (
-              <Table fixed striped condensed>
+              <Table striped condensed>
                 <Thead>
-                  <FixedRow>
+                  <Tr>
                     <NameColumnHeader />
                     <Th>Default</Th>
                     <Th>Value</Th>
                     <Th>Type</Th>
                     <Th>Req.</Th>
                     <Th className="text">Description</Th>
-                  </FixedRow>
+                  </Tr>
                 </Thead>
 
                 <DataOrEmptyTable
@@ -61,7 +52,7 @@ const ConfigItemsContainer: Function = ({
                   {props => (
                     <Tbody {...props}>
                       {configItems.map((item: Object, index: number) => (
-                        <Tr first={index === 0} key={index}>
+                        <Tr key={index}>
                           <NameColumn name={item.name} />
                           <Td className="text">{item.default_value}</Td>
                           {item.type === 'date' ? (
