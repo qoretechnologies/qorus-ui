@@ -27,6 +27,7 @@ import Pull from '../../components/Pull';
 import queryControl from '../../hocomponents/queryControl';
 import Search from '../../containers/search';
 import CsvControl from '../../components/CsvControl';
+import Flex from '../../components/Flex';
 
 type Props = {
   sortData: Object,
@@ -66,7 +67,7 @@ const Services: Function = ({
   changeSearchQuery,
   limit,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active>Services</Crumb>
@@ -97,7 +98,7 @@ const Services: Function = ({
         limit={limit}
       />
     </Box>
-  </div>
+  </Flex>
 );
 
 const filterSearch: Function = (search: string): Function => (

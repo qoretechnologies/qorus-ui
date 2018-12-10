@@ -9,14 +9,15 @@ import {
   Table,
   Thead,
   Tbody,
-  Tr,
   Th,
+  FixedRow,
 } from '../../../../../components/new_table';
 import Icon from '../../../../../components/icon';
 import sync from '../../../../../hocomponents/sync';
 import actions from '../../../../../store/api/actions';
 import { resourceSelector } from '../../../../../selectors';
 import SLARow from './row';
+import { NameColumnHeader } from '../../../../../components/NameColumn';
 
 type Props = {
   methods: Array<Object>,
@@ -35,27 +36,29 @@ const MethodsTable: Function = ({
   setMethod,
   removeMethod,
 }: Props): React.Element<any> => (
-  <Table condensed striped>
+  <Table fixed condensed striped>
     <Thead>
-      <Tr>
-        <Th className="name">Name</Th>
-        <Th className="tiny">
+      <FixedRow>
+        <NameColumnHeader />
+        <Th>
           <Icon iconName="lock" />
         </Th>
-        <Th className="tiny">
+        <Th>
           <Icon iconName="cog" />
         </Th>
-        <Th className="tiny">
+        <Th>
           <Icon iconName="pencil" />
         </Th>
-        <Th className="normal">Actions</Th>
-        <Th className="text">SLA</Th>
-      </Tr>
+        <Th>Actions</Th>
+        <Th>SLA</Th>
+      </FixedRow>
     </Thead>
     <Tbody>
       {methods.map(
-        (method: Object): React.Element<any> => (
+        (method: Object, index: number): React.Element<any> => (
           <SLARow
+            first={index === 0}
+            observeElement={index === 0 && '.pane'}
             key={method.service_methodid}
             service={service}
             slas={slas}

@@ -60,7 +60,6 @@ const Search: Function = ({
         </ButtonGroup>
       </Pull>
     </Headbar>
-
     <SimpleTabs activeTab={tabQuery}>
       <SimpleTab name="orders">
         <Orders location={location} />
