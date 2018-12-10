@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import actions from '../../../store/api/actions';
 import mapProps from 'recompose/mapProps';
 import Alert from '../../../components/alert';
+import Box from '../../../components/box';
 
 type Props = {
   storage: Object,
@@ -26,7 +27,7 @@ const UserSettings: Function = ({
   handleNotificationsSoundCheckboxChange,
   soundCheckboxDisabled,
 }: Props) => (
-  <div>
+  <Box fill top scrollY>
     <PaneItem title="Live Notifications">
       <Toolbar mb>
         <Alert bsStyle="info" iconName="notifications">
@@ -46,7 +47,7 @@ const UserSettings: Function = ({
         disabled={soundCheckboxDisabled}
       />
     </PaneItem>
-  </div>
+  </Box>
 );
 
 export default compose(
