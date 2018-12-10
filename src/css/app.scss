@@ -27,6 +27,7 @@ $status-error: $qore-danger;
 $status-blocked: lighten($qore-danger, 10);
 
 $bgcolor: #eee;
+$text-color: #333;
 
 @import './buttons';
 @import './tables';
@@ -66,6 +67,7 @@ $bgcolor: #eee;
 @import '../js/components/breadcrumbs/style';
 @import '../js/components/Headbar/style';
 @import '../js/components/DataOrEmptyTable/style';
+@import '../js/components/ContentByType/style';
 
 @import './not-supported';
 @import './root';
@@ -484,10 +486,6 @@ span.pt-icon-standard {
 .fade-leave.fade-leave-active {
   opacity: 0.01;
   transition: opacity 8000ms ease-in;
-}
-
-.pane-item {
-  clear: both;
 }
 
 .pt-navbar.pt-dark,

@@ -1,0 +1,15 @@
+.content-by-type {
+  display: inline-block;
+
+  &.string {
+    color: lighten($text-color, 10);
+  }
+
+  &.number {
+    color: $qore-info;
+  }
+
+  &.null {
+    color: lighten($text-color, 20);
+  }
+}
