@@ -50,33 +50,31 @@ const ClusterView: Function = ({
       </Pull>
     </Headbar>
 
-    <Box top>
-      <Container>
-        {Object.keys(nodes).map(
-          (node: string): any => {
-            const list: Array<Object> = Object.keys(processes).reduce(
-              (cur, process: string) => {
-                const obj = { ...processes[process], id: process };
+    <Box top scrollY>
+      {Object.keys(nodes).map(
+        (node: string): any => {
+          const list: Array<Object> = Object.keys(processes).reduce(
+            (cur, process: string) => {
+              const obj = { ...processes[process], id: process };
 
-                return [...cur, obj];
-              },
-              []
-            );
+              return [...cur, obj];
+            },
+            []
+          );
 
-            return (
-              <Node
-                openPane={openPane}
-                closePane={closePane}
-                paneId={paneId}
-                key={node}
-                node={node}
-                processes={list}
-                memory={nodes[node].node_priv}
-              />
-            );
-          }
-        )}
-      </Container>
+          return (
+            <Node
+              openPane={openPane}
+              closePane={closePane}
+              paneId={paneId}
+              key={node}
+              node={node}
+              processes={list}
+              memory={nodes[node].node_priv}
+            />
+          );
+        }
+      )}
     </Box>
   </Flex>
 );
