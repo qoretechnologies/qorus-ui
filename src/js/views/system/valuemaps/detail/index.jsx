@@ -19,7 +19,6 @@ import AddValue from './add';
 import { addValue } from '../../../../store/api/resources/valuemaps/actions';
 import { querySelector } from '../../../../selectors';
 import Box from '../../../../components/box';
-import Container from '../../../../components/container';
 import PaneItem from '../../../../components/pane_item';
 import withDispatch from '../../../../hocomponents/withDispatch';
 
@@ -59,46 +58,47 @@ const ValuemapsPane: Function = ({
     onResize={onResize}
     title={valuemap.name}
   >
-    <Box top>
-      <Container fill>
-        <PaneItem title="Description">{valuemap.description}</PaneItem>
-        {isTablet && (
-          <PaneItem title="Created">
-            <Date date={valuemap.created} />
-          </PaneItem>
-        )}
-        {isTablet && (
-          <PaneItem title="Modified">
-            <Date date={valuemap.modified} />
-          </PaneItem>
-        )}
-        <PaneItem title="Type">
-          <code>{valuemap.valuetype}</code>
+    <Box top fill scrollY>
+      <PaneItem title="Description">{valuemap.description}</PaneItem>
+      {isTablet && (
+        <PaneItem title="Created">
+          <Date date={valuemap.created} />
         </PaneItem>
-        <PaneItem title="Throws exception">
-          <Autocomponent>{valuemap.throws_exception}</Autocomponent>
+      )}
+      {isTablet && (
+        <PaneItem title="Modified">
+          <Date date={valuemap.modified} />
         </PaneItem>
-        <Author model={valuemap} />
-        <Search
-          onSearchUpdate={onSearchChange}
-          defaultValue={defaultSearchValue}
-        />
-        <Table paneId={paneId} location={location} />
-        <Button
-          text={adding ? 'Cancel' : 'Add value'}
-          onClick={onAddClick}
-          iconName={adding ? 'cross' : 'plus'}
-          intent={!adding ? Intent.PRIMARY : Intent.NONE}
-        />
-        {adding && <AddValue id={paneId} add={onSaveClick} />}
-      </Container>
+      )}
+      <PaneItem title="Type">
+        <code>{valuemap.valuetype}</code>
+      </PaneItem>
+      <PaneItem title="Throws exception">
+        <Autocomponent>{valuemap.throws_exception}</Autocomponent>
+      </PaneItem>
+      <Author model={valuemap} />
+      <Search
+        onSearchUpdate={onSearchChange}
+        defaultValue={defaultSearchValue}
+      />
+      <Table paneId={paneId} location={location} />
+      <Button
+        text={adding ? 'Cancel' : 'Add value'}
+        onClick={onAddClick}
+        iconName={adding ? 'cross' : 'plus'}
+        intent={!adding ? Intent.PRIMARY : Intent.NONE}
+      />
+      {adding && <AddValue id={paneId} add={onSaveClick} />}
     </Box>
   </Pane>
 );
 
-const selector = createSelector([querySelector('values')], query => ({
-  query,
-}));
+const selector = createSelector(
+  [querySelector('values')],
+  query => ({
+    query,
+  })
+);
 
 export default compose(
   connect(selector),
