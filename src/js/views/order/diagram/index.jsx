@@ -5,7 +5,7 @@ import actions from 'store/api/actions';
 import Loader from 'components/loader';
 import Info from './info';
 import Keys from './keys';
-import Graph from './graph';
+import StepCodeDiagram from '../../../components/StepCodeDiagram';
 import Hierarchy from '../hierarchy/';
 import StepDetails from './step_details';
 import Errors from './errors';
@@ -62,7 +62,7 @@ export default class DiagramView extends Component {
     }
 
     return (
-      <Box column={columns} noTransition top={top}>
+      <Box column={columns} noTransition top={top} key="errors">
         <Errors data={errors} />
       </Box>
     );
@@ -74,20 +74,20 @@ export default class DiagramView extends Component {
     const top: boolean = !this.props.isTablet;
 
     return [
-      <Box column={boxColumns} noTransition top>
-        <Graph
+      <Box column={boxColumns} noTransition top key="diagram">
+        <StepCodeDiagram
           workflow={this.props.workflow}
           order={this.props.order}
           onStepClick={this.handleStepClick}
         />
       </Box>,
-      <Box column={boxColumns} noTransition top={top}>
+      <Box column={boxColumns} noTransition top={top} key="info">
         <Info {...this.props.order} />
       </Box>,
-      <Box column={boxColumns} noTransition top={top}>
+      <Box column={boxColumns} noTransition top={top} key="keys">
         <Keys data={this.props.order.keys} />
       </Box>,
-      <Box column={boxColumns} noTransition top={top}>
+      <Box column={boxColumns} noTransition top={top} key="hierarchy">
         <PaneItem title="Hierarchy">
           <Hierarchy
             order={this.props.order}
@@ -96,7 +96,7 @@ export default class DiagramView extends Component {
           />
         </PaneItem>
       </Box>,
-      <Box column={boxColumns} noTransition top={top}>
+      <Box column={boxColumns} noTransition top={top} key="steps">
         <PaneItem title="Step details">
           {this.state.step ? (
             <StepDetails
