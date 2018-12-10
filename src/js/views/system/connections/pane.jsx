@@ -133,65 +133,63 @@ export default class ConnectionsPane extends Component {
         title={`${this.props.remote.name} detail`}
       >
         {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
-        <Box top>
-          <Container fill>
-            <PaneItem title="Overview">
-              <Table striped>
+        <Box top fill scrollY>
+          <PaneItem title="Overview">
+            <Table striped>
+              <Tbody>
+                {this.getData().map(
+                  (val: Object, key: number): React.Element<any> => (
+                    <Tr key={key}>
+                      <Td className="name">{capitalize(val.attr)}</Td>
+                      {val.editable &&
+                      this.props.canEdit &&
+                      val.attr !== 'options' &&
+                      val.attr !== 'opts' ? (
+                        <EditableCell
+                          className="text"
+                          value={val.value}
+                          onSave={this.handleEditSave(val.attr)}
+                        />
+                      ) : (
+                        <Td className="text">
+                          {val.attr === 'options' || val.attr === 'opts' ? (
+                            <Options
+                              data={val.value}
+                              onSave={this.handleEditSave(val.attr)}
+                            />
+                          ) : (
+                            <AutoComponent>{val.value}</AutoComponent>
+                          )}
+                        </Td>
+                      )}
+                    </Tr>
+                  )
+                )}
+              </Tbody>
+            </Table>
+          </PaneItem>
+          <AlertsTable alerts={alerts} />
+          <PaneItem title="Dependencies">
+            {deps && deps.length ? (
+              <Table striped condensed>
                 <Tbody>
-                  {this.getData().map(
-                    (val: Object, key: number): React.Element<any> => (
-                      <Tr key={key}>
-                        <Td className="name">{capitalize(val.attr)}</Td>
-                        {val.editable &&
-                        this.props.canEdit &&
-                        val.attr !== 'options' &&
-                        val.attr !== 'opts' ? (
-                          <EditableCell
-                            className="text"
-                            value={val.value}
-                            onSave={this.handleEditSave(val.attr)}
-                          />
-                        ) : (
-                          <Td className="text">
-                            {val.attr === 'options' || val.attr === 'opts' ? (
-                              <Options
-                                data={val.value}
-                                onSave={this.handleEditSave(val.attr)}
-                              />
-                            ) : (
-                              <AutoComponent>{val.value}</AutoComponent>
-                            )}
-                          </Td>
-                        )}
+                  {deps.map(
+                    (dep: Object, index: number): React.Element<any> => (
+                      <Tr key={index}>
+                        <Td className="name">
+                          <Link to={getDependencyObjectLink(dep.type, dep)}>
+                            {dep.desc}
+                          </Link>
+                        </Td>
                       </Tr>
                     )
                   )}
                 </Tbody>
               </Table>
-            </PaneItem>
-            <AlertsTable alerts={alerts} />
-            <PaneItem title="Dependencies">
-              {deps && deps.length ? (
-                <Table striped condensed>
-                  <Tbody>
-                    {deps.map(
-                      (dep: Object, index: number): React.Element<any> => (
-                        <Tr key={index}>
-                          <Td className="name">
-                            <Link to={getDependencyObjectLink(dep.type, dep)}>
-                              {dep.desc}
-                            </Link>
-                          </Td>
-                        </Tr>
-                      )
-                    )}
-                  </Tbody>
-                </Table>
-              ) : (
-                <NoData />
-              )}
-            </PaneItem>
-          </Container>
+            ) : (
+              <NoData />
+            )}
+          </PaneItem>
         </Box>
       </Pane>
     );
