@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { Intent, Icon } from '@blueprintjs/core';
-import isArray from 'lodash/isArray';
+import upperFirst from 'lodash/upperFirst';
 import size from 'lodash/size';
 
 import Alert from '../alert';
@@ -13,6 +13,8 @@ import EditModal from './modal';
 import { Controls as ButtonGroup, Control as Button } from '../controls';
 import Toolbar from '../toolbar';
 import Flex from '../Flex';
+import ContentByType from '../ContentByType';
+import { getType } from '../../helpers/functions';
 
 @withModal()
 export default class Tree extends Component {
@@ -39,7 +41,7 @@ export default class Tree extends Component {
     showTypes: false,
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Object) {
     if (nextProps.forceEdit) {
       this.setState({
         mode: 'edit',
@@ -99,18 +101,19 @@ export default class Tree extends Component {
         [`level-${level}`]: true,
       });
 
-      let dataType: string = typeof data[key];
-
-      if (isArray(data[key])) {
-        dataType = 'array';
-      }
-
+      const dataType: string = getType(data[key]);
+      const displayKey: string = upperFirst(key);
       const stateKey = k ? `${k}_${key}` : key;
-      const isObject = typeof data[key] === 'object' && data[key] !== null;
-      const isExpandable =
+      let isObject = typeof data[key] === 'object' && data[key] !== null;
+      let isExpandable =
         typeof data[key] !== 'object' ||
         this.state.items[stateKey] ||
         (this.state.allExpanded && this.state.items[stateKey] !== false);
+
+      if (isObject && size(data[key]) === 0) {
+        isObject = false;
+        isExpandable = false;
+      }
 
       const handleClick = () => {
         const { items } = this.state;
@@ -164,7 +167,7 @@ export default class Tree extends Component {
                 [`level-${level}`]: true,
               })}
             >
-              {isObject ? key : `${key}:`}{' '}
+              {isObject ? displayKey : `${displayKey}:`}{' '}
               {this.state.showTypes && <code>{dataType}</code>}
             </span>
           </div>
@@ -177,16 +180,16 @@ export default class Tree extends Component {
               <Icon iconName="edit" tooltip="Edit data" />
             </span>
           )}{' '}
-          {isExpandable &&
-            (isObject
-              ? this.renderTree(
-                  data[key],
-                  false,
-                  stateKey,
-                  top ? key : null,
-                  level + 1
-                )
-              : data[key].toString())}
+          {isExpandable && isObject
+            ? this.renderTree(
+                data[key],
+                false,
+                stateKey,
+                top ? key : null,
+                level + 1
+              )
+            : null}
+          {!isObject && <ContentByType content={data[key]} />}
         </div>
       );
     });

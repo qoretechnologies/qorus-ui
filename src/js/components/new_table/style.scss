@@ -104,18 +104,18 @@ td.editable {
 div.sort,
 th.sort {
   &:after {
-    font-family: FontAwesome;
+    font-family: Icons16;
     margin-left: 0.4em;
     color: $qore-cobalt;
   }
 
   &.sort-asc:after {
-    content: '\f106';
+    content: '\E696';
     margin-top: 0.3em;
   }
 
   &.sort-desc:after {
-    content: '\f107';
+    content: '\E697';
   }
 }
 
@@ -129,12 +129,12 @@ th.history-sort {
   }
 
   &.history-sort-asc:after {
-    content: '\f106';
+    content: '\E696';
     margin-top: 0.3em;
   }
 
   &.history-sort-desc:after {
-    content: '\f107';
+    content: '\E697';
   }
 }
 

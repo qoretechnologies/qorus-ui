@@ -1,5 +1,6 @@
 /* @flow */
 import React, { PropTypes } from 'react';
+import Flex from '../Flex';
 
 /**
  * Wrapper for modal main content.
@@ -8,7 +9,7 @@ import React, { PropTypes } from 'react';
  * @return {!ReactElement}
  */
 export default function Body(props: { children: any }) {
-  return <div className="pt-dialog-body">{props.children}</div>;
+  return <Flex className="pt-dialog-body">{props.children}</Flex>;
 }
 
 Body.propTypes = {

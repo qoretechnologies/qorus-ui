@@ -22,7 +22,11 @@ const CollapsedCrumb: Function = ({ links }: Props): React.Element<any> => (
       content={
         <Menu>
           {map(links, (link, name) => (
-            <MenuItem text={name} onClick={() => browserHistory.push(link)} />
+            <MenuItem
+              key={name}
+              text={name}
+              onClick={() => browserHistory.push(link)}
+            />
           ))}
         </Menu>
       }

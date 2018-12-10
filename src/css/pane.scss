@@ -91,12 +91,12 @@
 }
 
 .pane-item {
-  &:not(:first-of-type) {
-    margin-top: 15px;
-  }
+  clear: both;
+
+  margin-bottom: 6px;
 
   .pane-item-header {
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     overflow: hidden;
   }
 

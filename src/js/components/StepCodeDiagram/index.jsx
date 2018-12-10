@@ -2,13 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import createFragment from 'react-addons-create-fragment';
 import classNames from 'classnames';
 
-import StepModal from '../../../workflows/detail/step_modal';
+import StepModal from './modal';
 
-import { pureRender } from '../../../../components/utils';
-import { groupInstances } from '../../../../helpers/orders';
-import { graph } from '../../../../lib/graph';
-import { COLORS } from '../../../../constants/ui';
-import Flex from '../../../../components/Flex';
+import { pureRender } from '../utils';
+import { groupInstances } from '../../helpers/orders';
+import { graph } from '../../lib/graph';
+import { COLORS } from '../../constants/ui';
+import Flex from '../Flex';
 
 /**
  * Typical list of arguments for step-specific functions.

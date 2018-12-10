@@ -18,7 +18,7 @@ const SystemInfoTable: Function = ({ data }: { data: Object }) => (
         <Crumb active>Info</Crumb>
       </Breadcrumbs>
     </Headbar>
-    <Box noPadding top scrollY>
+    <Box fill top>
       <InfoTable object={data} />
     </Box>
   </Flex>

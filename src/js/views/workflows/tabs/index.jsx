@@ -6,7 +6,7 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import DetailTab from './detail';
 import Code from '../../../components/code';
-import StepsTab from '../../order/diagram/graph';
+import StepsTab from '../../../components/StepCodeDiagram';
 import LogContainer from '../../../containers/log';
 import ErrorsTab from './errors';
 import MappersTable from '../../../containers/mappers';
