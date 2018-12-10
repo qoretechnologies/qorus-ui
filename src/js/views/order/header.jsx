@@ -2,12 +2,12 @@
 import React, { Component, PropTypes } from 'react';
 import size from 'lodash/size';
 
-import OrderControls from '../workflow/tabs/list/controls';
+import OrderControls from '../workflows/tabs/list/controls';
 import WorkflowControls from '../workflows/controls';
 import WorkflowAutostart from '../workflows/autostart';
-import Lock from '../workflow/tabs/list/lock';
-import Reschedule from '../workflow/tabs/list/modals/schedule';
-import Dropdown, { Control, Item, Divider } from '../../components/dropdown';
+import Lock from '../workflows/tabs/list/lock';
+import Reschedule from '../workflows/tabs/list/modals/schedule';
+import Dropdown, { Control, Item } from '../../components/dropdown';
 import queryControl from '../../hocomponents/queryControl';
 import {
   Breadcrumbs,

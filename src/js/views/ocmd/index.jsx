@@ -15,7 +15,6 @@ import Box from '../../components/box';
 import Loader from '../../components/loader';
 import Dropdown, { Control, Item } from '../../components/dropdown';
 import Tree from '../../components/tree';
-import Container from '../../components/container';
 import Headbar from '../../components/Headbar';
 
 type Props = {

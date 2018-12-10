@@ -9,7 +9,6 @@ import PaneItem from '../../../../components/pane_item';
 import ServicesControls from '../../controls';
 import ProcessSummary from '../../../../components/ProcessSummary';
 import InfoHeader from '../../../../components/InfoHeader';
-import Container from '../../../../components/container';
 import Flex from '../../../../components/Flex';
 import Box from '../../../../components/box';
 

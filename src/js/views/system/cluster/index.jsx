@@ -12,7 +12,6 @@ import Box from '../../../components/box';
 import withPane from '../../../hocomponents/pane';
 import { calculateMemory } from '../../../helpers/system';
 import titleManager from '../../../hocomponents/TitleManager';
-import Container from '../../../components/container';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
 import Flex from '../../../components/Flex';

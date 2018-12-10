@@ -1,6 +1,5 @@
 /* @flow */
 import React, { PropTypes } from 'react';
-import Container from '../components/container';
 import Flex from '../components/Flex';
 
 /**

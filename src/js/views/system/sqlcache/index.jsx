@@ -7,9 +7,7 @@ import { flowRight, pickBy, includes } from 'lodash';
 import { Intent } from '@blueprintjs/core';
 
 import Headbar from '../../../components/Headbar';
-import Container from '../../../components/container';
 import Box from '../../../components/box';
-import NoData from '../../../components/nodata';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import Search from '../../../containers/search';
 import withDispatch from '../../../hocomponents/withDispatch';

@@ -12,7 +12,6 @@ import actions from '../../../../../store/api/actions';
 import patch from '../../../../../hocomponents/patchFuncArgs';
 import sync from '../../../../../hocomponents/sync';
 import Chart from '../../../../../components/chart';
-import Container from '../../../../../components/container';
 import { createPerfLineDatasets } from '../../../../../helpers/chart';
 import Flex from '../../../../../components/Flex';
 

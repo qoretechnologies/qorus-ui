@@ -14,7 +14,6 @@ import {
 } from '../../../components/new_table';
 import AutoComponent from '../../../components/autocomponent';
 import Box from '../../../components/box';
-import Container from '../../../components/container';
 import NoData from '../../../components/nodata';
 import actions from '../../../store/api/actions';
 import Alert from '../../../components/alert';

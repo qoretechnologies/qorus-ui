@@ -7,7 +7,6 @@ import { Link } from 'react-router';
 import Pane from '../../../components/pane';
 import InfoTable from '../../../components/info_table';
 import Box from '../../../components/box';
-import Container from '../../../components/container';
 import { getAlertObjectLink } from '../../../helpers/system';
 
 const alertSelector = (state, props) => {
