@@ -186,7 +186,7 @@ export default class Tree extends Component {
                   top ? key : null,
                   level + 1
                 )
-              : data[key] && data[key].toString())}
+              : data[key].toString())}
         </div>
       );
     });
@@ -260,12 +260,14 @@ export default class Tree extends Component {
                   iconName="expand-all"
                   text="Expand all"
                   onClick={this.handleExpandClick}
+                  key="expand-button"
                 />,
                 allExpanded || size(items) > 0 ? (
                   <Button
                     iconName="collapse-all"
                     text="Collapse all"
                     onClick={this.handleCollapseClick}
+                    key="collapse-button"
                   />
                 ) : null,
               ]}

@@ -41,29 +41,31 @@ const InstancesBar: Function = ({
         instances,
         totalInstances,
         minWidth
-      ).map(
-        (state: Object) =>
-          instances[state.name] && instances[state.name] !== 0 ? (
-            <Tooltip content={`${state.name} - ${instances[state.name]}`}>
-              <Link
-                to={link || `/${type}/${id}?filter=${state.title}&date=${date}`}
+      ).map((state: Object, index: number) =>
+        instances[state.name] && instances[state.name] !== 0 ? (
+          <Tooltip
+            content={`${state.name} - ${instances[state.name]}`}
+            key={index}
+          >
+            <Link
+              to={link || `/${type}/${id}?filter=${state.title}&date=${date}`}
+            >
+              <div
+                className={`instances-bar bar-${state.label}`}
+                key={state.name}
+                style={{
+                  width: `${state.width}%`,
+                }}
               >
-                <div
-                  className={`instances-bar bar-${state.label}`}
-                  key={state.name}
-                  style={{
-                    width: `${state.width}%`,
-                  }}
-                >
-                  <div className={`instance-bar-value bar-${state.label}`}>
-                    {showPct
-                      ? Math.round(state.pct)
-                      : formatCount(instances[state.name])}
-                  </div>
+                <div className={`instance-bar-value bar-${state.label}`}>
+                  {showPct
+                    ? Math.round(state.pct)
+                    : formatCount(instances[state.name])}
                 </div>
-              </Link>
-            </Tooltip>
-          ) : null
+              </div>
+            </Link>
+          </Tooltip>
+        ) : null
       )
     ) : (
       <div className="instances-bar bar-none">
