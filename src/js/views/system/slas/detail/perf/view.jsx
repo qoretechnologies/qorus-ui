@@ -14,6 +14,7 @@ import sync from '../../../../../hocomponents/sync';
 import Chart from '../../../../../components/chart';
 import Container from '../../../../../components/container';
 import { createPerfLineDatasets } from '../../../../../helpers/chart';
+import Flex from '../../../../../components/Flex';
 
 type Props = {
   params: Object,
@@ -39,9 +40,9 @@ const PerfView: Function = ({
   countChartData,
   successChartData,
   width,
-  ...rest,
+  ...rest
 }: Props): React.Element<any> => (
-  <Container>
+  <Flex display="initial" scrollY>
     <div className="chart-view">
       <Chart
         type="line"
@@ -82,14 +83,12 @@ const PerfView: Function = ({
         datasets={successChartData.data}
       />
     </div>
-  </Container>
+  </Flex>
 );
 
 const viewSelector: Function = createSelector(
-  [
-    resourceSelector('slaperf'),
-    (state: Object): Object => state.ui.settings,
-  ], (meta: Object, settings: Object): Object => ({
+  [resourceSelector('slaperf'), (state: Object): Object => state.ui.settings],
+  (meta: Object, settings: Object): Object => ({
     meta,
     collection: meta.data,
     settings,
@@ -104,15 +103,14 @@ export default compose(
       fetch: actions.slaperf.fetchPerfData,
     }
   ),
-  mapProps(({ params, ...rest }: Props): Props => ({
-    id: params.id,
-    params,
-    ...rest,
-  })),
-  patch('load', [
-    'id',
-    'searchData',
-  ]),
+  mapProps(
+    ({ params, ...rest }: Props): Props => ({
+      id: params.id,
+      params,
+      ...rest,
+    })
+  ),
+  patch('load', ['id', 'searchData']),
   sync('meta'),
   lifecycle({
     componentWillReceiveProps(nextProps: Props) {
@@ -127,21 +125,28 @@ export default compose(
         searchData.grouping !== nextProps.searchData.grouping ||
         searchData.success !== nextProps.searchData.success
       ) {
-        fetch(
-          id,
-          nextProps.searchData
-        );
+        fetch(id, nextProps.searchData);
       }
     },
   }),
-  mapProps(({ collection, groupingQuery, settings, ...rest }: Props): Props => ({
-    chartData: createPerfLineDatasets(collection, groupingQuery || 'hourly'),
-    countChartData: createPerfLineDatasets(collection, groupingQuery || 'hourly', 'count'),
-    successChartData: createPerfLineDatasets(collection, groupingQuery || 'hourly', 'success'),
-    collection,
-    groupingQuery,
-    width: settings.width - 260,
-    settings,
-    ...rest,
-  })),
+  mapProps(
+    ({ collection, groupingQuery, settings, ...rest }: Props): Props => ({
+      chartData: createPerfLineDatasets(collection, groupingQuery || 'hourly'),
+      countChartData: createPerfLineDatasets(
+        collection,
+        groupingQuery || 'hourly',
+        'count'
+      ),
+      successChartData: createPerfLineDatasets(
+        collection,
+        groupingQuery || 'hourly',
+        'success'
+      ),
+      collection,
+      groupingQuery,
+      width: settings.width - 260,
+      settings,
+      ...rest,
+    })
+  )
 )(PerfView);

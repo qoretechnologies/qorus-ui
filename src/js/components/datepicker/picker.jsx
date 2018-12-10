@@ -61,8 +61,8 @@ export default class Picker extends Component {
     return (
       <div className="datepicker" ref="datepicker">
         {this.props.children}
-        <ControlGroup fill>
-          <Control iconName="time" big />
+        <ControlGroup fill className="pt-small">
+          <Control iconName="time" />
           <InputGroup
             type="number"
             name="hours"
@@ -71,7 +71,7 @@ export default class Picker extends Component {
             value={this.props.hours}
             onChange={this.props.onHoursChange}
           />
-          <Control text=":" big />
+          <Control text=":" />
           <InputGroup
             type="number"
             name="minutes"
@@ -84,18 +84,19 @@ export default class Picker extends Component {
             iconName="undo"
             title="Reset"
             action={this.props.onResetClick}
-            big
           />
         </ControlGroup>
-        {this.renderControls()}
-        <Control
-          className="pull-right"
-          intent={Intent.PRIMARY}
-          onClick={this.props.onApplyClick}
-          iconName="small-tick"
-        >
-          Apply
-        </Control>
+        <div className="datepicker-submit">
+          {this.renderControls()}
+          <Control
+            className="pull-right"
+            intent={Intent.PRIMARY}
+            onClick={this.props.onApplyClick}
+            iconName="small-tick"
+          >
+            Apply
+          </Control>
+        </div>
       </div>
     );
   }

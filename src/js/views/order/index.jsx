@@ -20,6 +20,7 @@ import CodeView from './code';
 import DiagramView from './diagram';
 import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import titleManager from '../../hocomponents/TitleManager';
+import Flex from '../../components/Flex';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
@@ -80,7 +81,7 @@ export default class Order extends Component {
     };
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     const { id } = this.props.params;
 
     this.fetch(id);
@@ -96,19 +97,21 @@ export default class Order extends Component {
   }
 
   componentWillUnmount() {
-    this.props.dispatch(actions.orders.unsync());
+    const { dispatch } = this.props;
 
-    this.props.dispatch(actions.workflows.unsync());
+    dispatch(actions.orders.unsync());
+    dispatch(actions.workflows.unsync());
   }
 
   fetch: Function = async (id: number): void => {
-    this.props.dispatch(actions.orders.unsync());
+    const { dispatch } = this.props;
 
-    this.props.dispatch(actions.workflows.unsync());
+    dispatch(actions.orders.unsync());
+    dispatch(actions.workflows.unsync());
 
-    const order = await this.props.dispatch(actions.orders.fetch({}, id));
+    const order = await dispatch(actions.orders.fetch({}, id));
 
-    this.props.dispatch(
+    dispatch(
       actions.workflows.fetch({ lib_source: true }, order.payload.workflowid)
     );
   };
@@ -119,7 +122,7 @@ export default class Order extends Component {
     }
 
     return (
-      <div>
+      <Flex>
         <Header
           data={this.props.order}
           workflow={this.props.workflow}
@@ -215,6 +218,7 @@ export default class Order extends Component {
                 workflow: this.props.workflow,
                 dispatch: this.props.dispatch,
                 isTablet: this.props.isTablet,
+                location: this.props.location,
               }}
             />
           </SimpleTab>
@@ -229,7 +233,7 @@ export default class Order extends Component {
             />
           </SimpleTab>
         </SimpleTabs>
-      </div>
+      </Flex>
     );
   }
 }

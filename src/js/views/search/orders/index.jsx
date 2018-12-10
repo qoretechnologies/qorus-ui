@@ -6,13 +6,12 @@ import pure from 'recompose/onlyUpdateForKeys';
 import moment from 'moment';
 import { connect } from 'react-redux';
 
-import OrdersView from '../../workflow/tabs/list';
+import OrdersView from '../../workflows/tabs/list';
 import queryControl from '../../../hocomponents/queryControl';
 import { DATE_FORMATS } from '../../../constants/dates';
 import SearchToolbar from './toolbar';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
-import Box from '../../../components/box';
 
 type Props = {
   location: Object,

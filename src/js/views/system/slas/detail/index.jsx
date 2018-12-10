@@ -27,6 +27,7 @@ import Events from './events';
 import Sources from './methods';
 import Perf from './perf';
 import withTabs from '../../../../hocomponents/withTabs';
+import Flex from '../../../../components/Flex';
 
 type Props = {
   location: Object,
@@ -50,7 +51,7 @@ const SLADetail: Function = ({
   maxDate,
   tabQuery,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb link="/system/slas"> SLAs </Crumb>
@@ -94,7 +95,7 @@ const SLADetail: Function = ({
         </SimpleTab>
       </SimpleTabs>
     </Box>
-  </div>
+  </Flex>
 );
 
 const viewSelector: Function = createSelector(

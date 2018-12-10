@@ -1,12 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Button, Intent, Callout } from '@blueprintjs/core';
+import { Intent, Callout } from '@blueprintjs/core';
 
 import Box from 'components/box';
 import actions from 'store/api/actions';
 import NotesList from './table';
 import Toolbar from '../../../components/toolbar';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
+import PaneItem from '../../../components/pane_item';
+import withDispatch from '../../../hocomponents/withDispatch';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
@@ -26,12 +32,13 @@ const selector = createSelector(
 );
 
 @connect(selector)
+@withDispatch()
 export default class NotesView extends Component {
   static propTypes = {
     params: PropTypes.object,
     notes: PropTypes.array,
     order: PropTypes.object,
-    dispatch: PropTypes.func,
+    dispatchAction: PropTypes.func,
     user: PropTypes.object,
   };
 
@@ -65,12 +72,11 @@ export default class NotesView extends Component {
 
   submitForm() {
     if (/\S/.test(this.state.value) && this.state.value.length >= 3) {
-      this.props.dispatch(
-        actions.orders.addNote(
-          this.props.order,
-          this.state.value,
-          this.props.user.username
-        )
+      this.props.dispatchAction(
+        actions.orders.addNote,
+        this.props.order.workflow_instanceid,
+        this.state.value,
+        this.props.user.username
       );
 
       this.setState({
@@ -85,7 +91,7 @@ export default class NotesView extends Component {
 
   render() {
     return (
-      <Box top>
+      <Box top scrollY>
         {this.state.error && (
           <Callout
             intent={Intent.DANGER}
@@ -97,7 +103,7 @@ export default class NotesView extends Component {
         )}
         <form onSubmit={this.handleFormSubmit}>
           <textarea
-            className="form-control"
+            className="pt-input pt-fill"
             placeholder="Type note... (CTRL/CMD+Enter to submit)"
             rows="2"
             onChange={this.handleTextareaChange}
@@ -105,15 +111,20 @@ export default class NotesView extends Component {
             value={this.state.value}
           />
           <Toolbar mt mb>
-            <Button
-              type="submit"
-              text="Add note"
-              iconName="add"
-              intent={Intent.PRIMARY}
-            />
+            <ButtonGroup>
+              <Button
+                type="submit"
+                text="Add note"
+                iconName="add"
+                intent={Intent.PRIMARY}
+                big
+              />
+            </ButtonGroup>
           </Toolbar>
         </form>
-        <NotesList notes={this.props.notes} />
+        <PaneItem title="Notes history">
+          <NotesList notes={this.props.notes} />
+        </PaneItem>
       </Box>
     );
   }

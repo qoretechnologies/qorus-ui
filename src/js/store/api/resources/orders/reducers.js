@@ -19,10 +19,9 @@ const initialState: Object = {
 const fetchOrders: Object = {
   next(
     state: Object,
-    { payload: {
-      orders,
-      fetchMore,
-    } } : {
+    {
+      payload: { orders, fetchMore },
+    }: {
       payload: Object,
       orders: Array<Object>,
       fetchMore: boolean,
@@ -30,20 +29,29 @@ const fetchOrders: Object = {
   ): Object {
     const data = [...state.data];
     const newData = fetchMore ? [...data, ...orders] : setUpdatedToNull(orders);
-    const normalizedIds = newData.map((order: Object): Object => ({
-      ...order,
-      ...{
-        id: order.workflow_instanceid,
-      },
-    }));
-    const normalized = normalizedIds.map((order: Object): Object => normalizeName(order));
+    const normalizedIds = newData.map(
+      (order: Object): Object => ({
+        ...order,
+        ...{
+          id: order.workflow_instanceid,
+        },
+      })
+    );
+    const normalized = normalizedIds.map(
+      (order: Object): Object => normalizeName(order)
+    );
 
     return { ...state, ...{ data: normalized, loading: false, sync: true } };
   },
 };
 
 const changeOffset: Object = {
-  next(state: Object = initialState, { payload: { newOffset } }: Object): Object {
+  next(
+    state: Object = initialState,
+    {
+      payload: { newOffset },
+    }: Object
+  ): Object {
     const offset = newOffset || newOffset === 0 ? newOffset : state.offset + 50;
 
     return { ...state, ...{ offset } };
@@ -51,7 +59,12 @@ const changeOffset: Object = {
 };
 
 const changeServerSort: Object = {
-  next(state: Object = initialState, { payload: { sort } }: Object): Object {
+  next(
+    state: Object = initialState,
+    {
+      payload: { sort },
+    }: Object
+  ): Object {
     const sortDir = state.sort === sort ? !state.sortDir : state.sortDir;
 
     return { ...state, ...{ offset: 0, sort, sortDir } };
@@ -59,12 +72,21 @@ const changeServerSort: Object = {
 };
 
 const selectOrder: Object = {
-  next(state = initialState, { payload: { id } }) {
+  next(
+    state = initialState,
+    {
+      payload: { id },
+    }
+  ) {
     const stateData = [...state.data];
     const order = stateData.find((ord: Object) => ord.id === parseInt(id, 10));
 
     if (order) {
-      const newData = updateItemWithId(id, { _selected: !order._selected }, stateData);
+      const newData = updateItemWithId(
+        id,
+        { _selected: !order._selected },
+        stateData
+      );
 
       return { ...state, ...{ data: newData } };
     }
@@ -111,11 +133,13 @@ const selectInvert = {
 const unselectAll = {
   next(state: Object) {
     const data = [...state.data];
-    const newData = data.map(w => (
-      w._selected ? ({
-        ...w,
-        ...{ _selected: false },
-      }) : w)
+    const newData = data.map(w =>
+      w._selected
+        ? {
+            ...w,
+            ...{ _selected: false },
+          }
+        : w
     );
 
     return { ...state, ...{ data: newData } };
@@ -125,28 +149,41 @@ const unselectAll = {
 const addOrder: Object = {
   next(
     state: Object = initialState,
-    { payload: { events } }: { payload: Object, events: Array<Object> }
+    {
+      payload: { events },
+    }: { payload: Object, events: Array<Object> }
   ): Object {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach((obj: Object): void => {
-        const normalized = normalizeName({ ...obj.info, ...{ id: obj.info.workflow_instanceid } });
+      events.forEach(
+        (obj: Object): void => {
+          const normalized = normalizeName({
+            ...obj.info,
+            ...{ id: obj.info.workflow_instanceid },
+          });
 
-        newData = [{
-          ...normalized,
-          ...{
-            _updated: true,
-            started: obj.time,
-            workflowstatus: obj.info.status,
-            note_count: 0,
-          },
-        }, ...newData];
-      });
+          newData = [
+            {
+              ...normalized,
+              ...{
+                _updated: true,
+                started: obj.time,
+                workflowstatus: obj.info.status,
+                note_count: 0,
+              },
+            },
+            ...newData,
+          ];
+        }
+      );
 
-      const reducedData: Array<Object> = newData.slice(0, state.offset + state.limit);
+      const reducedData: Array<Object> = newData.slice(
+        0,
+        state.offset + state.limit
+      );
 
       return { ...state, ...{ data: reducedData } };
     }
@@ -177,13 +214,19 @@ const modifyOrder: Object = {
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach((dt: Object): void => {
-        newData = updateItemWithId(dt.id, {
-          workflowstatus: dt.new,
-          modified: dt.time,
-          _updated: true,
-        }, newData);
-      });
+      events.forEach(
+        (dt: Object): void => {
+          newData = updateItemWithId(
+            dt.id,
+            {
+              workflowstatus: dt.new,
+              modified: dt.time,
+              _updated: true,
+            },
+            newData
+          );
+        }
+      );
 
       return { ...state, ...{ data: newData } };
     }
@@ -202,18 +245,26 @@ const modifyOrder: Object = {
 const addNoteWebsocket = {
   next(
     state: Object = initialState,
-    { payload: { events } }: { payload: Object, events: Array<Object> }
+    {
+      payload: { events },
+    }: { payload: Object, events: Array<Object> }
   ): Object {
     if (state.data.length) {
       const data = state.data.slice();
       let newData = data;
 
-      events.forEach((dt: Object): void => {
-        const order = newData.find(d => d.id === dt.id);
-        const notes = [...order.notes, dt.note];
-        const noteCount = order.note_count + 1;
-        newData = updateItemWithId(dt.id, { notes, note_count: noteCount }, newData);
-      });
+      events.forEach(
+        (dt: Object): void => {
+          const order = newData.find(d => d.id === dt.id);
+          const notes = [...order.notes, dt.note];
+          const noteCount = order.note_count + 1;
+          newData = updateItemWithId(
+            dt.id,
+            { notes, note_count: noteCount },
+            newData
+          );
+        }
+      );
 
       return { ...state, ...{ data: newData } };
     }
@@ -230,10 +281,19 @@ const addNoteWebsocket = {
 };
 
 const updateDone = {
-  next(state: Object, { payload: { id } }: { payload: Object, id: number }) {
+  next(
+    state: Object,
+    {
+      payload: { id },
+    }: { payload: Object, id: number }
+  ) {
     if (state.sync) {
       const data: Array<Object> = state.data.slice();
-      const newData: Array<Object> = updateItemWithId(id, { _updated: null }, data);
+      const newData: Array<Object> = updateItemWithId(
+        id,
+        { _updated: null },
+        data
+      );
 
       return { ...state, ...{ data: newData } };
     }
@@ -252,7 +312,9 @@ const updateDone = {
 const fetchData: Object = {
   next(
     state: Object,
-    { payload: { id, type, data } }: {
+    {
+      payload: { id, type, data },
+    }: {
       payload: Object,
       id: number,
       type: string,
@@ -274,39 +336,52 @@ const fetchData: Object = {
 };
 
 const orderAction: Object = {
-  next(state: Object, { payload: { ids, action, result } }: Object) {
+  next(
+    state: Object,
+    {
+      payload: { ids, action, result },
+    }: Object
+  ) {
     const data = [...state.data];
     let newData = data;
 
     if (result) {
-      Object.keys(result).forEach((res: string): void => {
-        if (typeof result[res] === 'string') {
-          const ord = newData.find((order: Object): boolean => (
-            order.id === parseInt(res, 10)
-          ));
+      Object.keys(result).forEach(
+        (res: string): void => {
+          if (typeof result[res] === 'string') {
+            const ord = newData.find(
+              (order: Object): boolean => order.id === parseInt(res, 10)
+            );
 
-          newData = updateItemWithId(
-            parseInt(res, 10),
-            { workflowstatus: ord ? ord._originalStatus : null },
-            newData
-          );
+            newData = updateItemWithId(
+              parseInt(res, 10),
+              { workflowstatus: ord ? ord._originalStatus : null },
+              newData
+            );
+          }
         }
-      });
+      );
     } else {
       const orders: Array<number> = isArray(ids) ? ids : [ids];
 
-      orders.forEach((id: number): void => {
-        const ord = newData.find((order: Object): boolean => (
-          order.id === parseInt(id, 10)
-        ));
+      orders.forEach(
+        (id: number): void => {
+          const ord = newData.find(
+            (order: Object): boolean => order.id === parseInt(id, 10)
+          );
 
-        const origStatus = ord ? ord.workflowstatus : '';
+          const origStatus = ord ? ord.workflowstatus : '';
 
-        newData = updateItemWithId(id, {
-          workflowstatus: `${action.toUpperCase()}ING`,
-          _originalStatus: origStatus,
-        }, newData);
-      });
+          newData = updateItemWithId(
+            id,
+            {
+              workflowstatus: `${action.toUpperCase()}ING`,
+              _originalStatus: origStatus,
+            },
+            newData
+          );
+        }
+      );
     }
 
     return { ...state, ...{ data: newData } };
@@ -316,7 +391,9 @@ const orderAction: Object = {
 const skipStep: Object = {
   next(
     state: Object,
-    { payload: { orderId, stepid, ind } }: {
+    {
+      payload: { orderId, stepid, ind },
+    }: {
       payload: Object,
       orderId: number,
       stepid: number,
@@ -324,9 +401,15 @@ const skipStep: Object = {
     }
   ): Object {
     const data = [...state.data];
-    const order: ?Object = data.find((ord: Object): boolean => ord.id === orderId);
+    const order: ?Object = data.find(
+      (ord: Object): boolean => ord.id === orderId
+    );
     const newInstances = skipIndexes(order, stepid, ind);
-    const newData = updateItemWithId(orderId, { StepInstances: newInstances }, data);
+    const newData = updateItemWithId(
+      orderId,
+      { StepInstances: newInstances },
+      data
+    );
 
     return { ...state, ...{ data: newData } };
   },
@@ -335,7 +418,9 @@ const skipStep: Object = {
 const schedule: Object = {
   next(
     state: Object,
-    { payload: { id, date, error, origStatus } }: {
+    {
+      payload: { id, date, error, origStatus },
+    }: {
       payload: Object,
       id: number,
       date: string,
@@ -344,10 +429,14 @@ const schedule: Object = {
     }
   ): Object {
     const data = [...state.data];
-    const newData = updateItemWithId(id, {
-      workflowstatus: error ? origStatus : 'SCHEDULED',
-      scheduled: error ? null : date,
-    }, data);
+    const newData = updateItemWithId(
+      id,
+      {
+        workflowstatus: error ? origStatus : 'SCHEDULED',
+        scheduled: error ? null : date,
+      },
+      data
+    );
 
     return { ...state, ...{ data: newData } };
   },
@@ -356,7 +445,9 @@ const schedule: Object = {
 const setPriority: Object = {
   next(
     state: Object,
-    { payload: { id, priority } }: {
+    {
+      payload: { id, priority },
+    }: {
       payload: Object,
       id: number,
       priority: number,
@@ -371,7 +462,9 @@ const setPriority: Object = {
 const lock: Object = {
   next(
     state: Object,
-    { payload: { id, note, username, type } }: {
+    {
+      payload: { id, note, username, type },
+    }: {
       payload: Object,
       id: number,
       note: string,
@@ -384,17 +477,24 @@ const lock: Object = {
 
     if (order) {
       const currentNotes = order.notes || [];
-      const notes = [...currentNotes, {
-        saved: true,
-        username,
-        note,
-      }];
+      const notes = [
+        ...currentNotes,
+        {
+          saved: true,
+          username,
+          note,
+        },
+      ];
 
-      const newData = updateItemWithId(id, {
-        operator_lock: type === 'lock' ? username : null,
-        notes,
-        note_count: order.note_count + 1,
-      }, data);
+      const newData = updateItemWithId(
+        id,
+        {
+          operator_lock: type === 'lock' ? username : null,
+          notes,
+          note_count: order.note_count + 1,
+        },
+        data
+      );
 
       return { ...state, ...{ data: newData } };
     }
@@ -406,7 +506,9 @@ const lock: Object = {
 const updateErrors: Object = {
   next(
     state: Object,
-    { payload: { id, errors } }: {
+    {
+      payload: { id, errors },
+    }: {
       payload: Object,
       id: number,
       errors: Array<Object>,
@@ -415,9 +517,13 @@ const updateErrors: Object = {
     if (errors.err) return state;
 
     const data = [...state.data];
-    const newData = updateItemWithId(id, {
-      ErrorInstances: errors,
-    }, data);
+    const newData = updateItemWithId(
+      id,
+      {
+        ErrorInstances: errors,
+      },
+      data
+    );
 
     return { ...state, ...{ data: newData } };
   },
@@ -426,15 +532,21 @@ const updateErrors: Object = {
 const updateHierarchy: Object = {
   next(
     state: Object,
-    { payload: { id, hierarchy } }: {
+    {
+      payload: { id, hierarchy },
+    }: {
       payload: Object,
       id: number,
       hierarchy: Object,
     }
   ): Object {
-    const data = updateItemWithId(id, {
-      HierarchyInfo: hierarchy,
-    }, [...state.data]);
+    const data = updateItemWithId(
+      id,
+      {
+        HierarchyInfo: hierarchy,
+      },
+      [...state.data]
+    );
 
     return { ...state, ...{ data } };
   },
@@ -443,15 +555,21 @@ const updateHierarchy: Object = {
 const updateStepInstances: Object = {
   next(
     state: Object,
-    { payload: { id, steps } }: {
+    {
+      payload: { id, steps },
+    }: {
       payload: Object,
       id: number,
       steps: Object,
     }
   ): Object {
-    const data = updateItemWithId(id, {
-      StepInstances: steps,
-    }, [...state.data]);
+    const data = updateItemWithId(
+      id,
+      {
+        StepInstances: steps,
+      },
+      [...state.data]
+    );
 
     return { ...state, ...{ data } };
   },
@@ -460,42 +578,46 @@ const updateStepInstances: Object = {
 const fetchYamlData: Object = {
   next(
     state: Object,
-    { payload: { id, yamlData } }: {
+    {
+      payload: { id, yamlData },
+    }: {
       payload: Object,
       id: number,
       yamlData: string,
     }
   ): Object {
-    const data = updateItemWithId(id, {
-      yamlData,
-    }, [...state.data]);
+    const data = updateItemWithId(
+      id,
+      {
+        yamlData,
+      },
+      [...state.data]
+    );
 
     return { ...state, ...{ data } };
   },
 };
 
-
 const updateSensitiveData: Object = {
   next(
     state: Object,
     {
-      payload: {
-        newdata,
-        id,
-        skey,
-        svalue,
-      },
+      payload: { newdata, id, skey, svalue },
     }
   ): Object {
     const data: Array<Object> = [...state.data];
-    const order = data.find((datum: Object): bool => datum.id === id);
+    const order = data.find((datum: Object): boolean => datum.id === id);
 
     if (order) {
       const sensitiveData = order.sensitive_data;
 
       sensitiveData[skey][svalue].data = jsYaml.safeLoad(newdata);
 
-      const updatedData: Object = updateItemWithId(id, { sensitive_data: sensitiveData }, data);
+      const updatedData: Object = updateItemWithId(
+        id,
+        { sensitive_data: sensitiveData },
+        data
+      );
 
       return { ...state, ...{ updatedData } };
     }

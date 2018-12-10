@@ -19,6 +19,7 @@ import Pane from './detail';
 import titleManager from '../../../hocomponents/TitleManager';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
+import Flex from '../../../components/Flex';
 
 type Props = {
   onSearchChange: Function,
@@ -39,7 +40,7 @@ const ValueMaps: Function = ({
   isTablet,
   paneId,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active>Valuemaps</Crumb>
@@ -61,7 +62,7 @@ const ValueMaps: Function = ({
         paneId={paneId}
       />
     </Box>
-  </div>
+  </Flex>
 );
 
 const filterData = (query: string): Function => (

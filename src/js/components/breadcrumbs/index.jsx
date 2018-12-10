@@ -20,15 +20,16 @@ const Breadcrumbs: Function = ({
   onClick,
   noFloat,
   icon,
+  collapsed: collapsed = false,
 }: Props): React.Element<any> => (
   <ul className={`pt-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
-    {icon ? (
+    {!collapsed && (
       <li onClick={onClick}>
-        <Icon className="pt-breadcrumb" iconName={icon} />
-      </li>
-    ) : (
-      <li onClick={onClick}>
-        <img src={qoreLogo} style={{ width: '15px' }} />
+        {icon ? (
+          <Icon className="pt-breadcrumb" iconName={icon} />
+        ) : (
+          <img src={qoreLogo} style={{ width: '15px' }} />
+        )}
       </li>
     )}
     {children}

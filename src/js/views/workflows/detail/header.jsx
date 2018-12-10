@@ -1,56 +1,120 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+// @flow
+import React from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
+import { withRouter } from 'react-router';
+import size from 'lodash/size';
 
-import AutoStart from '../../../components/autostart';
-import WorkflowsControls from '../controls';
+import WorkflowControls from '../controls';
+import WorkflowAutostart from '../autostart';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
+import Pull from '../../../components/Pull';
+import Headbar from '../../../components/Headbar';
+import Search from '../../../containers/search';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
+import withHandlers from 'recompose/withHandlers';
+import { rebuildConfigHash } from '../../../helpers/interfaces';
+import { countArrayItemsInObject } from '../../../utils';
 
-import actions from 'store/api/actions';
+type Props = {
+  setAutostart: Function,
+  date: string,
+  onSearch: Function,
+  handleAlertClick: Function,
+  searchQuery?: string,
+  tab: string,
+  workflow: Object,
+};
 
-@connect(
-  () => ({}),
-  {
-    setAutostart: actions.workflows.setAutostart,
-  }
-)
-export default class WorkflowsHeader extends Component {
-  static propTypes = {
-    workflow: PropTypes.object,
-    setAutostart: PropTypes.func,
-  };
+const WorkflowHeader: Function = ({
+  workflow,
+  onSearch,
+  searchQuery,
+  tab,
+  handleAlertClick,
+}: Props): React.Element<any> => (
+  <Headbar>
+    <Breadcrumbs>
+      <Crumb link="/workflows"> Workflows </Crumb>
+      <Crumb>{workflow.normalizedName}</Crumb>
+      <CrumbTabs
+        tabs={[
+          'Orders',
+          'Performance',
+          'Steps',
+          'Order Stats',
+          'Process',
+          {
+            title: 'Config',
+            suffix: `(${countArrayItemsInObject(
+              rebuildConfigHash(workflow, true)
+            )})`,
+          },
+          'Releases',
+          {
+            title: 'Value maps',
+            suffix: `(${size(workflow.vmaps)})`,
+          },
+          {
+            title: 'Mappers',
+            suffix: `(${size(workflow.mappers)})`,
+          },
+          'Errors',
+          'Code',
+          'Log',
+          'Info',
+        ]}
+      />
+    </Breadcrumbs>
+    <Pull right>
+      {workflow.hasAlerts && (
+        <ButtonGroup>
+          <Button
+            big
+            iconName="error"
+            btnStyle="danger"
+            onClick={handleAlertClick}
+            title="This workflow has alerts raised against it which may prevent it from working properly"
+          >
+            {workflow.alerts.length}
+          </Button>
+        </ButtonGroup>
+      )}
+      <WorkflowControls
+        big
+        id={workflow.id}
+        enabled={workflow.enabled}
+        remote={workflow.remote}
+      />
+      <WorkflowAutostart
+        big
+        id={workflow.id}
+        autostart={workflow.autostart}
+        execCount={workflow.execCount}
+        withExec
+      />
+      {tab === 'orders' && (
+        <Search
+          defaultValue={searchQuery}
+          onSearchUpdate={onSearch}
+          resource="workflow"
+        />
+      )}
+    </Pull>
+  </Headbar>
+);
 
-  handleAutostartChange = (value) => {
-    this.props.setAutostart(this.props.workflow.id, value);
-  };
-
-  render() {
-    return (
-      <div className="row pane__header">
-        <div className="col-xs-12">
-          <h3 className="pull-left">
-            <span className="selectable">
-              {this.props.workflow.normalizedName}
-            </span>
-            <p>
-              <small>
-                <em>{this.props.workflow.description}</em>
-              </small>
-            </p>
-          </h3>
-        </div>
-        <div className="col-xs-12 pane__controls">
-          <WorkflowsControls
-            id={this.props.workflow.id}
-            enabled={this.props.workflow.enabled}
-          />
-          {' '}
-          <AutoStart
-            autostart={this.props.workflow.autostart}
-            execCount={this.props.workflow.exec_count}
-            onIncrementClick={this.handleAutostartChange}
-            onDecrementClick={this.handleAutostartChange}
-          />
-        </div>
-      </div>
-    );
-  }
-}
+export default compose(
+  withRouter,
+  withHandlers({
+    handleAlertClick: ({ router, date, workflow }): Function => (): void => {
+      router.push(
+        `/workflows?date=${date}&paneTab=detail&paneId=${workflow.id}`
+      );
+    },
+  }),
+  pure(['workflow', '_updated', 'location', 'tab'])
+)(WorkflowHeader);

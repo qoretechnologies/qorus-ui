@@ -6,12 +6,16 @@ type Props = {
   condition: boolean,
   children: any,
   title?: string,
+  big?: boolean,
+  inBox?: boolean,
 };
 
 const NoDataIf: Function = ({
   condition,
   children,
   title,
+  big,
+  inBox,
 }: Props): React.Element<any> =>
   !condition ? (
     typeof children === 'function' ? (
@@ -20,7 +24,7 @@ const NoDataIf: Function = ({
       children
     )
   ) : (
-    <NoData title={title} />
+    <NoData title={title} big={big} inBox={inBox} top />
   );
 
 export default onlyUpdateForKeys(['condition', 'children'])(NoDataIf);

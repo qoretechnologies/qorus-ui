@@ -60,6 +60,9 @@ class Headbar extends React.Component {
         key={this.state.lastMutation}
         className="headbar"
         ref={this.handleRef}
+        style={{
+          flex: '0 1 auto',
+        }}
       >
         {typeof children === 'function' ? children(this._el) : children}
       </div>

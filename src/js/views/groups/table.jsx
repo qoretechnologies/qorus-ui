@@ -12,6 +12,7 @@ import Selectors from './toolbar/selectors';
 import Actions from './toolbar/actions';
 import Pull from '../../components/Pull';
 import LoadMore from '../../components/LoadMore';
+import titleManager from '../../hocomponents/TitleManager';
 
 type Props = {
   sortData: Object,
@@ -78,7 +79,7 @@ const GroupsTable: Function = ({
         <Th className="name" name="name">
           Name
         </Th>
-        <Th name="description">Description</Th>
+        <Th name="text description">Description</Th>
         <Th
           className={isTablet ? 'narrow' : 'medium'}
           name="workflows_count"
@@ -148,5 +149,6 @@ export default compose(
       select: actions.groups.select,
     }
   ),
+  titleManager('Groups'),
   pure(['collection', 'sortData'])
 )(GroupsTable);

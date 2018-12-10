@@ -1,21 +1,14 @@
 /* @flow */
 import React from 'react';
 import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
 
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  FixedRow,
-  Th,
-} from '../../components/new_table';
+import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
 import withSort from '../../hocomponents/sort';
 import { NameColumnHeader } from '../../components/NameColumn';
 import checkData from '../../hocomponents/check-no-data';
 import ErrorRow from './row';
 import { sortDefaults } from '../../constants/sort';
+import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 
 type Props = {
   type: string,
@@ -26,8 +19,6 @@ type Props = {
   onDeleteClick: Function,
   sortData: Object,
   height: string | number,
-  fixed: boolean,
-  RowComponent: any,
 };
 
 const ErrorsTable: Function = ({
@@ -39,12 +30,10 @@ const ErrorsTable: Function = ({
   onEditClick,
   onDeleteClick,
   height,
-  fixed,
-  RowComponent,
 }: Props): React.Element<any> => (
-  <Table striped condensed fixed={fixed} height={height} key={data.length}>
+  <Table striped condensed fixed height={height} key={data.length}>
     <Thead>
-      <RowComponent sortData={sortData} onSortChange={onSortChange}>
+      <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <NameColumnHeader name="error" />
         {!compact && <Th name="description">Description</Th>}
         <Th className="medium" name="severity">
@@ -65,35 +54,34 @@ const ErrorsTable: Function = ({
           </Th>
         )}
         <Th className="medium">-</Th>
-      </RowComponent>
+      </FixedRow>
     </Thead>
-    <Tbody>
-      {data.map(
-        (error: Object, index: number): React.Element<ErrorRow> => (
-          <ErrorRow
-            first={index === 0}
-            key={index}
-            data={error}
-            compact={compact}
-            type={type}
-            onEditClick={onEditClick}
-            onDeleteClick={onDeleteClick}
-          />
-        )
+    <DataOrEmptyTable
+      condition={!data || data.length === 0}
+      cols={type === 'workflow' ? (compact ? 7 : 8) : compact ? 6 : 7}
+    >
+      {props => (
+        <Tbody {...props}>
+          {data.map(
+            (error: Object, index: number): React.Element<ErrorRow> => (
+              <ErrorRow
+                first={index === 0}
+                key={index}
+                data={error}
+                compact={compact}
+                type={type}
+                onEditClick={onEditClick}
+                onDeleteClick={onDeleteClick}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
 export default compose(
-  checkData((props: Object) => props.data.length > 0),
-  mapProps(
-    ({ fixed, ...rest }: Props): Props => ({
-      RowComponent: fixed ? FixedRow : Tr,
-      fixed,
-      ...rest,
-    })
-  ),
   withSort(
     (props: Object): string => `${props.type}Errors`,
     'data',

@@ -16,13 +16,14 @@ import PaneItem from '../../../components/pane_item';
 import { Link } from 'react-router';
 import NoData from '../../../components/nodata';
 import Headbar from '../../../components/Headbar';
+import Flex from '../../../components/Flex';
 
 type Props = {
   collection: Object,
 };
 
 const UserHttp: Function = ({ collection }: Props): any => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active> User HTTP Services </Crumb>
@@ -70,7 +71,7 @@ const UserHttp: Function = ({ collection }: Props): any => (
     ) : (
       <NoData big inBox top />
     )}
-  </div>
+  </Flex>
 );
 
 const userHttpMetaSelector = (state: Object): Object => {

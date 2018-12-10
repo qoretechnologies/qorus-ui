@@ -18,6 +18,7 @@ import ModalCode from './modal_code';
 import { hasPermission } from '../../../../../helpers/user';
 import actions from '../../../../../store/api/actions';
 import withDispatch from '../../../../../hocomponents/withDispatch';
+import NameColumn from '../../../../../components/NameColumn';
 
 type Props = {
   method: Object,
@@ -36,6 +37,8 @@ type Props = {
   dispatchAction: Function,
   handleSLARemove: Function,
   handleRemoveMethodClick: Function,
+  first: boolean,
+  observeElement?: string,
 };
 
 const MethodsRow: Function = ({
@@ -47,10 +50,12 @@ const MethodsRow: Function = ({
   service,
   handleSLAChange,
   handleSLARemove,
+  first,
+  observeElement,
 }: Props): React.Element<any> => (
-  <Tr title={method.description}>
-    <Td className="name">{method.name}</Td>
-    <Td className="tiny">
+  <Tr title={method.description} first={first} observeElement={observeElement}>
+    <NameColumn name={method.name} />
+    <Td className="narrow">
       <Autocomponent>{method.locktype}</Autocomponent>
     </Td>
     <Td className="tiny">

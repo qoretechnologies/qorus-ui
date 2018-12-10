@@ -19,11 +19,11 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../../components/controls';
-import Container from '../../../components/container';
 import Box from '../../../components/box';
 import { hasPermission } from '../../../helpers/user';
 import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
+import Flex from '../../../components/Flex';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
 const querySelector: Function = (state: Object, props: Object): Object =>
@@ -132,24 +132,22 @@ export default class PropertiesView extends Component {
     if (!Object.keys(collection).length) return null;
 
     return Object.keys(collection).map((p, key) => (
-      <Box top={key === 0}>
-        <Prop
-          data={collection[p]}
-          title={p}
-          perms={user.data.permissions}
-          key={key}
-          onDelete={this.handleDeleteClick}
-          onEdit={this.handleAddClick}
-          openModal={this.props.openModal}
-          closeModal={this.props.closeModal}
-        />
-      </Box>
+      <Prop
+        data={collection[p]}
+        title={p}
+        perms={user.data.permissions}
+        key={key}
+        onDelete={this.handleDeleteClick}
+        onEdit={this.handleAddClick}
+        openModal={this.props.openModal}
+        closeModal={this.props.closeModal}
+      />
     ));
   }
 
   render() {
     return (
-      <div>
+      <Flex>
         <Headbar>
           <Breadcrumbs>
             <Crumb active> Properties </Crumb>
@@ -178,8 +176,10 @@ export default class PropertiesView extends Component {
             />
           </Pull>
         </Headbar>
-        <Container>{this.renderProperties()}</Container>
-      </div>
+        <Box top scrollY>
+          {this.renderProperties()}
+        </Box>
+      </Flex>
     );
   }
 }

@@ -7,6 +7,7 @@ import { Breadcrumbs, Crumb, CrumbTabs } from '../breadcrumbs';
 import Headbar from '../Headbar';
 import Pull from '../Pull';
 import { Controls, Control } from '../controls';
+import Flex from '../Flex';
 
 type Props = {
   width?: number,
@@ -25,7 +26,7 @@ const Pane: Function = ({
   title,
   tabs,
 }: Props) => (
-  <div className="pane right" style={{ width }}>
+  <Flex className="pane right" style={{ width }}>
     <Headbar>
       <Breadcrumbs icon="list-detail-view">
         {title && <Crumb active>{title}</Crumb>}
@@ -44,9 +45,9 @@ const Pane: Function = ({
         </Controls>
       </Pull>
     </Headbar>
-    <div className="pane__content">{children}</div>
+    <Flex className="pane__content">{children}</Flex>
     <ResizeHandle onStop={onResize} left min={{ width: 600 }} />
-  </div>
+  </Flex>
 );
 
 export default pure(['width', 'children', 'tabs'])(Pane);

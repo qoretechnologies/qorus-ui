@@ -24,9 +24,10 @@ import Box from '../../components/box';
 import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
 import CsvControl from '../../components/CsvControl';
-import titleManager from '../../hocomponents/TitleManager';
 import Search from '../../containers/search';
 import queryControl from '../../hocomponents/queryControl';
+import Flex from '../../components/Flex';
+import Controls from './controls';
 
 type Props = {
   sortData: Object,
@@ -66,7 +67,7 @@ const GroupsView: Function = ({
   changeSearchQuery,
 }: Props): React.Element<any> =>
   group ? (
-    <div>
+    <Flex>
       <Headbar>
         <Breadcrumbs>
           <Crumb link="/groups">Groups</Crumb>
@@ -74,11 +75,14 @@ const GroupsView: Function = ({
             {group.name} ({group.id})
           </Crumb>
         </Breadcrumbs>
+        <Pull right>
+          <Controls enabled={group.enabled} name={group.name} big />
+        </Pull>
       </Headbar>
       <GroupsDetail {...group} />
-    </div>
+    </Flex>
   ) : (
-    <div>
+    <Flex>
       <Headbar>
         <Breadcrumbs>
           <Crumb active>Groups</Crumb>
@@ -106,7 +110,7 @@ const GroupsView: Function = ({
           limit={limit}
         />
       </Box>
-    </div>
+    </Flex>
   );
 
 const filterGroups: Function = (search: string) => (
@@ -175,7 +179,6 @@ export default compose(
   queryControl('search'),
   selectable('groups'),
   withCSV('groups', 'groups'),
-  titleManager('Groups'),
   pure([
     'group',
     'groups',

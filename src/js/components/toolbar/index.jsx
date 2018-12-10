@@ -12,53 +12,16 @@ class Toolbar extends Component {
     mt: PropTypes.bool,
   };
 
-  state: {
-    sticky: boolean,
-  } = {
-    sticky: false,
-  };
-
-  componentDidMount() {
-    if (this.props.sticky) {
-      this._start = this.refs.toolbar.getBoundingClientRect().top;
-
-      document
-        .querySelector('.root__center>section')
-        .addEventListener('scroll', this.handleScrolling);
-    }
-  }
-
-  componentWillUnmount() {
-    document
-      .querySelector('.root__center>section')
-      .removeEventListener('scroll', this.handleScrolling);
-  }
-
-  _start: number = 0;
-
-  handleScrolling: Function = (e: EventHandler) => {
-    if (e.target.scrollTop > this._start - 50 && !this.state.sticky) {
-      this.setState({
-        sticky: true,
-      });
-    } else if (e.target.scrollTop <= this._start - 51 && this.state.sticky) {
-      this.setState({
-        sticky: false,
-      });
-    }
-  };
-
   render() {
-    const { className, marginBottom, mb, mt, sticky, children } = this.props;
+    const { className, marginBottom, mb, mt, children } = this.props;
     return (
       <div
-        ref="toolbar"
-        id="workflows-toolbar"
         className={`${className} ${(marginBottom || mb) &&
-          'margin-bottom'} ${mt && 'margin-top'} toolbar ${
-          sticky ? 'sticky' : ''
-        }`}
+          'margin-bottom'} ${mt && 'margin-top'} toolbar`}
         role="toolbar"
+        style={{
+          flex: '0 1 auto',
+        }}
       >
         {children}
       </div>

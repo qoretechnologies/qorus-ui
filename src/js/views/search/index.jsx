@@ -11,7 +11,6 @@ import compose from 'recompose/compose';
 import titleManager from '../../hocomponents/TitleManager';
 import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
-import Dropdown, { Item, Control } from '../../components/dropdown';
 import {
   Controls as ButtonGroup,
   Control as Button,
@@ -21,6 +20,7 @@ import actions from '../../store/api/actions';
 import queryControl from '../../hocomponents/queryControl';
 import { connect } from 'react-redux';
 import HistoryModal from './modals/history';
+import Flex from '../../components/Flex';
 
 type Props = {
   location: Object,
@@ -37,7 +37,7 @@ const Search: Function = ({
   onSaveClick,
   onHistoryClick,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb>Search</Crumb>
@@ -60,7 +60,6 @@ const Search: Function = ({
         </ButtonGroup>
       </Pull>
     </Headbar>
-
     <SimpleTabs activeTab={tabQuery}>
       <SimpleTab name="orders">
         <Orders location={location} />
@@ -69,7 +68,7 @@ const Search: Function = ({
         <Errors location={location} />
       </SimpleTab>
     </SimpleTabs>
-  </div>
+  </Flex>
 );
 
 export default compose(

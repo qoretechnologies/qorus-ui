@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
+import Flex from '../Flex';
 
 type Props = {
   noPadding: boolean,
@@ -10,6 +11,9 @@ type Props = {
   column: number,
   style?: Object,
   width: string | number,
+  scrollX?: boolean,
+  scrollY?: boolean,
+  fill?: boolean,
 };
 
 const Box: Function = ({
@@ -19,6 +23,9 @@ const Box: Function = ({
   column,
   noTransition,
   style,
+  scrollX,
+  scrollY,
+  fill,
   width: width = 'initial',
 }: Props): React.Element<any> =>
   noTransition ? (
@@ -28,14 +35,19 @@ const Box: Function = ({
         padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
         width: column ? `${100 / column - 0.3 * column}%` : width,
+        overflowX: scrollX ? 'auto' : 'initial',
+        overflowY: scrollY ? 'auto' : 'initial',
         ...style,
       }}
     >
       {children}
     </div>
   ) : (
-    <div
+    <Flex
       className="white-box"
+      flex={fill ? '1 1 auto' : '0 1 auto'}
+      scrollX={scrollX}
+      scrollY={scrollY}
       style={{
         padding: noPadding ? 0 : null,
         marginTop: top ? 0 : null,
@@ -44,7 +56,7 @@ const Box: Function = ({
       }}
     >
       {children}
-    </div>
+    </Flex>
   );
 
 export default pure(['noPadding', 'children', 'top'])(Box);

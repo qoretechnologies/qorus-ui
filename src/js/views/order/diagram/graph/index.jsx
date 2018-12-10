@@ -8,6 +8,7 @@ import { pureRender } from '../../../../components/utils';
 import { groupInstances } from '../../../../helpers/orders';
 import { graph } from '../../../../lib/graph';
 import { COLORS } from '../../../../constants/ui';
+import Flex from '../../../../components/Flex';
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -970,6 +971,17 @@ export default class StepsTab extends Component {
     );
   }
 
+  handleDiagramRef = el => {
+    if (el) {
+      const copy = el;
+      copy.scrollLeft = el.scrollWidth;
+      const diff = (el.scrollWidth - el.scrollLeft) / 2;
+      const middle = el.scrollWidth / 2 - diff;
+
+      copy.scrollLeft = middle;
+    }
+  };
+
   /**
    * Returns element for this component.
    *
@@ -984,38 +996,41 @@ export default class StepsTab extends Component {
       (this.getBoxWidth() + BOX_MARGIN);
 
     return (
-      <div
-        ref={this.wrapperRef}
-        className="diagram-inner"
-        style={{
-          margin: '0 auto',
-          width: diaWidth,
-        }}
-      >
-        {tooltip && (
-          <div
-            className="svg-tooltip"
-            style={{
-              width,
-              left,
-              top: top + height + 10,
-            }}
-          >
-            <div className="svg-tooltip-arrow" />
-            <p>
-              <span> Description: </span> {tooltip}
-            </p>
-          </div>
-        )}
-        <svg
-          viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
-          className="diagram"
+      <Flex scrollX scrollY flexRef={this.handleDiagramRef}>
+        <div
+          ref={this.wrapperRef}
+          className="diagram-inner"
+          style={{
+            margin: '0 auto',
+            width: diaWidth,
+          }}
         >
-          <defs>{this.renderMasks()}</defs>
-          {this.renderPaths()}
-          {this.renderBoxes()}
-        </svg>
-      </div>
+          {tooltip && (
+            <div
+              className="svg-tooltip"
+              style={{
+                width,
+                left,
+                top: top + height + 10,
+              }}
+            >
+              <div className="svg-tooltip-arrow" />
+              <p>
+                <span> Description: </span> {tooltip}
+              </p>
+            </div>
+          )}
+          <h4>{this.props.workflow.normalizedName}</h4>
+          <svg
+            viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
+            className="diagram"
+          >
+            <defs>{this.renderMasks()}</defs>
+            {this.renderPaths()}
+            {this.renderBoxes()}
+          </svg>
+        </div>
+      </Flex>
     );
   }
 }

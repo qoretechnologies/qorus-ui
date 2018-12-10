@@ -18,9 +18,12 @@ const alertSelector = (state, props) => {
   );
 };
 
-const viewSelector = createSelector([alertSelector], alert => ({
-  alert,
-}));
+const viewSelector = createSelector(
+  [alertSelector],
+  alert => ({
+    alert,
+  })
+);
 
 type Props = {
   alert: Object,
@@ -43,24 +46,20 @@ const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
       onResize={onResize}
       title="Alert detail"
     >
-      <Box top>
-        <Container fill>
-          {alert.type !== 'RBAC' &&
-            !(alert.type === 'GROUP' && alert.id < 1) && (
-              <p>
-                Related object:{' '}
-                <Link
-                  className="alert-pane-object"
-                  to={getAlertObjectLink(alert.type, alert)}
-                >
-                  {alert.version &&
-                    `${alert.name} v${alert.version} (${alert.id})`}
-                  {!alert.version && `${alert.name}`}
-                </Link>
-              </p>
-            )}
-          <InfoTable object={alert} omit={['object', '_updated']} />
-        </Container>
+      <Box top fill>
+        {alert.type !== 'RBAC' && !(alert.type === 'GROUP' && alert.id < 1) && (
+          <p>
+            Related object:{' '}
+            <Link
+              className="alert-pane-object"
+              to={getAlertObjectLink(alert.type, alert)}
+            >
+              {alert.version && `${alert.name} v${alert.version} (${alert.id})`}
+              {!alert.version && `${alert.name}`}
+            </Link>
+          </p>
+        )}
+        <InfoTable object={alert} omit={['object', '_updated']} />
       </Box>
     </Pane>
   );

@@ -20,6 +20,7 @@ import Toolbar from '../../components/toolbar';
 import titleManager from '../../hocomponents/TitleManager';
 import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
+import Flex from '../../components/Flex';
 
 const filterCollection: Function = (
   query: string,
@@ -92,7 +93,7 @@ const LibraryView: Function = ({
   classes,
   constants,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active>Library</Crumb>
@@ -113,7 +114,7 @@ const LibraryView: Function = ({
         location={location}
       />
     </Box>
-  </div>
+  </Flex>
 );
 
 export default compose(

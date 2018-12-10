@@ -20,6 +20,7 @@ import Search from '../../../containers/search';
 import { resourceSelector } from '../../../selectors';
 import { CONN_MAP } from '../../../constants/remotes';
 import mapProps from 'recompose/mapProps';
+import Flex from '../../../components/Flex';
 
 type Props = {
   tabQuery?: string,
@@ -43,7 +44,7 @@ const Connections: Function = ({
   users,
   perms,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb> Connections </Crumb>
@@ -92,7 +93,7 @@ const Connections: Function = ({
         </SimpleTab>
       </SimpleTabs>
     </Box>
-  </div>
+  </Flex>
 );
 
 const viewSelector: Function = createSelector(

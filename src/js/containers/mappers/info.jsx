@@ -15,76 +15,73 @@ import Author from '../../components/author';
 import Tabs, { Pane } from '../../components/tabs';
 import InfoTable from '../../components/info_table';
 import Releases from '../releases';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';
 import Box from '../../components/box';
 import Headbar from '../../components/Headbar';
+import Flex from '../../components/Flex';
+import withTabs from '../../hocomponents/withTabs';
+import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 
 const MapperInfo = ({
   mapper,
   location,
+  tabQuery,
 }: {
   mapper: Object,
   onBackClick: Function,
   location: Object,
+  tabQuery: string,
 }) => {
   if (!mapper) return <Loader />;
 
   return (
-    <div>
+    <Flex>
       <Headbar>
         <Breadcrumbs>
           <Crumb>Mappers</Crumb>
-          <Crumb active>
-            {mapper.name} v{mapper.version}
+          <Crumb>
+            {mapper.name} v{mapper.version} ({mapper.mapperid})
           </Crumb>
+          <CrumbTabs tabs={['Diagram', 'Releases', 'Info']} />
         </Breadcrumbs>
       </Headbar>
-      <Box top>
-        <Tabs active="diagram">
-          <Pane name="Diagram">
-            <div className="view-content">
+      <Box top fill>
+        <SimpleTabs activeTab={tabQuery}>
+          <SimpleTab name="diagram">
+            <Flex scrollY>
               {!mapper.valid && (
-                <div className="mapper-error-msg">
-                  <h5>
-                    Warning: This mapper contains an error and might not be
-                    rendered correctly
-                  </h5>
-                  <Alert bsStyle="danger">{mapper.error}</Alert>
-                </div>
+                <Alert
+                  bsStyle="danger"
+                  title="Warning: This mapper contains an error and might not be
+                    rendered correctly"
+                >
+                  {mapper.error}
+                </Alert>
               )}
               <MapperDiagram mapper={mapper} />
-            </div>
-          </Pane>
-          <Pane name="Info">
-            <p className="mapper-subtitle">{mapper.desc}</p>
+            </Flex>
+          </SimpleTab>
+          <SimpleTab name="info">
             <Author model={mapper} />
-            <p className="mapper-desc">
-              <span> Type </span>: {mapper.type}
-            </p>
-
-            <p className="mapper-desc">
-              <span> Options </span>:
-            </p>
-            <div className="row mapper-opts">
-              <div className="col-lg-4">
-                <InfoTable
-                  object={mapper.opts}
-                  omit={['input', 'output', 'name']}
-                />
-              </div>
-            </div>
-          </Pane>
-          <Pane name="Releases">
+            <InfoTable
+              object={{
+                type: mapper.type,
+                description: mapper.desc,
+                options: mapper.opts,
+              }}
+            />
+          </SimpleTab>
+          <SimpleTab name="releases">
             <Releases
               component={mapper.name}
               location={location}
               key={mapper.name}
               compact
             />
-          </Pane>
-        </Tabs>
+          </SimpleTab>
+        </SimpleTabs>
       </Box>
-    </div>
+    </Flex>
   );
 };
 
@@ -122,5 +119,6 @@ export default compose(
 
       history.go(-1);
     },
-  })
+  }),
+  withTabs('diagram')
 )(MapperInfo);

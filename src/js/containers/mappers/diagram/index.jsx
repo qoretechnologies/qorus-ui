@@ -13,6 +13,7 @@ import Tooltip from './tooltip';
 import Connection from './connection';
 import modal from '../../../hocomponents/modal';
 import DetailModal from './modals/DetailModal';
+import Flex from '../../../components/Flex';
 
 const getRelations = (fieldSource: Object, inputs: Object): Array<Object> =>
   Object.entries(fieldSource)
@@ -117,7 +118,7 @@ export const Diagramm = ({
   tooltip: ?Object,
   toggleTooltip: Function,
 }): React.Element<any> => (
-  <div className="mapper-wrapper">
+  <Flex className="mapper-wrapper" scrollY>
     <Tooltip data={tooltip} />
     <div id={id} className="svg-diagram">
       <svg
@@ -278,7 +279,7 @@ export const Diagramm = ({
         ))}
       </svg>
     </div>
-  </div>
+  </Flex>
 );
 
 const SVG_WIDTH = 720;

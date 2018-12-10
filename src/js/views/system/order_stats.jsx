@@ -1,28 +1,26 @@
 // @flow
 import React from 'react';
 
-import StatsView from '../../views/workflows/detail/stats';
 import { connect } from 'react-redux';
-import NoDataIf from '../../components/NoDataIf';
+import OrderStats from '../../components/OrderStats';
 import Box from '../../components/box';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Headbar from '../../components/Headbar';
+import Flex from '../../components/Flex';
 
-const OrderStats = ({ orderStats }: Object): any => (
-  <div>
+const OrderStatsView = ({ orderStats }: Object): any => (
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active> Global order stats</Crumb>
       </Breadcrumbs>
     </Headbar>
-    <Box top>
-      <NoDataIf condition={!orderStats}>
-        {() => <StatsView orderStats={orderStats} />}
-      </NoDataIf>
+    <Box top scrollY>
+      <OrderStats orderStats={orderStats} />
     </Box>
-  </div>
+  </Flex>
 );
 
 export default connect((state: Object) => ({
   orderStats: state.api.system.data.order_stats,
-}))(OrderStats);
+}))(OrderStatsView);

@@ -10,6 +10,8 @@ import ServicesControls from '../../controls';
 import ProcessSummary from '../../../../components/ProcessSummary';
 import InfoHeader from '../../../../components/InfoHeader';
 import Container from '../../../../components/container';
+import Flex from '../../../../components/Flex';
+import Box from '../../../../components/box';
 
 @connect(
   () => ({}),
@@ -34,9 +36,9 @@ export default class DetailTab extends Component {
     const { service } = this.props;
 
     return (
-      <div>
+      <Box top fill>
         <InfoHeader model={service} />
-        <Container fill>
+        <Flex scrollY>
           <PaneItem title="Controls">
             <ServicesControls
               status={service.status}
@@ -66,8 +68,8 @@ export default class DetailTab extends Component {
             onSet={::this.setOption}
             onDelete={::this.deleteOption}
           />
-        </Container>
-      </div>
+        </Flex>
+      </Box>
     );
   }
 }

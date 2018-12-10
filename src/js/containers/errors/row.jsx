@@ -32,7 +32,7 @@ const ErrorsRow: Function = ({
   };
 
   return (
-    <Tr first={first}>
+    <Tr first={first} observeElement={first && '.pane'}>
       <Td className="name">
         <p>{data.error}</p>
       </Td>

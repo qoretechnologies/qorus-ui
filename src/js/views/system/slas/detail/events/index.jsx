@@ -9,6 +9,7 @@ import queryControl from '../../../../../hocomponents/queryControl';
 import { DATE_FORMATS } from '../../../../../constants/dates';
 import EventsToolbar from './toolbar';
 import EventsView from './view';
+import Flex from '../../../../../components/Flex';
 
 type Props = {
   location: Object,
@@ -31,10 +32,10 @@ type Props = {
 };
 
 const SLAEvents: Function = ({ ...rest }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <EventsToolbar {...rest} />
     <EventsView {...rest} />
-  </div>
+  </Flex>
 );
 
 export default compose(

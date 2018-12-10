@@ -15,6 +15,7 @@ import withTabs from '../../../hocomponents/withTabs';
 import Pull from '../../../components/Pull';
 import queryControl from '../../../hocomponents/queryControl';
 import { connect } from 'react-redux';
+import Flex from '../../../components/Flex';
 
 type Props = {
   tabQuery: string,
@@ -35,7 +36,7 @@ const RBAC: Function = ({
   roles,
   perms,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb>RBAC</Crumb>
@@ -68,7 +69,7 @@ const RBAC: Function = ({
         </SimpleTab>
       </SimpleTabs>
     </Box>
-  </div>
+  </Flex>
 );
 
 export default compose(

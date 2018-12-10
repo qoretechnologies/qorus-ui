@@ -1,10 +1,14 @@
 import React from 'react';
-import compose from 'recompose/compose';
+import { functionOrStringExp } from '../helpers/functions';
 
-const withMutationObserver: Function = (element: string): Function => (
-  Component: React.Element<any>
-): React.Element<any> => {
+const withMutationObserver: Function = (
+  element: string | Function
+): Function => (Component: React.Element<any>): React.Element<any> => {
   class WrappedComponent extends React.Component {
+    props: {
+      first?: boolean,
+    };
+
     state: {
       lastChange?: string,
     } = {
@@ -29,21 +33,26 @@ const withMutationObserver: Function = (element: string): Function => (
 
     handleObserverInit: Function = props => {
       this.handleObserverDisconnect();
+      const domElement: any = functionOrStringExp(element, props);
 
-      if (props.first) {
-        this._observer = new MutationObserver(
-          (mutations: Array<Object>): void => {
-            mutations.forEach(
-              (): void => {
-                this.setState({ lastChange: new Date() });
-              }
-            );
-          }
-        );
+      if (props.first && domElement) {
+        const el = document.querySelector(domElement);
 
-        this._observer.observe(document.querySelector(element), {
-          attributes: true,
-        });
+        if (el && el.length) {
+          this._observer = new MutationObserver(
+            (mutations: Array<Object>): void => {
+              mutations.forEach(
+                (): void => {
+                  this.setState({ lastChange: new Date() });
+                }
+              );
+            }
+          );
+
+          this._observer.observe(document.querySelector(domElement), {
+            attributes: true,
+          });
+        }
       }
     };
 

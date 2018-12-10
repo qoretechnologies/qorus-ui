@@ -7,19 +7,17 @@ import DetailPane from 'components/pane';
 import Box from 'components/box';
 import { DetailTab, MethodsTab, ResourceTab } from './tabs';
 import Code from '../../../components/code';
-// ! Why workflows
-// TODO: Change the log tab to container?
-import LogTab from '../../workflows/detail/log_tab';
 import MappersTable from '../../../containers/mappers';
 import Valuemaps from '../../../containers/valuemaps';
+import LogContainer from '../../../containers/log';
 import Releases from '../../../containers/releases';
 import actions from 'store/api/actions';
 import titleManager from '../../../hocomponents/TitleManager';
 import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
-import Container from '../../../components/container';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import { countArrayItemsInObject } from '../../../utils';
+import InfoTable from '../../../components/info_table';
 
 @connect(
   (state, props) => ({
@@ -99,18 +97,6 @@ export default class ServicesDetail extends Component {
     }
   }
 
-  handlePaneClose = () => {
-    this.props.onClose(['logQuery']);
-  };
-
-  getHeight: Function = (): number => {
-    const { top } = document
-      .querySelector('.pane__content .container-resizable')
-      .getBoundingClientRect();
-
-    return window.innerHeight - top - 60;
-  };
-
   render() {
     const { service, paneTab, systemOptions, methods } = this.props;
     const loaded: boolean = service && 'author' in service;
@@ -124,7 +110,7 @@ export default class ServicesDetail extends Component {
     return (
       <DetailPane
         width={this.props.width || 600}
-        onClose={this.handlePaneClose}
+        onClose={this.props.onClose}
         onResize={this.props.onResize}
         title={`Service ${service.id}`}
         tabs={{
@@ -141,76 +127,74 @@ export default class ServicesDetail extends Component {
               title: 'Config',
               suffix: `(${countArrayItemsInObject(configItems)})`,
             },
+            'Info',
           ],
           queryIdentifier: 'paneTab',
         }}
       >
-        <Box top>
-          <SimpleTabs activeTab={paneTab}>
-            <SimpleTab name="detail">
-              <DetailTab
-                key={service.name}
-                service={service}
-                systemOptions={systemOptions}
+        <SimpleTabs activeTab={paneTab}>
+          <SimpleTab name="detail">
+            <DetailTab
+              key={service.name}
+              service={service}
+              systemOptions={systemOptions}
+            />
+          </SimpleTab>
+          <SimpleTab name="code">
+            <Box top fill>
+              <Code data={this.props.data} location={this.props.location} />
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="methods">
+            <MethodsTab service={service} methods={this.props.methods} />
+          </SimpleTab>
+          <SimpleTab name="log">
+            <Box top fill>
+              <LogContainer
+                resource={`services/${service.id}`}
+                location={this.props.location}
               />
-            </SimpleTab>
-            <SimpleTab name="code">
-              <Container fill>
-                <Code
-                  data={this.props.data}
-                  heightUpdater={this.getHeight}
-                  location={this.props.location}
-                />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="methods">
-              <Container fill>
-                <MethodsTab service={service} methods={this.props.methods} />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="log">
-              <Container fill>
-                <LogTab
-                  resource={`services/${service.id}`}
-                  location={this.props.location}
-                />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="mappers">
-              <Container fill>
-                <MappersTable mappers={service.mappers} />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="value maps">
-              <Container fill>
-                <Valuemaps vmaps={service.vmaps} />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="resources">
-              <Container fill>
-                <ResourceTab
-                  resources={service.resources}
-                  resourceFiles={service.resource_files}
-                />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="releases">
-              <Container fill>
-                <Releases
-                  component={service.name}
-                  compact
-                  key={service.name}
-                  location={this.props.location}
-                />
-              </Container>
-            </SimpleTab>
-            <SimpleTab name="config">
-              <Container fill>
-                <ConfigItemsTable items={configItems} intrf="services" />
-              </Container>
-            </SimpleTab>
-          </SimpleTabs>
-        </Box>
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="mappers">
+            <Box top fill noPadding>
+              <MappersTable mappers={service.mappers} />
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="value maps">
+            <Box top fill noPadding>
+              <Valuemaps vmaps={service.vmaps} />
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="resources">
+            <Box top fill>
+              <ResourceTab
+                resources={service.resources}
+                resourceFiles={service.resource_files}
+              />
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="releases">
+            <Box top fill>
+              <Releases
+                component={service.name}
+                compact
+                key={service.name}
+                location={this.props.location}
+              />
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="config">
+            <Box top fill scrollY>
+              <ConfigItemsTable items={configItems} intrf="services" />
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="info">
+            <Box top fill>
+              <InfoTable object={service} />
+            </Box>
+          </SimpleTab>
+        </SimpleTabs>
       </DetailPane>
     );
   }

@@ -15,6 +15,7 @@ import titleManager from '../../../hocomponents/TitleManager';
 import Container from '../../../components/container';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
+import Flex from '../../../components/Flex';
 
 type Props = {
   nodes: Object,
@@ -33,7 +34,7 @@ const ClusterView: Function = ({
   closePane,
   paneId,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active> Cluster </Crumb>
@@ -49,35 +50,33 @@ const ClusterView: Function = ({
       </Pull>
     </Headbar>
 
-    <Box top>
-      <Container>
-        {Object.keys(nodes).map(
-          (node: string): any => {
-            const list: Array<Object> = Object.keys(processes).reduce(
-              (cur, process: string) => {
-                const obj = { ...processes[process], id: process };
+    <Box top scrollY>
+      {Object.keys(nodes).map(
+        (node: string): any => {
+          const list: Array<Object> = Object.keys(processes).reduce(
+            (cur, process: string) => {
+              const obj = { ...processes[process], id: process };
 
-                return [...cur, obj];
-              },
-              []
-            );
+              return [...cur, obj];
+            },
+            []
+          );
 
-            return (
-              <Node
-                openPane={openPane}
-                closePane={closePane}
-                paneId={paneId}
-                key={node}
-                node={node}
-                processes={list}
-                memory={nodes[node].node_priv}
-              />
-            );
-          }
-        )}
-      </Container>
+          return (
+            <Node
+              openPane={openPane}
+              closePane={closePane}
+              paneId={paneId}
+              key={node}
+              node={node}
+              processes={list}
+              memory={nodes[node].node_priv}
+            />
+          );
+        }
+      )}
     </Box>
-  </div>
+  </Flex>
 );
 
 export default compose(

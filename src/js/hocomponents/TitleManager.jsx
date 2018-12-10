@@ -11,9 +11,23 @@ export default (
     _baseTitle: string = '| Qorus Integration Engine';
 
     componentDidMount() {
+      this.changeTitle(this.props);
+    }
+
+    componentWillReceiveProps(nextProps): void {
+      this.changeTitle(nextProps);
+    }
+
+    componentWillUnmount() {
+      if (prevTitle) {
+        document.title = `${prevTitle} ${this._baseTitle}`;
+      }
+    }
+
+    changeTitle: Function = (props: Object): void => {
       let changedTitle: ?string;
       const newTitleSel =
-        typeof newTitle === 'function' ? newTitle(this.props) : newTitle;
+        typeof newTitle === 'function' ? newTitle(props) : newTitle;
 
       if (position) {
         if (position === 'suffix') {
@@ -26,13 +40,7 @@ export default (
       }
 
       document.title = `${changedTitle} ${this._baseTitle}`;
-    }
-
-    componentWillUnmount() {
-      if (prevTitle) {
-        document.title = `${prevTitle} ${this._baseTitle}`;
-      }
-    }
+    };
 
     render() {
       return <Component {...this.props} />;

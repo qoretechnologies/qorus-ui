@@ -8,6 +8,7 @@ import Box from '../../../components/box';
 import Headbar from '../../../components/Headbar';
 import titleManager from '../../../hocomponents/TitleManager';
 import withTabs from '../../../hocomponents/withTabs';
+import Flex from '../../../components/Flex';
 
 type Props = {
   tabQuery: string,
@@ -15,7 +16,7 @@ type Props = {
 };
 
 const Log: Function = ({ tabQuery }: Props) => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb>Logs</Crumb>
@@ -41,7 +42,7 @@ const Log: Function = ({ tabQuery }: Props) => (
         </SimpleTab>
       </SimpleTabs>
     </Box>
-  </div>
+  </Flex>
 );
 
 export default compose(

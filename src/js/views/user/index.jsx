@@ -13,12 +13,12 @@ import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import PaneItem from '../../components/pane_item';
 import NoData from '../../components/nodata';
 import Tree from '../../components/tree';
-import Container from '../../components/container';
 import Alert from '../../components/alert';
 import { normalizeName } from '../../components/utils';
 import Pull from '../../components/Pull';
 import withTabs from '../../hocomponents/withTabs';
 import UserSettings from './tabs/settings';
+import Flex from '../../components/Flex';
 
 const interfaces: Array<string> = [
   'roles',
@@ -48,7 +48,7 @@ const UserView: Function = ({
   clearStorage: Function,
   tabQuery: string,
 }) => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb>
@@ -65,50 +65,49 @@ const UserView: Function = ({
         />
       </Pull>
     </Headbar>
-    <Box top>
-      <Container>
-        <SimpleTabs activeTab={tabQuery}>
-          <SimpleTab name="overview">
-            {interfaces.map((intrf: string) => (
-              <PaneItem title={capitalize(intrf)}>
-                {userData[intrf].length ? (
-                  userData[intrf]
-                    .map((datum: string | Object) => {
-                      if (typeof datum === 'string') {
-                        return datum;
-                      }
 
-                      return normalizeName(datum, interfaceIds[intrf]);
-                    })
-                    .map(
-                      (datum: string): React.Element<Tag> => (
-                        <span>
-                          <Tag className="tag-with-margin">{datum}</Tag>{' '}
-                        </span>
-                      )
+    <SimpleTabs activeTab={tabQuery}>
+      <SimpleTab name="overview">
+        <Box fill top scrollY>
+          {interfaces.map((intrf: string) => (
+            <PaneItem title={capitalize(intrf)}>
+              {userData[intrf].length ? (
+                userData[intrf]
+                  .map((datum: string | Object) => {
+                    if (typeof datum === 'string') {
+                      return datum;
+                    }
+
+                    return normalizeName(datum, interfaceIds[intrf]);
+                  })
+                  .map(
+                    (datum: string): React.Element<Tag> => (
+                      <span>
+                        <Tag className="tag-with-margin">{datum}</Tag>{' '}
+                      </span>
                     )
-                ) : userData.has_default ? (
-                  <Alert bsStyle="warning" iconName="info-sign">
-                    {' '}
-                    Member of DEFAULT group with no restrictions; all interfaces
-                    are accessible
-                  </Alert>
-                ) : (
-                  <NoData />
-                )}
-              </PaneItem>
-            ))}
-            <PaneItem title="Storage data">
-              <Tree data={userData.storage} />
+                  )
+              ) : userData.has_default ? (
+                <Alert bsStyle="warning" iconName="info-sign">
+                  {' '}
+                  Member of DEFAULT group with no restrictions; all interfaces
+                  are accessible
+                </Alert>
+              ) : (
+                <NoData />
+              )}
             </PaneItem>
-          </SimpleTab>
-          <SimpleTab name="settings">
-            <UserSettings {...userData.storage.settings} />
-          </SimpleTab>
-        </SimpleTabs>
-      </Container>
-    </Box>
-  </div>
+          ))}
+          <PaneItem title="Storage data">
+            <Tree data={userData.storage} />
+          </PaneItem>
+        </Box>
+      </SimpleTab>
+      <SimpleTab name="settings">
+        <UserSettings {...userData.storage.settings} />
+      </SimpleTab>
+    </SimpleTabs>
+  </Flex>
 );
 
 export default compose(

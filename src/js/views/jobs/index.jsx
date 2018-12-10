@@ -18,7 +18,7 @@ import actions from '../../store/api/actions';
 import { DATES } from '../../constants/dates';
 import { formatDate } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
-import JobsDetail from './detail';
+import JobsDetail from './pane';
 import JobsTable from './table';
 import Box from '../../components/box';
 import { sortDefaults } from '../../constants/sort';
@@ -31,6 +31,7 @@ import queryControl from '../../hocomponents/queryControl';
 import Pull from '../../components/Pull';
 import CsvControl from '../../components/CsvControl';
 import Search from '../../containers/search';
+import Flex from '../../components/Flex';
 
 type Props = {
   jobs: Array<Object>,
@@ -80,7 +81,7 @@ const JobsView: Function = ({
   searchQuery,
   changeSearchQuery,
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active>Jobs</Crumb>
@@ -112,7 +113,7 @@ const JobsView: Function = ({
         selectedIds={selectedIds}
       />
     </Box>
-  </div>
+  </Flex>
 );
 
 const filterSearch: Function = (search: string): Function => (

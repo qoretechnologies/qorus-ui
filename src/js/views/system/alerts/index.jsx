@@ -18,11 +18,14 @@ import Search from '../../../containers/search';
 import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import sync from '../../../hocomponents/sync';
 import actions from '../../../store/api/actions';
+import Flex from '../../../components/Flex';
 
 type Props = {
   location: Object,
   tabQuery: string,
   handleTabChange: Function,
+  ongoingAlerts: Array<Object>,
+  transientAlerts: Array<Object>,
 };
 
 const Alerts: Function = ({
@@ -32,7 +35,7 @@ const Alerts: Function = ({
   transientAlerts,
   ...rest
 }: Props): React.Element<any> => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb> Alerts </Crumb>
@@ -72,7 +75,7 @@ const Alerts: Function = ({
         </SimpleTab>
       </SimpleTabs>
     </Box>
-  </div>
+  </Flex>
 );
 
 const filterCollection: Function = (type: string): Function => (

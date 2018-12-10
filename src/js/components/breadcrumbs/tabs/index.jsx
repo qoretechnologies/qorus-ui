@@ -15,7 +15,9 @@ import mapProps from 'recompose/mapProps';
 type Props = {
   tabs: Array<any>,
   handleTabChange: Function,
+  onChange?: Function,
   tabQuery?: string,
+  activeTab?: string,
   compact?: boolean,
   queryIdentifier?: string,
   parentRef: HTMLDivElement,
@@ -66,9 +68,26 @@ class CrumbTabs extends React.Component {
         }
       });
 
+      let tabsLen: number = 0;
+      const spaceWidth: number = parentWidth - childrenWidth;
+      let tabsWidth: number = 0;
+      let collapsed: boolean = false;
+
+      this.props.tabs.forEach(
+        (tab: any): void => {
+          const strLen: number = tab.title.length;
+          if (strLen * 10.5 + tabsWidth < spaceWidth) {
+            tabsLen = tabsLen + 1;
+            tabsWidth = tabsWidth + strLen * 10.5;
+          } else {
+            collapsed = true;
+          }
+        }
+      );
+
       this.setState(() => ({
         showTabs: true,
-        tabsLen: Math.floor((parentWidth - childrenWidth) / 117),
+        tabsLen: collapsed ? tabsLen - 1 : tabsLen,
       }));
     }
   };
@@ -76,7 +95,7 @@ class CrumbTabs extends React.Component {
   render() {
     const { tabs, handleTabChange, tabQuery }: Props = this.props;
     const { tabsLen, showTabs } = this.state;
-    const tabsCollapsed = tabs.length > tabsLen;
+    const tabsCollapsed: boolean = tabs.length > tabsLen;
 
     let newTabs: Array<any> = tabs;
     let leftoverTabs: Array<any> = [];
@@ -110,6 +129,7 @@ class CrumbTabs extends React.Component {
               position={Position.BOTTOM}
               useSmartPositioning
               useSmartArrowPositioning
+              key="crumbtabs-popover"
               content={
                 <Menu>
                   {leftoverTabs
@@ -162,6 +182,20 @@ export default compose(
   withTabs(
     ({ defaultTab, tabs }) => defaultTab || tabs[0].tabId.toLowerCase(),
     ({ queryIdentifier }) => queryIdentifier || 'tab'
+  ),
+  mapProps(
+    ({
+      local,
+      tabQuery,
+      handleTabChange,
+      activeTab,
+      onChange,
+      ...rest
+    }: Props): Props => ({
+      tabQuery: local ? activeTab : tabQuery,
+      handleTabChange: local ? onChange : handleTabChange,
+      ...rest,
+    })
   ),
   onlyUpdateForKeys(['tabQuery', 'tabs', 'parentRef'])
 )(CrumbTabs);

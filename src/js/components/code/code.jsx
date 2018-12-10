@@ -6,6 +6,8 @@ import SourceCode from '../../components/source_code';
 import Loader from '../../components/loader';
 
 import CodeAreaTitle from './title';
+import Flex from '../Flex';
+import InfoHeader from '../InfoHeader';
 
 type Props = {
   selected: Object,
@@ -54,9 +56,9 @@ class CodeTab extends React.Component {
     const { height } = this.state;
 
     return (
-      <div>
+      <Flex>
         {selected.item ? (
-          <CodeAreaTitle item={selected.item} />
+          <InfoHeader model={selected.item} />
         ) : (
           <h5>{selected.name}</h5>
         )}
@@ -67,7 +69,7 @@ class CodeTab extends React.Component {
             {selected.code}
           </SourceCode>
         )}
-      </div>
+      </Flex>
     );
   }
 }

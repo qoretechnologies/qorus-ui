@@ -4,13 +4,10 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 import { Tr, Td } from '../../../components/new_table';
 import Text from '../../../components/text';
 import Date from '../../../components/date';
-import Icon from '../../../components/icon';
-import DetailButton from '../../../components/detail_button';
 import { getAlertObjectLink } from '../../../helpers/system';
 import actions from '../../../store/api/actions';
 import NameColumn from '../../../components/NameColumn';

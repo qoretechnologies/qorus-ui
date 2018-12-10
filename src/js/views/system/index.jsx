@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Nav, { NavLink } from '../../components/navlink';
 import Alerts from './alerts';
 import Dashboard from './dashboard';
 import Options from './options';
@@ -17,6 +16,7 @@ import Releases from '../../containers/releases';
 import Slas from './slas';
 import Cluster from './cluster';
 import OrderStats from './order_stats';
+import Flex from '../../components/Flex';
 
 type Props = {
   location: Object,
@@ -27,13 +27,11 @@ const System: Function = ({
   location,
   children,
 }: Props): React.Element<any> => (
-  <div>
-    <div>
-      {React.Children.map(children, (child: React.Element<any>) =>
-        React.cloneElement(child, { location })
-      )}
-    </div>
-  </div>
+  <Flex>
+    {React.Children.map(children, (child: React.Element<any>) =>
+      React.cloneElement(child, { location })
+    )}
+  </Flex>
 );
 
 System.Dashboard = Dashboard;

@@ -15,9 +15,10 @@ import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import titleManager from '../../hocomponents/TitleManager';
 import NoDataIf from '../../components/NoDataIf';
 import Headbar from '../../components/Headbar';
+import Flex from '../../components/Flex';
 
 const Extensions = ({ extensions }: { extensions: Object }) => (
-  <div>
+  <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb active>Extensions</Crumb>
@@ -37,7 +38,7 @@ const Extensions = ({ extensions }: { extensions: Object }) => (
         </Tabs>
       </NoDataIf>
     </Box>
-  </div>
+  </Flex>
 );
 
 const groupExtensions = mapProps(props => ({

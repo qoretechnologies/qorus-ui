@@ -11,6 +11,8 @@ import Pull from '../Pull';
 import withModal from '../../hocomponents/modal';
 import EditModal from './modal';
 import { Controls as ButtonGroup, Control as Button } from '../controls';
+import Toolbar from '../toolbar';
+import Flex from '../Flex';
 
 @withModal()
 export default class Tree extends Component {
@@ -184,7 +186,7 @@ export default class Tree extends Component {
                   top ? key : null,
                   level + 1
                 )
-              : data[key] && data[key].toString())}
+              : data[key].toString())}
         </div>
       );
     });
@@ -249,65 +251,65 @@ export default class Tree extends Component {
     const lineCount: number = this.getLineCount(textData);
 
     return (
-      <div className="tree-component">
-        <div className="row">
-          <div className="col-lg-12">
-            <Pull>
-              <ButtonGroup>
-                {this.isDeep() && [
-                  <Button
-                    iconName="expand-all"
-                    text="Expand all"
-                    onClick={this.handleExpandClick}
-                  />,
-                  allExpanded || size(items) > 0 ? (
-                    <Button
-                      iconName="collapse-all"
-                      text="Collapse all"
-                      onClick={this.handleCollapseClick}
-                    />
-                  ) : null,
-                ]}
+      <Flex>
+        <Toolbar mb>
+          <Pull>
+            <ButtonGroup>
+              {this.isDeep() && [
                 <Button
-                  iconName="code"
-                  text="Show types"
-                  btnStyle={showTypes && 'primary'}
-                  onClick={this.handleTypesClick}
+                  iconName="expand-all"
+                  text="Expand all"
+                  onClick={this.handleExpandClick}
+                  key="expand-button"
+                />,
+                allExpanded || size(items) > 0 ? (
+                  <Button
+                    iconName="collapse-all"
+                    text="Collapse all"
+                    onClick={this.handleCollapseClick}
+                    key="collapse-button"
+                  />
+                ) : null,
+              ]}
+              <Button
+                iconName="code"
+                text="Show types"
+                btnStyle={showTypes && 'primary'}
+                onClick={this.handleTypesClick}
+              />
+            </ButtonGroup>
+          </Pull>
+          {!this.props.noControls && (
+            <div className="pull-right">
+              <ButtonGroup>
+                <Button
+                  text="Tree view"
+                  btnStyle={mode === 'normal' && 'primary'}
+                  onClick={this.handleTreeClick}
+                  iconName="diagram-tree"
                 />
+                <Button
+                  text="Copy view"
+                  btnStyle={mode === 'copy' && 'primary'}
+                  onClick={this.handleCopyClick}
+                  iconName="clipboard"
+                />
+                {withEdit && (
+                  <Button
+                    text="Edit mode"
+                    btnStyle={mode === 'edit' && 'primary'}
+                    onClick={this.handleEditClick}
+                    iconName="edit"
+                  />
+                )}
               </ButtonGroup>
-            </Pull>
-            {!this.props.noControls && (
-              <div className="pull-right">
-                <ButtonGroup>
-                  <Button
-                    text="Tree view"
-                    btnStyle={mode === 'normal' && 'primary'}
-                    onClick={this.handleTreeClick}
-                    iconName="diagram-tree"
-                  />
-                  <Button
-                    text="Copy view"
-                    btnStyle={mode === 'copy' && 'primary'}
-                    onClick={this.handleCopyClick}
-                    iconName="clipboard"
-                  />
-                  {withEdit && (
-                    <Button
-                      text="Edit mode"
-                      btnStyle={mode === 'edit' && 'primary'}
-                      onClick={this.handleEditClick}
-                      iconName="edit"
-                    />
-                  )}
-                </ButtonGroup>
-              </div>
-            )}
-          </div>
-        </div>
+            </div>
+          )}
+        </Toolbar>
         {this.state.mode === 'normal' && (
-          <div className="tree-wrapper" ref="tree">
+          <Flex scrollY className="tree-wrapper">
             {this.renderTree(this.props.data, true)}
-          </div>
+          </Flex>
         )}
         {this.state.mode === 'copy' && (
           <textarea
@@ -343,7 +345,7 @@ export default class Tree extends Component {
             </ButtonGroup>
           </div>
         )}
-      </div>
+      </Flex>
     );
   }
 }
