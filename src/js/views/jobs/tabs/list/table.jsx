@@ -20,7 +20,7 @@ import LoadMore from '../../../../components/LoadMore';
 import CsvControl from '../../../../components/CsvControl';
 import DatePicker from '../../../../components/datepicker';
 import { Controls as ButtonGroup } from '../../../../components/controls';
-import Filters from '../../../workflow/tabs/list/toolbar/filters';
+import Filters from '../../../workflows/tabs/list/toolbar/filters';
 import { JOB_STATES } from '../../../../constants/jobs';
 import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 import InstancesBar from '../../../../components/instances_bar';

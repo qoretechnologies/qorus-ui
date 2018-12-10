@@ -23,7 +23,7 @@ import workflowsRoutes from './routes/workflows';
 import orderRoutes from './routes/order';
 import servicesRoutes from './routes/services';
 import jobsRoutes from './routes/jobs';
-import jobRoutes from './routes/job';
+import Job from './views/jobs/detail';
 import searchRoutes from './routes/search';
 import groupsRoutes from './routes/groups';
 import ErrorView from './error';
@@ -97,7 +97,7 @@ class AppInfo extends React.Component {
             {orderRoutes()}
             {servicesRoutes()}
             {jobsRoutes()}
-            {jobRoutes()}
+            <Route path="job/:id" component={Job} />
             {searchRoutes()}
             {groupsRoutes()}
             <Route path="ocmd" component={Ocmd} />

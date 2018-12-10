@@ -1,193 +1,163 @@
 /* @flow */
 import React from 'react';
-import { connect } from 'react-redux';
 import compose from 'recompose/compose';
-import lifecycle from 'recompose/lifecycle';
-import pure from 'recompose/pure';
-import withHandlers from 'recompose/withHandlers';
-import mapProps from 'recompose/mapProps';
+import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import size from 'lodash/size';
 
-import { DetailTab } from './tabs';
-import MappersTable from '../../../containers/mappers';
-import Valuemaps from '../../../containers/valuemaps';
-import Releases from '../../../containers/releases';
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
-import DetailPane from '../../../components/pane';
-import Box from '../../../components/box';
-import Code from '../../../components/code';
-import Loader from '../../../components/loader';
+import sync from '../../../hocomponents/sync';
+import patch from '../../../hocomponents/patchFuncArgs';
 import actions from '../../../store/api/actions';
-import LogTab from '../../workflows/detail/log_tab';
-import show from '../../../hocomponents/show-if-passed';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
+import Controls from '../controls';
+import withTabs from '../../../hocomponents/withTabs';
 import titleManager from '../../../hocomponents/TitleManager';
-import Container from '../../../components/container';
-import { NonIdealState } from '@blueprintjs/core';
-import InfoTable from '../../../components/info_table';
+import Headbar from '../../../components/Headbar';
+import Pull from '../../../components/Pull';
+import JobsDetailTabs from '../tabs';
+import { normalizeName } from '../../../components/utils';
+import queryControl from '../../../hocomponents/queryControl';
+import Search from '../../../containers/search';
+import mapProps from 'recompose/mapProps';
+import { DATES, DATE_FORMATS } from '../../../constants/dates';
+import { formatDate } from '../../../helpers/date';
+import {
+  resourceSelector,
+  querySelector,
+  paramSelector,
+} from '../../../selectors';
+import lifecycle from 'recompose/lifecycle';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import unsync from '../../../hocomponents/unsync';
+import Flex from '../../../components/Flex';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import ConfigItemsTable from '../../../components/ConfigItemsTable';
 import { countArrayItemsInObject } from '../../../utils';
 
-const Detail = ({
-  location,
-  paneTab,
-  onClose,
-  model,
-  getHeight,
-  lib,
-  width,
-  onResize,
-  isTablet,
-  configItems,
-}: {
+type Props = {
+  job: Object,
   location: Object,
-  paneTab: string,
-  model: Object,
-  onClose: Function,
-  paneId: string | number,
-  getHeight: Function,
+  children: ?Object,
+  tabQuery: string,
+  searchQuery?: string,
+  changeSearchQuery: Function,
+  date: string,
+  linkDate: string,
+  fetch: Function,
+  id: number,
+  fetchParams: Object,
   lib: Object,
-  width: number,
-  onResize: Function,
-  isTablet: boolean,
-  configItems: Array<Object>,
-}): React.Element<*> => (
-  <DetailPane
-    width={width || 600}
-    onResize={onResize}
-    onClose={onClose}
-    title={`Job ${model.id}`}
-    tabs={{
-      tabs: [
-        'Detail',
-        'Process',
-        { title: 'Mappers', suffix: `(${size(model.mappers)})` },
-        { title: 'Value maps', suffix: `(${size(model.vmaps)})` },
-        'Releases',
-        {
-          title: 'Config',
-          suffix: `(${countArrayItemsInObject(configItems)})`,
-        },
-        'Log',
-      ],
-      queryIdentifier: 'paneTab',
-    }}
-  >
-    <Box top>
-      <SimpleTabs activeTab={paneTab}>
-        <SimpleTab name="detail">
-          <DetailTab key={model.name} model={model} isTablet={isTablet} />
-        </SimpleTab>
-        <SimpleTab name="code">
-          <Container fill>
-            {model.code ? (
-              <Code
-                selected={{
-                  name: `code - ${lib.code[0].name}`,
-                  code: lib.code[0].body,
-                  item: {
-                    name: lib.code[0].name,
-                  },
-                }}
-                data={lib || {}}
-                heightUpdater={getHeight}
-                location={location}
-              />
-            ) : (
-              <Loader />
-            )}
-          </Container>
-        </SimpleTab>
+  configItems: Object,
+};
 
-        {model.process ? (
-          <SimpleTab name="process">
-            <Container fill>
-              <InfoTable
-                object={{
-                  ...model.process,
-                  ...{ memory: model.process.priv_str },
-                }}
-                omit={['priv', 'rss', 'vsz', 'priv_str']}
-              />
-            </Container>
-          </SimpleTab>
-        ) : (
-          <SimpleTab name="process">
-            <Container fill>
-              <NonIdealState
-                title="Process unavailable"
-                description="This job is not running under a process"
-                visual="warning-sign"
-              />
-            </Container>
-          </SimpleTab>
+const JobPage = ({
+  job,
+  location,
+  tabQuery,
+  searchQuery,
+  changeSearchQuery,
+  date,
+  linkDate,
+  lib,
+  configItems,
+}: Props) => (
+  <Flex>
+    <Headbar>
+      <Breadcrumbs>
+        <Crumb link="/jobs"> Jobs </Crumb>
+        <Crumb>{normalizeName(job)}</Crumb>
+        <CrumbTabs
+          tabs={[
+            'Instances',
+            'Process',
+            { title: 'Mappers', suffix: `(${size(job.mappers)})` },
+            { title: 'Value maps', suffix: `(${size(job.vmaps)})` },
+            'Releases',
+            {
+              title: 'Config',
+              suffix: `(${countArrayItemsInObject(configItems)})`,
+            },
+            'Code',
+            'Log',
+            'Info',
+          ]}
+        />
+      </Breadcrumbs>
+      <Pull right>
+        <Controls {...job} big />
+        {tabQuery === 'instances' && (
+          <Search
+            defaultValue={searchQuery}
+            onSearchUpdate={changeSearchQuery}
+            resource="job"
+          />
         )}
-        <SimpleTab name="log">
-          <Container fill>
-            <LogTab resource={`jobs/${model.id}`} location={location} />
-          </Container>
-        </SimpleTab>
-        <SimpleTab name="mappers">
-          <Container fill>
-            <MappersTable mappers={model.mappers} />
-          </Container>
-        </SimpleTab>
-        <SimpleTab name="value maps">
-          <Container fill>
-            <Valuemaps vmaps={model.vmaps} />
-          </Container>
-        </SimpleTab>
-        <SimpleTab name="releases">
-          <Container fill>
-            <Releases
-              component={model.name}
-              compact
-              key={model.name}
-              location={location}
-            />
-          </Container>
-        </SimpleTab>
-        <SimpleTab name="config">
-          <Container fill>
-            <ConfigItemsTable items={configItems} intrf="jobs" />
-          </Container>
-        </SimpleTab>
-      </SimpleTabs>
-    </Box>
-  </DetailPane>
+      </Pull>
+    </Headbar>
+    <JobsDetailTabs
+      model={job}
+      lib={lib}
+      activeTab={tabQuery}
+      date={date}
+      linkDate={linkDate}
+      location={location}
+    />
+  </Flex>
 );
 
-const fetchLibSourceOnMountAndOnChange = lifecycle({
-  async componentWillMount() {
-    const { model, fetchLibSources } = this.props;
-    await fetchLibSources(model);
-  },
+const jobSelector: Function = (state: Object, props: Object): Object =>
+  state.api.jobs.data.find(
+    (job: Object) => parseInt(props.params.id, 10) === parseInt(job.id, 10)
+  );
 
-  async componentWillReceiveProps(nextProps) {
-    const { model } = this.props;
-    const { model: nextModel, fetchLibSources } = nextProps;
-
-    if (nextModel.id !== model.id) {
-      await fetchLibSources(nextModel);
-    }
-  },
-});
+const selector: Object = createSelector(
+  [
+    resourceSelector('jobs'),
+    jobSelector,
+    querySelector('date'),
+    paramSelector('id'),
+  ],
+  (meta, job, date, id) => ({
+    meta,
+    job,
+    date,
+    id: parseInt(id, 10),
+  })
+);
 
 export default compose(
   connect(
-    (state: Object, props: Object): Object => ({
-      jobsLoaded: state.api.jobs.sync,
-      model: state.api.jobs.data.find(
-        (job: Object): boolean => job.id === parseInt(props.paneId, 10)
-      ),
-    }),
+    selector,
     {
-      fetchLibSources: actions.jobs.fetchLibSources,
-      fetchCode: actions.jobs.fetchCode,
+      load: actions.jobs.fetch,
+      fetch: actions.jobs.fetch,
+      unsync: actions.jobs.unsync,
     }
   ),
-  show((props: Object) => props.jobsLoaded),
-  fetchLibSourceOnMountAndOnChange,
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      date: date || DATES.PREV_DAY,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      fetchParams: { lib_source: true, date: formatDate(date).format() },
+      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+      date,
+      ...rest,
+    })
+  ),
+  patch('load', ['fetchParams', 'id']),
+  sync('meta'),
+  lifecycle({
+    componentWillReceiveProps(nextProps: Props) {
+      const { date, fetch, id }: Props = this.props;
+
+      if (date !== nextProps.date || id !== nextProps.id) {
+        fetch(nextProps.fetchParams, nextProps.id);
+      }
+    },
+  }),
   mapProps(
     (props: Object): Object => ({
       ...props,
@@ -196,23 +166,18 @@ export default compose(
           code: [
             {
               name: 'Job code',
-              body: props.model.code,
+              body: props.job.code,
             },
           ],
         },
-        ...props.model.lib,
+        ...props.job.lib,
       },
-      configItems: rebuildConfigHash(props.model),
+      configItems: rebuildConfigHash(props.job),
     })
   ),
-  withHandlers({
-    getHeight: (): Function => (): number => {
-      const { top } = document
-        .querySelector('.pane__content .container-resizable')
-        .getBoundingClientRect();
-
-      return window.innerHeight - top - 60;
-    },
-  }),
-  titleManager(({ model }): string => model.name, 'Jobs', 'prefix')
-)(Detail);
+  titleManager(({ job }): string => job.name),
+  queryControl('search'),
+  withTabs('instances'),
+  unsync(),
+  onlyUpdateForKeys(['job', 'location', 'children'])
+)(JobPage);

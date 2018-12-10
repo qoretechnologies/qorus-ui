@@ -20,7 +20,8 @@ import PaneItem from '../../../../components/pane_item';
 import withDispatch from '../../../../hocomponents/withDispatch';
 import withHandlers from 'recompose/withHandlers';
 import ProcessSummary from '../../../../components/ProcessSummary';
-import Container from '../../../../components/container';
+import Box from '../../../../components/box';
+import Flex from '../../../../components/Flex';
 
 type Props = {
   model: Object,
@@ -39,9 +40,9 @@ const DetailTab = ({
   perms,
   slas,
 }: Props) => (
-  <div>
+  <Box top fill>
     <InfoHeader model={model} />
-    <Container fill>
+    <Flex scrollY>
       {isTablet && model.expiry_date && (
         <PaneItem title="Expiry date">
           <Date date={model.expiry_date} />
@@ -94,8 +95,8 @@ const DetailTab = ({
         ))}
       </Groups>
       <Options model={model} />
-    </Container>
-  </div>
+    </Flex>
+  </Box>
 );
 
 const viewSelector = createSelector(

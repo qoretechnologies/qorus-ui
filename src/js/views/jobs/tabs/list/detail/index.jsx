@@ -17,6 +17,7 @@ import Pull from '../../../../../components/Pull';
 import Box from '../../../../../components/box';
 import { Breadcrumbs, Crumb } from '../../../../../components/breadcrumbs';
 import Loader from '../../../../../components/loader';
+import Flex from '../../../../../components/Flex';
 
 const ResultDetail = ({
   result,
@@ -28,7 +29,7 @@ const ResultDetail = ({
   sidebarOpen: boolean,
 }) => {
   const renderResult: Function = () => [
-    <Headbar>
+    <Headbar key="job-detail-header">
       <Pull>
         <Breadcrumbs icon="list-detail-view">
           <Crumb active>{result.job_instanceid}</Crumb>
@@ -38,16 +39,16 @@ const ResultDetail = ({
         <Control text="Close" iconName="cross" big onClick={handleCloseClick} />
       </Pull>
     </Headbar>,
-    <Box top>
+    <Box fill top key="job-detail-content">
       <ResultData result={result} />
     </Box>,
   ];
 
   return (
-    <div className={`job-result-info ${sidebarOpen ? 'sidebar-open' : ''}`}>
+    <Flex className={`job-result-info ${sidebarOpen ? 'sidebar-open' : ''}`}>
       <Resize top />
       {result ? renderResult() : <Loader />}
-    </div>
+    </Flex>
   );
 };
 

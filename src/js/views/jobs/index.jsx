@@ -18,7 +18,7 @@ import actions from '../../store/api/actions';
 import { DATES } from '../../constants/dates';
 import { formatDate } from '../../helpers/workflows';
 import { findBy } from '../../helpers/search';
-import JobsDetail from './detail';
+import JobsDetail from './pane';
 import JobsTable from './table';
 import Box from '../../components/box';
 import { sortDefaults } from '../../constants/sort';

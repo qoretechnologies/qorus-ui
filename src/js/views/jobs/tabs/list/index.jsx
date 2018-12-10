@@ -22,6 +22,7 @@ import { sortDefaults } from '../../../../constants/sort';
 import sync from '../../../../hocomponents/sync';
 import csv from '../../../../hocomponents/csv';
 import unsync from '../../../../hocomponents/unsync';
+import Flex from '../../../../components/Flex';
 
 type Props = {
   job: Object,
@@ -55,7 +56,7 @@ const JobResults = ({
   onCSVClick,
   job,
 }: Props) => (
-  <div>
+  <Flex>
     <Box top noPadding>
       <Table
         collection={instances}
@@ -76,7 +77,7 @@ const JobResults = ({
     {jobQuery && jobQuery !== '' ? (
       <Detail location={location} changeJobQuery={changeJobQuery} />
     ) : null}
-  </div>
+  </Flex>
 );
 
 const filterInstances: Function = (id): Function => (
