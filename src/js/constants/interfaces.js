@@ -8,6 +8,13 @@ const INTERFACE_ICONS = {
   group: 'group-objects',
   alerts: 'warning-sign',
   alert: 'warning-sign',
+  remote: 'globe',
+  remotes: 'globe',
+  datasource: 'join-left',
+  datasources: 'join-left',
+  user: 'people',
+  ['user-connection']: 'people',
+  users: 'people',
 };
 
 export { INTERFACE_ICONS };
