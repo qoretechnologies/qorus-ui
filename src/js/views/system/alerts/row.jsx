@@ -28,6 +28,7 @@ type Props = {
   name: string,
   first: boolean,
   closePane: Function,
+  alertid: number,
 };
 
 const AlertRow: Function = ({
@@ -35,8 +36,8 @@ const AlertRow: Function = ({
   handleHighlightEnd,
   type,
   alert,
+  alertid,
   id,
-  object,
   when,
   name,
   _updated,
@@ -49,18 +50,21 @@ const AlertRow: Function = ({
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
   >
+    <Td className="narrow">{alertid}</Td>
+    <NameColumn
+      link={getAlertObjectLink(type, { name, id })}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+      name={name}
+      type={type}
+    />
     <Td className="big text">
       <Text text={type} />
     </Td>
     <Td className="alerts-large text">
       <Text text={alert} />
     </Td>
-    <NameColumn
-      link={getAlertObjectLink(type, { name, id })}
-      isActive={isActive}
-      onDetailClick={handleDetailClick}
-      name={object}
-    />
+
     <Td className="big">
       <Date date={when} />
     </Td>

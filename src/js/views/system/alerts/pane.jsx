@@ -8,6 +8,8 @@ import Pane from '../../../components/pane';
 import InfoTable from '../../../components/info_table';
 import Box from '../../../components/box';
 import { getAlertObjectLink } from '../../../helpers/system';
+import InterfaceTag from '../../../components/InterfaceTag';
+import Toolbar from '../../../components/toolbar';
 
 const alertSelector = (state, props) => {
   const dt = props.paneId.split(':');
@@ -47,16 +49,14 @@ const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
     >
       <Box top fill>
         {alert.type !== 'RBAC' && !(alert.type === 'GROUP' && alert.id < 1) && (
-          <p>
-            Related object:{' '}
-            <Link
-              className="alert-pane-object"
-              to={getAlertObjectLink(alert.type, alert)}
-            >
-              {alert.version && `${alert.name} v${alert.version} (${alert.id})`}
-              {!alert.version && `${alert.name}`}
-            </Link>
-          </p>
+          <Toolbar mb>
+            <InterfaceTag
+              flex="0 1 auto"
+              type={alert.type}
+              link={getAlertObjectLink(alert.type, alert)}
+              title={alert.name}
+            />
+          </Toolbar>
         )}
         <InfoTable object={alert} omit={['object', '_updated']} />
       </Box>

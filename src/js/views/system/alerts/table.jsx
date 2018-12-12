@@ -17,7 +17,6 @@ import { sortDefaults } from '../../../constants/sort';
 import { findBy } from '../../../helpers/search';
 import AlertsPane from './pane';
 import AlertRow from './row';
-import NoDataIf from '../../../components/NoDataIf';
 import LoadMore from '../../../components/LoadMore';
 import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
@@ -27,7 +26,6 @@ import Flex from '../../../components/Flex';
 import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 
 type Props = {
-  type: string,
   params: Object,
   sortData: Object,
   onSortChange: Function,
@@ -53,11 +51,10 @@ const AlertsTable: Function = ({
   openPane,
   closePane,
   paneId,
-  type,
   limit,
 }: Props): React.Element<any> => (
   <Flex>
-    <Table fixed hover striped key={`${type}-${alerts.length}`}>
+    <Table fixed hover striped condensed>
       <Thead>
         {canLoadMore && (
           <FixedRow className="toolbar-row">
@@ -74,26 +71,33 @@ const AlertsTable: Function = ({
           </FixedRow>
         )}
         <FixedRow sortData={sortData} onSortChange={onSortChange}>
-          <Th className="text big" name="type">
-            Type
+          <Th icon="numbered-list" name="alertid">
+            ID
           </Th>
-          <Th className="text alerts-large" name="alert">
+          <NameColumnHeader
+            name="name"
+            title="Object name"
+            icon="intersection"
+          />
+          <Th className="text" name="type" icon="application">
+            Interface
+          </Th>
+          <Th className="text" name="alert" icon="warning-sign">
             Alert
           </Th>
-          <NameColumnHeader name="object" title="Object" />
-          <Th className="big" name="when">
+          <Th name="when" icon="time">
             When
           </Th>
         </FixedRow>
       </Thead>
-      <DataOrEmptyTable condition={!alerts || alerts.length === 0} cols={4}>
+      <DataOrEmptyTable condition={!alerts || alerts.length === 0} cols={5}>
         {props => (
           <Tbody {...props}>
             {alerts.map(
               (alert: Object, index: number): React.Element<any> => (
                 <AlertRow
                   first={index === 0}
-                  key={index}
+                  key={alert.alertid}
                   openPane={openPane}
                   closePane={closePane}
                   isActive={paneId === `${alert.type}:${alert.id}`}
