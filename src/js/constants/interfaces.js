@@ -4,6 +4,7 @@ const INTERFACE_ICONS = {
   jobs: 'calendar',
   job: 'calendar',
   services: 'merge-links',
+  service: 'merge-links',
   groups: 'group-objects',
   group: 'group-objects',
   alerts: 'warning-sign',
