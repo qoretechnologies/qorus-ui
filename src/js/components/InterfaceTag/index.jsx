@@ -11,14 +11,18 @@ type InterfaceTagProps = {
   title: string,
   type: string,
   link?: string,
+  flex: string,
+  className?: string,
 };
 
 const InterfaceTag: Function = ({
   title,
   link,
   type,
+  className,
+  flex: flex = '1 1 auto',
 }: InterfaceTagProps): React.Element<any> => (
-  <Flex flexFlow="row" className="interface-tag">
+  <Flex flexFlow="row" flex={flex} className={`interface-tag ${className}`}>
     <Icon iconName={INTERFACE_ICONS[type.toLowerCase()]} />
     <Flex flexFlow="row" className="interface-tag-content">
       {link ? (

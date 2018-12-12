@@ -63,7 +63,12 @@ const NameColumn: Function = ({
             useSmartPositioning
           >
             {type ? (
-              <InterfaceTag title={name} type={type} link={link} />
+              <InterfaceTag
+                title={name}
+                type={type}
+                link={link}
+                className={hasAlerts && 'has-alerts'}
+              />
             ) : (
               <Name {...{ name, link }} />
             )}
@@ -71,7 +76,12 @@ const NameColumn: Function = ({
         ) : (
           <Flex flexFlow="row">
             {type ? (
-              <InterfaceTag title={name} type={type} link={link} />
+              <InterfaceTag
+                title={name}
+                type={type}
+                link={link}
+                className={hasAlerts && 'has-alerts'}
+              />
             ) : (
               <Name {...{ name, link }} />
             )}
