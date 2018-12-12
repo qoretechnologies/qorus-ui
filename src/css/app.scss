@@ -68,6 +68,7 @@ $text-color: #333;
 @import '../js/components/Headbar/style';
 @import '../js/components/DataOrEmptyTable/style';
 @import '../js/components/ContentByType/style';
+@import '../js/components/InterfaceTag/style';
 
 @import './not-supported';
 @import './root';
@@ -225,6 +226,7 @@ pre.line-numbers {
 }
 
 .resource-name-link {
+  width: 100%;
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -251,7 +253,11 @@ pre.line-numbers {
 }
 
 div.text-component {
-  word-wrap: break-word;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 24px;
+  vertical-align: middle;
 }
 
 .main-loading-text {

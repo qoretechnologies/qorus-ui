@@ -8,6 +8,8 @@ import { Link } from 'react-router';
 import DetailButton from '../detail_button';
 import Text from '../text';
 import { Controls as ButtonGroup, Control as Button } from '../controls';
+import InterfaceTag from '../InterfaceTag';
+import Flex from '../Flex';
 
 type NameColumnProps = {
   popoverContent?: React.Element<any>,
@@ -16,6 +18,7 @@ type NameColumnProps = {
   onDetailClick?: Function,
   isActive?: boolean,
   hasAlerts?: boolean,
+  type?: string,
 };
 
 type NameProps = {
@@ -39,10 +42,16 @@ const NameColumn: Function = ({
   isActive,
   onDetailClick,
   hasAlerts,
+  type,
 }: NameColumnProps): React.Element<any> => (
   <Td className={`name ${hasAlerts ? 'table-name-has-alerts' : ''}`}>
-    <div className="table-name-wrapper">
-      <div className="table-name-popover-wrapper">
+    <Flex flexFlow="row">
+      {onDetailClick && (
+        <ButtonGroup>
+          <DetailButton active={isActive} onClick={onDetailClick} />
+        </ButtonGroup>
+      )}
+      <Flex flexFlow="row" style={{ marginRight: hasAlerts ? '3px' : 0 }}>
         {popoverContent ? (
           <Popover
             hoverOpenDelay={300}
@@ -53,37 +62,44 @@ const NameColumn: Function = ({
             className="table-name-popover"
             useSmartPositioning
           >
-            <Name {...{ name, link }} />
+            {type ? (
+              <InterfaceTag title={name} type={type} link={link} />
+            ) : (
+              <Name {...{ name, link }} />
+            )}
           </Popover>
         ) : (
-          <div className="table-name-popover">
-            <Name {...{ name, link }} />
-          </div>
+          <Flex flexFlow="row">
+            {type ? (
+              <InterfaceTag title={name} type={type} link={link} />
+            ) : (
+              <Name {...{ name, link }} />
+            )}
+          </Flex>
         )}
-      </div>
-      <ButtonGroup>
-        {hasAlerts && (
+      </Flex>
+      {hasAlerts && (
+        <ButtonGroup>
           <Button iconName="error" btnStyle="danger" onClick={onDetailClick} />
-        )}
-        {onDetailClick && (
-          <DetailButton active={isActive} onClick={onDetailClick} />
-        )}
-      </ButtonGroup>
-    </div>
+        </ButtonGroup>
+      )}
+    </Flex>
   </Td>
 );
 
 type NameColumnHeaderProps = {
   name?: string,
   title?: string,
+  icon?: string,
 };
 
 const NameColumnHeader: Function = ({
   name: name = 'name',
   title: title = 'Name',
+  icon,
   ...rest
 }: NameColumnHeaderProps): React.Element<any> => (
-  <Th className="name" name={name} {...rest}>
+  <Th className="name" name={name} icon={icon} {...rest}>
     {title}
   </Th>
 );
