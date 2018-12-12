@@ -6,7 +6,11 @@ import mapProps from 'recompose/mapProps';
 import { Tag } from '@blueprintjs/core';
 
 import { Table, Thead, Tbody, Tr, Th } from '../../../components/new_table';
-import { getProcessObjectLink, calculateMemory } from '../../../helpers/system';
+import {
+  getProcessObjectLink,
+  calculateMemory,
+  getProcessObjectType,
+} from '../../../helpers/system';
 import ProcessRow from './row';
 import withSort from '../../../hocomponents/sort';
 import { sortDefaults } from '../../../constants/sort';
@@ -48,20 +52,24 @@ const ClusterNode: Function = ({
     <Table condensed striped>
       <Thead>
         <Tr sortData={sortData} onSortChange={onSortChange}>
-          <Th className="text" name="node">
+          <Th className="text" name="node" icon="database">
             Node
           </Th>
-          <Th className="text medium" name="type">
+          <NameColumnHeader
+            name="client_id"
+            title="Client ID"
+            icon="intersection"
+          />
+          <Th className="text medium" name="type" icon="application">
             Type
           </Th>
-          <NameColumnHeader name="client_id" title="Client ID" />
           <Th className="medium" name="pid">
             PID
           </Th>
-          <Th className="medium" name="priv">
+          <Th className="medium" name="priv" icon="layers">
             Memory
           </Th>
-          <Th className="text" name="status">
+          <Th className="text" name="status" icon="info-sign">
             Status
           </Th>
         </Tr>
@@ -76,6 +84,7 @@ const ClusterNode: Function = ({
               key={process.id}
               {...process}
               link={getProcessObjectLink(process)}
+              interfaceType={getProcessObjectType(process)}
             />
           )
         )}

@@ -8,6 +8,7 @@ import withHandlers from 'recompose/withHandlers';
 import { Tr, Td } from '../../../components/new_table';
 import NameColumn from '../../../components/NameColumn';
 import actions from '../../../store/api/actions';
+import ContentByType from '../../../components/ContentByType';
 
 type Props = {
   type: string,
@@ -25,6 +26,7 @@ type Props = {
   id: string,
   isActive: boolean,
   handleDetailClick: Function,
+  interfaceType?: string,
 };
 
 const typeNames: Object = {
@@ -50,21 +52,27 @@ const ProcessRow: Function = ({
   node,
   handleDetailClick,
   isActive,
+  interfaceType,
 }: Props): React.Element<any> => (
   <Tr highlight={_updated} onHighlightEnd={updateDone}>
     <Td className="text">{node}</Td>
-    <Td className="text medium" title={typeNames[type]}>
-      {type}
-    </Td>
     <NameColumn
       link={link}
       name={clientId}
       isActive={isActive}
       onDetailClick={handleDetailClick}
+      type={interfaceType}
     />
-    <Td className="medium"> {pid} </Td>
+    <Td className="text medium" title={typeNames[type]}>
+      {type}
+    </Td>
+    <Td className="medium">
+      <ContentByType content={pid} />
+    </Td>
     <Td className="medium"> {privStr} </Td>
-    <Td className="text"> {statusString} </Td>
+    <Td className="text">
+      <ContentByType content={statusString} />
+    </Td>
   </Tr>
 );
 
