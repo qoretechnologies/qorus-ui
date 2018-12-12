@@ -5,6 +5,7 @@ import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
 import classNames from 'classnames';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   children?: any,
@@ -19,6 +20,7 @@ type Props = {
   sortData?: Object,
   title?: string,
   fixed?: boolean,
+  icon?: string,
 };
 
 const Th: Function = ({
@@ -32,6 +34,7 @@ const Th: Function = ({
   colspan,
   fixed,
   onClick,
+  icon,
 }: Props) =>
   fixed ? (
     <div
@@ -52,7 +55,9 @@ const Th: Function = ({
       onClick={handleClick}
       title={title}
     >
-      {children}
+      {icon && <Icon iconName={icon} className="header-icon" />}
+      {icon && ' '}
+      <span>{children}</span>
     </div>
   ) : (
     <th
