@@ -77,6 +77,8 @@ const Th: Function = ({
       title={title}
       colSpan={colspan}
     >
+      {icon && <Icon iconName={icon} className="header-icon" />}
+      {icon && ' '}
       {children}
     </th>
   );
