@@ -130,6 +130,7 @@ const TableRow: Function = ({
       isActive={isActive}
       onDetailClick={handleDetailClick}
       hasAlerts={hasAlerts}
+      type="workflow"
     />
     {showDeprecated && (
       <Td className="medium">

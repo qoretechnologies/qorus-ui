@@ -86,15 +86,7 @@ const WorkflowsTable: Function = ({
   handleLoadAll,
   sortKeysObj,
 }: Props): React.Element<any> => (
-  <Table
-    striped
-    hover
-    condensed
-    fixed
-    className="resource-table"
-    // Another Firefox hack, jesus
-    key={collection.length}
-  >
+  <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan={isTablet ? 4 : 5}>
