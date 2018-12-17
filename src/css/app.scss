@@ -258,6 +258,10 @@ div.text-component {
   overflow: hidden;
   line-height: 24px;
   vertical-align: middle;
+
+  &.has-alerts {
+    color: $qore-danger;
+  }
 }
 
 .main-loading-text {

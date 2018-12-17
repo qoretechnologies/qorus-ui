@@ -24,15 +24,16 @@ type NameColumnProps = {
 type NameProps = {
   link?: string,
   name: string,
+  hasAlerts: boolean,
 };
 
-const Name: Function = ({ link, name }: NameProps): any =>
+const Name: Function = ({ link, name, hasAlerts }: NameProps): any =>
   link ? (
     <Link to={link} className="resource-name-link" title={name}>
       {name}
     </Link>
   ) : (
-    <Text text={name} />
+    <Text text={name} hasAlerts={hasAlerts} />
   );
 
 const NameColumn: Function = ({
@@ -70,7 +71,7 @@ const NameColumn: Function = ({
                 className={hasAlerts && 'has-alerts'}
               />
             ) : (
-              <Name {...{ name, link }} />
+              <Name {...{ name, link, hasAlerts }} />
             )}
           </Popover>
         ) : (
@@ -83,7 +84,7 @@ const NameColumn: Function = ({
                 className={hasAlerts && 'has-alerts'}
               />
             ) : (
-              <Name {...{ name, link }} />
+              <Name {...{ name, link, hasAlerts }} />
             )}
           </Flex>
         )}

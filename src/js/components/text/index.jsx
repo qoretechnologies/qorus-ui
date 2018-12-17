@@ -7,14 +7,18 @@ import Tree from '../tree';
 
 type Props = {
   text: any,
+  hasAlerts: boolean,
 };
 
-const Text: Function = ({ text }: Props): React.Element<any> =>
+const Text: Function = ({ text, hasAlerts }: Props): React.Element<any> =>
   text && typeof text === 'object' ? (
     <Tree data={text} />
   ) : (
     <Flex flexFlow="row">
-      <div className="text-component" title={text}>
+      <div
+        className={`text-component ${hasAlerts && 'has-alerts'}`}
+        title={text}
+      >
         {text}
       </div>
     </Flex>
