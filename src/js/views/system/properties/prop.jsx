@@ -1,7 +1,15 @@
 // @flow
 import React from 'react';
 
-import { Table, Thead, Tbody, Tr, Td, Th } from '../../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Td,
+  Th,
+  FixedRow,
+} from '../../../components/new_table';
 import { hasPermission } from '../../../helpers/user';
 import {
   Controls as ButtonGroup,
@@ -10,9 +18,16 @@ import {
 import Text from '../../../components/text';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import ExpandableItem from '../../../components/ExpandableItem';
+import Pull from '../../../components/Pull';
+import LocalTable from '../../../components/LocalTable';
+import LoadMore from '../../../components/LoadMore';
+import { NameColumnHeader } from '../../../components/NameColumn';
+import Search from '../../../containers/search';
+
+import type { LocalTableProps } from '../../../components/LocalTable';
 
 type Props = {
-  data: Object,
+  data: Array<Object>,
   title: string,
   perms: Array<Object>,
   onDelete: Function,
@@ -70,79 +85,114 @@ const Property: Function = ({
 
   return (
     <ExpandableItem title={title} show>
-      {title !== 'omq' && (
-        <div className="pull-right">
-          <ButtonGroup>
-            {hasPermission(perms, ['SERVER-CONTROL', 'SET-PROPERTY'], 'or') && (
-              <Button
-                text="Add property"
-                iconName="add"
-                onClick={handlePropAddClick}
-                big
-              />
-            )}
-            {hasPermission(
-              perms,
-              ['SERVER-CONTROL', 'DELETE-PROPERTY'],
-              'or'
-            ) && (
-              <Button
-                text="Remove group"
-                iconName="cross"
-                onClick={handlePropDeleteClick}
-                btnStyle="danger"
-                big
-              />
-            )}
-          </ButtonGroup>
-        </div>
-      )}
-      <Table condensed striped>
-        <Thead>
-          <Tr>
-            <Th className="name large">Name</Th>
-            <Th className="text">Prop</Th>
-            <Th className="narrow">Actions</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {Object.keys(data).map((d, key) => (
-            <Tr key={key}>
-              <Td className="name large">{d}</Td>
-              <Td className="text">
-                <Text text={data[d]} renderTree />
-              </Td>
-              <Td className="narrow">
-                {title !== 'omq' && (
-                  <ButtonGroup>
-                    {hasPermission(
-                      perms,
-                      ['SERVER-CONTROL', 'SET-PROPERTY'],
-                      'or'
-                    ) && (
-                      <Button
-                        iconName="edit"
-                        onClick={handleEditClick(d, data[d])}
-                      />
+      <LocalTable collection={data} searchBy={['name', 'prop']} id={title}>
+        {({
+          handleSearchChange,
+          handleLoadAll,
+          handleLoadMore,
+          limit,
+          collection,
+          canLoadMore,
+          sortData,
+          onSortChange,
+        }: LocalTableProps) => (
+          <Table condensed fixed striped>
+            <Thead>
+              <FixedRow className="toolbar-row">
+                <Th>
+                  {title !== 'omq' && (
+                    <Pull>
+                      <ButtonGroup>
+                        {hasPermission(
+                          perms,
+                          ['SERVER-CONTROL', 'SET-PROPERTY'],
+                          'or'
+                        ) && (
+                          <Button
+                            text="Add property"
+                            iconName="add"
+                            onClick={handlePropAddClick}
+                            big
+                          />
+                        )}
+                        {hasPermission(
+                          perms,
+                          ['SERVER-CONTROL', 'DELETE-PROPERTY'],
+                          'or'
+                        ) && (
+                          <Button
+                            text="Remove group"
+                            iconName="cross"
+                            onClick={handlePropDeleteClick}
+                            btnStyle="danger"
+                            big
+                          />
+                        )}
+                      </ButtonGroup>
+                    </Pull>
+                  )}
+                  <Pull right>
+                    <LoadMore
+                      handleLoadAll={handleLoadAll}
+                      handleLoadMore={handleLoadMore}
+                      limit={limit}
+                      canLoadMore={canLoadMore}
+                    />
+                    <Search
+                      resource="properties"
+                      onSearchUpdate={handleSearchChange}
+                    />
+                  </Pull>
+                </Th>
+              </FixedRow>
+              <FixedRow {...{ sortData, onSortChange }}>
+                <NameColumnHeader icon="application" />
+                <Th className="text" name="prop" icon="property">
+                  Property data
+                </Th>
+                <Th icon="build">Actions</Th>
+              </FixedRow>
+            </Thead>
+            <Tbody>
+              {collection.map((datum: Object, key: number) => (
+                <Tr key={key} first={key === 0}>
+                  <Td className="name large">{datum.name}</Td>
+                  <Td className="text">
+                    <Text text={datum.prop} renderTree />
+                  </Td>
+                  <Td className="normal">
+                    {title !== 'omq' && (
+                      <ButtonGroup>
+                        {hasPermission(
+                          perms,
+                          ['SERVER-CONTROL', 'SET-PROPERTY'],
+                          'or'
+                        ) && (
+                          <Button
+                            iconName="edit"
+                            onClick={handleEditClick(datum.name, datum.prop)}
+                          />
+                        )}
+                        {hasPermission(
+                          perms,
+                          ['SERVER-CONTROL', 'DELETE-PROPERTY'],
+                          'or'
+                        ) && (
+                          <Button
+                            iconName="cross"
+                            onClick={handleKeyDeleteClick(datum.name)}
+                            btnStyle="danger"
+                          />
+                        )}
+                      </ButtonGroup>
                     )}
-                    {hasPermission(
-                      perms,
-                      ['SERVER-CONTROL', 'DELETE-PROPERTY'],
-                      'or'
-                    ) && (
-                      <Button
-                        iconName="cross"
-                        onClick={handleKeyDeleteClick(d)}
-                        btnStyle="danger"
-                      />
-                    )}
-                  </ButtonGroup>
-                )}
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
+      </LocalTable>
     </ExpandableItem>
   );
 };
