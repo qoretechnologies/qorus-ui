@@ -27,6 +27,7 @@ type Props = {
   isActive: boolean,
   handleDetailClick: Function,
   interfaceType?: string,
+  first?: boolean,
 };
 
 const typeNames: Object = {
@@ -53,9 +54,10 @@ const ProcessRow: Function = ({
   handleDetailClick,
   isActive,
   interfaceType,
+  first,
 }: Props): React.Element<any> => (
-  <Tr highlight={_updated} onHighlightEnd={updateDone}>
-    <Td className="text">{node}</Td>
+  <Tr highlight={_updated} onHighlightEnd={updateDone} first={first}>
+    <Td className="big text">{node}</Td>
     <NameColumn
       link={link}
       name={clientId}
@@ -70,7 +72,7 @@ const ProcessRow: Function = ({
       <ContentByType content={pid} />
     </Td>
     <Td className="medium"> {privStr} </Td>
-    <Td className="text">
+    <Td className="big text">
       <ContentByType content={statusString} />
     </Td>
   </Tr>
