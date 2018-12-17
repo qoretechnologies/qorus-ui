@@ -10,7 +10,7 @@ import loadMore from '../../hocomponents/loadMore';
 import sort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
 
-type LocalTableProps = {
+export type LocalTableProps = {
   collection: Array<Object>,
   searchBy?: Array<string>,
   handleSearchChange: Function,
@@ -20,6 +20,9 @@ type LocalTableProps = {
   children: Function,
   search: string,
   changeSearch: Function,
+  canLoadMore: boolean,
+  sortData: Object,
+  onSortChange: Function,
 };
 
 const LocalTable: Function = ({
