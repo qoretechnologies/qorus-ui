@@ -85,6 +85,12 @@ const ConnectionRow: Function = ({
         {up ? 'UP' : 'DOWN'}
       </Tag>
     </Td>
+    <NameColumn
+      name={name}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+      hasAlerts={hasAlerts}
+    />
     <Td className="medium">
       <ButtonGroup>
         {remoteType === 'user' && (
@@ -104,15 +110,9 @@ const ConnectionRow: Function = ({
         />
       </ButtonGroup>
     </Td>
-    <NameColumn
-      name={name}
-      isActive={isActive}
-      onDetailClick={handleDetailClick}
-      hasAlerts={hasAlerts}
-    />
     {remoteType === 'datasources' ? (
       <Td className="text">
-        <Text text={options} renderTree />
+        <Text text={options} />
       </Td>
     ) : (
       <Td className="text">

@@ -114,8 +114,8 @@ const ConnectionTable: Function = ({
         <Th name="up" icon="info-sign">
           Status
         </Th>
-        <Th icon="build">Actions</Th>
         <NameColumnHeader icon="application" />
+        <Th icon="build">Actions</Th>
         {type === 'datasources' ? (
           <Th className="text" icon="cog">
             Options

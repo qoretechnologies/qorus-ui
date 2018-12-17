@@ -114,7 +114,7 @@ export default class PropertiesView extends Component {
             <Crumb active> Properties </Crumb>
           </Breadcrumbs>
           <Pull right>
-            <ButtonGroup marginRight={3}>
+            <ButtonGroup>
               <Button
                 disabled={
                   !hasPermission(
