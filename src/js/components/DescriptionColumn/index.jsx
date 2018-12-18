@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Td, Th } from '../new_table';
+import Text from '../text';
 
 type DescriptionColumnProps = {
   children: any,
@@ -14,7 +15,9 @@ const DescriptionColumn: Function = compose(onlyUpdateForKeys(['children']))(
     children,
     className: className = 'text',
   }: DescriptionColumnProps): React.Element<any> => (
-    <Td className={className}>{children}</Td>
+    <Td className={className}>
+      <Text text={children} />
+    </Td>
   )
 );
 
