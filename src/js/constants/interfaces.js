@@ -16,6 +16,8 @@ const INTERFACE_ICONS = {
   user: 'people',
   ['user-connection']: 'people',
   users: 'people',
+  sla: 'time',
+  slas: 'time',
 };
 
 export { INTERFACE_ICONS };
