@@ -15,7 +15,12 @@ import sort from '../../../../hocomponents/sort';
 import check from '../../../../hocomponents/check-no-data';
 import { sortDefaults } from '../../../../constants/sort';
 import Pull from '../../../../components/Pull';
+import LoadMore from '../../../../components/LoadMore';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import { DescriptionColumnHeader } from '../../../../components/DescriptionColumn';
+import { ActionColumnHeader } from '../../../../components/ActionColumn';
 import { Control as Button } from '../../../../components/controls';
+import loadMore from '../../../../hocomponents/loadMore';
 
 type Props = {
   collection: Array<Object>,
@@ -27,6 +32,10 @@ type Props = {
   sortData: Object,
   canAdd: boolean,
   onAddPermClick: Function,
+  canLoadMore: boolean,
+  handleLoadAll: Function,
+  handleLoadMore: Function,
+  limit: number,
 };
 
 const PermsTable: Function = ({
@@ -35,9 +44,13 @@ const PermsTable: Function = ({
   sortData,
   canAdd,
   onAddPermClick,
+  canLoadMore,
+  handleLoadAll,
+  handleLoadMore,
+  limit,
   ...rest
 }: Props): React.Element<Table> => (
-  <Table striped condensed fixed key={`perms_table-${collection.length}`}>
+  <Table striped condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan="full">
@@ -50,19 +63,23 @@ const PermsTable: Function = ({
               big
             />
           </Pull>
+          <Pull right>
+            <LoadMore
+              canLoadMore={canLoadMore}
+              onLoadMore={handleLoadMore}
+              onLoadAll={handleLoadAll}
+              limit={limit}
+            />
+          </Pull>
         </Th>
       </FixedRow>
       <FixedRow {...{ onSortChange, sortData }}>
-        <Th className="text normal" name="permission_type">
+        <NameColumnHeader />
+        <Th className="text normal" name="permission_type" icon="info-sign">
           Type
         </Th>
-        <Th className="name" name="name">
-          Name
-        </Th>
-        <Th className="text" name="desc">
-          Description
-        </Th>
-        <Th className="text narrow"> Actions </Th>
+        <DescriptionColumnHeader />
+        <ActionColumnHeader />
       </FixedRow>
     </Thead>
     <Tbody>
@@ -77,6 +94,7 @@ const PermsTable: Function = ({
 
 export default compose(
   check(({ collection }): boolean => collection && collection.length),
+  loadMore('collection', null, true, 50),
   sort('rbacperms', 'collection', sortDefaults.rbacPerms),
   pure(['sortData', 'collection'])
 )(PermsTable);
