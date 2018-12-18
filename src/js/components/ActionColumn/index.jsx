@@ -14,7 +14,7 @@ const ActionColumn: Function = compose(onlyUpdateForKeys(['children']))(
     children,
     className: className = 'normal',
   }: ActionColumnProps): React.Element<any> => (
-    <Td className={className}>{children}</Td>
+    <Td className={className}>{children || '-'}</Td>
   )
 );
 
