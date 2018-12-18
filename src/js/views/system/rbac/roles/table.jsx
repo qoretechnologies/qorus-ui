@@ -2,6 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
 import RolesRow from './row';
 import {
@@ -12,10 +13,15 @@ import {
   FixedRow,
 } from '../../../../components/new_table';
 import sort from '../../../../hocomponents/sort';
-import check from '../../../../hocomponents/check-no-data';
+import loadMore from '../../../../hocomponents/loadMore';
 import { sortDefaults } from '../../../../constants/sort';
 import Pull from '../../../../components/Pull';
+import LoadMore from '../../../../components/LoadMore';
+import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 import { Control as Button } from '../../../../components/controls';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import { DescriptionColumnHeader } from '../../../../components/DescriptionColumn';
+import { ActionColumnHeader } from '../../../../components/ActionColumn';
 
 type Props = {
   collection: Array<Object>,
@@ -28,6 +34,10 @@ type Props = {
   onSortChange: Function,
   sortData: Object,
   onAddRoleClick: Function,
+  canLoadMore: boolean,
+  handleLoadAll: Function,
+  handleLoadMore: Function,
+  limit: number,
 };
 
 const RolesTable: Function = ({
@@ -35,9 +45,13 @@ const RolesTable: Function = ({
   onSortChange,
   sortData,
   onAddRoleClick,
+  canLoadMore,
+  handleLoadAll,
+  handleLoadMore,
+  limit,
   ...rest
 }: Props): React.Element<Table> => (
-  <Table striped condensed fixed key={`roles_table-${collection.length}`}>
+  <Table striped condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan="full">
@@ -50,33 +64,46 @@ const RolesTable: Function = ({
               big
             />
           </Pull>
+          <Pull right>
+            <LoadMore
+              canLoadMore={canLoadMore}
+              onLoadMore={handleLoadMore}
+              onLoadAll={handleLoadAll}
+              limit={limit}
+            />
+          </Pull>
         </Th>
       </FixedRow>
       <FixedRow {...{ onSortChange, sortData }}>
-        <Th className="name" name="role">
-          Name
-        </Th>
-        <Th className="text" name="provider">
+        <NameColumnHeader name="role" />
+        <ActionColumnHeader />
+        <Th className="text" name="provider" icon="database">
           Provider
         </Th>
-        <Th className="text" name="desc">
-          Description
-        </Th>
-        <Th className="text medium">Actions</Th>
+        <DescriptionColumnHeader />
       </FixedRow>
     </Thead>
-    <Tbody>
-      {collection.map(
-        (role: Object, index: number): React.Element<RolesRow> => (
-          <RolesRow first={index === 0} key={index} model={role} {...rest} />
-        )
+    <DataOrEmptyTable condition={size(collection) === 0} cols={4}>
+      {props => (
+        <Tbody {...props}>
+          {collection.map(
+            (role: Object, index: number): React.Element<RolesRow> => (
+              <RolesRow
+                first={index === 0}
+                key={index}
+                model={role}
+                {...rest}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
 export default compose(
-  check(({ collection }): boolean => collection && collection.length),
+  loadMore('collection', null, true, 50),
   sort('rbacroles', 'collection', sortDefaults.rbacRoles),
   pure(['collection', 'sortData'])
 )(RolesTable);

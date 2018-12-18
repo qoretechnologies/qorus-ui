@@ -2,6 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
 import PermsRow from './row';
 import {
@@ -12,7 +13,6 @@ import {
   Th,
 } from '../../../../components/new_table';
 import sort from '../../../../hocomponents/sort';
-import check from '../../../../hocomponents/check-no-data';
 import { sortDefaults } from '../../../../constants/sort';
 import Pull from '../../../../components/Pull';
 import LoadMore from '../../../../components/LoadMore';
@@ -21,6 +21,7 @@ import { DescriptionColumnHeader } from '../../../../components/DescriptionColum
 import { ActionColumnHeader } from '../../../../components/ActionColumn';
 import { Control as Button } from '../../../../components/controls';
 import loadMore from '../../../../hocomponents/loadMore';
+import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 
 type Props = {
   collection: Array<Object>,
@@ -75,25 +76,33 @@ const PermsTable: Function = ({
       </FixedRow>
       <FixedRow {...{ onSortChange, sortData }}>
         <NameColumnHeader />
+        <ActionColumnHeader />
         <Th className="text normal" name="permission_type" icon="info-sign">
           Type
         </Th>
         <DescriptionColumnHeader />
-        <ActionColumnHeader />
       </FixedRow>
     </Thead>
-    <Tbody>
-      {collection.map(
-        (role: Object, index: number): React.Element<PermsRow> => (
-          <PermsRow first={index === 0} key={index} model={role} {...rest} />
-        )
+    <DataOrEmptyTable condition={size(collection) === 0} cols={4}>
+      {props => (
+        <Tbody {...props}>
+          {collection.map(
+            (role: Object, index: number): React.Element<PermsRow> => (
+              <PermsRow
+                first={index === 0}
+                key={index}
+                model={role}
+                {...rest}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
 export default compose(
-  check(({ collection }): boolean => collection && collection.length),
   loadMore('collection', null, true, 50),
   sort('rbacperms', 'collection', sortDefaults.rbacPerms),
   pure(['sortData', 'collection'])

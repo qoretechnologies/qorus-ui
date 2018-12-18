@@ -7,6 +7,9 @@ import { Button, Intent, ButtonGroup } from '@blueprintjs/core';
 
 import { Tr, Td } from '../../../../components/new_table';
 import Text from '../../../../components/text';
+import NameColumn from '../../../../components/NameColumn';
+import { DescriptionColumn } from '../../../../components/DescriptionColumn';
+import { ActionColumn } from '../../../../components/ActionColumn';
 
 type Props = {
   model: Object,
@@ -33,16 +36,8 @@ const RolesRow: Function = ({
   first,
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    <Td className="name">
-      <Text text={model.role} />
-    </Td>
-    <Td className="text">
-      <Text text={model.provider} />
-    </Td>
-    <Td className="text">
-      <Text text={model.desc} />
-    </Td>
-    <Td className="text medium">
+    <NameColumn name={model.role} />
+    <ActionColumn className="medium">
       <ButtonGroup>
         {canCreate && (
           <Button
@@ -70,7 +65,11 @@ const RolesRow: Function = ({
           />
         )}
       </ButtonGroup>
+    </ActionColumn>
+    <Td className="text">
+      <Text text={model.provider} />
     </Td>
+    <DescriptionColumn>{model.desc}</DescriptionColumn>
   </Tr>
 );
 
