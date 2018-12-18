@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { flowRight, pickBy, includes } from 'lodash';
+import { map } from 'lodash';
 import { Intent } from '@blueprintjs/core';
 
 import Headbar from '../../../components/Headbar';
 import Box from '../../../components/box';
 import ConfirmDialog from '../../../components/confirm_dialog';
-import Search from '../../../containers/search';
 import withDispatch from '../../../hocomponents/withDispatch';
 import sync from '../../../hocomponents/sync';
 import withModal from '../../../hocomponents/modal';
@@ -22,41 +21,30 @@ import {
   Controls as ButtonGroup,
 } from '../../../components/controls';
 import Pull from '../../../components/Pull';
-import queryControl from '../../../hocomponents/queryControl';
 import Flex from '../../../components/Flex';
 import NoDataIf from '../../../components/NoDataIf';
 
 const sqlcacheSelector: Function = (state: Object) => state.api.sqlcache;
-const querySelector: Function = (state: Object, props: Object): ?string =>
-  props.location.query.search;
-const filterData: Function = (query: ?string): Function => (
-  collection: Object
-) => {
-  if (!query) return collection;
-
-  const datasources: Array<string> = Object.keys(collection);
-  const result: Object = {};
-
-  datasources.forEach(ds => {
-    result[ds] = {};
-    result[ds].tables = pickBy(collection[ds].tables, (value, key) =>
-      includes(key, query)
+const formatData: Function = (): Function => (collection: Object) =>
+  Object.keys(collection).reduce((result: Object, key: string): Object => {
+    const coll = collection[key].tables;
+    const newCollection: Array<Object> = map(
+      coll,
+      (propData, propKey): Object => ({ name: propKey, ...propData })
     );
-  });
 
-  return result;
-};
+    return { ...result, ...{ [key]: newCollection } };
+  }, {});
 
 const collectionSelector = createSelector(
-  [sqlcacheSelector, querySelector],
-  (model, query) => flowRight(filterData(query))(model.data)
+  [sqlcacheSelector],
+  model => formatData()(model.data)
 );
 
 const viewSelector = createSelector(
-  [sqlcacheSelector, querySelector, collectionSelector],
-  (sqlcache: Object, query: ?string, collection: Object): Object => ({
+  [sqlcacheSelector, collectionSelector],
+  (sqlcache: Object, collection: Object): Object => ({
     sqlcache,
-    query,
     collection,
   })
 );
@@ -65,8 +53,6 @@ class SQLCache extends Component {
   props: {
     location: Object,
     collection: Object,
-    searchQuery: ?string,
-    changeSearchQuery: Function,
     optimisticDispatch: Function,
     openModal: Function,
     closeModal: Function,
@@ -141,23 +127,17 @@ class SQLCache extends Component {
                 big
               />
             </ButtonGroup>
-            <Search
-              defaultValue={this.props.searchQuery}
-              onSearchUpdate={this.props.changeSearchQuery}
-              resource="sqlcache"
-            />
           </Pull>
         </Headbar>
 
         <NoDataIf condition={colLength === 0} big inBox>
           {() => (
             <Box top scrollY>
-              {Object.keys(this.props.collection).map((col, index) => (
+              {Object.keys(collection).map((col, index) => (
                 <Table
                   key={index}
                   name={col}
-                  data={this.props.collection[col].tables}
-                  dataLen={Object.keys(this.props.collection[col].tables)}
+                  data={collection[col]}
                   onClick={this.handleClearDatasourceClick}
                   onSingleClick={this.handleClearSingleClick}
                 />
@@ -178,7 +158,6 @@ export default compose(
     }
   ),
   withDispatch(),
-  queryControl('search'),
   sync('sqlcache'),
   withModal(),
   titleManager('SQL Cache')

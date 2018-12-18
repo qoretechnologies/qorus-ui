@@ -8,7 +8,6 @@ import { omit, map, size } from 'lodash';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import actions from '../../../store/api/actions';
 import Prop from './prop';
-import Search from '../../../containers/search';
 import Modal from './modal';
 import sync from '../../../hocomponents/sync';
 import modal from '../../../hocomponents/modal';
@@ -26,20 +25,16 @@ import Flex from '../../../components/Flex';
 import NoDataIf from '../../../components/NoDataIf';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
-const formatData = (): Function => (collection: Object): Object => {
-  return Object.keys(collection).reduce(
-    (result: Object, key: string): Object => {
-      const coll = collection[key];
-      const newCollection: Array<Object> = map(
-        coll,
-        (propData, propKey): Object => ({ name: propKey, prop: propData })
-      );
+const formatData = (): Function => (collection: Object): Object =>
+  Object.keys(collection).reduce((result: Object, key: string): Object => {
+    const coll = collection[key];
+    const newCollection: Array<Object> = map(
+      coll,
+      (propData, propKey): Object => ({ name: propKey, prop: propData })
+    );
 
-      return { ...result, ...{ [key]: newCollection } };
-    },
-    {}
-  );
-};
+    return { ...result, ...{ [key]: newCollection } };
+  }, {});
 
 const collectionSelector = createSelector(
   [dataSelector],
