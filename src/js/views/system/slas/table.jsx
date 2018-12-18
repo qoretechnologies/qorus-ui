@@ -2,6 +2,7 @@
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
+import size from 'lodash/size';
 
 import {
   Table,
@@ -10,14 +11,13 @@ import {
   FixedRow,
   Th,
 } from '../../../components/new_table';
-import checkData from '../../../hocomponents/check-no-data';
 import withModal from '../../../hocomponents/modal';
 import SLARow from './row';
-import { hasPermission } from '../../../helpers/user';
 import { IdColumnHeader } from '../../../components/IdColumn';
 import { NameColumnHeader } from '../../../components/NameColumn';
 import { DescriptionColumnHeader } from '../../../components/DescriptionColumn';
 import { ActionColumnHeader } from '../../../components/ActionColumn';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 
 type Props = {
   collection: Array<Object>,
@@ -36,7 +36,7 @@ const SLATable: Function = ({
   closeModal,
   perms,
 }: Props): React.Element<any> => (
-  <Table striped condensed fixed className="resource-table">
+  <Table striped condensed fixed>
     <Thead>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <IdColumnHeader name="slaid" />
@@ -45,32 +45,31 @@ const SLATable: Function = ({
         <Th className="text" name="type" icon="time">
           Units
         </Th>
-        {hasPermission(perms, ['DELETE-SLA', 'SLA-CONTROL'], 'or') && (
-          <ActionColumnHeader />
-        )}
+        <ActionColumnHeader />
       </FixedRow>
     </Thead>
-    <Tbody>
-      {collection.map(
-        (sla: Object, idx: number): React.Element<any> => (
-          <SLARow
-            first={idx === 0}
-            perms={perms}
-            key={sla.slaid}
-            openModal={openModal}
-            closeModal={closeModal}
-            {...sla}
-          />
-        )
+    <DataOrEmptyTable condition={size(collection) === 0} cols={5}>
+      {props => (
+        <Tbody {...props}>
+          {collection.map(
+            (sla: Object, idx: number): React.Element<any> => (
+              <SLARow
+                first={idx === 0}
+                perms={perms}
+                key={sla.slaid}
+                openModal={openModal}
+                closeModal={closeModal}
+                {...sla}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
 export default compose(
-  checkData(
-    ({ collection }: Props): boolean => collection && collection.length > 0
-  ),
   withModal(),
   pure(['sortData', 'collection'])
 )(SLATable);

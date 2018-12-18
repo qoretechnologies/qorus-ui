@@ -83,12 +83,7 @@ const ConnectionTable: Function = ({
   canDelete,
   canAdd,
 }: Props): React.Element<any> => (
-  <Table
-    fixed
-    striped
-    key={`${type}-${remotes.length}`}
-    marginBottom={canLoadMore ? 40 : 0}
-  >
+  <Table fixed striped>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan="full">
@@ -145,7 +140,7 @@ const ConnectionTable: Function = ({
             (remote: Object, index: number): React.Element<any> => (
               <ConnectionRow
                 first={index === 0}
-                key={`connection_${remote.name}`}
+                key={index}
                 isActive={remote.name === paneId}
                 hasAlerts={remote.alerts.length > 0}
                 openPane={openPane}
@@ -192,7 +187,7 @@ export default compose(
     })
   ),
   withSort(({ type }: Props): string => type, 'remotes', sortDefaults.remote),
-  withLoadMore('remotes', 'remotes', true, 50),
+  withLoadMore('remotes', null, true, 50),
   withPane(ConnectionPane, ['remoteType', 'canEdit'], null, 'connections'),
   withModal(),
   withHandlers({

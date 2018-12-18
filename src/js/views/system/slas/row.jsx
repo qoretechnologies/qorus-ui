@@ -46,17 +46,16 @@ const SLARow: Function = ({
     <Td className="text">
       <Text text={units} />
     </Td>
-    {hasPermission(perms, ['DELETE-SLA', 'SLA-CONTROL'], 'or') && (
-      <ActionColumn>
-        <Controls grouped>
-          <Button
-            iconName="cross"
-            btnStyle="danger"
-            onClick={handleDeleteClick}
-          />
-        </Controls>
-      </ActionColumn>
-    )}
+    <ActionColumn>
+      <Controls grouped>
+        <Button
+          disabled={!hasPermission(perms, ['DELETE-SLA', 'SLA-CONTROL'], 'or')}
+          iconName="cross"
+          btnStyle="danger"
+          onClick={handleDeleteClick}
+        />
+      </Controls>
+    </ActionColumn>
   </Tr>
 );
 

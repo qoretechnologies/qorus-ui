@@ -19,12 +19,13 @@ import Text from '../../../components/text';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import ExpandableItem from '../../../components/ExpandableItem';
 import Pull from '../../../components/Pull';
-import LocalTable from '../../../components/LocalTable';
+import LocalTable from '../../../components/EnhancedTable';
 import LoadMore from '../../../components/LoadMore';
 import { NameColumnHeader } from '../../../components/NameColumn';
 import Search from '../../../containers/search';
 
-import type { LocalTableProps } from '../../../components/LocalTable';
+import type { EnhancedTableProps } from '../../../components/EnhancedTable';
+import { sortDefaults } from '../../../constants/sort';
 
 type Props = {
   data: Array<Object>,
@@ -85,7 +86,12 @@ const Property: Function = ({
 
   return (
     <ExpandableItem title={title} show>
-      <LocalTable collection={data} searchBy={['name', 'prop']} id={title}>
+      <LocalTable
+        collection={data}
+        searchBy={['name', 'prop']}
+        tableId={title}
+        sortDefault={sortDefaults.properties}
+      >
         {({
           handleSearchChange,
           handleLoadAll,
@@ -95,7 +101,7 @@ const Property: Function = ({
           canLoadMore,
           sortData,
           onSortChange,
-        }: LocalTableProps) => (
+        }: EnhancedTableProps) => (
           <Table condensed fixed striped>
             <Thead>
               <FixedRow className="toolbar-row">
