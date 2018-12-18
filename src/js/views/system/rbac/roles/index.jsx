@@ -166,7 +166,7 @@ export default class RBACRoles extends Component {
 
     return (
       <Table
-        collection={this.props.rolesModel}
+        roles={this.props.rolesModel}
         onDeleteClick={this.handleRemoveRoleClick}
         onEditClick={this.handleEditRoleClick}
         onCloneClick={this.handleCloneRoleClick}
