@@ -5,6 +5,10 @@ import { Tr, Td } from '../../components/new_table';
 import { Controls, Control as Button } from '../../components/controls';
 import Auto from '../../components/autocomponent';
 import Text from '../../components/text';
+import NameColumn from '../../components/NameColumn';
+import { DescriptionColumn } from '../../components/DescriptionColumn';
+import ContentByType from '../../components/ContentByType';
+import { ActionColumn } from '../../components/ActionColumn';
 
 type Props = {
   data: Object,
@@ -33,28 +37,8 @@ const ErrorsRow: Function = ({
 
   return (
     <Tr first={first} observeElement={first && '.pane'}>
-      <Td className="name">
-        <p>{data.error}</p>
-      </Td>
-      {!compact && (
-        <Td className="text">
-          <Text text={data.description} />
-        </Td>
-      )}
-      <Td className="medium">{data.severity}</Td>
-      <Td className="medium">
-        <Auto>{data.status}</Auto>
-      </Td>
-      <Td className="narrow">{data.retry_delay_secs}</Td>
-      <Td className="medium">
-        <Auto>{data.business_flag}</Auto>
-      </Td>
-      {type === 'workflow' && (
-        <Td className="medium">
-          <Auto>{data.manually_updated}</Auto>
-        </Td>
-      )}
-      <Td className="medium">
+      <NameColumn name={data.error} />
+      <ActionColumn>
         <Controls grouped>
           <Button
             onClick={handleEditClick}
@@ -68,7 +52,19 @@ const ErrorsRow: Function = ({
             title="Remove error"
           />
         </Controls>
+      </ActionColumn>
+      {!compact && <DescriptionColumn>{data.description}</DescriptionColumn>}
+      <Td className="medium">{data.severity}</Td>
+      <Td className="medium">{data.status}</Td>
+      <Td className="narrow">{data.retry_delay_secs}</Td>
+      <Td className="medium">
+        <ContentByType content={data.business_flag} />
       </Td>
+      {type === 'workflow' && (
+        <Td className="medium">
+          <ContentByType content={data.manually_updated} />
+        </Td>
+      )}
     </Tr>
   );
 };

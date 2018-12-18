@@ -3,21 +3,30 @@ import React from 'react';
 import compose from 'recompose/compose';
 
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
-import withSort from '../../hocomponents/sort';
 import { NameColumnHeader } from '../../components/NameColumn';
-import checkData from '../../hocomponents/check-no-data';
 import ErrorRow from './row';
 import { sortDefaults } from '../../constants/sort';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
+import EnhancedTable from '../../components/EnhancedTable';
+import type { EnhancedTableProps } from '../../components/EnhancedTable';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import Pull from '../../components/Pull';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
+import LoadMore from '../../components/LoadMore';
+import Search from '../search';
+import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
+import { ActionColumnHeader } from '../../components/ActionColumn';
 
 type Props = {
   type: string,
   data: Array<Object>,
   compact?: boolean,
-  onSortChange: Function,
   onEditClick: Function,
   onDeleteClick: Function,
-  sortData: Object,
+  onCreateClick: Function,
   height: string | number,
 };
 
@@ -25,66 +34,105 @@ const ErrorsTable: Function = ({
   data,
   compact,
   type,
-  onSortChange,
-  sortData,
   onEditClick,
   onDeleteClick,
+  onCreateClick,
   height,
 }: Props): React.Element<any> => (
-  <Table striped condensed fixed height={height} key={data.length}>
-    <Thead>
-      <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <NameColumnHeader name="error" />
-        {!compact && <Th name="description">Description</Th>}
-        <Th className="medium" name="severity">
-          Severity
-        </Th>
-        <Th className="medium" name="status">
-          Status
-        </Th>
-        <Th className="narrow" name="retry_delay_secs">
-          Delay
-        </Th>
-        <Th className="medium" name="business_flag">
-          Bus. Flag
-        </Th>
-        {type === 'workflow' && (
-          <Th className="medium" name="manually_updated">
-            Updated
-          </Th>
-        )}
-        <Th className="medium">-</Th>
-      </FixedRow>
-    </Thead>
-    <DataOrEmptyTable
-      condition={!data || data.length === 0}
-      cols={type === 'workflow' ? (compact ? 7 : 8) : compact ? 6 : 7}
-    >
-      {props => (
-        <Tbody {...props}>
-          {data.map(
-            (error: Object, index: number): React.Element<ErrorRow> => (
-              <ErrorRow
-                first={index === 0}
-                key={index}
-                data={error}
-                compact={compact}
-                type={type}
-                onEditClick={onEditClick}
-                onDeleteClick={onDeleteClick}
-              />
-            )
+  <EnhancedTable
+    collection={data}
+    tableId="globalErrors"
+    sortDefault={sortDefaults.globalErrors}
+    searchBy={['error', 'severity', 'status', 'delay']}
+  >
+    {({
+      canLoadMore,
+      handleLoadAll,
+      handleLoadMore,
+      limit,
+      sortData,
+      onSortChange,
+      collection,
+      handleSearchChange,
+    }: EnhancedTableProps) => (
+      <Table striped condensed fixed height={height}>
+        <Thead>
+          <FixedRow className="toolbar-row">
+            <Th>
+              <Pull>
+                <ButtonGroup>
+                  <Button
+                    text="Add error"
+                    iconName="plus"
+                    onClick={onCreateClick}
+                    big
+                  />
+                </ButtonGroup>
+              </Pull>
+              <Pull right>
+                <LoadMore
+                  canLoadMore={canLoadMore}
+                  onLoadMore={handleLoadMore}
+                  onLoadAll={handleLoadAll}
+                  limit={limit}
+                />
+                {compact && (
+                  <Search
+                    onSearchUpdate={handleSearchChange}
+                    resource={`${type}Errors`}
+                  />
+                )}
+              </Pull>
+            </Th>
+          </FixedRow>
+          <FixedRow sortData={sortData} onSortChange={onSortChange}>
+            <NameColumnHeader name="error" />
+            <ActionColumnHeader />
+            {!compact && <DescriptionColumnHeader name="description" />}
+            <Th name="severity" icon="warning-sign">
+              Severity
+            </Th>
+            <Th name="status" icon="info-sign">
+              Status
+            </Th>
+            <Th name="retry_delay_secs" icon="time">
+              Delay
+            </Th>
+            <Th name="business_flag" icon="flag">
+              Bus. Flag
+            </Th>
+            {type === 'workflow' && (
+              <Th name="manually_updated" icon="edit">
+                Updated
+              </Th>
+            )}
+          </FixedRow>
+        </Thead>
+        <DataOrEmptyTable
+          condition={!collection || collection.length === 0}
+          cols={type === 'workflow' ? (compact ? 7 : 8) : compact ? 6 : 7}
+        >
+          {props => (
+            <Tbody {...props}>
+              {collection.map(
+                (error: Object, index: number): React.Element<ErrorRow> => (
+                  <ErrorRow
+                    first={index === 0}
+                    key={index}
+                    data={error}
+                    compact={compact}
+                    type={type}
+                    onEditClick={onEditClick}
+                    onDeleteClick={onDeleteClick}
+                  />
+                )
+              )}
+            </Tbody>
           )}
-        </Tbody>
-      )}
-    </DataOrEmptyTable>
-  </Table>
+        </DataOrEmptyTable>
+      </Table>
+    )}
+  </EnhancedTable>
 );
 
-export default compose(
-  withSort(
-    (props: Object): string => `${props.type}Errors`,
-    'data',
-    (props: Object): Object => sortDefaults[`${props.type}Errors`]
-  )
-)(ErrorsTable);
+export default compose(onlyUpdateForKeys(['data']))(ErrorsTable);

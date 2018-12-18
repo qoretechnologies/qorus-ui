@@ -98,42 +98,33 @@ const ErrorsContainer: Function = ({
 
   return (
     <Flex>
-      <Headbar>
-        {title && (
+      {title && (
+        <Headbar>
           <Breadcrumbs icon={compact && 'error'}>
             <Crumb active>{title}</Crumb>
           </Breadcrumbs>
-        )}
-        <Pull right>
-          <ButtonGroup>
-            <Button
-              text="Add error"
-              iconName="plus"
-              onClick={handleCreateClick}
-              big
+          <Pull right>
+            <Search
+              onSearchUpdate={onSearchChange}
+              defaultValue={query}
+              resource={`${type}Errors`}
             />
-          </ButtonGroup>
-          <Search
-            onSearchUpdate={onSearchChange}
-            defaultValue={query}
-            resource={`${type}Errors`}
-          />
-        </Pull>
-      </Headbar>
+          </Pull>
+        </Headbar>
+      )}
       {compact ? (
         <Table
-          className="clear"
           type={type}
           data={errors}
           compact={compact}
           onEditClick={handleEditClick}
           onDeleteClick={handleDeleteClick}
+          onCreateClick={handleCreateClick}
           height={height}
         />
       ) : (
         <Box top noPadding>
           <Table
-            className="clear"
             type={type}
             data={errors}
             compact={compact}
