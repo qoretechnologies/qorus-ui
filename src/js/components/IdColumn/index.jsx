@@ -24,7 +24,9 @@ type IdColumnHeaderProps = {
   icon: string,
 };
 
-const IdColumnHeader: Function = compose(onlyUpdateForKeys(['children']))(
+const IdColumnHeader: Function = compose(
+  onlyUpdateForKeys(['children', 'sortData'])
+)(
   ({
     children: children = 'ID',
     name: name = 'id',

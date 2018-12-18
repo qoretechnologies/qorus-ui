@@ -25,7 +25,7 @@ type DescriptionColumnHeaderProps = {
 };
 
 const DescriptionColumnHeader: Function = compose(
-  onlyUpdateForKeys(['children'])
+  onlyUpdateForKeys(['children', 'sortData'])
 )(
   ({
     children: children = 'Description',
@@ -33,7 +33,7 @@ const DescriptionColumnHeader: Function = compose(
     icon: icon = 'label',
     ...rest
   }: DescriptionColumnHeaderProps): React.Element<any> => (
-    <Th name={name} icon={icon} {...rest}>
+    <Th name={name} icon={icon} className="text" {...rest}>
       {children}
     </Th>
   )
