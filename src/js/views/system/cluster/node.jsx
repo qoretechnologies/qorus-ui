@@ -20,10 +20,11 @@ import {
 import ProcessRow from './row';
 import ExpandableItem from '../../../components/ExpandableItem';
 import { NameColumnHeader } from '../../../components/NameColumn';
-import LocalTable from '../../../components/LocalTable';
+import EnhancedTable from '../../../components/EnhancedTable';
 import Pull from '../../../components/Pull';
 import LoadMore from '../../../components/LoadMore';
 import Search from '../../../containers/search';
+import { sortDefaults } from '../../../constants/sort';
 
 type Props = {
   node: string,
@@ -52,10 +53,11 @@ const ClusterNode: Function = ({
   paneId,
 }: Props): React.Element<any> => (
   <ExpandableItem show title={node}>
-    <LocalTable
+    <EnhancedTable
       tableId={node}
       collection={processes}
       searchBy={['node', 'client_id', 'type', 'pid', 'priv_str', 'status']}
+      sortDefault={sortDefaults.nodes}
     >
       {({
         collection,
@@ -137,7 +139,7 @@ const ClusterNode: Function = ({
           </Tbody>
         </Table>
       )}
-    </LocalTable>
+    </EnhancedTable>
   </ExpandableItem>
 );
 
