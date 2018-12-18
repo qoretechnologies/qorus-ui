@@ -8,9 +8,8 @@ import withHandlers from 'recompose/withHandlers';
 import { findBy } from '../../helpers/search';
 import loadMore from '../../hocomponents/loadMore';
 import sort from '../../hocomponents/sort';
-import { sortDefaults } from '../../constants/sort';
 
-export type LocalTableProps = {
+export type EnhancedTableProps = {
   collection: Array<Object>,
   searchBy?: Array<string>,
   handleSearchChange: Function,
@@ -25,15 +24,15 @@ export type LocalTableProps = {
   onSortChange: Function,
 };
 
-const LocalTable: Function = ({
+const EnhancedTable: Function = ({
   children,
   ...rest
-}: LocalTableProps): React.Element<any> => children(rest);
+}: EnhancedTableProps): React.Element<any> => children(rest);
 
 export default compose(
   withState('search', 'changeSearch', null),
   withHandlers({
-    handleSearchChange: ({ changeSearch }: LocalTableProps): Function => (
+    handleSearchChange: ({ changeSearch }: EnhancedTableProps): Function => (
       value: string
     ): void => {
       changeSearch(() => value);
@@ -45,9 +44,9 @@ export default compose(
       search,
       searchBy,
       ...rest
-    }: LocalTableProps): LocalTableProps => ({
+    }: EnhancedTableProps): EnhancedTableProps => ({
       collection:
-        search && search !== ''
+        search && searchBy && search !== ''
           ? findBy(searchBy, search, collection)
           : collection,
       search,
@@ -55,6 +54,5 @@ export default compose(
     })
   ),
   loadMore('collection', null, true, 50),
-  sort(({ tableId }) => tableId, 'collection', sortDefaults.nodes),
-  onlyUpdateForKeys(['collection'])
-)(LocalTable);
+  sort(({ tableId }) => tableId, 'collection', ({ sortDefault }) => sortDefault)
+)(EnhancedTable);
