@@ -12,6 +12,10 @@ import ConfirmDialog from '../../../components/confirm_dialog';
 import { Controls, Control as Button } from '../../../components/controls';
 import actions from '../../../store/api/actions';
 import { hasPermission } from '../../../helpers/user';
+import { IdColumn } from '../../../components/IdColumn';
+import NameColumn from '../../../components/NameColumn';
+import { DescriptionColumn } from '../../../components/DescriptionColumn';
+import { ActionColumn } from '../../../components/ActionColumn';
 
 type Props = {
   slaid: number,
@@ -36,24 +40,14 @@ const SLARow: Function = ({
   first,
 }: Props): React.Element<any> => (
   <Tr key={slaid} first={first}>
-    <Td className="narrow">{slaid}</Td>
-    <Td className="text">
-      <Link
-        className="resource-name-link"
-        to={`/system/sla/${slaid}`}
-        title={name}
-      >
-        {name}
-      </Link>
-    </Td>
-    <Td className="text">
-      <Text text={description} />
-    </Td>
+    <IdColumn>{slaid}</IdColumn>
+    <NameColumn name={name} link={`/system/sla/${slaid}`} type="sla" />
+    <DescriptionColumn>{description}</DescriptionColumn>
     <Td className="text">
       <Text text={units} />
     </Td>
     {hasPermission(perms, ['DELETE-SLA', 'SLA-CONTROL'], 'or') && (
-      <Td className="narrow">
+      <ActionColumn>
         <Controls grouped>
           <Button
             iconName="cross"
@@ -61,7 +55,7 @@ const SLARow: Function = ({
             onClick={handleDeleteClick}
           />
         </Controls>
-      </Td>
+      </ActionColumn>
     )}
   </Tr>
 );

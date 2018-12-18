@@ -14,6 +14,10 @@ import checkData from '../../../hocomponents/check-no-data';
 import withModal from '../../../hocomponents/modal';
 import SLARow from './row';
 import { hasPermission } from '../../../helpers/user';
+import { IdColumnHeader } from '../../../components/IdColumn';
+import { NameColumnHeader } from '../../../components/NameColumn';
+import { DescriptionColumnHeader } from '../../../components/DescriptionColumn';
+import { ActionColumnHeader } from '../../../components/ActionColumn';
 
 type Props = {
   collection: Array<Object>,
@@ -32,29 +36,17 @@ const SLATable: Function = ({
   closeModal,
   perms,
 }: Props): React.Element<any> => (
-  <Table
-    striped
-    condensed
-    fixed
-    className="resource-table"
-    key={collection.length}
-  >
+  <Table striped condensed fixed className="resource-table">
     <Thead>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="narrow" name="slaid">
-          ID
-        </Th>
-        <Th className="text" name="name">
-          Name
-        </Th>
-        <Th className="text" name="description">
-          Description
-        </Th>
-        <Th className="text" name="type">
+        <IdColumnHeader name="slaid" />
+        <NameColumnHeader />
+        <DescriptionColumnHeader name="description" />
+        <Th className="text" name="type" icon="time">
           Units
         </Th>
         {hasPermission(perms, ['DELETE-SLA', 'SLA-CONTROL'], 'or') && (
-          <Th className="narrow">Actions</Th>
+          <ActionColumnHeader />
         )}
       </FixedRow>
     </Thead>
