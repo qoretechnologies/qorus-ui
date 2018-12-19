@@ -11,6 +11,7 @@ type Props = {
   intent?: string,
   icon?: string,
   onClick: Function,
+  disabled?: boolean,
 };
 
 export default function Control({
@@ -20,6 +21,7 @@ export default function Control({
   intent,
   icon,
   onClick,
+  disabled,
 }: Props) {
   const iconName: ?string = !icon && !children ? 'caret-down' : icon;
   const rightIconName: ?string = !icon && !children ? undefined : 'caret-down';
@@ -34,6 +36,7 @@ export default function Control({
         iconName={iconName}
         rightIconName={!noCaret ? rightIconName : null}
         onClick={onClick}
+        disabled={disabled}
       />
     </ButtonGroup>
   ) : null;

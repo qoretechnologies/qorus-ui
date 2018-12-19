@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
+import size from 'lodash/size';
 
 import { Table, Thead, Tbody, Th, FixedRow } from '../../components/new_table';
 import withModal from '../../hocomponents/modal';
@@ -21,6 +22,7 @@ import { Icon } from '@blueprintjs/core';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import SortingDropdown from '../../components/SortingDropdown';
 import { NameColumnHeader } from '../../components/NameColumn';
+import Pull from '../../components/Pull';
 
 type Props = {
   sortData: Object,
@@ -90,8 +92,12 @@ const WorkflowsTable: Function = ({
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan={isTablet ? 4 : 5}>
-          <div className="pull-left">
-            <Selector selected={selected} selectedCount={selectedIds.length} />
+          <Pull>
+            <Selector
+              selected={selected}
+              selectedCount={selectedIds.length}
+              disabled={size(collection) === 0}
+            />
             <Actions
               selectedIds={selectedIds}
               show={selected !== 'none'}
@@ -103,15 +109,15 @@ const WorkflowsTable: Function = ({
               sortData={sortData}
               sortKeys={sortKeysObj}
             />
-          </div>
-          <div className="pull-right">
+          </Pull>
+          <Pull right>
             <LoadMore
               limit={limit}
               canLoadMore={canLoadMore}
               handleLoadAll={handleLoadAll}
               handleLoadMore={handleLoadMore}
             />
-          </div>
+          </Pull>
         </Th>
         <Th className="separated-cell" colspan={2}>
           <DatePicker
