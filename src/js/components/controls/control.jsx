@@ -6,6 +6,7 @@ import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 import classNames from 'classnames';
 import { Button, Intent } from '@blueprintjs/core';
+import { connect } from 'react-redux';
 
 const intentTransform = {
   success: Intent.SUCCESS,
@@ -35,6 +36,7 @@ type Props = {
   children?: React.Element<*> | Array<React.Element<*>>,
   intent?: string,
   text?: any,
+  isTablet?: boolean,
 };
 
 const Control: Function = ({
@@ -48,22 +50,28 @@ const Control: Function = ({
   iconName,
   text,
   intent,
+  isTablet,
 }: Props): React.Element<any> => (
   <Button
     id={id}
     className={className}
-    title={title}
+    title={isTablet ? text : title}
     onClick={handleClick}
     disabled={disabled}
     type={type}
     style={css}
     iconName={iconName}
-    text={text}
+    text={isTablet ? (iconName ? undefined : text) : text}
     intent={intent}
   />
 );
 
 export default compose(
+  connect(
+    (state: Object): Object => ({
+      isTablet: state.ui.settings.tablet,
+    })
+  ),
   mapProps(
     ({
       className,
@@ -115,5 +123,6 @@ export default compose(
     'btnStyle',
     'intent',
     'iconName',
+    'isTablet',
   ])
 )(Control);
