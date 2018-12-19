@@ -72,9 +72,7 @@ const ProcessRow: Function = ({
       <ContentByType content={pid} />
     </Td>
     <Td className="medium"> {privStr} </Td>
-    <Td className="big text">
-      <ContentByType content={statusString} />
-    </Td>
+    <Td className="big text">{statusString}</Td>
   </Tr>
 );
 
