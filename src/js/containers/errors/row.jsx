@@ -3,8 +3,6 @@ import React from 'react';
 
 import { Tr, Td } from '../../components/new_table';
 import { Controls, Control as Button } from '../../components/controls';
-import Auto from '../../components/autocomponent';
-import Text from '../../components/text';
 import NameColumn from '../../components/NameColumn';
 import { DescriptionColumn } from '../../components/DescriptionColumn';
 import ContentByType from '../../components/ContentByType';
