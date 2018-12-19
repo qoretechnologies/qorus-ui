@@ -30,6 +30,12 @@ const EnhancedTable: Function = ({
 }: EnhancedTableProps): React.Element<any> => children(rest);
 
 export default compose(
+  mapProps(
+    ({ collection, ...rest }: EnhancedTableProps): EnhancedTableProps => ({
+      collection: collection || [],
+      ...rest,
+    })
+  ),
   withState('search', 'changeSearch', null),
   withHandlers({
     handleSearchChange: ({ changeSearch }: EnhancedTableProps): Function => (
