@@ -18,6 +18,8 @@ const INTERFACE_ICONS = {
   users: 'people',
   sla: 'time',
   slas: 'time',
+  valuemap: 'map',
+  valuemaps: 'map',
 };
 
 export { INTERFACE_ICONS };
