@@ -6,13 +6,26 @@ import pickBy from 'lodash/pickBy';
 import includes from 'lodash/includes';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import size from 'lodash/size';
 
-import { Table, Thead, Tbody, Tr, Th } from '../../../../components/new_table';
+import Search from '../../../../containers/search';
+
+import {
+  Table,
+  Thead,
+  Tbody,
+  Th,
+  FixedRow,
+} from '../../../../components/new_table';
 import sync from '../../../../hocomponents/sync';
 import patch from '../../../../hocomponents/patchFuncArgs';
 import { resourceSelector, querySelector } from '../../../../selectors';
 import { fetchValues } from '../../../../store/api/resources/valuemaps/actions';
 import DetailRow from './row';
+import Pull from '../../../../components/Pull';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import { ActionColumnHeader } from '../../../../components/ActionColumn';
+import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 
 type Props = {
   paneId: number,
@@ -21,29 +34,52 @@ type Props = {
   sortData: Object,
   update: Function,
   remove: Function,
+  onSearchChange: Function,
+  defaultSearchValue?: string,
 };
 
-const DetailTable: Function = ({ paneId, data }: Props): React.Element<any> => (
-  <Table condensed striped>
+const DetailTable: Function = ({
+  paneId,
+  data,
+  onSearchChange,
+  defaultSearchValue,
+}: Props): React.Element<any> => (
+  <Table condensed striped fixed height={300}>
     <Thead>
-      <Tr>
-        <Th> Key </Th>
-        <Th> Value </Th>
-        <Th> Actions </Th>
-      </Tr>
+      <FixedRow className="toolbar-row">
+        <Th>
+          <Pull right>
+            <Search
+              onSearchUpdate={onSearchChange}
+              defaultValue={defaultSearchValue}
+              resource="valuemapKeys"
+            />
+          </Pull>
+        </Th>
+      </FixedRow>
+      <FixedRow>
+        <NameColumnHeader />
+        <ActionColumnHeader />
+        <Th icon="info-sign"> Value </Th>
+      </FixedRow>
     </Thead>
-    <Tbody>
-      {Object.keys(data).map(
-        (key: string): React.Element<any> => (
-          <DetailRow
-            key={`value_${key}`}
-            id={paneId}
-            name={key}
-            data={data[key]}
-          />
-        )
+    <DataOrEmptyTable condition={size(data) === 0} cols={3} small>
+      {props => (
+        <Tbody {...props}>
+          {Object.keys(data).map(
+            (key: string, index: number): React.Element<any> => (
+              <DetailRow
+                key={index}
+                id={paneId}
+                name={key}
+                first={index === 0}
+                data={data[key]}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
@@ -60,10 +96,8 @@ const findValuemap: Function = (id: number): Function => (
 const filterValues: Function = (query: string): Function => (
   data: Object
 ): Object =>
-  pickBy(
-    data,
-    (value, key) =>
-      query ? includes(key, query) || includes(value.value, query) : true
+  pickBy(data, (value, key) =>
+    query ? includes(key, query) || includes(value.value, query) : true
   );
 
 const valuemapId = (state: Object, props: Object): number => props.paneId;

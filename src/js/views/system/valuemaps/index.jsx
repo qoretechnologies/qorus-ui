@@ -14,7 +14,7 @@ import actions from '../../../store/api/actions';
 import Box from '../../../components/box';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Search from '../../../containers/search';
-import Table from './table';
+import ValueMapsContainer from '../../../containers/valuemaps';
 import Pane from './detail';
 import titleManager from '../../../hocomponents/TitleManager';
 import Headbar from '../../../components/Headbar';
@@ -27,7 +27,6 @@ type Props = {
   collection: Array<Object>,
   openPane: Function,
   closePane: Function,
-  isTablet: boolean,
   paneId: number,
 };
 
@@ -37,7 +36,6 @@ const ValueMaps: Function = ({
   collection,
   openPane,
   closePane,
-  isTablet,
   paneId,
 }: Props): React.Element<any> => (
   <Flex>
@@ -54,12 +52,12 @@ const ValueMaps: Function = ({
       </Pull>
     </Headbar>
     <Box top noPadding>
-      <Table
-        collection={collection}
+      <ValueMapsContainer
+        vmaps={collection}
         openPane={openPane}
         closePane={closePane}
-        isTablet={isTablet}
         paneId={paneId}
+        compact={false}
       />
     </Box>
   </Flex>
@@ -68,27 +66,19 @@ const ValueMaps: Function = ({
 const filterData = (query: string): Function => (
   collection: Array<Object>
 ): Array<Object> =>
-  findBy(['name', 'desc', 'author', 'valuetype'], query, collection);
+  findBy(['name', 'desc', 'author', 'valuetype', 'mapsize'], query, collection);
 
 const dataSelector: Function = createSelector(
   [resourceSelector('valuemaps'), querySelector('q')],
   (valuemaps, query) => filterData(query)(valuemaps.data)
 );
 
-const settingsSelector = (state: Object): Object => state.ui.settings;
-
 const state = createSelector(
-  [
-    dataSelector,
-    resourceSelector('valuemaps'),
-    querySelector('q'),
-    settingsSelector,
-  ],
-  (collection, valuemaps, query, settings) => ({
+  [dataSelector, resourceSelector('valuemaps'), querySelector('q')],
+  (collection, valuemaps, query) => ({
     collection,
     valuemaps,
     query,
-    isTablet: settings.tablet,
   })
 );
 
@@ -103,5 +93,5 @@ export default compose(
   search(),
   withPane(Pane, ['valuemaps', 'location', 'isTablet'], null, 'valuemaps'),
   titleManager('Valuemaps'),
-  pure(['collection', 'isTablet', 'location'])
+  pure(['collection', 'location'])
 )(ValueMaps);

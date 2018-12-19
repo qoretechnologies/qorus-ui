@@ -1,19 +1,25 @@
 /* @flow */
 import React from 'react';
 
-import { Tr, EditableCell, Td } from '../../../../components/new_table';
-import { Controls, Control as Button } from '../../../../components/controls';
+import { Tr, EditableCell } from '../../../../components/new_table';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../../components/controls';
 import {
   updateValue,
   deleteValue,
 } from '../../../../store/api/resources/valuemaps/actions';
 import withDispatch from '../../../../hocomponents/withDispatch';
+import NameColumn from '../../../../components/NameColumn';
+import { ActionColumn } from '../../../../components/ActionColumn';
 
 type Props = {
   data: Object,
   id: number,
   name: string,
   dispatchAction: Function,
+  first: boolean,
 };
 
 const RowDetail: Function = ({
@@ -21,6 +27,7 @@ const RowDetail: Function = ({
   id,
   name,
   dispatchAction,
+  first,
 }: Props): React.Element<any> => {
   const handleEnableClick: Function = (): void => {
     dispatchAction(updateValue, id, name, value, !enabled);
@@ -35,11 +42,10 @@ const RowDetail: Function = ({
   };
 
   return (
-    <Tr>
-      <Td className="name">{name}</Td>
-      <EditableCell value={value} onSave={handleValueChange} />
-      <Td>
-        <Controls grouped>
+    <Tr first={first} observeElement={first && '.pane'}>
+      <NameColumn name={name} />
+      <ActionColumn>
+        <ButtonGroup>
           <Button
             iconName="power"
             btnStyle={enabled ? 'success' : 'danger'}
@@ -52,8 +58,9 @@ const RowDetail: Function = ({
             onClick={handleRemoveClick}
             title="Remove value"
           />
-        </Controls>
-      </Td>
+        </ButtonGroup>
+      </ActionColumn>
+      <EditableCell value={value} onSave={handleValueChange} />
     </Tr>
   );
 };
