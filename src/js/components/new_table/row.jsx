@@ -17,7 +17,7 @@ type Props = {
   title?: string,
   key?: any,
   lastObserverChange?: string | number,
-  observeElement?: string,
+  observeElement?: ?string,
 };
 
 @withMutationObserver('.sidebar')
