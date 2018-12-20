@@ -19,6 +19,7 @@ type NameColumnProps = {
   isActive?: boolean,
   hasAlerts?: boolean,
   type?: string,
+  className?: string,
 };
 
 type NameProps = {
@@ -44,8 +45,11 @@ const NameColumn: Function = ({
   onDetailClick,
   hasAlerts,
   type,
+  className,
 }: NameColumnProps): React.Element<any> => (
-  <Td className={`name ${hasAlerts ? 'table-name-has-alerts' : ''}`}>
+  <Td
+    className={`name ${hasAlerts ? 'table-name-has-alerts' : ''} ${className}`}
+  >
     <Flex flexFlow="row">
       {onDetailClick && (
         <ButtonGroup>
