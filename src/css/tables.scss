@@ -28,7 +28,10 @@ th {
 .fixed-table-header,
 th {
   font-weight: 400;
-  text-align: center; /* [2] */
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 
   > span {
     &.header-icon {
