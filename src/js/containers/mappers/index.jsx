@@ -13,60 +13,90 @@ import {
   Td,
   FixedRow,
 } from '../../components/new_table';
-import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
+import EnhancedTable from '../../components/EnhancedTable';
+import Pull from '../../components/Pull';
+import LoadMore from '../../components/LoadMore';
+import Search from '../../containers/search';
+import type { EnhancedTableProps } from '../../components/EnhancedTable';
+import { IdColumn, IdColumnHeader } from '../../components/IdColumn';
+import NameColumn, { NameColumnHeader } from '../../components/NameColumn';
+import { normalizeName } from '../../components/utils';
 
 const MappersTable = ({
   mappers,
-  onSortChange,
-  sortData,
 }: {
   mappers: Array<Object>,
-  sortData: Object,
-  onSortChange: Function,
 }): React.Element<any> => (
-  <Table condensed striped fixed>
-    <Thead>
-      <FixedRow {...{ onSortChange, sortData }}>
-        <Th className="narrow" name="mapperid">
-          ID
-        </Th>
-        <Th className="name" name="name">
-          Name
-        </Th>
-        <Th className="text" name="type">
-          Type
-        </Th>
-      </FixedRow>
-    </Thead>
-    <DataOrEmptyTable condition={!mappers || mappers.length === 0} cols={3}>
-      {props => (
-        <Tbody {...props}>
-          {mappers.map(
-            (item: Object, index: number): React.Element<any> => (
-              <Tr
-                key={`mapper_${item.mapperid}`}
-                first={index === 0}
-                observeElement={index === 0 && '.pane'}
-              >
-                <Td className="narrow">{item.mapperid}</Td>
-                <Td className="name">
-                  <Link to={`/mappers/${item.mapperid}`}>
-                    {item.name} v{item.version}
-                  </Link>
-                </Td>
-                <Td className="text">{item.type}</Td>
-              </Tr>
-            )
+  <EnhancedTable
+    collection={mappers}
+    searchBy={['mapperid', 'name', 'version', 'type']}
+    tableId="mappers"
+    sortDefault={sortDefaults.mappers}
+  >
+    {({
+      collection,
+      sortData,
+      onSortChange,
+      handleSearchChange,
+      limit,
+      canLoadMore,
+      handleLoadMore,
+      handleLoadAll,
+    }: EnhancedTableProps) => (
+      <Table condensed striped fixed>
+        <Thead>
+          <FixedRow className="toolbar-row">
+            <Th>
+              <Pull right>
+                <LoadMore
+                  canLoadMore={canLoadMore}
+                  onLoadMore={handleLoadMore}
+                  onLoadAll={handleLoadAll}
+                  limit={limit}
+                />
+                <Search
+                  onSearchUpdate={handleSearchChange}
+                  resource="mappers"
+                />
+              </Pull>
+            </Th>
+          </FixedRow>
+          <FixedRow {...{ onSortChange, sortData }}>
+            <IdColumnHeader name="mapperid" />
+            <NameColumnHeader />
+            <Th className="text" name="type" icon="info-sign">
+              Type
+            </Th>
+          </FixedRow>
+        </Thead>
+        <DataOrEmptyTable condition={!mappers || mappers.length === 0} cols={3}>
+          {props => (
+            <Tbody {...props}>
+              {collection.map(
+                (item: Object, index: number): React.Element<any> => (
+                  <Tr
+                    key={index}
+                    first={index === 0}
+                    observeElement={index === 0 ? '.pane' : undefined}
+                  >
+                    <IdColumn>{item.mapperid}</IdColumn>
+                    <NameColumn
+                      name={normalizeName(item)}
+                      link={`/mappers/${item.mapperid}`}
+                      type="mapper"
+                    />
+                    <Td className="text">{item.type}</Td>
+                  </Tr>
+                )
+              )}
+            </Tbody>
           )}
-        </Tbody>
-      )}
-    </DataOrEmptyTable>
-  </Table>
+        </DataOrEmptyTable>
+      </Table>
+    )}
+  </EnhancedTable>
 );
 
-export default compose(
-  withSort('mappers', 'mappers', sortDefaults.mappers),
-  pure(['mappers', 'sortData'])
-)(MappersTable);
+export default compose(pure(['mappers']))(MappersTable);
