@@ -63,5 +63,5 @@ export default compose(
       selectAlerts: actions.workflows.selectStopped,
     }
   ),
-  pure(['selected', 'selectedCount'])
+  pure(['selected', 'selectedCount', 'disabled'])
 )(ToolbarSelector);
