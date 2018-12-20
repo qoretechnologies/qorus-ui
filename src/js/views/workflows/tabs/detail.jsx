@@ -29,6 +29,8 @@ import Dropdown, {
 } from '../../../components/dropdown';
 import Flex from '../../../components/Flex';
 import Box from '../../../components/box';
+import { Table, Thead, Th, Tbody, Tr, Td } from '../../../components/new_table';
+import { ActionColumnHeader } from '../../../components/ActionColumn';
 
 @connect(
   null,
@@ -111,35 +113,49 @@ export default class DetailTab extends Component {
         <InfoHeader model={workflow} />
         <Flex scrollY>
           <PaneItem title="Controls">
-            <WorkflowsControls
-              id={this.props.workflow.id}
-              enabled={this.props.workflow.enabled}
-              remote={this.props.workflow.remote}
-              big
-            />
-            <Autostart
-              autostart={this.props.workflow.autostart}
-              execCount={this.props.workflow.exec_count}
-              id={this.props.workflow.id}
-              withExec
-              big
-            />
-          </PaneItem>
-          <PaneItem title="SLA Threshold">
-            <ButtonGroup>
-              <form onSubmit={this.handleSubmit}>
-                <ControlGroup>
-                  <InputGroup
-                    type="text"
-                    value={`${this.state.slaThreshold}`}
-                    onChange={this.handleThresholdChange}
-                    className="pt-small"
-                    style={{ width: '50px' }}
-                  />
-                  <Control icon="floppy-disk" type="submit" big />
-                </ControlGroup>
-              </form>
-            </ButtonGroup>
+            <Table condensed bordered width="auto">
+              <Thead>
+                <Tr>
+                  <ActionColumnHeader />
+                  <Th icon="automatic-updates">Auto/Execs</Th>
+                  <Th icon="time">SLA Threshold</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                <Tr>
+                  <Td>
+                    <WorkflowsControls
+                      id={this.props.workflow.id}
+                      enabled={this.props.workflow.enabled}
+                      remote={this.props.workflow.remote}
+                    />
+                  </Td>
+                  <Td>
+                    <Autostart
+                      autostart={this.props.workflow.autostart}
+                      execCount={this.props.workflow.exec_count}
+                      id={this.props.workflow.id}
+                      withExec
+                    />
+                  </Td>
+                  <Td>
+                    <ButtonGroup>
+                      <form onSubmit={this.handleSubmit}>
+                        <ControlGroup>
+                          <InputGroup
+                            type="text"
+                            value={`${this.state.slaThreshold}`}
+                            onChange={this.handleThresholdChange}
+                            className="pt-small"
+                          />
+                          <Control icon="floppy-disk" type="submit" />
+                        </ControlGroup>
+                      </form>
+                    </ButtonGroup>
+                  </Td>
+                </Tr>
+              </Tbody>
+            </Table>
           </PaneItem>
           {workflow.order_stats && (
             <PaneItem
