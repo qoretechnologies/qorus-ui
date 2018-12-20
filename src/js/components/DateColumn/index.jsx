@@ -16,7 +16,7 @@ const DateColumn: Function = compose(onlyUpdateForKeys(['children']))(
     className: className = 'big',
   }: DateColumnProps): React.Element<any> => (
     <Td className={className}>
-      <DateComponent date={children} />
+      {children ? <DateComponent date={children} /> : '-'}
     </Td>
   )
 );
