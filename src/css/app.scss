@@ -123,6 +123,12 @@ h6,
   font-size: 12px;
 }
 
+.pt-icon-large.pt-intent-success,
+.pt-icon-standard.pt-intent-success,
+.pt-icon.pt-intent-success {
+  color: $qore-green;
+}
+
 .pt-button-group:not(.pt-minimal) .pt-button {
   &.pt-intent-success {
     background-color: $qore-green !important;
