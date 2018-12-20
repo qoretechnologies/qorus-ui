@@ -149,6 +149,10 @@ export const sortDefaults = {
     sortBy: 'name',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
+  steps: {
+    sortBy: 'stepname',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };
 
 export const sortKeys = {

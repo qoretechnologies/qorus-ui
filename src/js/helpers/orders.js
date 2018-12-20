@@ -25,7 +25,7 @@ const getStatusLabel = status => {
 };
 
 const groupInstances = steps => {
-  const stepGroups = [];
+  const stepGroups = {};
 
   steps.forEach(step => {
     const name = step.stepname;
