@@ -11,7 +11,9 @@ type SelectColumnProps = {
   checked: boolean,
 };
 
-const SelectColumn: Function = compose(onlyUpdateForKeys(['children']))(
+const SelectColumn: Function = compose(
+  onlyUpdateForKeys(['children', 'checked'])
+)(
   ({
     onClick,
     checked,
