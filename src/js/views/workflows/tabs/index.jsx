@@ -113,7 +113,7 @@ const WorkflowDetailTabs: Function = ({
       </Box>
     </SimpleTab>
     <SimpleTab name="config">
-      <Box top fill scrolly>
+      <Box top fill scrollY>
         <ConfigItemsTable
           items={rebuildConfigHash(workflow, true)}
           intrf="workflows"
@@ -121,7 +121,7 @@ const WorkflowDetailTabs: Function = ({
       </Box>
     </SimpleTab>
     <SimpleTab name="order stats">
-      <Box top fill scrolly>
+      <Box top fill scrollY>
         <OrderStats orderStats={workflow.order_stats} />
       </Box>
     </SimpleTab>

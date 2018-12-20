@@ -48,7 +48,7 @@ const ConfigItemsContainer: Function = ({
 }: ConfigItemsContainerProps): React.Element<any> => (
   <NoDataIf condition={size(items) === 0} big>
     {() => (
-      <Flex scrollY>
+      <div>
         {map(items, (configItems: Array<Object>, belongsTo: string) => (
           <ExpandableItem title={belongsTo} key={belongsTo} show>
             {() => (
@@ -105,7 +105,7 @@ const ConfigItemsContainer: Function = ({
                       </FixedRow>
                     </Thead>
                     <DataOrEmptyTable
-                      condition={!configItems || configItems.length === 0}
+                      condition={!collection || collection.length === 0}
                       cols={7}
                     >
                       {props => (
@@ -169,7 +169,7 @@ const ConfigItemsContainer: Function = ({
             )}
           </ExpandableItem>
         ))}
-      </Flex>
+      </div>
     )}
   </NoDataIf>
 );
