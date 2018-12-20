@@ -23,6 +23,9 @@ import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import SortingDropdown from '../../components/SortingDropdown';
 import { NameColumnHeader } from '../../components/NameColumn';
 import Pull from '../../components/Pull';
+import { SelectColumnHeader } from '../../components/SelectColumn';
+import { ActionColumnHeader } from '../../components/ActionColumn';
+import { IdColumnHeader } from '../../components/IdColumn';
 
 type Props = {
   sortData: Object,
@@ -136,30 +139,34 @@ const WorkflowsTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny">
-          <Icon iconName="small-tick" />
-        </Th>
-        {!isTablet && <Th className="normal">Actions</Th>}
-        <Th className="medium" name="autostart">
+        <SelectColumnHeader />
+        <IdColumnHeader />
+        <NameColumnHeader />
+        {!isTablet && <ActionColumnHeader />}
+        <Th name="autostart" icon="automatic-updates">
           Auto / Execs
         </Th>
-        <Th className="narrow" name="id">
-          ID
-        </Th>
-        <NameColumnHeader />
         {deprecated && (
-          <Th className="medium" name="deprecated">
+          <Th name="deprecated" icon="flag">
             Deprecated
           </Th>
         )}
-        <Th className="huge separated-cell" onClick={handleInstancesClick}>
+        <Th
+          className="separated-cell"
+          onClick={handleInstancesClick}
+          icon="layout-grid"
+        >
           Instances
         </Th>
-        <Th className="narrow" name="TOTAL">
+        <Th name="TOTAL" icon="grid">
           All
         </Th>
-        <Th className="big separated-cell">Disposition (%)</Th>
-        <Th className="normal">SLA (%)</Th>
+        <Th className="separated-cell" icon="pie-chart">
+          Disposition (%)
+        </Th>
+        <Th className="normal" icon="time">
+          SLA (%)
+        </Th>
       </FixedRow>
     </Thead>
     <DataOrEmptyTable
