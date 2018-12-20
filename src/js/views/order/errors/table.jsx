@@ -132,4 +132,4 @@ const ErrorsTable: Function = ({
   </EnhancedTable>
 );
 
-export default pure(['collection', 'steps', 'limit'])(ErrorsTable);
+export default pure(['errors'])(ErrorsTable);

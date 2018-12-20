@@ -20,7 +20,7 @@ export const sortDefaults = {
     historySortByKey: { direction: 1, ignoreCase: true },
   },
   orderErrors: {
-    sortBy: 'id',
+    sortBy: 'error',
     sortByKey: { direction: -1, ignoreCase: true },
   },
   alerts: {
@@ -151,6 +151,10 @@ export const sortDefaults = {
   },
   steps: {
     sortBy: 'stepname',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  audits: {
+    sortBy: 'event',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
 };

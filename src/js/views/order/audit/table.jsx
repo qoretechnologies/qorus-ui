@@ -11,79 +11,113 @@ import {
   Td,
   FixedRow,
 } from '../../../components/new_table';
-import Date from '../../../components/date';
 import Pull from '../../../components/Pull';
-import Dropdown, {
-  Control as DropdownToggle,
-  Item as DropdownItem,
-} from '../../../components/dropdown';
 import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import EnhancedTable from '../../../components/EnhancedTable';
+import type { EnhancedTableProps } from '../../../components/EnhancedTable';
+import { sortDefaults } from '../../../constants/sort';
+import LoadMore from '../../../components/LoadMore';
+import Search from '../../../containers/search';
+import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
+import {
+  DescriptionColumnHeader,
+  DescriptionColumn,
+} from '../../../components/DescriptionColumn';
+import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
+import { IdColumnHeader, IdColumn } from '../../../components/IdColumn';
+import {
+  AuthorColumnHeader,
+  AuthorColumn,
+} from '../../../components/AuthorColumn';
 
 type Props = {
-  collection: Array<Object>,
-  limit: number,
-  onItemClick: Function,
+  audits: Array<Object>,
 };
 
-const AuditTable: Function = ({
-  collection,
-  limit,
-  onItemClick,
-}: Props): React.Element<Table> => (
-  <Table fixed condensed striped>
-    <Thead>
-      {collection.length !== 0 && (
-        <FixedRow className="toolbar-row">
-          <Th>
-            <Pull right>
-              <Dropdown id="show">
-                <DropdownToggle>Showing: {limit}</DropdownToggle>
-                <DropdownItem title="10" action={onItemClick} />
-                <DropdownItem title="25" action={onItemClick} />
-                <DropdownItem title="50" action={onItemClick} />
-                <DropdownItem title="100" action={onItemClick} />
-                <DropdownItem title="500" action={onItemClick} />
-                <DropdownItem title="1000" action={onItemClick} />
-                <DropdownItem title="All" action={onItemClick} />
-              </Dropdown>
-            </Pull>
-          </Th>
-        </FixedRow>
-      )}
-      <FixedRow>
-        <Th className="narrow">Code</Th>
-        <Th className="narrow">Event ID</Th>
-        <Th>Created</Th>
-        <Th className="name">Event</Th>
-        <Th>Info</Th>
-        <Th>Reason</Th>
-        <Th>Source</Th>
-        <Th className="narrow">Who</Th>
-      </FixedRow>
-    </Thead>
-    <DataOrEmptyTable cols={8} condition={collection.length === 0}>
-      {props => (
-        <Tbody {...props}>
-          {collection.map(
-            (step: Object, index: number): React.Element<any> => (
-              <Tr key={index} first={index === 0}>
-                <Td className="narrow">{step.audit_event_code}</Td>
-                <Td className="narrow">{step.audit_eventid}</Td>
-                <Td>
-                  <Date date={step.created} />
-                </Td>
-                <Td className="name">{step.event}</Td>
-                <Td className="text">{step.info1}</Td>
-                <Td className="text">{step.reason}</Td>
-                <Td className="text">{step.source}</Td>
-                <Td className="narrow">{step.who}</Td>
-              </Tr>
-            )
+const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
+  <EnhancedTable
+    collection={audits}
+    tableId="orderErrors"
+    searchBy={[
+      'audit_event_code',
+      'audit_event_id',
+      'created',
+      'event',
+      'info1',
+      'reason',
+      'source',
+      'who',
+    ]}
+    sortDefault={sortDefaults.audits}
+  >
+    {({
+      handleSearchChange,
+      handleLoadAll,
+      handleLoadMore,
+      limit,
+      collection,
+      canLoadMore,
+      sortData,
+      onSortChange,
+    }: EnhancedTableProps) => (
+      <Table fixed condensed striped>
+        <Thead>
+          <FixedRow className="toolbar-row">
+            <Th>
+              <Pull right>
+                <LoadMore
+                  canLoadMore={canLoadMore}
+                  onLoadMore={handleLoadMore}
+                  onLoadAll={handleLoadAll}
+                  limit={limit}
+                />
+                <Search
+                  onSearchUpdate={handleSearchChange}
+                  resource="orderErrors"
+                />
+              </Pull>
+            </Th>
+          </FixedRow>
+          <FixedRow {...{ sortData, onSortChange }}>
+            <IdColumnHeader name="audit_eventid">Event ID</IdColumnHeader>
+            <NameColumnHeader name="event" title="Event" />
+            <Th name="audit_event_code" icon="info-sign">
+              Code
+            </Th>
+            <DescriptionColumnHeader name="source">
+              Source
+            </DescriptionColumnHeader>
+            <DescriptionColumnHeader name="reason">
+              Reason
+            </DescriptionColumnHeader>
+            <DescriptionColumnHeader name="info1">Info</DescriptionColumnHeader>
+            <AuthorColumnHeader name="who">Who</AuthorColumnHeader>
+            <DateColumnHeader />
+          </FixedRow>
+        </Thead>
+        <DataOrEmptyTable cols={8} condition={collection.length === 0}>
+          {props => (
+            <Tbody {...props}>
+              {collection.map(
+                (step: Object, index: number): React.Element<any> => (
+                  <Tr key={index} first={index === 0}>
+                    <IdColumn className="medium">{step.audit_eventid}</IdColumn>
+                    <NameColumn name={step.event} />
+                    <Td className="normal">{step.audit_event_code}</Td>
+                    <DescriptionColumn>{step.source}</DescriptionColumn>
+                    <DescriptionColumn>{step.reason}</DescriptionColumn>
+                    <DescriptionColumn>{step.info1}</DescriptionColumn>
+                    <AuthorColumn>{step.who}</AuthorColumn>
+                    <DateColumn>{step.created}</DateColumn>
+                  </Tr>
+                )
+              )}
+            </Tbody>
           )}
-        </Tbody>
-      )}
-    </DataOrEmptyTable>
-  </Table>
+        </DataOrEmptyTable>
+      </Table>
+    )}
+  </EnhancedTable>
 );
 
-export default pure(['collection'])(AuditTable);
+export default pure(['audits'])(AuditTable);
