@@ -4,18 +4,19 @@ import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 import { Tr, Td } from '../../../../components/new_table';
-import Checkbox from '../../../../components/checkbox';
 import actions from '../../../../store/api/actions';
 import OrderControls from './controls';
-import Date from '../../../../components/date';
-import AutoComp from '../../../../components/autocomponent';
 import { ALL_ORDER_STATES } from '../../../../constants/orders';
 import queryControl from '../../../../hocomponents/queryControl';
 import Lock from './lock';
+import { SelectColumn } from '../../../../components/SelectColumn';
+import NameColumn from '../../../../components/NameColumn';
+import { ActionColumn } from '../../../../components/ActionColumn';
+import { DateColumn } from '../../../../components/DateColumn';
+import ContentByType from '../../../../components/ContentByType';
 
 type Props = {
   date: string,
@@ -81,57 +82,41 @@ const TableRow: Function = ({
     className={_selected ? 'row-selected' : ''}
     onClick={handleCheckboxClick}
   >
-    <Td key="checkbox" className="tiny checker">
-      <Checkbox
-        action={handleCheckboxClick}
-        checked={_selected ? 'CHECKED' : 'UNCHECKED'}
-      />
-    </Td>
+    <SelectColumn onClick={handleCheckboxClick} checked={_selected} />
     {!isTablet && searchPage && (
-      <Td className="name">
-        <Link
-          to={`/workflow/${workflowid}?date=${date}`}
-          className="resource-name-link"
-          title={normalizedName}
-        >
-          {normalizedName}
-        </Link>
-      </Td>
+      <NameColumn
+        name={normalizedName}
+        link={`/workflow/${workflowid}?date=${date}`}
+        type="workflow"
+      />
+    )}
+    <NameColumn
+      name={id}
+      link={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(
+        allQuery
+      )}`}
+      className="normal"
+      type="order"
+    />
+    {!isTablet && (
+      <ActionColumn className="medium">
+        <OrderControls id={id} workflowstatus={workflowstatus} compact />
+      </ActionColumn>
     )}
     <Td className="medium">
-      <Link
-        to={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(
-          allQuery
-        )}`}
-        className="resource-name-link"
-        title={name}
-      >
-        {id}
-      </Link>
+      <Lock lock={operLock} id={id} />
     </Td>
-    {!isTablet && (
-      <Td className="medium">
-        <OrderControls id={id} workflowstatus={workflowstatus} compact />
-      </Td>
-    )}
     <Td className="medium">
       <span className={`label status-${label}`}>{workflowstatus}</span>
     </Td>
     <Td className="narrow">
-      <AutoComp>{busErr}</AutoComp>
-    </Td>
-    <Td className="big">
-      <Date date={started} />
-    </Td>
-    <Td className="big">
-      <Date date={completed} />
+      <ContentByType content={busErr} />
     </Td>
     <Td className="narrow">{errCnt}</Td>
     <Td className="narrow">{warnCnt}</Td>
-    <Td className="medium">
-      <Lock lock={operLock} id={id} />
-    </Td>
     <Td className="narrow">{noteCnt}</Td>
+    <DateColumn>{started}</DateColumn>
+    <DateColumn>{completed}</DateColumn>
   </Tr>
 );
 

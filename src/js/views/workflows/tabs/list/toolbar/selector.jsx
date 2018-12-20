@@ -13,6 +13,7 @@ type Props = {
   selectNone: Function,
   selectInvert: Function,
   selectedCount: number,
+  disabled: boolean,
 };
 
 const ToolbarSelector: Function = ({
@@ -21,8 +22,9 @@ const ToolbarSelector: Function = ({
   selectNone,
   selectInvert,
   selectedCount,
+  disabled,
 }: Props): React.Element<any> => (
-  <Dropdown id="selection">
+  <Dropdown disabled={disabled}>
     <Control
       icon={
         selected === 'all'
@@ -49,5 +51,5 @@ export default compose(
       selectInvert: actions.orders.selectInvert,
     }
   ),
-  pure(['selected', 'selectedCount'])
+  pure(['selected', 'selectedCount', 'disabled'])
 )(ToolbarSelector);

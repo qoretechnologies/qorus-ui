@@ -22,6 +22,8 @@ const INTERFACE_ICONS = {
   valuemaps: 'map',
   mapper: 'diagram-tree',
   mappers: 'diagram-tree',
+  order: 'box',
+  orders: 'box',
 };
 
 export { INTERFACE_ICONS };
