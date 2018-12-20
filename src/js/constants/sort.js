@@ -145,6 +145,10 @@ export const sortDefaults = {
     sortBy: 'name',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
+  configItems: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };
 
 export const sortKeys = {
