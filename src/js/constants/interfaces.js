@@ -20,6 +20,8 @@ const INTERFACE_ICONS = {
   slas: 'time',
   valuemap: 'map',
   valuemaps: 'map',
+  mapper: 'diagram-tree',
+  mappers: 'diagram-tree',
 };
 
 export { INTERFACE_ICONS };
