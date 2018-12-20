@@ -21,6 +21,7 @@ import DiagramView from './diagram';
 import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import titleManager from '../../hocomponents/TitleManager';
 import Flex from '../../components/Flex';
+import Box from '../../components/box';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
@@ -171,14 +172,16 @@ export default class Order extends Component {
             />
           </SimpleTab>
           <SimpleTab name="hierarchy">
-            <HierarchyView
-              {...{
-                order: this.props.order,
-                workflow: this.props.workflow,
-                dispatch: this.props.dispatch,
-                isTablet: this.props.isTablet,
-              }}
-            />
+            <Box top fill noPadding>
+              <HierarchyView
+                {...{
+                  order: this.props.order,
+                  workflow: this.props.workflow,
+                  dispatch: this.props.dispatch,
+                  isTablet: this.props.isTablet,
+                }}
+              />
+            </Box>
           </SimpleTab>
           <SimpleTab name="audit">
             <AuditView

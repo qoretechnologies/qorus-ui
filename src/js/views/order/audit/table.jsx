@@ -71,10 +71,7 @@ const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
                   onLoadAll={handleLoadAll}
                   limit={limit}
                 />
-                <Search
-                  onSearchUpdate={handleSearchChange}
-                  resource="orderErrors"
-                />
+                <Search onSearchUpdate={handleSearchChange} resource="audits" />
               </Pull>
             </Th>
           </FixedRow>

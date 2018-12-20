@@ -3,8 +3,8 @@ import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
-import withLoadMore from '../../../hocomponents/loadMore';
-import Box from '../../../components/box';
+import map from 'lodash/map';
+import size from 'lodash/size';
 import {
   Table,
   Tbody,
@@ -16,6 +16,13 @@ import HierarchyRow from './row';
 import Pull from '../../../components/Pull';
 import LoadMore from '../../../components/LoadMore';
 import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import EnhancedTable from '../../../components/EnhancedTable';
+import type { EnhancedTableProps } from '../../../components/EnhancedTable';
+import { sortDefaults } from '../../../constants/sort';
+import Search from '../../../containers/search';
+import { NameColumnHeader } from '../../../components/NameColumn';
+import { DateColumnHeader } from '../../../components/DateColumn';
+import { IdColumnHeader } from '../../../components/IdColumn';
 
 type Props = {
   hierarchy: Object,
@@ -35,84 +42,133 @@ type Props = {
 
 const HierarchyTable: Function = ({
   hierarchy,
-  hierarchyKeys,
   compact,
-  canLoadMore,
-  handleLoadMore,
-  handleLoadAll,
-  isTablet,
-  limit,
 }: Props): React.Element<any> => (
-  <Box noPadding top>
-    <Table fixed hover condensed striped>
-      <Thead>
-        <FixedRow className="toolbar-row" hide={!canLoadMore}>
-          <Th colspan="full">
-            <Pull right>
-              <LoadMore
-                canLoadMore={canLoadMore}
-                handleLoadMore={handleLoadMore}
-                handleLoadAll={handleLoadAll}
-                limit={limit}
-              />
-            </Pull>
-          </Th>
-        </FixedRow>
-        <FixedRow>
-          <Th className="normal">ID</Th>
-          {!isTablet && <Th className="name">Workflow</Th>}
-          <Th className="medium">Status</Th>
-          <Th className="narrow">Bus.Err.</Th>
-          <Th className="narrow">Errors</Th>
-          <Th className="narrow">Priority</Th>
-          {!compact && !isTablet && <Th className="big">Scheduled</Th>}
-          {!compact && <Th className="big">Started</Th>}
-          <Th className="big">Completed</Th>
-          {!compact && <Th className="narrow">Sub WF</Th>}
-          {!compact && <Th className="narrow">Sync</Th>}
-          {!compact && <Th className="medium">Warnings</Th>}
-        </FixedRow>
-      </Thead>
-      <DataOrEmptyTable
-        condition={hierarchyKeys.length === 0}
-        cols={isTablet ? (compact ? 6 : 10) : compact ? 7 : 12}
-        small={compact}
-      >
-        {props => (
-          <Tbody {...props}>
-            {hierarchyKeys.map(
-              (id: string | number, index: number): ?React.Element<any> => {
-                const item: Object = hierarchy[id];
-                const parentId: ?number = item.parent_workflow_instanceid;
-
-                return (
+  <EnhancedTable
+    collection={hierarchy}
+    tableId="orderErrors"
+    searchBy={[
+      'severity',
+      'error',
+      'step_name',
+      'ind',
+      'created',
+      'error_type',
+      'retry',
+      'info',
+      'description',
+    ]}
+    sortDefault={sortDefaults.orderErrors}
+  >
+    {({
+      handleSearchChange,
+      handleLoadAll,
+      handleLoadMore,
+      limit,
+      collection,
+      canLoadMore,
+      sortData,
+      onSortChange,
+    }: EnhancedTableProps) => (
+      <Table fixed condensed striped>
+        <Thead>
+          <FixedRow className="toolbar-row">
+            <Th colspan="full">
+              <Pull right>
+                <LoadMore
+                  canLoadMore={canLoadMore}
+                  handleLoadMore={handleLoadMore}
+                  handleLoadAll={handleLoadAll}
+                  limit={limit}
+                />
+                <Search
+                  onSearchUpdate={handleSearchChange}
+                  resource="hierarchy"
+                />
+              </Pull>
+            </Th>
+          </FixedRow>
+          <FixedRow {...{ sortData, onSortChange }}>
+            <IdColumnHeader />
+            <NameColumnHeader title="Workflow" />
+            <Th icon="info-sign" name="workflowstatus">
+              Status
+            </Th>
+            <Th icon="warning-sign" name="priority">
+              Priority
+            </Th>
+            <Th icon="error" name="business_error">
+              Bus.Err.
+            </Th>
+            {!compact && (
+              <Th icon="error" name="error_count">
+                Errors
+              </Th>
+            )}
+            {!compact && (
+              <Th icon="warning-sign" name="warning_count">
+                Warnings
+              </Th>
+            )}
+            {!compact && (
+              <Th icon="exchange" name="subworkflow">
+                Sub WF
+              </Th>
+            )}
+            {!compact && (
+              <Th icon="refresh" name="synchronous">
+                Sync
+              </Th>
+            )}
+            {!compact && (
+              <DateColumnHeader name="scheduled">Scheduled</DateColumnHeader>
+            )}
+            {!compact && (
+              <DateColumnHeader name="started">Started</DateColumnHeader>
+            )}
+            {!compact && (
+              <DateColumnHeader name="completed">Completed</DateColumnHeader>
+            )}
+          </FixedRow>
+        </Thead>
+        <DataOrEmptyTable
+          condition={size(hierarchy) === 0}
+          cols={compact ? 5 : 12}
+          small={compact}
+        >
+          {props => (
+            <Tbody {...props}>
+              {collection.map(
+                (item: Object, index: number): ?React.Element<any> => (
                   <HierarchyRow
-                    key={id}
+                    key={item.id}
                     first={index === 0}
                     id={item.workflow_instanceid}
                     compact={compact}
                     item={item}
-                    hasParent={parentId}
-                    isTablet={isTablet}
+                    hasParent={item.parent_workflow_instanceId}
                   />
-                );
-              }
-            )}
-          </Tbody>
-        )}
-      </DataOrEmptyTable>
-    </Table>
-  </Box>
+                )
+              )}
+            </Tbody>
+          )}
+        </DataOrEmptyTable>
+      </Table>
+    )}
+  </EnhancedTable>
 );
 
 export default compose(
   mapProps(
     ({ order, ...rest }: Props): Object => ({
-      hierarchy: order.HierarchyInfo,
-      hierarchyKeys: Object.keys(order.HierarchyInfo),
+      hierarchy: order.HierarchyInfo
+        ? map(order.HierarchyInfo, (hierarchy: Object, id: number) => ({
+            ...hierarchy,
+            id,
+          }))
+        : [],
       ...rest,
     })
   ),
-  withLoadMore('hierarchyKeys', null, true, 50),
-  pure(['hierarchy', 'hierarchyKeys', 'canLoadMore', 'isTablet'])
+  pure(['hierarchy', 'isTablet'])
 )(HierarchyTable);

@@ -1,14 +1,15 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router';
 import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 
 import { Tr, Td } from '../../../components/new_table';
-import AutoComp from '../../../components/autocomponent';
-import Date from '../../../components/date';
 import { ALL_ORDER_STATES } from '../../../constants/orders';
+import NameColumn from '../../../components/NameColumn';
+import { DateColumn } from '../../../components/DateColumn';
+import { IdColumn } from '../../../components/IdColumn';
+import ContentByType from '../../../components/ContentByType';
 
 type Props = {
   item: Object,
@@ -24,56 +25,39 @@ const HierarchyRow: Function = ({
   id,
   compact,
   label,
-  isTablet,
   first,
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    <Td className="normal">
-      <Link to={`/order/${id}/24h`}>{id}</Link>
-    </Td>
-    {!isTablet && (
-      <Td className="name">
-        <Link
-          to={`/workflow/${item.workflowid}`}
-          className="resource-name-link"
-          title={item.name}
-        >
-          {[...Array(item.hierarchy_level)].map((): string => '--')} {item.name}
-        </Link>
-      </Td>
-    )}
+    <IdColumn>{id}</IdColumn>
+    <NameColumn
+      name={`${[...Array(item.hierarchy_level)].map((): string => '--')} ${
+        item.name
+      }`}
+      link={`/workflow/${item.workflowid}`}
+      type="workflow"
+    />
     <Td className="medium">
       <span className={`label status-${label}`}>{item.workflowstatus}</span>
     </Td>
-    <Td className="narrow">
-      <AutoComp>{item.business_error}</AutoComp>
+    <Td className="medium">{item.priority}</Td>
+    <Td className="medium">
+      <ContentByType content={item.business_error} />
     </Td>
-    <Td className="narrow">{item.error_count}</Td>
-    <Td className="narrow">{item.priority}</Td>
-    {!compact && !isTablet && (
-      <Td className="big">
-        <Date date={item.scheduled} />
-      </Td>
-    )}
-    {!compact && (
-      <Td className="big">
-        <Date date={item.started} />
-      </Td>
-    )}
-    <Td className="big">
-      <Date date={item.completed} />
-    </Td>
-    {!compact && (
-      <Td className="narrow">
-        <AutoComp>{item.subworkflow}</AutoComp>
-      </Td>
-    )}
-    {!compact && (
-      <Td className="narrow">
-        <AutoComp>{item.synchronous}</AutoComp>
-      </Td>
-    )}
+    {!compact && <Td className="medium">{item.error_count}</Td>}
     {!compact && <Td className="medium">{item.warning_count}</Td>}
+    {!compact && (
+      <Td className="medium">
+        <ContentByType content={item.subworkflow} />
+      </Td>
+    )}
+    {!compact && (
+      <Td className="narrow">
+        <ContentByType content={item.synchronous} />
+      </Td>
+    )}
+    {!compact && <DateColumn>{item.scheduled}</DateColumn>}
+    {!compact && <DateColumn>{item.started}</DateColumn>}
+    {!compact && <DateColumn>{item.completed}</DateColumn>}
   </Tr>
 );
 
@@ -87,5 +71,5 @@ export default compose(
       ...rest,
     })
   ),
-  pure(['item', 'isTablet'])
+  pure(['item'])
 )(HierarchyRow);
