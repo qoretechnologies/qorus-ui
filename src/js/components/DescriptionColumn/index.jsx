@@ -15,9 +15,7 @@ const DescriptionColumn: Function = compose(onlyUpdateForKeys(['children']))(
     children,
     className: className = 'text',
   }: DescriptionColumnProps): React.Element<any> => (
-    <Td className={className}>
-      <Text text={children} />
-    </Td>
+    <Td className={className}>{children ? <Text text={children} /> : '-'}</Td>
   )
 );
 

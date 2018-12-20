@@ -62,8 +62,8 @@ const DiagramInfoTable: Function = ({
     <Table bordered condensed className="text-table">
       <Tbody>
         <Tr>
-          <Th className="text"> Instance ID </Th>
-          <Td>{id}</Td>
+          <Th className="text name">Instance ID</Th>
+          <Td className="name">{id}</Td>
           <Th> Status </Th>
           <Td>
             <span className={`label status-${label}`}>{workflowstatus}</span>
