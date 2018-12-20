@@ -17,7 +17,7 @@ const Td: Function = ({
   title,
 }: Props): React.Element<any> => (
   <td colSpan={colspan} className={className} title={title}>
-    {children}
+    {children || '-'}
   </td>
 );
 
