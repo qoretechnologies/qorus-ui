@@ -32,3 +32,11 @@
   left: 50%;
   transform: translateX(-50%);
 }
+
+.topbar-instance {
+  display: inline-block;
+  line-height: 30px;
+  border-left: 1px solid hsla(0, 0%, 100%, 0.15);
+  margin-left: 10px;
+  padding-left: 10px;
+}

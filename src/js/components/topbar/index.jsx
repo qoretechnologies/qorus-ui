@@ -164,6 +164,7 @@ export default class Topbar extends Component {
       light,
       onThemeClick,
       health: { data },
+      info,
     } = this.props;
     const [countryCode] = this.props.locale.split('-');
 
@@ -172,9 +173,10 @@ export default class Topbar extends Component {
         <NavbarGroup>
           <NavbarHeading className="nunito">
             <img src={light ? logo : whiteLogo} className="qore-small-logo" />
+            <span className="topbar-instance">{info.data['instance-key']}</span>
           </NavbarHeading>
         </NavbarGroup>
-        <NavbarGroup className="quick-search-wrapper">
+        <NavbarGroup align="right">
           <form onSubmit={this.handleSubmit}>
             <InputGroup
               leftIconName="search"
@@ -186,8 +188,7 @@ export default class Topbar extends Component {
               }
             />
           </form>
-        </NavbarGroup>
-        <NavbarGroup align="right">
+          <NavbarDivider />
           <Popover
             position={Position.BOTTOM}
             useSmartPositioning
@@ -272,7 +273,7 @@ export default class Topbar extends Component {
             />
           </ButtonGroup>
           <NavbarDivider />
-          <Popover
+          {/* <Popover
             position={Position.BOTTOM_RIGHT}
             content={
               <Menu>
@@ -300,7 +301,7 @@ export default class Topbar extends Component {
                 <img src={flags[this.props.locale]} />
               </Button>
             </ButtonGroup>
-          </Popover>
+          </Popover> */}
           <ButtonGroup minimal>
             <Button
               iconName={light ? 'moon' : 'flash'}
