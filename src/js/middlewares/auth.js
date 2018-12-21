@@ -7,7 +7,7 @@
  * "ok" status.
  */
 const auth: Function = () => (next: Function) => (action: Object): ?Object => {
-  if (!action) return;
+  if (!action) return next(action);
 
   const { type, payload = {} }: { type: string, payload: Object } = action;
 
