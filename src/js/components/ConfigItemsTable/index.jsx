@@ -106,7 +106,7 @@ const ConfigItemsContainer: Function = ({
                     </Thead>
                     <DataOrEmptyTable
                       condition={!collection || collection.length === 0}
-                      cols={7}
+                      cols={6}
                     >
                       {props => (
                         <Tbody {...props}>
