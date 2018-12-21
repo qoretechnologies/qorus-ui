@@ -15,6 +15,7 @@ type Props = {
   selectNone: Function,
   selectInvert: Function,
   selectAlerts: Function,
+  disabled: boolean,
 };
 
 const ToolbarSelector: Function = ({
@@ -24,16 +25,17 @@ const ToolbarSelector: Function = ({
   selectNone,
   selectInvert,
   selectAlerts,
+  disabled,
 }: Props): React.Element<any> => (
-  <ButtonGroup marginRight={3}>
-    <Dropdown id="selection" className="pull-left">
+  <ButtonGroup>
+    <Dropdown disabled={disabled}>
       <Control
         icon={
           selected === 'all'
             ? 'selection'
             : selected === 'some'
-              ? 'remove'
-              : 'circle'
+            ? 'remove'
+            : 'circle'
         }
       >
         {selectedCount}

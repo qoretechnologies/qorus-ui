@@ -6,6 +6,7 @@ import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import size from 'lodash/size';
 
 import sync from '../../hocomponents/sync';
 import withPane from '../../hocomponents/pane';
@@ -87,7 +88,7 @@ const JobsView: Function = ({
         <Crumb active>Jobs</Crumb>
       </Breadcrumbs>
       <Pull right>
-        <CsvControl onClick={onCSVClick} />
+        <CsvControl onClick={onCSVClick} disabled={size(jobs) === 0} />
         <Search
           defaultValue={searchQuery}
           onSearchUpdate={changeSearchQuery}

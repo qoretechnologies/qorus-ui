@@ -2,6 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
 import {
   Table,
@@ -25,6 +26,7 @@ import { JOB_STATES } from '../../../../constants/jobs';
 import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 import InstancesBar from '../../../../components/instances_bar';
 import { NameColumnHeader } from '../../../../components/NameColumn';
+import { DateColumnHeader } from '../../../../components/DateColumn';
 
 type Props = {
   collection: Array<Object>,
@@ -63,11 +65,10 @@ const ResultTable = ({
       <FixedRow className="toolbar-row">
         <Th colspan="full">
           <Pull>
-            <ButtonGroup>
-              <DatePicker date={dateQuery} onApplyDate={changeDateQuery} />
-            </ButtonGroup>
-            <Filters items={JOB_STATES} />
-            <CsvControl onClick={onCSVClick} />
+            <CsvControl
+              onClick={onCSVClick}
+              disabled={size(collection) === 0}
+            />
           </Pull>
           <Pull right>
             <LoadMore
@@ -75,6 +76,10 @@ const ResultTable = ({
               handleLoadMore={onLoadMore}
               limit={limit}
             />
+            <ButtonGroup>
+              <DatePicker date={dateQuery} onApplyDate={changeDateQuery} />
+            </ButtonGroup>
+            <Filters items={JOB_STATES} />
             <InstancesBar
               states={[
                 { name: 'COMPLETE', label: 'complete', title: 'Complete' },
@@ -100,21 +105,17 @@ const ResultTable = ({
       </FixedRow>
       <FixedRow onSortChange={onSortChange} sortData={sortData}>
         <NameColumnHeader title="Instance ID" name="job_instanceid" />
-        <Th name="jobstatus" className="medium">
+        <Th name="jobstatus" icon="info-sign">
           Status
         </Th>
-        <Th name="started" className="big" onClick={handleHeaderClick}>
-          Started
-        </Th>
-        <Th name="modified" className="big">
-          Modified
-        </Th>
-        <Th name="completed" className="big" onClick={handleHeaderClick}>
+        <DateColumnHeader name="started">Started</DateColumnHeader>
+        <DateColumnHeader name="modified">Modified</DateColumnHeader>
+        <DateColumnHeader name="completed" onClick={handleHeaderClick}>
           Completed
-        </Th>
+        </DateColumnHeader>
       </FixedRow>
     </Thead>
-    <DataOrEmptyTable cols={6} condition={collection.length === 0}>
+    <DataOrEmptyTable cols={5} condition={collection.length === 0}>
       {props => (
         <Tbody {...props}>
           {collection.map(
