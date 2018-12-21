@@ -19,6 +19,8 @@ import { hasPermission } from '../../../../../helpers/user';
 import actions from '../../../../../store/api/actions';
 import withDispatch from '../../../../../hocomponents/withDispatch';
 import NameColumn from '../../../../../components/NameColumn';
+import { ActionColumn } from '../../../../../components/ActionColumn';
+import ContentByType from '../../../../../components/ContentByType';
 
 type Props = {
   method: Object,
@@ -55,23 +57,23 @@ const MethodsRow: Function = ({
 }: Props): React.Element<any> => (
   <Tr title={method.description} first={first} observeElement={observeElement}>
     <NameColumn name={method.name} />
-    <Td className="narrow">
-      <Autocomponent>{method.locktype}</Autocomponent>
-    </Td>
-    <Td className="tiny">
-      <Autocomponent>{method.internal}</Autocomponent>
-    </Td>
-    <Td className="tiny">
-      <Autocomponent>{method.write}</Autocomponent>
-    </Td>
-    <Td className="normal">
-      <Controls grouped>
-        <Button iconName="play" btnStyle="success" onClick={handleRunClick} />
-        <Button iconName="code" btnStyle="inverse" onClick={handleCodeClick} />
+    <ActionColumn>
+      <Controls>
+        <Button iconName="play" onClick={handleRunClick} />
+        <Button iconName="code" onClick={handleCodeClick} />
       </Controls>
+    </ActionColumn>
+    <Td className="narrow">
+      <ContentByType content={method.locktype} />
+    </Td>
+    <Td className="tiny">
+      <ContentByType content={method.internal} />
+    </Td>
+    <Td className="tiny">
+      <ContentByType content={method.write} />
     </Td>
     <Td className="text">
-      {service.type === 'user' ? (
+      {service.type === 'user' && (
         <SLAControl
           canModify={canModify}
           slas={slas}
@@ -81,8 +83,6 @@ const MethodsRow: Function = ({
           setSla={handleSLAChange}
           removeSla={handleSLARemove}
         />
-      ) : (
-        method.sla || '-'
       )}
     </Td>
   </Tr>

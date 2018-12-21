@@ -8,12 +8,14 @@ import classnames from 'classnames';
 import { Tr, Td } from '../../components/new_table';
 import Text from '../../components/text';
 import Checkbox from '../../components/checkbox';
-import DetailButton from '../../components/detail_button';
 import ServiceControls from './controls';
 import withDispatch from '../../hocomponents/withDispatch';
 import { Icon } from '@blueprintjs/core';
-import { AlertColumn } from '../../components/AlertColumn';
 import NameColumn from '../../components/NameColumn';
+import { IdColumn } from '../../components/IdColumn';
+import { SelectColumn } from '../../components/SelectColumn';
+import { ActionColumn } from '../../components/ActionColumn';
+import { DescriptionColumn } from '../../components/DescriptionColumn';
 
 type Props = {
   openPane: Function,
@@ -55,7 +57,6 @@ const ServiceRow: Function = ({
   threads,
   id,
   normalizedName,
-  name,
   desc,
   enabled,
   autostart,
@@ -68,25 +69,21 @@ const ServiceRow: Function = ({
     highlight={_updated}
     onHighlightEnd={handleHighlightEnd}
     className={classnames({
-      'row-alert': hasAlerts,
       'row-selected': _selected,
       'row-active': isActive,
     })}
     onClick={handleCheckboxClick}
   >
-    <Td className="tiny checker">
-      <Checkbox
-        action={handleCheckboxClick}
-        checked={_selected ? 'CHECKED' : 'UNCHECKED'}
-      />
-    </Td>
-    <Td className="narrow">
-      <Icon
-        iconName={type === 'system' ? 'cog' : 'user'}
-        title={type === 'system' ? 'System' : 'User'}
-      />
-    </Td>
-    <Td className="big">
+    <SelectColumn onClick={handleCheckboxClick} checked={_selected} />
+    <IdColumn>{id}</IdColumn>
+    <NameColumn
+      name={normalizedName}
+      hasAlerts={hasAlerts}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+      type="service"
+    />
+    <ActionColumn className="big">
       <ServiceControls
         id={id}
         enabled={enabled}
@@ -95,18 +92,15 @@ const ServiceRow: Function = ({
         remote={remote}
         type={type}
       />
+    </ActionColumn>
+    <Td className="narrow">
+      <Icon
+        iconName={type === 'system' ? 'cog' : 'user'}
+        title={type === 'system' ? 'System' : 'User'}
+      />
     </Td>
-    <Td className="narrow">{threads}</Td>
-    <Td className="narrow">{id}</Td>
-    <NameColumn
-      name={normalizedName}
-      hasAlerts={hasAlerts}
-      isActive={isActive}
-      onDetailClick={handleDetailClick}
-    />
-    <Td className="text">
-      <Text text={desc} />
-    </Td>
+    <Td className="medium">{threads}</Td>
+    <DescriptionColumn>{desc}</DescriptionColumn>
   </Tr>
 );
 

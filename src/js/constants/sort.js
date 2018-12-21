@@ -157,6 +157,10 @@ export const sortDefaults = {
     sortBy: 'event',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
+  methods: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };
 
 export const sortKeys = {
