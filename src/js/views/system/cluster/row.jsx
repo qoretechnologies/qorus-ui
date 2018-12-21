@@ -8,6 +8,7 @@ import withHandlers from 'recompose/withHandlers';
 import { Tr, Td } from '../../../components/new_table';
 import NameColumn from '../../../components/NameColumn';
 import actions from '../../../store/api/actions';
+import ContentByType from '../../../components/ContentByType';
 
 type Props = {
   type: string,
@@ -25,6 +26,8 @@ type Props = {
   id: string,
   isActive: boolean,
   handleDetailClick: Function,
+  interfaceType?: string,
+  first?: boolean,
 };
 
 const typeNames: Object = {
@@ -50,21 +53,26 @@ const ProcessRow: Function = ({
   node,
   handleDetailClick,
   isActive,
+  interfaceType,
+  first,
 }: Props): React.Element<any> => (
-  <Tr highlight={_updated} onHighlightEnd={updateDone}>
-    <Td className="text">{node}</Td>
-    <Td className="text medium" title={typeNames[type]}>
-      {type}
-    </Td>
+  <Tr highlight={_updated} onHighlightEnd={updateDone} first={first}>
+    <Td className="big text">{node}</Td>
     <NameColumn
       link={link}
       name={clientId}
       isActive={isActive}
       onDetailClick={handleDetailClick}
+      type={interfaceType}
     />
-    <Td className="medium"> {pid} </Td>
+    <Td className="text medium" title={typeNames[type]}>
+      {type}
+    </Td>
+    <Td className="medium">
+      <ContentByType content={pid} />
+    </Td>
     <Td className="medium"> {privStr} </Td>
-    <Td className="text"> {statusString} </Td>
+    <Td className="big text">{statusString}</Td>
   </Tr>
 );
 

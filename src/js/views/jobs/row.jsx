@@ -14,6 +14,10 @@ import Box from '../../components/box';
 import PaneItem from '../../components/pane_item';
 import ProcessSummary from '../../components/ProcessSummary';
 import NameColumn from '../../components/NameColumn';
+import { SelectColumn } from '../../components/SelectColumn';
+import { IdColumn } from '../../components/IdColumn';
+import { ActionColumn } from '../../components/ActionColumn';
+import { DateColumn } from '../../components/DateColumn';
 
 type Props = {
   openPane: Function,
@@ -62,7 +66,6 @@ const ServiceRow: Function = ({
   _selected,
   date,
   id,
-  name,
   enabled,
   active,
   last_executed: executed,
@@ -93,26 +96,8 @@ const ServiceRow: Function = ({
     })}
     onClick={handleCheckboxClick}
   >
-    <Td className="tiny checker">
-      <Checkbox
-        action={handleCheckboxClick}
-        checked={_selected ? 'CHECKED' : 'UNCHECKED'}
-      />
-    </Td>
-    <Td className="big">
-      <JobControls
-        enabled={enabled}
-        active={active}
-        id={id}
-        minute={minute}
-        hour={hour}
-        day={day}
-        month={month}
-        week={wday}
-        remote={remote}
-      />
-    </Td>
-    <Td className="narrow">{id}</Td>
+    <SelectColumn onClick={handleCheckboxClick} checked={_selected} />
+    <IdColumn>{id}</IdColumn>
     <NameColumn
       popoverContent={
         <Box top>
@@ -125,16 +110,28 @@ const ServiceRow: Function = ({
       isActive={isActive}
       onDetailClick={handleDetailClick}
       hasAlerts={hasAlerts}
+      type="job"
     />
-    <Td className="big">
-      <Date date={executed} />
-    </Td>
-    <Td className="big">
+    <ActionColumn className="big">
+      <JobControls
+        enabled={enabled}
+        active={active}
+        id={id}
+        minute={minute}
+        hour={hour}
+        day={day}
+        month={month}
+        week={wday}
+        remote={remote}
+      />
+    </ActionColumn>
+    <DateColumn>{executed}</DateColumn>
+    <DateColumn>
       <Date date={next} />
-    </Td>
-    <Td className="big">
+    </DateColumn>
+    <DateColumn>
       <Date date={expiry} />
-    </Td>
+    </DateColumn>
     <Td className="huge separated-cell">
       <InstancesBar
         states={[

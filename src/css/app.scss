@@ -13,6 +13,7 @@ $qore-info: #2965cc;
 $qore-gray: #8a9ba8;
 $qore-blue: #277fba;
 $qore-cobalt: #5c7080;
+$qore-dark: #383c44;
 
 $status-automatic: $qore-purple;
 $status-complete: $qore-green;
@@ -68,6 +69,7 @@ $text-color: #333;
 @import '../js/components/Headbar/style';
 @import '../js/components/DataOrEmptyTable/style';
 @import '../js/components/ContentByType/style';
+@import '../js/components/InterfaceTag/style';
 
 @import './not-supported';
 @import './root';
@@ -120,6 +122,12 @@ h6,
 .pt-input,
 .pt-button[class*='pt-icon-']:before {
   font-size: 12px;
+}
+
+.pt-icon-large.pt-intent-success,
+.pt-icon-standard.pt-intent-success,
+.pt-icon.pt-intent-success {
+  color: $qore-green;
 }
 
 .pt-button-group:not(.pt-minimal) .pt-button {
@@ -225,6 +233,7 @@ pre.line-numbers {
 }
 
 .resource-name-link {
+  width: 100%;
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -251,7 +260,15 @@ pre.line-numbers {
 }
 
 div.text-component {
-  word-wrap: break-word;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 24px;
+  vertical-align: middle;
+
+  &.has-alerts {
+    color: $qore-danger;
+  }
 }
 
 .main-loading-text {
@@ -337,6 +354,14 @@ svg.preloader {
 
 .nunito {
   font-family: 'Nunito';
+}
+
+.neosans {
+  font-family: 'NeoLight';
+}
+
+.neosans-bold {
+  font-family: 'NeoMedium';
 }
 
 .dashboard-title {

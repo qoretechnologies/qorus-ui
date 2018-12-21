@@ -48,8 +48,7 @@ const ClusterView: Function = ({
         </Tag>
       </Pull>
     </Headbar>
-
-    <Box top scrollY>
+    <Box top fill scrollY>
       {Object.keys(nodes).map(
         (node: string): any => {
           const list: Array<Object> = Object.keys(processes).reduce(

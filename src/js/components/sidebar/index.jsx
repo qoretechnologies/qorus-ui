@@ -45,7 +45,7 @@ const menu = {
         { name: 'RBAC', icon: 'people', link: '/system/rbac' },
         { name: 'Errors', icon: 'error', link: '/system/errors' },
         { name: 'Cache', icon: 'database', link: '/system/sqlcache' },
-        { name: 'HTTP Services', icon: 'home', link: '/system/http' },
+        { name: 'HTTP Services', icon: 'globe-network', link: '/system/http' },
         { name: 'Valuemaps', icon: 'map', link: '/system/values' },
       ],
     },
@@ -54,7 +54,7 @@ const menu = {
     { name: 'Workflows', icon: 'exchange', link: '/workflows' },
     { name: 'Services', icon: 'merge-links', link: '/services' },
     { name: 'Jobs', icon: 'calendar', link: '/jobs' },
-    { name: 'Groups', icon: 'merge-links', link: '/groups' },
+    { name: 'Groups', icon: 'group-objects', link: '/groups' },
   ],
   Other: [
     { name: 'Search', icon: 'search', link: '/search' },
@@ -156,31 +156,30 @@ const MenuWrapper: Function = ({
             <h6>{key}</h6>
           </li>
         )}
-        {values.map(
-          ({ name, icon, link, submenu }) =>
-            menuCollapsed ? (
-              <Tooltip
-                key={name}
-                content={name}
-                position={submenu ? Position.BOTTOM : Position.RIGHT}
-              >
-                <MenuElement
-                  iconName={icon}
-                  link={link}
-                  name={name}
-                  submenu={submenu}
-                  menuCollapsed
-                />
-              </Tooltip>
-            ) : (
+        {values.map(({ name, icon, link, submenu }) =>
+          menuCollapsed ? (
+            <Tooltip
+              key={name}
+              content={name}
+              position={submenu ? Position.BOTTOM : Position.RIGHT}
+            >
               <MenuElement
-                key={name}
                 iconName={icon}
                 link={link}
                 name={name}
                 submenu={submenu}
+                menuCollapsed
               />
-            )
+            </Tooltip>
+          ) : (
+            <MenuElement
+              key={name}
+              iconName={icon}
+              link={link}
+              name={name}
+              submenu={submenu}
+            />
+          )
         )}
         <MenuDivider />
       </div>

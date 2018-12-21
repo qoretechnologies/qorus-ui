@@ -148,7 +148,7 @@ export default class RBACUsers extends Component {
 
     return (
       <Table
-        collection={this.props.usersModel}
+        users={this.props.usersModel}
         canAdd={canAdd}
         canEdit={canEdit}
         canDelete={canDelete}

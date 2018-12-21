@@ -3,13 +3,24 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 
-import { Table, Tbody, Thead, Tr, Th } from '../../../components/new_table';
+import {
+  Table,
+  Tbody,
+  Thead,
+  Th,
+  FixedRow,
+} from '../../../components/new_table';
 import CacheRow from './row';
 import Pull from '../../../components/Pull';
-import NoDataIf from '../../../components/NoDataIf';
 import ExpandableItem from '../../../components/ExpandableItem';
 import { Control as Button } from '../../../components/controls';
-import Headbar from '../../../components/Headbar';
+import { NameColumnHeader } from '../../../components/NameColumn';
+import { ActionColumnHeader } from '../../../components/ActionColumn';
+import EnhancedTable from '../../../components/EnhancedTable';
+import type { EnhancedTableProps } from '../../../components/EnhancedTable';
+import { sortDefaults } from '../../../constants/sort';
+import LoadMore from '../../../components/LoadMore';
+import Search from '../../../containers/search';
 
 type Props = {
   name: string,
@@ -34,47 +45,78 @@ const SQLCacheTable: Function = ({
 
   return (
     <ExpandableItem title={name} show>
-      <NoDataIf condition={Object.keys(data).length <= 0}>
-        {() => (
-          <div>
-            <Headbar>
-              <Pull right>
-                <Button
-                  text="Clear datasource"
-                  iconName="trash"
-                  onClick={handleClick}
-                  btnStyle="danger"
-                  big
-                />
-              </Pull>
-            </Headbar>
-            <Table condensed striped>
+      {() => (
+        <EnhancedTable
+          collection={data}
+          searchBy={['name', 'count', 'created']}
+          tableId={name}
+          sortDefault={sortDefaults.sqlcache}
+        >
+          {({
+            handleSearchChange,
+            handleLoadAll,
+            handleLoadMore,
+            limit,
+            collection,
+            canLoadMore,
+            sortData,
+            onSortChange,
+          }: EnhancedTableProps) => (
+            <Table fixed condensed striped>
               <Thead>
-                <Tr>
-                  <Th className="name">Name</Th>
-                  <Th className="narrow">Count</Th>
-                  <Th className="big">Created</Th>
-                  <Th className="narrow"> Actions </Th>
-                </Tr>
+                <FixedRow className="toolbar-row">
+                  <Pull>
+                    <Button
+                      text="Clear datasource"
+                      iconName="trash"
+                      onClick={handleClick}
+                      btnStyle="danger"
+                      big
+                    />
+                  </Pull>
+                  <Pull right>
+                    <LoadMore
+                      handleLoadAll={handleLoadAll}
+                      handleLoadMore={handleLoadMore}
+                      limit={limit}
+                      canLoadMore={canLoadMore}
+                    />
+                    <Search
+                      resource="sqlcache"
+                      onSearchUpdate={handleSearchChange}
+                    />
+                  </Pull>
+                </FixedRow>
+                <FixedRow {...{ onSortChange, sortData }}>
+                  <NameColumnHeader />
+                  <ActionColumnHeader />
+                  <Th name="count" icon="info-sign">
+                    Count
+                  </Th>
+                  <Th icon="time" name="created">
+                    Created
+                  </Th>
+                </FixedRow>
               </Thead>
               <Tbody>
-                {Object.keys(data).map((cache, index) => (
+                {collection.map((cache, index) => (
                   <CacheRow
+                    first={index === 0}
                     key={index}
                     datasource={name}
-                    name={cache}
-                    count={data[cache].count}
-                    created={data[cache].created}
+                    name={cache.name}
+                    count={cache.count}
+                    created={cache.created}
                     onClick={onSingleClick}
                   />
                 ))}
               </Tbody>
             </Table>
-          </div>
-        )}
-      </NoDataIf>
+          )}
+        </EnhancedTable>
+      )}
     </ExpandableItem>
   );
 };
 
-export default compose(pure(['dataLen']))(SQLCacheTable);
+export default compose(pure(['data']))(SQLCacheTable);

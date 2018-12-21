@@ -13,14 +13,12 @@ import {
   Control as Button,
 } from '../../../components/controls';
 import { Tr, Td } from '../../../components/new_table';
-import DetailButton from '../../../components/detail_button';
 import Text from '../../../components/text';
 import actions from '../../../store/api/actions';
 import withModal from '../../../hocomponents/modal';
 import PingModal from './modals/ping';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import withDispatch from '../../../hocomponents/withDispatch';
-import { AlertColumn } from '../../../components/AlertColumn';
 import NameColumn from '../../../components/NameColumn';
 
 type Props = {
@@ -87,6 +85,12 @@ const ConnectionRow: Function = ({
         {up ? 'UP' : 'DOWN'}
       </Tag>
     </Td>
+    <NameColumn
+      name={name}
+      isActive={isActive}
+      onDetailClick={handleDetailClick}
+      hasAlerts={hasAlerts}
+    />
     <Td className="medium">
       <ButtonGroup>
         {remoteType === 'user' && (
@@ -106,15 +110,9 @@ const ConnectionRow: Function = ({
         />
       </ButtonGroup>
     </Td>
-    <NameColumn
-      name={name}
-      isActive={isActive}
-      onDetailClick={handleDetailClick}
-      hasAlerts={hasAlerts}
-    />
     {remoteType === 'datasources' ? (
       <Td className="text">
-        <Text text={options} renderTree />
+        <Text text={options} />
       </Td>
     ) : (
       <Td className="text">
@@ -129,7 +127,7 @@ const ConnectionRow: Function = ({
       <Text text={desc} />
     </Td>
     {remoteType === 'qorus' && (
-      <Td className="normal">{loopback && <Icon iconName="small-tick" />}</Td>
+      <Td className="medium">{loopback && <Icon iconName="small-tick" />}</Td>
     )}
   </Tr>
 );

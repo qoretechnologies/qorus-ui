@@ -5,13 +5,26 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import { Tag } from '@blueprintjs/core';
 
-import { Table, Thead, Tbody, Tr, Th } from '../../../components/new_table';
-import { getProcessObjectLink, calculateMemory } from '../../../helpers/system';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Th,
+  FixedRow,
+} from '../../../components/new_table';
+import {
+  getProcessObjectLink,
+  calculateMemory,
+  getProcessObjectType,
+} from '../../../helpers/system';
 import ProcessRow from './row';
-import withSort from '../../../hocomponents/sort';
-import { sortDefaults } from '../../../constants/sort';
 import ExpandableItem from '../../../components/ExpandableItem';
 import { NameColumnHeader } from '../../../components/NameColumn';
+import EnhancedTable from '../../../components/EnhancedTable';
+import Pull from '../../../components/Pull';
+import LoadMore from '../../../components/LoadMore';
+import Search from '../../../containers/search';
+import { sortDefaults } from '../../../constants/sort';
 
 type Props = {
   node: string,
@@ -40,47 +53,93 @@ const ClusterNode: Function = ({
   paneId,
 }: Props): React.Element<any> => (
   <ExpandableItem show title={node}>
-    <div className="clear" style={{ padding: '10px 0' }}>
-      <Tag className="pt-minimal">Hostname: {hostname}</Tag>{' '}
-      <Tag className="pt-minimal">Node memory: {calculateMemory(memory)}</Tag>{' '}
-      <Tag className="pt-minimal"># of processes: {processes.length}</Tag>
-    </div>
-    <Table condensed striped>
-      <Thead>
-        <Tr sortData={sortData} onSortChange={onSortChange}>
-          <Th className="text" name="node">
-            Node
-          </Th>
-          <Th className="text medium" name="type">
-            Type
-          </Th>
-          <NameColumnHeader name="client_id" title="Client ID" />
-          <Th className="medium" name="pid">
-            PID
-          </Th>
-          <Th className="medium" name="priv">
-            Memory
-          </Th>
-          <Th className="text" name="status">
-            Status
-          </Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {processes.map(
-          (process: Object): React.Element<any> => (
-            <ProcessRow
-              openPane={openPane}
-              closePane={closePane}
-              isActive={process.id === paneId}
-              key={process.id}
-              {...process}
-              link={getProcessObjectLink(process)}
-            />
-          )
-        )}
-      </Tbody>
-    </Table>
+    <EnhancedTable
+      tableId={node}
+      collection={processes}
+      searchBy={['node', 'client_id', 'type', 'pid', 'priv_str', 'status']}
+      sortDefault={sortDefaults.nodes}
+    >
+      {({
+        collection,
+        handleLoadMore,
+        handleLoadAll,
+        limit,
+        handleSearchChange,
+        canLoadMore,
+        sortData,
+        onSortChange,
+      }) => (
+        <Table condensed striped fixed>
+          <Thead>
+            <FixedRow className="toolbar-row">
+              <Th>
+                <Pull>
+                  <Tag className="pt-large pt-minimal">
+                    Hostname: {hostname}
+                  </Tag>{' '}
+                  <Tag className="pt-large pt-minimal">
+                    Node memory: {calculateMemory(memory)}
+                  </Tag>{' '}
+                  <Tag className="pt-large pt-minimal">
+                    # of processes: {processes.length}
+                  </Tag>
+                </Pull>
+                <Pull right>
+                  <LoadMore
+                    onLoadMore={handleLoadMore}
+                    onLoadAll={handleLoadAll}
+                    limit={limit}
+                    canLoadMore={canLoadMore}
+                  />
+                  <Search
+                    onSearchUpdate={handleSearchChange}
+                    resource="cluster"
+                  />
+                </Pull>
+              </Th>
+            </FixedRow>
+            <FixedRow sortData={sortData} onSortChange={onSortChange}>
+              <Th className="text" name="node" icon="database">
+                Node
+              </Th>
+              <NameColumnHeader
+                name="client_id"
+                title="Client ID"
+                icon="intersection"
+              />
+              <Th className="text medium" name="type" icon="application">
+                Type
+              </Th>
+              <Th className="medium" name="pid">
+                PID
+              </Th>
+              <Th className="medium" name="priv" icon="layers">
+                Memory
+              </Th>
+              <Th className="text" name="status" icon="info-sign">
+                Status
+              </Th>
+            </FixedRow>
+          </Thead>
+          <Tbody>
+            {collection.map(
+              (process: Object, index: number): React.Element<any> => (
+                <ProcessRow
+                  first={index === 0}
+                  openPane={openPane}
+                  closePane={closePane}
+                  isActive={process.id === paneId}
+                  key={process.pid}
+                  {...process}
+                  link={getProcessObjectLink(process)}
+                  interfaceType={getProcessObjectType(process)}
+                />
+              )
+            )}
+          </Tbody>
+        </Table>
+      )}
+    </EnhancedTable>
   </ExpandableItem>
 );
 
@@ -92,6 +151,5 @@ export default compose(
       ...rest,
     })
   ),
-  withSort(({ node }) => node, 'processes', sortDefaults.nodes),
   pure(['node', 'memory', 'processes'])
 )(ClusterNode);

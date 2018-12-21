@@ -17,7 +17,7 @@ type Props = {
   title?: string,
   key?: any,
   lastObserverChange?: string | number,
-  observeElement?: string,
+  observeElement?: ?string,
 };
 
 @withMutationObserver('.sidebar')
@@ -55,7 +55,7 @@ export default class Tr extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     this.recalculateSizes();
   }
 
@@ -107,25 +107,11 @@ export default class Tr extends Component {
         const headers = parent.querySelectorAll(
           '.table-header-wrapper .table-fixed-row'
         );
-        const footCells = parent.querySelectorAll(
-          '.table-footer-wrapper .fixed-table-header'
-        );
         const headerWrapper = parent.querySelectorAll(
           'div.table-header-wrapper'
         );
-        const footerWrapper = parent.querySelectorAll(
-          'div.table-footer-wrapper'
-        );
-        const { width: rowWidth } = ref.getBoundingClientRect();
 
         headerWrapper[0].setAttribute('style', 'width: 100% !important');
-
-        if (footerWrapper.length) {
-          footerWrapper[0].setAttribute(
-            'style',
-            `width: ${rowWidth}px !important`
-          );
-        }
 
         headers.forEach(
           (header: any): void => {
@@ -167,13 +153,6 @@ export default class Tr extends Component {
                   }
 
                   cell.setAttribute('style', `width: ${width}px !important`);
-
-                  if (footCells.length) {
-                    footCells[index].setAttribute(
-                      'style',
-                      `width: ${width}px !important`
-                    );
-                  }
                 }
               );
             }

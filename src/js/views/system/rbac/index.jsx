@@ -52,7 +52,7 @@ const RBAC: Function = ({
         <Search
           onSearchUpdate={changeSearchQuery}
           defaultValue={searchQuery}
-          resource={`rbac${tabQuery}`}
+          resource="rbac"
         />
       </Pull>
     </Headbar>

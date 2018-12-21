@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
 import {
   Table,
@@ -16,7 +17,6 @@ import Row from './row';
 import actions from '../../../../store/api/actions';
 import Pull from '../../../../components/Pull';
 import CsvControl from '../../../../components/CsvControl';
-import { Icon, ButtonGroup } from '@blueprintjs/core';
 import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 import { ORDER_STATES, ORDER_STATES_ARRAY } from '../../../../constants/orders';
 import InstancesBar from '../../../../components/instances_bar/index';
@@ -27,6 +27,12 @@ import Selector from './toolbar/selector';
 import Filters from './toolbar/filters';
 import DatePicker from '../../../../components/datepicker';
 import queryControl from '../../../../hocomponents/queryControl';
+import ButtonGroup from '../../../../components/controls/controls';
+import { SelectColumnHeader } from '../../../../components/SelectColumn';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import { IdColumnHeader } from '../../../../components/IdColumn';
+import { ActionColumnHeader } from '../../../../components/ActionColumn';
+import { DateColumnHeader } from '../../../../components/DateColumn';
 
 type Props = {
   sortData: Object,
@@ -72,13 +78,7 @@ const WorkflowTable: Function = ({
   limit,
   children,
 }: Props): React.Element<any> => (
-  <Table
-    striped
-    condensed
-    fixed
-    className="resource-table"
-    key={collection.length}
-  >
+  <Table striped condensed fixed hover>
     <Thead>
       {children && (
         <FixedRow className="toolbar-row">
@@ -90,8 +90,23 @@ const WorkflowTable: Function = ({
       <FixedRow className="toolbar-row">
         <Th colspan="full">
           <Pull>
-            <Selector selected={selected} selectedCount={selectedIds.length} />
+            <Selector
+              selected={selected}
+              selectedCount={selectedIds.length}
+              disabled={size(collection) === 0}
+            />
             <Actions show={selected !== 'none'} selectedIds={selectedIds} />
+            <CsvControl
+              onClick={onCSVClick}
+              disabled={size(collection) === 0}
+            />
+          </Pull>
+          <Pull right>
+            <LoadMore
+              onLoadMore={onLoadMore}
+              limit={limit}
+              canLoadMore={canLoadMore}
+            />
             {!searchPage && (
               <ButtonGroup>
                 <DatePicker
@@ -101,14 +116,6 @@ const WorkflowTable: Function = ({
               </ButtonGroup>
             )}
             {!searchPage && <Filters location={location} />}
-            <CsvControl onClick={onCSVClick} />
-          </Pull>
-          <Pull right>
-            <LoadMore
-              onLoadMore={onLoadMore}
-              limit={limit}
-              canLoadMore={canLoadMore}
-            />
             {!searchPage && (
               <InstancesBar
                 states={ORDER_STATES}
@@ -124,34 +131,34 @@ const WorkflowTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny">
-          <Icon iconName="small-tick" />
-        </Th>
-        {!isTablet && searchPage && <Th className="name"> Worfklow </Th>}
-        <Th className="medium"> ID </Th>
-        {!isTablet && <Th className="medium"> Actions </Th>}
-        <Th className="medium"> Status </Th>
-        <Th className="narrow" name="business_error">
-          Err.
-        </Th>
-        <Th className="big" name="started" onClick={handleHeaderClick}>
-          Started
-        </Th>
-        <Th className="big" name="completed" onClick={handleHeaderClick}>
-          Completed
-        </Th>
-        <Th className="narrow" name="error_count">
-          Errors
-        </Th>
-        <Th className="narrow" name="warning_count">
-          Warns.
-        </Th>
-        <Th className="medium" name="operator_lock">
+        <SelectColumnHeader />
+        {!isTablet && searchPage && <NameColumnHeader title="Workflow" />}
+        <IdColumnHeader />
+        {!isTablet && <ActionColumnHeader />}
+        <Th name="operator_lock" icon="lock">
           Lock
         </Th>
-        <Th className="narrow" name="note_count">
+        <Th icon="info-sign" name="workflowstatus">
+          Status
+        </Th>
+        <Th name="business_error" icon="error">
+          Err.
+        </Th>
+        <Th name="error_count" icon="error">
+          Errors
+        </Th>
+        <Th name="warning_count" icon="warning-sign">
+          Warns.
+        </Th>
+        <Th name="note_count" icon="annotation">
           Notes
         </Th>
+        <DateColumnHeader name="started" onClick={handleHeaderClick}>
+          Started
+        </DateColumnHeader>
+        <DateColumnHeader name="completed" onClick={handleHeaderClick}>
+          Completed
+        </DateColumnHeader>
       </FixedRow>
     </Thead>
     <DataOrEmptyTable
@@ -164,7 +171,7 @@ const WorkflowTable: Function = ({
             (order: Object, index: number): React.Element<Row> => (
               <Row
                 first={index === 0}
-                key={`order_${order.workflow_instanceid}`}
+                key={index}
                 date={date}
                 isTablet={isTablet}
                 searchPage={searchPage}

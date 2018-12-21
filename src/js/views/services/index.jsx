@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
 import { querySelector, resourceSelector } from '../../selectors';
 import actions from '../../store/api/actions';
@@ -73,7 +74,7 @@ const Services: Function = ({
         <Crumb active>Services</Crumb>
       </Breadcrumbs>
       <Pull right>
-        <CsvControl onClick={onCSVClick} />
+        <CsvControl onClick={onCSVClick} disabled={size(services) === 0} />
         <Search
           defaultValue={searchQuery}
           onSearchUpdate={changeSearchQuery}

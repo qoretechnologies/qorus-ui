@@ -3,15 +3,13 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import { includes, flowRight, omit } from 'lodash';
+import { omit, map, size } from 'lodash';
 
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import actions from '../../../store/api/actions';
 import Prop from './prop';
-import Search from '../../../containers/search';
 import Modal from './modal';
 import sync from '../../../hocomponents/sync';
-import search from '../../../hocomponents/search';
 import modal from '../../../hocomponents/modal';
 import withDispatch from '../../../hocomponents/withDispatch';
 import Headbar from '../../../components/Headbar';
@@ -24,52 +22,30 @@ import { hasPermission } from '../../../helpers/user';
 import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
 import Flex from '../../../components/Flex';
+import NoDataIf from '../../../components/NoDataIf';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
-const querySelector: Function = (state: Object, props: Object): Object =>
-  props.location.query.q;
-const filterData = (query: string): Function => (
-  collection: Object
-): Object => {
-  if (!query) return collection;
-
-  return Object.keys(collection).reduce((n, k) => {
-    const obj = Object.keys(collection[k]).reduce(
-      (deep, deepkey) =>
-        includes(deepkey, query) || includes(collection[k][deepkey], query)
-          ? Object.assign(deep, { [deepkey]: collection[k][deepkey] })
-          : deep,
-      {}
+const formatData = (): Function => (collection: Object): Object =>
+  Object.keys(collection).reduce((result: Object, key: string): Object => {
+    const coll = collection[key];
+    const newCollection: Array<Object> = map(
+      coll,
+      (propData, propKey): Object => ({ name: propKey, prop: propData })
     );
 
-    if (Object.keys(obj).length) {
-      return Object.assign(n, { [k]: obj });
-    }
-
-    if (includes(k, query)) {
-      return Object.assign(n, { [k]: collection[k] });
-    }
-
-    return n;
+    return { ...result, ...{ [key]: newCollection } };
   }, {});
-};
 
 const collectionSelector = createSelector(
-  [dataSelector, querySelector],
-  (properties, query) => flowRight(filterData(query))(properties.data)
+  [dataSelector],
+  properties => formatData()(properties.data)
 );
 
 const viewSelector = createSelector(
-  [
-    dataSelector,
-    state => state.api.currentUser,
-    querySelector,
-    collectionSelector,
-  ],
-  (properties, user, query, collection) => ({
+  [dataSelector, state => state.api.currentUser, collectionSelector],
+  (properties, user, collection) => ({
     properties,
     user,
-    query,
     collection,
   })
 );
@@ -83,7 +59,6 @@ const viewSelector = createSelector(
   ),
   withDispatch(),
   modal(),
-  search(),
   sync('properties')
 )
 @titleManager('Properties')
@@ -93,8 +68,6 @@ export default class PropertiesView extends Component {
     user: PropTypes.object,
     openModal: PropTypes.func,
     closeModal: PropTypes.func,
-    query: PropTypes.string,
-    onSearchChange: PropTypes.func,
     optimisticDispatch: PropTypes.func,
   };
 
@@ -126,26 +99,9 @@ export default class PropertiesView extends Component {
     this.props.optimisticDispatch(actions.props.removeProp, prop);
   };
 
-  renderProperties() {
+  render() {
     const { collection, user } = this.props;
 
-    if (!Object.keys(collection).length) return null;
-
-    return Object.keys(collection).map((p, key) => (
-      <Prop
-        data={collection[p]}
-        title={p}
-        perms={user.data.permissions}
-        key={key}
-        onDelete={this.handleDeleteClick}
-        onEdit={this.handleAddClick}
-        openModal={this.props.openModal}
-        closeModal={this.props.closeModal}
-      />
-    ));
-  }
-
-  render() {
     return (
       <Flex>
         <Headbar>
@@ -153,7 +109,7 @@ export default class PropertiesView extends Component {
             <Crumb active> Properties </Crumb>
           </Breadcrumbs>
           <Pull right>
-            <ButtonGroup marginRight={3}>
+            <ButtonGroup>
               <Button
                 disabled={
                   !hasPermission(
@@ -168,17 +124,26 @@ export default class PropertiesView extends Component {
                 big
               />
             </ButtonGroup>
-
-            <Search
-              onSearchUpdate={this.props.onSearchChange}
-              defaultValue={this.props.query}
-              resource="properties"
-            />
           </Pull>
         </Headbar>
-        <Box top scrollY>
-          {this.renderProperties()}
-        </Box>
+        <NoDataIf condition={size(collection) === 0} big inBox>
+          {() => (
+            <Box top scrollY>
+              {map(collection, (data: Object, name: string) => (
+                <Prop
+                  data={data}
+                  title={name}
+                  perms={user.data.permissions}
+                  key={name}
+                  onDelete={this.handleDeleteClick}
+                  onEdit={this.handleAddClick}
+                  openModal={this.props.openModal}
+                  closeModal={this.props.closeModal}
+                />
+              ))}
+            </Box>
+          )}
+        </NoDataIf>
       </Flex>
     );
   }

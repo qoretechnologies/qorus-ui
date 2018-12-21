@@ -8,7 +8,7 @@
  * @returns {Array}
  */
 const findBy = (keys, query, collection) => {
-  if (query === undefined || query === '') return collection;
+  if (query === undefined || query === '' || query === null) return collection;
 
   let keysArray;
   let q;
@@ -33,7 +33,10 @@ const findBy = (keys, query, collection) => {
 
   return collection.filter(c => {
     for (const k of keysArray) {
-      if (regex.exec(c[k])) {
+      //* Stringify objects to be searchable
+      const value = typeof c[k] === 'object' ? JSON.stringify(c[k]) : c[k];
+
+      if (regex.exec(value)) {
         return true;
       }
     }

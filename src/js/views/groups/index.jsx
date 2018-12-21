@@ -5,6 +5,7 @@ import withProps from 'recompose/withProps';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
 import actions from '../../store/api/actions';
 import { querySelector, resourceSelector } from '../../selectors';
@@ -88,7 +89,7 @@ const GroupsView: Function = ({
           <Crumb active>Groups</Crumb>
         </Breadcrumbs>
         <Pull right>
-          <CsvControl onClick={onCSVClick} />
+          <CsvControl onClick={onCSVClick} disabled={size(groups) === 0} />
           <Search
             defaultValue={searchQuery}
             onSearchUpdate={changeSearchQuery}
@@ -169,13 +170,13 @@ export default compose(
     }
   ),
   withInfoBar('groups'),
-  withSort('groups', 'groups', sortDefaults.groups),
-  loadMore('groups', 'groups', true, 50),
   withProps({
     fetchParams: { no_synthetic: true },
   }),
   patch('load', ['fetchParams']),
   sync('meta'),
+  withSort('groups', 'groups', sortDefaults.groups),
+  loadMore('groups', 'groups', true, 50),
   queryControl('search'),
   selectable('groups'),
   withCSV('groups', 'groups'),

@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
+import size from 'lodash/size';
 
 import { Table, Thead, Tbody, Th, FixedRow } from '../../components/new_table';
 import withModal from '../../hocomponents/modal';
@@ -21,6 +22,10 @@ import { Icon } from '@blueprintjs/core';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import SortingDropdown from '../../components/SortingDropdown';
 import { NameColumnHeader } from '../../components/NameColumn';
+import Pull from '../../components/Pull';
+import { SelectColumnHeader } from '../../components/SelectColumn';
+import { ActionColumnHeader } from '../../components/ActionColumn';
+import { IdColumnHeader } from '../../components/IdColumn';
 
 type Props = {
   sortData: Object,
@@ -86,20 +91,16 @@ const WorkflowsTable: Function = ({
   handleLoadAll,
   sortKeysObj,
 }: Props): React.Element<any> => (
-  <Table
-    striped
-    hover
-    condensed
-    fixed
-    className="resource-table"
-    // Another Firefox hack, jesus
-    key={collection.length}
-  >
+  <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan={isTablet ? 4 : 5}>
-          <div className="pull-left">
-            <Selector selected={selected} selectedCount={selectedIds.length} />
+          <Pull>
+            <Selector
+              selected={selected}
+              selectedCount={selectedIds.length}
+              disabled={size(collection) === 0}
+            />
             <Actions
               selectedIds={selectedIds}
               show={selected !== 'none'}
@@ -111,15 +112,15 @@ const WorkflowsTable: Function = ({
               sortData={sortData}
               sortKeys={sortKeysObj}
             />
-          </div>
-          <div className="pull-right">
+          </Pull>
+          <Pull right>
             <LoadMore
               limit={limit}
               canLoadMore={canLoadMore}
               handleLoadAll={handleLoadAll}
               handleLoadMore={handleLoadMore}
             />
-          </div>
+          </Pull>
         </Th>
         <Th className="separated-cell" colspan={2}>
           <DatePicker
@@ -138,30 +139,34 @@ const WorkflowsTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny">
-          <Icon iconName="small-tick" />
-        </Th>
-        {!isTablet && <Th className="normal">Actions</Th>}
-        <Th className="medium" name="autostart">
+        <SelectColumnHeader />
+        <IdColumnHeader />
+        <NameColumnHeader />
+        {!isTablet && <ActionColumnHeader />}
+        <Th name="autostart" icon="automatic-updates">
           Auto / Execs
         </Th>
-        <Th className="narrow" name="id">
-          ID
-        </Th>
-        <NameColumnHeader />
         {deprecated && (
-          <Th className="medium" name="deprecated">
+          <Th name="deprecated" icon="flag">
             Deprecated
           </Th>
         )}
-        <Th className="huge separated-cell" onClick={handleInstancesClick}>
+        <Th
+          className="separated-cell"
+          onClick={handleInstancesClick}
+          icon="layout-grid"
+        >
           Instances
         </Th>
-        <Th className="narrow" name="TOTAL">
+        <Th name="TOTAL" icon="grid">
           All
         </Th>
-        <Th className="big separated-cell">Disposition (%)</Th>
-        <Th className="normal">SLA (%)</Th>
+        <Th className="separated-cell" icon="pie-chart">
+          Disposition (%)
+        </Th>
+        <Th className="normal" icon="time">
+          SLA (%)
+        </Th>
       </FixedRow>
     </Thead>
     <DataOrEmptyTable
@@ -174,7 +179,7 @@ const WorkflowsTable: Function = ({
             (workflow: Object, index: number): React.Element<Row> => (
               <Row
                 first={index === 0}
-                key={`worfkflow_${workflow.id}`}
+                key={index}
                 isActive={workflow.id === parseInt(paneId, 10)}
                 openPane={openPane}
                 closePane={closePane}

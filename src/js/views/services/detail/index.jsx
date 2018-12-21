@@ -99,7 +99,7 @@ export default class ServicesDetail extends Component {
 
   render() {
     const { service, paneTab, systemOptions, methods } = this.props;
-    const loaded: boolean = service && 'author' in service;
+    const loaded: boolean = service && 'lib' in service;
 
     if (!loaded) {
       return null;

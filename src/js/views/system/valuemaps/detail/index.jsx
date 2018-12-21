@@ -6,21 +6,21 @@ import compose from 'recompose/compose';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
-import { Button, Intent } from '@blueprintjs/core';
-
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../../components/controls';
 import Pane from '../../../../components/pane';
-import Search from '../../../../components/search';
-import Autocomponent from '../../../../components/autocomponent';
-import Date from '../../../../components/date';
-import Author from '../../../../components/author';
 import search from '../../../../hocomponents/search';
 import Table from './table';
 import AddValue from './add';
 import { addValue } from '../../../../store/api/resources/valuemaps/actions';
 import { querySelector } from '../../../../selectors';
 import Box from '../../../../components/box';
+import InfoHeader from '../../../../components/InfoHeader';
 import PaneItem from '../../../../components/pane_item';
 import withDispatch from '../../../../hocomponents/withDispatch';
+import ContentByType from '../../../../components/ContentByType';
 
 type Props = {
   onClose: Function,
@@ -49,45 +49,37 @@ const ValuemapsPane: Function = ({
   location,
   width,
   onResize,
-  isTablet,
 }: Props): React.Element<any> => (
   <Pane
     name="valuemaps"
-    width={width || 500}
+    width={width}
     onClose={onClose}
     onResize={onResize}
-    title={valuemap.name}
+    title="Value map detail"
   >
     <Box top fill scrollY>
-      <PaneItem title="Description">{valuemap.description}</PaneItem>
-      {isTablet && (
-        <PaneItem title="Created">
-          <Date date={valuemap.created} />
-        </PaneItem>
-      )}
-      {isTablet && (
-        <PaneItem title="Modified">
-          <Date date={valuemap.modified} />
-        </PaneItem>
-      )}
+      <InfoHeader model={valuemap} />
       <PaneItem title="Type">
         <code>{valuemap.valuetype}</code>
       </PaneItem>
       <PaneItem title="Throws exception">
-        <Autocomponent>{valuemap.throws_exception}</Autocomponent>
+        <ContentByType content={valuemap.throws_exception} />
       </PaneItem>
-      <Author model={valuemap} />
-      <Search
-        onSearchUpdate={onSearchChange}
-        defaultValue={defaultSearchValue}
+
+      <Table
+        paneId={paneId}
+        location={location}
+        onSearchChange={onSearchChange}
+        defaultSearchValue={defaultSearchValue}
       />
-      <Table paneId={paneId} location={location} />
-      <Button
-        text={adding ? 'Cancel' : 'Add value'}
-        onClick={onAddClick}
-        iconName={adding ? 'cross' : 'plus'}
-        intent={!adding ? Intent.PRIMARY : Intent.NONE}
-      />
+      <ButtonGroup>
+        <Button
+          text={adding ? 'Cancel' : 'Add value'}
+          onClick={onAddClick}
+          iconName={adding ? 'cross' : 'plus'}
+          btnStyle={!adding ? 'primary' : null}
+        />
+      </ButtonGroup>
       {adding && <AddValue id={paneId} add={onSaveClick} />}
     </Box>
   </Pane>

@@ -139,7 +139,7 @@ export default class RBACPerms extends Component {
 
     return (
       <Table
-        collection={this.props.permsModel}
+        perms={this.props.permsModel}
         onDeleteClick={this.handleRemovePermClick}
         onEditClick={this.handleEditPermClick}
         canEdit={canEdit}

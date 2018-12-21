@@ -25,6 +25,8 @@ import {
   buildOrderStatsDisposition,
   buildOrderStatsSLA,
 } from '../../helpers/workflows';
+import { SelectColumn } from '../../components/SelectColumn';
+import { IdColumn } from '../../components/IdColumn';
 
 type Props = {
   isActive?: boolean,
@@ -98,21 +100,8 @@ const TableRow: Function = ({
     onHighlightEnd={handleHighlightEnd}
     highlight={_updated}
   >
-    <Td key="checkbox" className="tiny checker">
-      <Checkbox
-        action={handleCheckboxClick}
-        checked={_selected ? 'CHECKED' : 'UNCHECKED'}
-      />
-    </Td>
-    {!isTablet && (
-      <Td key="controls" className="normal">
-        <WorkflowControls id={id} enabled={enabled} remote={remote} />
-      </Td>
-    )}
-    <Td key="autostart" name="autostart" className="medium">
-      <AutoStart id={id} autostart={autostart} execCount={execs} />
-    </Td>
-    <Td className="narrow">{id}</Td>
+    <SelectColumn onClick={handleCheckboxClick} checked={_selected} />
+    <IdColumn>{id}</IdColumn>
     <NameColumn
       popoverContent={
         <Box top>
@@ -130,7 +119,16 @@ const TableRow: Function = ({
       isActive={isActive}
       onDetailClick={handleDetailClick}
       hasAlerts={hasAlerts}
+      type="workflow"
     />
+    {!isTablet && (
+      <Td key="controls" className="normal">
+        <WorkflowControls id={id} enabled={enabled} remote={remote} />
+      </Td>
+    )}
+    <Td key="autostart" name="autostart" className="medium">
+      <AutoStart id={id} autostart={autostart} execCount={execs} />
+    </Td>
     {showDeprecated && (
       <Td className="medium">
         <Icon iconName={deprecated ? 'small-tick' : 'cross'} />

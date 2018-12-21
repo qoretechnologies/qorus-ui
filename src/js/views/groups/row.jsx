@@ -11,6 +11,11 @@ import Text from '../../components/text';
 import Controls from './controls';
 import actions from '../../store/api/actions';
 import queryControl from '../../hocomponents/queryControl';
+import { SelectColumn } from '../../components/SelectColumn';
+import { IdColumn } from '../../components/IdColumn';
+import NameColumn from '../../components/NameColumn';
+import { ActionColumn } from '../../components/ActionColumn';
+import { DescriptionColumn } from '../../components/DescriptionColumn';
 
 type Props = {
   updateDone: Function,
@@ -52,7 +57,6 @@ const ServiceRow: Function = ({
   vmaps_count: vmapsCount,
   roles_count: rolesCount,
   mappers_count: mappersCount,
-  handleNameClick,
   isTablet,
   first,
 }: Props): React.Element<any> => (
@@ -63,30 +67,19 @@ const ServiceRow: Function = ({
     className={_selected ? 'row-selected' : ''}
     onClick={handleCheckboxClick}
   >
-    <Td className="tiny checker">
-      <Checkbox
-        action={handleCheckboxClick}
-        checked={_selected ? 'CHECKED' : 'UNCHECKED'}
-      />
-    </Td>
-    <Td className="narrow">
+    <SelectColumn onClick={handleCheckboxClick} checked={_selected} />
+    <IdColumn>{id}</IdColumn>
+    <NameColumn name={name} link={`/groups?group=${name}`} type="groups" />
+    <ActionColumn>
       <Controls enabled={enabled} name={name} />
-    </Td>
-    <Td className="narrow">{id}</Td>
-    <Td className="name">
-      <a className="resource-name-link" onClick={handleNameClick} title={name}>
-        {name}
-      </a>
-    </Td>
-    <Td className="text">
-      <Text text={description} />
-    </Td>
+    </ActionColumn>
     <Td className={isTablet ? 'narrow' : 'medium'}>{workflowsCount}</Td>
     <Td className={isTablet ? 'narrow' : 'medium'}>{servicesCount}</Td>
     <Td className={isTablet ? 'narrow' : 'medium'}>{jobsCount}</Td>
     <Td className={isTablet ? 'narrow' : 'medium'}>{vmapsCount}</Td>
     <Td className={isTablet ? 'narrow' : 'medium'}>{rolesCount}</Td>
     <Td className={isTablet ? 'narrow' : 'medium'}>{mappersCount}</Td>
+    <DescriptionColumn>{description}</DescriptionColumn>
   </Tr>
 );
 
@@ -97,21 +90,12 @@ export default compose(
       action: actions.groups.groupAction,
     }
   ),
-  queryControl('group'),
   withHandlers({
-    handleNameClick: ({ changeGroupQuery, name }: Props): Function => (
-      event: EventHandler
-    ): void => {
-      event.preventDefault();
-
-      changeGroupQuery(name);
-    },
     handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
       select(id);
     },
     handleHighlightEnd: ({ updateDone, name }: Props): Function => (): void => {
       updateDone(name);
     },
-  }),
-  pure(['enabled', '_selected', '_updated', 'isTablet'])
+  })
 )(ServiceRow);

@@ -18,7 +18,9 @@ const withMutationObserver: Function = (
     _observer: any;
 
     componentDidMount() {
-      this.handleObserverInit(this.props);
+      if (this.props.first) {
+        this.handleObserverInit(this.props);
+      }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -38,7 +40,7 @@ const withMutationObserver: Function = (
       if (props.first && domElement) {
         const el = document.querySelector(domElement);
 
-        if (el && el.length) {
+        if (el) {
           this._observer = new MutationObserver(
             (mutations: Array<Object>): void => {
               mutations.forEach(
@@ -49,7 +51,7 @@ const withMutationObserver: Function = (
             }
           );
 
-          this._observer.observe(document.querySelector(domElement), {
+          this._observer.observe(el, {
             attributes: true,
           });
         }

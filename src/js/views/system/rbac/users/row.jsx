@@ -8,6 +8,8 @@ import { Button, Intent, ButtonGroup } from '@blueprintjs/core';
 import { Tr, Td } from '../../../../components/new_table';
 import Badge from '../../../../components/badge';
 import Text from '../../../../components/text';
+import NameColumn from '../../../../components/NameColumn';
+import { ActionColumn } from '../../../../components/ActionColumn';
 
 type Props = {
   model: Object,
@@ -29,7 +31,26 @@ const UsersRow: Function = ({
   first,
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    <Td className="name">{model.name}</Td>
+    <NameColumn name={model.name} />
+    <ActionColumn>
+      <ButtonGroup>
+        <Button
+          disabled={!canEdit}
+          iconName="edit"
+          onClick={handleEditClick}
+          title="Edit user"
+          className="pt-small"
+        />
+        <Button
+          disabled={!canDelete}
+          iconName="cross"
+          intent={Intent.DANGER}
+          onClick={handleDeleteClick}
+          title="Remove user"
+          className="pt-small"
+        />
+      </ButtonGroup>
+    </ActionColumn>
     <Td className="text big">
       <Text text={model.username} />
     </Td>
@@ -37,27 +58,6 @@ const UsersRow: Function = ({
       {model.roles.map((role, index) => (
         <Badge key={index} val={role} label="info" />
       ))}
-    </Td>
-    <Td className="narrow">
-      <ButtonGroup>
-        {canEdit && (
-          <Button
-            iconName="edit"
-            onClick={handleEditClick}
-            title="Edit user"
-            className="pt-small"
-          />
-        )}
-        {canDelete && (
-          <Button
-            iconName="cross"
-            intent={Intent.DANGER}
-            onClick={handleDeleteClick}
-            title="Remove user"
-            className="pt-small"
-          />
-        )}
-      </ButtonGroup>
     </Td>
   </Tr>
 );

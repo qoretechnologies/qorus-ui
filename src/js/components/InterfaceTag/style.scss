@@ -1,0 +1,39 @@
+.interface-tag {
+  line-height: 24px;
+  padding: 0 5px;
+  border-radius: 5px;
+  height: 24px;
+  color: $qore-cobalt;
+  background-color: lighten($qore-cobalt, 50);
+  box-shadow: inset 0 0 0 1px rgba(lighten($qore-cobalt, 15), 0.2),
+    inset 0 -1px 0 rgba(lighten($qore-cobalt, 15), 0.1);
+
+  a {
+    color: $qore-cobalt;
+    text-decoration: underline;
+
+    &:hover {
+      font-weight: bold;
+    }
+  }
+
+  &.has-alerts a {
+    color: $qore-danger;
+  }
+
+  > .pt-icon-standard {
+    color: $qore-cobalt;
+    vertical-align: middle;
+    line-height: 24px;
+    display: flex;
+    flex-flow: row;
+    flex: 0 1 auto;
+    font-size: 10px;
+    margin-right: 3px;
+    width: 13px;
+  }
+
+  &.has-alerts > .pt-icon-standard {
+    color: $qore-danger;
+  }
+}

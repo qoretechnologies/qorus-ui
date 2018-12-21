@@ -16,6 +16,7 @@ type Props = {
   selectStopped: Function,
   selectAlerts: Function,
   selectedCount?: number,
+  disabled: boolean,
 };
 
 const ToolbarSelector: Function = ({
@@ -27,15 +28,16 @@ const ToolbarSelector: Function = ({
   selectStopped,
   selectAlerts,
   selectedCount,
+  disabled,
 }: Props): React.Element<any> => (
-  <Dropdown>
+  <Dropdown disabled={disabled}>
     <Control
       icon={
         selected === 'all'
           ? 'selection'
           : selected === 'some'
-            ? 'remove'
-            : 'circle'
+          ? 'remove'
+          : 'circle'
       }
     >
       {selectedCount}
@@ -61,5 +63,5 @@ export default compose(
       selectAlerts: actions.workflows.selectStopped,
     }
   ),
-  pure(['selected', 'selectedCount'])
+  pure(['selected', 'selectedCount', 'disabled'])
 )(ToolbarSelector);

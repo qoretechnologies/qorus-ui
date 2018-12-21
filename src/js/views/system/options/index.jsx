@@ -3,12 +3,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { compose } from 'redux';
+import size from 'lodash/size';
+
 import sync from '../../../hocomponents/sync';
 import { sortDefaults } from '../../../constants/sort';
-
 import actions from '../../../store/api/actions';
 import { findBy } from '../../../helpers/search';
 import sort from '../../../hocomponents/sort';
+import loadMore from '../../../hocomponents/loadMore';
 import queryControl from '../../../hocomponents/queryControl';
 import {
   Table,
@@ -20,6 +22,8 @@ import {
 import Headbar from '../../../components/Headbar';
 import Box from '../../../components/box';
 import NoData from '../../../components/nodata';
+import LoadMore from '../../../components/LoadMore';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import Search from '../../../containers/search';
 import { querySelector, resourceSelector } from '../../../selectors';
@@ -41,6 +45,9 @@ type Props = {
   searchQuery: Function,
   openModal: Function,
   closeModal: Function,
+  canLoadMore?: boolean,
+  handleLoadMore: Function,
+  handleLoadAll: Function,
 };
 
 const OptionsView: Function = ({
@@ -49,6 +56,9 @@ const OptionsView: Function = ({
   sortData,
   onSortChange,
   collection,
+  canLoadMore,
+  handleLoadMore,
+  handleLoadAll,
 }: Props): React.Element<any> => (
   <Flex>
     <Headbar>
@@ -56,6 +66,12 @@ const OptionsView: Function = ({
         <Crumb active> Options </Crumb>
       </Breadcrumbs>
       <Pull right>
+        <LoadMore
+          canLoadMore={canLoadMore}
+          onLoadMore={handleLoadMore}
+          limit={50}
+          onLoadAll={handleLoadAll}
+        />
         <Search
           defaultValue={searchQuery}
           onSearchUpdate={changeSearchQuery}
@@ -64,35 +80,40 @@ const OptionsView: Function = ({
       </Pull>
     </Headbar>
     <Box top noPadding>
-      {collection.length ? (
-        <Table fixed condensed striped key={collection.length}>
-          <Thead>
-            <FixedRow {...{ sortData, onSortChange }}>
-              <Th className="narrow" name="status">
-                Status
-              </Th>
-              <NameColumnHeader />
-              <Th className="big">Type</Th>
-              <Th className="text" name="default">
-                Default value
-              </Th>
-              <Th className="text" name="value">
-                Current value
-              </Th>
-              <Th className="tiny">-</Th>
-            </FixedRow>
-          </Thead>
-          <Tbody>
-            {collection.map(
-              (option: Object, index: number): React.Element<any> => (
-                <OptionRow first={index === 0} key={option.name} {...option} />
-              )
-            )}
-          </Tbody>
-        </Table>
-      ) : (
-        <NoData />
-      )}
+      <Table fixed condensed striped>
+        <Thead>
+          <FixedRow {...{ sortData, onSortChange }}>
+            <Th name="status" icon="info-sign" />
+            <NameColumnHeader />
+            <Th icon="application">Type</Th>
+            <Th className="text" name="default">
+              Default value
+            </Th>
+            <Th className="text" name="value">
+              Current value
+            </Th>
+            <Th icon="edit" />
+          </FixedRow>
+        </Thead>
+        <DataOrEmptyTable
+          condition={!collection || size(collection) === 0}
+          cols={6}
+        >
+          {props => (
+            <Tbody {...props}>
+              {collection.map(
+                (option: Object, index: number): React.Element<any> => (
+                  <OptionRow
+                    first={index === 0}
+                    key={option.name}
+                    {...option}
+                  />
+                )
+              )}
+            </Tbody>
+          )}
+        </DataOrEmptyTable>
+      </Table>
     </Box>
   </Flex>
 );
@@ -124,8 +145,9 @@ export default compose(
       load: actions.systemOptions.fetch,
     }
   ),
-  sort('options', 'collection', sortDefaults.options),
   sync('options'),
+  sort('options', 'collection', sortDefaults.options),
+  loadMore('collection', null, true, 50),
   queryControl('search'),
   titleManager('Options')
 )(OptionsView);

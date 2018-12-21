@@ -127,6 +127,21 @@ const getProcessObjectLink: Function = (process: Object) => {
   }
 };
 
+const getProcessObjectType: Function = (process: Object) => {
+  switch (process.type) {
+    case 'qdsp':
+      return 'remote';
+    case 'qwf':
+      return 'workflow';
+    case 'qsvc':
+      return 'service';
+    case 'qjob':
+      return 'job';
+    default:
+      return null;
+  }
+};
+
 const calculateMemory: Function = (
   memory: number,
   unit: string,
@@ -161,6 +176,7 @@ export {
   getDependencyObjectLink,
   typeToString,
   getProcessObjectLink,
+  getProcessObjectType,
   calculateMemory,
   getSlicedRemotes,
 };

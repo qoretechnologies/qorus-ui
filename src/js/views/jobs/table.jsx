@@ -3,7 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
-import checkData from '../../hocomponents/check-no-data';
+import size from 'lodash/size';
 
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
 import Row from './row';
@@ -15,8 +15,11 @@ import LoadMore from '../../components/LoadMore';
 import queryControl from '../../hocomponents/queryControl';
 import DatePicker from '../../components/datepicker';
 import { Icon } from '@blueprintjs/core';
-import { AlertColumnHeader } from '../../components/AlertColumn';
 import { NameColumnHeader } from '../../components/NameColumn';
+import DataOrEmptyTable from '../../components/DataOrEmptyTable';
+import { IdColumnHeader } from '../../components/IdColumn';
+import { SelectColumnHeader } from '../../components/SelectColumn';
+import { ActionColumnHeader } from '../../components/ActionColumn';
 
 type Props = {
   sortData: Object,
@@ -59,19 +62,16 @@ const JobsTable: Function = ({
   dateQuery,
   changeDateQuery,
 }: Props): React.Element<any> => (
-  <Table
-    striped
-    hover
-    condensed
-    fixed
-    className="resource-table"
-    key={collection.length}
-  >
+  <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan={7}>
           <Pull>
-            <Selector selected={selected} selectedCount={selectedIds.length} />
+            <Selector
+              selected={selected}
+              selectedCount={selectedIds.length}
+              disabled={size(collection) === 0}
+            />
             <Actions selectedIds={selectedIds} show={selected !== 'none'} />
           </Pull>
           <Pull right>
@@ -88,45 +88,47 @@ const JobsTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny checker">
-          <Icon iconName="small-tick" />
-        </Th>
-        <Th className="big">Actions</Th>
-        <Th className="narrow" name="id">
-          ID
-        </Th>
+        <SelectColumnHeader />
+        <IdColumnHeader />
         <NameColumnHeader />
-        <Th className="big" name="last_executed">
-          <Icon iconName="time" /> Last run
+        <ActionColumnHeader />
+        <Th name="last_executed" icon="calendar">
+          Last run
         </Th>
-        <Th className="big" name="next">
-          <Icon iconName="time" /> Next run
+        <Th name="next" icon="calendar">
+          Next run
         </Th>
-        <Th className="big" name="expiry_date">
-          <Icon iconName="calendar" /> Expiry Date
+        <Th name="expiry_date" icon="calendar">
+          Expiry Date
         </Th>
-        <Th className="big separated-cell">Instances</Th>
+        <Th className="separated-cell" icon="grid">
+          Instances
+        </Th>
       </FixedRow>
     </Thead>
-    <Tbody>
-      {collection.map(
-        (job: Object, index: number): React.Element<Row> => (
-          <Row
-            first={index === 0}
-            key={`job_${job.id}`}
-            isActive={job.id === parseInt(paneId, 10)}
-            openPane={openPane}
-            closePane={closePane}
-            date={date}
-            select={select}
-            updateDone={updateDone}
-            PROGRESS={job['IN-PROGRESS']}
-            isTablet={isTablet}
-            {...job}
-          />
-        )
+    <DataOrEmptyTable condition={size(collection) === 0} cols={8}>
+      {props => (
+        <Tbody {...props}>
+          {collection.map(
+            (job: Object, index: number): React.Element<Row> => (
+              <Row
+                first={index === 0}
+                key={`job_${job.id}`}
+                isActive={job.id === parseInt(paneId, 10)}
+                openPane={openPane}
+                closePane={closePane}
+                date={date}
+                select={select}
+                updateDone={updateDone}
+                PROGRESS={job['IN-PROGRESS']}
+                isTablet={isTablet}
+                {...job}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
@@ -137,9 +139,6 @@ export default compose(
       updateDone: actions.jobs.updateDone,
       select: actions.jobs.select,
     }
-  ),
-  checkData(
-    ({ collection }: Props): boolean => collection && collection.length > 0
   ),
   queryControl('date'),
   pure([

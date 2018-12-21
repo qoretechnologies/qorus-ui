@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
+import size from 'lodash/size';
 
 import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
@@ -13,6 +14,13 @@ import Actions from './toolbar/actions';
 import Pull from '../../components/Pull';
 import LoadMore from '../../components/LoadMore';
 import titleManager from '../../hocomponents/TitleManager';
+import DataOrEmptyTable from '../../components/DataOrEmptyTable';
+import { SelectColumnHeader } from '../../components/SelectColumn';
+import { IdColumnHeader } from '../../components/IdColumn';
+import { NameColumnHeader } from '../../components/NameColumn';
+import { ActionColumnHeader } from '../../components/ActionColumn';
+import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
+import { INTERFACE_ICONS } from '../../constants/interfaces';
 
 type Props = {
   sortData: Object,
@@ -43,19 +51,16 @@ const GroupsTable: Function = ({
   handleLoadMore,
   handleLoadAll,
 }: Props): React.Element<any> => (
-  <Table
-    fixed
-    hover
-    condensed
-    striped
-    className="resource-table"
-    key={collection.length}
-  >
+  <Table fixed hover condensed striped>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan={11}>
           <Pull>
-            <Selectors selected={selected} selectedCount={selectedIds.length} />
+            <Selectors
+              selected={selected}
+              selectedCount={selectedIds.length}
+              disabled={size(collection) === 0}
+            />
             <Actions selectedIds={selectedIds} show={selected !== 'none'} />
           </Pull>
           <Pull right>
@@ -69,75 +74,57 @@ const GroupsTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="tiny">-</Th>
-        <Th className="narrow" name="enabled">
-          <Icon iconName="power-off" />
-        </Th>
-        <Th className="narrow" name="id">
-          ID
-        </Th>
-        <Th className="name" name="name">
-          Name
-        </Th>
-        <Th name="text description">Description</Th>
+        <SelectColumnHeader />
+        <IdColumnHeader />
+        <NameColumnHeader />
+        <ActionColumnHeader />
         <Th
-          className={isTablet ? 'narrow' : 'medium'}
           name="workflows_count"
           title="Workflows"
+          icon={INTERFACE_ICONS.workflows}
         >
           {isTablet ? 'W' : 'Workflows'}
         </Th>
         <Th
-          className={isTablet ? 'narrow' : 'medium'}
           name="services_count"
           title="Services"
+          icon={INTERFACE_ICONS.services}
         >
           {isTablet ? 'S' : 'Services'}
         </Th>
-        <Th
-          className={isTablet ? 'narrow' : 'medium'}
-          name="jobs_count"
-          title="Jobs"
-        >
+        <Th name="jobs_count" title="Jobs" icon={INTERFACE_ICONS.jobs}>
           {isTablet ? 'J' : 'Jobs'}
         </Th>
-        <Th
-          className={isTablet ? 'narrow' : 'medium'}
-          name="vmaps_count"
-          title="Vmaps"
-        >
+        <Th name="vmaps_count" title="Vmaps" icon={INTERFACE_ICONS.valuemaps}>
           {isTablet ? 'V' : 'Vmaps'}
         </Th>
-        <Th
-          className={isTablet ? 'narrow' : 'medium'}
-          name="roles_count"
-          title="Roles"
-        >
+        <Th name="roles_count" title="Roles" icon={INTERFACE_ICONS.roles}>
           {isTablet ? 'R' : 'Roles'}
         </Th>
-        <Th
-          className={isTablet ? 'narrow' : 'medium'}
-          name="mappers_count"
-          title="Mappers"
-        >
+        <Th name="mappers_count" title="Mappers" icon={INTERFACE_ICONS.mappers}>
           {isTablet ? 'M' : 'Mappers'}
         </Th>
+        <DescriptionColumnHeader name="description" />
       </FixedRow>
     </Thead>
-    <Tbody>
-      {collection.map(
-        (group: Object, index: number): React.Element<Row> => (
-          <Row
-            first={index === 0}
-            key={`group_${group.id}`}
-            select={select}
-            updateDone={updateDone}
-            isTablet={isTablet}
-            {...group}
-          />
-        )
+    <DataOrEmptyTable condition={size(collection) === 0} cols={11}>
+      {props => (
+        <Tbody {...props}>
+          {collection.map(
+            (group: Object, index: number): React.Element<Row> => (
+              <Row
+                first={index === 0}
+                key={index}
+                select={select}
+                updateDone={updateDone}
+                isTablet={isTablet}
+                {...group}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 

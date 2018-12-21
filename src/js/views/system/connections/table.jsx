@@ -8,6 +8,7 @@ import { withRouter } from 'react-router';
 import { Button } from '@blueprintjs/core';
 import titleManager from '../../../hocomponents/TitleManager';
 import capitalize from 'lodash/capitalize';
+import size from 'lodash/size';
 
 import {
   Table,
@@ -32,6 +33,7 @@ import {
 import { findBy } from '../../../helpers/search';
 import { hasPermission } from '../../../helpers/user';
 import Pull from '../../../components/Pull';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 import LoadMore from '../../../components/LoadMore';
 import { NameColumnHeader } from '../../../components/NameColumn';
 import queryControl from '../../../hocomponents/queryControl';
@@ -81,12 +83,7 @@ const ConnectionTable: Function = ({
   canDelete,
   canAdd,
 }: Props): React.Element<any> => (
-  <Table
-    fixed
-    striped
-    key={`${type}-${remotes.length}`}
-    marginBottom={canLoadMore ? 40 : 0}
-  >
+  <Table fixed striped>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan="full">
@@ -109,41 +106,54 @@ const ConnectionTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th className="normal" name="up">
+        <Th name="up" icon="info-sign">
           Status
         </Th>
-        <Th className="narrow">Actions</Th>
-        <NameColumnHeader />
+        <NameColumnHeader icon="application" />
+        <Th icon="build">Actions</Th>
         {type === 'datasources' ? (
-          <Th className="text">Options</Th>
+          <Th className="text" icon="cog">
+            Options
+          </Th>
         ) : (
-          <Th className="text" name="url">
+          <Th className="text" name="url" icon="link">
             URL
           </Th>
         )}
-        <Th className="text" name="desc">
+        <Th className="text" name="desc" icon="label">
           Description
         </Th>
-        {type === 'qorus' && <Th className="normal">Loopback</Th>}
+        {type === 'qorus' && (
+          <Th icon="repeat" name="loopback">
+            Loopback
+          </Th>
+        )}
       </FixedRow>
     </Thead>
-    <Tbody>
-      {remotes.map(
-        (remote: Object, index: number): React.Element<any> => (
-          <ConnectionRow
-            first={index === 0}
-            key={`connection_${remote.name}`}
-            isActive={remote.name === paneId}
-            hasAlerts={remote.alerts.length > 0}
-            openPane={openPane}
-            closePane={closePane}
-            remoteType={type}
-            canDelete={canDelete}
-            {...remote}
-          />
-        )
+    <DataOrEmptyTable
+      condition={!remotes || size(remotes) === 0}
+      cols={type === 'qorus' ? 6 : 5}
+    >
+      {props => (
+        <Tbody {...props}>
+          {remotes.map(
+            (remote: Object, index: number): React.Element<any> => (
+              <ConnectionRow
+                first={index === 0}
+                key={index}
+                isActive={remote.name === paneId}
+                hasAlerts={remote.alerts.length > 0}
+                openPane={openPane}
+                closePane={closePane}
+                remoteType={type}
+                canDelete={canDelete}
+                {...remote}
+              />
+            )
+          )}
+        </Tbody>
       )}
-    </Tbody>
+    </DataOrEmptyTable>
   </Table>
 );
 
@@ -177,7 +187,7 @@ export default compose(
     })
   ),
   withSort(({ type }: Props): string => type, 'remotes', sortDefaults.remote),
-  withLoadMore('remotes', 'remotes', true, 50),
+  withLoadMore('remotes', null, true, 50),
   withPane(ConnectionPane, ['remoteType', 'canEdit'], null, 'connections'),
   withModal(),
   withHandlers({

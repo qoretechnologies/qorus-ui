@@ -21,7 +21,7 @@ const pullConfigFromStepinfo: Function = (stepArray: Array<Object>): Object => {
       (step: Object): void => {
         const newConfig: Array<Object> = map(
           step.config,
-          mapConfigToArray(step.stepid, true, step)
+          mapConfigToArray(step.stepid)
         );
 
         const belongsTo: string = `${step.name} v${step.version} (${
@@ -43,17 +43,24 @@ const rebuildConfigHash: Function = (
   const configObj: Object = pullConfigValues
     ? pullConfigFromStepinfo(configHash)
     : {
-        [normalizeName(model)]: map(
-          configHash,
-          mapConfigToArray(model.id, false, model)
-        ),
+        [normalizeName(model)]: map(configHash, mapConfigToArray(model.id)),
       };
 
-  if (!size(configObj)) {
+  let resultObj = { ...configObj };
+
+  if (model.global_config) {
+    const globalConfigObj: Object = {
+      ['Global Config']: map(model.global_config, mapConfigToArray(model.id)),
+    };
+
+    resultObj = { ...globalConfigObj, ...resultObj };
+  }
+
+  if (!size(resultObj)) {
     return {};
   }
 
-  return configObj;
+  return resultObj;
 };
 
 export { pullConfigFromStepinfo, rebuildConfigHash };

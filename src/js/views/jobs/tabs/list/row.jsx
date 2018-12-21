@@ -9,6 +9,7 @@ import { Tr, Td } from '../../../../components/new_table';
 import Date from '../../../../components/date';
 import actions from '../../../../store/api/actions';
 import NameColumn from '../../../../components/NameColumn';
+import { DateColumn } from '../../../../components/DateColumn';
 
 type Props = {
   id: number,
@@ -48,21 +49,16 @@ const JobInstanceRow: Function = ({
       name={instanceId}
       isActive={active}
       onDetailClick={handleDetailClick}
+      type="job"
     />
     <Td className="medium">
       <span className={`label status-${jobstatus.toLowerCase()}`}>
         {jobstatus}
       </span>
     </Td>
-    <Td className="big">
-      <Date date={started} />
-    </Td>
-    <Td className="big">
-      <Date date={modified} />
-    </Td>
-    <Td className="big">
-      <Date date={completed} />
-    </Td>
+    <DateColumn>{started}</DateColumn>
+    <DateColumn>{modified}</DateColumn>
+    <DateColumn>{completed}</DateColumn>
   </Tr>
 );
 

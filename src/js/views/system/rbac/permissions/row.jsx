@@ -6,8 +6,9 @@ import withHandlers from 'recompose/withHandlers';
 import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
 
 import { Tr, Td } from '../../../../components/new_table';
-import { Controls, Control } from '../../../../components/controls';
-import Text from '../../../../components/text';
+import { ActionColumn } from '../../../../components/ActionColumn';
+import { DescriptionColumn } from '../../../../components/DescriptionColumn';
+import NameColumn from '../../../../components/NameColumn';
 
 type Props = {
   model: Object,
@@ -29,36 +30,28 @@ const PermsRow: Function = ({
   first,
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    <Td className="text normal">{model.permission_type}</Td>
-    <Td className="name">
-      <Text text={model.name} />
-    </Td>
-    <Td className="text">
-      <Text text={model.desc} />
-    </Td>
-    <Td className="text narrow">
+    <NameColumn name={model.name} />
+    <ActionColumn>
       <ButtonGroup>
-        {canEdit &&
-          model.permission_type !== 'SYSTEM' && (
-            <Button
-              iconName="edit"
-              onClick={handleEditClick}
-              title="Edit permission"
-              className="pt-small"
-            />
-          )}
-        {canDelete &&
-          model.permission_type !== 'SYSTEM' && (
-            <Button
-              iconName="cross"
-              intent={Intent.DANGER}
-              onClick={handleDeleteClick}
-              title="Remove permission"
-              className="pt-small"
-            />
-          )}
+        <Button
+          disabled={!(canEdit && model.permission_type !== 'SYSTEM')}
+          iconName="edit"
+          onClick={handleEditClick}
+          title="Edit permission"
+          className="pt-small"
+        />
+        <Button
+          disabled={!(canDelete && model.permission_type !== 'SYSTEM')}
+          iconName="cross"
+          intent={Intent.DANGER}
+          onClick={handleDeleteClick}
+          title="Remove permission"
+          className="pt-small"
+        />
       </ButtonGroup>
-    </Td>
+    </ActionColumn>
+    <Td className="text normal">{model.permission_type}</Td>
+    <DescriptionColumn>{model.desc}</DescriptionColumn>
   </Tr>
 );
 

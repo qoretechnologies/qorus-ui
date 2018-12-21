@@ -63,11 +63,6 @@ const Footer: Function = ({ info, path, openModal, closeModal }: Props) => {
 
   return (
     <footer>
-      <Pull>
-        <p style={{ fontWeight: 'bold' }}>
-          Qorus instance: <Tag>{info['instance-key']}</Tag>
-        </p>
-      </Pull>
       <p className="text-right text-muted">
         {'Qorus Integration Engine '}
         {info['omq-schema'] && (

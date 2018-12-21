@@ -4,11 +4,18 @@ import Skip from './skip';
 import { Table, Td, Th, Tr, Tbody, Thead } from 'components/new_table';
 import Date from 'components/date';
 import Dropdown, { Control, Item } from 'components/dropdown';
-import { Control as Button } from 'components/controls';
-import Autocomponent from 'components/autocomponent';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 import { pureRender } from 'components/utils';
 import { groupInstances, canSkip } from '../../../helpers/orders';
 import Toolbar from '../../../components/toolbar';
+import ContentByType from '../../../components/ContentByType';
+import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
+import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
+import { INTERFACE_ICONS } from '../../../constants/interfaces';
+import { IdColumnHeader, IdColumn } from '../../../components/IdColumn';
 
 @pureRender
 export default class StepDetailTable extends Component {
@@ -113,36 +120,9 @@ export default class StepDetailTable extends Component {
         <Table condensed bordered className="text-table">
           <Tbody>
             <Tr>
-              <Th> Name </Th>
-              <Td colspan={3}>{data.stepname}</Td>
-            </Tr>
-            <Tr>
-              <Th> Type </Th>
-              <Td colspan={3}>{data.steptype}</Td>
-            </Tr>
-            <Tr>
-              <Th> Started </Th>
-              <Td>
-                <Date date={data.started} />
-              </Td>
-              <Th> Skipped </Th>
-              <Td>
-                <Autocomponent>{data.skip}</Autocomponent>{' '}
-                {canSkip(data) && (
-                  <Button iconName="edit" action={this.handleSkipClick} />
-                )}
-              </Td>
-            </Tr>
-            <Tr>
-              <Th> Completed </Th>
-              <Td>
-                <Date date={data.completed} />
-              </Td>
-              <Th> Subwfl </Th>
-              <Td>{data.subworkflow_id}</Td>
-            </Tr>
-            <Tr>
-              <Th> Status </Th>
+              <NameColumnHeader />
+              <NameColumn name={data.stepname} />
+              <Th icon="info-sign">Status</Th>
               <Td>
                 <span
                   className={`label status-${data.stepstatus.toLowerCase()}`}
@@ -150,7 +130,37 @@ export default class StepDetailTable extends Component {
                   {data.stepstatus}
                 </span>
               </Td>
-              <Th> Ind </Th>
+            </Tr>
+            <Tr>
+              <Th icon="info-sign">Type</Th>
+              <Td>{data.steptype}</Td>
+              <Th icon="info-sign">Version</Th>
+              <Td>{data.stepversion}</Td>
+            </Tr>
+            <Tr>
+              <IdColumnHeader />
+              <IdColumn>{data.stepid}</IdColumn>
+              <Th icon="exclude-row">Skipped</Th>
+              <Td>
+                <ContentByType content={data.skip} />{' '}
+                {canSkip(data) && (
+                  <ButtonGroup>
+                    <Button iconName="edit" action={this.handleSkipClick} />
+                  </ButtonGroup>
+                )}
+              </Td>
+            </Tr>
+            <Tr>
+              <DateColumnHeader>Started</DateColumnHeader>
+              <DateColumn>{data.started}</DateColumn>
+
+              <Th icon={INTERFACE_ICONS.workflow}>SubWF</Th>
+              <Td>{data.subworkflow_id}</Td>
+            </Tr>
+            <Tr>
+              <DateColumnHeader>Completed</DateColumnHeader>
+              <DateColumn>{data.completed}</DateColumn>
+              <Th icon="info-sign">Ind</Th>
               <Td>{data.ind}</Td>
             </Tr>
           </Tbody>

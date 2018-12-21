@@ -24,6 +24,7 @@ type Props = {
   info?: boolean,
   height?: string | number,
   marginBottom?: number,
+  width?: number | string,
 };
 
 let Table: Function = ({
@@ -37,6 +38,7 @@ let Table: Function = ({
   height,
   marginBottom,
   info,
+  width,
 }: Props): React.Element<any> =>
   fixed ? (
     <Flex className="table-wrapper">
@@ -69,6 +71,9 @@ let Table: Function = ({
         },
         className
       )}
+      style={{
+        width,
+      }}
     >
       {React.Children.map(
         children,
@@ -79,7 +84,13 @@ let Table: Function = ({
   );
 
 Table = compose(
-  updateOnlyForKeys(['children', 'className', 'marginBottom', 'height'])
+  updateOnlyForKeys([
+    'children',
+    'className',
+    'marginBottom',
+    'height',
+    'width',
+  ])
 )(Table);
 
 export { Table, Thead, Tbody, Tfooter, Tr, Th, Td, EditableCell, FixedRow };

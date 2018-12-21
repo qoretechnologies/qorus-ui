@@ -20,7 +20,7 @@ export const sortDefaults = {
     historySortByKey: { direction: 1, ignoreCase: true },
   },
   orderErrors: {
-    sortBy: 'id',
+    sortBy: 'error',
     sortByKey: { direction: -1, ignoreCase: true },
   },
   alerts: {
@@ -134,6 +134,30 @@ export const sortDefaults = {
     sortByKey: { ignoreCase: true, direction: 1 },
   },
   orderSLAModal: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  properties: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  sqlcache: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  configItems: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  steps: {
+    sortBy: 'stepname',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  audits: {
+    sortBy: 'event',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  methods: {
     sortBy: 'name',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
