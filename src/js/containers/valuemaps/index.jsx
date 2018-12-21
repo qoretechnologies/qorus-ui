@@ -47,80 +47,74 @@ const ValueMapsTable = ({
       canLoadMore,
       sortData,
       onSortChange,
-    }: EnhancedTableProps) =>
-      console.log(canLoadMore, compact) || (
-        <Table fixed condensed striped>
-          <Thead>
-            {compact || canLoadMore ? (
-              <FixedRow className="toolbar-row">
-                <Th>
-                  <Pull right>
-                    <LoadMore
-                      handleLoadAll={handleLoadAll}
-                      handleLoadMore={handleLoadMore}
-                      limit={limit}
-                      canLoadMore={canLoadMore}
+    }: EnhancedTableProps) => (
+      <Table fixed condensed striped>
+        <Thead>
+          {compact || canLoadMore ? (
+            <FixedRow className="toolbar-row">
+              <Th>
+                <Pull right>
+                  <LoadMore
+                    handleLoadAll={handleLoadAll}
+                    handleLoadMore={handleLoadMore}
+                    limit={limit}
+                    canLoadMore={canLoadMore}
+                  />
+                  {compact && (
+                    <Search
+                      onSearchUpdate={handleSearchChange}
+                      resource="valuemaps"
                     />
-                    {compact && (
-                      <Search
-                        onSearchUpdate={handleSearchChange}
-                        resource="valuemaps"
-                      />
-                    )}
-                  </Pull>
-                </Th>
-              </FixedRow>
-            ) : null}
-            <FixedRow {...{ onSortChange, sortData }}>
-              <IdColumnHeader />
-              <NameColumnHeader />
-              {!compact && <Th icon="download">Dump</Th>}
-              <Th className="narrow" name="mapsize" icon="info-sign">
-                Mapsize
+                  )}
+                </Pull>
               </Th>
-              <Th
-                classname="narrow"
-                name="throws_exception"
-                icon="warning-sign"
-              >
-                Throws
-              </Th>
-              <Th className="narrow" name="valuetype" icon="code">
-                Type
-              </Th>
-              {!compact && <AuthorColumnHeader />}
-              {!compact && <DateColumnHeader />}
-              {!compact && (
-                <DateColumnHeader name="modified">Modified</DateColumnHeader>
-              )}
-              {!compact && <DescriptionColumnHeader name="description" />}
             </FixedRow>
-          </Thead>
-          <DataOrEmptyTable
-            condition={!collection || size(collection) === 0}
-            cols={compact ? 5 : 10}
-          >
-            {props => (
-              <Tbody {...props}>
-                {collection.map(
-                  (item: Object, index: number): React.Element<any> => (
-                    <ValueMapsRow
-                      key={index}
-                      first={index === 0}
-                      data={item}
-                      isActive={parseInt(paneId, 10) === item.id}
-                      openPane={openPane}
-                      closePane={closePane}
-                      compact={compact}
-                    />
-                  )
-                )}
-              </Tbody>
+          ) : null}
+          <FixedRow {...{ onSortChange, sortData }}>
+            <IdColumnHeader />
+            <NameColumnHeader />
+            {!compact && <Th icon="download">Dump</Th>}
+            <Th className="narrow" name="mapsize" icon="info-sign">
+              Mapsize
+            </Th>
+            <Th classname="narrow" name="throws_exception" icon="warning-sign">
+              Throws
+            </Th>
+            <Th className="narrow" name="valuetype" icon="code">
+              Type
+            </Th>
+            {!compact && <AuthorColumnHeader />}
+            {!compact && <DateColumnHeader />}
+            {!compact && (
+              <DateColumnHeader name="modified">Modified</DateColumnHeader>
             )}
-          </DataOrEmptyTable>
-        </Table>
-      )
-    }
+            {!compact && <DescriptionColumnHeader name="description" />}
+          </FixedRow>
+        </Thead>
+        <DataOrEmptyTable
+          condition={!collection || size(collection) === 0}
+          cols={compact ? 5 : 10}
+        >
+          {props => (
+            <Tbody {...props}>
+              {collection.map(
+                (item: Object, index: number): React.Element<any> => (
+                  <ValueMapsRow
+                    key={index}
+                    first={index === 0}
+                    data={item}
+                    isActive={parseInt(paneId, 10) === item.id}
+                    openPane={openPane}
+                    closePane={closePane}
+                    compact={compact}
+                  />
+                )
+              )}
+            </Tbody>
+          )}
+        </DataOrEmptyTable>
+      </Table>
+    )}
   </EnhancedTable>
 );
 
