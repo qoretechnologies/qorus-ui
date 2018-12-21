@@ -60,7 +60,7 @@ const ResultTable = ({
   changeDateQuery,
   job: { COMPLETE = 0, ERROR = 0, PROGRESS = 0, CRASHED = 0, id },
 }: Props) => (
-  <Table fixed condensed hover striped key={collection.length}>
+  <Table fixed condensed hover striped>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan="full">

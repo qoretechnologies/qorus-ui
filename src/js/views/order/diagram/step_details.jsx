@@ -114,8 +114,6 @@ export default class StepDetailTable extends Component {
   render() {
     const { ...data } = this.state.currentStep;
 
-    console.log(data);
-
     return (
       <div>
         <Toolbar mb>{this.renderDropdown()}</Toolbar>

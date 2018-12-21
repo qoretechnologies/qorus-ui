@@ -62,14 +62,7 @@ const JobsTable: Function = ({
   dateQuery,
   changeDateQuery,
 }: Props): React.Element<any> => (
-  <Table
-    striped
-    hover
-    condensed
-    fixed
-    className="resource-table"
-    key={collection.length}
-  >
+  <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan={7}>
