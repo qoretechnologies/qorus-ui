@@ -8,10 +8,12 @@ import pure from 'recompose/onlyUpdateForKeys';
 import lifecycle from 'recompose/lifecycle';
 
 import { Control as Button } from '../../../../components/controls';
+import ButtonGroup from '../../../../components/controls/controls';
 import { Tbody, Tr, Td } from '../../../../components/new_table';
 import Date from '../../../../components/date';
 import AutoComponent from '../../../../components/autocomponent';
 import withModal from '../../../../hocomponents/modal';
+import ContentByType from '../../../../components/ContentByType';
 
 type Props = {
   handleCopyClick: Function,
@@ -47,11 +49,13 @@ const ErrorRow: Function = ({
   <Tbody>
     <Tr>
       <Td className="narrow">
-        <Button
-          label={stateExpand ? 'Hide' : 'Detail'}
-          btnStyle={stateExpand ? 'info' : 'none'}
-          onClick={handleDetailClick}
-        />
+        <ButtonGroup>
+          <Button
+            label={stateExpand ? 'Hide' : 'Detail'}
+            btnStyle={stateExpand ? 'info' : 'none'}
+            onClick={handleDetailClick}
+          />
+        </ButtonGroup>
       </Td>
       <Td>{severity}</Td>
       <Td className="name">{error}</Td>
@@ -60,7 +64,7 @@ const ErrorRow: Function = ({
       </Td>
       <Td className="text">{description}</Td>
       <Td className="narrow">
-        <AutoComponent>{busErr}</AutoComponent>
+        <ContentByType content={busErr} />
       </Td>
     </Tr>
     {stateExpand && (
@@ -69,15 +73,14 @@ const ErrorRow: Function = ({
           <p>{info || 'No info'}</p>
         </Td>
         <Td className="narrow">
-          <Button label="Copy" iconName="copy" onClick={handleCopyClick} />
+          <ButtonGroup>
+            <Button label="Copy" iconName="copy" onClick={handleCopyClick} />
+          </ButtonGroup>
         </Td>
       </Tr>
     )}
   </Tbody>
 );
-
-const stringifyError: Function = (data: Object): string =>
-  Object.keys(data).reduce((str, key) => `${str}${key}: ${data[key]}\r\n`, '');
 
 export default compose(
   withState('stateExpand', 'setExpand', ({ expand }: Props): boolean => expand),

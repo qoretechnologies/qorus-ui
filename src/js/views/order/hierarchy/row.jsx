@@ -39,6 +39,9 @@ const HierarchyRow: Function = ({
     <Td className="medium">
       <span className={`label status-${label}`}>{item.workflowstatus}</span>
     </Td>
+    <Td className="medium">
+      <ContentByType content={item.hierarchy_level} />
+    </Td>
     <Td className="medium">{item.priority}</Td>
     <Td className="medium">
       <ContentByType content={item.business_error} />

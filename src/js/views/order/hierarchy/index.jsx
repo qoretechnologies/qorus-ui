@@ -70,7 +70,7 @@ const HierarchyTable: Function = ({
       sortData,
       onSortChange,
     }: EnhancedTableProps) => (
-      <Table fixed condensed striped>
+      <Table fixed condensed striped height={compact ? 300 : undefined}>
         <Thead>
           <FixedRow className="toolbar-row">
             <Th colspan="full">
@@ -93,6 +93,9 @@ const HierarchyTable: Function = ({
             <NameColumnHeader title="Workflow" />
             <Th icon="info-sign" name="workflowstatus">
               Status
+            </Th>
+            <Th icon="tree-diagram" name="hierarchy_level">
+              Level
             </Th>
             <Th icon="warning-sign" name="priority">
               Priority
