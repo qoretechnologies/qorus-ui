@@ -9,47 +9,65 @@ import { Tr, Td } from '../../../../components/new_table';
 import AutoComp from '../../../../components/autocomponent';
 import { ALL_ORDER_STATES } from '../../../../constants/orders';
 import Text from '../../../../components/text';
+import NameColumn from '../../../../components/NameColumn';
+import ContentByType from '../../../../components/ContentByType';
+import { IdColumn } from '../../../../components/IdColumn';
 
 type Props = {
   id: number,
   business_error: boolean,
   normalizedName: string,
-  name: string,
   operator_lock: boolean,
   workflowstatus: string,
   label: string,
   error: string,
   retry?: number,
   first?: boolean,
+  error_instanceid: number,
+  workflowid: number,
+  severity: string,
 };
 
 const TableRow: Function = ({
   id,
   business_error: busErr,
-  name,
+  normalizedName,
   error,
   workflowstatus,
+  workflowid,
   label,
   retry,
   first,
+  severity,
+  error_instanceid: errorId,
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    <Td className="medium">
-      <Link to={`/order/${id}/24h`} className="resource-name-link" title={name}>
-        {id}
-      </Link>
-    </Td>
+    <IdColumn>{errorId}</IdColumn>
+    <NameColumn
+      name={error}
+      type="error"
+      link={`/system/errors?globalErrQuery=${error}`}
+    />
+    <NameColumn
+      name={id}
+      type="order"
+      link={`/order/${id}/24h`}
+      className="medium"
+    />
+    <NameColumn
+      name={normalizedName}
+      type="workflow"
+      link={`/workflow/${workflowid}`}
+    />
+    <Td className="medium">{severity}</Td>
     <Td className="medium">
       <span className={`label status-${label}`}>{workflowstatus}</span>
     </Td>
-    <Td className="text name">
-      <Text text={error} />
-    </Td>
     <Td className="narrow">
-      <AutoComp>{retry}</AutoComp>
+      <ContentByType content={retry} />
     </Td>
     <Td className="medium">
-      <AutoComp>{busErr}</AutoComp>
+      <ContentByType content={busErr} />
     </Td>
   </Tr>
 );

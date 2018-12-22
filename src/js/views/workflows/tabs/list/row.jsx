@@ -58,7 +58,6 @@ const TableRow: Function = ({
   _selected,
   _updated,
   business_error: busErr,
-  name,
   normalizedName,
   started,
   completed,

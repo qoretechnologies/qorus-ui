@@ -16,6 +16,7 @@ import {
   Control as Button,
 } from '../../../components/controls';
 import Pull from '../../../components/Pull';
+import { INTERFACE_ICONS } from '../../../constants/interfaces';
 
 type Props = {
   mindateQuery: string,
@@ -203,7 +204,7 @@ export default class SearchToolbar extends Component {
                 : this.state.ids.split(',')
             }
           >
-            <Control />
+            <Control icon={INTERFACE_ICONS.workflow} />
             {this.props.workflows.map((o, k) => (
               <Item key={k} title={o} />
             ))}
@@ -221,7 +222,7 @@ export default class SearchToolbar extends Component {
                 : this.state.filter.split(',')
             }
           >
-            <Control />
+            <Control icon="info-sign" />
             <Item title="All" />
             {ORDER_STATES.map((o, k) => (
               <Item key={k} title={o.title} />
@@ -230,16 +231,14 @@ export default class SearchToolbar extends Component {
         </ButtonGroup>
         <ButtonGroup>
           <Button
-            text="Retry"
+            icon="refresh"
             intent={this.state.retry ? Intent.PRIMARY : Intent.NONE}
-            iconName={this.state.retry ? 'selection' : 'circle'}
             onClick={this.handleRetryChange}
             big
           />
           <Button
-            text="Bus. Err."
+            icon="error"
             intent={this.state.busErr ? Intent.PRIMARY : Intent.NONE}
-            iconName={this.state.busErr ? 'selection' : 'circle'}
             onClick={this.handleBuserrChange}
             big
           />

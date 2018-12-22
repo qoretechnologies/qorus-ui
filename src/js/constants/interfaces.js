@@ -24,6 +24,8 @@ const INTERFACE_ICONS = {
   mappers: 'diagram-tree',
   order: 'box',
   orders: 'box',
+  error: 'error',
+  errors: 'error',
 };
 
 export { INTERFACE_ICONS };
