@@ -30,8 +30,9 @@ export const extendDefaults = curry((defaults, item) =>
   assignIn({}, defaults, item)
 );
 
-export const normalizeName = curry(item => {
-  const { name, version, patch, id } = item;
+export const normalizeName = curry((item: Object, idKey: string = 'id') => {
+  const { name, version, patch } = item;
+  const id = item[idKey];
   const normalizedName = patch
     ? `${name} v${version}.${patch} (${id})`
     : `${name} v${version} (${id})`;
