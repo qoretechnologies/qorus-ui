@@ -5,7 +5,9 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { getType } from '../../helpers/functions';
 import { Icon, Intent } from '@blueprintjs/core';
 import Text from '../../components/text';
+import Date from '../../components/date';
 import Flex from '../Flex';
+import { isDate } from '../../helpers/date';
 
 type ContentByTypeProps = {
   content: any,
@@ -25,12 +27,15 @@ const ContentByType: Function = ({
   const className: string = `content-by-type ${type}`;
 
   if (type === 'string') {
+    const isContentDate: boolean = isDate(content);
+
+    let newContent = inTable ? <Text text={`"${content}"`} /> : content;
+    newContent = isContentDate ? <Date date={content} /> : `"${newContent}"`;
+
     return inTable ? (
-      <Flex className={className}>
-        <Text text={`"${content}"`} />
-      </Flex>
+      <Flex className={className}>{newContent}</Flex>
     ) : (
-      <div className={className}>"{content}"</div>
+      <div className={className}>{newContent}</div>
     );
   }
 
