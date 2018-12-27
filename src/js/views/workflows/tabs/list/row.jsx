@@ -133,9 +133,7 @@ export default compose(
         (state: Object): boolean => state.name === workflowstatus
       ).label,
       workflowstatus,
-      target: rest.searchPage
-        ? '/search/orders'
-        : `/workflow/${rest.workflowid}/list`,
+      target: rest.searchPage ? '/search' : `/workflow/${rest.workflowid}`,
       ...rest,
     })
   ),
