@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 
 import Modal from '../../../../../components/modal';
 import { Control as Button } from '../../../../../components/controls';
+import ButtonGroup from '../../../../../components/controls/controls';
 import actions from '../../../../../store/api/actions';
+import Pull from '../../../../../components/Pull';
 
 export default class extends Component {
   props: {
@@ -37,20 +39,22 @@ export default class extends Component {
           <textarea ref="text" rows="12" className="form-control" />
         </Modal.Body>
         <Modal.Footer>
-          <div className="pull-right">
-            <Button
-              big
-              label="Cancel"
-              action={this.props.onClose}
-              btnStyle="default"
-            />
-            <Button
-              big
-              label="Save"
-              action={this.handleLockClick}
-              btnStyle="success"
-            />
-          </div>
+          <Pull right>
+            <ButtonGroup>
+              <Button
+                big
+                label="Cancel"
+                action={this.props.onClose}
+                btnStyle="default"
+              />
+              <Button
+                big
+                label="Save"
+                action={this.handleLockClick}
+                btnStyle="success"
+              />
+            </ButtonGroup>
+          </Pull>
         </Modal.Footer>
       </Modal>
     );
