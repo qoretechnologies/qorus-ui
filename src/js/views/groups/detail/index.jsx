@@ -34,38 +34,31 @@ const GroupDetail: Function = ({
   <Flex scrollY>
     <Masonry
       id="group-masonry"
-      sizes={[{ columns: 3, gutter: 20 }]}
+      sizes={[{ columns: 3, gutter: 15 }]}
+      className="masonry masonryTriple"
       infiniteScrollDisabled
     >
       <Box column={3} noTransition top>
         <DetailTable
           data={services}
-          columns={['Type', 'Name', 'Version', 'Autostart']}
+          columns={['type', 'autostart']}
           type="Services"
         />
       </Box>
       <Box column={3} noTransition top>
-        <DetailTable
-          data={workflows}
-          columns={['Name', 'Version']}
-          type="Workflows"
-        />
+        <DetailTable data={workflows} type="Workflows" />
       </Box>
       <Box column={3} noTransition top>
-        <DetailTable data={jobs} columns={['Name', 'Version']} type="Jobs" />
+        <DetailTable data={jobs} type="Jobs" />
       </Box>
       <Box column={3} noTransition top>
-        <DetailTable data={roles} columns={['Name']} type="Roles" />
+        <DetailTable data={roles} type="Roles" />
       </Box>
       <Box column={3} noTransition top>
-        <DetailTable
-          data={mappers}
-          columns={['Name', 'Version', 'Type']}
-          type="Mappers"
-        />
+        <DetailTable data={mappers} columns={['type']} type="Mappers" />
       </Box>
       <Box column={3} noTransition top>
-        <DetailTable data={vmaps} columns={['Name']} type="Vmaps" />
+        <DetailTable data={vmaps} type="Value maps" />
       </Box>
     </Masonry>
   </Flex>

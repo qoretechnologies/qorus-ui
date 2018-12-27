@@ -1,11 +1,29 @@
+// @flow
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Link } from 'react-router';
+import upperFirst from 'lodash/upperFirst';
 
-import { Table, Thead, Tbody, Tr, Th, Td } from '../../../components/new_table';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  FixedRow,
+} from '../../../components/new_table';
 import NoDataIf from '../../../components/NoDataIf';
 import PaneItem from '../../../components/pane_item';
+import {
+  normalizeItem,
+  buildLinkToInterfaceId,
+} from '../../../helpers/interfaces';
+import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
+import ContentByType from '../../../components/ContentByType';
+import EnhancedTable from '../../../components/EnhancedTable';
+import type { EnhancedTableProps } from '../../../components/EnhancedTable';
+import { sortDefaults } from '../../../constants/sort';
 
 type Props = {
   data: Array<Object>,
@@ -15,65 +33,55 @@ type Props = {
 
 const GroupDetailTable: Function = ({
   data,
-  columns,
+  columns: columns = [],
   type,
 }: Props): React.Element<any> => {
-  const renderColumns: Function = (item: Object) =>
-    columns.map((column: string, index: number) => {
-      const name = item[column.toLowerCase()];
-      let val = item[column.toLowerCase()];
-      let css = 'text';
-
-      if (column === 'Name') {
-        css += ' name';
-
-        switch (type) {
-          case 'Services':
-            val = <Link to="/services"> {name} </Link>;
-            break;
-          case 'Workflows':
-            val = <Link to={`/workflow/${item.workflowid}`}> {name} </Link>;
-            break;
-          case 'Jobs':
-            val = <Link to={`/job/${item.jobid}`}> {name} </Link>;
-            break;
-          case 'Roles':
-            val = item;
-            break;
-          default:
-            break;
-        }
-      }
-
-      return (
-        <Td key={index} className={css}>
-          {val}
-        </Td>
-      );
-    });
+  const renderColumns: Function = (item: Object) => [
+    <NameColumn
+      name={item.name}
+      link={buildLinkToInterfaceId(type, item.id)}
+      type={type}
+    />,
+    ...columns.map((column: string, index: number) => (
+      <Td key={index}>
+        <ContentByType content={item[column]} inTable />
+      </Td>
+    )),
+  ];
 
   return (
     <PaneItem title={type}>
       <NoDataIf condition={!data || data.length === 0}>
         {() => (
-          <Table condensed striped>
-            <Thead>
-              <Tr>
-                {columns.map((column, index) => (
-                  <Th key={index} className="text">
-                    {column}
-                  </Th>
-                ))}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data.map(
-                (item: Object, index: number): React.Element<Tr> => (
-                  <Tr key={index}>{renderColumns(item)}</Tr>
-                )
-              )}
-            </Tbody>
-          </Table>
+          <EnhancedTable
+            collection={data}
+            tableId={`groupDetail-${type}`}
+            sortDefault={sortDefaults.groupDetail}
+          >
+            {({ collection, sortData, onSortChange }: EnhancedTableProps) => (
+              <Table condensed striped fixed>
+                <Thead>
+                  <FixedRow {...{ sortData, onSortChange }}>
+                    <NameColumnHeader />
+                    {columns.map((column, index) => (
+                      <Th key={index} icon="info-sign">
+                        {upperFirst(column)}
+                      </Th>
+                    ))}
+                  </FixedRow>
+                </Thead>
+                <Tbody>
+                  {collection.map(
+                    (item: Object, index: number): React.Element<Tr> => (
+                      <Tr key={index} first={index === 0}>
+                        {renderColumns(normalizeItem(item))}
+                      </Tr>
+                    )
+                  )}
+                </Tbody>
+              </Table>
+            )}
+          </EnhancedTable>
         )}
       </NoDataIf>
     </PaneItem>

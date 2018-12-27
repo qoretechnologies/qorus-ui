@@ -2,6 +2,8 @@
 import size from 'lodash/size';
 import map from 'lodash/map';
 import { normalizeName } from '../components/utils';
+import { INTERFACE_ID_KEYS, INTERFACE_ID_LINKS } from '../constants/interfaces';
+import { normalizeId } from '../store/api/resources/utils';
 
 const mapConfigToArray = (id: number): Function => (
   configItem: Object,
@@ -63,4 +65,45 @@ const rebuildConfigHash: Function = (
   return resultObj;
 };
 
-export { pullConfigFromStepinfo, rebuildConfigHash };
+const normalizeItem: Function = (item: Object): Object => {
+  let normalized: Object = item;
+
+  if (!normalized.normalized) {
+    if (item.id) {
+      normalized.name = normalizeName(normalized);
+      normalized.normalized = true;
+    } else {
+      INTERFACE_ID_KEYS.forEach(
+        (idKey: string): void => {
+          if (idKey in item) {
+            normalized = normalizeId(idKey, item);
+            normalized.name = normalizeName(normalized);
+            normalized.normalized = true;
+          }
+        }
+      );
+    }
+  }
+
+  return normalized;
+};
+
+const buildLinkToInterfaceId: Function = (
+  interFace: string,
+  id: number | string
+): string => {
+  const idLink: string = INTERFACE_ID_LINKS[interFace.toLowerCase()];
+
+  if (idLink) {
+    return `${idLink}${id}`;
+  }
+
+  return '';
+};
+
+export {
+  pullConfigFromStepinfo,
+  rebuildConfigHash,
+  normalizeItem,
+  buildLinkToInterfaceId,
+};
