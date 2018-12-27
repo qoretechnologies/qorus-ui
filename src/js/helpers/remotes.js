@@ -81,7 +81,7 @@ const attrsSelector = (state, props) => {
       break;
     }
     case 'qorus': {
-      attrs = ['conntype', 'up', 'monitor', 'status'];
+      attrs = ['conntype', 'up', 'monitor', 'status', 'last_check', 'locked'];
 
       break;
     }

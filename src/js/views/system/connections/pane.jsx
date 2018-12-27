@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { capitalize, includes } from 'lodash';
+import { upperFirst, includes, lowerCase } from 'lodash';
 import { Link } from 'react-router';
 
 import Pane from '../../../components/pane';
@@ -11,8 +11,8 @@ import {
   Tr,
   Td,
   EditableCell,
+  Th,
 } from '../../../components/new_table';
-import AutoComponent from '../../../components/autocomponent';
 import Box from '../../../components/box';
 import NoData from '../../../components/nodata';
 import actions from '../../../store/api/actions';
@@ -23,6 +23,8 @@ import AlertsTable from '../../../components/alerts_table';
 import PaneItem from '../../../components/pane_item';
 import { attrsSelector } from '../../../helpers/remotes';
 import withDispatch from '../../../hocomponents/withDispatch';
+import ContentByType from '../../../components/ContentByType';
+import NameColumn from '../../../components/NameColumn';
 
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find(a => a.name === props.paneId);
@@ -134,12 +136,14 @@ export default class ConnectionsPane extends Component {
         {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
         <Box top fill scrollY>
           <PaneItem title="Overview">
-            <Table striped>
+            <Table condensed bordered className="text-table">
               <Tbody>
                 {this.getData().map(
                   (val: Object, key: number): React.Element<any> => (
                     <Tr key={key}>
-                      <Td className="name">{capitalize(val.attr)}</Td>
+                      <Th className="name">
+                        {upperFirst(val.attr.replace(/_/g, ' '))}
+                      </Th>
                       {val.editable &&
                       this.props.canEdit &&
                       val.attr !== 'options' &&
@@ -157,7 +161,7 @@ export default class ConnectionsPane extends Component {
                               onSave={this.handleEditSave(val.attr)}
                             />
                           ) : (
-                            <AutoComponent>{val.value}</AutoComponent>
+                            <ContentByType content={val.value} />
                           )}
                         </Td>
                       )}
@@ -175,11 +179,11 @@ export default class ConnectionsPane extends Component {
                   {deps.map(
                     (dep: Object, index: number): React.Element<any> => (
                       <Tr key={index}>
-                        <Td className="name">
-                          <Link to={getDependencyObjectLink(dep.type, dep)}>
-                            {dep.desc}
-                          </Link>
-                        </Td>
+                        <NameColumn
+                          name={dep.name}
+                          link={getDependencyObjectLink(dep.type, dep)}
+                          type={lowerCase(dep.type)}
+                        />
                       </Tr>
                     )
                   )}
