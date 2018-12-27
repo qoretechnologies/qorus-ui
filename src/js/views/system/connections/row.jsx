@@ -48,6 +48,7 @@ type Props = {
   canDelete: boolean,
   first: boolean,
   loopback: boolean,
+  handleResetClick: Function,
 };
 
 const ConnectionRow: Function = ({
@@ -70,6 +71,7 @@ const ConnectionRow: Function = ({
   loopback,
   enabled,
   handleToggleClick,
+  handleResetClick,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -100,6 +102,9 @@ const ConnectionRow: Function = ({
             onClick={handleToggleClick}
             btnStyle={enabled ? 'success' : 'danger'}
           />
+        )}
+        {remoteType === 'datasources' && (
+          <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
         )}
         <Button title="Ping" iconName="exchange" onClick={handlePingClick} />
         <Button
@@ -192,6 +197,13 @@ export default compose(
           <strong>{name}</strong> ?
         </ConfirmDialog>
       );
+    },
+    handleResetClick: ({
+      dispatchAction,
+      name,
+      remoteType,
+    }: Props): Function => (): void => {
+      dispatchAction(actions.remotes.resetConnection, remoteType, name);
     },
   }),
   pure([

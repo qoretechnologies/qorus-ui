@@ -62,29 +62,28 @@ const WorkflowOrders: Function = ({
   onCSVClick,
   workflow,
   children,
-}: Props): React.Element<any> =>
-  console.log(orders) || (
-    <Box top noPadding>
-      <Table
-        collection={orders}
-        date={linkDate}
-        sortData={sortData}
-        onSortChange={onSortChange}
-        canLoadMore={canLoadMore}
-        isTablet={isTablet}
-        searchPage={searchPage}
-        onCSVClick={onCSVClick}
-        workflow={workflow}
-        onLoadMore={handleLoadMore}
-        selected={selected}
-        selectedIds={selectedIds}
-        location={location}
-        limit={limit}
-      >
-        {children}
-      </Table>
-    </Box>
-  );
+}: Props): React.Element<any> => (
+  <Box top noPadding>
+    <Table
+      collection={orders}
+      date={linkDate}
+      sortData={sortData}
+      onSortChange={onSortChange}
+      canLoadMore={canLoadMore}
+      isTablet={isTablet}
+      searchPage={searchPage}
+      onCSVClick={onCSVClick}
+      workflow={workflow}
+      onLoadMore={handleLoadMore}
+      selected={selected}
+      selectedIds={selectedIds}
+      location={location}
+      limit={limit}
+    >
+      {children}
+    </Table>
+  </Box>
+);
 
 const filterOrders: Function = (id): Function => (
   orders: Array<Object>

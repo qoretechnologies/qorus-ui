@@ -127,8 +127,26 @@ const toggleConnection: Function = createAction(
             value ? 'enable' : 'disable'
           }`
         ),
-      `${value ? 'Enabling' : 'Disabling'} ${name}`,
+      `${value ? 'Enabling' : 'Disabling'} ${name}...`,
       `${name} successfuly ${value ? 'enabled' : 'disabled'}`,
+      dispatch
+    );
+
+    return;
+  }
+);
+
+const resetConnection: Function = createAction(
+  'REMOTES_RESETCONNECTION',
+  (remoteType: string, name: string, dispatch: Function): void => {
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/remote/${remoteType}/${name}?action=reset`
+        ),
+      `Reseting ${name}...`,
+      `${name} successfuly reset`,
       dispatch
     );
 
@@ -145,4 +163,5 @@ export {
   manageConnection,
   deleteConnection,
   toggleConnection,
+  resetConnection,
 };
