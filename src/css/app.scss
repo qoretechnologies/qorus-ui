@@ -527,3 +527,9 @@ span.pt-icon-standard {
   width: 100%;
   display: inline-block;
 }
+
+.skeleton-loader {
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
