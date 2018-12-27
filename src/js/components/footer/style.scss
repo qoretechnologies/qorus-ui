@@ -12,6 +12,8 @@ footer {
   position: fixed; /* [1] */
   bottom: 0; /* [1] */
   width: 100%; /* [1] */
+  height: 30px;
+  line-height: 30px;
 
   background-color: darken($bgcolor, 3) !important;
 
@@ -24,6 +26,6 @@ footer {
   z-index: 19;
 
   p {
-    margin: $footer-padding 0; /* [2] */
+    line-height: 30px;
   }
 }
