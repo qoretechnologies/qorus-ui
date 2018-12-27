@@ -4,9 +4,12 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { getType } from '../../helpers/functions';
 import { Icon, Intent } from '@blueprintjs/core';
+import Text from '../../components/text';
+import Flex from '../Flex';
 
 type ContentByTypeProps = {
   content: any,
+  inTable?: boolean,
 };
 
 const emptyTypeToString: Object = {
@@ -16,12 +19,19 @@ const emptyTypeToString: Object = {
 
 const ContentByType: Function = ({
   content,
+  inTable,
 }: ContentByTypeProps): React.Element<any> => {
   const type: string = getType(content);
   const className: string = `content-by-type ${type}`;
 
   if (type === 'string') {
-    return <div className={className}>"{content}"</div>;
+    return inTable ? (
+      <Flex className={className}>
+        <Text text={`"${content}"`} />
+      </Flex>
+    ) : (
+      <div className={className}>"{content}"</div>
+    );
   }
 
   if (type === 'number') {
