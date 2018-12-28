@@ -46,7 +46,7 @@ const TableRow: Function = ({
     <NameColumn
       name={error}
       type="error"
-      link={`/system/errors?globalErrQuery=${error}`}
+      link={`/order/${id}/24h?tab=errors`}
     />
     <NameColumn
       name={id}
