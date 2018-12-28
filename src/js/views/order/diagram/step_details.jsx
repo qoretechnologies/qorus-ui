@@ -155,7 +155,7 @@ export default class StepDetailTable extends Component {
               <DateColumn>{data.started}</DateColumn>
 
               <Th icon={INTERFACE_ICONS.workflow}>SubWF</Th>
-              <Td>{data.subworkflow_id}</Td>
+              <Td>{data.subworkflow_instanceid}</Td>
             </Tr>
             <Tr>
               <DateColumnHeader>Completed</DateColumnHeader>
