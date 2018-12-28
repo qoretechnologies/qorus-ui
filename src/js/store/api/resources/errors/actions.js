@@ -31,7 +31,7 @@ const createOrUpdate: Function = createAction(
     }
 
     const dt =
-      type === 'workflow' ? { ...data, ...{ forceworfklow: true } } : data;
+      type === 'workflow' ? { ...data, ...{ forceworkflow: true } } : data;
 
     await fetchWithNotifications(
       async () =>

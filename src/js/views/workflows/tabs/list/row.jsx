@@ -58,7 +58,6 @@ const TableRow: Function = ({
   _selected,
   _updated,
   business_error: busErr,
-  name,
   normalizedName,
   started,
   completed,
@@ -83,13 +82,6 @@ const TableRow: Function = ({
     onClick={handleCheckboxClick}
   >
     <SelectColumn onClick={handleCheckboxClick} checked={_selected} />
-    {!isTablet && searchPage && (
-      <NameColumn
-        name={normalizedName}
-        link={`/workflow/${workflowid}?date=${date}`}
-        type="workflow"
-      />
-    )}
     <NameColumn
       name={id}
       link={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(
@@ -98,6 +90,13 @@ const TableRow: Function = ({
       className="normal"
       type="order"
     />
+    {!isTablet && searchPage && (
+      <NameColumn
+        name={normalizedName}
+        link={`/workflow/${workflowid}?date=${date}`}
+        type="workflow"
+      />
+    )}
     {!isTablet && (
       <ActionColumn className="medium">
         <OrderControls id={id} workflowstatus={workflowstatus} compact />
@@ -134,9 +133,7 @@ export default compose(
         (state: Object): boolean => state.name === workflowstatus
       ).label,
       workflowstatus,
-      target: rest.searchPage
-        ? '/search/orders'
-        : `/workflow/${rest.workflowid}/list`,
+      target: rest.searchPage ? '/search' : `/workflow/${rest.workflowid}`,
       ...rest,
     })
   ),

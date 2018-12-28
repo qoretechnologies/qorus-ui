@@ -96,19 +96,27 @@ export default class OrderHeader extends Component {
 
   render() {
     const { prevQueryQuery, targetQuery, workflow, data } = this.props;
-    const target = targetQuery || `/workflow/${workflow.id}?tab=orders`;
+
+    const target = targetQuery
+      ? `${targetQuery}?`
+      : `/workflow/${workflow.id}?tab=orders`;
 
     const backQueriesObj = prevQueryQuery
       ? JSON.parse(JSON.parse(this.props.prevQueryQuery))
-      : {};
-    const backQueriesStr = Object.keys(backQueriesObj).reduce(
-      (cur, next, index) => {
-        const last = index === Object.keys(backQueriesObj).length - 1;
+      : null;
 
-        return `${cur}${next}=${backQueriesObj[next]}${last ? '' : '&'}`;
-      },
-      `${target}&`
-    );
+    let backQueriesStr = target;
+
+    if (backQueriesObj) {
+      backQueriesStr = Object.keys(backQueriesObj).reduce(
+        (cur, next, index) => {
+          const last = index === Object.keys(backQueriesObj).length - 1;
+
+          return `${cur}${next}=${backQueriesObj[next]}${last ? '' : '&'}`;
+        },
+        target
+      );
+    }
 
     const workflowName: string = normalizeName(this.props.workflow);
     const label = ALL_ORDER_STATES.find(

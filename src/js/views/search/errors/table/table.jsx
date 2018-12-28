@@ -2,6 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
 import {
   Table,
@@ -10,13 +11,15 @@ import {
   FixedRow,
   Th,
 } from '../../../../components/new_table';
-import noData from '../../../../hocomponents/check-no-data';
 import Row from './row';
 import Pull from '../../../../components/Pull';
 import CsvControl from '../../../../components/CsvControl';
 import LoadMore from '../../../../components/LoadMore';
 import Box from '../../../../components/box';
 import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
+import { IdColumnHeader } from '../../../../components/IdColumn';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import { INTERFACE_ICONS } from '../../../../constants/interfaces';
 
 type Props = {
   sortData: Object,
@@ -51,7 +54,10 @@ const WorkflowTable: Function = ({
         <FixedRow className="toolbar-row">
           <Th colspan="full">
             <Pull>
-              <CsvControl onClick={onCSVClick} />
+              <CsvControl
+                onClick={onCSVClick}
+                disabled={size(collection) === 0}
+              />
             </Pull>
             <Pull right>
               <LoadMore
@@ -63,24 +69,33 @@ const WorkflowTable: Function = ({
           </Th>
         </FixedRow>
         <FixedRow sortData={sortData} onSortChange={onSortChange}>
-          <Th className="medium" name="id">
-            ID
+          <IdColumnHeader />
+          <NameColumnHeader name="error" />
+          <NameColumnHeader
+            icon={INTERFACE_ICONS.order}
+            title="Order"
+            name="workflow_instanceid"
+          />
+          <NameColumnHeader
+            icon={INTERFACE_ICONS.workflow}
+            title="Workflow"
+            name="workflowid"
+          />
+          <Th name="severity" icon="warning-sign">
+            Severity
           </Th>
-          <Th className="medium" name="workflowstatus">
+          <Th name="workflowstatus" icon="info-sign">
             Status
           </Th>
-          <Th className="text name" name="error">
-            Error
-          </Th>
-          <Th className="narrow" name="retry">
+          <Th name="retry" icon="refresh">
             Retry
           </Th>
-          <Th className="medium" name="business_error">
+          <Th name="business_error" icon="error">
             Bus. Err.
           </Th>
         </FixedRow>
       </Thead>
-      <DataOrEmptyTable condition={collection.length === 0} cols={5}>
+      <DataOrEmptyTable condition={collection.length === 0} cols={8}>
         {props => (
           <Tbody {...props}>
             {collection.map(

@@ -28,6 +28,15 @@ const toggleConnection = {
   },
 };
 
+const resetConnection = {
+  next(state: Object = initialState): Object {
+    return state;
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
 const connectionChange = {
   next(
     state: Object = initialState,
@@ -239,4 +248,5 @@ export {
   manageConnection as MANAGECONNECTION,
   deleteConnection as DELETECONNECTION,
   toggleConnection as TOGGLECONNECTION,
+  resetConnection as RESETCONNECTION,
 };

@@ -1,6 +1,7 @@
 /* @flow */
 import React, { PropTypes } from 'react';
 import Flex from '../components/Flex';
+import Loader from '../components/loader';
 
 /**
  * Returns high order component that need to sync data.
@@ -27,23 +28,7 @@ export default (
 
     render() {
       if (showLoader && !this.props[propName].sync) {
-        return (
-          <Flex height="100%">
-            <p className="pt-skeleton" style={{ width: '30%', height: '5%' }} />
-            <p
-              className="pt-skeleton"
-              style={{ width: '80%', height: '15%' }}
-            />
-            <p
-              className="pt-skeleton"
-              style={{ width: '100%', height: '60%' }}
-            />
-            <p
-              className="pt-skeleton"
-              style={{ width: '60%', height: '20%' }}
-            />
-          </Flex>
-        );
+        return <Loader />;
       }
 
       return <Component {...this.props} />;

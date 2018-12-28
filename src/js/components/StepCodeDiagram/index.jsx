@@ -9,6 +9,7 @@ import { groupInstances } from '../../helpers/orders';
 import { graph } from '../../lib/graph';
 import { COLORS } from '../../constants/ui';
 import Flex from '../Flex';
+import { Tag, Icon } from '@blueprintjs/core';
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -759,7 +760,8 @@ export default class StepsTab extends Component {
     const stepInfo = this.getStepInfo(stepId);
     const type = stepInfo ? stepInfo.steptype : '';
     const name = this.getStepName(stepId);
-    let css = type.toLowerCase();
+    const typeCss = `status-${type.toLowerCase()}-diagram`;
+    let statusCss = '';
     let onBoxClick;
     let instances;
     let arrayStep = [];
@@ -768,7 +770,11 @@ export default class StepsTab extends Component {
       instances = this.props.order.StepInstances
         ? groupInstances(this.props.order.StepInstances)
         : {};
-      css = instances[name] ? instances[name].status.toLowerCase() : 'normal';
+
+      statusCss = instances[name]
+        ? instances[name].status.toLowerCase()
+        : statusCss;
+
       onBoxClick = instances[name] ? this.handleStepClick(name) : undefined;
 
       if (stepInfo.arraytype !== 'NONE' && instances[name]) {
@@ -776,23 +782,15 @@ export default class StepsTab extends Component {
       }
     }
 
+    statusCss = `status-${statusCss}-diagram`;
+
     return (
       <svg>
         {stepInfo.arraytype !== 'NONE' && (
           <svg>
             <g
-              className={classNames({
+              className={classNames(typeCss, statusCss, {
                 diagram__box: true,
-                'status-normal-diagram': true,
-              })}
-              transform={this.getBoxTransform(colIdx, rowIdx, 8)}
-            >
-              <rect {...this.getDefaultParams()} />
-            </g>
-            <g
-              className={classNames({
-                diagram__box: true,
-                'status-normal-diagram': true,
               })}
               transform={this.getBoxTransform(colIdx, rowIdx, 4)}
             >
@@ -801,9 +799,8 @@ export default class StepsTab extends Component {
           </svg>
         )}
         <g
-          className={classNames({
+          className={classNames(typeCss, statusCss, {
             diagram__box: true,
-            [`status-${css}-diagram`]: css,
             clickable: instances && instances[name],
           })}
           transform={this.getBoxTransform(colIdx, rowIdx)}
@@ -816,13 +813,23 @@ export default class StepsTab extends Component {
             {this.getStepFullname(stepId)}
           </text>
           {stepInfo.arraytype !== 'NONE' && (
-            <text x={15} y={13}>
-              [{arrayStep.length}]
-            </text>
+            <foreignObject x={4} y={4}>
+              <Tag>[{arrayStep.length}]</Tag>
+            </foreignObject>
           )}
-          <text x={225} y={13} className="link" onClick={onCodeClick}>
-            CODE
-          </text>
+          <foreignObject x={stepInfo.arraytype === 'NONE' ? 4 : 32} y={4}>
+            <Tag>{type}</Tag>
+          </foreignObject>
+          <foreignObject
+            x={222}
+            y={4}
+            onClick={onCodeClick}
+            style={{ cursor: 'pointer' }}
+          >
+            <Tag>
+              <Icon iconName="code" />
+            </Tag>
+          </foreignObject>
         </g>
       </svg>
     );

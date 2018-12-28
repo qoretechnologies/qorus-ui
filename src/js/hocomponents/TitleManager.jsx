@@ -29,17 +29,13 @@ export default (
       const newTitleSel =
         typeof newTitle === 'function' ? newTitle(props) : newTitle;
 
-      if (position) {
-        if (position === 'suffix') {
-          changedTitle = `${document.title} | ${newTitleSel}`;
-        } else {
-          changedTitle = `${newTitleSel} | ${document.title}`;
-        }
+      if (position && position === 'suffix') {
+        changedTitle = `${this._baseTitle} ${newTitleSel}`;
       } else {
-        changedTitle = newTitleSel;
+        changedTitle = `${newTitleSel} ${this._baseTitle}`;
       }
 
-      document.title = `${changedTitle} ${this._baseTitle}`;
+      document.title = changedTitle;
     };
 
     render() {

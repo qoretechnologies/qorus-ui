@@ -39,7 +39,6 @@ type Props = {
   closeModal: Function,
   optimisticDispatch: Function,
   id: string | number,
-  fixed: boolean,
   height: string | number,
 };
 
@@ -54,9 +53,10 @@ const ErrorsContainer: Function = ({
   closeModal,
   optimisticDispatch,
   id,
-  fixed,
   height,
 }: Props): React.Element<any> => {
+  console.log(id);
+
   const handleFormSubmit: Function = (data: Object) => {
     optimisticDispatch(actions.errors.createOrUpdate, type, id, data);
     closeModal();
@@ -68,6 +68,7 @@ const ErrorsContainer: Function = ({
         onClose={closeModal}
         onSubmit={handleFormSubmit}
         data={data}
+        id={id}
       />
     );
   };
@@ -76,6 +77,7 @@ const ErrorsContainer: Function = ({
     handleModalOpen({
       retry_flag: false,
       business_flag: false,
+      forceworkflow: false,
     });
   };
 
@@ -130,6 +132,7 @@ const ErrorsContainer: Function = ({
             compact={compact}
             onEditClick={handleEditClick}
             onDeleteClick={handleDeleteClick}
+            onCreateClick={handleCreateClick}
             height={height}
           />
         </Box>

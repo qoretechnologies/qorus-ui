@@ -132,8 +132,10 @@ const WorkflowTable: Function = ({
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <SelectColumnHeader />
-        {!isTablet && searchPage && <NameColumnHeader title="Workflow" />}
         <IdColumnHeader />
+        {!isTablet && searchPage && (
+          <NameColumnHeader title="Workflow" icon="exchange" />
+        )}
         {!isTablet && <ActionColumnHeader />}
         <Th name="operator_lock" icon="lock">
           Lock

@@ -38,7 +38,7 @@ type Props = {
 const StepsTable: Function = ({ steps }: Props): React.Element<Table> => (
   <NoDataIf condition={size(steps) === 0} big inBox>
     {() => (
-      <Box top fill>
+      <Box top fill scrollY>
         {Object.keys(steps).map(stepName => (
           <ExpandableItem
             show

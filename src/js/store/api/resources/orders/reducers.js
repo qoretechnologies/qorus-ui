@@ -38,7 +38,7 @@ const fetchOrders: Object = {
       })
     );
     const normalized = normalizedIds.map(
-      (order: Object): Object => normalizeName(order)
+      (order: Object): Object => normalizeName(order, 'workflowid')
     );
 
     return { ...state, ...{ data: normalized, loading: false, sync: true } };

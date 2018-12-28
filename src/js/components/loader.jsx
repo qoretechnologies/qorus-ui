@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import Flex from './Flex';
 
 /**
  * Simple spinning loading indicator.
@@ -7,12 +8,16 @@ import React, { PropTypes } from 'react';
  */
 export default function Loader(props) {
   return (
-    <div style={{ height: '100%' }}>
-      <p className="pt-skeleton" style={{ width: '30%', height: '5%' }} />
-      <p className="pt-skeleton" style={{ width: '80%', height: '15%' }} />
-      <p className="pt-skeleton" style={{ width: '100%', height: '60%' }} />
-      <p className="pt-skeleton" style={{ width: '60%', height: '20%' }} />
-    </div>
+    <Flex style={{ margin: 10 }}>
+      <Flex flexFlow="row" className="skeleton-loader">
+        <Flex className="pt-skeleton" style={{ marginRight: 10 }} />
+        <Flex className="pt-skeleton" flex="3 1 auto" />
+        <Flex flex="8 1 auto" />
+        <Flex className="pt-skeleton" flex="3 1 auto" />
+      </Flex>
+      <Flex className="pt-skeleton skeleton-loader" flex="2 1 auto" />
+      <Flex className="pt-skeleton skeleton-loader" flex="14 1 auto" />
+    </Flex>
   );
 }
 

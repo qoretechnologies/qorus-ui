@@ -29,8 +29,16 @@ const Option: Function = ({
       "{objKey}": "{value}"{' '}
       <div className="pull-right">
         <Controls grouped>
-          <Button iconName="edit" btnStyle="warning" onClick={handleEditClick} />
-          <Button iconName="cross" btnStyle="danger" onClick={handleDeleteClick} />
+          <Button
+            iconName="edit"
+            btnStyle="warning"
+            onClick={handleEditClick}
+          />
+          <Button
+            iconName="cross"
+            btnStyle="danger"
+            onClick={handleDeleteClick}
+          />
         </Controls>
       </div>
     </div>
@@ -49,6 +57,16 @@ export default class ConnectionOptions extends Component {
     value: '',
     options: this.props.data || {},
   };
+
+  componentWillReceiveProps(nextProps: Props) {
+    if (this.props.data !== nextProps.data) {
+      this.setState({
+        key: '',
+        value: '',
+        options: nextProps.data || {},
+      });
+    }
+  }
 
   handleKeyChange: Function = (ev: EventHandler): void => {
     this.changeData('key', ev.target.value);
@@ -98,7 +116,6 @@ export default class ConnectionOptions extends Component {
           <div className="row">
             <div className="col-sm-12">
               <pre>
-                {'{'}
                 {opts.map(
                   (opt: string): React.Element<any> => (
                     <Option
@@ -110,7 +127,6 @@ export default class ConnectionOptions extends Component {
                     />
                   )
                 )}
-                {'}'}
               </pre>
             </div>
           </div>
@@ -128,13 +144,15 @@ export default class ConnectionOptions extends Component {
             value={this.state.value}
             onChange={this.handleValueChange}
           />
-          <Button
-            btnStyle="success"
-            iconName="small-tick"
-            big
-            className="pt-fixed"
-            onClick={this.handleOptionSave}
-          />
+          <Controls>
+            <Button
+              btnStyle="success"
+              iconName="small-tick"
+              big
+              className="pt-fixed"
+              onClick={this.handleOptionSave}
+            />
+          </Controls>
         </ControlGroup>
       </div>
     );

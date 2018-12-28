@@ -20,7 +20,6 @@ import websocket from './hocomponents/websocket';
 import actions from './store/api/actions';
 import dashboardRoutes from './routes/dashboard';
 import workflowsRoutes from './routes/workflows';
-import orderRoutes from './routes/order';
 import servicesRoutes from './routes/services';
 import jobsRoutes from './routes/jobs';
 import Job from './views/jobs/detail';
@@ -30,6 +29,7 @@ import ErrorView from './error';
 import * as events from './store/apievents/actions';
 
 import Workflow from './views/workflows/detail';
+import Order from './views/order';
 
 class AppInfo extends React.Component {
   /**
@@ -94,7 +94,7 @@ class AppInfo extends React.Component {
             {dashboardRoutes()}
             {workflowsRoutes()}
             <Route path="workflow/:id" component={Workflow} />
-            {orderRoutes()}
+            <Route path="order/:id/:date" component={Order} />
             {servicesRoutes()}
             {jobsRoutes()}
             <Route path="job/:id" component={Job} />

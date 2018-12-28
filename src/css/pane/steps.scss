@@ -1,21 +1,12 @@
-/**
- * Diagram is an SVG element with box groups and paths between them.
- *
- * Box is a group element with a basic shape (rect or ellipse) and a
- * text.
- *
- * 1. Diagram spread across available horizontal space.
- * 2. Paths are black lines.
- * 3. Boxes are clickable with exception of a start (root) box.
- * 4. Shapes are white with gray-ish border.
- * 5. Texts are black and aligned to their geometrical center.
- * 6. Masks are applied on text to prevent overflowing.
- */
 .diagram {
-  width: 100%; /* [1] */
+  width: 100%;
 
-  &__path { /* [2] */
-    stroke: #000;
+  .pt-tag {
+    position: unset !important;
+  }
+
+  &__path {
+    stroke: $qore-cobalt;
     fill: none;
   }
 
@@ -34,79 +25,24 @@
 
     > rect,
     > ellipse {
-      stroke: #666;
-      stroke-width: 1;
+      stroke: $qore-cobalt;
+      stroke-width: 2;
     }
 
-    > text { /* [5] */
-      font-size: 10px;
-      font-weight: bold;
+    > text {
+      font-size: 14px;
+      font-weight: normal;
 
       text-anchor: middle;
       alignment-baseline: middle;
     }
-
-    &--async-waiting > rect {
-      fill: #f7bb32;
-    }
-
-    &--complete > rect {
-      fill: #34bb33;
-    }
-
-    &--complete > text {
-      fill: #fff;
-    }
-
-    &--subworkflow > rect {
-      fill: #e5c737;
-    }
-
-    &--ok > rect {
-      fill: #c5e08c;
-    }
-
-    &--waiting > rect {
-      fill: #edd973;
-    }
-
-    &--important > rect {
-      fill: #ce807f;
-    }
-
-    &--warning > rect {
-      fill: #fab451;
-    }
-
-    &--success > rect {
-      fill: #9ec251;
-    }
-
-    &--info > rect,
-    &--async > rect {
-      fill: #75abc6;
-    }
-
-    &--error > rect,
-    &--error > ellipse {
-      fill: #ef312c;
-    }
-
-    &--error > text {
-      fill: #fff;
-    }
-
-    &--canceled > rect {
-      fill: #e2b6b6;
-    }
   }
 
-  &__mask { /* [6] */
+  &__mask {
     fill: #fff;
     stroke: #000;
   }
 }
-
 
 .step-info {
   /**
