@@ -10,45 +10,45 @@
   &-complete {
     background-color: $status-complete;
     color: #fff;
-  }
 
-  &-complete-diagram {
-    rect,
-    ellipse {
-      fill: lighten($status-complete, 33);
-    }
-    text {
-      fill: #000;
+    &-diagram {
+      rect,
+      ellipse {
+        fill: lighten($status-complete, 33);
+      }
+      text {
+        fill: #000;
+      }
     }
   }
 
   &-ready {
     background-color: $status-ready;
     color: #fff;
-  }
 
-  &-ready-diagram {
-    rect,
-    ellipse {
-      fill: lighten($status-ready, 10);
-    }
-    text {
-      fill: #000;
+    &-diagram {
+      rect,
+      ellipse {
+        fill: lighten($status-ready, 10);
+      }
+      text {
+        fill: #000;
+      }
     }
   }
 
   &-scheduled {
     background-color: $status-scheduled;
     color: #fff;
-  }
 
-  &-scheduled-diagram {
-    rect,
-    ellipse {
-      fill: $status-scheduled;
-    }
-    text {
-      fill: #000;
+    &-diagram {
+      rect,
+      ellipse {
+        fill: $status-scheduled;
+      }
+      text {
+        fill: #fff;
+      }
     }
   }
 
@@ -59,8 +59,7 @@
 
   &-waiting-diagram,
   &-async-waiting-diagram,
-  &-event-waiting-diagram,
-  &-subworkflow-diagram {
+  &-event-waiting-diagram {
     rect,
     ellipse {
       fill: lighten($status-waiting, 6);
@@ -75,93 +74,85 @@
     color: #fff;
   }
 
-  &-incomplete-diagram,
-  &-async-diagram {
-    rect,
-    ellipse {
-      fill: lighten($status-incomplete, 6);
-    }
-    text {
-      fill: #000;
-    }
-  }
-
   &-retry {
     background-color: $status-retry;
     color: #fff;
-  }
 
-  &-retry-diagram {
-    rect,
-    ellipse {
-      fill: lighten($status-retry, 10);
-    }
-    text {
-      fill: #000;
+    &-diagram {
+      rect,
+      ellipse {
+        fill: darken($status-retry, 10);
+      }
+      text {
+        fill: #000;
+      }
     }
   }
 
   &-error {
     background-color: $status-error;
     color: #fff;
-  }
 
-  &-error-diagram {
-    rect,
-    ellipse {
-      fill: lighten($status-error, 5);
-    }
-    text {
-      fill: #000;
+    &-diagram {
+      rect,
+      ellipse {
+        fill: lighten($status-error, 25);
+      }
+      text {
+        fill: #000;
+      }
     }
   }
 
   &-in-progress {
     background-color: $status-in-progress;
     color: #fff;
-  }
 
-  &-in-progress-diagram {
-    rect,
-    ellipse {
-      fill: lighten($status-in-progress, 5);
-    }
-    text {
-      fill: #000;
+    &-diagram {
+      rect,
+      ellipse {
+        fill: lighten($status-in-progress, 5);
+      }
+      text {
+        fill: #fff;
+      }
     }
   }
 
   &-canceled {
     background-color: $status-canceled;
     color: #fff;
-  }
 
-  &-canceled-diagram {
-    rect,
-    ellipse {
-      fill: lighten($status-canceled, 10);
-    }
-    text {
-      fill: #000;
+    &-diagram {
+      rect,
+      ellipse {
+        fill: lighten($status-canceled, 10);
+      }
+      text {
+        fill: #000;
+      }
     }
   }
 
   &-blocked {
     background-color: $status-blocked;
     color: #fff;
+
+    &-diagram {
+      rect,
+      ellipse {
+        fill: lighten($status-blocked, 8);
+      }
+      text {
+        fill: #000;
+      }
+    }
   }
 
-  &-blocked-diagram {
-    rect,
-    ellipse {
-      fill: lighten($status-blocked, 8);
-    }
-    text {
-      fill: #000;
-    }
-  }
+  //* DIAGRAM STEP TYPES
 
-  &-normal-diagram {
+  &-normal-diagram,
+  &--diagram {
     rect,
     ellipse {
       fill: #fff;
@@ -171,13 +162,24 @@
     }
   }
 
+  &-subworkflow-diagram {
+    rect,
+    ellipse {
+      stroke: $qore-warning !important;
+    }
+  }
+
+  &-async-diagram {
+    rect,
+    ellipse {
+      stroke: #3b3b98 !important;
+    }
+  }
+
   &-event-diagram {
     rect,
     ellipse {
-      fill: #ad7fc6;
-    }
-    text {
-      fill: #000;
+      stroke: #b33771 !important;
     }
   }
 }
