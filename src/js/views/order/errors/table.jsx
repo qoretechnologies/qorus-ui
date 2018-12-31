@@ -26,15 +26,21 @@ import {
   DescriptionColumn,
 } from '../../../components/DescriptionColumn';
 import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
+import Dropdown, { Item, Control } from '../../../components/dropdown';
+import ContentByType from '../../../components/ContentByType';
 
 type Props = {
   errors: Array<Object>,
   onCSVClick: Function,
+  onFilterChange: Function,
+  compact: boolean,
 };
 
 const ErrorsTable: Function = ({
   errors,
   onCSVClick,
+  onFilterChange,
+  compact,
 }: Props): React.Element<Table> => (
   <EnhancedTable
     collection={errors}
@@ -67,6 +73,15 @@ const ErrorsTable: Function = ({
           <FixedRow className="toolbar-row">
             <Th colspan="full">
               <Pull>
+                <Dropdown multi def="ALL" id="errors" onSubmit={onFilterChange}>
+                  <Control icon="filter" />
+                  <Item title="ALL" />
+                  <Item title="FATAL" />
+                  <Item title="MAJOR" />
+                  <Item title="WARNING" />
+                  <Item title="INFO" />
+                  <Item title="NONE" />
+                </Dropdown>
                 <CsvControl
                   onClick={onCSVClick}
                   disabled={size(collection) === 0}
@@ -88,38 +103,58 @@ const ErrorsTable: Function = ({
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
             <NameColumnHeader title="Error code" name="error" icon="error" />
-            <NameColumnHeader title="Step Name" name="step_name" />
+            {!compact && (
+              <NameColumnHeader title="Step Name" name="step_name" />
+            )}
             <Th icon="info-sign" name="severity">
               Severity
             </Th>
-            <Th icon="error" name="error_type">
-              Error Type
+            <Th icon="error" name="business_error">
+              Bus.Err.
             </Th>
-            <Th icon="refresh" name="retry">
-              Retry
-            </Th>
-            <Th icon="info-sign" name="ind">
-              Ind
-            </Th>
+            {!compact && (
+              <Th icon="error" name="error_type">
+                Error Type
+              </Th>
+            )}
+            {!compact && (
+              <Th icon="refresh" name="retry">
+                Retry
+              </Th>
+            )}
+            {!compact && (
+              <Th icon="info-sign" name="ind">
+                Ind
+              </Th>
+            )}
             <DescriptionColumnHeader name="info">Info</DescriptionColumnHeader>
-            <DescriptionColumnHeader name="description" />
+            {!compact && <DescriptionColumnHeader name="description" />}
             <DateColumnHeader />
           </FixedRow>
         </Thead>
-        <DataOrEmptyTable condition={collection.length === 0} cols={9}>
+        <DataOrEmptyTable
+          condition={collection.length === 0}
+          cols={compact ? 5 : 10}
+          small={compact}
+        >
           {props => (
             <Tbody {...props}>
               {collection.map(
                 (error: Object, index: number): React.Element<any> => (
                   <Tr key={index} first={index === 0}>
                     <NameColumn name={error.error} />
-                    <NameColumn name={error.step_name} />
+                    {!compact && <NameColumn name={error.step_name} />}
                     <Td className="medium">{error.severity}</Td>
-                    <Td className="medium">{error.error_type}</Td>
-                    <Td className="medium">{error.retry}</Td>
-                    <Td className="narrow">{error.retry}</Td>
+                    <Td className="medium">
+                      <ContentByType content={error.business_error} />
+                    </Td>
+                    {!compact && <Td className="medium">{error.error_type}</Td>}
+                    {!compact && <Td className="medium">{error.retry}</Td>}
+                    {!compact && <Td className="narrow">{error.ind}</Td>}
                     <DescriptionColumn>{error.info}</DescriptionColumn>
-                    <DescriptionColumn>{error.description}</DescriptionColumn>
+                    {!compact && (
+                      <DescriptionColumn>{error.description}</DescriptionColumn>
+                    )}
                     <DateColumn>{error.created}</DateColumn>
                   </Tr>
                 )

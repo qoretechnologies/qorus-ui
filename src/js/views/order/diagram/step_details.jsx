@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import Skip from './skip';
-import { Table, Td, Th, Tr, Tbody, Thead } from 'components/new_table';
-import Date from 'components/date';
+import { Table, Td, Th, Tr, Tbody } from 'components/new_table';
 import Dropdown, { Control, Item } from 'components/dropdown';
 import {
   Controls as ButtonGroup,
@@ -16,6 +15,8 @@ import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
 import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
 import { INTERFACE_ICONS } from '../../../constants/interfaces';
 import { IdColumnHeader, IdColumn } from '../../../components/IdColumn';
+import PaneItem from '../../../components/pane_item';
+import Errors from '../errors';
 
 @pureRender
 export default class StepDetailTable extends Component {
@@ -24,6 +25,7 @@ export default class StepDetailTable extends Component {
     instances: PropTypes.array,
     steps: PropTypes.object,
     onSkipSubmit: PropTypes.func,
+    order: PropTypes.obj,
   };
 
   static contextTypes = {
@@ -113,58 +115,64 @@ export default class StepDetailTable extends Component {
 
   render() {
     const { ...data } = this.state.currentStep;
+    const { order } = this.props;
 
     return (
       <div>
-        <Toolbar mb>{this.renderDropdown()}</Toolbar>
-        <Table condensed bordered className="text-table">
-          <Tbody>
-            <Tr>
-              <NameColumnHeader />
-              <NameColumn name={data.stepname} />
-              <Th icon="info-sign">Status</Th>
-              <Td>
-                <span
-                  className={`label status-${data.stepstatus.toLowerCase()}`}
-                >
-                  {data.stepstatus}
-                </span>
-              </Td>
-            </Tr>
-            <Tr>
-              <Th icon="info-sign">Type</Th>
-              <Td>{data.steptype}</Td>
-              <Th icon="info-sign">Version</Th>
-              <Td>{data.stepversion}</Td>
-            </Tr>
-            <Tr>
-              <IdColumnHeader />
-              <IdColumn>{data.stepid}</IdColumn>
-              <Th icon="exclude-row">Skipped</Th>
-              <Td>
-                <ContentByType content={data.skip} />{' '}
-                {canSkip(data) && (
-                  <ButtonGroup>
-                    <Button iconName="edit" action={this.handleSkipClick} />
-                  </ButtonGroup>
-                )}
-              </Td>
-            </Tr>
-            <Tr>
-              <DateColumnHeader>Started</DateColumnHeader>
-              <DateColumn>{data.started}</DateColumn>
+        <PaneItem title="Step details">
+          <Toolbar mb>{this.renderDropdown()}</Toolbar>
+          <Table condensed bordered className="text-table">
+            <Tbody>
+              <Tr>
+                <NameColumnHeader />
+                <NameColumn name={data.stepname} />
+                <Th icon="info-sign">Status</Th>
+                <Td>
+                  <span
+                    className={`label status-${data.stepstatus.toLowerCase()}`}
+                  >
+                    {data.stepstatus}
+                  </span>
+                </Td>
+              </Tr>
+              <Tr>
+                <Th icon="info-sign">Type</Th>
+                <Td>{data.steptype}</Td>
+                <Th icon="info-sign">Version</Th>
+                <Td>{data.stepversion}</Td>
+              </Tr>
+              <Tr>
+                <IdColumnHeader />
+                <IdColumn>{data.stepid}</IdColumn>
+                <Th icon="exclude-row">Skipped</Th>
+                <Td>
+                  <ContentByType content={data.skip} />{' '}
+                  {canSkip(data) && (
+                    <ButtonGroup>
+                      <Button iconName="edit" action={this.handleSkipClick} />
+                    </ButtonGroup>
+                  )}
+                </Td>
+              </Tr>
+              <Tr>
+                <DateColumnHeader>Started</DateColumnHeader>
+                <DateColumn>{data.started}</DateColumn>
 
-              <Th icon={INTERFACE_ICONS.workflow}>SubWF</Th>
-              <Td>{data.subworkflow_instanceid}</Td>
-            </Tr>
-            <Tr>
-              <DateColumnHeader>Completed</DateColumnHeader>
-              <DateColumn>{data.completed}</DateColumn>
-              <Th icon="info-sign">Ind</Th>
-              <Td>{data.ind}</Td>
-            </Tr>
-          </Tbody>
-        </Table>
+                <Th icon={INTERFACE_ICONS.workflow}>SubWF</Th>
+                <Td>{data.subworkflow_instanceid}</Td>
+              </Tr>
+              <Tr>
+                <DateColumnHeader>Completed</DateColumnHeader>
+                <DateColumn>{data.completed}</DateColumn>
+                <Th icon="info-sign">Ind</Th>
+                <Td>{data.ind}</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </PaneItem>
+        <PaneItem title="Errors for this step">
+          <Errors order={order} filterByStepId={data.stepid} compact />
+        </PaneItem>
       </div>
     );
   }

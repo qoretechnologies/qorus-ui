@@ -162,17 +162,19 @@ export default class Order extends Component {
             />
           </SimpleTab>
           <SimpleTab name="errors">
-            <ErrorsView
-              {...{
-                order: this.props.order,
-                workflow: this.props.workflow,
-                dispatch: this.props.dispatch,
-                isTablet: this.props.isTablet,
-              }}
-            />
+            <Box top noPadding>
+              <ErrorsView
+                {...{
+                  order: this.props.order,
+                  workflow: this.props.workflow,
+                  dispatch: this.props.dispatch,
+                  isTablet: this.props.isTablet,
+                }}
+              />
+            </Box>
           </SimpleTab>
           <SimpleTab name="hierarchy">
-            <Box top fill noPadding>
+            <Box top noPadding>
               <HierarchyView
                 {...{
                   order: this.props.order,

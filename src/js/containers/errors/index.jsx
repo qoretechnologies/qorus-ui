@@ -55,8 +55,6 @@ const ErrorsContainer: Function = ({
   id,
   height,
 }: Props): React.Element<any> => {
-  console.log(id);
-
   const handleFormSubmit: Function = (data: Object) => {
     optimisticDispatch(actions.errors.createOrUpdate, type, id, data);
     closeModal();
