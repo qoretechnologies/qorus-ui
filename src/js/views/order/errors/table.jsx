@@ -134,7 +134,7 @@ const ErrorsTable: Function = ({
         </Thead>
         <DataOrEmptyTable
           condition={collection.length === 0}
-          cols={compact ? 5 : 9}
+          cols={compact ? 5 : 10}
           small={compact}
         >
           {props => (
