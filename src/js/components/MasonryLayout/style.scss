@@ -1,5 +1,5 @@
 .masonry-layout {
-  column-gap: 0;
+  column-gap: 10px;
 
   &.columns-1 {
     column-count: 1;
@@ -15,6 +15,6 @@
 
   .masonry-panel {
     break-inside: avoid;
-    padding: 5px;
+    padding-bottom: 10px;
   }
 }
