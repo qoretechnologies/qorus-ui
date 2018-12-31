@@ -14,7 +14,7 @@
     &-diagram {
       rect,
       ellipse {
-        fill: lighten($status-complete, 33);
+        fill: lighten($status-complete, 33) !important;
       }
       text {
         fill: #000;
@@ -25,31 +25,11 @@
   &-ready {
     background-color: $status-ready;
     color: #fff;
-
-    &-diagram {
-      rect,
-      ellipse {
-        fill: lighten($status-ready, 10);
-      }
-      text {
-        fill: #000;
-      }
-    }
   }
 
   &-scheduled {
     background-color: $status-scheduled;
     color: #fff;
-
-    &-diagram {
-      rect,
-      ellipse {
-        fill: $status-scheduled;
-      }
-      text {
-        fill: #fff;
-      }
-    }
   }
 
   &-waiting {
@@ -62,7 +42,7 @@
   &-event-waiting-diagram {
     rect,
     ellipse {
-      fill: lighten($status-waiting, 6);
+      fill: lighten($status-waiting, 6) !important;
     }
     text {
       fill: #000;
@@ -81,7 +61,7 @@
     &-diagram {
       rect,
       ellipse {
-        fill: darken($status-retry, 10);
+        fill: darken($status-retry, 10) !important;
       }
       text {
         fill: #000;
@@ -96,7 +76,7 @@
     &-diagram {
       rect,
       ellipse {
-        fill: lighten($status-error, 25);
+        fill: lighten($status-error, 25) !important;
       }
       text {
         fill: #000;
@@ -111,7 +91,7 @@
     &-diagram {
       rect,
       ellipse {
-        fill: lighten($status-in-progress, 5);
+        fill: lighten($status-in-progress, 5) !important;
       }
       text {
         fill: #fff;
@@ -122,36 +102,14 @@
   &-canceled {
     background-color: $status-canceled;
     color: #fff;
-
-    &-diagram {
-      rect,
-      ellipse {
-        fill: lighten($status-canceled, 10);
-      }
-      text {
-        fill: #000;
-      }
-    }
   }
 
   &-blocked {
     background-color: $status-blocked;
     color: #fff;
-
-    &-diagram {
-      rect,
-      ellipse {
-        fill: lighten($status-blocked, 8);
-      }
-      text {
-        fill: #000;
-      }
-    }
   }
 
   //* DIAGRAM STEP TYPES
-
-  &-normal-diagram,
   &--diagram {
     rect,
     ellipse {

@@ -98,13 +98,31 @@ export default class StepsTab extends Component {
     top: number,
     width: number,
     height: number,
+    selectedStep: ?any,
   } = {
     tooltip: null,
     left: 0,
     top: 0,
     width: 0,
     height: 0,
+    selectedStep: null,
   };
+
+  _diagramWrapper;
+
+  componentDidMount() {
+    if (this._diagramWrapper) {
+      const el = this._diagramWrapper;
+      const copy = el;
+
+      copy.scrollLeft = el.scrollWidth;
+
+      const diff = (el.scrollWidth - el.scrollLeft) / 2;
+      const middle = el.scrollWidth / 2 - diff;
+
+      copy.scrollLeft = middle;
+    }
+  }
 
   /**
    * Opens modal with detailed information about clicked step.
@@ -789,7 +807,7 @@ export default class StepsTab extends Component {
         {stepInfo.arraytype !== 'NONE' && (
           <svg>
             <g
-              className={classNames(typeCss, statusCss, {
+              className={classNames(statusCss, typeCss, {
                 diagram__box: true,
               })}
               transform={this.getBoxTransform(colIdx, rowIdx, 4)}
@@ -799,7 +817,7 @@ export default class StepsTab extends Component {
           </svg>
         )}
         <g
-          className={classNames(typeCss, statusCss, {
+          className={classNames(statusCss, typeCss, {
             diagram__box: true,
             clickable: instances && instances[name],
           })}
@@ -980,12 +998,7 @@ export default class StepsTab extends Component {
 
   handleDiagramRef = el => {
     if (el) {
-      const copy = el;
-      copy.scrollLeft = el.scrollWidth;
-      const diff = (el.scrollWidth - el.scrollLeft) / 2;
-      const middle = el.scrollWidth / 2 - diff;
-
-      copy.scrollLeft = middle;
+      this._diagramWrapper = el;
     }
   };
 
@@ -1005,7 +1018,6 @@ export default class StepsTab extends Component {
     return (
       <Flex scrollX scrollY flexRef={this.handleDiagramRef}>
         <div
-          ref={this.wrapperRef}
           className="diagram-inner"
           style={{
             margin: '0 auto',
