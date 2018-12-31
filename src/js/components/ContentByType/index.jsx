@@ -30,7 +30,7 @@ const ContentByType: Function = ({
     const isContentDate: boolean = isDate(content);
 
     let newContent = inTable ? <Text text={`"${content}"`} /> : content;
-    newContent = isContentDate ? <Date date={content} /> : `"${newContent}"`;
+    newContent = isContentDate ? <Date date={content} /> : newContent;
 
     return inTable ? (
       <Flex className={className}>{newContent}</Flex>
