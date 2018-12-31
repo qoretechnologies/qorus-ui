@@ -2,28 +2,46 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
+import includes from 'lodash/includes';
 
 import ErrorsTable from './table';
 import Box from 'components/box';
 import csv from '../../../hocomponents/csv';
+import withState from 'recompose/withState';
+import withHandlers from 'recompose/withHandlers';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 type ErrorsViewProps = {
   errors: Array<Object>,
   onCSVClick: Function,
+  compact?: boolean,
+  handleFilterChange: Function,
 };
 
-const ErrorsView: Function = ({ errors, onCSVClick }: ErrorsViewProps) => (
+const ErrorsView: Function = ({
+  errors,
+  onCSVClick,
+  compact,
+  handleFilterChange,
+}: ErrorsViewProps) => (
   <Box top noPadding>
-    <ErrorsTable errors={errors} onCSVClick={onCSVClick} />
+    <ErrorsTable
+      compact={compact}
+      errors={errors}
+      onCSVClick={onCSVClick}
+      onFilterChange={handleFilterChange}
+    />
   </Box>
 );
 
 const orderSelector = (state, props) => props.order;
+const filterSelector = (state, props) => props.errorFilter;
+const stepIdSelector = (state, props) => props.filterByStepId;
 
-const transformErrors = order => {
+const transformErrors = (order, filter, stepId) => {
   if (!order.ErrorInstances) return [];
 
-  return order.ErrorInstances.map((e, index) => {
+  const res = order.ErrorInstances.map((e, index) => {
     const copy = e;
     copy.id = index;
     copy.error_type = e.business_error ? 'Business' : 'Other';
@@ -32,12 +50,20 @@ const transformErrors = order => {
     ).stepname;
 
     return copy;
-  });
+  }).filter(d => includes(filter, d.severity) || includes(filter, 'ALL'));
+
+  if (stepId) {
+    console.log(stepId);
+
+    return res.filter((errInst: Object) => errInst.stepid === stepId);
+  }
+
+  return res;
 };
 
 const errorSelector = createSelector(
-  [orderSelector],
-  order => transformErrors(order)
+  [orderSelector, filterSelector, stepIdSelector],
+  (order, filter, stepId) => transformErrors(order, filter, stepId)
 );
 
 const selector = createSelector(
@@ -50,6 +76,17 @@ const selector = createSelector(
 );
 
 export default compose(
+  withState('errorFilter', 'changeErrorFilter', ['ALL']),
+  withHandlers({
+    handleFilterChange: ({
+      changeErrorFilter,
+    }: {
+      changeErrorFilter: Function,
+    }): Function => (name: string): void => {
+      changeErrorFilter(() => name);
+    },
+  }),
   connect(selector),
-  csv('errors', 'order_errors')
+  csv('errors', 'order_errors'),
+  onlyUpdateForKeys(['errors', 'compact', 'errorFilter'])
 )(ErrorsView);
