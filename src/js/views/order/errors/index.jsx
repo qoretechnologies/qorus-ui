@@ -24,14 +24,12 @@ const ErrorsView: Function = ({
   compact,
   handleFilterChange,
 }: ErrorsViewProps) => (
-  <Box top noPadding>
-    <ErrorsTable
-      compact={compact}
-      errors={errors}
-      onCSVClick={onCSVClick}
-      onFilterChange={handleFilterChange}
-    />
-  </Box>
+  <ErrorsTable
+    compact={compact}
+    errors={errors}
+    onCSVClick={onCSVClick}
+    onFilterChange={handleFilterChange}
+  />
 );
 
 const orderSelector = (state, props) => props.order;
@@ -53,8 +51,6 @@ const transformErrors = (order, filter, stepId) => {
   }).filter(d => includes(filter, d.severity) || includes(filter, 'ALL'));
 
   if (stepId) {
-    console.log(stepId);
-
     return res.filter((errInst: Object) => errInst.stepid === stepId);
   }
 
