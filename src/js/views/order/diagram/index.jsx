@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import Masonry from 'react-masonry-layout';
 
 import actions from 'store/api/actions';
 import Loader from 'components/loader';
@@ -7,36 +6,25 @@ import Info from './info';
 import Keys from './keys';
 import StepCodeDiagram from '../../../components/StepCodeDiagram';
 import Hierarchy from '../hierarchy/';
-import StepDetails from './step_details';
-import Errors from './errors';
+import Errors from '../errors';
 import PaneItem from '../../../components/pane_item';
 import Box from '../../../components/box';
-import NoData from '../../../components/nodata';
 import withDispatch from '../../../hocomponents/withDispatch';
 import Flex from '../../../components/Flex';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { MasonryLayout, MasonryPanel } from '../../../components/MasonryLayout';
 
 @withDispatch()
+@onlyUpdateForKeys(['order', 'workflow', 'isTablet'])
 export default class DiagramView extends Component {
   static propTypes = {
     order: PropTypes.object,
     workflow: PropTypes.object,
-    params: PropTypes.object,
     isTablet: PropTypes.bool,
     dispatchAction: PropTypes.func,
   };
 
-  componentWillMount() {
-    this.setState({
-      step: null,
-      paneSize: 200,
-    });
-  }
-
-  handleStepClick = step => {
-    this.setState({
-      step,
-    });
-  };
+  _masonryInstance: any;
 
   handleSkipSubmit = (step, value, noretry) => {
     this.props.dispatchAction(
@@ -48,88 +36,61 @@ export default class DiagramView extends Component {
     );
   };
 
-  renderErrorPane(top, columns) {
-    if (!this.props.order.ErrorInstances) return undefined;
-
-    let errors = this.props.order.ErrorInstances;
-
-    if (this.state.step) {
-      const stepId = this.props.order.StepInstances.find(
-        s => s.stepname === this.state.step
-      ).stepid;
-
-      errors = errors.filter(e => e.stepid === stepId);
-    }
-
-    return (
-      <Box column={columns} noTransition top={top} key="errors">
-        <Errors data={errors} />
-      </Box>
-    );
-  }
-
   renderContent() {
-    const columns: number = this.props.isTablet ? 1 : 2;
-    const boxColumns: ?number = columns === 1 ? null : columns;
     const top: boolean = !this.props.isTablet;
 
     return [
-      <Box column={boxColumns} noTransition top key="diagram">
-        <StepCodeDiagram
-          workflow={this.props.workflow}
-          order={this.props.order}
-          onStepClick={this.handleStepClick}
-        />
-      </Box>,
-      <Box column={boxColumns} noTransition top={top} key="info">
-        <Info {...this.props.order} />
-      </Box>,
-      <Box column={boxColumns} noTransition top={top} key="keys">
-        <Keys data={this.props.order.keys} />
-      </Box>,
-      <Box column={boxColumns} noTransition top={top} key="hierarchy">
-        <PaneItem title="Hierarchy">
-          <Hierarchy
+      <MasonryPanel>
+        <Box top key="diagram">
+          <StepCodeDiagram
+            workflow={this.props.workflow}
             order={this.props.order}
-            compact
-            isTablet={this.props.isTablet}
+            onSkipSubmit={this.handleSkipSubmit}
+            masonryInstance={this._masonryInstance}
           />
-        </PaneItem>
-      </Box>,
-      <Box column={boxColumns} noTransition top={top} key="steps">
-        <PaneItem title="Step details">
-          {this.state.step ? (
-            <StepDetails
-              step={this.state.step}
-              instances={this.props.order.StepInstances}
-              onSkipSubmit={this.handleSkipSubmit}
+        </Box>
+      </MasonryPanel>,
+      <MasonryPanel>
+        <Box top={top} key="info">
+          <Info {...this.props.order} />
+        </Box>
+      </MasonryPanel>,
+      <MasonryPanel>
+        <Box top={top} key="keys">
+          <Keys data={this.props.order.keys} />
+        </Box>
+      </MasonryPanel>,
+      <MasonryPanel>
+        <Box top={top} key="hierarchy">
+          <PaneItem title="Hierarchy">
+            <Hierarchy
+              order={this.props.order}
+              compact
+              isTablet={this.props.isTablet}
             />
-          ) : (
-            <NoData />
-          )}
-        </PaneItem>
-      </Box>,
-      this.renderErrorPane(top, columns),
+          </PaneItem>
+        </Box>
+      </MasonryPanel>,
+      <MasonryPanel>
+        <Box top={top} key="errors">
+          <PaneItem title="Order Error Instances">
+            <Errors order={this.props.order} compact />
+          </PaneItem>
+        </Box>
+      </MasonryPanel>,
     ];
   }
 
   render() {
-    if (!this.props.workflow) return <Loader />;
+    const { workflow, isTablet } = this.props;
+
+    if (!workflow) return <Loader />;
 
     return (
       <Flex scrollY>
-        {!this.props.isTablet ? (
-          <Masonry
-            id="order-masonry"
-            sizes={[{ columns: 2, gutter: 15 }]}
-            infiniteScrollDisabled
-            key={this.state.step}
-          >
-            {this.renderContent()}
-          </Masonry>
-        ) : (
-          this.renderContent()
-        )}
+        <MasonryLayout columns={isTablet ? 1 : 2}>
+          {this.renderContent()}
+        </MasonryLayout>
       </Flex>
     );
   }

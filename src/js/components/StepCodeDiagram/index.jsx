@@ -1,15 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import createFragment from 'react-addons-create-fragment';
 import classNames from 'classnames';
+import PanElement from 'react-element-pan';
 
 import StepModal from './modal';
 
-import { pureRender } from '../utils';
 import { groupInstances } from '../../helpers/orders';
 import { graph } from '../../lib/graph';
 import { COLORS } from '../../constants/ui';
-import Flex from '../Flex';
 import { Tag, Icon } from '@blueprintjs/core';
+import PaneItem from '../pane_item';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import StepDetailTable from '../../views/order/diagram/step_details';
+import { Controls as ButtonGroup, Control as Button } from '../controls';
+import Loader from '../loader';
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -66,7 +70,7 @@ const BOX_ROUNDED_CORNER = 5;
 /**
  * Minimal numbers of columns diagram must have.
  */
-const DIAGRAM_MIN_COLUMNS = 3;
+const DIAGRAM_MIN_COLUMNS = 1;
 
 /**
  * Diagram with functions and dependencies between them.
@@ -79,7 +83,7 @@ const DIAGRAM_MIN_COLUMNS = 3;
  * be fetched via API as it is not usually part of the workflow
  * object.
  */
-@pureRender
+@onlyUpdateForKeys(['workflow', 'order'])
 export default class StepsTab extends Component {
   static propTypes = {
     workflow: PropTypes.object.isRequired,
@@ -99,6 +103,8 @@ export default class StepsTab extends Component {
     width: number,
     height: number,
     selectedStep: ?any,
+    diagramScale: number,
+    panWidth: number,
   } = {
     tooltip: null,
     left: 0,
@@ -106,23 +112,9 @@ export default class StepsTab extends Component {
     width: 0,
     height: 0,
     selectedStep: null,
+    diagramScale: 1,
+    panWidth: 0,
   };
-
-  _diagramWrapper;
-
-  componentDidMount() {
-    if (this._diagramWrapper) {
-      const el = this._diagramWrapper;
-      const copy = el;
-
-      copy.scrollLeft = el.scrollWidth;
-
-      const diff = (el.scrollWidth - el.scrollLeft) / 2;
-      const middle = el.scrollWidth / 2 - diff;
-
-      copy.scrollLeft = middle;
-    }
-  }
 
   /**
    * Opens modal with detailed information about clicked step.
@@ -641,6 +633,24 @@ export default class StepsTab extends Component {
     this.props.onStepClick(stepId);
   };
 
+  handleZoomIn: Function = () => {
+    this.setState((state: Object) => ({
+      diagramScale: state.diagramScale + 0.1,
+    }));
+  };
+
+  handleZoomOut: Function = () => {
+    this.setState((state: Object) => ({
+      diagramScale: state.diagramScale - 0.1 < 0 ? 0 : state.diagramScale - 0.1,
+    }));
+  };
+
+  handleZoomReset: Function = () => {
+    this.setState(() => ({
+      diagramScale: 1,
+    }));
+  };
+
   /**
    * Returns mask element for a start (root) step.
    *
@@ -780,7 +790,6 @@ export default class StepsTab extends Component {
     const name = this.getStepName(stepId);
     const typeCss = `status-${type.toLowerCase()}-diagram`;
     let statusCss = '';
-    let onBoxClick;
     let instances;
     let arrayStep = [];
 
@@ -792,8 +801,6 @@ export default class StepsTab extends Component {
       statusCss = instances[name]
         ? instances[name].status.toLowerCase()
         : statusCss;
-
-      onBoxClick = instances[name] ? this.handleStepClick(name) : undefined;
 
       if (stepInfo.arraytype !== 'NONE' && instances[name]) {
         arrayStep = instances[name].steps;
@@ -824,7 +831,11 @@ export default class StepsTab extends Component {
           transform={this.getBoxTransform(colIdx, rowIdx)}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
-          onClick={onBoxClick}
+          onClick={() => {
+            if (this.props.order) {
+              this.setState({ selectedStep: name });
+            }
+          }}
         >
           <rect {...this.getDefaultParams()} />
           <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
@@ -836,7 +847,10 @@ export default class StepsTab extends Component {
             </foreignObject>
           )}
           <foreignObject x={stepInfo.arraytype === 'NONE' ? 4 : 32} y={4}>
-            <Tag>{type}</Tag>
+            <Tag>
+              {type} <Icon iconName="dot" />{' '}
+              {instances && instances[name] ? instances[name].status : 'NONE'}
+            </Tag>
           </foreignObject>
           <foreignObject
             x={222}
@@ -996,9 +1010,11 @@ export default class StepsTab extends Component {
     );
   }
 
-  handleDiagramRef = el => {
+  handlePanRef = el => {
     if (el) {
-      this._diagramWrapper = el;
+      const { width } = el.getBoundingClientRect();
+
+      this.setState({ panWidth: width });
     }
   };
 
@@ -1008,48 +1024,66 @@ export default class StepsTab extends Component {
    * @return {ReactElement}
    */
   render() {
-    const { tooltip, left, top, width, height } = this.state;
+    const { selectedStep, diagramScale, panWidth } = this.state;
+    const { order, workflow, onSkipSubmit } = this.props;
     const nodes = graph(this.getStepDeps());
 
     const diaWidth =
-      Math.max(3, nodes.get(ROOT_STEP_ID).width) *
+      Math.max(1, nodes.get(ROOT_STEP_ID).width) *
       (this.getBoxWidth() + BOX_MARGIN);
 
+    const half = diaWidth / 2;
+    const panHalf = panWidth / 2;
+    const startX = half - panHalf;
+
     return (
-      <Flex scrollX scrollY flexRef={this.handleDiagramRef}>
-        <div
-          className="diagram-inner"
-          style={{
-            margin: '0 auto',
-            width: diaWidth,
-          }}
-        >
-          {tooltip && (
-            <div
-              className="svg-tooltip"
-              style={{
-                width,
-                left,
-                top: top + height + 10,
-              }}
-            >
-              <div className="svg-tooltip-arrow" />
-              <p>
-                <span> Description: </span> {tooltip}
-              </p>
-            </div>
+      <PaneItem
+        title={workflow.normalizedName}
+        label={
+          <ButtonGroup>
+            <Button icon="zoom-in" onClick={this.handleZoomIn} />
+            <Button icon="zoom-out" onClick={this.handleZoomOut} />
+            <Button icon="zoom-to-fit" onClick={this.handleZoomReset} />
+          </ButtonGroup>
+        }
+      >
+        <div ref={this.handlePanRef}>
+          {panWidth === 0 ? (
+            <Loader />
+          ) : (
+            [
+              <PanElement startX={startX}>
+                <div
+                  style={{
+                    transform: `scale(${diagramScale})`,
+                    width: diaWidth,
+                    transformOrigin: 'left top',
+                    height: this.getDiagramHeight(),
+                    margin: 'auto',
+                  }}
+                >
+                  <svg
+                    viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
+                    className="diagram"
+                  >
+                    <defs>{this.renderMasks()}</defs>
+                    {this.renderPaths()}
+                    {this.renderBoxes()}
+                  </svg>
+                </div>
+              </PanElement>,
+              selectedStep && (
+                <StepDetailTable
+                  step={selectedStep}
+                  instances={order.StepInstances}
+                  order={order}
+                  onSkipSubmit={onSkipSubmit}
+                />
+              ),
+            ]
           )}
-          <h4>{this.props.workflow.normalizedName}</h4>
-          <svg
-            viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
-            className="diagram"
-          >
-            <defs>{this.renderMasks()}</defs>
-            {this.renderPaths()}
-            {this.renderBoxes()}
-          </svg>
         </div>
-      </Flex>
+      </PaneItem>
     );
   }
 }
