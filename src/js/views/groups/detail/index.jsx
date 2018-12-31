@@ -2,12 +2,12 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import Masonry from 'react-masonry-layout';
 
 import DetailTable from './table';
 import Box from '../../../components/box';
 import titleManager from '../../../hocomponents/TitleManager';
 import Flex from '../../../components/Flex';
+import { MasonryLayout, MasonryPanel } from '../../../components/MasonryLayout';
 
 type Props = {
   onBackClick: Function,
@@ -32,35 +32,42 @@ const GroupDetail: Function = ({
   vmaps,
 }: Props): React.Element<any> => (
   <Flex scrollY>
-    <Masonry
-      id="group-masonry"
-      sizes={[{ columns: 3, gutter: 15 }]}
-      className="masonry masonryTriple"
-      infiniteScrollDisabled
-    >
-      <Box column={3} noTransition top>
-        <DetailTable
-          data={services}
-          columns={['type', 'autostart']}
-          type="Services"
-        />
-      </Box>
-      <Box column={3} noTransition top>
-        <DetailTable data={workflows} type="Workflows" />
-      </Box>
-      <Box column={3} noTransition top>
-        <DetailTable data={jobs} type="Jobs" />
-      </Box>
-      <Box column={3} noTransition top>
-        <DetailTable data={roles} type="Roles" />
-      </Box>
-      <Box column={3} noTransition top>
-        <DetailTable data={mappers} columns={['type']} type="Mappers" />
-      </Box>
-      <Box column={3} noTransition top>
-        <DetailTable data={vmaps} type="Value maps" />
-      </Box>
-    </Masonry>
+    <MasonryLayout columns={3}>
+      <MasonryPanel>
+        <Box top>
+          <DetailTable
+            data={services}
+            columns={['type', 'autostart']}
+            type="Services"
+          />
+        </Box>
+      </MasonryPanel>
+      <MasonryPanel>
+        <Box top>
+          <DetailTable data={workflows} type="Workflows" />
+        </Box>
+      </MasonryPanel>
+      <MasonryPanel>
+        <Box top>
+          <DetailTable data={jobs} type="Jobs" />
+        </Box>
+      </MasonryPanel>
+      <MasonryPanel>
+        <Box top>
+          <DetailTable data={roles} type="Roles" />
+        </Box>
+      </MasonryPanel>
+      <MasonryPanel>
+        <Box top>
+          <DetailTable data={mappers} columns={['type']} type="Mappers" />
+        </Box>
+      </MasonryPanel>
+      <MasonryPanel>
+        <Box top>
+          <DetailTable data={vmaps} type="Value maps" />
+        </Box>
+      </MasonryPanel>
+    </MasonryLayout>
   </Flex>
 );
 
