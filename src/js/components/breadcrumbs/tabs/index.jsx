@@ -167,11 +167,11 @@ class CrumbTabs extends React.Component {
 export default compose(
   connect(
     (state: Object): Object => ({
-      width: state.ui.settings.width,
+      windowWidth: state.ui.settings.width,
     })
   ),
   mapProps(
-    ({ tabs, ...rest }: Props): Props => ({
+    ({ tabs, width, windowWidth, ...rest }: Props): Props => ({
       tabs: tabs.map(
         (tab: any): Object =>
           isString(tab)
@@ -181,6 +181,7 @@ export default compose(
                 tabId: tab.title,
               }
       ),
+      width: width || windowWidth,
       ...rest,
     })
   ),
