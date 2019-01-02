@@ -11,7 +11,7 @@ import { Bubble } from '../../components/bubbles';
 import queryControl from '../../hocomponents/queryControl';
 
 const timeoutByBubbleType = {
-  WARNING: '60000',
+  WARNING: '30000',
   DANGER: '5000',
   SUCCESS: '5000',
   INFO: '5000',
@@ -25,6 +25,8 @@ type Props = {
   changeNotificationsPaneQuery: Function,
   stack: number,
   notificationsSound: boolean,
+  dismissNotification: Function,
+  deleteBubble: Function,
 };
 
 export class BubbleItem extends React.Component {
@@ -35,9 +37,7 @@ export class BubbleItem extends React.Component {
     const { timeout, bubble } = this.props;
     const timeoutByType = timeout || timeoutByBubbleType[bubble.type];
 
-    if (bubble.type !== 'WARNING') {
-      this._timeout = setTimeout(this.handleDelete, timeoutByType);
-    }
+    this._timeout = setTimeout(this.handleDelete, timeoutByType);
   }
 
   componentWillReceiveProps(nextProps: Props) {
