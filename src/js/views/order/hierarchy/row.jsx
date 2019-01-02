@@ -28,7 +28,7 @@ const HierarchyRow: Function = ({
   first,
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    <IdColumn>{id}</IdColumn>
+    <NameColumn name={id} link={`/order/${id}/24h`} type="order" />
     <NameColumn
       name={`${[...Array(item.hierarchy_level)].map((): string => '--')} ${
         item.name
