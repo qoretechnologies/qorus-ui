@@ -5,7 +5,6 @@ import compose from 'recompose/compose';
 import includes from 'lodash/includes';
 
 import ErrorsTable from './table';
-import Box from 'components/box';
 import csv from '../../../hocomponents/csv';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';

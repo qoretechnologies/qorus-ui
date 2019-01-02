@@ -261,14 +261,17 @@ pre.line-numbers {
 }
 
 div.text-component {
-  white-space: nowrap;
-  text-overflow: ellipsis;
   overflow: hidden;
   line-height: 24px;
   vertical-align: middle;
 
   &.has-alerts {
     color: $qore-danger;
+  }
+
+  &:not(.text-component-expanded) {
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 

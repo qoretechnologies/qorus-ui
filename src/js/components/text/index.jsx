@@ -8,15 +8,21 @@ import Tree from '../tree';
 type Props = {
   text: any,
   hasAlerts: boolean,
+  expanded?: boolean,
 };
 
-const Text: Function = ({ text, hasAlerts }: Props): React.Element<any> =>
+const Text: Function = ({
+  text,
+  hasAlerts,
+  expanded,
+}: Props): React.Element<any> =>
   text && typeof text === 'object' ? (
     <Tree data={text} />
   ) : (
     <Flex flexFlow="row">
       <div
-        className={`text-component ${hasAlerts && 'has-alerts'}`}
+        className={`text-component ${expanded &&
+          'text-component-expanded'} ${hasAlerts && 'has-alerts'}`}
         title={text}
       >
         {text}
@@ -24,4 +30,4 @@ const Text: Function = ({ text, hasAlerts }: Props): React.Element<any> =>
     </Flex>
   );
 
-export default compose(pure(['text']))(Text);
+export default compose(pure(['text', 'expanded']))(Text);
