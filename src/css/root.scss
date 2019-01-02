@@ -32,7 +32,6 @@
   height: 100%;
 
   &__center {
-    min-width: 1024px;
     position: relative; /* [5] */
 
     display: -ms-flexbox;
@@ -51,7 +50,7 @@
     margin-top: $navbar-height; /* [1], [4] */
 
     > nav,
-    > section {
+    > .section {
       margin-bottom: 30px; /* [2], [4] */
     }
 
@@ -63,7 +62,7 @@
       overflow-y: auto; /* [4] */
     }
 
-    > section {
+    > .section {
       height: calc(100vh - 80px);
       flex: 1 1 auto;
       overflow: auto;
@@ -101,10 +100,6 @@
 
 .pt-menu-header h6 {
   font-size: 15px !important;
-}
-
-#content-wrapper div:first-child {
-  // height: 100%;
 }
 
 .loading-logo {
