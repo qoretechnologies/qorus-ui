@@ -11,6 +11,7 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
+import { connect } from 'react-redux';
 
 type Props = {
   tabs: Array<any>,
@@ -20,7 +21,6 @@ type Props = {
   activeTab?: string,
   compact?: boolean,
   queryIdentifier?: string,
-  parentRef: HTMLDivElement,
   width: number,
 };
 
@@ -165,6 +165,11 @@ class CrumbTabs extends React.Component {
 }
 
 export default compose(
+  connect(
+    (state: Object): Object => ({
+      width: state.ui.settings.width,
+    })
+  ),
   mapProps(
     ({ tabs, ...rest }: Props): Props => ({
       tabs: tabs.map(
@@ -197,5 +202,5 @@ export default compose(
       ...rest,
     })
   ),
-  onlyUpdateForKeys(['tabQuery', 'tabs', 'parentRef'])
+  onlyUpdateForKeys(['tabQuery', 'tabs', 'width'])
 )(CrumbTabs);
