@@ -8,14 +8,20 @@ import Text from '../text';
 type DescriptionColumnProps = {
   children: any,
   className: string,
+  expanded?: boolean,
 };
 
-const DescriptionColumn: Function = compose(onlyUpdateForKeys(['children']))(
+const DescriptionColumn: Function = compose(
+  onlyUpdateForKeys(['children', 'expanded'])
+)(
   ({
     children,
     className: className = 'text',
+    expanded,
   }: DescriptionColumnProps): React.Element<any> => (
-    <Td className={className}>{children ? <Text text={children} /> : '-'}</Td>
+    <Td className={className}>
+      {children ? <Text text={children} expanded={expanded} /> : '-'}
+    </Td>
   )
 );
 
