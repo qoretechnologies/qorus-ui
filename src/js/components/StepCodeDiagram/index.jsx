@@ -14,6 +14,10 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import StepDetailTable from '../../views/order/diagram/step_details';
 import { Controls as ButtonGroup, Control as Button } from '../controls';
 import Loader from '../loader';
+import Flex from '../Flex';
+import Headbar from '../Headbar';
+import Pull from '../Pull';
+import { Breadcrumbs, Crumb } from '../breadcrumbs';
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -89,6 +93,7 @@ export default class StepsTab extends Component {
     workflow: PropTypes.object.isRequired,
     order: PropTypes.object,
     onStepClick: PropTypes.func,
+    onSkipSubmit: PropTypes.func,
   };
 
   static contextTypes = {
@@ -1038,7 +1043,7 @@ export default class StepsTab extends Component {
       style={{
         transform: `scale(${diagramScale})`,
         width: diaWidth,
-        transformOrigin: 'left top',
+        transformOrigin: 'center top',
         height: this.getDiagramHeight(),
         margin: 'auto',
       }}
@@ -1068,32 +1073,40 @@ export default class StepsTab extends Component {
     const startX = half - panHalf;
 
     return (
-      <PaneItem
-        title={workflow.normalizedName}
-        label={
-          <ButtonGroup>
-            {useDrag && (
-              <span
-                style={{ lineHeight: '24px', paddingRight: 5 }}
-                className="text-muted"
-              >
-                Drag to move around
-              </span>
-            )}
-            <Button
-              icon="hand"
-              onClick={this.handleMoveChange}
-              btnStyle={useDrag && 'primary'}
-            />
-            <Button icon="zoom-in" onClick={this.handleZoomIn} />
-            <Button icon="zoom-out" onClick={this.handleZoomOut} />
-            <Button icon="zoom-to-fit" onClick={this.handleZoomReset} />
-          </ButtonGroup>
-        }
-      >
+      <Flex>
+        <Headbar>
+          <Breadcrumbs collapsed>
+            <Crumb>{workflow.normalizedName}</Crumb>
+          </Breadcrumbs>
+          <Pull right>
+            <ButtonGroup>
+              {useDrag && (
+                <span
+                  style={{ lineHeight: '30px', paddingRight: 5 }}
+                  className="text-muted"
+                >
+                  Drag to move around
+                </span>
+              )}
+              <Button
+                icon="hand"
+                onClick={this.handleMoveChange}
+                btnStyle={useDrag && 'primary'}
+                big
+              />
+              <Button icon="zoom-in" onClick={this.handleZoomIn} big />
+              <Button icon="zoom-out" onClick={this.handleZoomOut} big />
+              <Button icon="zoom-to-fit" onClick={this.handleZoomReset} big />
+            </ButtonGroup>
+          </Pull>
+        </Headbar>
         <div
           ref={this.handlePanRef}
-          style={{ overflow: useDrag ? 'hidden' : 'auto' }}
+          style={{
+            display: 'flex',
+            flexFlow: 'column',
+            flex: '1 1 auto',
+          }}
         >
           {panWidth === 0 ? (
             <Loader />
@@ -1104,7 +1117,9 @@ export default class StepsTab extends Component {
                   {this.renderContent(diagramScale, diaWidth)}
                 </PanElement>
               ) : (
-                this.renderContent(diagramScale, diaWidth)
+                <div style={{ overflow: 'auto' }}>
+                  {this.renderContent(diagramScale, diaWidth)}
+                </div>
               ),
               selectedStep && (
                 <StepDetailTable
@@ -1117,7 +1132,7 @@ export default class StepsTab extends Component {
             ]
           )}
         </div>
-      </PaneItem>
+      </Flex>
     );
   }
 }
