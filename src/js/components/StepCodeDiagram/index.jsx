@@ -105,6 +105,7 @@ export default class StepsTab extends Component {
     selectedStep: ?any,
     diagramScale: number,
     panWidth: number,
+    useDrag: boolean,
   } = {
     tooltip: null,
     left: 0,
@@ -114,6 +115,7 @@ export default class StepsTab extends Component {
     selectedStep: null,
     diagramScale: 1,
     panWidth: 0,
+    useDrag: true,
   };
 
   /**
@@ -516,7 +518,7 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    */
   getBoxTopCoord(colIdx) {
-    const top = this.getBoxHorizontalCenter(colIdx);
+    const top = this.getBoxHorizontalCenter(colIdx) + 2;
 
     return top;
   }
@@ -618,7 +620,7 @@ export default class StepsTab extends Component {
   getBoxTransform(colIdx, rowIdx, margin = 0) {
     return (
       'translate(' +
-      `${this.getBoxTopCoord(colIdx) - margin} ` +
+      `${this.getBoxTopCoord(colIdx) + margin} ` +
       `${this.getBoxLeftCoord(rowIdx) + margin}` +
       ')'
     );
@@ -631,6 +633,12 @@ export default class StepsTab extends Component {
    */
   handleStepClick = stepId => () => {
     this.props.onStepClick(stepId);
+  };
+
+  handleMoveChange: Function = () => {
+    this.setState((state: Object) => ({
+      useDrag: !state.useDrag,
+    }));
   };
 
   handleZoomIn: Function = () => {
@@ -832,15 +840,22 @@ export default class StepsTab extends Component {
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
           onClick={() => {
-            if (this.props.order) {
+            if (this.props.order && instances && instances[name]) {
               this.setState({ selectedStep: name });
             }
           }}
         >
           <rect {...this.getDefaultParams()} />
-          <text {...this.getTextParams(stepId, colIdx, row, rowIdx)}>
-            {this.getStepFullname(stepId)}
-          </text>
+          <foreignObject
+            x={4}
+            y={40}
+            width={this.getBoxWidth() - 10}
+            height="30"
+          >
+            <span className="step-diagram-stepname">
+              {this.getStepFullname(stepId)}
+            </span>
+          </foreignObject>
           {stepInfo.arraytype !== 'NONE' && (
             <foreignObject x={4} y={4}>
               <Tag>[{arrayStep.length}]</Tag>
@@ -924,15 +939,15 @@ export default class StepsTab extends Component {
    */
   renderPath(start, end) {
     const startX =
-      this.getBoxHorizontalCenter(start.colIdx) + this.getBoxWidth() / 2;
-    const startY = this.getBoxVerticalCenter(start.rowIdx);
+      this.getBoxHorizontalCenter(start.colIdx) + this.getBoxWidth() / 2 + 2;
+    const startY = this.getBoxVerticalCenter(start.rowIdx) + 2;
 
     const endX =
-      this.getBoxHorizontalCenter(end.colIdx) + this.getBoxWidth() / 2;
-    const endY = this.getBoxVerticalCenter(end.rowIdx);
+      this.getBoxHorizontalCenter(end.colIdx) + this.getBoxWidth() / 2 + 2;
+    const endY = this.getBoxVerticalCenter(end.rowIdx) + 2;
 
     const joint =
-      Math.max(startY, endY) - this.getBoxHeight() / 2 - BOX_MARGIN / 2;
+      Math.max(startY, endY) - this.getBoxHeight() / 2 - BOX_MARGIN / 2 + 2;
 
     return (
       <path
@@ -1018,13 +1033,29 @@ export default class StepsTab extends Component {
     }
   };
 
-  /**
-   * Returns element for this component.
-   *
-   * @return {ReactElement}
-   */
+  renderContent: Function = (diagramScale, diaWidth) => (
+    <div
+      style={{
+        transform: `scale(${diagramScale})`,
+        width: diaWidth,
+        transformOrigin: 'left top',
+        height: this.getDiagramHeight(),
+        margin: 'auto',
+      }}
+    >
+      <svg
+        viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
+        className="diagram"
+      >
+        <defs>{this.renderMasks()}</defs>
+        {this.renderPaths()}
+        {this.renderBoxes()}
+      </svg>
+    </div>
+  );
+
   render() {
-    const { selectedStep, diagramScale, panWidth } = this.state;
+    const { selectedStep, diagramScale, panWidth, useDrag } = this.state;
     const { order, workflow, onSkipSubmit } = this.props;
     const nodes = graph(this.getStepDeps());
 
@@ -1041,37 +1072,40 @@ export default class StepsTab extends Component {
         title={workflow.normalizedName}
         label={
           <ButtonGroup>
+            {useDrag && (
+              <span
+                style={{ lineHeight: '24px', paddingRight: 5 }}
+                className="text-muted"
+              >
+                Drag to move around
+              </span>
+            )}
+            <Button
+              icon="hand"
+              onClick={this.handleMoveChange}
+              btnStyle={useDrag && 'primary'}
+            />
             <Button icon="zoom-in" onClick={this.handleZoomIn} />
             <Button icon="zoom-out" onClick={this.handleZoomOut} />
             <Button icon="zoom-to-fit" onClick={this.handleZoomReset} />
           </ButtonGroup>
         }
       >
-        <div ref={this.handlePanRef}>
+        <div
+          ref={this.handlePanRef}
+          style={{ overflow: useDrag ? 'hidden' : 'auto' }}
+        >
           {panWidth === 0 ? (
             <Loader />
           ) : (
             [
-              <PanElement startX={startX}>
-                <div
-                  style={{
-                    transform: `scale(${diagramScale})`,
-                    width: diaWidth,
-                    transformOrigin: 'left top',
-                    height: this.getDiagramHeight(),
-                    margin: 'auto',
-                  }}
-                >
-                  <svg
-                    viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
-                    className="diagram"
-                  >
-                    <defs>{this.renderMasks()}</defs>
-                    {this.renderPaths()}
-                    {this.renderBoxes()}
-                  </svg>
-                </div>
-              </PanElement>,
+              useDrag ? (
+                <PanElement startX={startX}>
+                  {this.renderContent(diagramScale, diaWidth)}
+                </PanElement>
+              ) : (
+                this.renderContent(diagramScale, diaWidth)
+              ),
               selectedStep && (
                 <StepDetailTable
                   step={selectedStep}
