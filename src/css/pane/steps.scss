@@ -57,3 +57,11 @@
     margin-bottom: $line-height-computed / 2;
   }
 }
+
+span.step-diagram-stepname {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  padding: 0 10px;
+  word-break: break-all;
+}
