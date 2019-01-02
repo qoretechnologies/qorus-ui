@@ -28,6 +28,13 @@ import {
 import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
 import Dropdown, { Item, Control } from '../../../components/dropdown';
 import ContentByType from '../../../components/ContentByType';
+import compose from 'recompose/compose';
+import withState from 'recompose/withState';
+import withHandlers from 'recompose/withHandlers';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 
 type Props = {
   errors: Array<Object>,
@@ -41,6 +48,8 @@ const ErrorsTable: Function = ({
   onCSVClick,
   onFilterChange,
   compact,
+  expanded,
+  handleExpandClick,
 }: Props): React.Element<Table> => (
   <EnhancedTable
     collection={errors}
@@ -82,12 +91,21 @@ const ErrorsTable: Function = ({
                   <Item title="INFO" />
                   <Item title="NONE" />
                 </Dropdown>
+                <ButtonGroup>
+                  <Button
+                    text={expanded ? 'Collapse texts' : 'Expand texts'}
+                    icon={expanded ? 'collapse-all' : 'expand-all'}
+                    btnStyle={expanded && 'primary'}
+                    big
+                    onClick={handleExpandClick}
+                  />
+                </ButtonGroup>
+              </Pull>
+              <Pull right>
                 <CsvControl
                   onClick={onCSVClick}
                   disabled={size(collection) === 0}
                 />
-              </Pull>
-              <Pull right>
                 <LoadMore
                   canLoadMore={canLoadMore}
                   onLoadMore={handleLoadMore}
@@ -128,8 +146,8 @@ const ErrorsTable: Function = ({
               </Th>
             )}
             <DescriptionColumnHeader name="info">Info</DescriptionColumnHeader>
-            {!compact && <DescriptionColumnHeader name="description" />}
-            <DateColumnHeader />
+            <DescriptionColumnHeader name="description" />
+            {!compact && <DateColumnHeader />}
           </FixedRow>
         </Thead>
         <DataOrEmptyTable
@@ -151,11 +169,15 @@ const ErrorsTable: Function = ({
                     {!compact && <Td className="medium">{error.error_type}</Td>}
                     {!compact && <Td className="medium">{error.retry}</Td>}
                     {!compact && <Td className="narrow">{error.ind}</Td>}
-                    <DescriptionColumn>{error.info}</DescriptionColumn>
-                    {!compact && (
-                      <DescriptionColumn>{error.description}</DescriptionColumn>
-                    )}
-                    <DateColumn>{error.created}</DateColumn>
+                    <DescriptionColumn expanded={expanded}>
+                      {error.info}
+                    </DescriptionColumn>
+
+                    <DescriptionColumn expanded={expanded}>
+                      {error.description}
+                    </DescriptionColumn>
+
+                    {!compact && <DateColumn>{error.created}</DateColumn>}
                   </Tr>
                 )
               )}
@@ -167,4 +189,16 @@ const ErrorsTable: Function = ({
   </EnhancedTable>
 );
 
-export default pure(['errors'])(ErrorsTable);
+export default compose(
+  withState('expanded', 'changeExpand', false),
+  withHandlers({
+    handleExpandClick: ({
+      changeExpand,
+    }: {
+      changeExpand: Function,
+    }): Function => (): void => {
+      changeExpand(expanded => !expanded);
+    },
+  }),
+  pure(['errors', 'expanded'])
+)(ErrorsTable);
