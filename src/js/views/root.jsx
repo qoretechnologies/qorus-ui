@@ -24,6 +24,7 @@ import Notifications from '../containers/notifications';
 import { Spinner, Classes, Icon, Intent } from '@blueprintjs/core';
 import qorusLogo from '../../img/qorus_engine_logo.png';
 import elementsLogo from '../../img/elements.png';
+import Flex from '../components/Flex';
 
 addLocaleData([...en, ...cs, ...de]);
 
@@ -284,7 +285,9 @@ export default class Root extends Component {
               toggleMenu={this.toggleMenu}
               isTablet={isTablet}
             />
-            <section>{this.props.children}</section>
+            <Flex className="section" scrollX>
+              <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
+            </Flex>
           </div>
           <Footer path={this.props.location.pathname} info={info.data} />
           <ModalManager ref={this.refModal} />
