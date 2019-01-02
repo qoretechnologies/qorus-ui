@@ -61,4 +61,4 @@ const ContentByType: Function = ({
   return <div className={className}>-</div>;
 };
 
-export default compose(onlyUpdateForKeys(['type']))(ContentByType);
+export default compose(onlyUpdateForKeys(['type', 'content']))(ContentByType);

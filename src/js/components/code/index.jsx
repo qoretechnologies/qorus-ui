@@ -71,7 +71,6 @@ const Code: Function = ({
                 <ReleasesTab
                   component={selected.item.name}
                   location={location}
-                  key={selected.item.name}
                   compact
                 />
               </Pane>
