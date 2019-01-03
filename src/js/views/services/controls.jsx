@@ -28,6 +28,7 @@ type Props = {
   id: number,
   remote: boolean,
   type: string,
+  big?: boolean,
 };
 
 const ServiceControls: Function = ({
@@ -41,6 +42,7 @@ const ServiceControls: Function = ({
   autostart,
   type,
   remote,
+  big,
 }: Props): React.Element<any> => (
   <ButtonGroup>
     <Button
@@ -48,18 +50,21 @@ const ServiceControls: Function = ({
       iconName="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
+      big={big}
     />
     <Button
       title={autostart ? 'Disable autostart' : 'Enable autostart'}
       iconName={autostart ? 'pause' : 'play'}
       intent={autostart ? Intent.PRIMARY : Intent.NONE}
       onClick={handleAutostartClick}
+      big={big}
     />
     <Button
       title={loaded ? 'Unload' : 'Load'}
       iconName={loaded ? 'small-tick' : 'cross'}
       intent={loaded ? Intent.PRIMARY : Intent.NONE}
       onClick={handleLoadClick}
+      big={big}
     />
     <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
     <Button
@@ -68,6 +73,7 @@ const ServiceControls: Function = ({
       intent={remote ? Intent.PRIMARY : Intent.NONE}
       onClick={handleRemoteClick}
       disabled={type === 'system'}
+      big={big}
     />
   </ButtonGroup>
 );

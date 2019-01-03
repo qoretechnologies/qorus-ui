@@ -12,20 +12,20 @@ import {
   Tbody,
   Th,
   FixedRow,
-} from '../../../../../components/new_table';
-import Search from '../../../../../containers/search';
-import sync from '../../../../../hocomponents/sync';
-import actions from '../../../../../store/api/actions';
-import { resourceSelector } from '../../../../../selectors';
+} from '../../../../components/new_table';
+import Search from '../../../../containers/search';
+import sync from '../../../../hocomponents/sync';
+import actions from '../../../../store/api/actions';
+import { resourceSelector } from '../../../../selectors';
 import SLARow from './row';
-import { NameColumnHeader } from '../../../../../components/NameColumn';
-import LoadMore from '../../../../../components/LoadMore';
-import EnhancedTable from '../../../../../components/EnhancedTable';
-import type { EnhancedTableProps } from '../../../../../components/EnhancedTable';
-import { sortDefaults } from '../../../../../constants/sort';
-import { ActionColumnHeader } from '../../../../../components/ActionColumn';
-import Pull from '../../../../../components/Pull';
-import DataOrEmptyTable from '../../../../../components/DataOrEmptyTable';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import LoadMore from '../../../../components/LoadMore';
+import EnhancedTable from '../../../../components/EnhancedTable';
+import type { EnhancedTableProps } from '../../../../components/EnhancedTable';
+import { sortDefaults } from '../../../../constants/sort';
+import { ActionColumnHeader } from '../../../../components/ActionColumn';
+import Pull from '../../../../components/Pull';
+import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 
 type Props = {
   methods: Array<Object>,

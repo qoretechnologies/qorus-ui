@@ -15,7 +15,7 @@ import withCSV from '../../hocomponents/csv';
 import unsync from '../../hocomponents/unsync';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import selectable from '../../hocomponents/selectable';
-import ServicesDetail from './detail';
+import ServicesDetail from './pane';
 import ServicesTable from './table';
 import withSort from '../../hocomponents/sort';
 import loadMore from '../../hocomponents/loadMore';

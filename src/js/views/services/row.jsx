@@ -6,8 +6,6 @@ import withHandlers from 'recompose/withHandlers';
 import classnames from 'classnames';
 
 import { Tr, Td } from '../../components/new_table';
-import Text from '../../components/text';
-import Checkbox from '../../components/checkbox';
 import ServiceControls from './controls';
 import withDispatch from '../../hocomponents/withDispatch';
 import { Icon } from '@blueprintjs/core';
@@ -70,6 +68,7 @@ const ServiceRow: Function = ({
     onHighlightEnd={handleHighlightEnd}
     className={classnames({
       'row-selected': _selected,
+      'row-alert': hasAlerts,
       'row-active': isActive,
     })}
     onClick={handleCheckboxClick}
@@ -81,6 +80,7 @@ const ServiceRow: Function = ({
       hasAlerts={hasAlerts}
       isActive={isActive}
       onDetailClick={handleDetailClick}
+      link={`/service/${id}`}
       type="service"
     />
     <ActionColumn className="big">
@@ -93,7 +93,7 @@ const ServiceRow: Function = ({
         type={type}
       />
     </ActionColumn>
-    <Td className="narrow">
+    <Td className="medium">
       <Icon
         iconName={type === 'system' ? 'cog' : 'user'}
         title={type === 'system' ? 'System' : 'User'}

@@ -81,8 +81,16 @@ const setOptions = {
 
 const fetchLibSources = {
   next(state = initialState, action) {
+    const service: Object = state.data.find(
+      (datum: Object) => datum.id === parseInt(action.meta.serviceId, 10)
+    );
+
     return Object.assign({}, state, {
-      data: updateItemWithId(action.meta.serviceId, action.payload, state.data),
+      data: !service
+        ? [...state.data, action.payload]
+        : updateItemWithId(action.meta.serviceId, action.payload, state.data),
+      sync: true,
+      loading: false,
     });
   },
   throw(state = initialState, action) {

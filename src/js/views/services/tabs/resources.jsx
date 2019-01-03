@@ -11,10 +11,10 @@ import {
   Th,
   Td,
   FixedRow,
-} from '../../../../components/new_table';
-import Text from '../../../../components/text';
-import Tabs, { Pane } from '../../../../components/tabs';
-import NoDataIf from '../../../../components/NoDataIf';
+} from '../../../components/new_table';
+import Text from '../../../components/text';
+import Tabs, { Pane } from '../../../components/tabs';
+import NoDataIf from '../../../components/NoDataIf';
 
 type Props = {
   resources: Object,
@@ -44,7 +44,7 @@ const ResourceTable: Function = ({
                   <Tr
                     key={key}
                     first={key === 0}
-                    observeElement={key === 0 && '.pane'}
+                    observeElement={key === 0 ? '.pane' : undefined}
                   >
                     <Td className="name">
                       <Text text={resource} />
@@ -89,7 +89,7 @@ const ResourceTable: Function = ({
                   <Tr
                     key={key}
                     first={key === 0}
-                    observeElement={key === 0 && '.pane'}
+                    observeElement={key === 0 ? '.pane' : undefined}
                   >
                     <Td className="name">
                       <Text text={name} />

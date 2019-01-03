@@ -73,10 +73,21 @@ export function createResourceReducers(
                 });
               }
 
-              return assignIn({}, state, {
-                data: updateItemWithId(action.meta.id, data, state.data),
-                sync: true,
-              });
+              const item = state.data.find(
+                (datum: Object) => datum.id === parseInt(action.meta.id, 10)
+              );
+
+              if (item) {
+                return assignIn({}, state, {
+                  data: updateItemWithId(action.meta.id, data, state.data),
+                  sync: true,
+                });
+              } else {
+                return assignIn({}, state, {
+                  data: [...state.data, data],
+                  sync: true,
+                });
+              }
             }
 
             if (action.meta.ids) {

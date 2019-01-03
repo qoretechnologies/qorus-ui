@@ -1,16 +1,17 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { Groups, Group } from 'components/groups';
-import Options from '../../../../components/options';
-import actions from 'store/api/actions';
-import AlertsTable from '../../../../components/alerts_table';
-import PaneItem from '../../../../components/pane_item';
-import ServicesControls from '../../controls';
-import ProcessSummary from '../../../../components/ProcessSummary';
-import InfoHeader from '../../../../components/InfoHeader';
-import Flex from '../../../../components/Flex';
-import Box from '../../../../components/box';
+import { Groups, Group } from '../../../components/groups';
+import Options from '../../../components/options';
+import actions from '../../../store/api/actions';
+import AlertsTable from '../../../components/alerts_table';
+import PaneItem from '../../../components/pane_item';
+import ServicesControls from '../controls';
+import ProcessSummary from '../../../components/ProcessSummary';
+import InfoHeader from '../../../components/InfoHeader';
+import Flex from '../../../components/Flex';
+import Box from '../../../components/box';
 
 @connect(
   () => ({}),
@@ -23,13 +24,13 @@ export default class DetailTab extends Component {
     setOptions: PropTypes.func.isRequired,
   };
 
-  setOption(opt) {
+  setOption = (opt: any) => {
     this.props.setOptions(this.props.service, opt.name, opt.value);
-  }
+  };
 
-  deleteOption(opt) {
+  deleteOption = (opt: any) => {
     this.setOption(Object.assign({}, opt, { value: '' }));
-  }
+  };
 
   render() {
     const { service } = this.props;
@@ -49,7 +50,7 @@ export default class DetailTab extends Component {
             />
           </PaneItem>
           <AlertsTable alerts={service.alerts} />
-          <ProcessSummary process={service.process} />
+          <ProcessSummary model={service} />
           <Groups>
             {(service.groups || []).map(g => (
               <Group
@@ -64,8 +65,8 @@ export default class DetailTab extends Component {
           <Options
             model={service}
             systemOptions={this.props.systemOptions}
-            onSet={::this.setOption}
-            onDelete={::this.deleteOption}
+            onSet={this.setOption}
+            onDelete={this.deleteOption}
           />
         </Flex>
       </Box>

@@ -1,21 +1,18 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 import yaml from 'js-yaml';
 import { connect } from 'react-redux';
 
-import Modal from '../../../../../components/modal';
-import Alert from '../../../../../components/alert';
-import Box from '../../../../../components/box';
-import PaneItem from '../../../../../components/pane_item';
-import settings from '../../../../../settings';
-import {
-  fetchJson,
-  fetchWithNotifications,
-} from '../../../../../store/api/utils';
+import Modal from '../../../../components/modal';
+import Box from '../../../../components/box';
+import PaneItem from '../../../../components/pane_item';
+import settings from '../../../../settings';
+import { fetchJson, fetchWithNotifications } from '../../../../store/api/utils';
 import {
   Controls as ButtonGroup,
   Control as Button,
-} from '../../../../../components/controls';
-import Dropdown, { Item, Control } from '../../../../../components/dropdown';
+} from '../../../../components/controls';
+import Dropdown, { Item, Control } from '../../../../components/dropdown';
 
 @connect()
 export default class ModalRun extends Component {

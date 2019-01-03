@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import MethodsTable from './table';
-import Box from '../../../../../components/box';
+import Box from '../../../../components/box';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 type Props = {

@@ -9,16 +9,20 @@ import settings from '../../settings';
 import { warning } from '../ui/bubbles/actions';
 import { processRESTResponse } from './resources/utils';
 
-export function updateItemWithId(id, props, data, idkey = 'id') {
-  const parsedId = parseFloat(id, 10) || id;
-  const idx = data.findIndex(i => i[idkey] === parsedId);
-  const updatedItem = Object.assign({}, data[idx], props);
+export const updateItemWithId: Function = (
+  id: string | number,
+  props: Object,
+  data: Array<Object>,
+  idkey: string = 'id'
+) =>
+  data.reduce((newData: Array<Object>, datum: Object): Array<Object> => {
+    // eslint-disable-next-line
+    if (datum[idkey] == id) {
+      return [...newData, { ...datum, ...props }];
+    }
 
-  return data
-    .slice(0, idx)
-    .concat([updatedItem])
-    .concat(data.slice(idx + 1));
-}
+    return [...newData, datum];
+  }, []);
 
 export function updateItemWithName(name, props, data, nameKey = 'name') {
   const idx = data.findIndex(i => i[nameKey] === name);
