@@ -1,7 +1,7 @@
-// components
+// @flow
 import React from 'react';
-import Modal from 'components/modal';
-import SourceCode from 'components/source_code';
+import Modal from '../../../../components/modal';
+import SourceCode from '../../../../components/source_code';
 import pure from 'recompose/pure';
 
 type Props = {

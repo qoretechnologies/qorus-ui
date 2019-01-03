@@ -5,22 +5,18 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 
-import { Tr, Td } from '../../../../../components/new_table';
-import Autocomponent from '../../../../../components/autocomponent';
-import {
-  Controls,
-  Control as Button,
-} from '../../../../../components/controls';
-import SLAControl from '../../../../../components/sla_control';
-import withModal from '../../../../../hocomponents/modal';
+import { Tr, Td } from '../../../../components/new_table';
+import { Controls, Control as Button } from '../../../../components/controls';
+import SLAControl from '../../../../components/sla_control';
+import withModal from '../../../../hocomponents/modal';
 import ModalRun from './modal_run';
 import ModalCode from './modal_code';
-import { hasPermission } from '../../../../../helpers/user';
-import actions from '../../../../../store/api/actions';
-import withDispatch from '../../../../../hocomponents/withDispatch';
-import NameColumn from '../../../../../components/NameColumn';
-import { ActionColumn } from '../../../../../components/ActionColumn';
-import ContentByType from '../../../../../components/ContentByType';
+import { hasPermission } from '../../../../helpers/user';
+import actions from '../../../../store/api/actions';
+import withDispatch from '../../../../hocomponents/withDispatch';
+import NameColumn from '../../../../components/NameColumn';
+import { ActionColumn } from '../../../../components/ActionColumn';
+import ContentByType from '../../../../components/ContentByType';
 
 type Props = {
   method: Object,
