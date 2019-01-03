@@ -36,6 +36,6 @@ const InterfaceTag: Function = ({
   </Flex>
 );
 
-export default compose(onlyUpdateForKeys(['title', 'link', 'type']))(
-  InterfaceTag
-);
+export default compose(
+  onlyUpdateForKeys(['title', 'link', 'type', 'className'])
+)(InterfaceTag);
