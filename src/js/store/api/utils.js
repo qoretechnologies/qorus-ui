@@ -16,7 +16,8 @@ export const updateItemWithId: Function = (
   idkey: string = 'id'
 ) =>
   data.reduce((newData: Array<Object>, datum: Object): Array<Object> => {
-    if (datum[idkey] === id) {
+    // eslint-disable-next-line
+    if (datum[idkey] == id) {
       return [...newData, { ...datum, ...props }];
     }
 
