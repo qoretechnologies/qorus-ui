@@ -93,7 +93,7 @@ const ServiceRow: Function = ({
         type={type}
       />
     </ActionColumn>
-    <Td className="narrow">
+    <Td className="medium">
       <Icon
         iconName={type === 'system' ? 'cog' : 'user'}
         title={type === 'system' ? 'System' : 'User'}
