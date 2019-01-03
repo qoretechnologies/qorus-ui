@@ -10,9 +10,7 @@ import { Tooltip, Position, Icon } from '@blueprintjs/core';
 import { Tr, Td } from '../../components/new_table';
 import Box from '../../components/box';
 import PaneItem from '../../components/pane_item';
-import Checkbox from '../../components/checkbox';
 import WorkflowControls from './controls';
-
 import AutoStart from './autostart';
 import { ORDER_STATES_ARRAY } from '../../constants/orders';
 import InstancesBar from '../../components/instances_bar';
@@ -111,7 +109,7 @@ const TableRow: Function = ({
               <InstancesChart width={400} states={states} instances={rest} />
             </PaneItem>
           )}
-          <ProcessSummary process={rest.process} />
+          <ProcessSummary model={{ enabled, remote, ...rest }} />
         </Box>
       }
       link={`/workflow/${id}?date=${date}`}

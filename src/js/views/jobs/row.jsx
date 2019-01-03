@@ -102,7 +102,7 @@ const ServiceRow: Function = ({
       popoverContent={
         <Box top>
           <PaneItem title={normalizedName}>{rest.description}</PaneItem>
-          <ProcessSummary process={rest.process} />
+          <ProcessSummary model={{ enabled, remote, ...rest }} />
         </Box>
       }
       link={`/job/${id}?date=${date}`}
