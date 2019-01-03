@@ -225,7 +225,7 @@ export default class DetailTab extends Component {
             </PaneItem>
           )}
           <AlertsTab alerts={workflow.alerts} />
-          <ProcessSummary process={workflow.process} />
+          <ProcessSummary model={workflow} />
           <PaneItem title="Instances">
             <NoDataIf condition={workflow.TOTAL === 0}>
               {() => (

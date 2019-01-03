@@ -49,7 +49,7 @@ export default class DetailTab extends Component {
             />
           </PaneItem>
           <AlertsTable alerts={service.alerts} />
-          <ProcessSummary process={service.process} />
+          <ProcessSummary model={service} />
           <Groups>
             {(service.groups || []).map(g => (
               <Group

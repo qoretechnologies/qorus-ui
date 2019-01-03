@@ -81,7 +81,7 @@ const DetailTab = ({
           type="job"
         />
       </PaneItem>
-      <ProcessSummary process={model.process} />
+      <ProcessSummary model={model} />
       <AlertsTable alerts={model.alerts} />
       <Groups>
         {(model.groups || []).map(g => (
