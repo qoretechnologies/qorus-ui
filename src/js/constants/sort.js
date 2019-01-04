@@ -208,24 +208,19 @@ export const sortKeys = {
     ['Waiting Threads']: 'waiting_threads',
   },
   jobs: {
+    Active: 'active',
     Author: 'author',
-    Autostart: 'autostart',
+    ['Class Based']: 'class_based',
     Created: 'created',
-    Deprecated: 'deprecated',
+    Description: 'description',
+    ['DB Active']: 'db_active',
     Enabled: 'enabled',
-    ['Exec Count']: 'exec_count',
+    ['Expiry Date']: 'expiry_date',
+    Host: 'host',
+    Open: 'open',
     Modified: 'modified',
     Name: 'name',
     Remote: 'remote',
-    ['SLA Threshold']: 'sla_threshold',
     Version: 'version',
-    ID: 'id',
-    ...ORDER_STATES_ARRAY.reduce(
-      (states: Object, state: string): Object => ({
-        ...states,
-        [state]: state,
-      }),
-      {}
-    ),
   },
 };
