@@ -189,4 +189,43 @@ export const sortKeys = {
       {}
     ),
   },
+  services: {
+    ['Active Calls']: 'active_calls',
+    Author: 'author',
+    Autostart: 'autostart',
+    Config: 'config',
+    Description: 'desc',
+    Enabled: 'enabled',
+    Loaded: 'loaded',
+    ['Manual Autostart']: 'manual_autostart',
+    Name: 'name',
+    Remote: 'remote',
+    ID: 'id',
+    Status: 'status',
+    Threads: 'threads',
+    Type: 'type',
+    Version: 'version',
+    ['Waiting Threads']: 'waiting_threads',
+  },
+  jobs: {
+    Author: 'author',
+    Autostart: 'autostart',
+    Created: 'created',
+    Deprecated: 'deprecated',
+    Enabled: 'enabled',
+    ['Exec Count']: 'exec_count',
+    Modified: 'modified',
+    Name: 'name',
+    Remote: 'remote',
+    ['SLA Threshold']: 'sla_threshold',
+    Version: 'version',
+    ID: 'id',
+    ...ORDER_STATES_ARRAY.reduce(
+      (states: Object, state: string): Object => ({
+        ...states,
+        [state]: state,
+      }),
+      {}
+    ),
+  },
 };

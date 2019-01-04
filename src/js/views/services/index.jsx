@@ -32,6 +32,7 @@ import Flex from '../../components/Flex';
 
 type Props = {
   sortData: Object,
+  sortKeysObj: Object,
   onSortChange: Function,
   onCSVClick: Function,
   selected: string,
@@ -67,6 +68,7 @@ const Services: Function = ({
   searchQuery,
   changeSearchQuery,
   limit,
+  sortKeysObj,
 }: Props): React.Element<any> => (
   <Flex>
     <Headbar>
@@ -97,6 +99,7 @@ const Services: Function = ({
         handleLoadMore={handleLoadMore}
         handleLoadAll={handleLoadAll}
         limit={limit}
+        sortKeys={sortKeysObj}
       />
     </Box>
   </Flex>

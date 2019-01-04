@@ -6,7 +6,6 @@ import withHandlers from 'recompose/withHandlers';
 import classnames from 'classnames';
 
 import { Tr, Td } from '../../components/new_table';
-import Checkbox from '../../components/checkbox';
 import Date from '../../components/date';
 import JobControls from './controls';
 import InstancesBar from '../../components/instances_bar';

@@ -5,7 +5,6 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 import size from 'lodash/size';
 
-import checkData from '../../hocomponents/check-no-data';
 import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
 import Row from './row';
@@ -14,12 +13,12 @@ import Selector from './toolbar/selector';
 import Actions from './toolbar/actions';
 import LoadMore from '../../components/LoadMore';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
-import { Icon } from '@blueprintjs/core';
 import { NameColumnHeader } from '../../components/NameColumn';
 import { SelectColumnHeader } from '../../components/SelectColumn';
 import { IdColumnHeader } from '../../components/IdColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
 import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
+import SortingDropdown from '../../components/SortingDropdown';
 
 type Props = {
   sortData: Object,
@@ -36,6 +35,7 @@ type Props = {
   handleLoadMore: Function,
   handleLoadAll: Function,
   limit: number,
+  sortKeys: Object,
 };
 
 const ServicesTable: Function = ({
@@ -53,6 +53,7 @@ const ServicesTable: Function = ({
   handleLoadMore,
   handleLoadAll,
   limit,
+  sortKeys,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -72,6 +73,11 @@ const ServicesTable: Function = ({
               disabled={size(collection) === 0}
             />
             <Actions selectedIds={selectedIds} show={selected !== 'none'} />
+            <SortingDropdown
+              onSortChange={onSortChange}
+              sortData={sortData}
+              sortKeys={sortKeys}
+            />
           </Pull>
           <Pull right>
             <LoadMore
