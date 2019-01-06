@@ -11,6 +11,10 @@ import {
   selectAlerts,
 } from '../../../../helpers/resources';
 import { DEFAULTS } from '.';
+import {
+  processStartedReducer,
+  processStoppedReducer,
+} from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
 
@@ -155,6 +159,9 @@ const setExecCount = {
     return state;
   },
 };
+
+const processStarted = processStartedReducer;
+const processStopped = processStoppedReducer;
 
 const setEnabled = {
   next(
@@ -409,9 +416,7 @@ const fixOrders = {
 
         // * Count the values of the old statuses to be added to the new status
         const oldStatusCount: number = dt.old.reduce(
-          (cur: number, status: string): number => {
-            return cur + workflow[status];
-          },
+          (cur: number, status: string): number => cur + workflow[status],
           0
         );
 
@@ -716,4 +721,6 @@ export {
   setRemote as SETREMOTE,
   fixOrders as FIXORDERS,
   updateConfigItemWs as UPDATECONFIGITEMWS,
+  processStarted as PROCESSSTARTED,
+  processStopped as PROCESSSTOPPED,
 };

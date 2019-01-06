@@ -90,6 +90,12 @@ const updateStats = createAction('WORKFLOWS_UPDATESTATS', events => ({
   events,
 }));
 
+const processStarted = createAction('WORKFLOWS_PROCESSSTARTED', events => ({
+  events,
+}));
+const processStopped = createAction('WORKFLOWS_PROCESSSTOPPED', events => ({
+  events,
+}));
 const processMemoryChanged = createAction(
   'WORKFLOWS_PROCESSMEMORYCHANGED',
   events => ({ events })
@@ -282,6 +288,8 @@ export {
   fetchList,
   addNew,
   processMemoryChanged,
+  processStarted,
+  processStopped,
   updateStats,
   setThreshold,
   setRemote,
