@@ -132,7 +132,7 @@ export default class ServicesDetail extends Component {
       >
         <ServiceTabs
           service={service}
-          configItem={configItems}
+          configItems={configItems}
           activeTab={paneTab}
           methods={methods}
           location={location}
