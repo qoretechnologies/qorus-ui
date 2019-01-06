@@ -14,15 +14,16 @@ import Actions from './toolbar/actions';
 import LoadMore from '../../components/LoadMore';
 import queryControl from '../../hocomponents/queryControl';
 import DatePicker from '../../components/datepicker';
-import { Icon } from '@blueprintjs/core';
 import { NameColumnHeader } from '../../components/NameColumn';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import { IdColumnHeader } from '../../components/IdColumn';
 import { SelectColumnHeader } from '../../components/SelectColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
+import SortingDropdown from '../../components/SortingDropdown';
 
 type Props = {
   sortData: Object,
+  sortKeys: Object,
   onSortChange: Function,
   collection: Array<Object>,
   paneId?: number,
@@ -44,6 +45,7 @@ type Props = {
 
 const JobsTable: Function = ({
   sortData,
+  sortKeys,
   onSortChange,
   collection,
   paneId,
@@ -73,6 +75,11 @@ const JobsTable: Function = ({
               disabled={size(collection) === 0}
             />
             <Actions selectedIds={selectedIds} show={selected !== 'none'} />
+            <SortingDropdown
+              onSortChange={onSortChange}
+              sortData={sortData}
+              sortKeys={sortKeys}
+            />
           </Pull>
           <Pull right>
             <LoadMore

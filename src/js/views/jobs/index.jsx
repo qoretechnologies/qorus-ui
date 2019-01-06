@@ -61,6 +61,7 @@ type Props = {
   user: Object,
   searchQuery: string,
   changeSearchQuery: Function,
+  sortKeysObj: Object,
 };
 
 const JobsView: Function = ({
@@ -81,6 +82,7 @@ const JobsView: Function = ({
   isTablet,
   searchQuery,
   changeSearchQuery,
+  sortKeysObj,
 }: Props): React.Element<any> => (
   <Flex>
     <Headbar>
@@ -112,6 +114,7 @@ const JobsView: Function = ({
         handleLoadMore={handleLoadMore}
         selected={selected}
         selectedIds={selectedIds}
+        sortKeys={sortKeysObj}
       />
     </Box>
   </Flex>
