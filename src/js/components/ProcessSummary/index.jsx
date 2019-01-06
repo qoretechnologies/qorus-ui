@@ -42,7 +42,7 @@ const ProcessSummary: Function = ({
         return (
           <PaneItem title="Process summary">
             <Alert title="Process not running" bsStyle="warning">
-              Autostart is zero; to start the workflow automatically, set a
+              Autostart is zero to start the workflow automatically, set a
               positive autostart value
             </Alert>
           </PaneItem>
