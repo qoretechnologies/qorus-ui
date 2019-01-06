@@ -11,20 +11,45 @@ type Props = {
 };
 
 const ProcessSummary: Function = ({
-  model: { enabled, process, remote },
+  model: { enabled, process: prcs, remote, autostart },
 }: Props): React.Element<PaneItem> => {
   if (enabled) {
     if (remote) {
-      if (process) {
+      if (prcs) {
         return (
           <PaneItem title="Process summary">
-            <Tag> Node: {process.node}</Tag> <Tag> PID: {process.pid}</Tag>{' '}
-            <Tag> Status: {process.status}</Tag>{' '}
-            <Tag> Memory: {process.priv_str}</Tag>{' '}
+            <Tag> Node: {prcs.node}</Tag> <Tag> PID: {prcs.pid}</Tag>{' '}
+            <Tag> Status: {prcs.status}</Tag>{' '}
+            <Tag> Memory: {prcs.priv_str}</Tag>{' '}
           </PaneItem>
         );
       }
 
+      // Service not running
+      if (autostart === false) {
+        return (
+          <PaneItem title="Process summary">
+            <Alert title="Process not running" bsStyle="warning">
+              Autostart is disabled; to start the service automatically, set
+              autostart to true
+            </Alert>
+          </PaneItem>
+        );
+      }
+
+      // Workflow not running
+      if (autostart === 0) {
+        return (
+          <PaneItem title="Process summary">
+            <Alert title="Process not running" bsStyle="warning">
+              Autostart is zero; to start the workflow automatically, set a
+              positive autostart value
+            </Alert>
+          </PaneItem>
+        );
+      }
+
+      // Autostart is non-existent or has positive value
       return (
         <PaneItem title="Process summary">
           <Alert title="Process not running" bsStyle="warning">
