@@ -302,6 +302,14 @@ const updateConfigItemWs = createAction('JOBS_UPDATECONFIGITEMWS', events => ({
   events,
 }));
 
+const processStarted = createAction('JOBS_PROCESSSTARTED', events => ({
+  events,
+}));
+
+const processStopped = createAction('JOBS_PROCESSSTOPPED', events => ({
+  events,
+}));
+
 const selectAll = createAction('JOBS_SELECTALL');
 const selectNone = createAction('JOBS_SELECTNONE');
 const selectInvert = createAction('JOBS_SELECTINVERT');
@@ -339,4 +347,6 @@ export {
   setRemote,
   updateConfigItem,
   updateConfigItemWs,
+  processStarted,
+  processStopped,
 };

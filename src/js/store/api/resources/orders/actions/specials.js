@@ -9,7 +9,6 @@ import {
   post,
 } from '../../../utils';
 import settings from '../../../../../settings';
-import { error } from '../../../../ui/bubbles/actions';
 
 const fetchOrders = createAction(
   'ORDERS_FETCHORDERS',
@@ -355,7 +354,7 @@ const updateSensitiveData: Function = createAction(
 
 const fetchYamlAction: Function = createAction(
   'ORDERS_FETCHYAMLACTION',
-  async (type: string, id: number, dispatch: Function): Object => {
+  async (type: string, id: number): Object => {
     const result: Object = await fetchYaml(
       'GET',
       `${settings.REST_BASE_URL}/orders/${id}?action=yaml${type}Data`,
@@ -364,10 +363,6 @@ const fetchYamlAction: Function = createAction(
       true,
       true
     );
-
-    if (result.err) {
-      dispatch(error(result.desc));
-    }
 
     return {
       type,

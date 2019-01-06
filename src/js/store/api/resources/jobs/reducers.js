@@ -10,6 +10,10 @@ import {
   selectInvert,
   selectAlerts,
 } from '../../../../helpers/resources';
+import {
+  processStartedReducer,
+  processStoppedReducer,
+} from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
 
@@ -692,6 +696,9 @@ const updateConfigItemWs = {
   },
 };
 
+const processStarted = processStartedReducer;
+const processStopped = processStoppedReducer;
+
 export {
   setOptions as SETOPTIONS,
   fetchLibSources as FETCHLIBSOURCES,
@@ -722,4 +729,6 @@ export {
   removeSLAJob as REMOVESLAJOB,
   setRemote as SETREMOTE,
   updateConfigItemWs as UPDATECONFIGITEMWS,
+  processStarted as PROCESSSTARTED,
+  processStopped as PROCESSSTOPPED,
 };

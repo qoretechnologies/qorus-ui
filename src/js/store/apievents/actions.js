@@ -1,3 +1,4 @@
+// @flow
 import { createAction } from 'redux-actions';
 import startsWith from 'lodash/startsWith';
 import { browserHistory } from 'react-router';
@@ -15,9 +16,21 @@ import * as health from '../api/resources/health/actions';
 import { notifications } from '../ui/actions';
 import { pipeline } from '../../helpers/apievents';
 import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
+import {
+  getProcessObjectType,
+  getProcessObjectInterfaceId,
+} from '../../helpers/system';
 
 const handleEvent = (url, data, dispatch, state) => {
   const dt = JSON.parse(data);
+  const isInterfaceLoaded: Function = (
+    interfaceType: string,
+    id: number
+  ): boolean =>
+    state.api[interfaceType].sync &&
+    state.api[interfaceType].data.find(
+      (item: Object) => item.id === parseFloat(id, 10)
+    );
 
   dt.forEach(d => {
     const { info, eventstr } = d;
@@ -54,21 +67,111 @@ const handleEvent = (url, data, dispatch, state) => {
           }
         }
         break;
-      case 'PROCESS_STARTED':
+      case 'PROCESS_STARTED': {
         if (state.api.system.sync) {
           pipeline(eventstr, system.addProcess, info, dispatch);
         }
+
+        const iType = getProcessObjectType(info);
+
+        if (iType === 'workflow') {
+          if (
+            isInterfaceLoaded(
+              'workflows',
+              info[getProcessObjectInterfaceId(info)]
+            )
+          ) {
+            pipeline(
+              eventstr,
+              workflows.processStarted,
+              { id: info[getProcessObjectInterfaceId(info)], info },
+              dispatch
+            );
+          }
+        } else if (iType === 'service') {
+          if (
+            isInterfaceLoaded(
+              'services',
+              info[getProcessObjectInterfaceId(info)]
+            )
+          ) {
+            pipeline(
+              eventstr,
+              services.processStarted,
+              { id: info[getProcessObjectInterfaceId(info)], info },
+              dispatch
+            );
+          }
+        } else if (iType === 'job') {
+          if (
+            isInterfaceLoaded('jobs', info[getProcessObjectInterfaceId(info)])
+          ) {
+            pipeline(
+              eventstr,
+              jobs.processStarted,
+              { id: info[getProcessObjectInterfaceId(info)], info },
+              dispatch
+            );
+          }
+        }
+
         break;
+      }
       case 'PROCESS_MEMORY_CHANGED':
         if (state.api.system.sync) {
           pipeline(eventstr, system.processMemoryChanged, info, dispatch);
         }
         break;
-      case 'PROCESS_STOPPED':
+      case 'PROCESS_STOPPED': {
         if (state.api.system.sync) {
           pipeline(eventstr, system.removeProcess, info, dispatch);
         }
+
+        const iType = getProcessObjectType(info);
+
+        if (iType === 'workflow') {
+          if (
+            isInterfaceLoaded(
+              'workflows',
+              info[getProcessObjectInterfaceId(info)]
+            )
+          ) {
+            pipeline(
+              eventstr,
+              workflows.processStopped,
+              { id: info[getProcessObjectInterfaceId(info)] },
+              dispatch
+            );
+          }
+        } else if (iType === 'service') {
+          if (
+            isInterfaceLoaded(
+              'services',
+              info[getProcessObjectInterfaceId(info)]
+            )
+          ) {
+            pipeline(
+              eventstr,
+              services.processStopped,
+              { id: info[getProcessObjectInterfaceId(info)] },
+              dispatch
+            );
+          }
+        } else if (iType === 'job') {
+          if (
+            isInterfaceLoaded('jobs', info[getProcessObjectInterfaceId(info)])
+          ) {
+            pipeline(
+              eventstr,
+              jobs.processStopped,
+              { id: info[getProcessObjectInterfaceId(info)] },
+              dispatch
+            );
+          }
+        }
+
         break;
+      }
       case 'ALERT_ONGOING_RAISED':
         switch (info.type) {
           case 'WORKFLOW':
@@ -810,7 +913,10 @@ const handleEvent = (url, data, dispatch, state) => {
 
 const messageAction = createAction('APIEVENTS_MESSAGE', handleEvent);
 
-const message = (url, data) => (dispatch, getState) => {
+const message = (url: string, data: Object) => (
+  dispatch: Function,
+  getState: Function
+) => {
   dispatch(messageAction(url, data, dispatch, getState()));
 };
 

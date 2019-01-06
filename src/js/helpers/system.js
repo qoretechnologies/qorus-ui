@@ -112,23 +112,23 @@ const typeToString: Function = (val: any): any => {
   return val;
 };
 
-const getProcessObjectLink: Function = (process: Object) => {
-  switch (process.type) {
+const getProcessObjectLink: Function = (prcs: Object) => {
+  switch (prcs.type) {
     case 'qdsp':
-      return `/system/remote?paneId=${process.client_id}`;
+      return `/system/remote?paneId=${prcs.client_id}`;
     case 'qwf':
-      return `/workflows?paneId=${process.wfid}&paneTab=detail`;
+      return `/workflows?paneId=${prcs.wfid}&paneTab=detail`;
     case 'qsvc':
-      return `/services?paneId=${process.svcid}&paneTab=detail`;
+      return `/services?paneId=${prcs.svcid}&paneTab=detail`;
     case 'qjob':
-      return `/jobs?paneId=${process.jobid}&paneTab=detail`;
+      return `/jobs?paneId=${prcs.jobid}&paneTab=detail`;
     default:
       return null;
   }
 };
 
-const getProcessObjectType: Function = (process: Object) => {
-  switch (process.type) {
+const getProcessObjectType: Function = (prcs: Object) => {
+  switch (prcs.type) {
     case 'qdsp':
       return 'remote';
     case 'qwf':
@@ -137,6 +137,21 @@ const getProcessObjectType: Function = (process: Object) => {
       return 'service';
     case 'qjob':
       return 'job';
+    default:
+      return null;
+  }
+};
+
+const getProcessObjectInterfaceId: Function = (prcs: Object) => {
+  switch (prcs.type) {
+    case 'qdsp':
+      return 'client_id';
+    case 'qwf':
+      return 'wfid';
+    case 'qsvc':
+      return 'svcid';
+    case 'qjob':
+      return 'jobid';
     default:
       return null;
   }
@@ -177,6 +192,7 @@ export {
   typeToString,
   getProcessObjectLink,
   getProcessObjectType,
+  getProcessObjectInterfaceId,
   calculateMemory,
   getSlicedRemotes,
 };

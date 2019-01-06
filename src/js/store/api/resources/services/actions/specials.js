@@ -3,7 +3,6 @@ import isArray from 'lodash/isArray';
 
 import { fetchJson, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
-import { error } from '../../../../ui/bubbles/actions';
 import { updateConfigItemAction } from '../../../common/actions';
 
 function setOptionsPayload(service, name, value) {
@@ -183,6 +182,13 @@ const updateConfigItemWs = createAction(
   events => ({ events })
 );
 
+const processStarted = createAction('SERVICES_PROCESSSTARTED', events => ({
+  events,
+}));
+const processStopped = createAction('SERVICES_PROCESSSTOPPED', events => ({
+  events,
+}));
+
 const unsync = createAction('SERVICES_UNSYNC');
 
 export {
@@ -208,4 +214,6 @@ export {
   setRemote,
   updateConfigItem,
   updateConfigItemWs,
+  processStarted,
+  processStopped,
 };
