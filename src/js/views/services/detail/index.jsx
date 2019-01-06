@@ -91,7 +91,7 @@ const ServicesDetail: Function = ({
     </Headbar>
     <ServiceTabs
       service={service}
-      configItem={configItems}
+      configItems={configItems}
       methods={methods}
       location={location}
       codeData={data}

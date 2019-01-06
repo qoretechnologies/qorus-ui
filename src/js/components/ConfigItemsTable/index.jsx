@@ -22,7 +22,6 @@ import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
 import ExpandableItem from '../ExpandableItem';
 import DatePicker from '../datepicker';
-import Flex from '../Flex';
 import NoDataIf from '../NoDataIf';
 import LoadMore from '../LoadMore';
 import Search from '../../containers/search';
