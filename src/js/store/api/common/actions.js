@@ -23,7 +23,12 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
           await put(
             `${settings.REST_BASE_URL}/${
               intfcToApiPath[intfc]
-            }/${id}/config/${configItemName}?value=${newValue}`
+            }/${id}/config/${configItemName}`,
+            {
+              body: JSON.stringify({
+                value: newValue,
+              }),
+            }
           ),
         `Updating value for ${configItemName}...`,
         `${configItemName} value updated successfuly`,
