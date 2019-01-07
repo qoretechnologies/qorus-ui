@@ -46,11 +46,17 @@ const ConfigItemsContainer: Function = ({
   dispatchAction,
   intrf,
 }: ConfigItemsContainerProps): React.Element<any> => {
-  function saveValue(newValue, id, name) {
-    dispatchAction(actions[intrf].updateConfigItem, id, name, newValue);
-  }
+  function renderValueContent(item: Object, belongsTo: string) {
+    const saveValue = newValue => {
+      dispatchAction(
+        actions[intrf].updateConfigItem,
+        item.id,
+        item.name,
+        newValue,
+        belongsTo
+      );
+    };
 
-  function renderValueContent(item) {
     switch (item.type) {
       case 'bool':
         return (
@@ -60,13 +66,13 @@ const ConfigItemsContainer: Function = ({
               <Item
                 title="True"
                 onClick={() => {
-                  saveValue(true, item.id, item.name);
+                  saveValue(true);
                 }}
               />
               <Item
                 title="False"
                 onClick={() => {
-                  saveValue(false, item.id, item.name);
+                  saveValue(false);
                 }}
               />
             </Dropdown>
@@ -78,7 +84,7 @@ const ConfigItemsContainer: Function = ({
             <DatePicker
               date={item.value}
               onApplyDate={(newValue: any) => {
-                saveValue(newValue, item.id, item.name);
+                saveValue(newValue);
               }}
               noButtons
               small
@@ -91,7 +97,7 @@ const ConfigItemsContainer: Function = ({
             className="text large"
             value={item.value}
             onSave={(newValue: any) => {
-              saveValue(newValue, item.id, item.name);
+              saveValue(newValue);
             }}
           />
         );
@@ -175,7 +181,7 @@ const ConfigItemsContainer: Function = ({
                               >
                                 <NameColumn name={item.name} />
                                 <Td className="text">{item.default_value}</Td>
-                                {renderValueContent(item)}
+                                {renderValueContent(item, belongsTo)}
                                 <Td className="narrow">{item.type}</Td>
                                 <Td className="narrow">
                                   <Icon

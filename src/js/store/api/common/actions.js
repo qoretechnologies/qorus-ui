@@ -10,6 +10,7 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       id: number | string,
       configItemName: string,
       newValue: any,
+      belongsTo: string,
       dispatch: Function
     ): void => {
       const intfcToApiPath: Object = {
@@ -18,18 +19,20 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
         JOBS: 'jobs',
       };
 
+      const url =
+        belongsTo === 'Global Config'
+          ? `${settings.REST_BASE_URL}/system/config/${configItemName}`
+          : `${settings.REST_BASE_URL}/${
+              intfcToApiPath[intfc]
+            }/${id}/config/${configItemName}`;
+
       fetchWithNotifications(
         async (): Promise<*> =>
-          await put(
-            `${settings.REST_BASE_URL}/${
-              intfcToApiPath[intfc]
-            }/${id}/config/${configItemName}`,
-            {
-              body: JSON.stringify({
-                value: newValue,
-              }),
-            }
-          ),
+          await put(url, {
+            body: JSON.stringify({
+              value: newValue,
+            }),
+          }),
         `Updating value for ${configItemName}...`,
         `${configItemName} value updated successfuly`,
         dispatch
