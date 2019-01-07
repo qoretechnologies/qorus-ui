@@ -117,6 +117,7 @@ export default class ServicesDetail extends Component {
             'Code',
             { title: 'Methods', suffix: `(${size(methods)})` },
             'Log',
+            { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
             { title: 'Mappers', suffix: `(${size(service.mappers)})` },
             { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
             'Resources',

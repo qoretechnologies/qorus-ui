@@ -13,6 +13,7 @@ import {
   FixedRow,
 } from '../../../components/new_table';
 import Text from '../../../components/text';
+import Tree from '../../../components/tree';
 import Tabs, { Pane } from '../../../components/tabs';
 import NoDataIf from '../../../components/NoDataIf';
 
@@ -56,14 +57,7 @@ const ResourceTable: Function = ({
                       <Text text={resources[resource].type} />
                     </Td>
                     <Td className="text">
-                      <a>
-                        <Text
-                          popup
-                          placeholder="Show info"
-                          text={resources[resource].info}
-                          renderTree
-                        />
-                      </a>
+                      <Tree data={resources[resource].info} />
                     </Td>
                   </Tr>
                 )

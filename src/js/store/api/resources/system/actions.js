@@ -1,5 +1,7 @@
 /* @flow */
 import { createAction } from 'redux-actions';
+import { fetchWithNotifications, post } from '../../utils';
+import settings from '../../../../settings';
 
 const init: Function = createAction('SYSTEM_INIT');
 const unsync: Function = createAction('SYSTEM_UNSYNC');
@@ -49,6 +51,23 @@ const remoteHealthChanged: Function = createAction(
   (events: Array<Object>): Object => ({ events })
 );
 
+const killProcess: Function = createAction(
+  'SYSTEM_KILLPROCESS',
+  (processId: number, onFinish: Function, dispatch: Function): void => {
+    fetchWithNotifications(
+      async () => {
+        await post(
+          `${settings.REST_BASE_URL}/system/processes/${processId}?action=kill`
+        );
+        onFinish();
+      },
+      `Killing process ${processId}...`,
+      `Process ${processId} killed.`,
+      dispatch
+    );
+  }
+);
+
 const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
 export {
@@ -64,4 +83,5 @@ export {
   unsync,
   healthChanged,
   remoteHealthChanged,
+  killProcess,
 };

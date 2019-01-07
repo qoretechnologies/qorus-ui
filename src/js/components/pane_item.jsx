@@ -20,7 +20,7 @@ const PaneItem: Function = ({
         {label && <div className="pull-right pane-item-label">{label}</div>}
       </div>
     )}
-    <div>{children}</div>
+    {children && <div>{children}</div>}
   </div>
 );
 

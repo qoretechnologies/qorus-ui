@@ -156,6 +156,12 @@ const unsync = {
   },
 };
 
+const killProcess = {
+  next(state: Object) {
+    return state;
+  },
+};
+
 const updateStats = {
   next(
     state: Object,
@@ -269,4 +275,5 @@ export {
   unsync as UNSYNC,
   healthChanged as HEALTHCHANGED,
   remoteHealthChanged as REMOTEHEALTHCHANGED,
+  killProcess as KILLPROCESS,
 };

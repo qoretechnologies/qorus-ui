@@ -15,6 +15,7 @@ import Releases from '../../../containers/releases';
 import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
 import InfoTable from '../../../components/info_table';
+import ProcessTable from '../../../components/ProcessTable';
 
 type ServiceTabsProps = {
   service: Object,
@@ -68,6 +69,11 @@ const ServiceTabs: Function = ({
     <SimpleTab name="value maps">
       <Box top fill noPadding>
         <Valuemaps vmaps={service.vmaps} />
+      </Box>
+    </SimpleTab>
+    <SimpleTab name="process">
+      <Box top fill>
+        <ProcessTable model={service} />
       </Box>
     </SimpleTab>
     <SimpleTab name="resources">
