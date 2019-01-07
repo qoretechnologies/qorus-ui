@@ -9,6 +9,11 @@ import { Tr, Td } from '../../../components/new_table';
 import NameColumn from '../../../components/NameColumn';
 import actions from '../../../store/api/actions';
 import ContentByType from '../../../components/ContentByType';
+import { ActionColumn } from '../../../components/ActionColumn';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 
 type Props = {
   type: string,
@@ -28,6 +33,8 @@ type Props = {
   handleDetailClick: Function,
   interfaceType?: string,
   first?: boolean,
+  handleKillClick: Function,
+  onKillClick: Function,
 };
 
 const typeNames: Object = {
@@ -55,6 +62,7 @@ const ProcessRow: Function = ({
   isActive,
   interfaceType,
   first,
+  handleKillClick,
 }: Props): React.Element<any> => (
   <Tr highlight={_updated} onHighlightEnd={updateDone} first={first}>
     <Td className="big text">{node}</Td>
@@ -65,6 +73,16 @@ const ProcessRow: Function = ({
       onDetailClick={handleDetailClick}
       type={interfaceType}
     />
+    <ActionColumn>
+      <ButtonGroup>
+        <Button
+          icon="cross"
+          btnStyle="danger"
+          title="Kill"
+          onClick={handleKillClick}
+        />
+      </ButtonGroup>
+    </ActionColumn>
     <Td className="text medium" title={typeNames[type]}>
       {type}
     </Td>
@@ -89,6 +107,9 @@ export default compose(
       } else {
         openPane(id);
       }
+    },
+    handleKillClick: ({ id, onKillClick }: Props): Function => (): void => {
+      onKillClick(id);
     },
   }),
   connect(

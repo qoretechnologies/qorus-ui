@@ -25,6 +25,8 @@ import Pull from '../../../components/Pull';
 import LoadMore from '../../../components/LoadMore';
 import Search from '../../../containers/search';
 import { sortDefaults } from '../../../constants/sort';
+import { ActionColumnHeader } from '../../../components/ActionColumn';
+import withProcessKill from '../../../hocomponents/withProcessKill';
 
 type Props = {
   node: string,
@@ -39,6 +41,10 @@ type Props = {
   openPane: Function,
   closePane: Function,
   paneId: string,
+  dispatchAction: Function,
+  openModal: Function,
+  closeModal: Function,
+  handleKillClick: Function,
 };
 
 const ClusterNode: Function = ({
@@ -51,6 +57,7 @@ const ClusterNode: Function = ({
   openPane,
   closePane,
   paneId,
+  handleKillClick,
 }: Props): React.Element<any> => (
   <ExpandableItem show title={node}>
     <EnhancedTable
@@ -107,6 +114,7 @@ const ClusterNode: Function = ({
                 title="Client ID"
                 icon="intersection"
               />
+              <ActionColumnHeader />
               <Th className="text medium" name="type" icon="application">
                 Type
               </Th>
@@ -133,6 +141,7 @@ const ClusterNode: Function = ({
                   {...process}
                   link={getProcessObjectLink(process)}
                   interfaceType={getProcessObjectType(process)}
+                  onKillClick={handleKillClick}
                 />
               )
             )}
@@ -151,5 +160,6 @@ export default compose(
       ...rest,
     })
   ),
+  withProcessKill,
   pure(['node', 'memory', 'processes'])
 )(ClusterNode);
