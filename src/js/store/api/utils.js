@@ -211,7 +211,7 @@ export async function fetchJson(
     jsonRes = 'success';
   }
 
-  if (res.status >= 500 && res.status <= 600) {
+  if (res.status === 404 || (res.status >= 500 && res.status <= 600)) {
     return {
       err: true,
       desc: jsonRes,

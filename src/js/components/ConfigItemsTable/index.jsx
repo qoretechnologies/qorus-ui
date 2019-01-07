@@ -33,6 +33,7 @@ import {
 import type { EnhancedTableProps } from '../EnhancedTable';
 import { sortDefaults } from '../../constants/sort';
 import Pull from '../Pull';
+import Dropdown, { Item, Control } from '../../components/dropdown';
 
 type ConfigItemsContainerProps = {
   items: Object,
@@ -44,134 +45,171 @@ const ConfigItemsContainer: Function = ({
   items,
   dispatchAction,
   intrf,
-}: ConfigItemsContainerProps): React.Element<any> => (
-  <NoDataIf condition={size(items) === 0} big>
-    {() => (
-      <div>
-        {map(items, (configItems: Array<Object>, belongsTo: string) => (
-          <ExpandableItem title={belongsTo} key={belongsTo} show>
-            {() => (
-              <EnhancedTable
-                collection={configItems}
-                searchBy={[
-                  'name',
-                  'default_value',
-                  'value',
-                  'type',
-                  'mandatory',
-                  'desc',
-                ]}
-                tableId={belongsTo}
-                sortDefault={sortDefaults.configItems}
-              >
-                {({
-                  collection,
-                  canLoadMore,
-                  handleLoadMore,
-                  handleLoadAll,
-                  limit,
-                  sortData,
-                  onSortChange,
-                  handleSearchChange,
-                }: EnhancedTableProps) => (
-                  <Table striped condensed fixed>
-                    <Thead>
-                      <FixedRow className="toolbar-row">
-                        <Pull right>
-                          <LoadMore
-                            canLoadMore={canLoadMore}
-                            onLoadMore={handleLoadMore}
-                            onLoadAll={handleLoadAll}
-                            limit={limit}
-                          />
-                          <Search
-                            onSearchUpdate={handleSearchChange}
-                            resource="configItems"
-                          />
-                        </Pull>
-                      </FixedRow>
-                      <FixedRow {...{ sortData, onSortChange }}>
-                        <NameColumnHeader />
-                        <Th name="default_value">Default</Th>
-                        <Th icon="info-sign" name="value">
-                          Value
-                        </Th>
-                        <Th icon="code" name="type">
-                          Type
-                        </Th>
-                        <Th icon="asterisk">Req.</Th>
-                        <DescriptionColumnHeader />
-                      </FixedRow>
-                    </Thead>
-                    <DataOrEmptyTable
-                      condition={!collection || collection.length === 0}
-                      cols={6}
-                    >
-                      {props => (
-                        <Tbody {...props}>
-                          {collection.map((item: Object, index: number) => (
-                            <Tr
-                              key={index}
-                              first={index === 0}
-                              observeElement={index === 0 ? '.pane' : undefined}
-                            >
-                              <NameColumn name={item.name} />
-                              <Td className="text">{item.default_value}</Td>
-                              {item.type === 'date' ? (
-                                <Td className="large">
-                                  <DatePicker
-                                    date={item.value}
-                                    onApplyDate={(newValue: any) =>
-                                      dispatchAction(
-                                        actions[intrf].updateConfigItem,
-                                        item.id,
-                                        item.name,
-                                        newValue
-                                      )
+}: ConfigItemsContainerProps): React.Element<any> => {
+  function renderValueContent(item: Object, belongsTo: string) {
+    const saveValue = newValue => {
+      dispatchAction(
+        actions[intrf].updateConfigItem,
+        item.id,
+        item.name,
+        newValue,
+        belongsTo
+      );
+    };
+
+    switch (item.type) {
+      case 'bool':
+        return (
+          <Td className="text large">
+            <Dropdown>
+              <Control small>{item.value ? 'True' : 'False'}</Control>
+              <Item
+                title="True"
+                onClick={() => {
+                  saveValue(true);
+                }}
+              />
+              <Item
+                title="False"
+                onClick={() => {
+                  saveValue(false);
+                }}
+              />
+            </Dropdown>
+          </Td>
+        );
+      case 'date':
+        return (
+          <Td className="text large">
+            <DatePicker
+              date={item.value}
+              onApplyDate={(newValue: any) => {
+                saveValue(newValue);
+              }}
+              noButtons
+              small
+            />
+          </Td>
+        );
+      default:
+        return (
+          <EditableCell
+            className="text large"
+            value={item.value}
+            onSave={(newValue: any) => {
+              saveValue(newValue);
+            }}
+          />
+        );
+    }
+  }
+
+  return (
+    <NoDataIf condition={size(items) === 0} big>
+      {() => (
+        <div>
+          {map(items, (configItems: Array<Object>, belongsTo: string) => (
+            <ExpandableItem title={belongsTo} key={belongsTo} show>
+              {() => (
+                <EnhancedTable
+                  collection={configItems}
+                  searchBy={[
+                    'name',
+                    'default_value',
+                    'value',
+                    'type',
+                    'mandatory',
+                    'desc',
+                  ]}
+                  tableId={belongsTo}
+                  sortDefault={sortDefaults.configItems}
+                >
+                  {({
+                    collection,
+                    canLoadMore,
+                    handleLoadMore,
+                    handleLoadAll,
+                    limit,
+                    sortData,
+                    onSortChange,
+                    handleSearchChange,
+                  }: EnhancedTableProps) => (
+                    <Table striped condensed fixed>
+                      <Thead>
+                        <FixedRow className="toolbar-row">
+                          <Pull right>
+                            <LoadMore
+                              canLoadMore={canLoadMore}
+                              onLoadMore={handleLoadMore}
+                              onLoadAll={handleLoadAll}
+                              limit={limit}
+                            />
+                            <Search
+                              onSearchUpdate={handleSearchChange}
+                              resource="configItems"
+                            />
+                          </Pull>
+                        </FixedRow>
+                        <FixedRow {...{ sortData, onSortChange }}>
+                          <NameColumnHeader />
+                          <Th className="text" name="default_value">
+                            Default
+                          </Th>
+                          <Th className="text" icon="info-sign" name="value">
+                            Value
+                          </Th>
+                          <Th icon="code" name="type">
+                            Type
+                          </Th>
+                          <Th icon="asterisk">Req.</Th>
+                          <DescriptionColumnHeader />
+                        </FixedRow>
+                      </Thead>
+                      <DataOrEmptyTable
+                        condition={!collection || collection.length === 0}
+                        cols={6}
+                      >
+                        {props => (
+                          <Tbody {...props}>
+                            {collection.map((item: Object, index: number) => (
+                              <Tr
+                                key={index}
+                                first={index === 0}
+                                observeElement={
+                                  index === 0 ? '.pane' : undefined
+                                }
+                              >
+                                <NameColumn name={item.name} />
+                                <Td className="text">{item.default_value}</Td>
+                                {renderValueContent(item, belongsTo)}
+                                <Td className="narrow">{item.type}</Td>
+                                <Td className="narrow">
+                                  <Icon
+                                    iconName={
+                                      item.mandatory ? 'small-tick' : 'cross'
                                     }
-                                    noButtons
-                                    small
+                                    intent={item.mandatory && Intent.SUCCESS}
                                   />
                                 </Td>
-                              ) : (
-                                <EditableCell
-                                  className="text large"
-                                  value={item.value}
-                                  onSave={(newValue: any) =>
-                                    dispatchAction(
-                                      actions[intrf].updateConfigItem,
-                                      item.id,
-                                      item.name,
-                                      newValue
-                                    )
-                                  }
-                                />
-                              )}
-                              <Td className="narrow">{item.type}</Td>
-                              <Td className="narrow">
-                                <Icon
-                                  iconName={
-                                    item.mandatory ? 'small-tick' : 'cross'
-                                  }
-                                  intent={item.mandatory && Intent.SUCCESS}
-                                />
-                              </Td>
-                              <DescriptionColumn>{item.desc}</DescriptionColumn>
-                            </Tr>
-                          ))}
-                        </Tbody>
-                      )}
-                    </DataOrEmptyTable>
-                  </Table>
-                )}
-              </EnhancedTable>
-            )}
-          </ExpandableItem>
-        ))}
-      </div>
-    )}
-  </NoDataIf>
-);
+                                <DescriptionColumn>
+                                  {item.desc}
+                                </DescriptionColumn>
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        )}
+                      </DataOrEmptyTable>
+                    </Table>
+                  )}
+                </EnhancedTable>
+              )}
+            </ExpandableItem>
+          ))}
+        </div>
+      )}
+    </NoDataIf>
+  );
+};
 
 export default compose(
   withDispatch(),
