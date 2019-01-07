@@ -65,6 +65,7 @@ const ServicesDetail: Function = ({
             { title: 'Methods', suffix: `(${size(methods)})` },
             'Code',
             'Log',
+            { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
             { title: 'Mappers', suffix: `(${size(service.mappers)})` },
             { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
             'Resources',
