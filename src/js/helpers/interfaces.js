@@ -1,6 +1,8 @@
 // @flow
 import size from 'lodash/size';
 import map from 'lodash/map';
+import reduce from 'lodash/reduce';
+
 import { normalizeName } from '../components/utils';
 import { INTERFACE_ID_KEYS, INTERFACE_ID_LINKS } from '../constants/interfaces';
 import { normalizeId } from '../store/api/resources/utils';
@@ -101,9 +103,23 @@ const buildLinkToInterfaceId: Function = (
   return '';
 };
 
+const objectCollectionToArray: Function = (
+  collection: Object,
+  keyName: string = 'name'
+): Array<Object> =>
+  reduce(
+    collection,
+    (newCollection: Array<Object>, datum: Object, key: string) => [
+      ...newCollection,
+      { [keyName]: key, ...datum },
+    ],
+    []
+  );
+
 export {
   pullConfigFromStepinfo,
   rebuildConfigHash,
   normalizeItem,
   buildLinkToInterfaceId,
+  objectCollectionToArray,
 };

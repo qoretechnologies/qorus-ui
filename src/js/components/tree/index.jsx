@@ -32,6 +32,7 @@ export default class Tree extends Component {
     id: PropTypes.number,
     editableKeys: PropTypes.bool,
     expanded: PropTypes.bool,
+    compact: PropTypes.bool,
   };
 
   state = {
@@ -243,7 +244,7 @@ export default class Tree extends Component {
     );
 
   render() {
-    const { data, withEdit } = this.props;
+    const { data, withEdit, compact } = this.props;
     const { mode, showTypes, allExpanded, items } = this.state;
 
     if (!data || !Object.keys(data).length) {
@@ -261,14 +262,14 @@ export default class Tree extends Component {
               {this.isDeep() && [
                 <Button
                   iconName="expand-all"
-                  text="Expand all"
+                  text={!compact && 'Expand all'}
                   onClick={this.handleExpandClick}
                   key="expand-button"
                 />,
                 allExpanded || size(items) > 0 ? (
                   <Button
                     iconName="collapse-all"
-                    text="Collapse all"
+                    text={!compact && 'Collapse all'}
                     onClick={this.handleCollapseClick}
                     key="collapse-button"
                   />
@@ -276,7 +277,7 @@ export default class Tree extends Component {
               ]}
               <Button
                 iconName="code"
-                text="Show types"
+                text={!compact && 'Show types'}
                 btnStyle={showTypes && 'primary'}
                 onClick={this.handleTypesClick}
               />
@@ -286,20 +287,20 @@ export default class Tree extends Component {
             <div className="pull-right">
               <ButtonGroup>
                 <Button
-                  text="Tree view"
+                  text={!compact && 'Tree view'}
                   btnStyle={mode === 'normal' && 'primary'}
                   onClick={this.handleTreeClick}
                   iconName="diagram-tree"
                 />
                 <Button
-                  text="Copy view"
+                  text={!compact && 'Copy view'}
                   btnStyle={mode === 'copy' && 'primary'}
                   onClick={this.handleCopyClick}
                   iconName="clipboard"
                 />
                 {withEdit && (
                   <Button
-                    text="Edit mode"
+                    text={!compact && 'Edit mode'}
                     btnStyle={mode === 'edit' && 'primary'}
                     onClick={this.handleEditClick}
                     iconName="edit"

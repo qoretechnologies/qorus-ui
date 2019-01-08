@@ -165,6 +165,14 @@ export const sortDefaults = {
     sortBy: 'name',
     sortByKey: { ignoreCase: true, direction: 1 },
   },
+  resources: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
+  resourceFiles: {
+    sortBy: 'name',
+    sortByKey: { ignoreCase: true, direction: 1 },
+  },
 };
 
 export const sortKeys = {

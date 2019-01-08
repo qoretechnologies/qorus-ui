@@ -45,6 +45,7 @@ const INTERFACE_ID_LINKS: Object = {
   workflow: '/workflow/',
   workflows: '/workflows?paneId=',
   services: '/services?paneId=',
+  service: '/service/',
   job: '/job/',
   jobs: '/jobs?paneId=',
   mapper: '/mappers/',
