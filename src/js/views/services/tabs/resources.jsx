@@ -15,7 +15,18 @@ import {
 import Text from '../../../components/text';
 import Tree from '../../../components/tree';
 import Tabs, { Pane } from '../../../components/tabs';
-import NoDataIf from '../../../components/NoDataIf';
+import EnhancedTable from '../../../components/EnhancedTable';
+import { sortDefaults } from '../../../constants/sort';
+import Pull from '../../../components/Pull';
+import LoadMore from '../../../components/LoadMore';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import Search from '../../../containers/search';
+import { objectCollectionToArray } from '../../../helpers/interfaces';
+import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
+import {
+  DescriptionColumnHeader,
+  DescriptionColumn,
+} from '../../../components/DescriptionColumn';
 
 type Props = {
   resources: Object,
@@ -28,74 +39,151 @@ const ResourceTable: Function = ({
 }: Props): React.Element<any> => (
   <Tabs active="resources">
     <Pane name="Resources">
-      <NoDataIf condition={!resources || size(resources) === 0} big>
-        {() => (
+      <EnhancedTable
+        collection={objectCollectionToArray(resources)}
+        searchBy={['name', 'desc', 'type', 'info']}
+        tableId="resources"
+        sortDefault={sortDefaults.resources}
+      >
+        {({
+          collection,
+          handleSearchChange,
+          sortData,
+          onSortChange,
+          handleLoadMore,
+          handleLoadAll,
+          canLoadMore,
+          limit,
+        }: Object) => (
           <Table fixed condensed striped>
             <Thead>
-              <FixedRow>
-                <Th className="name">Name</Th>
-                <Th className="text">Description</Th>
-                <Th className="text">Info</Th>
-                <Th className="text">Type</Th>
+              <FixedRow className="toolbar-row">
+                <Th>
+                  <Pull right>
+                    <LoadMore
+                      onLoadMore={handleLoadMore}
+                      onLoadAll={handleLoadAll}
+                      canLoadMore={canLoadMore}
+                      limit={limit}
+                    />
+                    <Search
+                      onSearchUpdate={handleSearchChange}
+                      resource="resources"
+                    />
+                  </Pull>
+                </Th>
+              </FixedRow>
+              <FixedRow {...{ sortData, onSortChange }}>
+                <NameColumnHeader />
+                <DescriptionColumnHeader />
+                <Th className="text" icon="info-sign" name="type">
+                  Type
+                </Th>
+                <Th className="text" icon="info-sign">
+                  Info
+                </Th>
               </FixedRow>
             </Thead>
-            <Tbody>
-              {Object.keys(resources).map(
-                (resource: string, key: number): React.Element<any> => (
-                  <Tr
-                    key={key}
-                    first={key === 0}
-                    observeElement={key === 0 ? '.pane' : undefined}
-                  >
-                    <Td className="name">
-                      <Text text={resource} />
-                    </Td>
-                    <Td className="text">
-                      <Text text={resources[resource].desc} />
-                    </Td>
-                    <Td className="text">
-                      <Text text={resources[resource].type} />
-                    </Td>
-                    <Td className="text">
-                      <Tree data={resources[resource].info} />
-                    </Td>
-                  </Tr>
-                )
+            <DataOrEmptyTable
+              condition={!collection || size(collection) === 0}
+              cols={4}
+            >
+              {props => (
+                <Tbody {...props}>
+                  {collection.map(
+                    (item: Object, key: number): React.Element<any> => (
+                      <Tr
+                        key={key}
+                        first={key === 0}
+                        observeElement={key === 0 ? '.pane' : undefined}
+                      >
+                        <NameColumn name={item.name} />
+                        <DescriptionColumn>{item.desc}</DescriptionColumn>
+                        <Td className="text">
+                          <Text text={item.type} />
+                        </Td>
+                        <Td className="text">
+                          <Tree compact data={item.info} />
+                        </Td>
+                      </Tr>
+                    )
+                  )}
+                </Tbody>
               )}
-            </Tbody>
+            </DataOrEmptyTable>
           </Table>
         )}
-      </NoDataIf>
+      </EnhancedTable>
     </Pane>
     <Pane name="Resource files">
-      <NoDataIf condition={!resourceFiles || resourceFiles.length === 0} big>
-        {() => (
+      <EnhancedTable
+        collection={resourceFiles}
+        searchBy={['name', 'type']}
+        tableId="resourceFiles"
+        sortDefault={sortDefaults.resourceFiles}
+      >
+        {({
+          collection,
+          handleSearchChange,
+          sortData,
+          onSortChange,
+          handleLoadMore,
+          handleLoadAll,
+          canLoadMore,
+          limit,
+        }: Object) => (
           <Table fixed condensed striped>
             <Thead>
-              <FixedRow>
-                <Th className="name">Name</Th>
-                <Th className="narrow">Type</Th>
+              <FixedRow className="toolbar-row">
+                <Th>
+                  <Pull right>
+                    <LoadMore
+                      onLoadMore={handleLoadMore}
+                      onLoadAll={handleLoadAll}
+                      canLoadMore={canLoadMore}
+                      limit={limit}
+                    />
+                    <Search
+                      onSearchUpdate={handleSearchChange}
+                      resource="resourceFiles"
+                    />
+                  </Pull>
+                </Th>
+              </FixedRow>
+              <FixedRow {...{ sortData, onSortChange }}>
+                <NameColumnHeader />
+                <Th className="narrow" name="type">
+                  Type
+                </Th>
               </FixedRow>
             </Thead>
-            <Tbody>
-              {resourceFiles.map(
-                ({ name, type }: Object, key: number): React.Element<any> => (
-                  <Tr
-                    key={key}
-                    first={key === 0}
-                    observeElement={key === 0 ? '.pane' : undefined}
-                  >
-                    <Td className="name">
-                      <Text text={name} />
-                    </Td>
-                    <Td className="narrow">{type}</Td>
-                  </Tr>
-                )
+            <DataOrEmptyTable
+              condition={!collection || size(collection) === 0}
+              cols={2}
+            >
+              {props => (
+                <Tbody {...props}>
+                  {collection.map(
+                    (
+                      { name, type }: Object,
+                      key: number
+                    ): React.Element<any> => (
+                      <Tr
+                        key={key}
+                        first={key === 0}
+                        observeElement={key === 0 ? '.pane' : undefined}
+                      >
+                        <NameColumn name={name} />
+                        <Td className="narrow">{type}</Td>
+                      </Tr>
+                    )
+                  )}
+                </Tbody>
               )}
-            </Tbody>
+            </DataOrEmptyTable>
           </Table>
         )}
-      </NoDataIf>
+      </EnhancedTable>
     </Pane>
   </Tabs>
 );
