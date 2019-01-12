@@ -131,7 +131,7 @@ export default class ConnectionOptions extends Component {
             </div>
           </div>
         )}
-        <ControlGroup fill>
+        <ControlGroup className="pt-fill">
           <InputGroup
             placeholder="Key..."
             type="text"

@@ -2,7 +2,6 @@
 import React from 'react';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
 import classnames from 'classnames';
 
 import { Thead, Tbody, Tfooter } from './section';
@@ -25,6 +24,7 @@ type Props = {
   height?: string | number,
   marginBottom?: number,
   width?: number | string,
+  clean?: boolean,
 };
 
 let Table: Function = ({
@@ -34,6 +34,7 @@ let Table: Function = ({
   hover,
   condensed,
   bordered,
+  clean,
   className,
   height,
   marginBottom,
@@ -53,6 +54,7 @@ let Table: Function = ({
             bordered,
             className,
             height,
+            clean,
             marginBottom: marginBottom || 0,
           })
       )}
@@ -68,6 +70,7 @@ let Table: Function = ({
           'table-hover': hover,
           'table-bordered-our': bordered,
           'table--info': info,
+          'table-clean': clean,
         },
         className
       )}

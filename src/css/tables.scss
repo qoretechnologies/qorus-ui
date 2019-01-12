@@ -382,6 +382,10 @@ table {
           text-align: center;
         }
       }
+
+      > th {
+        line-height: 1 !important;
+      }
     }
   }
 }

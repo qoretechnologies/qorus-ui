@@ -49,24 +49,28 @@ const processMemoryChanged = {
     const data = { ...state.data };
     const processes = { ...data.processes };
 
-    events.forEach(event => {
-      data.cluster_info[event.node].node_priv = event.node_priv;
-      data.cluster_info[event.node].node_load_pct = event.node_load_pct;
-      data.cluster_info[event.node].node_ram_in_use = event.node_ram_in_use;
-      data.cluster_info[event.node].node_priv_str = event.node_priv_str;
-      data.cluster_info[event.node].node_ram_in_use_str =
-        event.node_ram_in_use_str;
+    if (data.cluster_info) {
+      events.forEach(event => {
+        data.cluster_info[event.node].node_priv = event.node_priv;
+        data.cluster_info[event.node].node_load_pct = event.node_load_pct;
+        data.cluster_info[event.node].node_ram_in_use = event.node_ram_in_use;
+        data.cluster_info[event.node].node_priv_str = event.node_priv_str;
+        data.cluster_info[event.node].node_ram_in_use_str =
+          event.node_ram_in_use_str;
 
-      if (event.status_string === 'IDLE') {
-        delete processes[event.id];
-      } else {
-        processes[event.id] = { ...event, ...{ _updated: true } };
-      }
-    });
+        if (event.status_string === 'IDLE') {
+          delete processes[event.id];
+        } else {
+          processes[event.id] = { ...event, ...{ _updated: true } };
+        }
+      });
 
-    const newData = { ...data, ...{ processes } };
+      const newData = { ...data, ...{ processes } };
 
-    return { ...state, ...{ data: newData } };
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
   },
 };
 

@@ -1,13 +1,17 @@
-const location = window && window.location ? window.location : {
-  protocol: 'http:',
-  host: 'localhost',
-};
+const location =
+  window && window.location
+    ? window.location
+    : {
+      protocol: 'http:',
+      host: 'localhost',
+    };
 
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-
-export default {
-  // eslint-disable-next-line
-  REST_BASE_URL: process.env.TESTINST || process.env.NODE_ENV === 'dev_fix' ? '/api' : '/api/latest',
+const settings = {
+  REST_BASE_URL:
+    process.env.TESTINST || process.env.NODE_ENV === 'dev_fix'
+      ? '/api'
+      : '/api/latest',
   WS_BASE_URL: `${wsProtocol}//${location.host}`,
   DEFAULT_REST_HEADERS: {
     Accept: 'application/json',
@@ -19,4 +23,7 @@ export default {
   },
   NOTIFICATION_TIMEOUT: 5000,
   PROTOCOL: location.protocol,
+  IS_HTTP: location.protocol === 'http:',
 };
+
+export default settings;

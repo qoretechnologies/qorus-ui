@@ -19,6 +19,7 @@ type Props = {
   Tag: string,
   marginBottom: number,
   hasFooter: boolean,
+  clean?: boolean,
 };
 
 let Section: Function = ({
@@ -31,6 +32,7 @@ let Section: Function = ({
   Tag,
   bordered,
   height,
+  clean,
 }: Props): React.Element<any> => {
   if (!fixed) {
     return <Tag>{children}</Tag>;
@@ -59,6 +61,7 @@ let Section: Function = ({
             {
               'table-hover': hover,
               'table-striped': striped,
+              'table-clean': clean,
               'table-bordered-our': bordered,
               'fixed-table': true,
             },

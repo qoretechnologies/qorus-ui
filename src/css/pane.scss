@@ -104,15 +104,17 @@
   h5.pane-item-title {
     vertical-align: sub;
     margin: 0;
-    padding-bottom: 3px;
-    border-bottom: 3px solid #eee;
     display: inline-block;
+    line-height: 30px;
+    font-weight: 500;
+    color: darken($qore-cobalt, 3);
+    font-size: 15px;
   }
 
   .pane-item-label {
     h5 {
-      height: 23px;
-      line-height: 23px;
+      height: 30px;
+      line-height: 30px;
     }
   }
 }

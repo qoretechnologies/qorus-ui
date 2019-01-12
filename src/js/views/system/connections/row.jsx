@@ -20,6 +20,7 @@ import PingModal from './modals/ping';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import withDispatch from '../../../hocomponents/withDispatch';
 import NameColumn from '../../../components/NameColumn';
+import Tree from '../../../components/tree';
 
 type Props = {
   name: string,
@@ -44,7 +45,7 @@ type Props = {
   safe_url?: string,
   url?: string,
   desc?: string,
-  options: Object,
+  opts: Object,
   canDelete: boolean,
   first: boolean,
   loopback: boolean,
@@ -65,7 +66,7 @@ const ConnectionRow: Function = ({
   url,
   desc,
   remoteType,
-  options,
+  opts,
   canDelete,
   first,
   loopback,
@@ -93,20 +94,21 @@ const ConnectionRow: Function = ({
       onDetailClick={handleDetailClick}
       hasAlerts={hasAlerts}
     />
-    <Td className="medium">
+    <Td className="big">
       <ButtonGroup>
-        {remoteType === 'user' && (
-          <Button
-            title={enabled ? 'Disable' : 'Enable'}
-            iconName="power"
-            onClick={handleToggleClick}
-            btnStyle={enabled ? 'success' : 'danger'}
-          />
-        )}
+        <Button
+          title={enabled ? 'Disable' : 'Enable'}
+          iconName="power"
+          onClick={handleToggleClick}
+          btnStyle={enabled ? 'success' : 'danger'}
+        />
         {remoteType === 'datasources' && (
           <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
         )}
         <Button title="Ping" iconName="exchange" onClick={handlePingClick} />
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button iconName="edit" onClick={handleDetailClick} />
         <Button
           disabled={!canDelete}
           iconName="cross"
@@ -115,25 +117,22 @@ const ConnectionRow: Function = ({
         />
       </ButtonGroup>
     </Td>
-    {remoteType === 'datasources' ? (
-      <Td className="text">
-        <Text text={options} />
-      </Td>
-    ) : (
-      <Td className="text">
-        <p title={safeUrl || url}>
-          <Link className="resource-link" to={safeUrl || url}>
-            {safeUrl || url}
-          </Link>
-        </p>
-      </Td>
-    )}
+    <Td className="text">
+      <Tree compact data={opts} />
+    </Td>
+
+    <Td className="text">
+      <p title={safeUrl || url}>
+        <Link className="resource-link" to={safeUrl || url}>
+          {safeUrl || url}
+        </Link>
+      </p>
+    </Td>
+
     <Td className="text">
       <Text text={desc} />
     </Td>
-    {remoteType === 'qorus' && (
-      <Td className="medium">{loopback && <Icon iconName="small-tick" />}</Td>
-    )}
+    <Td className="medium">{loopback && <Icon iconName="small-tick" />}</Td>
   </Tr>
 );
 
@@ -175,9 +174,15 @@ export default compose(
     handleToggleClick: ({
       name,
       enabled,
+      remoteType,
       dispatchAction,
     }: Props): Function => (): void => {
-      dispatchAction(actions.remotes.toggleConnection, name, !enabled);
+      dispatchAction(
+        actions.remotes.toggleConnection,
+        name,
+        !enabled,
+        remoteType
+      );
     },
     handleDeleteClick: ({
       dispatchAction,
@@ -211,7 +216,7 @@ export default compose(
     'isActive',
     '_updated',
     'up',
-    'options',
+    'opts',
     'desc',
     'safe_url',
     'url',

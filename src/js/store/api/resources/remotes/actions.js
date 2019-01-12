@@ -2,7 +2,7 @@
 import { createAction } from 'redux-actions';
 import pickBy from 'lodash/pickBy';
 
-import { fetchJson, fetchWithNotifications, put } from '../../utils';
+import { fetchJson, fetchWithNotifications, put, get } from '../../utils';
 import settings from '../../../../settings';
 import { attrsSelector } from '../../../../helpers/remotes';
 
@@ -26,6 +26,32 @@ const connectionChange = createAction('REMOTES_CONNECTIONCHANGE', events => ({
 const updateDone: Function = createAction(
   'REMOTES_UPDATEDONE',
   (name: string): Object => ({ name })
+);
+
+const fetchPass: Function = createAction(
+  'REMOTES_FETCHPASS',
+  async (
+    remoteType: string,
+    name: string,
+    withPass: boolean,
+    dispatch: Function
+  ): Object => {
+    const model = await fetchWithNotifications(
+      async () =>
+        get(
+          `${
+            settings.REST_BASE_URL
+          }/remote/${remoteType}/${name}?with_password=${
+            withPass ? 'true' : 'false'
+          }`
+        ),
+      null,
+      null,
+      dispatch
+    );
+
+    return { model };
+  }
 );
 
 const addAlert = createAction('REMOTES_ADDALERT', events => ({ events }));
@@ -118,12 +144,17 @@ const deleteConnection: Function = createAction(
 
 const toggleConnection: Function = createAction(
   'REMOTES_TOGGLECONNECTION',
-  (name: string, value: boolean, dispatch: Function): void => {
+  (
+    name: string,
+    value: boolean,
+    remoteType: string,
+    dispatch: Function
+  ): void => {
     fetchWithNotifications(
       async () =>
         await fetchJson(
           'PUT',
-          `${settings.REST_BASE_URL}/remote/user/${name}?action=${
+          `${settings.REST_BASE_URL}/remote/${remoteType}/${name}?action=${
             value ? 'enable' : 'disable'
           }`
         ),
@@ -164,4 +195,5 @@ export {
   deleteConnection,
   toggleConnection,
   resetConnection,
+  fetchPass,
 };
