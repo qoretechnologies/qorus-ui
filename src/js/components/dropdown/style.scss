@@ -52,6 +52,14 @@
   border-bottom-left-radius: 0;
 }
 
+.pt-button-group
+  .qorus-dropdown:not(:last-child)
+  .pt-button-group
+  button:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .dropdown-filter {
   padding: 5px;
 }

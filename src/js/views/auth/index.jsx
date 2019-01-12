@@ -67,7 +67,7 @@ export default compose(
       await auth(login, password, sendAuthCredentials);
 
       const nextUrl = location.query.next || '/';
-      router.push(nextUrl);
+      router.push(decodeURIComponent(nextUrl));
     },
   }),
   titleManager('Login'),

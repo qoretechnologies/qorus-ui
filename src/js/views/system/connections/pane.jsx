@@ -1,8 +1,8 @@
+// @flow
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { upperFirst, includes, lowerCase } from 'lodash';
-import { Link } from 'react-router';
 
 import Pane from '../../../components/pane';
 import {
@@ -25,6 +25,8 @@ import { attrsSelector } from '../../../helpers/remotes';
 import withDispatch from '../../../hocomponents/withDispatch';
 import ContentByType from '../../../components/ContentByType';
 import NameColumn from '../../../components/NameColumn';
+import Loader from '../../../components/loader';
+import settings from '../../../settings';
 
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find(a => a.name === props.paneId);
@@ -57,10 +59,31 @@ export default class ConnectionsPane extends Component {
   state: {
     error: ?string,
     options: ?string,
+    isPassLoaded: boolean,
   } = {
     error: null,
     options: null,
+    isPassLoaded: this.props.remote.fetchedWithPass,
   };
+
+  componentDidMount() {
+    this.props.dispatchAction(
+      actions.remotes.fetchPass,
+      this.props.remoteType,
+      this.props.remote.name,
+      !settings.IS_HTTP
+    );
+  }
+
+  componentWillReceiveProps(nextProps: Object) {
+    if (
+      this.props.remote.fetchedWithPass !== nextProps.remote.fetchedWithPass
+    ) {
+      this.setState({
+        isPassLoaded: true,
+      });
+    }
+  }
 
   getData: Function = () => {
     const data = [];
@@ -78,17 +101,14 @@ export default class ConnectionsPane extends Component {
 
   handleEditSave: Function = (attr: string) => (value: any) => {
     const { optimisticDispatch, remoteType } = this.props;
-    const optsKey = remoteType === 'user' ? 'opts' : 'options';
+    const optsKey = 'opts';
     const val =
-      (value === '' || value === '{}') &&
-      (attr === 'options' || attr === 'opts')
-        ? null
-        : value;
+      (value === '' || value === '{}') && attr === 'opts' ? null : value;
 
     const data = { ...this.props.remote, ...{ [attr]: val } };
 
     try {
-      if (val && val !== '' && (attr === 'options' || attr === 'opts')) {
+      if (val && val !== '' && attr === 'opts') {
         JSON.parse(data[optsKey]);
       }
     } catch (e) {
@@ -98,11 +118,11 @@ export default class ConnectionsPane extends Component {
     } finally {
       let proceed = true;
 
-      if (val && val !== '' && (attr === 'options' || attr === 'opts')) {
+      if (val && val !== '' && attr === 'opts') {
         data[optsKey] = JSON.parse(data[optsKey]);
 
         Object.keys(data[optsKey]).forEach(
-          (key: string): Object => {
+          (key: string): void => {
             proceed = typeof data[optsKey][key] === 'object' ? false : proceed;
           }
         );
@@ -125,6 +145,7 @@ export default class ConnectionsPane extends Component {
 
   render() {
     const { deps, alerts } = this.props.remote;
+    const { isPassLoaded } = this.state;
 
     return (
       <Pane
@@ -133,67 +154,78 @@ export default class ConnectionsPane extends Component {
         onResize={this.props.onResize}
         title={`${this.props.remote.name} detail`}
       >
-        {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
-        <Box top fill scrollY>
-          <PaneItem title="Overview">
-            <Table condensed bordered className="text-table">
-              <Tbody>
-                {this.getData().map(
-                  (val: Object, key: number): React.Element<any> => (
-                    <Tr key={key}>
-                      <Th className="name">
-                        {upperFirst(val.attr.replace(/_/g, ' '))}
-                      </Th>
-                      {val.editable &&
-                      this.props.canEdit &&
-                      val.attr !== 'options' &&
-                      val.attr !== 'opts' ? (
-                        <EditableCell
-                          className="text"
-                          value={val.value}
-                          onSave={this.handleEditSave(val.attr)}
-                        />
-                      ) : (
-                        <Td className="text">
-                          {val.attr === 'options' || val.attr === 'opts' ? (
-                            <Options
-                              data={val.value}
-                              onSave={this.handleEditSave(val.attr)}
-                            />
-                          ) : (
-                            <ContentByType content={val.value} />
-                          )}
-                        </Td>
-                      )}
-                    </Tr>
-                  )
-                )}
-              </Tbody>
-            </Table>
-          </PaneItem>
-          <AlertsTable alerts={alerts} />
-          <PaneItem title="Dependencies">
-            {deps && deps.length ? (
-              <Table striped condensed>
+        {!isPassLoaded ? (
+          <Loader />
+        ) : (
+          <Box top fill scrollY>
+            <PaneItem title="Overview">
+              {this.state.error && (
+                <Alert bsStyle="danger">{this.state.error}</Alert>
+              )}
+              {settings.IS_HTTP && (
+                <Alert bsStyle="warning" title="Insecure connection">
+                  Passwords are not displayed
+                </Alert>
+              )}
+              <Table condensed clean className="text-table">
                 <Tbody>
-                  {deps.map(
-                    (dep: Object, index: number): React.Element<any> => (
-                      <Tr key={index}>
-                        <NameColumn
-                          name={dep.name}
-                          link={getDependencyObjectLink(dep.type, dep)}
-                          type={lowerCase(dep.type)}
-                        />
+                  {this.getData().map(
+                    (val: Object, key: number): React.Element<any> => (
+                      <Tr key={key}>
+                        <Th className="name">
+                          {upperFirst(val.attr.replace(/_/g, ' '))}
+                        </Th>
+                        {val.editable &&
+                        this.props.canEdit &&
+                        val.attr !== 'options' &&
+                        val.attr !== 'opts' ? (
+                          <EditableCell
+                            className="text"
+                            value={val.value}
+                            onSave={this.handleEditSave(val.attr)}
+                          />
+                        ) : (
+                          <Td className="text">
+                            {val.attr === 'options' || val.attr === 'opts' ? (
+                              <Options
+                                data={val.value}
+                                onSave={this.handleEditSave(val.attr)}
+                              />
+                            ) : (
+                              <ContentByType content={val.value} />
+                            )}
+                          </Td>
+                        )}
                       </Tr>
                     )
                   )}
                 </Tbody>
               </Table>
-            ) : (
-              <NoData />
-            )}
-          </PaneItem>
-        </Box>
+            </PaneItem>
+            <AlertsTable alerts={alerts} />
+            <PaneItem title="Dependencies">
+              {deps && deps.length ? (
+                <Table striped condensed>
+                  <Tbody>
+                    {deps.map(
+                      (dep: Object, index: number): React.Element<any> => (
+                        <Tr key={index}>
+                          <NameColumn
+                            name={dep.name}
+                            link={getDependencyObjectLink(dep.type, dep)}
+                            type={lowerCase(dep.type)}
+                          />
+                        </Tr>
+                      )
+                    )}
+                  </Tbody>
+                </Table>
+              ) : (
+                <NoData />
+              )}
+            </PaneItem>
+          </Box>
+        )}
       </Pane>
     );
   }

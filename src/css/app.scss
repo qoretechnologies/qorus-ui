@@ -270,6 +270,7 @@ div.text-component {
   }
 
   &:not(.text-component-expanded) {
+    word-break: break-all;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
@@ -477,7 +478,8 @@ span.pt-icon-standard {
   }
 }
 
-.pt-control-group .qorus-dropdown:not(:last-child) {
+.pt-control-group .qorus-dropdown:not(:last-child),
+.pt-button-group .qorus-dropdown:not(:last-child) {
   margin-right: -1px;
 }
 

@@ -212,7 +212,7 @@ export default class Topbar extends Component {
               <Button iconName="user" />
             </ButtonGroup>
           </Popover>
-          {settings.PROTOCOL === 'http' && (
+          {settings.IS_HTTP && (
             <ButtonGroup minimal>
               <Tooltip
                 intent={Intent.DANGER}

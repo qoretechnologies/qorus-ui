@@ -14,8 +14,8 @@ import {
   Table,
   Tbody,
   Thead,
-  FixedRow,
   Th,
+  FixedRow,
 } from '../../../components/new_table';
 import withSort from '../../../hocomponents/sort';
 import withLoadMore from '../../../hocomponents/loadMore';
@@ -111,23 +111,18 @@ const ConnectionTable: Function = ({
         </Th>
         <NameColumnHeader icon="application" />
         <Th icon="build">Actions</Th>
-        {type === 'datasources' ? (
-          <Th className="text" icon="cog">
-            Options
-          </Th>
-        ) : (
-          <Th className="text" name="url" icon="link">
-            URL
-          </Th>
-        )}
+        <Th className="text" icon="cog">
+          Options
+        </Th>
+        <Th className="text" name="url" icon="link">
+          URL
+        </Th>
         <Th className="text" name="desc" icon="label">
           Description
         </Th>
-        {type === 'qorus' && (
-          <Th icon="repeat" name="loopback">
-            Loopback
-          </Th>
-        )}
+        <Th icon="repeat" name="loopback">
+          Loopback
+        </Th>
       </FixedRow>
     </Thead>
     <DataOrEmptyTable

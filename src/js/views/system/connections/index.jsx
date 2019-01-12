@@ -106,7 +106,7 @@ const viewSelector: Function = createSelector(
 );
 
 export default compose(
-  defaultProps({ query: { action: 'all', with_passwords: true } }),
+  defaultProps({ query: { action: 'all' } }),
   connect(
     viewSelector,
     {

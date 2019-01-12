@@ -248,7 +248,7 @@ export default class Tree extends Component {
     const { mode, showTypes, allExpanded, items } = this.state;
 
     if (!data || !Object.keys(data).length) {
-      return <NoData />;
+      return compact ? <span>-</span> : <NoData />;
     }
 
     const textData: string = this.renderText(data);

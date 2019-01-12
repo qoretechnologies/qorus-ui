@@ -66,14 +66,14 @@ class ManageModal extends Component {
       {}
     );
 
-    data.options =
+    data.opts =
       this.state.options === '' || this.state.options === '{}'
         ? null
         : this.state.options;
 
     try {
-      if (data.options && data.options !== '') {
-        JSON.parse(data.options);
+      if (data.opts && data.opts !== '') {
+        JSON.parse(data.opts);
       }
     } catch (e) {
       this.setState({
@@ -95,12 +95,12 @@ class ManageModal extends Component {
       } else {
         let proceed = true;
 
-        if (data.options && data.options !== '') {
-          data.options = JSON.parse(data.options);
+        if (data.opts && data.opts !== '') {
+          data.opts = JSON.parse(data.opts);
 
-          Object.keys(data.options).forEach(
+          Object.keys(data.opts).forEach(
             (key: string): Object => {
-              proceed = typeof data.options[key] === 'object' ? false : proceed;
+              proceed = typeof data.opts[key] === 'object' ? false : proceed;
             }
           );
         }
@@ -155,211 +155,65 @@ class ManageModal extends Component {
             {this.state.error && (
               <Alert bsStyle="danger">{this.state.error}</Alert>
             )}
-            {remoteType === 'user' && (
-              <div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="name">
-                    Name *
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      className="form-control"
-                      defaultValue={name}
-                      ref="name"
-                      readOnly={edit ? 'readonly' : false}
-                      required="required"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="desc">
-                    Description *
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="desc"
-                      id="desc"
-                      className="form-control"
-                      defaultValue={desc}
-                      ref="desc"
-                      required="required"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="url">
-                    URL *
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="url"
-                      id="url"
-                      className="form-control"
-                      defaultValue={url}
-                      ref="url"
-                      required="required"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="options">
-                    Options *
-                  </label>
-                  <div className="col-lg-6">
-                    <Options data={opts} onSave={this.handleOptionsSave} />
-                  </div>
+            <div>
+              <div className="form-group">
+                <label className="col-lg-4 control-label" htmlFor="name">
+                  Name *
+                </label>
+                <div className="col-lg-6">
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    className="form-control"
+                    defaultValue={name}
+                    ref="name"
+                    readOnly={edit ? 'readonly' : false}
+                    required="required"
+                  />
                 </div>
               </div>
-            )}
-            {remoteType === 'datasources' && (
-              <div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="name">
-                    Name *
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      className="form-control"
-                      defaultValue={name}
-                      ref="name"
-                      readOnly={edit ? 'readonly' : false}
-                      required="required"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="type">
-                    Type *
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="type"
-                      id="type"
-                      className="form-control"
-                      defaultValue={type}
-                      ref="type"
-                      required="required"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="usr">
-                    User *
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="usr"
-                      id="usr"
-                      autoComplete="off"
-                      className="form-control"
-                      defaultValue={user}
-                      ref="user"
-                      required="required"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="pwd">
-                    Password *
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="pwd"
-                      id="pwd"
-                      autoComplete="off"
-                      className="form-control"
-                      defaultValue={pass}
-                      ref="pass"
-                      required="required"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="db">
-                    DB *
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="db"
-                      id="db"
-                      autoComplete="off"
-                      className="form-control"
-                      defaultValue={db}
-                      ref="db"
-                      required="required"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="charset">
-                    Charset{' '}
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="charset"
-                      id="charset"
-                      autoComplete="off"
-                      className="form-control"
-                      defaultValue={charset}
-                      ref="charset"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="host">
-                    Host{' '}
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="host"
-                      id="host"
-                      autoComplete="off"
-                      className="form-control"
-                      defaultValue={host}
-                      ref="host"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="port">
-                    Port{' '}
-                  </label>
-                  <div className="col-lg-6">
-                    <input
-                      type="text"
-                      name="port"
-                      id="port"
-                      autoComplete="off"
-                      className="form-control"
-                      defaultValue={port}
-                      ref="port"
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="col-lg-4 control-label" htmlFor="options">
-                    Options{' '}
-                  </label>
-                  <div className="col-lg-6">
-                    <Options data={options} onSave={this.handleOptionsSave} />
-                  </div>
+              <div className="form-group">
+                <label className="col-lg-4 control-label" htmlFor="desc">
+                  Description *
+                </label>
+                <div className="col-lg-6">
+                  <input
+                    type="text"
+                    name="desc"
+                    id="desc"
+                    className="form-control"
+                    defaultValue={desc}
+                    ref="desc"
+                    required="required"
+                  />
                 </div>
               </div>
-            )}
+              <div className="form-group">
+                <label className="col-lg-4 control-label" htmlFor="url">
+                  URL *
+                </label>
+                <div className="col-lg-6">
+                  <input
+                    type="text"
+                    name="url"
+                    id="url"
+                    className="form-control"
+                    defaultValue={url}
+                    ref="url"
+                    required="required"
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="col-lg-4 control-label" htmlFor="options">
+                  Options *
+                </label>
+                <div className="col-lg-6">
+                  <Options data={opts} onSave={this.handleOptionsSave} />
+                </div>
+              </div>
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Controls noControls grouped>

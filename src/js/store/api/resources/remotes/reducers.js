@@ -92,6 +92,35 @@ const updateDone = {
   },
 };
 
+const fetchPass = {
+  next(
+    state,
+    {
+      payload: { model },
+    }
+  ) {
+    if (state.sync) {
+      const data = state.data.slice();
+      const connection = data.find(d => d.name === model.name);
+
+      if (connection) {
+        const newData = updateItemWithName(
+          model.name,
+          { ...model, fetchedWithPass: true },
+          data
+        );
+
+        return { ...state, ...{ data: newData } };
+      }
+    }
+
+    return state;
+  },
+  throw(state) {
+    return state;
+  },
+};
+
 const addAlert = {
   next(
     state = initialState,
@@ -249,4 +278,5 @@ export {
   deleteConnection as DELETECONNECTION,
   toggleConnection as TOGGLECONNECTION,
   resetConnection as RESETCONNECTION,
+  fetchPass as FETCHPASS,
 };

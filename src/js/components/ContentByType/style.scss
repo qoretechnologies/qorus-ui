@@ -2,6 +2,7 @@
   display: inline-block;
 
   &.string {
+    word-break: break-all;
     color: lighten($text-color, 10);
   }
 

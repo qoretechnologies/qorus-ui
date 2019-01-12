@@ -59,8 +59,13 @@ class AppInfo extends React.Component {
   requireAuthenticated = (nextState, replace) => {
     const { noauth } = this.props.info.data;
     const token = window.localStorage.getItem('token');
+
     if (!token && !noauth) {
-      replace(`/login?next=${nextState.location.pathname}`);
+      replace(
+        `/login?next=${nextState.location.pathname}${encodeURIComponent(
+          nextState.location.search
+        )}`
+      );
     }
   };
 
