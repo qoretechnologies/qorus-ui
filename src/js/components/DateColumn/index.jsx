@@ -36,7 +36,7 @@ const DateColumnHeader: Function = compose(
     icon: icon = 'calendar',
     ...rest
   }: DateColumnHeaderProps): React.Element<any> => (
-    <Th icon={icon} name={name} {...rest}>
+    <Th iconName={icon} name={name} {...rest}>
       {children}
     </Th>
   )

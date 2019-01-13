@@ -33,7 +33,7 @@ const IdColumnHeader: Function = compose(
     icon: icon = 'numbered-list',
     ...rest
   }: IdColumnHeaderProps): React.Element<any> => (
-    <Th name={name} icon={icon} {...rest}>
+    <Th name={name} iconName={icon} {...rest}>
       {children}
     </Th>
   )

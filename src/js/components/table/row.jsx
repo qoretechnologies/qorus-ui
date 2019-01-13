@@ -28,7 +28,8 @@ export default class Row extends Component {
 
   componentWillUnmount() {
     clearTimeout(this._highlightTimeout);
-    if (this.props.onHighlightEnd && this.props.highlight) this.props.onHighlightEnd();
+    if (this.props.onHighlightEnd && this.props.highlight)
+      this.props.onHighlightEnd();
   }
 
   _highlightTimeout = null;
@@ -57,7 +58,10 @@ export default class Row extends Component {
 
   render() {
     const { cells, data, children, ...restProps } = this.props;
-    const className = classNames({ 'row-highlight': this.state.highlight }, restProps.className);
+    const className = classNames(
+      { 'row-highlight': this.state.highlight },
+      restProps.className
+    );
     const updatedProps = omit(restProps, ['highlight', 'onHighlightEnd']);
     const newProps = { ...updatedProps, ...{ className } };
 

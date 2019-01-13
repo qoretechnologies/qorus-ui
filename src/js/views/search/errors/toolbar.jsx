@@ -204,7 +204,7 @@ export default class SearchToolbar extends Component {
                 : this.state.ids.split(',')
             }
           >
-            <Control icon={INTERFACE_ICONS.workflow} />
+            <Control iconName={INTERFACE_ICONS.workflow} />
             {this.props.workflows.map((o, k) => (
               <Item key={k} title={o} />
             ))}
@@ -222,7 +222,7 @@ export default class SearchToolbar extends Component {
                 : this.state.filter.split(',')
             }
           >
-            <Control icon="info-sign" />
+            <Control iconName="info-sign" />
             <Item title="All" />
             {ORDER_STATES.map((o, k) => (
               <Item key={k} title={o.title} />
@@ -231,13 +231,13 @@ export default class SearchToolbar extends Component {
         </ButtonGroup>
         <ButtonGroup>
           <Button
-            icon="refresh"
+            iconName="refresh"
             intent={this.state.retry ? Intent.PRIMARY : Intent.NONE}
             onClick={this.handleRetryChange}
             big
           />
           <Button
-            icon="error"
+            iconName="error"
             intent={this.state.busErr ? Intent.PRIMARY : Intent.NONE}
             onClick={this.handleBuserrChange}
             big

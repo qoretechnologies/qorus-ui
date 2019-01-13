@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 const SystemInfo = ({ info }: { info: Object }) => (
   <div className="login-footer">
@@ -17,8 +17,5 @@ const SystemInfo = ({ info }: { info: Object }) => (
     </span>
   </div>
 );
-SystemInfo.propTypes = {
-  info: PropTypes.object.isRequired,
-};
 
 export default SystemInfo;

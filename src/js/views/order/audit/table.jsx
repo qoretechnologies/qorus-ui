@@ -78,7 +78,7 @@ const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
           <FixedRow {...{ sortData, onSortChange }}>
             <IdColumnHeader name="audit_eventid">Event ID</IdColumnHeader>
             <NameColumnHeader name="event" title="Event" />
-            <Th name="audit_event_code" icon="info-sign">
+            <Th name="audit_event_code" iconName="info-sign">
               Code
             </Th>
             <DescriptionColumnHeader name="source">

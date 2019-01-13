@@ -30,7 +30,7 @@ const ToolbarSelector: Function = ({
   <ButtonGroup>
     <Dropdown disabled={disabled}>
       <Control
-        icon={
+        iconName={
           selected === 'all'
             ? 'selection'
             : selected === 'some'

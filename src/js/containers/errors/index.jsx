@@ -100,7 +100,7 @@ const ErrorsContainer: Function = ({
     <Flex>
       {title && (
         <Headbar>
-          <Breadcrumbs icon={compact && 'error'}>
+          <Breadcrumbs iconName={compact && 'error'}>
             <Crumb active>{title}</Crumb>
           </Breadcrumbs>
           <Pull right>

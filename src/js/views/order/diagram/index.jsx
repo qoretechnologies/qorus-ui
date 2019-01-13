@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 
-import actions from 'store/api/actions';
-import Loader from 'components/loader';
+import actions from '../../../store/api/actions';
+import Loader from '../../../components/loader';
 import Info from './info';
 import Keys from './keys';
 import StepCodeDiagram from '../../../components/StepCodeDiagram';
@@ -17,14 +18,12 @@ import { MasonryLayout, MasonryPanel } from '../../../components/MasonryLayout';
 @withDispatch()
 @onlyUpdateForKeys(['order', 'workflow', 'isTablet'])
 export default class DiagramView extends Component {
-  static propTypes = {
-    order: PropTypes.object,
-    workflow: PropTypes.object,
-    isTablet: PropTypes.bool,
-    dispatchAction: PropTypes.func,
+  props: {
+    order: Object,
+    workflow: Object,
+    isTablet: boolean,
+    dispatchAction: Function,
   };
-
-  _masonryInstance: any;
 
   handleSkipSubmit = (step, value, noretry) => {
     this.props.dispatchAction(
@@ -46,7 +45,6 @@ export default class DiagramView extends Component {
             workflow={this.props.workflow}
             order={this.props.order}
             onSkipSubmit={this.handleSkipSubmit}
-            masonryInstance={this._masonryInstance}
           />
         </Box>
       </MasonryPanel>,

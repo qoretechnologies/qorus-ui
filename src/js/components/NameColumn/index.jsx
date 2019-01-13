@@ -114,7 +114,7 @@ const NameColumnHeader: Function = ({
   icon: icon = 'application',
   ...rest
 }: NameColumnHeaderProps): React.Element<any> => (
-  <Th className="name" name={name} icon={icon} {...rest}>
+  <Th className="name" name={name} iconName={icon} {...rest}>
     {title}
   </Th>
 );

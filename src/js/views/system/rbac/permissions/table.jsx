@@ -79,7 +79,7 @@ const PermsTable: Function = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <NameColumnHeader />
             <ActionColumnHeader />
-            <Th className="text normal" name="permission_type" icon="info-sign">
+            <Th className="text normal" name="permission_type" iconName="info-sign">
               Type
             </Th>
             <DescriptionColumnHeader />

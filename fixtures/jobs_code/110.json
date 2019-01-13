@@ -1,4 +1,0 @@
-{
-  "jobid": 110,
-  "code": "%require-types\n\n#! polls local staging GSI_COMMISSIONING for new outbound delivery of CDS data; if data exists, then wf orders are created\n/** \n*/\nsub run() { do_job(); }\n"
-}

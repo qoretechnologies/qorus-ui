@@ -93,25 +93,25 @@ const StepsTable: Function = ({ steps }: Props): React.Element<Table> => (
                       </FixedRow>
                       <FixedRow {...{ sortData, onSortChange }}>
                         <NameColumnHeader name="stepname" />
-                        <Th icon="info-sign" name="stepstatus">
+                        <Th iconName="info-sign" name="stepstatus">
                           Status
                         </Th>
-                        <Th icon="info-sign" name="custom_status">
+                        <Th iconName="info-sign" name="custom_status">
                           Custom Status
                         </Th>
                         <IdColumnHeader name="subworkflow_instanceid">
                           SubWF IID
                         </IdColumnHeader>
-                        <Th icon="error" name="error_type">
+                        <Th iconName="error" name="error_type">
                           Error Type
                         </Th>
-                        <Th icon="info-sign" name="ind">
+                        <Th iconName="info-sign" name="ind">
                           Ind
                         </Th>
-                        <Th icon="refresh" name="retries">
+                        <Th iconName="refresh" name="retries">
                           Retries
                         </Th>
-                        <Th icon="exclude-row" name="skip">
+                        <Th iconName="exclude-row" name="skip">
                           Skip
                         </Th>
                         <DateColumnHeader name="started">

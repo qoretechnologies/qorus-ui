@@ -1,13 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 import Modal from 'components/modal';
 import { Controls, Control } from 'components/controls';
 
 export default class extends Component {
-  static propTypes = {
-    onClose: PropTypes.func,
-    onSubmit: PropTypes.func,
-    steps: PropTypes.array,
+  props: {
+    onClose: Function,
+    onSubmit: Function,
+    steps: Array<Object>,
   };
 
   componentWillMount() {
@@ -17,7 +17,7 @@ export default class extends Component {
     });
   }
 
-  handleInputChange = (event) => {
+  handleInputChange = event => {
     this.setState({
       value: event.target.value,
     });
@@ -29,13 +29,13 @@ export default class extends Component {
 
   handleSkipRetryClick = () => {
     this.skipStep(false);
-  }
+  };
 
-  handleFormSubmit = (event) => {
+  handleFormSubmit = event => {
     event.preventDefault();
   };
 
-  skipStep = (type) => {
+  skipStep = type => {
     let corr = true;
     const vals = this.state.value.split(',');
     const regexVal = /^[0-9]+$/;
@@ -61,13 +61,11 @@ export default class extends Component {
   render() {
     return (
       <Modal hasFooter>
-        <Modal.Header
-          titleId="skip-modal"
-          onClose={this.props.onClose}
-        > Skip step </Modal.Header>
-        <form
-          onSubmit={this.handleFormSubmit}
-        >
+        <Modal.Header titleId="skip-modal" onClose={this.props.onClose}>
+          {' '}
+          Skip step{' '}
+        </Modal.Header>
+        <form onSubmit={this.handleFormSubmit}>
           <Modal.Body>
             <p> You can skip a step using: </p>
             <p> - individual step indexes separated by comma (1, 2, 3)</p>

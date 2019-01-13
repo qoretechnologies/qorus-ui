@@ -1,3 +1,0 @@
---compilers js:babel-register,jsx:babel-register
---require test/jsdom.js
---require test/babel.js

@@ -32,7 +32,7 @@ const ActionColumnHeader: Function = compose(
     icon: icon = 'wrench',
     ...rest
   }: ActionColumnHeaderProps): React.Element<any> => (
-    <Th icon={icon} {...rest}>
+    <Th iconName={icon} {...rest}>
       {children}
     </Th>
   )

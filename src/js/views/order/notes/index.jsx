@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Intent, Callout } from '@blueprintjs/core';
@@ -34,12 +35,12 @@ const selector = createSelector(
 @connect(selector)
 @withDispatch()
 export default class NotesView extends Component {
-  static propTypes = {
-    params: PropTypes.object,
-    notes: PropTypes.array,
-    order: PropTypes.object,
-    dispatchAction: PropTypes.func,
-    user: PropTypes.object,
+  props: {
+    params: Object,
+    notes: Array<Object>,
+    order: Object,
+    dispatchAction: Function,
+    user: Object,
   };
 
   componentWillMount() {

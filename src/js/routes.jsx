@@ -1,11 +1,9 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 import { connect } from 'react-redux';
 import { Route, Router, IndexRedirect } from 'react-router';
-import applyMiddleware from 'react-router-apply-middleware';
-import { useRelativeLinks } from 'react-router-relative-links';
 
 import Root from './views/root';
 import Login from './views/auth';
@@ -33,6 +31,11 @@ import Services from './views/services';
 import Service from './views/services/detail';
 
 class AppInfo extends React.Component {
+  props: {
+    info: Object,
+    logout: Function,
+    routerProps: Object,
+  };
   /**
    * requireAnonymous - redirect to main page if user authenticated
    * @param  {*} nextState next router state
@@ -78,11 +81,7 @@ class AppInfo extends React.Component {
   render() {
     if (this.props.info.error) {
       return (
-        <Router
-          {...this.props.routerProps}
-          render={applyMiddleware(useRelativeLinks())}
-          key={Math.random()}
-        >
+        <Router {...this.props.routerProps} key={Math.random()}>
           <Route path="/error" component={ErrorView} />
         </Router>
       );
@@ -90,11 +89,7 @@ class AppInfo extends React.Component {
 
     if (this.props.info.sync) {
       return (
-        <Router
-          {...this.props.routerProps}
-          render={applyMiddleware(useRelativeLinks())}
-          key={Math.random()}
-        >
+        <Router {...this.props.routerProps} key={Math.random()}>
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
             <IndexRedirect to="/system/dashboard" />
             {dashboardRoutes()}
@@ -128,11 +123,6 @@ class AppInfo extends React.Component {
     return null;
   }
 }
-AppInfo.propTypes = {
-  info: PropTypes.object,
-  logout: PropTypes.func,
-  routerProps: PropTypes.object,
-};
 
 export default compose(
   connect(

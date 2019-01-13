@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Groups, Group } from '../../../components/groups';
@@ -18,10 +18,10 @@ import Box from '../../../components/box';
   actions.services
 )
 export default class DetailTab extends Component {
-  static propTypes = {
-    service: PropTypes.object.isRequired,
-    systemOptions: PropTypes.array.isRequired,
-    setOptions: PropTypes.func.isRequired,
+  props: {
+    service: Object,
+    systemOptions: Array<Object>,
+    setOptions: Function,
   };
 
   setOption = (opt: any) => {

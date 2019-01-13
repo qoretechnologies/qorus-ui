@@ -1,4 +1,0 @@
-{
-  "jobid": 33,
-  "code": "%require-types\n%new-style\n%requires SqlUtil\n\nbool sub data_ready() {\n    DatasourcePool dsstage = sepl_get_dsp(\"gsi_staging\");\n    on_success dsstage.commit();\n    on_error dsstage.rollback();\n\n    # just an sql logging\n    string sql;\n    on_error log(LL_INFO, \"sql: %s\", sql);\n\n    hash sh = (\n            \"columns\" : ( cop_as(cop_count(), \"cnt\") ),\n            \"where\"   : (\"status\"      : \"N\",),\n        );\n\n    SqlUtil::AbstractTable t = get_sql_table(dsstage, \"it_master_data_item_dhl\");\n    return t.selectRow(sh, \\sql).cnt > 0;\n}\n\nsub run() {\n    sepl_create_master_order(\"IT-01-MASTER_DATA_ITEM-DHL-OUT\", data_ready());\n}\n"
-}

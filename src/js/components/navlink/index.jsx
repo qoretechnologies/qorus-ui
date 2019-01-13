@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import NavLink from './link';
 
 type Props = {
@@ -22,12 +22,6 @@ const Nav: Function = ({ children, path }: Props): React.Element<any> => (
     </ul>
   </div>
 );
-
-Nav.propTypes = {
-  path: PropTypes.string,
-  children: PropTypes.node,
-  type: PropTypes.string,
-};
 
 export default Nav;
 export { NavLink };

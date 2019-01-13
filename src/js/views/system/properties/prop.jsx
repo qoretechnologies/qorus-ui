@@ -152,11 +152,11 @@ const Property: Function = ({
                 </Th>
               </FixedRow>
               <FixedRow {...{ sortData, onSortChange }}>
-                <NameColumnHeader icon="application" />
-                <Th className="text" name="prop" icon="property">
+                <NameColumnHeader iconName="application" />
+                <Th className="text" name="prop" iconName="property">
                   Property data
                 </Th>
-                <Th icon="build">Actions</Th>
+                <Th iconName="build">Actions</Th>
               </FixedRow>
             </Thead>
             <Tbody>

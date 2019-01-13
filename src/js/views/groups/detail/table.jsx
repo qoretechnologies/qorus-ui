@@ -64,7 +64,7 @@ const GroupDetailTable: Function = ({
                   <FixedRow {...{ sortData, onSortChange }}>
                     <NameColumnHeader />
                     {columns.map((column, index) => (
-                      <Th key={index} icon="info-sign">
+                      <Th key={index} iconName="info-sign">
                         {upperFirst(column)}
                       </Th>
                     ))}

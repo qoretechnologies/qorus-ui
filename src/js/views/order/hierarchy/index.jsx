@@ -91,35 +91,35 @@ const HierarchyTable: Function = ({
           <FixedRow {...{ sortData, onSortChange }}>
             <IdColumnHeader />
             <NameColumnHeader title="Workflow" />
-            <Th icon="info-sign" name="workflowstatus">
+            <Th iconName="info-sign" name="workflowstatus">
               Status
             </Th>
-            <Th icon="tree-diagram" name="hierarchy_level">
+            <Th iconName="tree-diagram" name="hierarchy_level">
               Level
             </Th>
-            <Th icon="warning-sign" name="priority">
+            <Th iconName="warning-sign" name="priority">
               Priority
             </Th>
-            <Th icon="error" name="business_error">
+            <Th iconName="error" name="business_error">
               Bus.Err.
             </Th>
             {!compact && (
-              <Th icon="error" name="error_count">
+              <Th iconName="error" name="error_count">
                 Errors
               </Th>
             )}
             {!compact && (
-              <Th icon="warning-sign" name="warning_count">
+              <Th iconName="warning-sign" name="warning_count">
                 Warnings
               </Th>
             )}
             {!compact && (
-              <Th icon="exchange" name="subworkflow">
+              <Th iconName="exchange" name="subworkflow">
                 Sub WF
               </Th>
             )}
             {!compact && (
-              <Th icon="refresh" name="synchronous">
+              <Th iconName="refresh" name="synchronous">
                 Sync
               </Th>
             )}

@@ -90,10 +90,10 @@ const SQLCacheTable: Function = ({
                 <FixedRow {...{ onSortChange, sortData }}>
                   <NameColumnHeader />
                   <ActionColumnHeader />
-                  <Th name="count" icon="info-sign">
+                  <Th name="count" iconName="info-sign">
                     Count
                   </Th>
-                  <Th icon="time" name="created">
+                  <Th iconName="time" name="created">
                     Created
                   </Th>
                 </FixedRow>

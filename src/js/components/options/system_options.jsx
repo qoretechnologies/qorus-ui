@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 
 import { pureRender } from '../utils';
 import Toolbar from '../toolbar';
@@ -9,9 +10,9 @@ import { Controls as ButtonGroup, Control as Button } from '../controls';
  */
 @pureRender
 export default class SystemOptions extends Component {
-  static propTypes = {
-    options: PropTypes.array.isRequired,
-    onAdd: PropTypes.func.isRequired,
+  props: {
+    options: Array<Object>,
+    onAdd: Function,
   };
 
   /**

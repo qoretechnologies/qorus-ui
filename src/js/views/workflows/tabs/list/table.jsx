@@ -134,25 +134,25 @@ const WorkflowTable: Function = ({
         <SelectColumnHeader />
         <IdColumnHeader />
         {!isTablet && searchPage && (
-          <NameColumnHeader title="Workflow" icon="exchange" />
+          <NameColumnHeader title="Workflow" iconName="exchange" />
         )}
         {!isTablet && <ActionColumnHeader />}
-        <Th name="operator_lock" icon="lock">
+        <Th name="operator_lock" iconName="lock">
           Lock
         </Th>
-        <Th icon="info-sign" name="workflowstatus">
+        <Th iconName="info-sign" name="workflowstatus">
           Status
         </Th>
-        <Th name="business_error" icon="error">
+        <Th name="business_error" iconName="error">
           Err.
         </Th>
-        <Th name="error_count" icon="error">
+        <Th name="error_count" iconName="error">
           Errors
         </Th>
-        <Th name="warning_count" icon="warning-sign">
+        <Th name="warning_count" iconName="warning-sign">
           Warns.
         </Th>
-        <Th name="note_count" icon="annotation">
+        <Th name="note_count" iconName="annotation">
           Notes
         </Th>
         <DateColumnHeader name="started" onClick={handleHeaderClick}>

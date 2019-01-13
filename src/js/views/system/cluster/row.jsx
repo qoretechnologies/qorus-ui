@@ -76,7 +76,7 @@ const ProcessRow: Function = ({
     <ActionColumn>
       <ButtonGroup>
         <Button
-          icon="cross"
+          iconName="cross"
           btnStyle="danger"
           title="Kill"
           onClick={handleKillClick}

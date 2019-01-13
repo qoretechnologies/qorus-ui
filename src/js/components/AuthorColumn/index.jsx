@@ -36,7 +36,7 @@ const AuthorColumnHeader: Function = compose(
     icon: icon = 'person',
     ...rest
   }: AuthorColumnHeaderProps): React.Element<any> => (
-    <Th icon={icon} name={name} className="text" {...rest}>
+    <Th iconName={icon} name={name} className="text" {...rest}>
       {children}
     </Th>
   )

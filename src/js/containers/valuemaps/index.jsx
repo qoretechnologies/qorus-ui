@@ -73,14 +73,14 @@ const ValueMapsTable = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <IdColumnHeader />
             <NameColumnHeader />
-            {!compact && <Th icon="download">Dump</Th>}
-            <Th className="narrow" name="mapsize" icon="info-sign">
+            {!compact && <Th iconName="download">Dump</Th>}
+            <Th className="narrow" name="mapsize" iconName="info-sign">
               Mapsize
             </Th>
-            <Th classname="narrow" name="throws_exception" icon="warning-sign">
+            <Th classname="narrow" name="throws_exception" iconName="warning-sign">
               Throws
             </Th>
-            <Th className="narrow" name="valuetype" icon="code">
+            <Th className="narrow" name="valuetype" iconName="code">
               Type
             </Th>
             {!compact && <AuthorColumnHeader />}

@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Controls, Control } from '../controls';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -101,17 +101,3 @@ export default class Picker extends Component {
     );
   }
 }
-
-Picker.propTypes = {
-  minutes: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  hours: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  onAllClick: PropTypes.func,
-  onApplyClick: PropTypes.func,
-  on24hClick: PropTypes.func,
-  onResetClick: PropTypes.func,
-  onMinutesChange: PropTypes.func,
-  onHoursChange: PropTypes.func,
-  hideDatepicker: PropTypes.func,
-  children: PropTypes.node,
-  futureOnly: PropTypes.bool,
-};

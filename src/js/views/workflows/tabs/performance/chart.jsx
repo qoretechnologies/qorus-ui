@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import settings from '../../../../settings';
 import { fetchJson } from '../../../../store/api/utils';
 import moment from 'moment';
@@ -14,10 +14,10 @@ import {
 } from '../../../../helpers/chart';
 
 export default class ChartView extends Component {
-  static propTypes = {
-    days: PropTypes.number,
-    workflow: PropTypes.object,
-    global: PropTypes.bool,
+  props: {
+    days: number,
+    workflow: Object,
+    global: boolean,
   };
 
   componentWillMount() {

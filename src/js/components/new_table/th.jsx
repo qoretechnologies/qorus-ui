@@ -21,6 +21,7 @@ type Props = {
   title?: string,
   fixed?: boolean,
   icon?: string,
+  iconName?: string,
 };
 
 const Th: Function = ({
@@ -94,7 +95,7 @@ export default compose(
       }
     },
   }),
-  mapProps(({ sortData, name, ...rest }: Props) => ({
+  mapProps(({ sortData, name, icon, iconName, ...rest }: Props) => ({
     direction:
       sortData && sortData.sortBy === name
         ? sortData.sortByKey.direction
@@ -104,6 +105,7 @@ export default compose(
         ? sortData.historySortByKey.direction
         : null,
     name,
+    icon: icon || iconName,
     ...rest,
   })),
   updateOnlyForKeys([

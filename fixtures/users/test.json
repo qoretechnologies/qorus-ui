@@ -1,1 +1,0 @@
-{ "provider" : "db", "username" : "test", "password": "test", "name" : "test", "token": "testtkn", "has_default" : true, "roles" : [ "MIG-admin" ], "workflows" : [  ], "services" : [  ], "jobs" : [  ], "groups" : [  ], "storage" : {  } }

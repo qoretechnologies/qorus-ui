@@ -33,7 +33,7 @@ const MultiDispostionChart: Function = ({
     title={title}
     label={
       <Dropdown>
-        <Control small icon="time">
+        <Control small iconName="time">
           {chartTab}
         </Control>
         <Item title="1 hour band" action={handleChartTabChange} />

@@ -99,16 +99,16 @@ const JobsTable: Function = ({
         <IdColumnHeader />
         <NameColumnHeader />
         <ActionColumnHeader />
-        <Th name="last_executed" icon="calendar">
+        <Th name="last_executed" iconName="calendar">
           Last run
         </Th>
-        <Th name="next" icon="calendar">
+        <Th name="next" iconName="calendar">
           Next run
         </Th>
-        <Th name="expiry_date" icon="calendar">
+        <Th name="expiry_date" iconName="calendar">
           Expiry Date
         </Th>
-        <Th className="separated-cell" icon="grid">
+        <Th className="separated-cell" iconName="grid">
           Instances
         </Th>
       </FixedRow>

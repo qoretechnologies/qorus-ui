@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import { Icon } from '@blueprintjs/core';
@@ -39,16 +40,16 @@ const LEFT = 0b1000;
  * other combination throws an error before render.
  */
 export default class Handle extends Component {
-  static propTypes = {
-    minCurrent: PropTypes.bool,
-    min: PropTypes.object,
-    top: PropTypes.bool,
-    right: PropTypes.bool,
-    bottom: PropTypes.bool,
-    left: PropTypes.bool,
-    onStart: PropTypes.func,
-    onStop: PropTypes.func,
-    children: PropTypes.any,
+  props: {
+    minCurrent: boolean,
+    min: Object,
+    top: boolean,
+    right: boolean,
+    bottom: boolean,
+    left: boolean,
+    onStart: Function,
+    onStop: Function,
+    children: any,
   };
 
   static defaultProps = {

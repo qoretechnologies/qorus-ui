@@ -81,10 +81,10 @@ const MethodsTable: Function = ({
           <FixedRow {...{ sortData, onSortChange }}>
             <NameColumnHeader />
             <ActionColumnHeader />
-            <Th name="locktype" icon="lock" />
-            <Th name="internal" icon="cog" />
-            <Th name="write" icon="edit" />
-            <Th icon="time">SLA</Th>
+            <Th name="locktype" iconName="lock" />
+            <Th name="internal" iconName="cog" />
+            <Th name="write" iconName="edit" />
+            <Th iconName="time">SLA</Th>
           </FixedRow>
         </Thead>
         <DataOrEmptyTable condition={size(collection) === 0} cols={6}>

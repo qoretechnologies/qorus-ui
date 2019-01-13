@@ -198,7 +198,7 @@ export default class SearchToolbar extends Component {
                   : this.state.filter.split(',')
               }
             >
-              <Control icon="filter-list" />
+              <Control iconName="filter-list" />
               <Item title="All" />
               {ORDER_STATES.map((o, k) => (
                 <Item key={k} title={o.title} />

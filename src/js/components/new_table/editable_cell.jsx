@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 
@@ -18,19 +19,16 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
  */
 @onlyUpdateForKeys(['value', 'className'])
 export default class EditableCell extends Component {
-  static propTypes = {
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-    ]),
-    startEdit: PropTypes.bool,
-    onSave: PropTypes.func,
-    onCancel: PropTypes.func,
-    type: PropTypes.string,
-    min: PropTypes.number,
-    max: PropTypes.number,
-    showControl: PropTypes.bool,
-    className: PropTypes.string,
+  props: {
+    value: string | number,
+    startEdit: boolean,
+    onSave: Function,
+    onCancel: Function,
+    type: string,
+    min: number,
+    max: number,
+    showControl: boolean,
+    className: string,
   };
 
   static defaultProps = {

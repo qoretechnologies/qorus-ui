@@ -42,7 +42,7 @@ const SLATable: Function = ({
         <IdColumnHeader name="slaid" />
         <NameColumnHeader />
         <DescriptionColumnHeader name="description" />
-        <Th className="text" name="type" icon="time">
+        <Th className="text" name="type" iconName="time">
           Units
         </Th>
         <ActionColumnHeader />

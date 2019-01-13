@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 import Modal from '../modal';
 import Loader from '../loader';
@@ -27,31 +27,15 @@ import { rebuildConfigHash } from '../../helpers/interfaces';
     )
 )
 export default class StepModal extends Component {
-  static propTypes = {
-    id: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    version: PropTypes.string.isRequired,
-    patch: PropTypes.string,
-    steptype: PropTypes.string.isRequired,
-    step: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      version: PropTypes.string.isRequired,
-      patch: PropTypes.string,
-      steptype: PropTypes.string.isRequired,
-      functions: React.PropTypes.arrayOf(
-        PropTypes.shape({
-          function_instanceid: PropTypes.number.isRequired,
-          type: PropTypes.string.isRequired,
-          name: PropTypes.string.isRequired,
-          version: PropTypes.string.isRequired,
-          patch: PropTypes.string,
-          body: PropTypes.string.isRequired,
-          offset: PropTypes.string.isRequired,
-        }).isRequired
-      ).isRequired,
-    }),
-    onClose: PropTypes.func.isRequired,
-    fetchStep: PropTypes.func.isRequired,
+  props: {
+    id: number,
+    name: string,
+    version: string,
+    patch?: string,
+    steptype: string,
+    step: Object,
+    onClose: Function,
+    fetchStep: Function,
   };
 
   /**

@@ -43,7 +43,7 @@ const WorkflowControls: Function = ({
     />
     <Control
       title="Remote"
-      icon="globe"
+      iconName="globe"
       btnStyle={remote ? 'info' : 'default'}
       onClick={handleRemoteClick}
       big={big}

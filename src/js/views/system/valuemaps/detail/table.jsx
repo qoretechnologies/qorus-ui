@@ -60,7 +60,7 @@ const DetailTable: Function = ({
       <FixedRow>
         <NameColumnHeader />
         <ActionColumnHeader />
-        <Th icon="info-sign"> Value </Th>
+        <Th iconName="info-sign"> Value </Th>
       </FixedRow>
     </Thead>
     <DataOrEmptyTable condition={size(data) === 0} cols={3} small>

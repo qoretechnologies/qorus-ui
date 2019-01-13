@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 
@@ -102,13 +102,6 @@ export default (
       );
     }
   }
-
-  WrappedComponent.propTypes = {
-    changeSort: PropTypes.func,
-    initSort: PropTypes.func,
-    sortData: PropTypes.object,
-    [collectionProp]: PropTypes.array,
-  };
 
   WrappedComponent.displayName = wrapDisplayName(Component, 'sort');
 

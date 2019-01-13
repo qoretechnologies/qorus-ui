@@ -19,7 +19,7 @@ const DiagramKeysTable: Function = ({
           <Thead>
             <Tr>
               <NameColumnHeader title="Key" />
-              <Th icon="info-sign"> Value </Th>
+              <Th iconName="info-sign"> Value </Th>
             </Tr>
           </Thead>
           <Tbody>

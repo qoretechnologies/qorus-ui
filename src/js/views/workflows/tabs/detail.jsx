@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Groups, Group } from '../../../components/groups';
 import Options from '../../../components/options';
 import { connect } from 'react-redux';
@@ -40,12 +40,12 @@ import { ActionColumnHeader } from '../../../components/ActionColumn';
 )
 @withDispatch()
 export default class DetailTab extends Component {
-  static propTypes = {
-    workflow: PropTypes.object.isRequired,
-    systemOptions: PropTypes.array.isRequired,
-    setOptions: PropTypes.func.isRequired,
-    dispatchAction: PropTypes.func.isRequired,
-    band: PropTypes.string.isRequired,
+  props: {
+    workflow: Object,
+    systemOptions: Array<Object>,
+    setOptions: Function,
+    dispatchAction: Function,
+    band: string,
   };
 
   state: {
@@ -117,8 +117,8 @@ export default class DetailTab extends Component {
               <Thead>
                 <Tr>
                   <ActionColumnHeader />
-                  <Th icon="automatic-updates">Auto/Execs</Th>
-                  <Th icon="time">SLA Threshold</Th>
+                  <Th iconName="automatic-updates">Auto/Execs</Th>
+                  <Th iconName="time">SLA Threshold</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -148,7 +148,7 @@ export default class DetailTab extends Component {
                             onChange={this.handleThresholdChange}
                             className="pt-small"
                           />
-                          <Control icon="floppy-disk" type="submit" />
+                          <Control iconName="floppy-disk" type="submit" />
                         </ControlGroup>
                       </form>
                     </ButtonGroup>
@@ -162,7 +162,7 @@ export default class DetailTab extends Component {
               title="Order Stats - Disposition (%)"
               label={
                 <Dropdown>
-                  <DControl small icon="time">
+                  <DControl small iconName="time">
                     {dispositionBand}
                   </DControl>
                   <Item
@@ -199,7 +199,7 @@ export default class DetailTab extends Component {
               title="Order Stats - SLA (%)"
               label={
                 <Dropdown>
-                  <DControl small icon="time">
+                  <DControl small iconName="time">
                     {slaBand}
                   </DControl>
                   <Item title="1 hour band" action={this.handleSlaBandChange} />

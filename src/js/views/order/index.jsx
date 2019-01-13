@@ -1,11 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import actions from 'store/api/actions';
+import actions from '../../store/api/actions';
 
 import Header from './header';
-import Loader from 'components/loader';
+import Loader from '../../components/loader';
 import withTabs from '../../hocomponents/withTabs';
 
 import StepsView from './steps';
@@ -58,18 +60,18 @@ const selector = createSelector(
 @withTabs('overview')
 @titleManager(({ order }): string => (order ? order.name : 'Order view'))
 export default class Order extends Component {
-  static propTypes = {
-    order: PropTypes.object,
-    workflow: PropTypes.object,
-    dispatch: PropTypes.func,
-    params: PropTypes.object,
-    route: PropTypes.object,
-    location: PropTypes.object,
-    children: PropTypes.node,
-    user: PropTypes.object,
-    isTablet: PropTypes.bool,
-    tabQuery: PropTypes.string,
-    handleTabChange: PropTypes.func,
+  props: {
+    order: Object,
+    workflow: Object,
+    dispatch: Function,
+    params: Object,
+    route: Object,
+    location: Object,
+    children: any,
+    user: Object,
+    isTablet: boolean,
+    tabQuery: string,
+    handleTabChange: Function,
   };
 
   static childContextTypes = {
@@ -242,14 +244,3 @@ export default class Order extends Component {
     );
   }
 }
-
-Order.Steps = StepsView;
-Order.Data = DataView;
-Order.Info = InfoView;
-Order.Log = LogView;
-Order.Notes = NotesView;
-Order.Errors = ErrorsView;
-Order.Hierarchy = HierarchyView;
-Order.Audit = AuditView;
-Order.Code = CodeView;
-Order.Diagram = DiagramView;

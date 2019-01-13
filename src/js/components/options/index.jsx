@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import { Button, Intent } from '@blueprintjs/core';
 
 import SystemOptions from './system_options';
@@ -22,11 +23,11 @@ import NoData from '../nodata';
  */
 @pureRender
 export default class Options extends Component {
-  static propTypes = {
-    model: PropTypes.object.isRequired,
-    systemOptions: PropTypes.array.isRequired,
-    onSet: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired,
+  props: {
+    model: Object,
+    systemOptions: Array<Object>,
+    onSet: Function,
+    onDelete: Function,
   };
 
   /**
@@ -133,9 +134,7 @@ export default class Options extends Component {
    * @return {Generator<ReactElement>}
    */
   *renderTableCells(opt) {
-    yield (
-      <Cell className="name">{opt.name}</Cell>
-    );
+    yield <Cell className="name">{opt.name}</Cell>;
 
     const handleSave = value => this.setOption(opt, value);
     const handleCancel = () => this.cancelOptionEdit(opt);
@@ -172,9 +171,7 @@ export default class Options extends Component {
    */
   *renderTableRows(opts) {
     for (const opt of opts) {
-      yield (
-        <Row data={opt} cells={this.renderTableCells} />
-      );
+      yield <Row data={opt} cells={this.renderTableCells} />;
     }
   }
 
@@ -196,9 +193,7 @@ export default class Options extends Component {
       </thead>
     );
 
-    yield (
-      <Section type="body" data={opts} rows={this.renderTableRows} />
-    );
+    yield <Section type="body" data={opts} rows={this.renderTableRows} />;
   }
 
   /**

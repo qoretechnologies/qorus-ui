@@ -1,6 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
-
 import { pureRender } from '../utils';
 
 /**
@@ -8,15 +7,15 @@ import { pureRender } from '../utils';
  */
 @pureRender
 export default class Cell extends Component {
-  static propTypes = {
-    tag: PropTypes.oneOf(['td', 'th']),
-    children: PropTypes.node,
-    onSortChange: PropTypes.func,
-    name: PropTypes.string,
-    className: PropTypes.string,
-    sortData: PropTypes.object,
-    colspan: PropTypes.number,
-    onClick: PropTypes.func,
+  props: {
+    tag: any,
+    children: any,
+    onSortChange: Function,
+    name: string,
+    className: string,
+    sortData: Object,
+    colspan: number,
+    onClick: Function,
   };
 
   static defaultProps = {
@@ -41,7 +40,10 @@ export default class Cell extends Component {
     let sortCss;
 
     if (this.props.sortData && this.props.sortData.sortBy === this.props.name) {
-      sortCss = this.props.sortData.sortByKey.direction > 0 ? 'sort sort-asc' : 'sort sort-desc';
+      sortCss =
+        this.props.sortData.sortByKey.direction > 0
+          ? 'sort sort-asc'
+          : 'sort sort-desc';
     }
 
     return (
@@ -50,7 +52,7 @@ export default class Cell extends Component {
         className={classNames(this.props.className, sortCss)}
         colSpan={this.props.colspan}
       >
-        { React.Children.toArray(this.props.children) }
+        {React.Children.toArray(this.props.children)}
       </Tag>
     );
   }

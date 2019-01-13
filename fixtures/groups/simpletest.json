@@ -1,1 +1,0 @@
-{"name": "SIMPLETEST","description": "synthetic group created to manage the single workflow member","id": -173,"enabled": false,"size": 1,"is_default": false,"services": [],"workflows": [{"workflowid": 695,"name": "SIMPLETEST","version": "1.0"}],"jobs": [],"mappers": [],"vmaps": [],"roles": [],"synthetic": true}

@@ -74,7 +74,7 @@ const RolesTable: Function = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <NameColumnHeader name="role" />
             <ActionColumnHeader />
-            <Th className="text" name="provider" icon="database">
+            <Th className="text" name="provider" iconName="database">
               Provider
             </Th>
             <DescriptionColumnHeader />
