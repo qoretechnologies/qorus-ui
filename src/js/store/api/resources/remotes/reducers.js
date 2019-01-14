@@ -37,6 +37,15 @@ const resetConnection = {
   },
 };
 
+const deleteConnection = {
+  next(state: Object = initialState): Object {
+    return state;
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
 const connectionChange = {
   next(
     state: Object = initialState,
@@ -277,22 +286,22 @@ const manageConnection = {
   },
 };
 
-const deleteConnection = {
+const removeConnectionWs = {
   next(
     state: Object = initialState,
     {
-      payload: { remoteType, name, error },
+      payload: { events },
     }: Object
   ): Object {
     const data = [...state.data];
 
-    if (!error) {
+    events.forEach(dt => {
       remove(
         data,
         (remote: Object): boolean =>
-          remote.name === name && remote.conntype === CONN_MAP[remoteType]
+          remote.name === dt.name && remote.conntype === dt.type
       );
-    }
+    });
 
     return { ...state, ...{ data } };
   },
@@ -307,6 +316,7 @@ export {
   clearAlert as CLEARALERT,
   manageConnection as MANAGECONNECTION,
   deleteConnection as DELETECONNECTION,
+  removeConnectionWs as REMOVECONNECTIONWS,
   toggleConnection as TOGGLECONNECTION,
   resetConnection as RESETCONNECTION,
   fetchPass as FETCHPASS,

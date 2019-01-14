@@ -845,6 +845,21 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
+      case 'CONNECTION_CREATED':
+        if (state.api.remotes.sync) {
+          pipeline(eventstr, remotes.addConnection, info, dispatch);
+        }
+        break;
+      case 'CONNECTION_UPDATED':
+        if (state.api.remotes.sync) {
+          pipeline(eventstr, remotes.updateConnection, info, dispatch);
+        }
+        break;
+      case 'CONNECTION_DELETED':
+        if (state.api.remotes.sync) {
+          pipeline(eventstr, remotes.removeConnectionWS, info, dispatch);
+        }
+        break;
       case 'SYSTEM_HEALTH_CHANGED':
         if (state.api.system.sync) {
           pipeline(eventstr, system.healthChanged, info, dispatch);

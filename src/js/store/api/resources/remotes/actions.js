@@ -27,6 +27,19 @@ const enabledChange = createAction('REMOTES_ENABLEDCHANGE', events => ({
   events,
 }));
 
+const addConnection = createAction('REMOTES_ADDCONNECTION', events => ({
+  events,
+}));
+const updateConnection = createAction('REMOTES_UPDATECONNECTION', events => ({
+  events,
+}));
+const removeConnectionWS = createAction(
+  'REMOTES_REMOVECONNECTIONWS',
+  events => ({
+    events,
+  })
+);
+
 const updateDone: Function = createAction(
   'REMOTES_UPDATEDONE',
   (name: string): Object => ({ name })
@@ -124,8 +137,8 @@ const manageConnection: Function = createAction(
 
 const deleteConnection: Function = createAction(
   'REMOTES_DELETECONNECTION',
-  async (remoteType: string, name: string, dispatch): Object => {
-    const response = await fetchWithNotifications(
+  (remoteType: string, name: string, dispatch): ?Object => {
+    fetchWithNotifications(
       async () =>
         await fetchJson(
           'DELETE',
@@ -138,11 +151,7 @@ const deleteConnection: Function = createAction(
       dispatch
     );
 
-    return {
-      remoteType,
-      name,
-      error: !!response.err,
-    };
+    return;
   }
 );
 
@@ -201,4 +210,7 @@ export {
   toggleConnection,
   resetConnection,
   fetchPass,
+  addConnection,
+  updateConnection,
+  removeConnectionWS,
 };
