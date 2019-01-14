@@ -131,7 +131,7 @@ const WorkflowsTable: Function = ({
         </Th>
         <Th className="separated-cell" colspan={2}>
           <Dropdown>
-            <Control icon="time">{band}</Control>
+            <Control iconName="time">{band}</Control>
             <Item title="1 hour band" onClick={handleDispositionChange} />
             <Item title="4 hour band" onClick={handleDispositionChange} />
             <Item title="24 hour band" onClick={handleDispositionChange} />
@@ -143,28 +143,28 @@ const WorkflowsTable: Function = ({
         <IdColumnHeader />
         <NameColumnHeader />
         {!isTablet && <ActionColumnHeader />}
-        <Th name="autostart" icon="automatic-updates">
+        <Th name="autostart" iconName="automatic-updates">
           Auto / Execs
         </Th>
         {deprecated && (
-          <Th name="deprecated" icon="flag">
+          <Th name="deprecated" iconName="flag">
             Deprecated
           </Th>
         )}
         <Th
           className="separated-cell"
           onClick={handleInstancesClick}
-          icon="layout-grid"
+          iconName="layout-grid"
         >
           Instances
         </Th>
-        <Th name="TOTAL" icon="grid">
+        <Th name="TOTAL" iconName="grid">
           All
         </Th>
-        <Th className="separated-cell" icon="pie-chart">
+        <Th className="separated-cell" iconName="pie-chart">
           Disposition (%)
         </Th>
-        <Th className="normal" icon="time">
+        <Th className="normal" iconName="time">
           SLA (%)
         </Th>
       </FixedRow>

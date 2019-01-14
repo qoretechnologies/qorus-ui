@@ -1,18 +1,21 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import includes from 'lodash/includes';
 
 import { Controls, Control } from '../../../components/controls';
-import Dropdown, { Control as DControl, Item as DItem } from '../../../components/dropdown';
+import Dropdown, {
+  Control as DControl,
+  Item as DItem,
+} from '../../../components/dropdown';
 import Modal from '../../../components/modal';
 
 export default class extends Component {
-  static propTypes = {
-    onMount: PropTypes.func,
-    onClose: PropTypes.func,
-    onSubmit: PropTypes.func,
-    data: PropTypes.object,
-    collection: PropTypes.object,
+  props: {
+    onMount: Function,
+    onClose: Function,
+    onSubmit: Function,
+    data: Object,
+    collection: Object,
   };
 
   state: {
@@ -68,7 +71,10 @@ export default class extends Component {
     });
   };
 
-  handleDomainSelect: Function = (event: EventHandler, domain: string): void => {
+  handleDomainSelect: Function = (
+    event: EventHandler,
+    domain: string
+  ): void => {
     this.setState({ domain });
   };
 
@@ -103,54 +109,39 @@ export default class extends Component {
     }
   };
 
-  getDomainList: Function = (value: string): Array<string> => (
-    Object.keys(this.props.collection).filter((domain: string): boolean => (
-      includes(domain, value)
-    ))
-  );
+  getDomainList: Function = (value: string): Array<string> =>
+    Object.keys(this.props.collection).filter(
+      (domain: string): boolean => includes(domain, value)
+    );
 
-  getKeyList: Function = (value: string): Array<string> => (
-    Object.keys(this.props.collection[this.state.domain]).filter((key: string): boolean => (
-      value ? includes(key, value) : true
-    ))
-  );
+  getKeyList: Function = (value: string): Array<string> =>
+    Object.keys(this.props.collection[this.state.domain]).filter(
+      (key: string): boolean => (value ? includes(key, value) : true)
+    );
 
-  renderDomains: Function = (): Array<React.Element<any>> => (
+  renderDomains: Function = (): Array<React.Element<any>> =>
     this.getDomainList(this.state.domain).map((domain: string, key: number) => (
-      <DItem
-        key={key}
-        title={domain}
-        action={this.handleDomainSelect}
-      />
-    ))
-  );
+      <DItem key={key} title={domain} action={this.handleDomainSelect} />
+    ));
 
-  renderKeys: Function = (): ?Array<React.Element<any>> => (
+  renderKeys: Function = (): ?Array<React.Element<any>> =>
     this.getKeyList(this.state.key).map((key: string, index: number) => (
-      <DItem
-        key={index}
-        title={key}
-        action={this.handleKeySelect}
-      />
-    ))
-  );
+      <DItem key={index} title={key} action={this.handleKeySelect} />
+    ));
 
   render() {
     const { data, collection } = this.props;
 
     return (
       <Modal hasFooter>
-        <Modal.Header
-          titleId="props-modal"
-          onClose={this.props.onClose}
-        >
+        <Modal.Header titleId="props-modal" onClose={this.props.onClose}>
           Create / Update property
         </Modal.Header>
         <form onSubmit={this.handleFormSubmit}>
           <Modal.Body>
             <label htmlFor="domain"> Domain </label>
             <div className={`form-group ${!data ? 'input-group' : ''}`}>
-              { !data && (
+              {!data && (
                 <div className="input-group-btn">
                   <Dropdown
                     id="props"
@@ -158,7 +149,7 @@ export default class extends Component {
                     onHide={this.handleDomainClose}
                   >
                     <DControl> Select </DControl>
-                    { this.renderDomains() }
+                    {this.renderDomains()}
                   </Dropdown>
                 </div>
               )}
@@ -175,7 +166,11 @@ export default class extends Component {
               />
             </div>
             <label htmlFor="key"> Key </label>
-            <div className={`form-group ${(!data || !data.key) ? 'input-group' : ''}`}>
+            <div
+              className={`form-group ${
+                !data || !data.key ? 'input-group' : ''
+              }`}
+            >
               {(!data || !data.key) && (
                 <div className="input-group-btn">
                   <Dropdown
@@ -183,10 +178,11 @@ export default class extends Component {
                     show={this.state.showKeys}
                     onHide={this.handleKeysClose}
                   >
-                    <DControl disabled={!collection[this.state.domain]}> Select </DControl>
-                    { collection[this.state.domain] && (
-                      this.renderKeys()
-                    )}
+                    <DControl disabled={!collection[this.state.domain]}>
+                      {' '}
+                      Select{' '}
+                    </DControl>
+                    {collection[this.state.domain] && this.renderKeys()}
                   </Dropdown>
                 </div>
               )}
@@ -222,12 +218,7 @@ export default class extends Component {
                   action={this.props.onClose}
                   type="button"
                 />
-                <Control
-                  type="submit"
-                  big
-                  label="Save"
-                  btnStyle="success"
-                />
+                <Control type="submit" big label="Save" btnStyle="success" />
               </Controls>
             </div>
           </Modal.Footer>

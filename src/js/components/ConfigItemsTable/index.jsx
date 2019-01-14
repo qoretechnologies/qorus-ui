@@ -155,13 +155,13 @@ const ConfigItemsContainer: Function = ({
                           <Th className="text" name="default_value">
                             Default
                           </Th>
-                          <Th className="text" icon="info-sign" name="value">
+                          <Th className="text" iconName="info-sign" name="value">
                             Value
                           </Th>
-                          <Th icon="code" name="type">
+                          <Th iconName="code" name="type">
                             Type
                           </Th>
-                          <Th icon="asterisk">Req.</Th>
+                          <Th iconName="asterisk">Req.</Th>
                           <DescriptionColumnHeader />
                         </FixedRow>
                       </Thead>

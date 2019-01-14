@@ -89,20 +89,20 @@ const ErrorsTable: Function = ({
             <NameColumnHeader name="error" />
             <ActionColumnHeader />
             {!compact && <DescriptionColumnHeader name="description" />}
-            <Th name="severity" icon="warning-sign">
+            <Th name="severity" iconName="warning-sign">
               Severity
             </Th>
-            <Th name="status" icon="info-sign">
+            <Th name="status" iconName="info-sign">
               Status
             </Th>
-            <Th name="retry_delay_secs" icon="time">
+            <Th name="retry_delay_secs" iconName="time">
               Delay
             </Th>
-            <Th name="business_flag" icon="flag">
+            <Th name="business_flag" iconName="flag">
               Bus. Flag
             </Th>
             {type === 'workflow' && (
-              <Th name="manually_updated" icon="edit">
+              <Th name="manually_updated" iconName="edit">
                 Updated
               </Th>
             )}

@@ -1,7 +1,7 @@
 // @flow
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
-import Transition from 'react-addons-css-transition-group';
 import getContext from 'recompose/getContext';
 import withHandlers from 'recompose/withHandlers';
 import compose from 'recompose/compose';
@@ -26,25 +26,16 @@ type Props = {
 const Login: Function = ({ info, handleSubmit }: Props): React.Element<any> => (
   <div className="full-background">
     <CenterWrapper>
-      <Transition
-        transitionName="bubble"
-        transitionAppear
-        transitionAppearTimeout={500000}
-        transitionEnter={false}
-        transitionLeave={false}
-        component="div"
-      >
-        <div className="login-wrapper">
-          <h1 className="login-header">
-            <img src={logo} />
-            Qorus Integration Engine <span className="small reg">&reg;</span>
-            <p className="login-instance-wrapper">
-              <span> {info['instance-key']} </span>
-            </p>
-          </h1>
-          <LoginForm onSubmit={handleSubmit} />
-        </div>
-      </Transition>
+      <div className="login-wrapper">
+        <h1 className="login-header">
+          <img src={logo} />
+          Qorus Integration Engine <span className="small reg">&reg;</span>
+          <p className="login-instance-wrapper">
+            <span> {info['instance-key']} </span>
+          </p>
+        </h1>
+        <LoginForm onSubmit={handleSubmit} />
+      </div>
     </CenterWrapper>
     <SystemInfo info={info} />
   </div>

@@ -32,7 +32,7 @@ const ToolbarSelector: Function = ({
 }: Props): React.Element<any> => (
   <Dropdown disabled={disabled}>
     <Control
-      icon={
+      iconName={
         selected === 'all'
           ? 'selection'
           : selected === 'some'

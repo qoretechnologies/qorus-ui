@@ -1,5 +1,5 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { pureRender } from '../utils';
 
 import Item from './item';
@@ -31,8 +31,10 @@ export default class Navigation extends Component {
    * @return {boolean}
    */
   isActiveItem({ url }: { url: string }): boolean {
-    return !!this.props.location.pathname &&
-      this.props.location.pathname.indexOf(url) === 0;
+    return (
+      !!this.props.location.pathname &&
+      this.props.location.pathname.indexOf(url) === 0
+    );
   }
 
   /**
@@ -69,9 +71,3 @@ export default class Navigation extends Component {
     );
   }
 }
-
-Navigation.propTypes = {
-  location: PropTypes.object,
-  mainItems: PropTypes.array,
-  extraItems: PropTypes.array,
-};

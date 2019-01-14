@@ -72,25 +72,25 @@ const WorkflowTable: Function = ({
           <IdColumnHeader />
           <NameColumnHeader name="error" />
           <NameColumnHeader
-            icon={INTERFACE_ICONS.order}
+            iconName={INTERFACE_ICONS.order}
             title="Order"
             name="workflow_instanceid"
           />
           <NameColumnHeader
-            icon={INTERFACE_ICONS.workflow}
+            iconName={INTERFACE_ICONS.workflow}
             title="Workflow"
             name="workflowid"
           />
-          <Th name="severity" icon="warning-sign">
+          <Th name="severity" iconName="warning-sign">
             Severity
           </Th>
-          <Th name="workflowstatus" icon="info-sign">
+          <Th name="workflowstatus" iconName="info-sign">
             Status
           </Th>
-          <Th name="retry" icon="refresh">
+          <Th name="retry" iconName="refresh">
             Retry
           </Th>
-          <Th name="business_error" icon="error">
+          <Th name="business_error" iconName="error">
             Bus. Err.
           </Th>
         </FixedRow>

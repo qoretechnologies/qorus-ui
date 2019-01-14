@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Flex from '../Flex';
 
 /**
@@ -11,7 +11,3 @@ import Flex from '../Flex';
 export default function Body(props: { children: any }) {
   return <Flex className="pt-dialog-body">{props.children}</Flex>;
 }
-
-Body.propTypes = {
-  children: PropTypes.node,
-};

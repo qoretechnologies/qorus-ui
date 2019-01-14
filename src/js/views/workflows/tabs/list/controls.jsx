@@ -57,7 +57,7 @@ const ActionButton: Function = ({
       onClick={handleClick}
     />
   ) : (
-    <Item onClick={handleClick} icon={icon} title={name} disabled={disabled} />
+    <Item onClick={handleClick} iconName={icon} title={name} disabled={disabled} />
   );
 };
 

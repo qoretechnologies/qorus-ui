@@ -83,7 +83,7 @@ const ErrorsTable: Function = ({
             <Th colspan="full">
               <Pull>
                 <Dropdown multi def="ALL" id="errors" onSubmit={onFilterChange}>
-                  <Control icon="filter" />
+                  <Control iconName="filter" />
                   <Item title="ALL" />
                   <Item title="FATAL" />
                   <Item title="MAJOR" />
@@ -94,7 +94,7 @@ const ErrorsTable: Function = ({
                 <ButtonGroup>
                   <Button
                     text={expanded ? 'Collapse texts' : 'Expand texts'}
-                    icon={expanded ? 'collapse-all' : 'expand-all'}
+                    iconName={expanded ? 'collapse-all' : 'expand-all'}
                     btnStyle={expanded && 'primary'}
                     big
                     onClick={handleExpandClick}
@@ -120,28 +120,28 @@ const ErrorsTable: Function = ({
             </Th>
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
-            <NameColumnHeader title="Error code" name="error" icon="error" />
+            <NameColumnHeader title="Error code" name="error" iconName="error" />
             {!compact && (
               <NameColumnHeader title="Step Name" name="step_name" />
             )}
-            <Th icon="info-sign" name="severity">
+            <Th iconName="info-sign" name="severity">
               Severity
             </Th>
-            <Th icon="error" name="business_error">
+            <Th iconName="error" name="business_error">
               Bus.Err.
             </Th>
             {!compact && (
-              <Th icon="error" name="error_type">
+              <Th iconName="error" name="error_type">
                 Error Type
               </Th>
             )}
             {!compact && (
-              <Th icon="refresh" name="retry">
+              <Th iconName="refresh" name="retry">
                 Retry
               </Th>
             )}
             {!compact && (
-              <Th icon="info-sign" name="ind">
+              <Th iconName="info-sign" name="ind">
                 Ind
               </Th>
             )}

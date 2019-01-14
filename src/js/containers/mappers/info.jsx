@@ -12,7 +12,6 @@ import actions from '../../store/api/actions';
 import Loader from '../../components/loader';
 import Alert from '../../components/alert';
 import Author from '../../components/author';
-import Tabs, { Pane } from '../../components/tabs';
 import InfoTable from '../../components/info_table';
 import Releases from '../releases';
 import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';

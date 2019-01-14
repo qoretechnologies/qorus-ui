@@ -1,1 +1,0 @@
-{"sepl": {"local_staging": "omquser","gsi_staging": "omquser"},"panda": {"medved": 1,"koala": 1,"mival": 1,"medvidek": 2},"1212": {"testequalEscape": {"test": 3},"equality": "{&quot;thisis&quot;:&quot;tester&quot;}"},"test": {"search": "test"},"omq": {"schema-version": "3.1.0","schema-compatibility": "3.1.0","schema-load-compatibility": "3.1.0"}}

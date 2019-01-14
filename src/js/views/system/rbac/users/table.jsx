@@ -83,10 +83,10 @@ const UsersTable: Function = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <NameColumnHeader />
             <ActionColumnHeader />
-            <Th className="text big" name="username" icon="user">
+            <Th className="text big" name="username" iconName="user">
               Username
             </Th>
-            <Th className="text" icon="contrast">
+            <Th className="text" iconName="contrast">
               Roles
             </Th>
           </FixedRow>

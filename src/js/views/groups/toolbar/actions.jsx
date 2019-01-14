@@ -26,9 +26,9 @@ const ToolbarActions: Function = ({
   handleDisableClick,
 }: Props): ?React.Element<any> => (
   <Dropdown>
-    <Control icon="cog">With selected</Control>
-    <Item title="Enable" icon="power" onClick={handleEnableClick} />
-    <Item title="Disable" icon="power" onClick={handleDisableClick} />
+    <Control iconName="cog">With selected</Control>
+    <Item title="Enable" iconName="power" onClick={handleEnableClick} />
+    <Item title="Disable" iconName="power" onClick={handleDisableClick} />
   </Dropdown>
 );
 

@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 import showIfPassed from './show-if-passed';
 import Loader from '../components/loader';
@@ -19,10 +19,6 @@ export default (propName: string, bigLoader: boolean = false): Function => (
       props[propName] && props[propName].sync && !props[propName].loading,
     bigLoader ? <Preloader /> : <Loader />
   )(Component);
-
-  WrappedComponent.propTypes = {
-    [propName]: PropTypes.object,
-  };
 
   WrappedComponent.displayName = `showIfLoaded(${propName})(${
     Component.displayName

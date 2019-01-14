@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 
 import Prism from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
@@ -22,12 +23,12 @@ import Flex from '../Flex';
  */
 @pureRender
 export default class SourceCode extends Component {
-  static propTypes = {
-    lineOffset: PropTypes.number,
-    children: PropTypes.string,
-    height: PropTypes.number,
-    handleRef: PropTypes.func,
-    language: PropTypes.string,
+  props: {
+    lineOffset: number,
+    children: any,
+    height: number,
+    handleRef: Function,
+    language: string,
   };
 
   static defaultProps = {

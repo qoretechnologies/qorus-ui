@@ -76,10 +76,10 @@ const ResourceTable: Function = ({
               <FixedRow {...{ sortData, onSortChange }}>
                 <NameColumnHeader />
                 <DescriptionColumnHeader />
-                <Th className="text" icon="info-sign" name="type">
+                <Th className="text" iconName="info-sign" name="type">
                   Type
                 </Th>
-                <Th className="text" icon="info-sign">
+                <Th className="text" iconName="info-sign">
                   Info
                 </Th>
               </FixedRow>

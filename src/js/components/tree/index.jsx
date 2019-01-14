@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Intent, Icon } from '@blueprintjs/core';
 import upperFirst from 'lodash/upperFirst';
@@ -18,21 +18,21 @@ import { getType } from '../../helpers/functions';
 
 @withModal()
 export default class Tree extends Component {
-  static propTypes = {
-    data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    withEdit: PropTypes.bool,
-    onUpdateClick: PropTypes.func,
-    noControls: PropTypes.bool,
-    forceEdit: PropTypes.bool,
-    customEditData: PropTypes.string,
-    customEdit: PropTypes.bool,
-    onEditClick: PropTypes.func,
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-    id: PropTypes.number,
-    editableKeys: PropTypes.bool,
-    expanded: PropTypes.bool,
-    compact: PropTypes.bool,
+  props: {
+    data: Object | Array<any>,
+    withEdit: boolean,
+    onUpdateClick: Function,
+    noControls: boolean,
+    forceEdit: boolean,
+    customEditData: string,
+    customEdit: boolean,
+    onEditClick: Function,
+    openModal: Function,
+    closeModal: Function,
+    id: number,
+    editableKeys: boolean,
+    expanded: boolean,
+    compact: boolean,
   };
 
   state = {

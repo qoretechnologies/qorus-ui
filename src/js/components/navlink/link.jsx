@@ -1,8 +1,6 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { isActive } from '../../helpers/router';
-import { omit } from 'lodash';
-
 import { RelativeLink } from 'react-router-relative-links';
 
 export default class NavLink extends RelativeLink {
@@ -23,8 +21,3 @@ export default class NavLink extends RelativeLink {
     );
   }
 }
-
-NavLink.propTypes = {
-  to: PropTypes.string.isRequired,
-  path: PropTypes.string,
-};

@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 /**
  * Wrapper for modal footer content (usually action buttons).
@@ -14,7 +14,3 @@ export default function Footer(props: { children: any }) {
     </div>
   );
 }
-
-Footer.propTypes = {
-  children: PropTypes.node,
-};

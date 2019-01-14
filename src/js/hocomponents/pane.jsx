@@ -1,5 +1,6 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 import omit from 'lodash/omit';
 import upperFirst from 'lodash/upperFirst';

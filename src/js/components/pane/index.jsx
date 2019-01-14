@@ -28,7 +28,7 @@ const Pane: Function = ({
 }: Props) => (
   <Flex className="pane right" style={{ width }}>
     <Headbar>
-      <Breadcrumbs icon="list-detail-view">
+      <Breadcrumbs iconName="list-detail-view">
         {title && <Crumb active>{title}</Crumb>}
         {tabs && (
           <CrumbTabs

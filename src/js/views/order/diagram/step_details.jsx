@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import Skip from './skip';
 import { Table, Td, Th, Tr, Tbody } from 'components/new_table';
@@ -20,12 +21,12 @@ import Errors from '../errors';
 
 @pureRender
 export default class StepDetailTable extends Component {
-  static propTypes = {
-    step: PropTypes.string.isRequired,
-    instances: PropTypes.array,
-    steps: PropTypes.object,
-    onSkipSubmit: PropTypes.func,
-    order: PropTypes.obj,
+  props: {
+    step: string,
+    instances: Array<any>,
+    steps: Object,
+    onSkipSubmit: Function,
+    order: Object,
   };
 
   static contextTypes = {
@@ -126,7 +127,7 @@ export default class StepDetailTable extends Component {
               <Tr>
                 <NameColumnHeader />
                 <NameColumn name={data.stepname} />
-                <Th icon="info-sign">Status</Th>
+                <Th iconName="info-sign">Status</Th>
                 <Td>
                   <span
                     className={`label status-${data.stepstatus.toLowerCase()}`}
@@ -136,15 +137,15 @@ export default class StepDetailTable extends Component {
                 </Td>
               </Tr>
               <Tr>
-                <Th icon="info-sign">Type</Th>
+                <Th iconName="info-sign">Type</Th>
                 <Td>{data.steptype}</Td>
-                <Th icon="info-sign">Version</Th>
+                <Th iconName="info-sign">Version</Th>
                 <Td>{data.stepversion}</Td>
               </Tr>
               <Tr>
                 <IdColumnHeader />
                 <IdColumn>{data.stepid}</IdColumn>
-                <Th icon="exclude-row">Skipped</Th>
+                <Th iconName="exclude-row">Skipped</Th>
                 <Td>
                   <ContentByType content={data.skip} />{' '}
                   {canSkip(data) && (
@@ -158,13 +159,13 @@ export default class StepDetailTable extends Component {
                 <DateColumnHeader>Started</DateColumnHeader>
                 <DateColumn>{data.started}</DateColumn>
 
-                <Th icon={INTERFACE_ICONS.workflow}>SubWF</Th>
+                <Th iconName={INTERFACE_ICONS.workflow}>SubWF</Th>
                 <Td>{data.subworkflow_instanceid}</Td>
               </Tr>
               <Tr>
                 <DateColumnHeader>Completed</DateColumnHeader>
                 <DateColumn>{data.completed}</DateColumn>
-                <Th icon="info-sign">Ind</Th>
+                <Th iconName="info-sign">Ind</Th>
                 <Td>{data.ind}</Td>
               </Tr>
             </Tbody>

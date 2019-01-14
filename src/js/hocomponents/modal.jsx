@@ -1,5 +1,6 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 
 /**
@@ -40,4 +41,3 @@ export default (): Function => (Component: ReactClass<*>): ReactClass<*> => {
 
   return ComponentWithModal;
 };
-

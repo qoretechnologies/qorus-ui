@@ -1,11 +1,12 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 import { changeQuery } from '../helpers/router';
 
 export default (
   queryName: string | Function = () => 'q',
-  customFunc: ?Function,
+  customFunc: ?Function
 ): Function => (Component: any): ?ReactClass<*> => {
   class WrappedComponent extends React.Component {
     static contextTypes = {
@@ -18,9 +19,8 @@ export default (
       query: string,
     };
 
-    getQueryName: Function = (qn: string | Function): string => (
-      typeof qn === 'function' ? qn(this.props) : qn
-    );
+    getQueryName: Function = (qn: string | Function): string =>
+      typeof qn === 'function' ? qn(this.props) : qn;
 
     handleSearch: Function = (querySearch): void => {
       const query = this.getQueryName(queryName);

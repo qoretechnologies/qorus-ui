@@ -31,7 +31,7 @@ const ResultDetail = ({
   const renderResult: Function = () => [
     <Headbar key="job-detail-header">
       <Pull>
-        <Breadcrumbs icon="list-detail-view">
+        <Breadcrumbs iconName="list-detail-view">
           <Crumb active>{result.job_instanceid}</Crumb>
         </Breadcrumbs>
       </Pull>

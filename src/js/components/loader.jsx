@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Flex from './Flex';
 
 /**
@@ -6,7 +6,7 @@ import Flex from './Flex';
  *
  * @return {!ReactElement}
  */
-export default function Loader(props) {
+export default function Loader() {
   return (
     <Flex style={{ margin: 10 }}>
       <Flex flexFlow="row" className="skeleton-loader">
@@ -20,11 +20,3 @@ export default function Loader(props) {
     </Flex>
   );
 }
-
-Loader.propTypes = {
-  message: PropTypes.string,
-};
-
-Loader.defaultProps = {
-  message: 'Loading...',
-};

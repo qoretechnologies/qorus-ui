@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import createFragment from 'react-addons-create-fragment';
 import classNames from 'classnames';
 import PanElement from 'react-element-pan';
@@ -9,7 +10,6 @@ import { groupInstances } from '../../helpers/orders';
 import { graph } from '../../lib/graph';
 import { COLORS } from '../../constants/ui';
 import { Tag, Icon } from '@blueprintjs/core';
-import PaneItem from '../pane_item';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import StepDetailTable from '../../views/order/diagram/step_details';
 import { Controls as ButtonGroup, Control as Button } from '../controls';
@@ -18,6 +18,7 @@ import Flex from '../Flex';
 import Headbar from '../Headbar';
 import Pull from '../Pull';
 import { Breadcrumbs, Crumb } from '../breadcrumbs';
+import modal from '../../hocomponents/modal';
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -88,17 +89,15 @@ const DIAGRAM_MIN_COLUMNS = 1;
  * object.
  */
 @onlyUpdateForKeys(['workflow', 'order'])
+@modal()
 export default class StepsTab extends Component {
-  static propTypes = {
-    workflow: PropTypes.object.isRequired,
-    order: PropTypes.object,
-    onStepClick: PropTypes.func,
-    onSkipSubmit: PropTypes.func,
-  };
-
-  static contextTypes = {
-    openModal: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired,
+  props: {
+    workflow: Object,
+    order: Object,
+    onStepClick: Function,
+    onSkipSubmit: Function,
+    openModal: Function,
+    closeModal: Function,
   };
 
   state: {
@@ -129,26 +128,16 @@ export default class StepsTab extends Component {
    * @param {number} stepId
    */
   onBoxClick = stepId => () => {
-    this._modal = (
+    this.props.openModal(
       <StepModal
         id={stepId}
         name={this.getStepName(stepId)}
         version={this.getStepInfo(stepId).version}
         patch={this.getStepInfo(stepId).patch}
         steptype={this.getStepInfo(stepId).steptype}
-        onClose={this.onModalClose}
+        onClose={this.props.closeModal}
       />
     );
-
-    this.context.openModal(this._modal);
-  };
-
-  /**
-   * Closes modal with detailed step information.
-   */
-  onModalClose = () => {
-    this.context.closeModal(this._modal);
-    this._modal = null;
   };
 
   /**
@@ -313,8 +302,8 @@ export default class StepsTab extends Component {
 
     return info && info.ind === 0
       ? Object.assign({}, info, {
-          subwfls: this.props.workflow.stepinfo.filter(si => si.name === name),
-        })
+        subwfls: this.props.workflow.stepinfo.filter(si => si.name === name),
+      })
       : info;
   }
 
@@ -1089,14 +1078,14 @@ export default class StepsTab extends Component {
                 </span>
               )}
               <Button
-                icon="hand"
+                iconName="hand"
                 onClick={this.handleMoveChange}
                 btnStyle={useDrag && 'primary'}
                 big
               />
-              <Button icon="zoom-in" onClick={this.handleZoomIn} big />
-              <Button icon="zoom-out" onClick={this.handleZoomOut} big />
-              <Button icon="zoom-to-fit" onClick={this.handleZoomReset} big />
+              <Button iconName="zoom-in" onClick={this.handleZoomIn} big />
+              <Button iconName="zoom-out" onClick={this.handleZoomOut} big />
+              <Button iconName="zoom-to-fit" onClick={this.handleZoomReset} big />
             </ButtonGroup>
           </Pull>
         </Headbar>

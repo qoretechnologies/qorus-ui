@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import _ from 'lodash';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -20,10 +20,7 @@ const chunk = (arr: Array<Object>, unit: number): Array<any> => {
   return _.toArray(res);
 };
 
-@pure([
-  'date',
-  'activeDate',
-])
+@pure(['date', 'activeDate'])
 export default class Calendar extends Component {
   props: {
     date: Object,
@@ -36,14 +33,19 @@ export default class Calendar extends Component {
     const month: number = this.props.date.month();
     const year: number = this.props.date.year();
     const start: Object = moment([year, month]).startOf('isoweek');
-    const end: Object = start.clone().add(6, 'weeks').add(-1, 'days');
+    const end: Object = start
+      .clone()
+      .add(6, 'weeks')
+      .add(-1, 'days');
     const days: Array<Object> = [];
     const date: Object = this.props.date;
     const activeDate: Object = this.props.activeDate;
 
     while (start.valueOf() <= end.valueOf()) {
       const dDate: Object = moment(start)
-        .hours(date.hours()).minutes(date.minutes()).seconds(date.seconds());
+        .hours(date.hours())
+        .minutes(date.minutes())
+        .seconds(date.seconds());
       const day: Object = {
         date: dDate,
         day: start.date(),
@@ -52,13 +54,20 @@ export default class Calendar extends Component {
         css: '',
       };
 
-      if (start.valueOf()
-        === moment([moment().year(), moment().month(), moment().date()])
-          .valueOf()) day.is_today = true;
-      if (start.valueOf()
-        === moment(
-          [activeDate.year(), activeDate.month(), activeDate.date()]
-        ).valueOf()) day.active = true;
+      if (
+        start.valueOf() ===
+        moment([moment().year(), moment().month(), moment().date()]).valueOf()
+      )
+        day.is_today = true;
+      if (
+        start.valueOf() ===
+        moment([
+          activeDate.year(),
+          activeDate.month(),
+          activeDate.date(),
+        ]).valueOf()
+      )
+        day.active = true;
 
       if (start.month() < month) day.css = 'old';
       if (start.month() > month) day.css = 'new';
@@ -90,25 +99,28 @@ export default class Calendar extends Component {
     this.setDate(date.add(-1, 'months'));
   };
 
-  renderYearAndMonth: Function = (): string => (
-    `${this.props.date.format('MMM')} ${this.props.date.year()}`
-  );
+  renderYearAndMonth: Function = (): string =>
+    `${this.props.date.format('MMM')} ${this.props.date.year()}`;
 
   renderRows: Function = (): Array<React.Element<any>> => {
     const weeks: Array<Object> = chunk(this.getDaysOfMonth(), 7);
 
     return weeks.reduce((wks, week, key) => {
-      const days: Array<number> = week.reduce((ds, day, idx) => ([...ds,
-        <td
-          className={day.css}
-          key={idx}
-          onClick={() => this.setActiveDate(day.date)}
-        >
-          { day.day }
-        </td>]),
-      []);
+      const days: Array<number> = week.reduce(
+        (ds, day, idx) => [
+          ...ds,
+          <td
+            className={day.css}
+            key={idx}
+            onClick={() => this.setActiveDate(day.date)}
+          >
+            {day.day}
+          </td>,
+        ],
+        []
+      );
 
-      return [...wks, <tr key={key}>{ days }</tr>];
+      return [...wks, <tr key={key}>{days}</tr>];
     }, []);
   };
 
@@ -117,18 +129,12 @@ export default class Calendar extends Component {
       <table className="table table-condensed">
         <thead>
           <tr>
-            <th
-              className="month"
-              onClick={ this.prevMonth }
-            >
-              <i className="fa fa-angle-left"></i>
+            <th className="month" onClick={this.prevMonth}>
+              <i className="fa fa-angle-left" />
             </th>
-            <th colSpan="5">{ this.renderYearAndMonth() }</th>
-            <th
-              className="month"
-              onClick={ this.nextMonth }
-            >
-              <i className="fa fa-angle-right"></i>
+            <th colSpan="5">{this.renderYearAndMonth()}</th>
+            <th className="month" onClick={this.nextMonth}>
+              <i className="fa fa-angle-right" />
             </th>
           </tr>
           <tr>
@@ -141,17 +147,8 @@ export default class Calendar extends Component {
             <th>Sun</th>
           </tr>
         </thead>
-        <tbody>
-          { this.renderRows() }
-        </tbody>
+        <tbody>{this.renderRows()}</tbody>
       </table>
     );
   }
 }
-
-Calendar.propTypes = {
-  date: PropTypes.object.isRequired,
-  setDate: PropTypes.func,
-  activeDate: PropTypes.object,
-  setActiveDate: PropTypes.func,
-};

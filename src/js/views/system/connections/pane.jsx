@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { upperFirst, includes, lowerCase } from 'lodash';
@@ -43,17 +43,18 @@ const viewSelector = createSelector(
 @connect(viewSelector)
 @withDispatch()
 export default class ConnectionsPane extends Component {
-  static propTypes = {
-    remote: PropTypes.object.isRequired,
-    onClose: PropTypes.func,
-    attrs: PropTypes.array,
-    editable: PropTypes.array,
-    type: PropTypes.string,
-    width: PropTypes.number,
-    onResize: PropTypes.func,
-    optimisticDispatch: PropTypes.func,
-    remoteType: PropTypes.string,
-    canEdit: PropTypes.bool,
+  props: {
+    remote: Object,
+    onClose: Function,
+    attrs: Array<string>,
+    editable: Array<string>,
+    type: string,
+    width: number,
+    onResize: Function,
+    optimisticDispatch: Function,
+    dispatchAction: Function,
+    remoteType: string,
+    canEdit: boolean,
   };
 
   state: {

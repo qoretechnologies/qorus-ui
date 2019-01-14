@@ -129,7 +129,7 @@ export default class Search extends Component {
         <ControlGroup>
           {searches && searches.length !== 0 && (
             <Dropdown>
-              <Control icon="history" noCaret />
+              <Control iconName="history" noCaret />
               {this.renderHistoryItems()}
             </Dropdown>
           )}

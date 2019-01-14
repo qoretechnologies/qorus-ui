@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 type Props = {
   titleId: string,
@@ -40,9 +40,3 @@ export default function Header(props: Props) {
     </div>
   );
 }
-
-Header.propTypes = {
-  titleId: PropTypes.string.isRequired,
-  onClose: PropTypes.func,
-  children: PropTypes.node,
-};

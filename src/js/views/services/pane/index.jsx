@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import size from 'lodash/size';
@@ -49,7 +49,7 @@ import ServiceTabs from '../tabs';
   ({ data, service, ...rest }: Object): Object => ({
     data: service.class_based
       ? {
-          ...{
+        ...{
             code: [
               {
                 name: 'Service code',
@@ -57,8 +57,8 @@ import ServiceTabs from '../tabs';
               },
             ],
           },
-          ...data,
-        }
+        ...data,
+      }
       : data,
     service,
     ...rest,
@@ -66,16 +66,16 @@ import ServiceTabs from '../tabs';
 )
 @titleManager(({ service }): string => service.name, 'Services', 'prefix')
 export default class ServicesDetail extends Component {
-  static propTypes = {
-    service: PropTypes.object,
-    systemOptions: PropTypes.array.isRequired,
-    paneTab: PropTypes.string,
-    paneId: PropTypes.string,
-    onClose: PropTypes.func,
-    location: PropTypes.object,
-    width: PropTypes.number,
-    onResize: PropTypes.func,
-    data: PropTypes.object,
+  props: {
+    service: Object,
+    systemOptions: Array<Object>,
+    paneTab: string,
+    paneId: number,
+    onClose: Function,
+    location: Object,
+    width: number,
+    onResize: Function,
+    data: Object,
   };
 
   componentWillMount() {

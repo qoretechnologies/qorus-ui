@@ -1,6 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import mapProps from 'recompose/mapProps';
-
 
 import Section from './section';
 import Row from './row';
@@ -29,7 +28,7 @@ import EditableCell from './editable_cell';
  * }} props
  * @return {!ReactElement}
  */
-export default function Table(props) {
+export default function Table(props: Object) {
   const { sections, data, children, ...restProps } = props;
 
   return React.createElement(
@@ -39,22 +38,9 @@ export default function Table(props) {
   );
 }
 
-Table.propTypes = {
-  sections: PropTypes.func,
-  data: PropTypes.any,
-  children: PropTypes.node,
-};
-
 const Th = mapProps(props => ({ ...props, tag: 'th' }))(Cell);
 Th.displayName = 'Th';
 const Td = mapProps(props => ({ ...props, tag: 'td' }))(Cell);
 Td.displayName = 'Td';
 
-export {
-  Section,
-  Row,
-  Cell,
-  EditableCell,
-  Th,
-  Td,
-};
+export { Section, Row, Cell, EditableCell, Th, Td };

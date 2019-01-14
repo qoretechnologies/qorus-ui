@@ -33,7 +33,7 @@ const OrderLock: Function = ({
       disabled={lock && lock !== username}
       small={!big}
       btnStyle={lock ? 'danger' : 'success'}
-      icon={lock ? 'lock' : 'unlock'}
+      iconName={lock ? 'lock' : 'unlock'}
     >
       {lock || ''}
     </Control>

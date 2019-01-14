@@ -1,5 +1,6 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import debounce from 'lodash/debounce';
@@ -87,23 +88,22 @@ const optionsSelector = state => state.api.systemOptions;
   'children',
 ])
 export default class Root extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-    menu: PropTypes.object,
-    info: PropTypes.object,
-    fetchSystem: PropTypes.func,
-    saveDimensions: PropTypes.func,
-    fetchSystemOptions: PropTypes.func,
-    fetchCurrentUser: PropTypes.func,
-    location: PropTypes.object,
-    currentUser: PropTypes.object,
-    health: PropTypes.object,
-    isTablet: PropTypes.bool,
-    sidebarOpen: PropTypes.bool,
-    storeSidebar: PropTypes.func,
-    fetchHealth: PropTypes.func,
-    options: PropTypes.object,
-    storeTheme: PropTypes.func,
+  props: {
+    children: any,
+    info: Object,
+    fetchSystem: Function,
+    saveDimensions: Function,
+    fetchSystemOptions: Function,
+    fetchCurrentUser: Function,
+    location: Object,
+    currentUser: Object,
+    health: Object,
+    isTablet: boolean,
+    sidebarOpen: boolean,
+    storeSidebar: Function,
+    fetchHealth: Function,
+    options: Object,
+    storeTheme: Function,
   };
 
   static childContextTypes = {

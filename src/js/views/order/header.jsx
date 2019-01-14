@@ -1,5 +1,6 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import size from 'lodash/size';
 
 import OrderControls from '../workflows/tabs/list/controls';
@@ -23,13 +24,13 @@ import { ALL_ORDER_STATES } from '../../constants/orders';
 @queryControl('target')
 @queryControl('prevQuery')
 export default class OrderHeader extends Component {
-  static propTypes = {
-    data: PropTypes.object,
-    workflow: PropTypes.object,
-    username: PropTypes.string,
-    linkDate: PropTypes.string,
-    targetQuery: PropTypes.string,
-    prevQueryQuery: PropTypes.string,
+  props: {
+    data: Object,
+    workflow: Object,
+    username: string,
+    linkDate: string,
+    targetQuery: string,
+    prevQueryQuery: string,
   };
 
   static contextTypes = {

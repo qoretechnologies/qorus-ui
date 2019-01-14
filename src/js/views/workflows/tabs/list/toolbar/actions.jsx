@@ -37,7 +37,7 @@ const ToolbarActions: Function = ({
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
     <Dropdown id="hidden">
-      <DropdownControl icon="cog">With selected</DropdownControl>
+      <DropdownControl iconName="cog">With selected</DropdownControl>
       <DropdownItem
         title="Retry"
         iconName="refresh"

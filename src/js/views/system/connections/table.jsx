@@ -106,21 +106,21 @@ const ConnectionTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th name="up" icon="info-sign">
+        <Th name="up" iconName="info-sign">
           Status
         </Th>
-        <NameColumnHeader icon="application" />
-        <Th icon="build">Actions</Th>
-        <Th className="text" icon="cog">
+        <NameColumnHeader iconName="application" />
+        <Th iconName="build">Actions</Th>
+        <Th className="text" iconName="cog">
           Options
         </Th>
-        <Th className="text" name="url" icon="link">
+        <Th className="text" name="url" iconName="link">
           URL
         </Th>
-        <Th className="text" name="desc" icon="label">
+        <Th className="text" name="desc" iconName="label">
           Description
         </Th>
-        <Th icon="repeat" name="loopback">
+        <Th iconName="repeat" name="loopback">
           Loopback
         </Th>
       </FixedRow>

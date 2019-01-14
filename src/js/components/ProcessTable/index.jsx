@@ -31,7 +31,7 @@ const ProcessTable: Function = ({
             <ButtonGroup>
               <Button
                 btnStyle="danger"
-                icon="cross"
+                iconName="cross"
                 onClick={() => {
                   handleKillClick(model.process.id);
                 }}

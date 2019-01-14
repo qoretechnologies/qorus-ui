@@ -33,7 +33,7 @@ const ToolbarFilters: Function = ({
           ? Intent.PRIMARY
           : Intent.NONE
       }
-      icon="filter-list"
+      iconName="filter-list"
     >
       {' '}
       Filter

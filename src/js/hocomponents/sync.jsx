@@ -1,5 +1,5 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 import Loader from '../components/loader';
 
 /**
@@ -33,10 +33,6 @@ export default (
       return <Component {...this.props} />;
     }
   }
-  WrappedComponent.propTypes = {
-    load: PropTypes.func,
-    [propName]: PropTypes.object,
-  };
 
   WrappedComponent.displayName = `sync(${Component.displayName})`;
   return WrappedComponent;

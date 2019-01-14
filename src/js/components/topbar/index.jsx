@@ -179,7 +179,7 @@ export default class Topbar extends Component {
         <NavbarGroup align="right">
           <form onSubmit={this.handleSubmit}>
             <InputGroup
-              leftIconName="search"
+              lefticonName="search"
               placeholder="Quick search"
               rightElement={this.renderSearchMenu()}
               value={this.state.quickSearchValue}

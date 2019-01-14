@@ -1,34 +1,27 @@
 /* @flow */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 import { Control } from '../controls';
 import Modal from '../modal';
 import { generateCSV } from '../../helpers/table';
+import modal from '../../hocomponents/modal';
 
-
+@modal()
 class CsvExport extends React.Component {
-  static contextTypes = {
-    openModal: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired,
-  };
-
   props: {
     collection: Array<Object>,
+    openModal: Function,
+    closeModal: Function,
     type: string,
   };
 
   _modal: React.Element<*>;
 
   handleCsvOpen = () => {
-    const { collection, type } = this.props;
+    const { collection, type, closeModal } = this.props;
     this._modal = (
-      <Modal
-        onMount={this.selectCSVContent}
-      >
-        <Modal.Header
-          onClose={this.handleCSVCloseClick}
-          titleId="csv-modal"
-        >
+      <Modal onMount={this.selectCSVContent}>
+        <Modal.Header onClose={closeModal} titleId="csv-modal">
           Copy table
           <small> (Press ⌘ + c)</small>
         </Modal.Header>
@@ -43,12 +36,8 @@ class CsvExport extends React.Component {
         </Modal.Body>
       </Modal>
     );
-    this.context.openModal(this._modal);
-  }
-
-  handleCSVCloseClick = () => {
-    this.context.closeModal(this._modal);
-  }
+    this.props.openModal(this._modal);
+  };
 
   selectCSVContent = () => {
     // $FlowIssue

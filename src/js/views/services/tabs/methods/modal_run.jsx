@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import yaml from 'js-yaml';
 import { connect } from 'react-redux';
 
@@ -16,12 +16,12 @@ import Dropdown, { Item, Control } from '../../../../components/dropdown';
 
 @connect()
 export default class ModalRun extends Component {
-  static propTypes = {
-    method: PropTypes.object.isRequired,
-    service: PropTypes.object.isRequired,
-    response: PropTypes.object,
-    onClose: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired,
+  props: {
+    method: Object,
+    service: Object,
+    response: Object,
+    onClose: Function,
+    dispatch: Function,
   };
 
   state = {

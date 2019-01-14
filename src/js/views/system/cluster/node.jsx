@@ -106,25 +106,25 @@ const ClusterNode: Function = ({
               </Th>
             </FixedRow>
             <FixedRow sortData={sortData} onSortChange={onSortChange}>
-              <Th className="text" name="node" icon="database">
+              <Th className="text" name="node" iconName="database">
                 Node
               </Th>
               <NameColumnHeader
                 name="client_id"
                 title="Client ID"
-                icon="intersection"
+                iconName="intersection"
               />
               <ActionColumnHeader />
-              <Th className="text medium" name="type" icon="application">
+              <Th className="text medium" name="type" iconName="application">
                 Type
               </Th>
               <Th className="medium" name="pid">
                 PID
               </Th>
-              <Th className="medium" name="priv" icon="layers">
+              <Th className="medium" name="priv" iconName="layers">
                 Memory
               </Th>
-              <Th className="text" name="status" icon="info-sign">
+              <Th className="text" name="status" iconName="info-sign">
                 Status
               </Th>
             </FixedRow>

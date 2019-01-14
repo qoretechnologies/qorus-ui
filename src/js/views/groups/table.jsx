@@ -81,27 +81,27 @@ const GroupsTable: Function = ({
         <Th
           name="workflows_count"
           title="Workflows"
-          icon={INTERFACE_ICONS.workflows}
+          iconName={INTERFACE_ICONS.workflows}
         >
           {isTablet ? 'W' : 'Workflows'}
         </Th>
         <Th
           name="services_count"
           title="Services"
-          icon={INTERFACE_ICONS.services}
+          iconName={INTERFACE_ICONS.services}
         >
           {isTablet ? 'S' : 'Services'}
         </Th>
-        <Th name="jobs_count" title="Jobs" icon={INTERFACE_ICONS.jobs}>
+        <Th name="jobs_count" title="Jobs" iconName={INTERFACE_ICONS.jobs}>
           {isTablet ? 'J' : 'Jobs'}
         </Th>
-        <Th name="vmaps_count" title="Vmaps" icon={INTERFACE_ICONS.valuemaps}>
+        <Th name="vmaps_count" title="Vmaps" iconName={INTERFACE_ICONS.valuemaps}>
           {isTablet ? 'V' : 'Vmaps'}
         </Th>
-        <Th name="roles_count" title="Roles" icon={INTERFACE_ICONS.roles}>
+        <Th name="roles_count" title="Roles" iconName={INTERFACE_ICONS.roles}>
           {isTablet ? 'R' : 'Roles'}
         </Th>
-        <Th name="mappers_count" title="Mappers" icon={INTERFACE_ICONS.mappers}>
+        <Th name="mappers_count" title="Mappers" iconName={INTERFACE_ICONS.mappers}>
           {isTablet ? 'M' : 'Mappers'}
         </Th>
         <DescriptionColumnHeader name="description" />

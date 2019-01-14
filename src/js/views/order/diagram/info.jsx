@@ -66,7 +66,7 @@ const DiagramInfoTable: Function = ({
         <Tr>
           <IdColumnHeader>Instance ID</IdColumnHeader>
           <IdColumn>{id}</IdColumn>
-          <Th icon="info-sign"> Status </Th>
+          <Th iconName="info-sign"> Status </Th>
           <Td>
             <span className={`label status-${label}`}>{workflowstatus}</span>
           </Td>
@@ -74,13 +74,13 @@ const DiagramInfoTable: Function = ({
         <Tr>
           <DateColumnHeader>Started</DateColumnHeader>
           <DateColumn>{started}</DateColumn>
-          <Th icon="info-sign"> Custom </Th>
+          <Th iconName="info-sign"> Custom </Th>
           <Td>{customStatus}</Td>
         </Tr>
         <Tr>
           <DateColumnHeader>Modified</DateColumnHeader>
           <DateColumn>{modified}</DateColumn>
-          <Th icon="warning-sign"> Priority </Th>
+          <Th iconName="warning-sign"> Priority </Th>
           <EditableCell
             value={priority}
             type="number"
@@ -92,7 +92,7 @@ const DiagramInfoTable: Function = ({
         <Tr>
           <DateColumnHeader>Completed</DateColumnHeader>
           <DateColumn>{completed}</DateColumn>
-          <Th icon="arrow-up"> Parent ID </Th>
+          <Th iconName="arrow-up"> Parent ID </Th>
           <Td>{parentId}</Td>
         </Tr>
         <Tr>
@@ -110,7 +110,7 @@ const DiagramInfoTable: Function = ({
           ) : (
             <DateColumn>{scheduled}</DateColumn>
           )}
-          <Th icon="refresh"> Synchronous </Th>
+          <Th iconName="refresh"> Synchronous </Th>
           <Td>
             <ContentByType content={synchronous !== 0} />
           </Td>

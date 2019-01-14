@@ -40,7 +40,7 @@ const DescriptionColumnHeader: Function = compose(
     icon: icon = 'label',
     ...rest
   }: DescriptionColumnHeaderProps): React.Element<any> => (
-    <Th name={name} icon={icon} className="text" {...rest}>
+    <Th name={name} iconName={icon} className="text" {...rest}>
       {children}
     </Th>
   )

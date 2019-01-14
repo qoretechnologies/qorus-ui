@@ -1,5 +1,5 @@
 /* @flow */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
@@ -63,12 +63,12 @@ const viewSelector = createSelector(
 )
 @titleManager('Properties')
 export default class PropertiesView extends Component {
-  static propTypes = {
-    collection: PropTypes.object,
-    user: PropTypes.object,
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-    optimisticDispatch: PropTypes.func,
+  props: {
+    collection: Object,
+    user: Object,
+    openModal: Function,
+    closeModal: Function,
+    optimisicDispatch: Function,
   };
 
   handleAddClick = (event: EventHandler, data: Object) => {
