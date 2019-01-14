@@ -108,8 +108,9 @@ const ConnectionRow: Function = ({
         <Button title="Ping" iconName="exchange" onClick={handlePingClick} />
       </ButtonGroup>
       <ButtonGroup>
-        <Button iconName="edit" onClick={handleDetailClick} />
+        <Button iconName="edit" title="Edit" onClick={handleDetailClick} />
         <Button
+          title="Delete"
           disabled={!canDelete}
           iconName="cross"
           intent={Intent.DANGER}
