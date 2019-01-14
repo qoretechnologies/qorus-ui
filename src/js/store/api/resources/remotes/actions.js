@@ -77,26 +77,12 @@ const clearAlert = createAction('REMOTES_CLEARALERT', events => ({ events }));
 
 const manageConnection: Function = createAction(
   'REMOTES_MANAGECONNECTION',
-  async (
-    remoteType: string,
-    data: Object,
-    name: string,
-    dispatch: Function
-  ) => {
-    if (!dispatch) {
-      return {
-        remoteType,
-        data,
-        name,
-      };
-    }
-
-    let response: Object;
+  (remoteType: string, data: Object, name: string, dispatch: Function) => {
     const { editable } = attrsSelector(null, { remoteType });
     let newData = data;
 
     if (!name) {
-      response = await fetchWithNotifications(
+      fetchWithNotifications(
         async () =>
           await fetchJson(
             'POST',
@@ -111,7 +97,7 @@ const manageConnection: Function = createAction(
       );
     } else {
       newData = pickBy(data, (val, key) => editable.includes(key));
-      response = await fetchWithNotifications(
+      fetchWithNotifications(
         async () =>
           await fetchJson(
             'PUT',
@@ -125,13 +111,6 @@ const manageConnection: Function = createAction(
         dispatch
       );
     }
-
-    return {
-      remoteType,
-      data,
-      name,
-      error: !!response.err,
-    };
   }
 );
 
