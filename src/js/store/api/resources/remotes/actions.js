@@ -23,6 +23,10 @@ const connectionChange = createAction('REMOTES_CONNECTIONCHANGE', events => ({
   events,
 }));
 
+const enabledChange = createAction('REMOTES_ENABLEDCHANGE', events => ({
+  events,
+}));
+
 const updateDone: Function = createAction(
   'REMOTES_UPDATEDONE',
   (name: string): Object => ({ name })
@@ -188,6 +192,7 @@ const resetConnection: Function = createAction(
 export {
   pingRemote,
   connectionChange,
+  enabledChange,
   updateDone,
   addAlert,
   clearAlert,

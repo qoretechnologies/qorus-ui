@@ -25,11 +25,15 @@ const handleEvent = (url, data, dispatch, state) => {
   const dt = JSON.parse(data);
   const isInterfaceLoaded: Function = (
     interfaceType: string,
-    id: number
+    id: number | string,
+    idKey: string = 'id',
+    customComparator?: Function
   ): boolean =>
     state.api[interfaceType].sync &&
-    state.api[interfaceType].data.find(
-      (item: Object) => item.id === parseFloat(id, 10)
+    state.api[interfaceType].data.find((item: Object) =>
+      customComparator
+        ? customComparator(item)
+        : item[idKey] === parseFloat(id, 10)
     );
 
   dt.forEach(d => {
@@ -814,6 +818,27 @@ const handleEvent = (url, data, dispatch, state) => {
             {
               name: info.name,
               up: false,
+              enabled: info.enabled,
+            },
+            dispatch
+          );
+        }
+        break;
+      case 'CONNECTION_ENABLED_CHANGE':
+        if (
+          isInterfaceLoaded(
+            'remotes',
+            null,
+            null,
+            (item: Object) => item.name === info.name && info.type === info.type
+          )
+        ) {
+          pipeline(
+            eventstr,
+            remotes.enabledChange,
+            {
+              name: info.name,
+              type: info.type,
               enabled: info.enabled,
             },
             dispatch

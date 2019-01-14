@@ -28,7 +28,7 @@ const Option: Function = ({
 
   return (
     <div className="conn-options-item">
-      "{objKey}": "{value}"{' '}
+      "{objKey}": "{value.toString()}"{' '}
       {canEdit && (
         <div className="pull-right">
           <Controls grouped>

@@ -67,6 +67,36 @@ const connectionChange = {
   },
 };
 
+const enabledChange = {
+  next(
+    state: Object = initialState,
+    {
+      payload: { events },
+    }
+  ): Object {
+    if (state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach((dt: Object) => {
+        newData = updateItemWithName(
+          dt.name,
+          { enabled: dt.enabled, _updated: true },
+          newData
+        );
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
 const updateDone = {
   next(
     state,
@@ -271,6 +301,7 @@ const deleteConnection = {
 export {
   pingRemote as PINGREMOTE,
   connectionChange as CONNECTIONCHANGE,
+  enabledChange as ENABLEDCHANGE,
   updateDone as UPDATEDONE,
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
