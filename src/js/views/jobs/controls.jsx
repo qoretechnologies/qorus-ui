@@ -191,5 +191,16 @@ export default compose(
       );
     },
   }),
-  pure(['enabled', 'active', 'id', 'big', 'remote'])
+  pure([
+    'enabled',
+    'active',
+    'id',
+    'big',
+    'remote',
+    'minute',
+    'hour',
+    'day',
+    'month',
+    'week',
+  ])
 )(JobControls);

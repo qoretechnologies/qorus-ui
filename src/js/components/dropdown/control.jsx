@@ -28,8 +28,6 @@ const Control = ({
   const iconName: ?string = !icon && !children ? 'caret-down' : icon;
   const rightIconName: ?string = !icon && !children ? undefined : 'caret-down';
 
-  console.log(rightIconName);
-
   return children || icon || !noCaret ? (
     <ButtonGroup>
       <Button
