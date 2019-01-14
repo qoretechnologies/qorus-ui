@@ -7,6 +7,7 @@ import { Controls, Control as Button } from '../../../components/controls';
 type Props = {
   data?: Object,
   onSave: Function,
+  canEdit: boolean,
 };
 
 const Option: Function = ({
@@ -14,6 +15,7 @@ const Option: Function = ({
   value,
   onEdit,
   onDelete,
+  canEdit,
 }: Object): React.Element<any> => {
   const handleEditClick: Function = (): void => {
     onEdit('key', objKey);
@@ -26,21 +28,23 @@ const Option: Function = ({
 
   return (
     <div className="conn-options-item">
-      "{objKey}": "{value}"{' '}
-      <div className="pull-right">
-        <Controls grouped>
-          <Button
-            iconName="edit"
-            btnStyle="warning"
-            onClick={handleEditClick}
-          />
-          <Button
-            iconName="cross"
-            btnStyle="danger"
-            onClick={handleDeleteClick}
-          />
-        </Controls>
-      </div>
+      "{objKey}": "{value.toString()}"{' '}
+      {canEdit && (
+        <div className="pull-right">
+          <Controls grouped>
+            <Button
+              iconName="edit"
+              btnStyle="warning"
+              onClick={handleEditClick}
+            />
+            <Button
+              iconName="cross"
+              btnStyle="danger"
+              onClick={handleDeleteClick}
+            />
+          </Controls>
+        </div>
+      )}
     </div>
   );
 };
@@ -119,6 +123,7 @@ export default class ConnectionOptions extends Component {
                 {opts.map(
                   (opt: string): React.Element<any> => (
                     <Option
+                      canEdit={this.props.canEdit}
                       key={opt}
                       objKey={opt}
                       value={this.state.options[opt]}
@@ -131,29 +136,31 @@ export default class ConnectionOptions extends Component {
             </div>
           </div>
         )}
-        <ControlGroup className="pt-fill">
-          <InputGroup
-            placeholder="Key..."
-            type="text"
-            value={this.state.key}
-            onChange={this.handleKeyChange}
-          />
-          <InputGroup
-            placeholder="Value..."
-            type="text"
-            value={this.state.value}
-            onChange={this.handleValueChange}
-          />
-          <Controls>
-            <Button
-              btnStyle="success"
-              iconName="small-tick"
-              big
-              className="pt-fixed"
-              onClick={this.handleOptionSave}
+        {this.props.canEdit && (
+          <ControlGroup className="pt-fill">
+            <InputGroup
+              placeholder="Key..."
+              type="text"
+              value={this.state.key}
+              onChange={this.handleKeyChange}
             />
-          </Controls>
-        </ControlGroup>
+            <InputGroup
+              placeholder="Value..."
+              type="text"
+              value={this.state.value}
+              onChange={this.handleValueChange}
+            />
+            <Controls>
+              <Button
+                btnStyle="success"
+                iconName="small-tick"
+                big
+                className="pt-fixed"
+                onClick={this.handleOptionSave}
+              />
+            </Controls>
+          </ControlGroup>
+        )}
       </div>
     );
   }

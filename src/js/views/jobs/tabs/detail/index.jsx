@@ -48,7 +48,7 @@ const DetailTab = ({
           <Date date={model.expiry_date} />
         </PaneItem>
       )}
-      <PaneItem title="Schedule">
+      <PaneItem title="Controls">
         <JobControls
           enabled={model.enabled}
           active={model.active}

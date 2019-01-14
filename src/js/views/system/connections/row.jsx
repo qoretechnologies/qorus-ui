@@ -21,6 +21,7 @@ import ConfirmDialog from '../../../components/confirm_dialog';
 import withDispatch from '../../../hocomponents/withDispatch';
 import NameColumn from '../../../components/NameColumn';
 import Tree from '../../../components/tree';
+import ContentByType from '../../../components/ContentByType';
 
 type Props = {
   name: string,
@@ -50,6 +51,8 @@ type Props = {
   first: boolean,
   loopback: boolean,
   handleResetClick: Function,
+  locked: boolean,
+  canEdit: boolean,
 };
 
 const ConnectionRow: Function = ({
@@ -68,11 +71,13 @@ const ConnectionRow: Function = ({
   remoteType,
   opts,
   canDelete,
+  canEdit,
   first,
   loopback,
   enabled,
   handleToggleClick,
   handleResetClick,
+  locked,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -101,6 +106,7 @@ const ConnectionRow: Function = ({
           iconName="power"
           onClick={handleToggleClick}
           btnStyle={enabled ? 'success' : 'danger'}
+          disabled={locked}
         />
         {remoteType === 'datasources' && (
           <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
@@ -108,9 +114,15 @@ const ConnectionRow: Function = ({
         <Button title="Ping" iconName="exchange" onClick={handlePingClick} />
       </ButtonGroup>
       <ButtonGroup>
-        <Button iconName="edit" onClick={handleDetailClick} />
         <Button
-          disabled={!canDelete}
+          iconName="edit"
+          title="Edit"
+          disabled={!(!locked && canEdit)}
+          onClick={handleDetailClick}
+        />
+        <Button
+          title="Delete"
+          disabled={!(!locked && canDelete)}
           iconName="cross"
           intent={Intent.DANGER}
           onClick={handleDeleteClick}
@@ -131,6 +143,9 @@ const ConnectionRow: Function = ({
 
     <Td className="text">
       <Text text={desc} />
+    </Td>
+    <Td className="medium">
+      <ContentByType content={locked} />
     </Td>
     <Td className="medium">{loopback && <Icon iconName="small-tick" />}</Td>
   </Tr>
@@ -215,6 +230,7 @@ export default compose(
     'hasAlerts',
     'isActive',
     '_updated',
+    'lockec',
     'up',
     'opts',
     'desc',

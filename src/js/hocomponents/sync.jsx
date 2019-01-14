@@ -25,6 +25,15 @@ export default (
       }
     }
 
+    componentWillReceiveProps(nextProps) {
+      const load = nextProps[loadFunc] || nextProps.load;
+      const value = nextProps[propName];
+
+      if (!value.loading && !value.sync) {
+        load();
+      }
+    }
+
     render() {
       if (showLoader && !this.props[propName].sync) {
         return <Loader />;

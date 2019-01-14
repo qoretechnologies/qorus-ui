@@ -97,18 +97,11 @@ export default class OCMDView extends Component {
     }
   }
 
-  componentDidUpdate(prevProps: Object, prevState: Object) {
-    if (size(prevState.collection) === 0 && this.refs.command)
-      this.refs.command.focus();
-  }
-
   handleDropdownItemClick: Function = (event: Object, value: string): void => {
     this.setState({
       value,
       showDropdown: false,
     });
-
-    this.refs.command.focus();
   };
 
   handleInputChange: Function = (event: EventHandler): void => {
@@ -193,8 +186,6 @@ export default class OCMDView extends Component {
       lastCommand: `${this.state.value} ${this.state.args}`,
       history,
     });
-
-    this.refs.command.focus();
   };
 
   renderCommands: Function = (): Array<React.Element<Item>> => {
@@ -278,7 +269,6 @@ export default class OCMDView extends Component {
                     style={{ width: '250px' }}
                   />
                 </ControlGroup>
-                <Button type="submit" style={{ display: 'none' }} />
               </ButtonGroup>
             </form>
           </Pull>

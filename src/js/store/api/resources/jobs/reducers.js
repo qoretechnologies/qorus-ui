@@ -607,6 +607,8 @@ const reschedule = {
         day,
         month,
         wday,
+        // eslint-disable-next-line
+        sched_txt: `minutes: ${minute}, hours: ${hour}, days: ${day}, months: ${month}, wdays: ${wday}`,
       },
       [...state.data]
     );

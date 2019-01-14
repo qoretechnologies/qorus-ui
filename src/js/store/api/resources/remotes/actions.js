@@ -23,6 +23,23 @@ const connectionChange = createAction('REMOTES_CONNECTIONCHANGE', events => ({
   events,
 }));
 
+const enabledChange = createAction('REMOTES_ENABLEDCHANGE', events => ({
+  events,
+}));
+
+const addConnection = createAction('REMOTES_ADDCONNECTION', events => ({
+  events,
+}));
+const updateConnection = createAction('REMOTES_UPDATECONNECTION', events => ({
+  events,
+}));
+const removeConnectionWS = createAction(
+  'REMOTES_REMOVECONNECTIONWS',
+  events => ({
+    events,
+  })
+);
+
 const updateDone: Function = createAction(
   'REMOTES_UPDATEDONE',
   (name: string): Object => ({ name })
@@ -60,26 +77,12 @@ const clearAlert = createAction('REMOTES_CLEARALERT', events => ({ events }));
 
 const manageConnection: Function = createAction(
   'REMOTES_MANAGECONNECTION',
-  async (
-    remoteType: string,
-    data: Object,
-    name: string,
-    dispatch: Function
-  ) => {
-    if (!dispatch) {
-      return {
-        remoteType,
-        data,
-        name,
-      };
-    }
-
-    let response: Object;
+  (remoteType: string, data: Object, name: string, dispatch: Function) => {
     const { editable } = attrsSelector(null, { remoteType });
     let newData = data;
 
     if (!name) {
-      response = await fetchWithNotifications(
+      fetchWithNotifications(
         async () =>
           await fetchJson(
             'POST',
@@ -94,7 +97,7 @@ const manageConnection: Function = createAction(
       );
     } else {
       newData = pickBy(data, (val, key) => editable.includes(key));
-      response = await fetchWithNotifications(
+      fetchWithNotifications(
         async () =>
           await fetchJson(
             'PUT',
@@ -108,20 +111,13 @@ const manageConnection: Function = createAction(
         dispatch
       );
     }
-
-    return {
-      remoteType,
-      data,
-      name,
-      error: !!response.err,
-    };
   }
 );
 
 const deleteConnection: Function = createAction(
   'REMOTES_DELETECONNECTION',
-  async (remoteType: string, name: string, dispatch): Object => {
-    const response = await fetchWithNotifications(
+  (remoteType: string, name: string, dispatch): ?Object => {
+    fetchWithNotifications(
       async () =>
         await fetchJson(
           'DELETE',
@@ -134,11 +130,7 @@ const deleteConnection: Function = createAction(
       dispatch
     );
 
-    return {
-      remoteType,
-      name,
-      error: !!response.err,
-    };
+    return;
   }
 );
 
@@ -188,6 +180,7 @@ const resetConnection: Function = createAction(
 export {
   pingRemote,
   connectionChange,
+  enabledChange,
   updateDone,
   addAlert,
   clearAlert,
@@ -196,4 +189,7 @@ export {
   toggleConnection,
   resetConnection,
   fetchPass,
+  addConnection,
+  updateConnection,
+  removeConnectionWS,
 };

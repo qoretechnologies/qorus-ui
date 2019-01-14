@@ -210,7 +210,11 @@ class ManageModal extends Component {
                   Options *
                 </label>
                 <div className="col-lg-6">
-                  <Options data={opts} onSave={this.handleOptionsSave} />
+                  <Options
+                    canEdit
+                    data={opts}
+                    onSave={this.handleOptionsSave}
+                  />
                 </div>
               </div>
             </div>

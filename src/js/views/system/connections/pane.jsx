@@ -145,8 +145,10 @@ export default class ConnectionsPane extends Component {
   };
 
   render() {
-    const { deps, alerts } = this.props.remote;
+    const { deps, alerts, locked } = this.props.remote;
     const { isPassLoaded } = this.state;
+
+    const canEdit = !locked && this.props.canEdit;
 
     return (
       <Pane
@@ -165,7 +167,7 @@ export default class ConnectionsPane extends Component {
               )}
               {settings.IS_HTTP && (
                 <Alert bsStyle="warning" title="Insecure connection">
-                  Passwords are not displayed
+                  Passwords are not displayedasjghsjkaghsakj
                 </Alert>
               )}
               <Table condensed clean className="text-table">
@@ -177,7 +179,7 @@ export default class ConnectionsPane extends Component {
                           {upperFirst(val.attr.replace(/_/g, ' '))}
                         </Th>
                         {val.editable &&
-                        this.props.canEdit &&
+                        canEdit &&
                         val.attr !== 'options' &&
                         val.attr !== 'opts' ? (
                           <EditableCell
@@ -191,6 +193,7 @@ export default class ConnectionsPane extends Component {
                               <Options
                                 data={val.value}
                                 onSave={this.handleEditSave(val.attr)}
+                                canEdit={canEdit}
                               />
                             ) : (
                               <ContentByType content={val.value} />

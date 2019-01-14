@@ -1,40 +1,55 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Qorus Integration Engine</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link
+      rel="stylesheet"
+      href="/css/base.css"
+      title="no title"
+      charset="utf-8"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Orbitron"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <title>Qorus Integration Engine</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/base.css" title="no title" charset="utf-8">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
-</head>
-
-<body>
-  <div class="app">
-    <div id="not-supported">
-      <div class="wrap">
-        <h1>Your browser is not supported</h1>
-        <p>We are sorry, but your browser is not supported</p>
-        <p>Try to open the page with one of these browsers:</p>
-        <ul>
-          <li>Google Chrome 14+</li>
-          <li>Firefox 11+</li>
-          <li>Opera 12.1+</li>
-          <li>Safari 6+</li>
-          <li>Internet Explorer 10+</li>
-        </ul>
+  <body>
+    <div class="app">
+      <div id="not-supported">
+        <div class="wrap">
+          <h1>Your browser is not supported</h1>
+          <p>We are sorry, but your browser is not supported</p>
+          <p>Try to open the page with one of these browsers:</p>
+          <ul>
+            <li>Google Chrome 14+</li>
+            <li>Firefox 11+</li>
+            <li>Opera 12.1+</li>
+            <li>Safari 6+</li>
+            <li>Internet Explorer 10+</li>
+          </ul>
+        </div>
+      </div>
+      <div class="center-wrapper default-wrapper">
+        <svg class="preloader" width="40" height="40" viewbox="0 0 40 40">
+          <polygon points="0 0 0 40 40 40 40 0" class="preloader-rect" />
+          <text class="preloader-text" y="25" x="14">Q</text>
+        </svg>
+        <h3 class="main-loading-text">Now loading...</h3>
       </div>
     </div>
-    <div class="center-wrapper default-wrapper">
-      <svg class="preloader" width="40" height="40" viewbox="0 0 40 40">
-        <polygon points="0 0 0 40 40 40 40 0" class="preloader-rect" />
-        <text class="preloader-text" y="25" x="14"> Q </text>
-      </svg>
-      <h3 class="main-loading-text"> Now loading... </h3>
-    </div>
-  </div>
-  <script src="/qorus.bundle.js"></script>
-</body>
-
+    <script src="/qorus.bundle.js"></script>
+  </body>
 </html>

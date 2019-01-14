@@ -37,6 +37,24 @@ const resetConnection = {
   },
 };
 
+const deleteConnection = {
+  next(state: Object = initialState): Object {
+    return state;
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
+const manageConnection = {
+  next(state: Object = initialState): Object {
+    return state;
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
 const connectionChange = {
   next(
     state: Object = initialState,
@@ -53,6 +71,36 @@ const connectionChange = {
         newData = updateItemWithName(
           dt.name,
           { up: dt.up, enabled: dt.enabled, _updated: true },
+          newData
+        );
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
+const enabledChange = {
+  next(
+    state: Object = initialState,
+    {
+      payload: { events },
+    }
+  ): Object {
+    if (state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach((dt: Object) => {
+        newData = updateItemWithName(
+          dt.name,
+          { enabled: dt.enabled, _updated: true },
           newData
         );
       });
@@ -212,33 +260,18 @@ const clearAlert = {
   },
 };
 
-const manageConnection = {
+const updateConnection = {
   next(
     state: Object = initialState,
     {
-      payload: { remoteType, data, name, error },
+      payload: { events },
     }: Object
   ): Object {
     let newData = [...state.data];
 
-    if (error && !name) {
-      remove(newData, (conn: Object) => conn.name === data.name);
-    } else if (name) {
-      const hashData = buildRemoteHash(remoteType, data, name);
-
-      newData = updateItemWithName(name, hashData, newData);
-    } else {
-      const findRemote = newData.find(
-        (remote: Object): boolean =>
-          remote.name === data.name && remote.conntype === CONN_MAP[remoteType]
-      );
-
-      if (!findRemote) {
-        const hashData = buildRemoteHash(remoteType, data);
-
-        newData = [...newData, hashData];
-      }
-    }
+    events.forEach(dt => {
+      newData = updateItemWithName(dt.name, { ...dt, _updated: true }, newData);
+    });
 
     return { ...state, ...{ data: newData } };
   },
@@ -247,22 +280,44 @@ const manageConnection = {
   },
 };
 
-const deleteConnection = {
+const addConnection = {
   next(
     state: Object = initialState,
     {
-      payload: { remoteType, name, error },
+      payload: { events },
+    }: Object
+  ): Object {
+    let newData = [...state.data];
+
+    events.forEach(dt => {
+      console.log(dt);
+
+      newData = [...newData, dt];
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
+const removeConnectionWs = {
+  next(
+    state: Object = initialState,
+    {
+      payload: { events },
     }: Object
   ): Object {
     const data = [...state.data];
 
-    if (!error) {
+    events.forEach(dt => {
       remove(
         data,
         (remote: Object): boolean =>
-          remote.name === name && remote.conntype === CONN_MAP[remoteType]
+          remote.name === dt.name && remote.conntype === dt.type
       );
-    }
+    });
 
     return { ...state, ...{ data } };
   },
@@ -271,12 +326,16 @@ const deleteConnection = {
 export {
   pingRemote as PINGREMOTE,
   connectionChange as CONNECTIONCHANGE,
+  enabledChange as ENABLEDCHANGE,
   updateDone as UPDATEDONE,
   addAlert as ADDALERT,
   clearAlert as CLEARALERT,
   manageConnection as MANAGECONNECTION,
   deleteConnection as DELETECONNECTION,
+  removeConnectionWs as REMOVECONNECTIONWS,
   toggleConnection as TOGGLECONNECTION,
   resetConnection as RESETCONNECTION,
+  updateConnection as UPDATECONNECTION,
+  addConnection as ADDCONNECTION,
   fetchPass as FETCHPASS,
 };
