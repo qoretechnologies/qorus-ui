@@ -82,6 +82,7 @@ const ConnectionTable: Function = ({
   handleAddClick,
   canDelete,
   canAdd,
+  canEdit,
 }: Props): React.Element<any> => (
   <Table fixed striped>
     <Thead>
@@ -120,15 +121,15 @@ const ConnectionTable: Function = ({
         <Th className="text" name="desc" iconName="label">
           Description
         </Th>
+        <Th iconName="lock" name="locked">
+          Locked
+        </Th>
         <Th iconName="repeat" name="loopback">
           Loopback
         </Th>
       </FixedRow>
     </Thead>
-    <DataOrEmptyTable
-      condition={!remotes || size(remotes) === 0}
-      cols={type === 'qorus' ? 6 : 5}
-    >
+    <DataOrEmptyTable condition={!remotes || size(remotes) === 0} cols={8}>
       {props => (
         <Tbody {...props}>
           {remotes.map(
@@ -142,6 +143,7 @@ const ConnectionTable: Function = ({
                 closePane={closePane}
                 remoteType={type}
                 canDelete={canDelete}
+                canEdit={canEdit}
                 {...remote}
               />
             )

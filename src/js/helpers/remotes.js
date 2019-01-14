@@ -24,6 +24,7 @@ const attrsSelector = () => {
     'monitor',
     'status',
     'last_check',
+    'locked',
   ];
 
   const editable = ['desc', 'url', 'opts'];
