@@ -14,7 +14,7 @@ type Props = {
   })
 )
 class Headbar extends React.Component {
-  props: Props;
+  props: Props = this.props;
 
   _el: any;
   _id: string = shortid.generate();

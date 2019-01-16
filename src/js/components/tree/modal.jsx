@@ -23,7 +23,7 @@ type Props = {
   }
 )
 export default class SenstiveYamlEditModal extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     data: ?string,

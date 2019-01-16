@@ -3,6 +3,9 @@ import React from 'react';
 import classNames from 'classnames';
 import { Button, ButtonGroup } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
+import compose from 'recompose/compose';
+import setDisplayName from 'recompose/setDisplayName';
+import wrapDisplayName from 'recompose/wrapDisplayName';
 
 type Props = {
   children?: React.Element<any>,
@@ -22,20 +25,23 @@ const Control = ({
   noCaret,
   intent,
   icon,
+  iconName,
   onClick,
   disabled,
 }: Props) => {
-  const iconName: ?string = !icon && !children ? 'caret-down' : icon;
-  const rightIconName: ?string = !icon && !children ? undefined : 'caret-down';
+  const newIcon: ?string = icon || iconName;
+  const newIconName: ?string = !newIcon && !children ? 'caret-down' : newIcon;
+  const rightIconName: ?string =
+    !newIcon && !children ? undefined : 'caret-down';
 
-  return children || icon || !noCaret ? (
+  return children || newIcon || !noCaret ? (
     <ButtonGroup>
       <Button
         className={classNames(small ? 'pt-small' : '')}
         type="button"
         text={children}
         intent={intent}
-        iconName={iconName}
+        iconName={newIconName}
         rightIconName={!noCaret ? rightIconName : null}
         onClick={onClick}
         disabled={disabled}
@@ -44,7 +50,6 @@ const Control = ({
   ) : null;
 };
 
-export default mapProps(({ icon, iconName, ...rest }: Props) => ({
-  icon: icon || iconName,
-  ...rest,
-}))(Control);
+Control.displayName = 'DropdownControl';
+
+export default Control;

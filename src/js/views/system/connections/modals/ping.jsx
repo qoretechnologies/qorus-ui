@@ -18,7 +18,7 @@ export default class Ping extends Component {
     name: string,
     onClose: Function,
     type: string,
-  };
+  } = this.props;
 
   state: {
     error: boolean,

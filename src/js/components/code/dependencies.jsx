@@ -41,7 +41,7 @@ const fetchBodyIfMissing: Function = (): Function => (Component): Function => {
     props: {
       classItem: Object,
       fetch: Function,
-    };
+    } = this.props;
 
     componentWillMount() {
       const { classItem, fetch } = this.props;

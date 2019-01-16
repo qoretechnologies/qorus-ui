@@ -57,7 +57,7 @@ export default class ChartComponent extends Component {
     yMin?: number,
     legendHandlers?: Array<Function>,
     onClick?: Function,
-  };
+  } = this.props;
 
   state: {
     chart: Object,
@@ -141,18 +141,18 @@ export default class ChartComponent extends Component {
               {
                 ticks: max
                   ? {
-                      min,
-                      max,
-                      stepSize,
-                      callback: val => round(val, 2) + unit,
-                      fontSize: 10,
-                    }
+                    min,
+                    max,
+                    stepSize,
+                    callback: val => round(val, 2) + unit,
+                    fontSize: 10,
+                  }
                   : {
-                      min,
-                      stepSize,
-                      callback: val => round(val, 2) + unit,
-                      fontSize: 10,
-                    },
+                    min,
+                    stepSize,
+                    callback: val => round(val, 2) + unit,
+                    fontSize: 10,
+                  },
                 scaleLabel: {
                   display: !!this.props.yAxisLabel,
                   labelString: this.props.yAxisLabel,

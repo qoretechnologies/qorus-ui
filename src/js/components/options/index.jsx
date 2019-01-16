@@ -28,7 +28,7 @@ export default class Options extends Component {
     systemOptions: Array<Object>,
     onSet: Function,
     onDelete: Function,
-  };
+  } = this.props;
 
   /**
    * Sets up state to cache last opton.
@@ -39,9 +39,9 @@ export default class Options extends Component {
       lastOptionSet: false,
     });
 
-    this.renderTableCells = ::this.renderTableCells;
-    this.renderTableRows = ::this.renderTableRows;
-    this.renderTableSections = ::this.renderTableSections;
+    this.renderTableCells = this.renderTableCells.bind(this);
+    this.renderTableRows = this.renderTableRows.bind(this);
+    this.renderTableSections = this.renderTableSections.bind(this);
   }
 
   /**

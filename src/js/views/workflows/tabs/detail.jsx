@@ -46,7 +46,7 @@ export default class DetailTab extends Component {
     setOptions: Function,
     dispatchAction: Function,
     band: string,
-  };
+  } = this.props;
 
   state: {
     slaThreshold: string,

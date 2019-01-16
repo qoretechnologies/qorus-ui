@@ -23,7 +23,7 @@ export default class DiagramView extends Component {
     workflow: Object,
     isTablet: boolean,
     dispatchAction: Function,
-  };
+  } = this.props;
 
   handleSkipSubmit = (step, value, noretry) => {
     this.props.dispatchAction(

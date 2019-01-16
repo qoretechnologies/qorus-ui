@@ -37,7 +37,7 @@ type Props = {
 }))
 @withDispatch()
 class ManageModal extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     error: ?string,

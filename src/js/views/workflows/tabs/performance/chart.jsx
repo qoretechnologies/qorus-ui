@@ -18,7 +18,7 @@ export default class ChartView extends Component {
     days: number,
     workflow: Object,
     global: boolean,
-  };
+  } = this.props;
 
   componentWillMount() {
     this.fetchData(this.props.days);

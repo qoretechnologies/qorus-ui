@@ -33,7 +33,7 @@ export default class Tree extends Component {
     editableKeys: boolean,
     expanded: boolean,
     compact: boolean,
-  };
+  } = this.props;
 
   state = {
     mode: 'normal',

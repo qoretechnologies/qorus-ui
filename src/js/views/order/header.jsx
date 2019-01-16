@@ -31,7 +31,7 @@ export default class OrderHeader extends Component {
     linkDate: string,
     targetQuery: string,
     prevQueryQuery: string,
-  };
+  } = this.props;
 
   static contextTypes = {
     openModal: PropTypes.func,

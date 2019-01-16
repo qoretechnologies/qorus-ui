@@ -55,7 +55,7 @@ export default class ConnectionsPane extends Component {
     dispatchAction: Function,
     remoteType: string,
     canEdit: boolean,
-  };
+  } = this.props;
 
   state: {
     error: ?string,

@@ -45,7 +45,7 @@ const viewSelector: Function = createSelector(
 @connect(viewSelector)
 @titleManager('OCMD')
 export default class OCMDView extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     value: string,

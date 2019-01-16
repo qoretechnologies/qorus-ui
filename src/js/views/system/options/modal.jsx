@@ -12,7 +12,7 @@ export default class OptionModal extends Component {
     onSave: Function,
     onClose: Function,
     model: Object,
-  };
+  } = this.props;
 
   state: {
     value: string | number,
@@ -65,8 +65,8 @@ export default class OptionModal extends Component {
             model.interval[1] === 'UNLIMITED'
               ? Number.MAX_SAFE_INTEGER
               : model.interval[1] > model.interval[0]
-                ? model.interval[1]
-                : model.interval[0];
+              ? model.interval[1]
+              : model.interval[0];
         }
 
         return (

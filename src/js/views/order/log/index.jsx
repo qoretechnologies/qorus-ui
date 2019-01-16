@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Log from './log';
-import Loader from 'components/loader';
+import Loader from '../../../components/loader';
 import Box from '../../../components/box';
 
 const LogView = ({

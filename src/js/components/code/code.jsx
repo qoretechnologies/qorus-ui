@@ -15,7 +15,7 @@ type Props = {
 };
 
 class CodeTab extends React.Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     height: any,

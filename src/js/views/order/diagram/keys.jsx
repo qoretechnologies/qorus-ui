@@ -2,7 +2,7 @@ import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import size from 'lodash/size';
 
-import { Table, Td, Tr, Th, Tbody, Thead } from 'components/new_table';
+import { Table, Td, Tr, Th, Tbody, Thead } from '../../../components/new_table';
 import PaneItem from '../../../components/pane_item';
 import NoDataIf from '../../../components/NoDataIf';
 import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';

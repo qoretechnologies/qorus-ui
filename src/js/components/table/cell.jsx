@@ -16,7 +16,7 @@ export default class Cell extends Component {
     sortData: Object,
     colspan: number,
     onClick: Function,
-  };
+  } = this.props;
 
   static defaultProps = {
     tag: 'td',

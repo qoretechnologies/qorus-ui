@@ -50,7 +50,7 @@ export default class Handle extends Component {
     onStart: Function,
     onStop: Function,
     children: any,
-  };
+  } = this.props;
 
   static defaultProps = {
     minCurrent: false,

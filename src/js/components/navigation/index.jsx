@@ -22,7 +22,7 @@ export default class Navigation extends Component {
     location: Object,
     mainItems: Array<any>,
     extraItems: Array<any>,
-  };
+  } = this.props;
 
   /**
    * Checks if given item URL is base for current location.

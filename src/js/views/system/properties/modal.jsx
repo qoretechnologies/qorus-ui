@@ -16,7 +16,7 @@ export default class extends Component {
     onSubmit: Function,
     data: Object,
     collection: Object,
-  };
+  } = this.props;
 
   state: {
     domain: string,

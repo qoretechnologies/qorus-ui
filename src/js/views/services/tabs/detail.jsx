@@ -22,7 +22,7 @@ export default class DetailTab extends Component {
     service: Object,
     systemOptions: Array<Object>,
     setOptions: Function,
-  };
+  } = this.props;
 
   setOption = (opt: any) => {
     this.props.setOptions(this.props.service, opt.name, opt.value);

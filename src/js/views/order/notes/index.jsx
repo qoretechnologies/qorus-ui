@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Intent, Callout } from '@blueprintjs/core';
 
-import Box from 'components/box';
-import actions from 'store/api/actions';
+import Box from '../../../components/box';
+import actions from '../../../store/api/actions';
 import NotesList from './table';
 import Toolbar from '../../../components/toolbar';
 import {
@@ -41,7 +41,7 @@ export default class NotesView extends Component {
     order: Object,
     dispatchAction: Function,
     user: Object,
-  };
+  } = this.props;
 
   componentWillMount() {
     this.setState({

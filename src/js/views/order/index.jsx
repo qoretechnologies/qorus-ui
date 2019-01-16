@@ -72,7 +72,7 @@ export default class Order extends Component {
     isTablet: boolean,
     tabQuery: string,
     handleTabChange: Function,
-  };
+  } = this.props;
 
   static childContextTypes = {
     dispatch: PropTypes.func,

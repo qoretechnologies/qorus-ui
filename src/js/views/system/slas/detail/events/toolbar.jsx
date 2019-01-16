@@ -41,7 +41,7 @@ type Props = {
   'producerQuery',
 ])
 export default class SearchToolbar extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     minDate: string,

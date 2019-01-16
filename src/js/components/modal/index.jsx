@@ -24,7 +24,7 @@ export default class Modal extends Component {
   static Header = null;
   static Body = null;
 
-  props: any;
+  props: any = this.props;
   state: {
     height: ?number,
   } = {

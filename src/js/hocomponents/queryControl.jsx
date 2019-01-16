@@ -22,7 +22,7 @@ export default (
     props: {
       location: Object,
       query: string,
-    };
+    } = this.props;
 
     getQueryName: Function = (qn: string | Function): string =>
       typeof qn === 'function' ? qn(this.props) : qn;

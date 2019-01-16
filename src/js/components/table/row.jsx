@@ -10,7 +10,7 @@ export default class Row extends Component {
     children?: any,
     highlight?: false,
     onHighlightEnd?: Function,
-  };
+  } = this.props;
 
   state: {
     highlight: ?boolean,

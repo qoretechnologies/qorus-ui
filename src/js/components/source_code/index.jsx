@@ -29,7 +29,7 @@ export default class SourceCode extends Component {
     height: number,
     handleRef: Function,
     language: string,
-  };
+  } = this.props;
 
   static defaultProps = {
     lineOffset: 0,

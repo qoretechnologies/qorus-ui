@@ -22,7 +22,7 @@ export default class ModalRun extends Component {
     response: Object,
     onClose: Function,
     dispatch: Function,
-  };
+  } = this.props;
 
   state = {
     activeMethod: this.props.method,

@@ -34,6 +34,7 @@ import type { EnhancedTableProps } from '../EnhancedTable';
 import { sortDefaults } from '../../constants/sort';
 import Pull from '../Pull';
 import Dropdown, { Item, Control } from '../../components/dropdown';
+import ContentByType from '../ContentByType';
 
 type ConfigItemsContainerProps = {
   items: Object,
@@ -155,7 +156,11 @@ const ConfigItemsContainer: Function = ({
                           <Th className="text" name="default_value">
                             Default
                           </Th>
-                          <Th className="text" iconName="info-sign" name="value">
+                          <Th
+                            className="text"
+                            iconName="info-sign"
+                            name="value"
+                          >
                             Value
                           </Th>
                           <Th iconName="code" name="type">
@@ -180,9 +185,13 @@ const ConfigItemsContainer: Function = ({
                                 }
                               >
                                 <NameColumn name={item.name} />
-                                <Td className="text">{item.default_value}</Td>
+                                <Td className="text">
+                                  <ContentByType content={item.default_value} />
+                                </Td>
                                 {renderValueContent(item, belongsTo)}
-                                <Td className="narrow">{item.type}</Td>
+                                <Td className="narrow">
+                                  <code>{item.type}</code>
+                                </Td>
                                 <Td className="narrow">
                                   <Icon
                                     iconName={

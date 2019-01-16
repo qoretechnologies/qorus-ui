@@ -1,0 +1,32 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["flowtype", "react"],
+  "rules": {
+    "strict": 0,
+    "no-confusing-arrow": 0,
+    "react/jsx-no-bind": 0,
+    "space-infix-ops": 0,
+    "no-nested-ternary": 0
+  },
+  "settings": {
+    "flowtype": {
+      "onlyFilesWithFlowAnnotation": true
+    }
+  },
+  "globals": {
+    "ReactClass": true,
+    "history": true,
+    "Generator": true,
+    "SyntheticEvent": true,
+    "KeyboardEvent": true,
+    "EventHandler": true,
+    "document": true,
+    "window": true,
+    "localStorage": true,
+    "WebSocket": true
+  }
+}

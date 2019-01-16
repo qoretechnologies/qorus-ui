@@ -32,7 +32,7 @@ type Props = {
   'observeElement',
 ])
 export default class Tr extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     highlight: ?boolean,

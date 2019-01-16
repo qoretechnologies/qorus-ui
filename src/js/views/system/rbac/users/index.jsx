@@ -57,7 +57,7 @@ export default class RBACUsers extends Component {
     openModal: Function,
     closeModal: Function,
     optimisticDispatch: Function,
-  };
+  } = this.props;
 
   handleAddUserClick: Function = (): void => {
     this.props.openModal(

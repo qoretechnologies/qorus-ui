@@ -30,7 +30,7 @@ type Props = {
 };
 
 export class BubbleItem extends React.Component {
-  props: Props;
+  props: Props = this.props;
   _timeout: any;
 
   componentDidMount() {

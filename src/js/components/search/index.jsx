@@ -4,7 +4,6 @@ import { pureRender } from '../utils';
 import { debounce, includes } from 'lodash';
 import {
   Button,
-  Popover,
   Menu,
   MenuItem,
   Position,
@@ -22,7 +21,7 @@ export default class Search extends Component {
     defaultValue?: ?string,
     pullLeft?: boolean,
     searches?: Array<string>,
-  };
+  } = this.props;
 
   state: {
     query: string,
@@ -127,12 +126,12 @@ export default class Search extends Component {
         className={`${this.props.pullLeft ? '' : 'pull-right'}`}
       >
         <ControlGroup>
-          {searches && searches.length !== 0 && (
+          {searches && searches.length !== 0 ? (
             <Dropdown>
               <Control iconName="history" noCaret />
               {this.renderHistoryItems()}
             </Dropdown>
-          )}
+          ) : null}
           <InputGroup
             ref="input"
             type="text"

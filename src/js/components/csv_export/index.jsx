@@ -13,7 +13,7 @@ class CsvExport extends React.Component {
     openModal: Function,
     closeModal: Function,
     type: string,
-  };
+  } = this.props;
 
   _modal: React.Element<*>;
 

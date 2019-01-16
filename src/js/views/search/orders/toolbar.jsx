@@ -48,7 +48,7 @@ type Props = {
   'idsQuery',
 ])
 export default class SearchToolbar extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     mindate: string,

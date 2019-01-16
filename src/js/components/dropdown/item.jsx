@@ -19,7 +19,7 @@ export default class Item extends Component {
     marked: number,
     intent: ?string,
     disabled?: boolean,
-  };
+  } = this.props;
 
   componentDidMount() {
     this.setup();

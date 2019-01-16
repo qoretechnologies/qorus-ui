@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Code from 'components/code';
-import Box from 'components/box';
+import Code from '../../../components/code';
+import Box from '../../../components/box';
 
 const LibraryView = ({
   workflow,

@@ -25,7 +25,7 @@ type Props = {
 };
 
 class CrumbTabs extends React.Component {
-  props: Props;
+  props: Props = this.props;
 
   _tabsWrapper: any;
 
