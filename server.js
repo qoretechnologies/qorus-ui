@@ -21,6 +21,10 @@ if (env === 'production') {
 
   const compiler = webpack(config);
 
+  // History
+  app.use(history());
+
+  // Proxy
   app.use(proxyMiddleware('/api', { target: APIconfig.restBaseUrl }));
   app.use(
     proxyMiddleware('/apievents', {
@@ -34,9 +38,6 @@ if (env === 'production') {
       ws: true,
     })
   );
-
-  // History
-  app.use(history());
 
   // Dev server
   const devMiddleware = webpackDevMiddleware(compiler, {
@@ -53,10 +54,9 @@ if (env === 'production') {
   devMiddleware.invalidate();
 
   app.use(devMiddleware);
-  app.use(webpackHotMiddleware(compiler, { noInfo: false }));
 
-  // Serving
-  app.get('*', serveStatic(config.output.path));
+  // Hot reloading
+  app.use(webpackHotMiddleware(compiler, { noInfo: false }));
 
   // Dev config
   app.listen(process.env.PORT, 'localhost', () => {

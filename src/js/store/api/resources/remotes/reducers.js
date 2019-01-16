@@ -290,8 +290,6 @@ const addConnection = {
     let newData = [...state.data];
 
     events.forEach(dt => {
-      console.log(dt);
-
       newData = [...newData, dt];
     });
 

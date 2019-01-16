@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const merge = require('webpack-merge');
 
 // Root path
@@ -72,6 +73,7 @@ let webpackConfig = {
     ],
   },
   plugins: [
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new MiniCssExtractPlugin({
       filename: 'css/base.css',
       chunkFilename: 'css/[name].css',
@@ -90,13 +92,12 @@ let webpackConfig = {
 if (process.env.NODE_ENV === 'development') {
   webpackConfig = merge(webpackConfig, {
     entry: {
-      vendors: ['webpack-hot-middleware/client'],
-      qorus: [`${root}/src/index.jsx`],
+      qorus: ['webpack-hot-middleware/client', `${root}/src/index.jsx`],
     },
+    cache: true,
     mode: 'development',
     devtool: 'source-map',
     plugins: [
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
     ],
@@ -132,9 +133,14 @@ if (process.env.NODE_ENV === 'development') {
       },
     },
     plugins: [
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new OptimizeCssAssetsPlugin({
+        cssProcessorPluginOptions: {
+          preset: ['default', { discardComments: { removeAll: true } }],
+        },
+        canPrint: true,
+      }),
       new CompressionPlugin({
-        test: /\.js(\?.*)?$/i,
+        test: /\.js|css(\?.*)?$/i,
         cache: true,
       }),
     ],
