@@ -328,9 +328,6 @@ export default compose(
       unselectAll: actions.workflows.unselectAll,
     }
   ),
-  withInfoBar('workflows'),
-  withSort('workflows', 'workflows', sortDefaults.workflows),
-  loadMore('workflows', 'workflows', true, 50),
   mapProps(
     ({ date, isTablet, user, ...rest }: Props): Object => ({
       isTablet: isTablet || user.data.storage.sidebarOpen,
@@ -349,6 +346,9 @@ export default compose(
   ),
   patch('load', ['fetchParams']),
   sync('meta'),
+  withInfoBar('workflows'),
+  withSort('workflows', 'workflows', sortDefaults.workflows),
+  loadMore('workflows', 'workflows', true, 50),
   withState('expanded', 'toggleExpand', false),
   queryControl('disposition'),
   mapProps(({ toggleExpand, isTablet, dispositionQuery, ...rest }: Props) => ({

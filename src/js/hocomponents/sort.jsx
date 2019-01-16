@@ -41,23 +41,26 @@ export default (
       }
     }
 
-    setupSorting(table: string, props: Props) {
-      if (defaultSortData) {
-        let defaultSort;
+    setupSorting = (table: string, props: Props) => {
+      const { initSort } = props;
+      const defaultSort = this.getDefaultSortData(table, props);
+      initSort(table, defaultSort);
+    };
 
-        if (!props.storage[table] || !props.storage[table].sort) {
-          defaultSort =
-            typeof defaultSortData === 'function'
-              ? defaultSortData(props)
-              : defaultSortData;
-        } else {
-          defaultSort = props.storage[table].sort;
-        }
+    getDefaultSortData = (table, props) => {
+      let defaultSort;
 
-        const { initSort } = props;
-        initSort(table, defaultSort);
+      if (!props.storage[table] || !props.storage[table].sort) {
+        defaultSort =
+          typeof defaultSortData === 'function'
+            ? defaultSortData(props)
+            : defaultSortData;
+      } else {
+        defaultSort = props.storage[table].sort;
       }
-    }
+
+      return defaultSort;
+    };
 
     handleSortChange = ({ sortBy }: { sortBy: string }) => {
       const { changeSort, sortData } = this.props;
@@ -83,10 +86,15 @@ export default (
         collectionProp,
         this.props
       );
-      const { sortData } = this.props;
+      const tableSelected = functionOrStringExp(tableName, this.props);
+      const fallbackSortData = this.getDefaultSortData(
+        tableSelected,
+        this.props
+      );
+      let sortData = this.props.sortData || fallbackSortData;
       let collection = this.props[collectionPropSelected];
-      const newProps = { ...this.props };
-      const sortKeysObj = sortKeys[tableName] || {};
+      const newProps = { ...this.props, sortData: sortData };
+      const sortKeysObj = sortKeys[tableSelected] || {};
 
       if (sortData && collection) {
         collection = sortTable(this.props[collectionPropSelected], sortData);

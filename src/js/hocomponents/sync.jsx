@@ -16,20 +16,34 @@ export default (
   loadFunc: ?string = null
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
   class WrappedComponent extends React.Component {
+    state: {
+      hasStartedLoading: boolean,
+    } = {
+      hasStartedLoading: false,
+    };
+
     componentDidMount() {
       const load = this.props[loadFunc] || this.props.load;
       const value = this.props[propName];
 
       if (!value.loading && !value.sync) {
+        this.setState(state => ({
+          ...state,
+          hasStartedLoading: true,
+        }));
         load();
       }
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(nextProps) {
       const load = nextProps[loadFunc] || nextProps.load;
       const value = nextProps[propName];
 
-      if (!value.loading && !value.sync) {
+      if (!this.state.hasStartedLoading) {
+        this.setState(state => ({
+          ...state,
+          hasStartedLoading: true,
+        }));
         load();
       }
     }
