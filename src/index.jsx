@@ -6,11 +6,7 @@ import App from './js/app';
 import isSupported from './js/helpers/is_supported';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-if (process.env.NODE_ENV === 'development') {
-  require('./html/dev/index.html');
-} else {
-  require('./html/index.html');
-}
+require('./html/index.html');
 
 global.env = process.env;
 

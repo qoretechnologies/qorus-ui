@@ -72,6 +72,19 @@ let webpackConfig = {
       },
     ],
   },
+  optimization: {
+    runtimeChunk: false,
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          enforce: true,
+          chunks: 'all',
+        },
+      },
+    },
+  },
   plugins: [
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new MiniCssExtractPlugin({
@@ -96,7 +109,7 @@ if (process.env.NODE_ENV === 'development') {
     },
     cache: true,
     mode: 'development',
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
@@ -118,19 +131,6 @@ if (process.env.NODE_ENV === 'development') {
       chunkModules: true,
       modules: true,
       children: true,
-    },
-    optimization: {
-      runtimeChunk: false,
-      splitChunks: {
-        cacheGroups: {
-          vendors: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            enforce: true,
-            chunks: 'all',
-          },
-        },
-      },
     },
     plugins: [
       new OptimizeCssAssetsPlugin({

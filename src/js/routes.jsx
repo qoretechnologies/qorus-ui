@@ -96,7 +96,7 @@ class AppInfo extends React.Component {
             {workflowsRoutes()}
             <Route path="workflow/:id" component={Workflow} />
             <Route path="order/:id/:date" component={Order} />
-            <Route path="servicess" component={Services} />
+            <Route path="services" component={Services} />
             <Route path="service/:id" component={Service} />
             {jobsRoutes()}
             <Route path="job/:id" component={Job} />
