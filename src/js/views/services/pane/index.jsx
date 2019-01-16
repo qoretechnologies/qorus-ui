@@ -49,7 +49,7 @@ import ServiceTabs from '../tabs';
   ({ data, service, ...rest }: Object): Object => ({
     data: service.class_based
       ? {
-        ...{
+          ...{
             code: [
               {
                 name: 'Service code',
@@ -57,8 +57,8 @@ import ServiceTabs from '../tabs';
               },
             ],
           },
-        ...data,
-      }
+          ...data,
+        }
       : data,
     service,
     ...rest,
@@ -76,7 +76,7 @@ export default class ServicesDetail extends Component {
     width: number,
     onResize: Function,
     data: Object,
-  };
+  } = this.props;
 
   componentWillMount() {
     this.props.load(this.props.paneId);

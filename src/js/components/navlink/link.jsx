@@ -7,7 +7,7 @@ export default class NavLink extends RelativeLink {
   props: {
     to: string,
     path?: string,
-  };
+  } = this.props;
 
   render() {
     return (

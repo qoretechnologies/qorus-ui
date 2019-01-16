@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import Skip from './skip';
-import { Table, Td, Th, Tr, Tbody } from 'components/new_table';
-import Dropdown, { Control, Item } from 'components/dropdown';
+import { Table, Td, Th, Tr, Tbody } from '../../../components/new_table';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
 import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../../components/controls';
-import { pureRender } from 'components/utils';
+import { pureRender } from '../../../components/utils';
 import { groupInstances, canSkip } from '../../../helpers/orders';
 import Toolbar from '../../../components/toolbar';
 import ContentByType from '../../../components/ContentByType';
@@ -27,7 +27,7 @@ export default class StepDetailTable extends Component {
     steps: Object,
     onSkipSubmit: Function,
     order: Object,
-  };
+  } = this.props;
 
   static contextTypes = {
     openModal: PropTypes.func,

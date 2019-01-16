@@ -19,7 +19,7 @@ export default class Picker extends Component {
     hideDatepicker: () => void,
     children?: Array<React.Element<any>>,
     futureOnly: boolean,
-  };
+  } = this.props;
 
   componentDidMount(): void {
     document.addEventListener('click', this.handleOutsideClick);

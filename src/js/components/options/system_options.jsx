@@ -13,7 +13,7 @@ export default class SystemOptions extends Component {
   props: {
     options: Array<Object>,
     onAdd: Function,
-  };
+  } = this.props;
 
   /**
    * Sets up state with default edit flag and no selected option.
@@ -27,39 +27,39 @@ export default class SystemOptions extends Component {
    *
    * @param {Event} ev
    */
-  onChange(ev) {
+  onChange = ev => {
     this.setState({
       selected: this.props.options.find(
         opt => opt.name === ev.currentTarget.value
       ),
     });
-  }
+  };
 
   /**
    * Start editing by showing options to add.
    */
-  start() {
+  start = () => {
     this.setState({ edit: true, selected: this.props.options[0] });
-  }
+  };
 
   /**
    * Cancels editing by hiding options to add.
    */
-  cancel() {
+  cancel = () => {
     this.setState({ edit: false, selected: null });
-  }
+  };
 
   /**
    * Adds new option by calling `onAdd` prop.
    *
    * @param {Event} ev
    */
-  commit(ev) {
+  commit = ev => {
     ev.preventDefault();
 
     this.props.onAdd(this.state.selected);
     this.setState({ edit: false, selected: null });
-  }
+  };
 
   /**
    * Returns a form to select new option to add.
@@ -68,12 +68,12 @@ export default class SystemOptions extends Component {
    */
   renderOptions() {
     return (
-      <form className="form-inline" onSubmit={::this.commit}>
+      <form className="form-inline" onSubmit={this.commit}>
         <ButtonGroup>
           <select
             className="form-control"
             value={this.state.selected && this.state.selected.name}
-            onChange={::this.onChange}
+            onChange={this.onChange}
           >
             {this.props.options.map(opt => (
               <option key={opt.name} value={opt.name}>
@@ -89,7 +89,7 @@ export default class SystemOptions extends Component {
           />
           <Button
             type="button"
-            onClick={::this.cancel}
+            onClick={this.cancel}
             iconName="cross"
             text="Cancel"
           />
@@ -108,7 +108,7 @@ export default class SystemOptions extends Component {
       <ButtonGroup>
         <Button
           btnStyle="primary"
-          onClick={::this.start}
+          onClick={this.start}
           disabled={!this.props.options.length}
           text="Add option"
           iconName="plus"

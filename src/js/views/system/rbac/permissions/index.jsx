@@ -62,7 +62,7 @@ export default class RBACPerms extends Component {
     closeModal: Function,
     optimisticDispatch: Function,
     user: Object,
-  };
+  } = this.props;
 
   handleAddPermClick: Function = (): void => {
     this.props.openModal(

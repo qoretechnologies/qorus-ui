@@ -55,7 +55,7 @@ export default (
       connect: Function,
       disconnect: Function,
       url: string,
-    };
+    } = this.props;
 
     componentWillMount() {
       this.handleConnect()();

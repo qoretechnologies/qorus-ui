@@ -55,7 +55,7 @@ export default class WorkflowsDetail extends Component {
     width: number,
     fetchParams: Object,
     band: string,
-  };
+  } = this.props;
 
   componentWillMount() {
     this.props.load(this.props.paneId, this.props.fetchParams.date);

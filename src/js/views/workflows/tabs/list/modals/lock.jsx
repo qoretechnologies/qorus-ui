@@ -14,7 +14,7 @@ export default class extends Component {
     lock: Function,
     username: string,
     locked: boolean,
-  };
+  } = this.props;
 
   handleLockClick = () => {
     const { lock, id, username, locked, onClose } = this.props;

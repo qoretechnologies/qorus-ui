@@ -20,7 +20,7 @@ type Props = {
 
 @pure(['children', 'active', 'vertical', 'noContainer', 'tabs', 'rightElement'])
 class Tabs extends React.Component {
-  props: Props;
+  props: Props = this.props;
   state: {
     active?: string,
   } = {

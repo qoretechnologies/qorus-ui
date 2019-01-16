@@ -7,7 +7,7 @@ const withMutationObserver: Function = (
   class WrappedComponent extends React.Component {
     props: {
       first?: boolean,
-    };
+    } = this.props;
 
     state: {
       lastChange?: string,

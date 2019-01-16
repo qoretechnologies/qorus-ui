@@ -1,85 +1,68 @@
-'use strict';
-
+// @flow
 const express = require('express');
 const history = require('connect-history-api-fallback');
 const serveStatic = require('serve-static');
+
 const config = require('./webpack.config');
-const devConfig = require('./webpack.config/dev');
-const APIconfig = require('./server_config.js');
 
 const app = express();
+const env = app.get('env');
 
-if (!APIconfig.wsProxy) {
-  require('express-ws')(app);
-}
+if (env === 'production') {
+  app.use(history());
+  app.get('*', serveStatic(config.output.path));
+} else {
+  // Get webpack
+  const APIconfig = require('./server_config.js');
+  const webpack = require('webpack');
+  const proxyMiddleware = require('http-proxy-middleware');
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
 
-switch (app.get('env')) {
-  case 'production':
-    app.use(history());
-    app.get('*', serveStatic(config.output.path));
-    break;
+  const compiler = webpack(config);
 
-  default: {
-    const webpack = require('webpack');
-    const compiler = webpack(config);
+  app.use(proxyMiddleware('/api', { target: APIconfig.restBaseUrl }));
+  app.use(
+    proxyMiddleware('/apievents', {
+      target: `${APIconfig.wsBaseUrl}/apievents`,
+      ws: true,
+    })
+  );
+  app.use(
+    proxyMiddleware('/log', {
+      target: `${APIconfig.wsBaseUrl}/log`,
+      ws: true,
+    })
+  );
 
-    let api;
-    const reload = () => {
-      api = require('./api')();
-    };
-    process.on('SIGUSR2', reload);
-    reload();
+  // History
+  app.use(history());
 
-    app.use((req, res, next) => {
-      if (
-        req.originalUrl.includes('/api') &&
-        req.headers['qorus-token'] &&
-        req.headers['qorus-token'] === 'fake'
-      ) {
-        res.status(401).send('Wrong token');
-        return;
-      }
-      api(req, res, next);
-    });
-    app.use(history());
-    app.use(require('webpack-dev-middleware')(compiler, config.devServer));
-    if (
-      config.plugins &&
-      config.plugins.some(p => p instanceof webpack.HotModuleReplacementPlugin)
-    ) {
-      app.use(require('webpack-hot-middleware')(compiler));
-    }
-    app.get('*', serveStatic(config.context));
-    break;
-  }
-}
+  // Dev server
+  const devMiddleware = webpackDevMiddleware(compiler, {
+    inline: true,
+    host: 'localhost',
+    port: parseInt(process.env.PORT, 10),
+    historyApiFallback: true,
+    publicPath: config.output.publicPath,
+    noInfo: true,
+    stats: { colors: true },
+    hot: true,
+  });
 
-const serverConfig = devConfig();
-app.listen(serverConfig.port, serverConfig.host, function onListening() {
-  if (process.env.PIDFILE) {
-    const pidfile = require('path').resolve(__dirname, process.env.PIDFILE);
+  devMiddleware.invalidate();
 
-    try {
-      require('fs').statSync(pidfile);
-      process.stdout.write(`PIDFILE "${process.env.PIDFILE}" already exists\n`);
-      this.close();
-      process.exit(1);
-    } catch (e) {
-      // Do nothing.
-    }
+  app.use(devMiddleware);
+  app.use(webpackHotMiddleware(compiler, { noInfo: false }));
 
-    require('fs').writeFileSync(pidfile, `${process.pid}`, 'ascii');
-    process.on('SIGINT', () => {
-      require('fs').unlinkSync(pidfile);
-      this.close();
-      process.exit();
-    });
-  }
+  // Serving
+  app.get('*', serveStatic(config.output.path));
 
-  if (app.get('env') !== 'test1') {
+  // Dev config
+  app.listen(process.env.PORT, 'localhost', () => {
     process.stdout.write(
       `Qorus Webapp ${app.get('env')} server listening on ` +
-        `http://${serverConfig.host}:${serverConfig.port}\n`
+        `http://localhost:${process.env.PORT}\n`
     );
-  }
-});
+  });
+}

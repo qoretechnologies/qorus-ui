@@ -18,7 +18,7 @@ type Props = {
   'type',
 ])
 export default class Editable extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     error: boolean,

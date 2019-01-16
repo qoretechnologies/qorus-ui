@@ -56,7 +56,7 @@ class SQLCache extends Component {
     optimisticDispatch: Function,
     openModal: Function,
     closeModal: Function,
-  };
+  } = this.props;
 
   handleClearAllClick: Function = (): void => {
     const confirmFunc: Function = (): void => {

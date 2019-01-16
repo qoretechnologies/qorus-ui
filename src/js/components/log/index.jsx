@@ -15,7 +15,7 @@ export default class LogComponent extends Component {
     messages: Array<string>,
     onClearClick: Function,
     height: any,
-  };
+  } = this.props;
 
   state: {
     autoScroll: boolean,

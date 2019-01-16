@@ -69,7 +69,7 @@ export default class PropertiesView extends Component {
     openModal: Function,
     closeModal: Function,
     optimisicDispatch: Function,
-  };
+  } = this.props;
 
   handleAddClick = (event: EventHandler, data: Object) => {
     const onSubmit = data

@@ -58,7 +58,7 @@ export default class RBACRoles extends Component {
     closeModal: Function,
     optimisticDispatch: Function,
     user: Object,
-  };
+  } = this.props;
 
   handleAddRoleClick: Function = (): void => {
     this.props.openModal(

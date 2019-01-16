@@ -6,15 +6,14 @@ import modal from './modal';
 import Modal from '../components/modal';
 import { generateCSV } from '../helpers/table';
 
-export default (
-  collection: string,
-  name: string
-): Function => (Component: ReactClass<*>): ReactClass<*> => {
+export default (collection: string, name: string): Function => (
+  Component: ReactClass<*>
+): ReactClass<*> => {
   class WrappedComponent extends React.Component {
     props: {
       openModal: Function,
       closeModal: Function,
-    };
+    } = this.props;
 
     handleModalMount: Function = (): void => {
       const el: Object = document.querySelector('#CSV-modal-text');
@@ -25,10 +24,7 @@ export default (
     handleCSVClick: Function = (): void => {
       this.props.openModal(
         <Modal onMount={this.handleModalMount}>
-          <Modal.Header
-            onClose={this.props.closeModal}
-            titleId="CSV-modal"
-          >
+          <Modal.Header onClose={this.props.closeModal} titleId="CSV-modal">
             Copy table
             <small> (Press ⌘ + c / CTRL + c) </small>
           </Modal.Header>
@@ -46,9 +42,7 @@ export default (
     };
 
     render() {
-      return (
-        <Component onCSVClick={this.handleCSVClick} {...this.props} />
-      );
+      return <Component onCSVClick={this.handleCSVClick} {...this.props} />;
     }
   }
 

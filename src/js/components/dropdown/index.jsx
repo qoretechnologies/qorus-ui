@@ -38,7 +38,7 @@ export default class Dropdown extends Component {
     submitLabel: 'Filter',
   };
 
-  props: Props;
+  props: Props = this.props;
 
   state: {
     showDropdown: ?boolean,
@@ -266,7 +266,7 @@ export default class Dropdown extends Component {
 
   renderDropdownList(): ?React.Element<any> {
     return React.Children.map(this.props.children, (c, index) => {
-      if (!c || c.type === Control) return null;
+      if (!c || c.type.displayName === 'DropdownControl') return null;
 
       if (c.type === CustomItem || c.type === Divider) {
         return c;
@@ -309,7 +309,7 @@ export default class Dropdown extends Component {
 
   renderDropdownControl(): ?React.Element<any> {
     return React.Children.map(this.props.children, c => {
-      if (!c || c.type !== Control) return undefined;
+      if (!c || c.type.displayName !== 'DropdownControl') return undefined;
 
       return (
         <c.type

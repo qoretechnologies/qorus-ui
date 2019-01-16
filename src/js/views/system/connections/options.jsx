@@ -50,7 +50,7 @@ const Option: Function = ({
 };
 
 export default class ConnectionOptions extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     key: ?string,

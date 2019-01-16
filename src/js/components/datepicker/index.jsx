@@ -32,7 +32,7 @@ type Props = {
 
 @pure(['date', 'futureOnly', 'className'])
 export default class DatePicker extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     date: Object,

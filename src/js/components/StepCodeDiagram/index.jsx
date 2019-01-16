@@ -98,7 +98,7 @@ export default class StepsTab extends Component {
     onSkipSubmit: Function,
     openModal: Function,
     closeModal: Function,
-  };
+  } = this.props;
 
   state: {
     tooltip?: string,
@@ -1085,7 +1085,11 @@ export default class StepsTab extends Component {
               />
               <Button iconName="zoom-in" onClick={this.handleZoomIn} big />
               <Button iconName="zoom-out" onClick={this.handleZoomOut} big />
-              <Button iconName="zoom-to-fit" onClick={this.handleZoomReset} big />
+              <Button
+                iconName="zoom-to-fit"
+                onClick={this.handleZoomReset}
+                big
+              />
             </ButtonGroup>
           </Pull>
         </Headbar>

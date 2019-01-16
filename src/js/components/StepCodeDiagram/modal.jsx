@@ -36,7 +36,7 @@ export default class StepModal extends Component {
     step: Object,
     onClose: Function,
     fetchStep: Function,
-  };
+  } = this.props;
 
   /**
    * Fetches detailed information about step.

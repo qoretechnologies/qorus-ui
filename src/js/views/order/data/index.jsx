@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Box from 'components/box';
+import Box from '../../../components/box';
 import StaticView from './static';
 import DynamicView from './dynamic';
 import SensitiveView from './sensitive';

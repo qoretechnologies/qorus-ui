@@ -6,6 +6,7 @@ import omit from 'lodash/omit';
 import upperFirst from 'lodash/upperFirst';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
+import isArray from 'lodash/isArray';
 
 import actions from '../store/api/actions';
 import withTabs from './withTabs';
@@ -45,16 +46,22 @@ export default (
       width?: number,
       tabQuery?: string,
       changeTabQuery: Function,
-    };
+    } = this.props;
 
-    handleClose: Function = (omitQueries: Array<String> = []): void => {
+    handleClose: Function = (
+      omitQueries: Array<String> | Object = []
+    ): void => {
       const { query, pathname }: { query: Object, pathname: string } =
         this.props.location || this.context.location;
+
+      // Event object can be received as the first parameter
+      const omitQueriesArray =
+        omitQueries && isArray(omitQueries) ? omitQueries : [];
 
       const newQuery: Object = omit(query, [
         paneTabQueryName,
         paneQueryName,
-        ...omitQueries,
+        ...omitQueriesArray,
       ]);
 
       this.context.router.push({

@@ -26,9 +26,9 @@ import { Spinner, Classes, Icon, Intent } from '@blueprintjs/core';
 import qorusLogo from '../../img/qorus_engine_logo.png';
 import elementsLogo from '../../img/elements.png';
 import Flex from '../components/Flex';
+import { success, warning } from '../store/ui/bubbles/actions';
 
 addLocaleData([...en, ...cs, ...de]);
-
 const systemSelector = state => state.api.system;
 const currentUserSelector = state => state.api.currentUser;
 const menuSelector = state => state.menu;
@@ -67,6 +67,8 @@ const optionsSelector = state => state.api.systemOptions;
     storeSidebar: actions.currentUser.storeSidebar,
     storeTheme: actions.currentUser.storeTheme,
     fetchHealth: actions.health.fetch,
+    sendSuccess: success,
+    sendWarning: warning,
   }
 )
 @mapProps(
@@ -104,7 +106,9 @@ export default class Root extends Component {
     fetchHealth: Function,
     options: Object,
     storeTheme: Function,
-  };
+    sendSuccess: Function,
+    sendWarning: Function,
+  } = this.props;
 
   static childContextTypes = {
     openModal: PropTypes.func,
@@ -128,6 +132,31 @@ export default class Root extends Component {
     this.fetchGlobalData();
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
+
+    if (process.env.NODE_ENV !== 'production') {
+      const { sendSuccess, sendWarning } = this.props;
+
+      if (window.__whmEventSourceWrapper) {
+        for (let key of Object.keys(window.__whmEventSourceWrapper)) {
+          window.__whmEventSourceWrapper[key].addMessageListener(msg => {
+            if (typeof msg.data === 'string' && msg.data.startsWith('{')) {
+              const data = JSON.parse(msg.data);
+
+              if (data && data.action) {
+                switch (data.action) {
+                  case 'building':
+                    sendWarning('Webpack rebuilding...', 'webpack-build');
+                    break;
+                  case 'built':
+                    sendSuccess('Webpack rebuilt!', 'webpack-build');
+                    break;
+                }
+              }
+            }
+          });
+        }
+      }
+    }
   }
 
   delayedResize: Function = debounce((data: Object): void => {

@@ -21,7 +21,7 @@ export default (
   defaultSortData: ?Object | Function
 ) => (Component: ReactClass<*>) => {
   class WrappedComponent extends React.Component {
-    props: Props;
+    props: Props = this.props;
 
     componentWillMount() {
       const tbl =

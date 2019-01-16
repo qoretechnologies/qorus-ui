@@ -35,7 +35,7 @@ class AppInfo extends React.Component {
     info: Object,
     logout: Function,
     routerProps: Object,
-  };
+  } = this.props;
   /**
    * requireAnonymous - redirect to main page if user authenticated
    * @param  {*} nextState next router state
@@ -96,7 +96,7 @@ class AppInfo extends React.Component {
             {workflowsRoutes()}
             <Route path="workflow/:id" component={Workflow} />
             <Route path="order/:id/:date" component={Order} />
-            <Route path="services" component={Services} />
+            <Route path="servicess" component={Services} />
             <Route path="service/:id" component={Service} />
             {jobsRoutes()}
             <Route path="job/:id" component={Job} />

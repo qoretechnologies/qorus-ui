@@ -6,7 +6,7 @@ import round from 'lodash/round';
 import { browserHistory } from 'react-router';
 
 import Loader from '../../../components/loader';
-import actions from 'store/api/actions';
+import actions from '../../../store/api/actions';
 import DashboardModule from '../../../components/dashboard_module/index';
 import PaneItem from '../../../components/pane_item';
 import {
@@ -60,7 +60,7 @@ type Props = {
 @withModal()
 @titleManager('Dashboard')
 export default class Dashboard extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     chartTab: string,

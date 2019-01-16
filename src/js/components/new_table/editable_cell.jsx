@@ -29,7 +29,7 @@ export default class EditableCell extends Component {
     max: number,
     showControl: boolean,
     className: string,
-  };
+  } = this.props;
 
   static defaultProps = {
     value: '',

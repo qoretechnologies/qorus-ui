@@ -21,7 +21,7 @@ type Props = {
 };
 
 class ReleasesSearch extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     fileName: ?string,

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 
-import Modal from 'components/modal';
-import { Controls, Control } from 'components/controls';
+import Modal from '../../../components/modal';
+import { Controls, Control } from '../../../components/controls';
 
 export default class extends Component {
   props: {
     onClose: Function,
     onSubmit: Function,
     steps: Array<Object>,
-  };
+  } = this.props;
 
   componentWillMount() {
     this.setState({

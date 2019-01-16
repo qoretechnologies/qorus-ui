@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import reduxStore from './store';
 import { browserHistory } from 'react-router';
 import Routes from './routes';
-import pure from 'recompose/pure';
+import { hot } from 'react-hot-loader/root';
 
 require('normalize.css/normalize.css');
 require('@blueprintjs/core/dist/blueprint.css');
@@ -15,7 +15,6 @@ require('@blueprintjs/core/resources/icons/icons-20.eot');
 require('@blueprintjs/core/resources/icons/icons-20.ttf');
 require('@blueprintjs/core/resources/icons/icons-20.woff');
 require('bootstrap-sass/assets/stylesheets/_bootstrap.scss');
-require('font-awesome-webpack!../font-awesome.config.js');
 require('../css/app.scss');
 
 const App: Function = () => (
@@ -26,4 +25,4 @@ const App: Function = () => (
   </Provider>
 );
 
-export default pure(App);
+export default hot(App);

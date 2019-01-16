@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Info from 'components/info_table';
-import Box from 'components/box';
+import Info from '../../../components/info_table';
+import Box from '../../../components/box';
 
 const InfoView = ({ order }: { order: Object }) => (
   <Box top>

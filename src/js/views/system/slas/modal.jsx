@@ -13,7 +13,7 @@ type Props = {
 
 @withDispatch()
 export default class SLACreateModal extends Component {
-  props: Props;
+  props: Props = this.props;
 
   handleFormSubmit: Function = (event: Object): void => {
     event.preventDefault();

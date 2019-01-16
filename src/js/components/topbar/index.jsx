@@ -101,7 +101,7 @@ export type Props = {
 @withModal()
 @withPane(Notifications, null, 'all', 'notifications', 'notificationsPane')
 export default class Topbar extends Component {
-  props: Props;
+  props: Props = this.props;
 
   state: {
     quickSearchType: string,

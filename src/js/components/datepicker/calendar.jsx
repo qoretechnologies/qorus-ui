@@ -27,7 +27,7 @@ export default class Calendar extends Component {
     setDate: (date: Object) => void,
     activeDate: Object,
     setActiveDate: () => void,
-  };
+  } = this.props;
 
   getDaysOfMonth(): Array<Object> {
     const month: number = this.props.date.month();
