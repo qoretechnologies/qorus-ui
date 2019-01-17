@@ -7,6 +7,7 @@ import includes from 'lodash/includes';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import size from 'lodash/size';
+import AddValue from './add';
 
 import Search from '../../../../containers/search';
 
@@ -43,11 +44,15 @@ const DetailTable: Function = ({
   data,
   onSearchChange,
   defaultSearchValue,
+  onSaveClick,
 }: Props): React.Element<any> => (
-  <Table condensed striped fixed height={300}>
+  <Table condensed striped fixed>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th>
+          <Pull>
+            <AddValue id={paneId} add={onSaveClick} />
+          </Pull>
           <Pull right>
             <Search
               onSearchUpdate={onSearchChange}

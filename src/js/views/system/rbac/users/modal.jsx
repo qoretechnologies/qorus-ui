@@ -42,6 +42,7 @@ export default class AddUserModal extends Component {
     onSave: Function,
     model?: Object,
     title: string,
+    rbacExternal: any,
   } = this.props;
 
   state: {

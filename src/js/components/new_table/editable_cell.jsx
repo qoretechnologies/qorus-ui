@@ -273,6 +273,7 @@ export default class EditableCell extends Component {
           <React.Fragment>
             <span>{this.state.value}</span>
             <Control
+              title="Edit"
               iconName="edit"
               className="editable-button"
               onClick={this.start}
