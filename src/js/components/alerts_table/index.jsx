@@ -19,7 +19,7 @@ const AlertsTab = ({ alerts }: { alerts: Array<Object> }) => (
             {item.alert}
           </Link>
           <p>{item.object}</p>
-          <small>{item.reason}</small>
+          <div style={{ whiteSpace: 'pre-wrap' }}>{item.reason}</div>
         </div>
       ))
     ) : (

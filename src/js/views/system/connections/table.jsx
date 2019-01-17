@@ -112,9 +112,6 @@ const ConnectionTable: Function = ({
         </Th>
         <NameColumnHeader iconName="application" />
         <Th iconName="build">Actions</Th>
-        <Th className="text" iconName="cog">
-          Options
-        </Th>
         <Th className="text" name="url" iconName="link">
           URL
         </Th>
@@ -129,7 +126,7 @@ const ConnectionTable: Function = ({
         </Th>
       </FixedRow>
     </Thead>
-    <DataOrEmptyTable condition={!remotes || size(remotes) === 0} cols={8}>
+    <DataOrEmptyTable condition={!remotes || size(remotes) === 0} cols={7}>
       {props => (
         <Tbody {...props}>
           {remotes.map(

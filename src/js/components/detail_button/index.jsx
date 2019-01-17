@@ -17,6 +17,7 @@ const DetailButton: Function = ({
   handleClick,
 }: Props): React.Element<any> => (
   <Button
+    title="Opens side pane with detailed item view"
     intent={active ? Intent.PRIMARY : Intent.NONE}
     onClick={handleClick}
     iconName="list-detail-view"

@@ -130,10 +130,6 @@ const ConnectionRow: Function = ({
       </ButtonGroup>
     </Td>
     <Td className="text">
-      <Tree compact data={opts} />
-    </Td>
-
-    <Td className="text">
       <p title={safeUrl || url}>
         <Link className="resource-link" to={safeUrl || url}>
           {safeUrl || url}

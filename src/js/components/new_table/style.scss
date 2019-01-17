@@ -36,35 +36,16 @@ td.editable {
   vertical-align: middle;
   white-space: nowrap;
 
+  .editable-button {
+    position: absolute;
+    right: 5px;
+    top: 0;
+  }
+
   & {
     /* [2] */
     position: relative;
     padding-right: 20px;
-
-    &::after {
-      content: '\270E';
-      font-size: $font-size-small;
-
-      position: absolute;
-      top: 10%;
-      right: 5px;
-
-      color: #cacaca;
-      font-family: Icons16;
-      font-style: normal;
-      font-weight: normal;
-      text-decoration: inherit;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    &:hover::after {
-      color: #000;
-    }
-
-    &.editor::after {
-      content: '';
-      display: none;
-    }
   }
 
   &.editor {

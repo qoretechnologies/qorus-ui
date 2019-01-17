@@ -35,4 +35,18 @@ const attrsSelector = () => {
   };
 };
 
-export { buildRemoteHash, attrsSelector };
+const attrsMapper: Function = (attr: string) => {
+  const attrs = {
+    opts: 'Options',
+    desc: 'Description',
+    url: 'URL',
+  };
+
+  if (attr in attrs) {
+    return attrs[attr];
+  }
+
+  return attr;
+};
+
+export { buildRemoteHash, attrsSelector, attrsMapper };
