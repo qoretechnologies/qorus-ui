@@ -146,7 +146,7 @@ export default class SearchToolbar extends Component {
             <ControlGroup className="vab">
               <InputGroup
                 type="text"
-                placeholder="Instance ID..."
+                placeholder="Workflow Order ID..."
                 onChange={this.handleIdsChange}
                 value={this.state.ids || ''}
                 id="instance-id"
@@ -191,6 +191,7 @@ export default class SearchToolbar extends Component {
               id="filters"
               multi
               def="All"
+              submitOnBlur
               onSubmit={this.handleFilterChange}
               selected={
                 !this.state.filter || this.state.filter === ''

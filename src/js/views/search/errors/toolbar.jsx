@@ -197,6 +197,7 @@ export default class SearchToolbar extends Component {
           <Dropdown
             id="ids"
             multi
+            submitOnBlur
             onSubmit={this.handleIdsChange}
             selected={
               !this.state.ids || this.state.ids === ''
@@ -215,6 +216,7 @@ export default class SearchToolbar extends Component {
             id="filters"
             multi
             def="All"
+            submitOnBlur
             onSubmit={this.handleFilterChange}
             selected={
               !this.state.filter || this.state.filter === ''

@@ -137,14 +137,6 @@ export default class Dropdown extends Component {
     if (this.props.onSelect) this.props.onSelect(selected);
   };
 
-  handleOutsideClick: Function = (event: Object): void => {
-    const el: Object = ReactDOM.findDOMNode(this.refs.dropdown);
-
-    if (el && !el.contains(event.target)) {
-      this.hideToggle();
-    }
-  };
-
   handleMarkedChange: Function = (event: EventHandler): void => {
     const { which } = event;
     const { marked } = this.state;
@@ -326,7 +318,7 @@ export default class Dropdown extends Component {
   }
 
   renderSubmit(): ?React.Element<Button> {
-    if (this.props.multi && this.props.onSubmit) {
+    if (this.props.multi && this.props.onSubmit && !this.props.submitOnBlur) {
       return (
         <Button text={this.props.submitLabel} onClick={this.handleSubmit} />
       );
@@ -336,6 +328,8 @@ export default class Dropdown extends Component {
   }
 
   render(): React.Element<any> {
+    const { onSubmit, submitOnBlur } = this.props;
+
     return (
       <ButtonGroup className={`${this.props.className} qorus-dropdown`}>
         <Popover
@@ -345,7 +339,15 @@ export default class Dropdown extends Component {
           isOpen={this.state.showDropdown}
           enforceFocus={false}
           autoFocus={false}
-          onInteraction={inter => !inter && this.hideToggle()}
+          onInteraction={inter => {
+            if (!inter) {
+              if (onSubmit && submitOnBlur) {
+                onSubmit(this.state.selected);
+              }
+
+              this.hideToggle();
+            }
+          }}
         >
           {this.renderDropdownControl()}
         </Popover>
