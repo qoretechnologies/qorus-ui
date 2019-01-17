@@ -14,13 +14,18 @@ import {
 } from '../../../../components/new_table';
 import { sortDefaults } from '../../../../constants/sort';
 import Pull from '../../../../components/Pull';
-import { Control as Button } from '../../../../components/controls';
+import {
+  Control as Button,
+  Controls as ButtonGroup,
+} from '../../../../components/controls';
 import LoadMore from '../../../../components/LoadMore';
 import EnhancedTable from '../../../../components/EnhancedTable';
 import type { EnhancedTableProps } from '../../../../components/EnhancedTable';
 import { ActionColumnHeader } from '../../../../components/ActionColumn';
 import { NameColumnHeader } from '../../../../components/NameColumn';
 import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
+import Alert from '../../../../components/alert';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   users: Array<Object>,
@@ -32,6 +37,7 @@ type Props = {
   canDelete: boolean,
   onAddUserClick: Function,
   canAdd: boolean,
+  rbacExternal: Array<Object>,
 };
 
 const UsersTable: Function = ({
@@ -42,6 +48,7 @@ const UsersTable: Function = ({
   canDelete,
   onAddUserClick,
   canAdd,
+  rbacExternal,
 }: Props): React.Element<Table> => (
   <EnhancedTable
     collection={users}
@@ -62,13 +69,28 @@ const UsersTable: Function = ({
           <FixedRow className="toolbar-row">
             <Th collspan="full">
               <Pull>
-                <Button
-                  disabled={!canAdd}
-                  text="Add user"
-                  iconName="plus"
-                  onClick={onAddUserClick}
-                  big
-                />
+                <ButtonGroup>
+                  <Button
+                    disabled={!canAdd}
+                    text="Add user"
+                    iconName="plus"
+                    onClick={onAddUserClick}
+                    big
+                  />
+                </ButtonGroup>
+                {rbacExternal && (
+                  <ButtonGroup>
+                    <Button
+                      className="pt-minimal"
+                      icon="warning-sign"
+                      btnStyle="warning"
+                      title={`External RBAC providers are: ${rbacExternal}`}
+                      text="Only users stored in Qorus system DB are manageable in this
+                    area"
+                      big
+                    />
+                  </ButtonGroup>
+                )}
               </Pull>
               <Pull right>
                 <LoadMore

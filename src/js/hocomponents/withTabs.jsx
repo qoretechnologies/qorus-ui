@@ -11,7 +11,12 @@ export default (
   queryName: string | Function = 'tab'
 ): Function => (Component: any): Function =>
   compose(
-    queryControl(props => functionOrStringExp(queryName, props)),
+    queryControl(
+      props => functionOrStringExp(queryName, props),
+      null,
+      false,
+      false
+    ),
     mapProps(
       (props): Object => ({
         tabQuery: props[`${functionOrStringExp(queryName, props)}Query`],

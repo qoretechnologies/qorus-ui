@@ -16,10 +16,10 @@ import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
 
 const rolesSelector: Function = (state: Object): Object => state.api.roles;
+
 const viewSelector: Function = createSelector(
-  [
-    rolesSelector,
-  ], (roles) => ({
+  [rolesSelector],
+  roles => ({
     roles,
     rolesModel: roles.data,
   })
@@ -35,14 +35,14 @@ const viewSelector: Function = createSelector(
   sync('roles')
 )
 export default class AddUserModal extends Component {
-  props:{
+  props: {
     rolesModel?: Array<Object>,
     users: Array<Object>,
     onClose: Function,
     onSave: Function,
     model?: Object,
     title: string,
-  };
+  } = this.props;
 
   state: {
     roles: Array<string>,
@@ -61,19 +61,12 @@ export default class AddUserModal extends Component {
   handleSaveClick: Function = (): void => {
     const { name, username } = this.refs;
 
-    if (
-      name.value === '' ||
-      username.value === ''
-    ) {
+    if (name.value === '' || username.value === '') {
       this.setState({
         error: 'Please fill all fields marked with *',
       });
     } else {
-      this.props.onSave(
-        name.value,
-        username.value,
-        this.state.roles,
-      );
+      this.props.onSave(name.value, username.value, this.state.roles);
     }
   };
 
@@ -89,15 +82,11 @@ export default class AddUserModal extends Component {
       this.setState({
         error: 'Please fill all fields marked with *',
       });
-    } else if (
-      password.value !== passwordConf.value
-    ) {
+    } else if (password.value !== passwordConf.value) {
       this.setState({
         error: 'Password and confirmation do not match',
       });
-    } else if (
-      find(this.props.users, { username: username.value })
-    ) {
+    } else if (find(this.props.users, { username: username.value })) {
       this.setState({
         error: 'User with this username already exists',
       });
@@ -106,7 +95,7 @@ export default class AddUserModal extends Component {
         name.value,
         username.value,
         password.value,
-        this.state.roles,
+        this.state.roles
       );
     }
   };
@@ -121,34 +110,36 @@ export default class AddUserModal extends Component {
     }
   };
 
-  renderRoles: Function = (): ?Array<React.Element<DropItem>> => (
-    this.props.rolesModel ? this.props.rolesModel.map(role => (
-      <DropItem
-        key={role.role}
-        title={role.role}
-      />
-    )) : null
-  );
+  renderRoles: Function = (): ?Array<React.Element<DropItem>> =>
+    this.props.rolesModel
+      ? this.props.rolesModel.map(role => (
+          <DropItem key={role.role} title={role.role} />
+        ))
+      : null;
 
   render() {
-    const { model, onClose } = this.props;
+    const { model, onClose, rbacExternal } = this.props;
 
     return (
-      <form
-        className="form-horizontal"
-        onSubmit={this.handleFormSubmit}
-      >
+      <form className="form-horizontal" onSubmit={this.handleFormSubmit}>
         <Modal hasFooter>
-          <Modal.Header
-            titleId="addUserModal"
-            onClose={onClose}
-          >{ this.props.title } </Modal.Header>
+          <Modal.Header titleId="addUserModal" onClose={onClose}>
+            {this.props.title}{' '}
+          </Modal.Header>
           <Modal.Body>
-            { this.state.error && (
-              <Alert bsStyle="danger">{ this.state.error }</Alert>
+            {this.state.error && (
+              <Alert bsStyle="danger">{this.state.error}</Alert>
+            )}
+            {rbacExternal && (
+              <Alert bsStyle="warning">
+                Only users stored in Qorus system DB are manageable in this
+                area. External RBAC providers are: {rbacExternal}.
+              </Alert>
             )}
             <div className="form-group">
-              <label htmlFor="username" className="col-sm-4 control-label">Username *</label>
+              <label htmlFor="username" className="col-sm-4 control-label">
+                Username *
+              </label>
               <div className="col-sm-6">
                 <input
                   readOnly={model}
@@ -161,7 +152,9 @@ export default class AddUserModal extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="name" className="col-sm-4 control-label">Full name *</label>
+              <label htmlFor="name" className="col-sm-4 control-label">
+                Full name *
+              </label>
               <div className="col-sm-6">
                 <input
                   ref="name"
@@ -172,10 +165,12 @@ export default class AddUserModal extends Component {
                 />
               </div>
             </div>
-            { !model && (
+            {!model && (
               <div>
                 <div className="form-group">
-                  <label htmlFor="password" className="col-sm-4 control-label">Password *</label>
+                  <label htmlFor="password" className="col-sm-4 control-label">
+                    Password *
+                  </label>
                   <div className="col-sm-6">
                     <input
                       ref="password"
@@ -204,10 +199,10 @@ export default class AddUserModal extends Component {
               </div>
             )}
             <div className="form-group">
-              <label
-                htmlFor="roles"
-                className="col-sm-4 control-label"
-              > Roles </label>
+              <label htmlFor="roles" className="col-sm-4 control-label">
+                {' '}
+                Roles{' '}
+              </label>
               <div className="col-sm-6">
                 <Dropdown
                   id="roles"
@@ -216,7 +211,7 @@ export default class AddUserModal extends Component {
                   selected={model ? model.roles : null}
                 >
                   <DropControl> Select roles </DropControl>
-                  { this.renderRoles() }
+                  {this.renderRoles()}
                 </Dropdown>
               </div>
             </div>
@@ -230,12 +225,7 @@ export default class AddUserModal extends Component {
                 action={onClose}
                 type="button"
               />
-              <Button
-                label="Save"
-                big
-                btnStyle="success"
-                type="submit"
-              />
+              <Button label="Save" big btnStyle="success" type="submit" />
             </Controls>
           </Modal.Footer>
         </Modal>

@@ -9,15 +9,17 @@ type Props = {
   text: any,
   hasAlerts: boolean,
   expanded?: boolean,
+  caseSensitiveTree: boolean,
 };
 
 const Text: Function = ({
   text,
   hasAlerts,
   expanded,
+  caseSensitiveTree,
 }: Props): React.Element<any> =>
   text && typeof text === 'object' ? (
-    <Tree data={text} />
+    <Tree data={text} caseSensitive={caseSensitiveTree} />
   ) : (
     <Flex flexFlow="row">
       <div

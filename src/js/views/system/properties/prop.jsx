@@ -164,7 +164,7 @@ const Property: Function = ({
                 <Tr key={key} first={key === 0}>
                   <Td className="name large">{datum.name}</Td>
                   <Td className="text">
-                    <Text text={datum.prop} renderTree />
+                    <Text text={datum.prop} renderTree caseSensitiveTree />
                   </Td>
                   <Td className="normal">
                     {title !== 'omq' && (

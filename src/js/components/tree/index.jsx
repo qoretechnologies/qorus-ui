@@ -16,6 +16,14 @@ import Flex from '../Flex';
 import ContentByType from '../ContentByType';
 import { getType } from '../../helpers/functions';
 
+const qorusTypeMapper = {
+  array: 'list',
+  object: 'hash',
+  string: 'string',
+  number: 'number',
+  boolean: 'boolean',
+};
+
 @withModal()
 export default class Tree extends Component {
   props: {
@@ -33,6 +41,7 @@ export default class Tree extends Component {
     editableKeys: boolean,
     expanded: boolean,
     compact: boolean,
+    caseSensitive: boolean,
   } = this.props;
 
   state = {
@@ -103,7 +112,9 @@ export default class Tree extends Component {
       });
 
       const dataType: string = getType(data[key]);
-      const displayKey: string = upperFirst(key);
+      const displayKey: string = this.props.caseSensitive
+        ? key
+        : upperFirst(key);
       const stateKey = k ? `${k}_${key}` : key;
       let isObject = typeof data[key] === 'object' && data[key] !== null;
       let isExpandable =
@@ -169,7 +180,7 @@ export default class Tree extends Component {
               })}
             >
               {isObject ? displayKey : `${displayKey}:`}{' '}
-              {this.state.showTypes && <code>{dataType}</code>}
+              {this.state.showTypes && <code>{qorusTypeMapper[dataType]}</code>}
             </span>
           </div>
           {this.props.editableKeys && topKey && (
