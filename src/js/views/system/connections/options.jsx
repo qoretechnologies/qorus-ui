@@ -106,7 +106,7 @@ export default class ConnectionOptions extends Component {
   };
 
   changeData: Function = (item: string, value: string): void => {
-    if (item && item !== '' && (value && value !== '')) {
+    if (item && item !== '' && (value || value === '')) {
       this.setState({ [item]: value });
     }
   };

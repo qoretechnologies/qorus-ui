@@ -101,7 +101,7 @@ export default class ConnectionsPane extends Component {
   };
 
   handleEditSave: Function = (attr: string) => (value: any) => {
-    const { optimisticDispatch, remoteType } = this.props;
+    const { dispatchAction, remoteType } = this.props;
     const optsKey = 'opts';
     const val =
       (value === '' || value === '{}') && attr === 'opts' ? null : value;
@@ -133,8 +133,8 @@ export default class ConnectionsPane extends Component {
         this.setState({
           error: 'The "options" object is invalid. It cannot be nested.',
         });
-      } else if (optimisticDispatch) {
-        optimisticDispatch(
+      } else if (dispatchAction) {
+        dispatchAction(
           actions.remotes.manageConnection,
           remoteType,
           data,
