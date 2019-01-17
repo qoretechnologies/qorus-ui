@@ -15,9 +15,7 @@ const OrderStatsView = ({ orderStats }: Object): any => (
         <Crumb active> Global order stats</Crumb>
       </Breadcrumbs>
     </Headbar>
-    <Box top scrollY>
-      <OrderStats orderStats={orderStats} />
-    </Box>
+    <OrderStats orderStats={orderStats} />
   </Flex>
 );
 

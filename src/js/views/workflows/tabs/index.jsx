@@ -122,7 +122,7 @@ const WorkflowDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="order stats">
       <Box top fill scrollY>
-        <OrderStats orderStats={workflow.order_stats} />
+        <OrderStats renderRows orderStats={workflow.order_stats} />
       </Box>
     </SimpleTab>
     <SimpleTab name="info">
