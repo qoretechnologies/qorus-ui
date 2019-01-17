@@ -56,24 +56,26 @@ const OptionRow: Function = ({
 }: Props): React.Element<any> => (
   <Tr first={first}>
     <Td className="narrow">
-      <Icon iconName={status === 'locked' ? 'lock' : 'unlock'} />
+      {status === 'locked' && <Icon title="This option is locked and cannot be changed while Qorus is running" iconName="lock" />}
     </Td>
     <NameColumn name={name} />
     <Td className="big">
       <Tag
-        title="Workflow"
+        title={workflow ? 'Affecting Workflows' : ''}
         className="pt-minimal pt-round"
         intent={workflow ? Intent.PRIMARY : Intent.NONE}
       >
         W
       </Tag>{' '}
       <Tag
+        title={service ? 'Affecting Services' : ''}
         className="pt-minimal pt-round"
         intent={service ? Intent.PRIMARY : Intent.NONE}
       >
         S
       </Tag>{' '}
       <Tag
+        title={job ? 'Affecting Jobs' : ''}
         className="pt-minimal pt-round"
         intent={job ? Intent.PRIMARY : Intent.NONE}
       >
@@ -90,6 +92,7 @@ const OptionRow: Function = ({
       {canEdit && (
         <ButtonGroup>
           <Button
+            title="Edit this option"
             iconName="edit"
             onClick={handleEditClick}
             className="pt-small"

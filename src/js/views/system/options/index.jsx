@@ -56,9 +56,6 @@ const OptionsView: Function = ({
   sortData,
   onSortChange,
   collection,
-  canLoadMore,
-  handleLoadMore,
-  handleLoadAll,
 }: Props): React.Element<any> => (
   <Flex>
     <Headbar>
@@ -66,12 +63,6 @@ const OptionsView: Function = ({
         <Crumb active> Options </Crumb>
       </Breadcrumbs>
       <Pull right>
-        <LoadMore
-          canLoadMore={canLoadMore}
-          onLoadMore={handleLoadMore}
-          limit={50}
-          onLoadAll={handleLoadAll}
-        />
         <Search
           defaultValue={searchQuery}
           onSearchUpdate={changeSearchQuery}
@@ -83,7 +74,7 @@ const OptionsView: Function = ({
       <Table fixed condensed striped>
         <Thead>
           <FixedRow {...{ sortData, onSortChange }}>
-            <Th name="status" iconName="info-sign" />
+            <Th name="status" iconName="lock" />
             <NameColumnHeader />
             <Th iconName="application">Type</Th>
             <Th className="text" name="default">
@@ -147,7 +138,6 @@ export default compose(
   ),
   sync('options'),
   sort('options', 'collection', sortDefaults.options),
-  loadMore('collection', null, true, 50),
   queryControl('search'),
   titleManager('Options')
 )(OptionsView);
