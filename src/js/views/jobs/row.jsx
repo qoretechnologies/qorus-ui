@@ -17,6 +17,7 @@ import { SelectColumn } from '../../components/SelectColumn';
 import { IdColumn } from '../../components/IdColumn';
 import { ActionColumn } from '../../components/ActionColumn';
 import { DateColumn } from '../../components/DateColumn';
+import ContentByType from '../../components/ContentByType';
 
 type Props = {
   openPane: Function,
@@ -125,12 +126,8 @@ const ServiceRow: Function = ({
       />
     </ActionColumn>
     <DateColumn>{executed}</DateColumn>
-    <DateColumn>
-      <Date date={next} />
-    </DateColumn>
-    <DateColumn>
-      <Date date={expiry} />
-    </DateColumn>
+    <DateColumn>{next}</DateColumn>
+    <DateColumn>{expiry}</DateColumn>
     <Td className="huge separated-cell">
       <InstancesBar
         states={[
