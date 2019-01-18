@@ -8,14 +8,15 @@ import { functionOrStringExp } from '../helpers/functions';
 
 export default (
   defaultTab: string | Function,
-  queryName: string | Function = 'tab'
+  queryName: string | Function = 'tab',
+  mergeQueries: boolean = true
 ): Function => (Component: any): Function =>
   compose(
     queryControl(
       props => functionOrStringExp(queryName, props),
       null,
       false,
-      false
+      mergeQueries
     ),
     mapProps(
       (props): Object => ({

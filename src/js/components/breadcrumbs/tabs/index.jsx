@@ -187,7 +187,8 @@ export default compose(
   ),
   withTabs(
     ({ defaultTab, tabs }) => defaultTab || tabs[0].tabId.toLowerCase(),
-    ({ queryIdentifier }) => queryIdentifier || 'tab'
+    ({ queryIdentifier }) => queryIdentifier || 'tab',
+    false
   ),
   mapProps(
     ({
