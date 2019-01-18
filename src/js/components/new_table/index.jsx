@@ -61,6 +61,7 @@ let Table: Function = ({
     </Flex>
   ) : (
     <table
+      tabIndex={1}
       className={classnames(
         'table',
         {
