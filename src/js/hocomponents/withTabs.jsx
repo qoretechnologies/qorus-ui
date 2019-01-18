@@ -9,7 +9,7 @@ import { functionOrStringExp } from '../helpers/functions';
 export default (
   defaultTab: string | Function,
   queryName: string | Function = 'tab',
-  mergeQueries: boolean = true
+  mergeQueries: boolean | Function = true
 ): Function => (Component: any): Function =>
   compose(
     queryControl(

@@ -44,13 +44,16 @@ export default (
           val = location.query[query] ? '' : true;
         }
 
+        const mergeQueries =
+          typeof merge === 'function' ? merge(this.props) : merge;
+
         changeQuery(
           this.context.router,
           location,
           {
             [query]: val,
           },
-          merge
+          mergeQueries
         );
       }
     };
