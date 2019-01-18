@@ -160,8 +160,6 @@ export default class OCMDView extends Component {
   };
 
   handleFormSubmit: Function = (event: EventHandler): void => {
-    console.log('submit');
-
     event.preventDefault();
 
     this.props.dispatch(
