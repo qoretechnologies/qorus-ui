@@ -11,7 +11,7 @@ export default (
   queryName: ?string | ?Function,
   customFunc: ?Function,
   toggle: ?boolean,
-  merge: boolean = true
+  merge: boolean | Function
 ): Function => (Component: any): ?ReactClass<*> => {
   @withRouter
   class WrappedComponent extends React.Component {
@@ -44,8 +44,11 @@ export default (
           val = location.query[query] ? '' : true;
         }
 
-        const mergeQueries =
-          typeof merge === 'function' ? merge(this.props) : merge;
+        const mergeQueries = merge
+          ? typeof merge === 'function'
+            ? merge(this.props)
+            : merge
+          : true;
 
         changeQuery(
           this.context.router,
