@@ -286,6 +286,7 @@ const Workflows: Function = ({
           defaultValue={searchQuery}
           onSearchUpdate={changeSearchQuery}
           resource="workflows"
+          focusOnMount
         />
       </div>
     </Headbar>

@@ -95,6 +95,7 @@ const JobsView: Function = ({
           defaultValue={searchQuery}
           onSearchUpdate={changeSearchQuery}
           resource="jobs"
+          focusOnMount
         />
       </Pull>
     </Headbar>
