@@ -767,6 +767,7 @@ const handleEvent = (url, data, dispatch, state) => {
             {
               data: info,
               started: d.time,
+              executed: d.time,
             },
             dispatch
           );
@@ -783,6 +784,7 @@ const handleEvent = (url, data, dispatch, state) => {
             {
               data: info,
               modified: d.time,
+              executed: d.time,
             },
             dispatch
           );
