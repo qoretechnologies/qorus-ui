@@ -119,7 +119,7 @@ export default class Search extends Component {
     );
   };
 
-  handleRef: Funciton = (ref: any): void => {
+  handleRef: Function = (ref: any): void => {
     if (ref) {
       this._input = ref;
 
