@@ -177,13 +177,7 @@ const ConfigItemsContainer: Function = ({
                         {props => (
                           <Tbody {...props}>
                             {collection.map((item: Object, index: number) => (
-                              <Tr
-                                key={index}
-                                first={index === 0}
-                                observeElement={
-                                  index === 0 ? '.pane' : undefined
-                                }
-                              >
+                              <Tr key={index} first={index === 0}>
                                 <NameColumn name={item.name} />
                                 <Td className="text">
                                   <ContentByType content={item.default_value} />
