@@ -15,6 +15,7 @@ const CsvControl: Function = ({
   <Controls>
     <Control
       big
+      title="Export CSV"
       text="Export CSV"
       iconName="export"
       disabled={disabled}
