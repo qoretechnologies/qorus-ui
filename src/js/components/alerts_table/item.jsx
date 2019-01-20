@@ -27,37 +27,36 @@ const AlertsTableItem: Function = ({
   isExpandable,
   handleExpandClick,
   noTag,
-}: AlertsTableItemProps): React.Element<any> =>
-  console.log(expanded) || (
-    <div className="alerts-table-item">
-      {!noTag && (
-        <InterfaceTag
-          title={item.alert}
-          link={`/system/alerts?tab=${item.alerttype.toLowerCase()}&paneId=${
-            item.type
-          }:${item.id}`}
-          type="alert"
-        />
-      )}
-      <div
-        className={classnames('alerts-table-reason', {
-          expanded,
-          isExpandable,
-        })}
-      >
-        {item.reason}
-      </div>
-      {isExpandable && (
-        <ButtonGroup className="alerts-table-expander">
-          <Button
-            icon={expanded ? 'collapse-all' : 'expand-all'}
-            label={expanded ? 'Collapse' : 'Expand'}
-            onClick={handleExpandClick}
-          />
-        </ButtonGroup>
-      )}
+}: AlertsTableItemProps): React.Element<any> => (
+  <div className="alerts-table-item">
+    {!noTag && (
+      <InterfaceTag
+        title={item.alert}
+        link={`/system/alerts?tab=${item.alerttype.toLowerCase()}&paneId=${
+          item.type
+        }:${item.id}`}
+        type="alert"
+      />
+    )}
+    <div
+      className={classnames('alerts-table-reason', {
+        expanded,
+        isExpandable,
+      })}
+    >
+      {item.reason}
     </div>
-  );
+    {isExpandable && (
+      <ButtonGroup className="alerts-table-expander">
+        <Button
+          icon={expanded ? 'collapse-all' : 'expand-all'}
+          label={expanded ? 'Collapse' : 'Expand'}
+          onClick={handleExpandClick}
+        />
+      </ButtonGroup>
+    )}
+  </div>
+);
 
 export default compose(
   mapProps(({ item, ...rest }: AlertsTableItem) => ({
