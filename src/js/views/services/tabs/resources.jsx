@@ -92,11 +92,7 @@ const ResourceTable: Function = ({
                 <Tbody {...props}>
                   {collection.map(
                     (item: Object, key: number): React.Element<any> => (
-                      <Tr
-                        key={key}
-                        first={key === 0}
-                        observeElement={key === 0 ? '.pane' : undefined}
-                      >
+                      <Tr key={key} first={key === 0}>
                         <NameColumn name={item.name} />
                         <DescriptionColumn>{item.desc}</DescriptionColumn>
                         <Td className="text">
@@ -168,11 +164,7 @@ const ResourceTable: Function = ({
                       { name, type }: Object,
                       key: number
                     ): React.Element<any> => (
-                      <Tr
-                        key={key}
-                        first={key === 0}
-                        observeElement={key === 0 ? '.pane' : undefined}
-                      >
+                      <Tr key={key} first={key === 0}>
                         <NameColumn name={name} />
                         <Td className="narrow">{type}</Td>
                       </Tr>
