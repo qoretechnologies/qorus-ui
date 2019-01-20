@@ -71,5 +71,5 @@ export default compose(
       handleBatchAction('reset');
     },
   }),
-  pure(['selectedIds'])
+  pure(['show'])
 )(ToolbarActions);

@@ -25,6 +25,7 @@ const ToolbarFilters: Function = ({
     <Dropdown
       id="filters"
       multi
+      submitOnBlur
       def="All"
       onSubmit={handleFilterChange}
       selected={filterQuery ? filterQuery.split(',') : ['All']}
