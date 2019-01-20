@@ -15,6 +15,7 @@ import Toolbar from '../toolbar';
 import Flex from '../Flex';
 import ContentByType from '../ContentByType';
 import { getType } from '../../helpers/functions';
+import { getLineCount } from '../../helpers/system';
 
 const qorusTypeMapper = {
   array: 'list',
@@ -234,14 +235,6 @@ export default class Tree extends Component {
     return JSON.stringify(data, null, 20);
   }
 
-  getLineCount: Function = (str: string): number => {
-    try {
-      return str.match(/[^\n]*\n[^\n]*/gi).length;
-    } catch (e) {
-      return 0;
-    }
-  };
-
   handleUpdateClick = () => {
     this.props.onUpdateClick(this.refs.editedData.value);
     this.setState({
@@ -263,7 +256,7 @@ export default class Tree extends Component {
     }
 
     const textData: string = this.renderText(data);
-    const lineCount: number = this.getLineCount(textData);
+    const lineCount: number = getLineCount(textData);
 
     return (
       <Flex>
