@@ -1,0 +1,26 @@
+.alerts-table {
+  position: relative;
+
+  .alerts-table-reason {
+    white-space: pre-wrap;
+
+    &.isExpandable {
+      height: 100px;
+      overflow: hidden;
+      font-family: monospace;
+      padding: 10px 0;
+      border-bottom: 1px dashed $qore-cobalt;
+
+      &.expanded {
+        height: auto;
+      }
+    }
+  }
+
+  .alerts-table-expander {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: -12px;
+  }
+}
