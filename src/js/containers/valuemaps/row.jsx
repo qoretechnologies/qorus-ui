@@ -41,7 +41,7 @@ type ValueMapsRowProps = {
 class ValueMapsRow extends Component {
   props: ValueMapsRowProps;
 
-  componentDidUpdate(): void {
+  componentDidUpdate (): void {
     const { data, remove, compact } = this.props;
 
     if (!compact) {
@@ -76,14 +76,10 @@ class ValueMapsRow extends Component {
     event.stopPropagation();
   };
 
-  render() {
+  render () {
     const { first, isActive, compact, data } = this.props;
     return (
-      <Tr
-        first={first}
-        observeElement={first && '.pane'}
-        className={isActive ? 'row-active' : ''}
-      >
+      <Tr first={first} className={isActive ? 'row-active' : ''}>
         <IdColumn>{data.id}</IdColumn>
         <NameColumn
           isActive={isActive}
