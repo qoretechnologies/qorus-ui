@@ -35,12 +35,20 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../../components/controls';
+import modal from '../../../hocomponents/modal';
+import Modal from '../../../components/modal';
+import last from 'lodash/last';
+import withDispatch from '../../../hocomponents/withDispatch';
+import { success } from '../../../store/ui/bubbles/actions';
 
 type Props = {
   errors: Array<Object>,
   onCSVClick: Function,
   onFilterChange: Function,
   compact: boolean,
+  expanded: boolean,
+  handleExpandClick: Function,
+  handleCopyClick: Function,
 };
 
 const ErrorsTable: Function = ({
@@ -50,6 +58,7 @@ const ErrorsTable: Function = ({
   compact,
   expanded,
   handleExpandClick,
+  handleCopyClick,
 }: Props): React.Element<Table> => (
   <EnhancedTable
     collection={errors}
@@ -82,7 +91,13 @@ const ErrorsTable: Function = ({
           <FixedRow className="toolbar-row">
             <Th colspan="full">
               <Pull>
-                <Dropdown multi def="ALL" id="errors" onSubmit={onFilterChange}>
+                <Dropdown
+                  multi
+                  def="ALL"
+                  id="errors"
+                  submitOnBlur
+                  onSubmit={onFilterChange}
+                >
                   <Control iconName="filter" />
                   <Item title="ALL" />
                   <Item title="FATAL" />
@@ -94,14 +109,26 @@ const ErrorsTable: Function = ({
                 <ButtonGroup>
                   <Button
                     text={expanded ? 'Collapse texts' : 'Expand texts'}
+                    title={expanded ? 'Collapse texts' : 'Expand texts'}
                     iconName={expanded ? 'collapse-all' : 'expand-all'}
                     btnStyle={expanded && 'primary'}
                     big
+                    disabled={size(collection) === 0}
                     onClick={handleExpandClick}
                   />
                 </ButtonGroup>
               </Pull>
               <Pull right>
+                <ButtonGroup>
+                  <Button
+                    disabled={size(collection) === 0}
+                    text="Copy last error"
+                    title="Copy last error"
+                    iconName="clipboard"
+                    big
+                    onClick={handleCopyClick}
+                  />
+                </ButtonGroup>
                 <CsvControl
                   onClick={onCSVClick}
                   disabled={size(collection) === 0}
@@ -120,7 +147,11 @@ const ErrorsTable: Function = ({
             </Th>
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
-            <NameColumnHeader title="Error code" name="error" iconName="error" />
+            <NameColumnHeader
+              title="Error code"
+              name="error"
+              iconName="error"
+            />
             {!compact && (
               <NameColumnHeader title="Step Name" name="step_name" />
             )}
@@ -191,6 +222,8 @@ const ErrorsTable: Function = ({
 
 export default compose(
   withState('expanded', 'changeExpand', false),
+  modal(),
+  withDispatch(),
   withHandlers({
     handleExpandClick: ({
       changeExpand,
@@ -198,6 +231,22 @@ export default compose(
       changeExpand: Function,
     }): Function => (): void => {
       changeExpand(expanded => !expanded);
+    },
+    handleCopyClick: ({
+      errors,
+      dispatchAction,
+    }: {
+      errors: Array<Object>,
+      dispatchAction: Function,
+    }): Function => (): void => {
+      const textField = document.createElement('textarea');
+      textField.innerText = last(errors).info;
+      document.body.appendChild(textField);
+      textField.select();
+      document.execCommand('copy');
+      textField.remove();
+
+      dispatchAction(success, 'Successfuly copied to clipboard', 'clipboard');
     },
   }),
   pure(['errors', 'expanded'])

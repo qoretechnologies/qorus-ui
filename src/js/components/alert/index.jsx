@@ -8,17 +8,20 @@ const Alert: Function = ({
   children,
   bsStyle,
   title,
+  className,
   iconName: iconName = 'warning-sign',
 }: {
   children: any,
   bsStyle?: string,
   title?: string,
   iconName?: string,
+  className?: string,
 }): React.Element<any> => (
   <Callout
     intent={getIntentFromBsStyle(bsStyle)}
     iconName={iconName}
     title={title}
+    className={className}
   >
     {children}
   </Callout>

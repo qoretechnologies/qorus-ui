@@ -137,7 +137,9 @@ MenuElement = compose(
   injectIntl,
   withHandlers({
     handleClick: ({ link }): Function => (): void => {
-      browserHistory.push(link);
+      if (link) {
+        browserHistory.push(link);
+      }
     },
   })
 )(MenuElement);

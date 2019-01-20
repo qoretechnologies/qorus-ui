@@ -4,6 +4,7 @@ import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
 import withMutationObserver from '../../hocomponents/withMutationObserver';
+import ResizeObserver from 'resize-observer-polyfill';
 
 type Props = {
   children?: any,
@@ -16,21 +17,9 @@ type Props = {
   first?: boolean,
   title?: string,
   key?: any,
-  lastObserverChange?: string | number,
-  observeElement?: ?string,
 };
 
-@withMutationObserver('.sidebar')
-@withMutationObserver(({ observeElement }) => observeElement)
-@updateOnlyForKeys([
-  'children',
-  'className',
-  'sortData',
-  'highlight',
-  'first',
-  'lastObserverChange',
-  'observeElement',
-])
+@updateOnlyForKeys(['children', 'className', 'sortData', 'highlight', 'first'])
 export default class Tr extends Component {
   props: Props = this.props;
 
@@ -46,17 +35,6 @@ export default class Tr extends Component {
 
   componentWillReceiveProps(nextProps: Object): void {
     this.startHighlight(nextProps.highlight);
-
-    if (
-      nextProps.first &&
-      this.props.lastObserverChange !== nextProps.lastObserverChange
-    ) {
-      this.recalculateSizes();
-    }
-  }
-
-  componentDidUpdate() {
-    this.recalculateSizes();
   }
 
   componentWillUnmount() {
@@ -65,8 +43,6 @@ export default class Tr extends Component {
     if (this.props.onHighlightEnd && this.props.highlight) {
       this.props.onHighlightEnd();
     }
-
-    window.removeEventListener('resize', this.recalculateSizes);
   }
 
   _el: any;
@@ -78,8 +54,13 @@ export default class Tr extends Component {
       this._el = ref;
 
       if (this.props.first) {
-        this.recalculateSizes();
-        window.addEventListener('resize', this.recalculateSizes);
+        const ro = new ResizeObserver((entries, observer) => {
+          for (const entry of entries) {
+            this.recalculateSizes();
+          }
+        });
+
+        ro.observe(findDOMNode(ref));
       }
     }
   };

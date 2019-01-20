@@ -17,6 +17,8 @@ import actions from '../../../../store/api/actions';
 
 const currentUserSelector: Function = (state: Object): Object =>
   state.api.currentUser;
+const optionsSelector: Function = (state: Object): Object =>
+  state.api.systemOptions;
 const usersSelector: Function = (state: Object): Object => state.api.users;
 const querySelector: Function = (state: Object, props: Object): ?string =>
   props.location.query.search;
@@ -30,9 +32,16 @@ const collectionSelector: Function = createSelector(
 );
 
 const viewSelector: Function = createSelector(
-  [currentUserSelector, usersSelector, querySelector, collectionSelector],
-  (currentUser, users, query, collection) => ({
+  [
+    currentUserSelector,
+    usersSelector,
+    querySelector,
+    collectionSelector,
+    optionsSelector,
+  ],
+  (currentUser, users, query, collection, options) => ({
     user: currentUser.data,
+    options: options.data,
     users,
     query,
     usersModel: collection,
@@ -57,7 +66,17 @@ export default class RBACUsers extends Component {
     openModal: Function,
     closeModal: Function,
     optimisticDispatch: Function,
+    options: Array<Object>,
   } = this.props;
+
+  isRbacExternal: Function = () => {
+    const { options } = this.props;
+    const rbacExternal: any = options.find(
+      (option: Object): boolean => option.name === 'rbac-external'
+    );
+
+    return rbacExternal?.value;
+  };
 
   handleAddUserClick: Function = (): void => {
     this.props.openModal(
@@ -66,6 +85,7 @@ export default class RBACUsers extends Component {
         onSave={this.handleCreateUserClick}
         users={this.props.usersModel}
         title="Add user"
+        rbacExternal={this.isRbacExternal()}
       />
     );
   };
@@ -78,6 +98,7 @@ export default class RBACUsers extends Component {
         users={this.props.usersModel}
         title="Edit user"
         model={model}
+        rbacExternal={this.isRbacExternal()}
       />
     );
   };
@@ -155,6 +176,7 @@ export default class RBACUsers extends Component {
         onAddUserClick={this.handleAddUserClick}
         onDeleteClick={this.handleRemoveUserClick}
         onEditClick={this.handleEditUserClick}
+        rbacExternal={this.isRbacExternal()}
       />
     );
   }

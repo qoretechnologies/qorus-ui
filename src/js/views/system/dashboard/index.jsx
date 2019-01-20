@@ -16,7 +16,6 @@ import {
 } from '../../../helpers/system';
 import ChartComponent from '../../../components/chart';
 import { prepareHistory, formatChartTime } from '../../../helpers/chart';
-import Dropdown, { Control, Item } from '../../../components/dropdown';
 import withModal from '../../../hocomponents/modal';
 import StatsModal from './statsModal';
 import SLAModal from './modals/sla';
@@ -27,6 +26,7 @@ import { COLORS } from '../../../constants/ui';
 import MultiDispositionChart from '../../../components/MultiDispositionChart';
 import Flex from '../../../components/Flex';
 import { MasonryLayout, MasonryPanel } from '../../../components/MasonryLayout';
+import Nodes from './dropdowns/Nodes';
 
 const viewSelector = createSelector(
   [
@@ -630,19 +630,11 @@ export default class Dashboard extends Component {
               <PaneItem
                 title="Node Memory Progression"
                 label={
-                  <Dropdown>
-                    <Control small>{this.state.nodeTab}</Control>
-                    {map(
-                      system.cluster_info,
-                      (nodeData: Object, nodeName: string) => (
-                        <Item
-                          key={nodeName}
-                          title={nodeName}
-                          action={this.handleNodeTabChange}
-                        />
-                      )
-                    )}
-                  </Dropdown>
+                  <Nodes
+                    nodeTab={this.state.nodeTab}
+                    nodes={Object.keys(system.cluster_info)}
+                    onTabChange={this.handleNodeTabChange}
+                  />
                 }
               >
                 <ChartComponent

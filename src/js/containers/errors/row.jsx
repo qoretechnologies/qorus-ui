@@ -34,7 +34,7 @@ const ErrorsRow: Function = ({
   };
 
   return (
-    <Tr first={first} observeElement={first && '.pane'}>
+    <Tr first={first}>
       <NameColumn name={data.error} />
       <ActionColumn>
         <Controls grouped>

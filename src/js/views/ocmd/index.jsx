@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { includes, isArray, isObject, size } from 'lodash';
-import {
-  ControlGroup,
-  InputGroup,
-  Button,
-  ButtonGroup,
-} from '@blueprintjs/core';
+import { ControlGroup, InputGroup } from '@blueprintjs/core';
 
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 import Toolbar from '../../components/toolbar';
 import Box from '../../components/box';
 import Loader from '../../components/loader';
@@ -234,44 +233,53 @@ export default class OCMDView extends Component {
         <Headbar>
           <Breadcrumbs>
             <Crumb active>OCMD</Crumb>
+            <Crumb>
+              <Pull>
+                <form onSubmit={this.handleFormSubmit}>
+                  <ButtonGroup>
+                    <Dropdown show={this.state.showDropdown}>
+                      <Control iconName="list">Command list</Control>
+                      {size(this.state.filtered) !== 0 ||
+                      this.state.value === ''
+                        ? this.renderCommands()
+                        : null}
+                    </Dropdown>
+                  </ButtonGroup>
+                  <ButtonGroup>
+                    <ControlGroup className="vab">
+                      <InputGroup
+                        type="text"
+                        name="ocmd-command"
+                        onChange={this.handleInputChange}
+                        onKeyDown={this.handleInputKeyPress}
+                        placeholder="Type or select command..."
+                        value={this.state.value}
+                        ref="command"
+                        autoComplete="off"
+                        style={{ width: '350px' }}
+                      />
+                      <InputGroup
+                        type="text"
+                        name="ocmd-args"
+                        ref="args"
+                        onChange={this.handleArgsChange}
+                        placeholder="Arguments..."
+                        value={this.state.args}
+                        autoComplete="off"
+                        style={{ width: '350px' }}
+                      />
+                      <Button
+                        type="submit"
+                        icon="tick"
+                        btnStyle="success"
+                        big
+                      />
+                    </ControlGroup>
+                  </ButtonGroup>
+                </form>
+              </Pull>
+            </Crumb>
           </Breadcrumbs>
-          <Pull right>
-            <form onSubmit={this.handleFormSubmit}>
-              <ButtonGroup>
-                <Dropdown show={this.state.showDropdown}>
-                  <Control iconName="list">Command list</Control>
-                  {size(this.state.filtered) !== 0 || this.state.value === ''
-                    ? this.renderCommands()
-                    : null}
-                </Dropdown>
-              </ButtonGroup>
-              <ButtonGroup>
-                <ControlGroup className="vab">
-                  <InputGroup
-                    type="text"
-                    name="ocmd-command"
-                    onChange={this.handleInputChange}
-                    onKeyDown={this.handleInputKeyPress}
-                    placeholder="Type or select command..."
-                    value={this.state.value}
-                    ref="command"
-                    autoComplete="off"
-                    style={{ width: '250px' }}
-                  />
-                  <InputGroup
-                    type="text"
-                    name="ocmd-args"
-                    ref="args"
-                    onChange={this.handleArgsChange}
-                    placeholder="Arguments..."
-                    value={this.state.args}
-                    autoComplete="off"
-                    style={{ width: '250px' }}
-                  />
-                </ControlGroup>
-              </ButtonGroup>
-            </form>
-          </Pull>
         </Headbar>
         <Box top>
           {this.state.lastCommand && (

@@ -95,7 +95,12 @@ const NameColumn: Function = ({
       </Flex>
       {hasAlerts && (
         <ButtonGroup>
-          <Button iconName="error" btnStyle="danger" onClick={onDetailClick} />
+          <Button
+            iconName="error"
+            title="This item has alerts, click to view"
+            btnStyle="danger"
+            onClick={onDetailClick}
+          />
         </ButtonGroup>
       )}
     </Flex>

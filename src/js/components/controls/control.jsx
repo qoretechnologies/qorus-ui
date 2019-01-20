@@ -83,7 +83,7 @@ export default compose(
       children,
       intent,
       btnStyle,
-      ...rest,
+      ...rest
     }: Props): Props => ({
       className: classNames(className, {
         'pt-small': !big,
@@ -124,5 +124,6 @@ export default compose(
     'intent',
     'iconName',
     'isTablet',
+    'text',
   ])
 )(Control);

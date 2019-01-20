@@ -15,6 +15,15 @@ import Toolbar from '../toolbar';
 import Flex from '../Flex';
 import ContentByType from '../ContentByType';
 import { getType } from '../../helpers/functions';
+import { getLineCount } from '../../helpers/system';
+
+const qorusTypeMapper = {
+  array: 'list',
+  object: 'hash',
+  string: 'string',
+  number: 'number',
+  boolean: 'boolean',
+};
 
 @withModal()
 export default class Tree extends Component {
@@ -33,6 +42,7 @@ export default class Tree extends Component {
     editableKeys: boolean,
     expanded: boolean,
     compact: boolean,
+    caseSensitive: boolean,
   } = this.props;
 
   state = {
@@ -103,7 +113,9 @@ export default class Tree extends Component {
       });
 
       const dataType: string = getType(data[key]);
-      const displayKey: string = upperFirst(key);
+      const displayKey: string = this.props.caseSensitive
+        ? key
+        : upperFirst(key);
       const stateKey = k ? `${k}_${key}` : key;
       let isObject = typeof data[key] === 'object' && data[key] !== null;
       let isExpandable =
@@ -169,7 +181,7 @@ export default class Tree extends Component {
               })}
             >
               {isObject ? displayKey : `${displayKey}:`}{' '}
-              {this.state.showTypes && <code>{dataType}</code>}
+              {this.state.showTypes && <code>{qorusTypeMapper[dataType]}</code>}
             </span>
           </div>
           {this.props.editableKeys && topKey && (
@@ -223,14 +235,6 @@ export default class Tree extends Component {
     return JSON.stringify(data, null, 20);
   }
 
-  getLineCount: Function = (str: string): number => {
-    try {
-      return str.match(/[^\n]*\n[^\n]*/gi).length;
-    } catch (e) {
-      return 0;
-    }
-  };
-
   handleUpdateClick = () => {
     this.props.onUpdateClick(this.refs.editedData.value);
     this.setState({
@@ -252,7 +256,7 @@ export default class Tree extends Component {
     }
 
     const textData: string = this.renderText(data);
-    const lineCount: number = this.getLineCount(textData);
+    const lineCount: number = getLineCount(textData);
 
     return (
       <Flex>

@@ -31,6 +31,8 @@ export default class Search extends Component {
     history: false,
   };
 
+  _input: any;
+
   componentWillReceiveProps(nextProps: Object) {
     if (this.props.defaultValue !== nextProps.defaultValue) {
       this.setState({
@@ -117,6 +119,16 @@ export default class Search extends Component {
     );
   };
 
+  handleRef: Function = (ref: any): void => {
+    if (ref) {
+      this._input = ref;
+
+      if (this.props.focusOnMount) {
+        this._input.focus();
+      }
+    }
+  };
+
   render() {
     const { searches } = this.props;
 
@@ -133,7 +145,7 @@ export default class Search extends Component {
             </Dropdown>
           ) : null}
           <InputGroup
-            ref="input"
+            inputRef={this.handleRef}
             type="text"
             id="search"
             onChange={this.handleInputChange}

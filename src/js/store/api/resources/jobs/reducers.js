@@ -1,3 +1,4 @@
+// @flow
 import _ from 'lodash';
 import remove from 'lodash/remove';
 
@@ -376,6 +377,7 @@ const addInstance = {
           {
             _updated: true,
             'IN-PROGRESS': progressCount,
+            last_executed: dt.executed,
           },
           newData
         );
@@ -408,6 +410,7 @@ const modifyInstance = {
       const {
         data: { jobid, job_instanceid, status },
         modified,
+        executed,
       } = dt;
       const job = newData.find(d => d.id === jobid);
 
@@ -444,6 +447,7 @@ const modifyInstance = {
             _updated: true,
             'IN-PROGRESS': progressCount,
             [status]: statusCount,
+            last_executed: executed,
           },
           newData
         );

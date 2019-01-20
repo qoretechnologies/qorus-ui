@@ -45,9 +45,10 @@ const AddValue: Function = ({
       />
       <ButtonGroup>
         <Button
+          title={enabled ? 'Enabled' : 'Disabled'}
           iconName="power"
           big
-          btnStyle={enabled ? 'success' : 'default'}
+          btnStyle={enabled ? 'success' : 'danger'}
           type="button"
           onClick={onEnabledClick}
         />

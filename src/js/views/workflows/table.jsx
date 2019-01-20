@@ -16,9 +16,7 @@ import DatePicker from '../../components/datepicker';
 import Selector from './toolbar/selector';
 import Actions from './toolbar/actions';
 import Filters from './toolbar/filters';
-import Dropdown, { Control, Item } from '../../components/dropdown';
 import LoadMore from '../../components/LoadMore';
-import { Icon } from '@blueprintjs/core';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import SortingDropdown from '../../components/SortingDropdown';
 import { NameColumnHeader } from '../../components/NameColumn';
@@ -26,6 +24,7 @@ import Pull from '../../components/Pull';
 import { SelectColumnHeader } from '../../components/SelectColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
 import { IdColumnHeader } from '../../components/IdColumn';
+import Band from './toolbar/band';
 
 type Props = {
   sortData: Object,
@@ -130,12 +129,7 @@ const WorkflowsTable: Function = ({
           />
         </Th>
         <Th className="separated-cell" colspan={2}>
-          <Dropdown>
-            <Control iconName="time">{band}</Control>
-            <Item title="1 hour band" onClick={handleDispositionChange} />
-            <Item title="4 hour band" onClick={handleDispositionChange} />
-            <Item title="24 hour band" onClick={handleDispositionChange} />
-          </Dropdown>
+          <Band band={band} onChange={handleDispositionChange} />
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>

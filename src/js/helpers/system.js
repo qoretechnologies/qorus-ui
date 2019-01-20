@@ -184,6 +184,14 @@ const getSlicedRemotes: Function = (remotes): ?Array<Object> => {
   return remotesLen > 5 ? remotes.slice(0, 5) : remotes;
 };
 
+const getLineCount: Function = (value: string): number => {
+  try {
+    return value.match(/[^\n]*\n[^\n]*/gi).length;
+  } catch (e) {
+    return 0;
+  }
+};
+
 export {
   statusHealth,
   utf8ToB64,
@@ -195,4 +203,5 @@ export {
   getProcessObjectInterfaceId,
   calculateMemory,
   getSlicedRemotes,
+  getLineCount,
 };

@@ -21,7 +21,7 @@ import Options from './options';
 import { getDependencyObjectLink } from '../../../helpers/system';
 import AlertsTable from '../../../components/alerts_table';
 import PaneItem from '../../../components/pane_item';
-import { attrsSelector } from '../../../helpers/remotes';
+import { attrsSelector, attrsMapper } from '../../../helpers/remotes';
 import withDispatch from '../../../hocomponents/withDispatch';
 import ContentByType from '../../../components/ContentByType';
 import NameColumn from '../../../components/NameColumn';
@@ -101,7 +101,7 @@ export default class ConnectionsPane extends Component {
   };
 
   handleEditSave: Function = (attr: string) => (value: any) => {
-    const { optimisticDispatch, remoteType } = this.props;
+    const { dispatchAction, remoteType } = this.props;
     const optsKey = 'opts';
     const val =
       (value === '' || value === '{}') && attr === 'opts' ? null : value;
@@ -133,8 +133,8 @@ export default class ConnectionsPane extends Component {
         this.setState({
           error: 'The "options" object is invalid. It cannot be nested.',
         });
-      } else if (optimisticDispatch) {
-        optimisticDispatch(
+      } else if (dispatchAction) {
+        dispatchAction(
           actions.remotes.manageConnection,
           remoteType,
           data,
@@ -167,7 +167,7 @@ export default class ConnectionsPane extends Component {
               )}
               {settings.IS_HTTP && (
                 <Alert bsStyle="warning" title="Insecure connection">
-                  Passwords are not displayedasjghsjkaghsakj
+                  Passwords are not displayed
                 </Alert>
               )}
               <Table condensed clean className="text-table">
@@ -176,7 +176,7 @@ export default class ConnectionsPane extends Component {
                     (val: Object, key: number): React.Element<any> => (
                       <Tr key={key}>
                         <Th className="name">
-                          {upperFirst(val.attr.replace(/_/g, ' '))}
+                          {upperFirst(attrsMapper(val.attr).replace(/_/g, ' '))}
                         </Th>
                         {val.editable &&
                         canEdit &&

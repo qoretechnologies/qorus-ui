@@ -42,7 +42,7 @@ const RowDetail: Function = ({
   };
 
   return (
-    <Tr first={first} observeElement={first && '.pane'}>
+    <Tr first={first}>
       <NameColumn name={name} />
       <ActionColumn>
         <ButtonGroup>

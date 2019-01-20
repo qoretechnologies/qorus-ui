@@ -94,7 +94,6 @@ const MethodsTable: Function = ({
                 (method: Object, index: number): React.Element<any> => (
                   <SLARow
                     first={index === 0}
-                    observeElement={index === 0 && '.pane'}
                     key={method.service_methodid}
                     service={service}
                     slas={slas}

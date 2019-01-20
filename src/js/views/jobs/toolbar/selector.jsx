@@ -34,8 +34,8 @@ const ToolbarSelector: Function = ({
           selected === 'all'
             ? 'selection'
             : selected === 'some'
-            ? 'remove'
-            : 'circle'
+              ? 'remove'
+              : 'circle'
         }
       >
         {selectedCount}

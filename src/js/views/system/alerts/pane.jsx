@@ -2,7 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Link } from 'react-router';
 
 import Pane from '../../../components/pane';
 import InfoTable from '../../../components/info_table';
@@ -10,6 +9,8 @@ import Box from '../../../components/box';
 import { getAlertObjectLink } from '../../../helpers/system';
 import InterfaceTag from '../../../components/InterfaceTag';
 import Toolbar from '../../../components/toolbar';
+import AlertsTable from '../../../components/alerts_table';
+import PaneItem from '../../../components/pane_item';
 
 const alertSelector = (state, props) => {
   const dt = props.paneId.split(':');
@@ -47,7 +48,7 @@ const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
       onResize={onResize}
       title="Alert detail"
     >
-      <Box top fill>
+      <Box top fill scrollY>
         {alert.type !== 'RBAC' && !(alert.type === 'GROUP' && alert.id < 1) && (
           <Toolbar mb>
             <InterfaceTag
@@ -58,7 +59,10 @@ const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
             />
           </Toolbar>
         )}
-        <InfoTable object={alert} omit={['object', '_updated']} />
+        <AlertsTable alerts={[alert]} noTag title="Reason" />
+        <PaneItem title="Info">
+          <InfoTable object={alert} omit={['object', '_updated', 'reason']} />
+        </PaneItem>
       </Box>
     </Pane>
   );

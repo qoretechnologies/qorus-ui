@@ -1,30 +1,31 @@
 /* @flow */
 import React from 'react';
-import { Link } from 'react-router';
 import pure from 'recompose/onlyUpdateForKeys';
+import size from 'lodash/size';
 
-import NoData from '../nodata';
 import PaneItem from '../pane_item';
+import NoDataIf from '../NoDataIf';
+import AlertsTableItem from './item';
 
-const AlertsTab = ({ alerts }: { alerts: Array<Object> }) => (
-  <PaneItem title="Alerts">
-    {alerts.length ? (
-      alerts.map(item => (
-        <div key={`alert_${item.alertid}`} className="job-alert alerts-item">
-          <Link
-            to={`/system/alerts?tab=${item.alerttype.toLowerCase()}&paneId=${
-              item.type
-            }:${item.id}`}
-          >
-            {item.alert}
-          </Link>
-          <p>{item.object}</p>
-          <small>{item.reason}</small>
+const AlertsTab = ({
+  alerts,
+  noTag,
+  title: title = 'Alerts',
+}: {
+  alerts: Array<Object>,
+  noTag: boolean,
+  title: string,
+}) => (
+  <PaneItem title={title}>
+    <NoDataIf condition={size(alerts) === 0}>
+      {() => (
+        <div className="alerts-table">
+          {alerts.map((item, index) => (
+            <AlertsTableItem key={index} item={item} noTag={noTag} />
+          ))}
         </div>
-      ))
-    ) : (
-      <NoData />
-    )}
+      )}
+    </NoDataIf>
   </PaneItem>
 );
 

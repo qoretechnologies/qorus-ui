@@ -302,8 +302,8 @@ export default class StepsTab extends Component {
 
     return info && info.ind === 0
       ? Object.assign({}, info, {
-        subwfls: this.props.workflow.stepinfo.filter(si => si.name === name),
-      })
+          subwfls: this.props.workflow.stepinfo.filter(si => si.name === name),
+        })
       : info;
   }
 
@@ -852,11 +852,11 @@ export default class StepsTab extends Component {
           </foreignObject>
           {stepInfo.arraytype !== 'NONE' && (
             <foreignObject x={4} y={4}>
-              <Tag>[{arrayStep.length}]</Tag>
+              <Tag title="Array step">[{arrayStep.length}]</Tag>
             </foreignObject>
           )}
           <foreignObject x={stepInfo.arraytype === 'NONE' ? 4 : 32} y={4}>
-            <Tag>
+            <Tag title="Type & Status">
               {type} <Icon iconName="dot" />{' '}
               {instances && instances[name] ? instances[name].status : 'NONE'}
             </Tag>
@@ -867,7 +867,7 @@ export default class StepsTab extends Component {
             onClick={onCodeClick}
             style={{ cursor: 'pointer' }}
           >
-            <Tag>
+            <Tag title="Show code">
               <Icon iconName="code" />
             </Tag>
           </foreignObject>
@@ -1078,14 +1078,26 @@ export default class StepsTab extends Component {
                 </span>
               )}
               <Button
+                title={useDrag ? 'Use scrollbars' : 'Use drag to move'}
                 iconName="hand"
                 onClick={this.handleMoveChange}
                 btnStyle={useDrag && 'primary'}
                 big
               />
-              <Button iconName="zoom-in" onClick={this.handleZoomIn} big />
-              <Button iconName="zoom-out" onClick={this.handleZoomOut} big />
               <Button
+                title="Zoom in"
+                iconName="zoom-in"
+                onClick={this.handleZoomIn}
+                big
+              />
+              <Button
+                title="Zoom out"
+                iconName="zoom-out"
+                onClick={this.handleZoomOut}
+                big
+              />
+              <Button
+                title="Reset zoom"
                 iconName="zoom-to-fit"
                 onClick={this.handleZoomReset}
                 big

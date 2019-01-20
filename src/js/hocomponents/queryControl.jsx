@@ -10,7 +10,8 @@ import { withRouter } from 'react-router';
 export default (
   queryName: ?string | ?Function,
   customFunc: ?Function,
-  toggle: ?boolean
+  toggle: ?boolean,
+  merge?: boolean | Function
 ): Function => (Component: any): ?ReactClass<*> => {
   @withRouter
   class WrappedComponent extends React.Component {
@@ -43,13 +44,24 @@ export default (
           val = location.query[query] ? '' : true;
         }
 
-        changeQuery(this.context.router, location, {
-          [query]: val,
-        });
+        const mergeQueries = merge
+          ? typeof merge === 'function'
+            ? merge(this.props)
+            : merge
+          : true;
+
+        changeQuery(
+          this.context.router,
+          location,
+          {
+            [query]: val,
+          },
+          mergeQueries
+        );
       }
     };
 
-    render() {
+    render () {
       const func: Function = customFunc || this.handleQueryChange;
       const location: Object = this.getLocation();
       const qName: string = !queryName ? 'all' : this.getQueryName(queryName);

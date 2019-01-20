@@ -52,7 +52,7 @@ const Search: Function = ({
             big
           />
           <Button
-            text="Show search history"
+            text="Show saved searches"
             iconName="history"
             onClick={onHistoryClick}
             big

@@ -22,6 +22,8 @@ import queryControl from '../../../hocomponents/queryControl';
 import { Control as Button } from '../../../components/controls';
 import Box from '../../../components/box';
 import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import ButtonGroup from '../../../components/controls/controls';
+import ContentByType from '../../../components/ContentByType';
 
 type Props = {
   history: Array<string>,
@@ -66,10 +68,10 @@ let SearchHistoryRow: Function = ({
         )}
       </Td>
       <Td className="text big">
-        <Date date={item.mindate} />
+        <ContentByType content={item.mindate} />
       </Td>
       <Td className="text big">
-        <Date date={item.maxdate} />
+        <ContentByType content={item.maxdate} />
       </Td>
       {type !== 'ordersSearch' && (
         <Td className="narrow">
@@ -85,7 +87,9 @@ let SearchHistoryRow: Function = ({
         <Text text={item.filter} />
       </Td>
       <Td className="narrow">
-        <Button label="Apply" btnStyle="success" onClick={handleClick} />
+        <ButtonGroup>
+          <Button label="Apply" btnStyle="success" onClick={handleClick} />
+        </ButtonGroup>
       </Td>
     </Tr>
   );

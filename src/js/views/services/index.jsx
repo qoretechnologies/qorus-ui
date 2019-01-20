@@ -81,6 +81,7 @@ const Services: Function = ({
           defaultValue={searchQuery}
           onSearchUpdate={changeSearchQuery}
           resource="services"
+          focusOnMount
         />
       </Pull>
     </Headbar>

@@ -13,7 +13,6 @@ import {
 import Pane from '../../../../components/pane';
 import search from '../../../../hocomponents/search';
 import Table from './table';
-import AddValue from './add';
 import { addValue } from '../../../../store/api/resources/valuemaps/actions';
 import { querySelector } from '../../../../selectors';
 import Box from '../../../../components/box';
@@ -28,8 +27,6 @@ type Props = {
   valuemap: Object,
   onSearchChange: Function,
   defaultSearchValue: string,
-  adding: boolean,
-  onAddClick: Function,
   onSaveClick: Function,
   location: Object,
   width: number,
@@ -43,8 +40,6 @@ const ValuemapsPane: Function = ({
   valuemap,
   onSearchChange,
   defaultSearchValue,
-  adding,
-  onAddClick,
   onSaveClick,
   location,
   width,
@@ -65,22 +60,13 @@ const ValuemapsPane: Function = ({
       <PaneItem title="Throws exception">
         <ContentByType content={valuemap.throws_exception} />
       </PaneItem>
-
       <Table
         paneId={paneId}
         location={location}
         onSearchChange={onSearchChange}
         defaultSearchValue={defaultSearchValue}
+        onSaveClick={onSaveClick}
       />
-      <ButtonGroup>
-        <Button
-          text={adding ? 'Cancel' : 'Add value'}
-          onClick={onAddClick}
-          iconName={adding ? 'cross' : 'plus'}
-          btnStyle={!adding ? 'primary' : null}
-        />
-      </ButtonGroup>
-      {adding && <AddValue id={paneId} add={onSaveClick} />}
     </Box>
   </Pane>
 );
@@ -95,10 +81,8 @@ const selector = createSelector(
 export default compose(
   connect(selector),
   withDispatch(),
-  withState('adding', 'setAdding', false),
   mapProps(
-    ({ setAdding, valuemaps, paneId, ...rest }): Object => ({
-      toggleAdding: () => setAdding((adding: boolean): boolean => !adding),
+    ({ valuemaps, paneId, ...rest }): Object => ({
       valuemap: valuemaps.data.find(
         (vm: Object): boolean => vm.id === parseInt(paneId, 10)
       ),
@@ -107,15 +91,11 @@ export default compose(
     })
   ),
   withHandlers({
-    onAddClick: ({ toggleAdding }): Function => (): void => {
-      toggleAdding();
-    },
     onSaveClick: ({ toggleAdding, paneId, dispatchAction }): Function => (
       key,
       value,
       enabled
     ): void => {
-      toggleAdding();
       dispatchAction(addValue, paneId, key, value, enabled);
     },
   }),

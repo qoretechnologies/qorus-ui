@@ -18,9 +18,10 @@ type Props = {
 const Controls: Function = ({
   children,
   marginRight,
+  className,
   ...rest
 }: Props): React.Element<any> => (
-  <ButtonGroup style={{ marginRight }} {...rest}>
+  <ButtonGroup className={className} style={{ marginRight }} {...rest}>
     {children}
   </ButtonGroup>
 );

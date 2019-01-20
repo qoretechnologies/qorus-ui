@@ -767,6 +767,7 @@ const handleEvent = (url, data, dispatch, state) => {
             {
               data: info,
               started: d.time,
+              executed: d.time,
             },
             dispatch
           );
@@ -783,6 +784,7 @@ const handleEvent = (url, data, dispatch, state) => {
             {
               data: info,
               modified: d.time,
+              executed: d.time,
             },
             dispatch
           );
@@ -961,9 +963,11 @@ const message = (url: string, data: Object) => (
 };
 
 const disconnect = () => () => {
-  const { pathname } = window.location;
+  const { pathname, search } = window.location;
 
-  browserHistory.push(`/error?next=${pathname}`);
+  if (process.env.NODE_ENV !== 'development') {
+    browserHistory.push(`/error?next=${pathname}${encodeURIComponent(search)}`);
+  }
 };
 
 export { message, disconnect };
