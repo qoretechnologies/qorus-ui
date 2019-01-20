@@ -34,17 +34,18 @@ class CrumbTabs extends React.Component {
     tabsLen: 0,
   };
 
-  componentWillReceiveProps(nextProps: Props): void {
-    if (this.props.width !== nextProps.width) {
-      this.handleTabsResize(nextProps);
-    }
-  }
-
   handleRef: Function = (ref: any): void => {
     if (ref) {
       this._tabsWrapper = ref;
 
-      this.handleTabsResize(this.props);
+      const ro = new ResizeObserver((entries, observer) => {
+        this.handleTabsResize();
+      });
+
+      const parent: any = findDOMNode(this._tabsWrapper).parentNode.parentNode;
+      ro.observe(parent);
+
+      this.handleTabsResize();
     }
   };
 
@@ -92,7 +93,7 @@ class CrumbTabs extends React.Component {
     }
   };
 
-  render() {
+  render () {
     const { tabs, handleTabChange, tabQuery }: Props = this.props;
     const { tabsLen, showTabs } = this.state;
     const tabsCollapsed: boolean = tabs.length > tabsLen;
@@ -177,9 +178,9 @@ export default compose(
           isString(tab)
             ? { title: tab, tabId: tab }
             : {
-                title: `${tab.title}${tab.suffix ? ` ${tab.suffix}` : ''}`,
-                tabId: tab.title,
-              }
+              title: `${tab.title}${tab.suffix ? ` ${tab.suffix}` : ''}`,
+              tabId: tab.title,
+            }
       ),
       width: width || windowWidth,
       ...rest,
@@ -188,7 +189,7 @@ export default compose(
   withTabs(
     ({ defaultTab, tabs }) => defaultTab || tabs[0].tabId.toLowerCase(),
     ({ queryIdentifier }) => queryIdentifier || 'tab',
-    ({ isPane }) => (isPane ? true : false)
+    ({ isPane }) => !!isPane
   ),
   mapProps(
     ({
