@@ -36,7 +36,6 @@ type Props = {
   handleSLARemove: Function,
   handleRemoveMethodClick: Function,
   first: boolean,
-  observeElement?: string,
 };
 
 const MethodsRow: Function = ({
@@ -49,9 +48,8 @@ const MethodsRow: Function = ({
   handleSLAChange,
   handleSLARemove,
   first,
-  observeElement,
 }: Props): React.Element<any> => (
-  <Tr title={method.description} first={first} observeElement={observeElement}>
+  <Tr title={method.description} first={first}>
     <NameColumn name={method.name} />
     <ActionColumn>
       <Controls>
