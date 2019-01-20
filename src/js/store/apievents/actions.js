@@ -963,9 +963,11 @@ const message = (url: string, data: Object) => (
 };
 
 const disconnect = () => () => {
-  const { pathname } = window.location;
+  const { pathname, search } = window.location;
 
-  browserHistory.push(`/error?next=${pathname}`);
+  if (process.env.NODE_ENV !== 'development') {
+    browserHistory.push(`/error?next=${pathname}${encodeURIComponent(search)}`);
+  }
 };
 
 export { message, disconnect };
