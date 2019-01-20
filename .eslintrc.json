@@ -1,21 +1,20 @@
 {
+  "extends": "standard",
   "parser": "babel-eslint",
-  "env": {
-    "browser": true,
-    "node": true
-  },
   "plugins": ["flowtype", "react"],
-  "rules": {
-    "strict": 0,
-    "no-confusing-arrow": 0,
-    "react/jsx-no-bind": 0,
-    "space-infix-ops": 0,
-    "no-nested-ternary": 0
-  },
   "settings": {
     "flowtype": {
       "onlyFilesWithFlowAnnotation": true
     }
+  },
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "react/jsx-uses-vars": [2],
+    "react/jsx-uses-react": [2],
+    "comma-dangle": "off",
+    "semi": "off"
   },
   "globals": {
     "ReactClass": true,
