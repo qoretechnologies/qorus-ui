@@ -35,8 +35,6 @@ const Pane: Function = ({
             tabs={tabs.tabs}
             queryIdentifier={tabs.queryIdentifier}
             isPane
-            //! Send pane width to resize the tabs
-            width={width}
           />
         )}
       </Breadcrumbs>
