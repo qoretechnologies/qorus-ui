@@ -11,7 +11,7 @@ export default (
   queryName: ?string | ?Function,
   customFunc: ?Function,
   toggle: ?boolean,
-  merge: boolean | Function
+  merge?: boolean | Function
 ): Function => (Component: any): ?ReactClass<*> => {
   @withRouter
   class WrappedComponent extends React.Component {
@@ -61,7 +61,7 @@ export default (
       }
     };
 
-    render() {
+    render () {
       const func: Function = customFunc || this.handleQueryChange;
       const location: Object = this.getLocation();
       const qName: string = !queryName ? 'all' : this.getQueryName(queryName);
