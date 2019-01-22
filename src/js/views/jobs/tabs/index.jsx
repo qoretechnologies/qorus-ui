@@ -54,7 +54,7 @@ const JobsDetailTabs: Function = ({
         {model.code ? (
           <Code
             selected={{
-              name: `code - ${lib.code[0].name}`,
+              name: lib.code[0].name,
               code: lib.code[0].body,
               item: {
                 name: lib.code[0].name,
