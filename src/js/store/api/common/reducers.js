@@ -54,4 +54,35 @@ const processStoppedReducer = {
   },
 };
 
-export { processStartedReducer, processStoppedReducer };
+const basicDataUpdatedReducer = {
+  next(
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      const data = state.data.slice();
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        newData = updateItemWithId(
+          dt.id,
+          { ...dt.info, _updated: true },
+          newData
+        );
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
+export {
+  processStartedReducer,
+  processStoppedReducer,
+  basicDataUpdatedReducer,
+};

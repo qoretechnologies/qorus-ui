@@ -3,9 +3,14 @@ import isArray from 'lodash/isArray';
 
 import { fetchJson, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
-import { updateConfigItemAction } from '../../../common/actions';
+import {
+  updateConfigItemAction,
+  updateBasicDataAction,
+} from '../../../common/actions';
 
-function setOptionsPayload(service, name, value) {
+const updateBasicData = updateBasicDataAction('SERVICES');
+
+function setOptionsPayload (service, name, value) {
   return fetchJson('PUT', `${settings.REST_BASE_URL}/services/${service.id}`, {
     body: JSON.stringify({
       action: 'setOptions',
@@ -14,7 +19,7 @@ function setOptionsPayload(service, name, value) {
   });
 }
 
-function setOptionsMeta(service, name, value) {
+function setOptionsMeta (service, name, value) {
   return {
     serviceId: service.id,
     option: { name, value },
@@ -27,7 +32,7 @@ const setOptions = createAction(
   setOptionsMeta
 );
 
-function fetchLibSourcesPayload(id) {
+function fetchLibSourcesPayload (id) {
   return fetchJson(
     'GET',
     `${
@@ -36,7 +41,7 @@ function fetchLibSourcesPayload(id) {
   );
 }
 
-function fetchLibSourcesMeta(serviceId) {
+function fetchLibSourcesMeta (serviceId) {
   return { serviceId };
 }
 
@@ -46,14 +51,14 @@ const fetchLibSources = createAction(
   fetchLibSourcesMeta
 );
 
-function fetchMethodSourcesPayload(service) {
+function fetchMethodSourcesPayload (service) {
   return fetchJson(
     'GET',
     `${settings.REST_BASE_URL}/services/${service.id}?method_source=true`
   );
 }
 
-function fetchMethodSourcesMeta(service) {
+function fetchMethodSourcesMeta (service) {
   return { serviceId: service.id };
 }
 
@@ -100,8 +105,8 @@ const serviceAction = createAction(
     const url =
       action === 'autostart'
         ? `${
-            settings.REST_BASE_URL
-          }/services/${id}?action=setAutostart&autostart=${!autostart}`
+          settings.REST_BASE_URL
+        }/services/${id}?action=setAutostart&autostart=${!autostart}`
         : `${settings.REST_BASE_URL}/services?ids=${id}&action=${action}`;
 
     fetchWithNotifications(
@@ -151,11 +156,7 @@ const removeSLAMethod = createAction(
 const setRemote = createAction(
   'SERVICES_SETREMOTE',
   async (id, value, dispatch) => {
-    if (!dispatch) {
-      return { id, value };
-    }
-
-    const result = await fetchWithNotifications(
+    fetchWithNotifications(
       async () =>
         await fetchJson(
           'PUT',
@@ -167,12 +168,6 @@ const setRemote = createAction(
       `Service set as ${!value ? 'not' : ''} remote`,
       dispatch
     );
-
-    if (result.err) {
-      return { id, value: !value };
-    }
-
-    return { id, value };
   }
 );
 
@@ -216,4 +211,5 @@ export {
   updateConfigItemWs,
   processStarted,
   processStopped,
+  updateBasicData,
 };

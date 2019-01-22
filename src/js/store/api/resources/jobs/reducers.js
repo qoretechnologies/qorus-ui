@@ -14,6 +14,7 @@ import {
 import {
   processStartedReducer,
   processStoppedReducer,
+  basicDataUpdatedReducer,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -25,7 +26,7 @@ const setOptions = {
    * @param action
    * @returns {{data: *}}
    */
-  next(state = initialState, action) {
+  next (state = initialState, action) {
     const {
       payload: { option },
       meta: { modelId, optimistic },
@@ -60,7 +61,7 @@ const setOptions = {
    * @param action
    * @returns {{data: Array, sync: boolean, loading: boolean}}
    */
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     const {
       meta: { modelId, option },
     } = action;
@@ -82,7 +83,7 @@ const setOptions = {
 };
 
 const fetchLibSources = {
-  next(state = initialState, action) {
+  next (state = initialState, action) {
     return Object.assign({}, state, {
       data: updateItemWithId(
         action.meta.modelId,
@@ -91,7 +92,7 @@ const fetchLibSources = {
       ),
     });
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -101,7 +102,7 @@ const fetchLibSources = {
 };
 
 const startFetchingResults = {
-  next(state, action) {
+  next (state, action) {
     const { modelId } = action.meta;
     const job = state.data.find(item => item.id === modelId);
     if (!job) {
@@ -117,13 +118,13 @@ const startFetchingResults = {
       data: updateItemWithId(modelId, newJob, state.data),
     };
   },
-  throw(state) {
+  throw (state) {
     return state;
   },
 };
 
 const addNew = {
-  next(
+  next (
     state = initialState,
     {
       payload: { job },
@@ -143,7 +144,7 @@ const addNew = {
 };
 
 const fetchResults = {
-  next(state, action) {
+  next (state, action) {
     const { modelId, offset, limit } = action.meta;
     const job = state.data.find(item => item.id === modelId);
     if (!job) {
@@ -168,13 +169,13 @@ const fetchResults = {
       data: updateItemWithId(modelId, job, state.data),
     };
   },
-  throw(state) {
+  throw (state) {
     return state;
   },
 };
 
 const clearResults = {
-  next(state, action) {
+  next (state, action) {
     const { modelId } = action.meta;
     const job = state.data.find(item => item.id === modelId);
     if (!job) {
@@ -189,13 +190,13 @@ const clearResults = {
 
     return { ...state, data: updateItemWithId(modelId, job, state.data) };
   },
-  throw(state) {
+  throw (state) {
     return state;
   },
 };
 
 const fetchCode = {
-  next(state, action) {
+  next (state, action) {
     const {
       meta: { job },
       payload: { code },
@@ -203,13 +204,13 @@ const fetchCode = {
     const updatedJob = { ...job, code };
     return { ...state, data: updateItemWithId(job.id, updatedJob, state.data) };
   },
-  throw(state) {
+  throw (state) {
     return state;
   },
 };
 
 const setActive = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -232,13 +233,13 @@ const setActive = {
 
     return state;
   },
-  throw(state) {
+  throw (state) {
     return state;
   },
 };
 
 const setEnabled = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -258,7 +259,7 @@ const setEnabled = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state, action) {
+  throw (state, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -268,7 +269,7 @@ const setEnabled = {
 };
 
 const updateDone = {
-  next(
+  next (
     state,
     {
       payload: { id },
@@ -283,7 +284,7 @@ const updateDone = {
 
     return state;
   },
-  throw(state, action) {
+  throw (state, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -293,7 +294,7 @@ const updateDone = {
 };
 
 const instanceUpdateDone = {
-  next(
+  next (
     state,
     {
       payload: { jobid, id },
@@ -322,7 +323,7 @@ const instanceUpdateDone = {
 
     return state;
   },
-  throw(state, action) {
+  throw (state, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -332,7 +333,7 @@ const instanceUpdateDone = {
 };
 
 const addInstance = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -386,7 +387,7 @@ const addInstance = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state, action) {
+  throw (state, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -396,7 +397,7 @@ const addInstance = {
 };
 
 const modifyInstance = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -456,7 +457,7 @@ const modifyInstance = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state, action) {
+  throw (state, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -466,7 +467,7 @@ const modifyInstance = {
 };
 
 const addAlert = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -497,7 +498,7 @@ const addAlert = {
 
     return state;
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -506,8 +507,10 @@ const addAlert = {
   },
 };
 
+const updateBasicData = basicDataUpdatedReducer;
+
 const clearAlert = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -540,7 +543,7 @@ const clearAlert = {
 
     return state;
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -550,7 +553,7 @@ const clearAlert = {
 };
 
 const selectJob = {
-  next(
+  next (
     state = initialState,
     {
       payload: { id },
@@ -561,86 +564,67 @@ const selectJob = {
 };
 
 const selectAllJobs = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectAll(state);
   },
 };
 
 const selectNoneJobs = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectNone(state);
   },
 };
 
 const invertSelection = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectInvert(state);
   },
 };
 
 const selectWithAlerts = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectAlerts(state);
   },
 };
 
 const unsync = {
-  next() {
+  next () {
     return initialState;
   },
 };
 
 const jobsAction = {
-  next(state = initialState) {
+  next (state = initialState) {
     return state;
   },
 };
 
 const reschedule = {
-  next(
-    state = initialState,
-    {
-      payload: { minute, hour, day, month, wday, id },
-    }
-  ) {
-    const data = updateItemWithId(
-      id,
-      {
-        minute,
-        hour,
-        day,
-        month,
-        wday,
-        // eslint-disable-next-line
-        sched_txt: `minutes: ${minute}, hours: ${hour}, days: ${day}, months: ${month}, wdays: ${wday}`,
-      },
-      [...state.data]
-    );
-
-    return { ...state, ...{ data } };
+  next (state = initialState) {
+    return state;
   },
 };
 
 const activate = {
-  next(state = initialState) {
+  next (state = initialState) {
     return state;
   },
 };
 
 const setSLAJob = {
-  next(state) {
+  next (state) {
     return state;
   },
 };
 
 const removeSLAJob = {
-  next(state) {
+  next (state) {
     return state;
   },
 };
 
 const expire = {
-  next(
+  next (
     state = initialState,
     {
       payload: { id, date, error },
@@ -662,21 +646,13 @@ const expire = {
 };
 
 const setRemote = {
-  next(
-    state = initialState,
-    {
-      payload: { id, value },
-    }
-  ) {
-    const stateData = [...state.data];
-    const newData = updateItemWithId(id, { remote: value }, stateData);
-
-    return { ...state, ...{ data: newData } };
+  next (state = initialState) {
+    return state;
   },
 };
 
 const updateConfigItemWs = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -737,4 +713,5 @@ export {
   updateConfigItemWs as UPDATECONFIGITEMWS,
   processStarted as PROCESSSTARTED,
   processStopped as PROCESSSTOPPED,
+  updateBasicData as UPDATEBASICDATA,
 };

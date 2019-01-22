@@ -3,9 +3,14 @@ import isArray from 'lodash/isArray';
 
 import { fetchJson, fetchWithNotifications } from '../../../utils';
 import settings from '../../../../../settings';
-import { updateConfigItemAction } from '../../../common/actions';
+import {
+  updateConfigItemAction,
+  updateBasicDataAction,
+} from '../../../common/actions';
 
-function setOptionsPayload(workflow, name, value) {
+const updateBasicData = updateBasicDataAction('WORKFLOWS');
+
+function setOptionsPayload (workflow, name, value) {
   return fetchJson(
     'PUT',
     `${settings.REST_BASE_URL}/workflows/${workflow.id}`,
@@ -18,7 +23,7 @@ function setOptionsPayload(workflow, name, value) {
   );
 }
 
-function setOptionsMeta(workflow, name, value) {
+function setOptionsMeta (workflow, name, value) {
   return {
     workflowId: workflow.id,
     option: { name, value },
@@ -31,7 +36,7 @@ const setOptions = createAction(
   setOptionsMeta
 );
 
-function fetchLibSourcesPayload(workflow, date) {
+function fetchLibSourcesPayload (workflow, date) {
   const id = typeof workflow === 'object' ? workflow.id : workflow;
 
   return fetchJson(
@@ -40,7 +45,7 @@ function fetchLibSourcesPayload(workflow, date) {
   );
 }
 
-function fetchLibSourcesMeta(workflow) {
+function fetchLibSourcesMeta (workflow) {
   const workflowId = typeof workflow === 'object' ? workflow.id : workflow;
 
   return { workflowId };
@@ -210,8 +215,6 @@ const setAutostart = createAction(
       `Workflow ${id} autostart set to ${value}`,
       dispatch
     );
-
-    return { id, value };
   }
 );
 
@@ -248,8 +251,6 @@ const setRemote = createAction('WORKFLOWS_SETREMOTE', (id, value, dispatch) => {
     `Workflow ${id} set to ${remoteStr}`,
     dispatch
   );
-
-  return { id, value };
 });
 
 const updateConfigItem: Function = updateConfigItemAction('WORKFLOWS');
@@ -296,4 +297,5 @@ export {
   fixOrders,
   updateConfigItem,
   updateConfigItemWs,
+  updateBasicData,
 };
