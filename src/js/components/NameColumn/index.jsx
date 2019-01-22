@@ -65,7 +65,6 @@ const NameColumn: Function = ({
             position={Position.TOP}
             rootElementTag="div"
             className="table-name-popover"
-            useSmartPositioning
           >
             {type ? (
               <InterfaceTag
