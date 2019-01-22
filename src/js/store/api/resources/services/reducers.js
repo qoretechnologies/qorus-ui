@@ -12,6 +12,7 @@ import {
 import {
   processStartedReducer,
   processStoppedReducer,
+  basicDataUpdatedReducer,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -25,7 +26,7 @@ const initialState = { data: [], sync: false, loading: false };
  * @param {string|number} value
  * @return {array}
  */
-function getDataWithOption(data, serviceId, name, value) {
+function getDataWithOption (data, serviceId, name, value) {
   const service = data.find(w => w.id === serviceId);
   const options = Array.from(service.options);
   const optIdx = options.findIndex(o => o.name === name);
@@ -49,14 +50,14 @@ function getDataWithOption(data, serviceId, name, value) {
  * @param {string} name
  * @return {object|null}
  */
-function findOption(data, serviceId, name) {
+function findOption (data, serviceId, name) {
   const service = data.find(w => w.id === serviceId);
 
   return service ? service.options.find(o => o.name === name) : null;
 }
 
 const setOptions = {
-  next(state = initialState, action) {
+  next (state = initialState, action) {
     return Object.assign({}, state, {
       data: getDataWithOption(
         state.data,
@@ -66,7 +67,7 @@ const setOptions = {
       ),
     });
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     const option = findOption(state.data, action.meta.option.name);
 
     return Object.assign({}, state, {
@@ -83,8 +84,10 @@ const setOptions = {
   },
 };
 
+const updateBasicData = basicDataUpdatedReducer;
+
 const fetchLibSources = {
-  next(state = initialState, action) {
+  next (state = initialState, action) {
     const service: Object = state.data.find(
       (datum: Object) => datum.id === parseInt(action.meta.serviceId, 10)
     );
@@ -97,7 +100,7 @@ const fetchLibSources = {
       loading: false,
     });
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -107,12 +110,12 @@ const fetchLibSources = {
 };
 
 const fetchMethodSources = {
-  next(state = initialState, action) {
+  next (state = initialState, action) {
     return Object.assign({}, state, {
       data: updateItemWithId(action.meta.serviceId, action.payload, state.data),
     });
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -122,7 +125,7 @@ const fetchMethodSources = {
 };
 
 const addNew = {
-  next(
+  next (
     state = initialState,
     {
       payload: { srv },
@@ -145,7 +148,7 @@ const addNew = {
 };
 
 const setStatus = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -164,7 +167,7 @@ const setStatus = {
 
     return state;
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -174,7 +177,7 @@ const setStatus = {
 };
 
 const setEnabled = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -198,7 +201,7 @@ const setEnabled = {
 
     return state;
   },
-  throw(state, action) {
+  throw (state, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -208,7 +211,7 @@ const setEnabled = {
 };
 
 const setAutostart = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -232,7 +235,7 @@ const setAutostart = {
 
     return state;
   },
-  throw(state, action) {
+  throw (state, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -242,7 +245,7 @@ const setAutostart = {
 };
 
 const updateDone = {
-  next(
+  next (
     state,
     {
       payload: { id },
@@ -257,7 +260,7 @@ const updateDone = {
 
     return state;
   },
-  throw(state, action) {
+  throw (state, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -267,7 +270,7 @@ const updateDone = {
 };
 
 const addAlert = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -296,7 +299,7 @@ const addAlert = {
 
     return state;
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -306,7 +309,7 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -338,7 +341,7 @@ const clearAlert = {
 
     return state;
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -348,7 +351,7 @@ const clearAlert = {
 };
 
 const selectService = {
-  next(
+  next (
     state = initialState,
     {
       payload: { id },
@@ -359,57 +362,49 @@ const selectService = {
 };
 
 const selectAllServices = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectAll(state);
   },
 };
 
 const selectNoneServices = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectNone(state);
   },
 };
 
 const invertSelection = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectInvert(state);
   },
 };
 
 const selectWithAlerts = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectAlerts(state);
   },
 };
 
 const serviceAction = {
-  next(state = initialState) {
+  next (state = initialState) {
     return state;
   },
 };
 
 const setRemote = {
-  next(
-    state = initialState,
-    {
-      payload: { id, value },
-    }
-  ) {
-    const stateData = [...state.data];
-    const newData = updateItemWithId(id, { remote: value }, stateData);
-
-    return { ...state, ...{ data: newData } };
+  next (state = initialState) {
+    return state;
   },
 };
 
 const unsync = {
-  next() {
+  next () {
     return initialState;
   },
 };
 
 const updateConfigItemWs = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -460,4 +455,5 @@ export {
   updateConfigItemWs as UPDATECONFIGITEMWS,
   processStarted as PROCESSSTARTED,
   processStopped as PROCESSSTOPPED,
+  updateBasicData as UPDATEBASICDATA,
 };

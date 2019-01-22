@@ -14,14 +14,14 @@ const INTERFACE_ICONS = {
   datasource: 'join-left',
   datasources: 'join-left',
   user: 'people',
-  ['user-connection']: 'people',
+  'user-connection': 'people',
   users: 'people',
   sla: 'time',
   slas: 'time',
   valuemap: 'map',
   valuemaps: 'map',
-  ['value maps']: 'map',
-  ['value map']: 'map',
+  'value maps': 'map',
+  'value map': 'map',
   vmap: 'map',
   vmaps: 'map',
   mapper: 'diagram-tree',
@@ -41,6 +41,19 @@ const INTERFACE_ID_KEYS: Array<string> = [
   'alertid',
 ];
 
+const INTERFACE_IDS: Object = {
+  workflows: 'workflowid',
+  workflow: 'workflowid',
+  services: 'serviceid',
+  service: 'serviceid',
+  jobs: 'jobid',
+  job: 'jobid',
+  vmaps: 'id',
+  vmap: 'id',
+  mappers: 'mapperid',
+  mapper: 'mapperid',
+};
+
 const INTERFACE_ID_LINKS: Object = {
   workflow: '/workflow/',
   workflows: '/workflows?paneId=',
@@ -55,8 +68,13 @@ const INTERFACE_ID_LINKS: Object = {
   vmap: '/system/values?paneId=',
   valuemaps: '/system/values?paneId=',
   vmaps: '/system/values?paneId=',
-  ['value maps']: '/system/values?paneId=',
-  ['value map']: '/system/values?paneId=',
+  'value maps': '/system/values?paneId=',
+  'value map': '/system/values?paneId=',
 };
 
-export { INTERFACE_ICONS, INTERFACE_ID_KEYS, INTERFACE_ID_LINKS };
+export {
+  INTERFACE_ICONS,
+  INTERFACE_ID_KEYS,
+  INTERFACE_ID_LINKS,
+  INTERFACE_IDS,
+};

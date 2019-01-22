@@ -20,6 +20,13 @@ import {
   getProcessObjectType,
   getProcessObjectInterfaceId,
 } from '../../helpers/system';
+import { INTERFACE_IDS } from '../../constants/interfaces';
+
+const interfaceActions: Object = {
+  workflows,
+  services,
+  jobs,
+};
 
 const handleEvent = (url, data, dispatch, state) => {
   const dt = JSON.parse(data);
@@ -37,7 +44,7 @@ const handleEvent = (url, data, dispatch, state) => {
     );
 
   dt.forEach(d => {
-    const { info, eventstr } = d;
+    const { info, eventstr, classstr } = d;
 
     switch (eventstr) {
       case 'NODE_INFO':
@@ -724,6 +731,25 @@ const handleEvent = (url, data, dispatch, state) => {
 
         break;
       }
+      case 'WORKFLOW_UPDATED':
+      case 'SERVICE_UPDATED':
+      case 'JOB_UPDATED': {
+        // Check if the interface is loaded
+        const interfaceName = `${classstr.toLowerCase()}s`;
+        const interfaceId: number = info[INTERFACE_IDS[interfaceName]];
+        const isLoaded: boolean = isInterfaceLoaded(interfaceName, interfaceId);
+
+        if (isLoaded) {
+          pipeline(
+            eventstr,
+            interfaceActions[interfaceName].updateBasicData,
+            { ...info, id: interfaceId },
+            dispatch
+          );
+        }
+
+        break;
+      }
       case 'JOB_STOP': {
         const job = state.api.jobs.data.find(
           jb => jb.id === parseInt(info.jobid, 10)
@@ -832,7 +858,7 @@ const handleEvent = (url, data, dispatch, state) => {
             'remotes',
             null,
             null,
-            (item: Object) => item.name === info.name && info.type === info.type
+            (item: Object) => item.name === info.name && item.type === info.type
           )
         ) {
           pipeline(

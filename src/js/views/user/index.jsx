@@ -19,6 +19,7 @@ import Pull from '../../components/Pull';
 import withTabs from '../../hocomponents/withTabs';
 import UserSettings from './tabs/settings';
 import Flex from '../../components/Flex';
+import { INTERFACE_IDS } from '../../constants/interfaces';
 
 const interfaces: Array<string> = [
   'roles',
@@ -30,14 +31,6 @@ const interfaces: Array<string> = [
   'vmaps',
   'mappers',
 ];
-
-const interfaceIds = {
-  workflows: 'workflowid',
-  services: 'serviceid',
-  jobs: 'jobid',
-  vmaps: 'id',
-  mappers: 'mapperid',
-};
 
 const UserView: Function = ({
   userData,
@@ -78,7 +71,7 @@ const UserView: Function = ({
                       return datum;
                     }
 
-                    return normalizeName(datum, interfaceIds[intrf]);
+                    return normalizeName(datum, INTERFACE_IDS[intrf]);
                   })
                   .map(
                     (datum: string): React.Element<Tag> => (

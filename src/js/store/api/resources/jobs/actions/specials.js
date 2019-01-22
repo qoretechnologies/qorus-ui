@@ -9,9 +9,14 @@ import {
   fetchWithNotifications,
 } from '../../../utils';
 import settings from '../../../../../settings';
-import { updateConfigItemAction } from '../../../common/actions';
+import {
+  updateConfigItemAction,
+  updateBasicDataAction,
+} from '../../../common/actions';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
+
+const updateBasicData = updateBasicDataAction('JOBS');
 
 /**
  * If action is optimistic return payload { modelId, option }.
@@ -65,7 +70,7 @@ const setOptions = (model, opt) => dispatch => {
 const fetchLibSourcesPayload = baseUrl => model =>
   fetchJson('GET', `${baseUrl}/${model.id}?lib_source=true&method_source=true`);
 
-function fetchLibSourcesMeta(model) {
+function fetchLibSourcesMeta (model) {
   return { modelId: model.id };
 }
 
@@ -188,17 +193,6 @@ const expire = createAction('JOBS_EXPIRE', async (id, date, dispatch) => {
 const reschedule = createAction(
   'JOBS_RESCHEDULE',
   async (id, { minute, hour, day, month, wday }, dispatch) => {
-    if (!dispatch) {
-      return {
-        id,
-        minute,
-        hour,
-        day,
-        month,
-        wday,
-      };
-    }
-
     const cron = `${minute} ${hour} ${day} ${month} ${wday}`;
     const url = `${
       settings.REST_BASE_URL
@@ -210,15 +204,6 @@ const reschedule = createAction(
       `Job ${id} rescheduled`,
       dispatch
     );
-
-    return {
-      id,
-      minute,
-      hour,
-      day,
-      month,
-      wday,
-    };
   }
 );
 
@@ -269,11 +254,7 @@ const removeSLAJob = createAction(
 const setRemote = createAction(
   'JOBS_SETREMOTE',
   async (id, value, dispatch) => {
-    if (!dispatch) {
-      return { id, value };
-    }
-
-    const result = await fetchWithNotifications(
+    fetchWithNotifications(
       async () =>
         await fetchJson(
           'PUT',
@@ -288,12 +269,6 @@ const setRemote = createAction(
       `Set job ${id} as ${!value ? 'not' : ''} remote`,
       dispatch
     );
-
-    if (result.err) {
-      return { id, value: !value };
-    }
-
-    return { id, value };
   }
 );
 
@@ -349,4 +324,5 @@ export {
   updateConfigItemWs,
   processStarted,
   processStopped,
+  updateBasicData,
 };

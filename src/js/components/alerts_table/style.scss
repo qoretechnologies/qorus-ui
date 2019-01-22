@@ -3,12 +3,12 @@
 
   .alerts-table-reason {
     white-space: pre-wrap;
+    font-family: monospace;
+    padding: 10px 0;
 
     &.isExpandable {
       height: 100px;
       overflow: hidden;
-      font-family: monospace;
-      padding: 10px 0;
       border-bottom: 1px dashed $qore-cobalt;
 
       &.expanded {

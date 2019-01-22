@@ -23,8 +23,8 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
         belongsTo === 'Global Config'
           ? `${settings.REST_BASE_URL}/system/config/${configItemName}`
           : `${settings.REST_BASE_URL}/${
-              intfcToApiPath[intfc]
-            }/${id}/config/${configItemName}`;
+            intfcToApiPath[intfc]
+          }/${id}/config/${configItemName}`;
 
       fetchWithNotifications(
         async (): Promise<*> =>
@@ -40,4 +40,7 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
     }
   );
 
-export { updateConfigItemAction };
+const updateBasicDataAction: Function = (intfc: string): Function =>
+  createAction(`${intfc}_UPDATEBASICDATA`, events => ({ events }));
+
+export { updateConfigItemAction, updateBasicDataAction };

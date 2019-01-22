@@ -14,6 +14,7 @@ import { DEFAULTS } from '.';
 import {
   processStartedReducer,
   processStoppedReducer,
+  basicDataUpdatedReducer,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -162,6 +163,7 @@ const setExecCount = {
 
 const processStarted = processStartedReducer;
 const processStopped = processStoppedReducer;
+const updateBasicData = basicDataUpdatedReducer;
 
 const setEnabled = {
   next(
@@ -605,16 +607,8 @@ const setDeprecated = {
 };
 
 const setAutostart = {
-  next(
-    state = initialState,
-    {
-      payload: { id, value },
-    }
-  ) {
-    const stateData = [...state.data];
-    const newData = updateItemWithId(id, { autostart: value }, stateData);
-
-    return { ...state, ...{ data: newData } };
+  next(state = initialState) {
+    return state;
   },
 };
 
@@ -633,16 +627,8 @@ const setThreshold = {
 };
 
 const setRemote = {
-  next(
-    state = initialState,
-    {
-      payload: { id, value },
-    }
-  ) {
-    const stateData = [...state.data];
-    const newData = updateItemWithId(id, { remote: value }, stateData);
-
-    return { ...state, ...{ data: newData } };
+  next(state = initialState) {
+    return state;
   },
 };
 
@@ -723,4 +709,5 @@ export {
   updateConfigItemWs as UPDATECONFIGITEMWS,
   processStarted as PROCESSSTARTED,
   processStopped as PROCESSSTOPPED,
+  updateBasicData as UPDATEBASICDATA,
 };

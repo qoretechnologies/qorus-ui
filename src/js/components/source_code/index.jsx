@@ -85,8 +85,8 @@ export default class SourceCode extends Component {
             'line-numbers': !this.state.wrapLines,
             'source-code__code': true,
             'source-code__code--wrap': this.state.wrapLines,
-            'language-qore': this.props.language !== 'java8',
-            'language-java': this.props.language === 'java8',
+            'language-qore': this.props.language !== 'java',
+            'language-java': this.props.language === 'java',
           })}
           style={{
             maxHeight: this.props.height || 'auto',
