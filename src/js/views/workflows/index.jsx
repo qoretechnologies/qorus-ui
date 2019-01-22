@@ -61,17 +61,17 @@ const filterLastVersion: Function = (latest: string): Function => (
 ): Array<Object> =>
   latest && latest !== ''
     ? workflows.filter(w => {
-        for (const workflow of workflows) {
-          if (
-            w.name === workflow.name &&
+      for (const workflow of workflows) {
+        if (
+          w.name === workflow.name &&
             parseFloat(w.version) < parseFloat(workflow.version)
-          ) {
-            return false;
-          }
+        ) {
+          return false;
         }
+      }
 
-        return true;
-      })
+      return true;
+    })
     : workflows;
 
 const filterDeprecated: Function = (deprecated: string): Function => (
@@ -271,7 +271,7 @@ const Workflows: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb active> Workflows </Crumb>
+        <Crumb active> Workflows test </Crumb>
       </Breadcrumbs>
       <div className="pull-right">
         <ButtonGroup marginRight={3}>
@@ -368,7 +368,7 @@ export default compose(
     },
   }),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       const { deprecated, date, unselectAll, fetch } = this.props;
 
       if (deprecated !== nextProps.deprecated || date !== nextProps.date) {
