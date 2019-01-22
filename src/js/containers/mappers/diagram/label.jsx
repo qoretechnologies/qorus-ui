@@ -38,7 +38,6 @@ const Label = ({
   descShown: boolean,
 }) => (
   <svg
-    ref="label"
     x={x}
     y={y}
     height={height}
@@ -48,13 +47,7 @@ const Label = ({
     onClick={onClick}
     className="mapper-label"
   >
-    <rect
-      x="0"
-      y="0"
-      height={height}
-      width={width}
-      fill={background}
-    />
+    <rect x="0" y="0" height={height} width={width} fill={background} />
     <text
       x={offsetX}
       y="15"
@@ -65,9 +58,9 @@ const Label = ({
     >
       {children}
     </text>
-    { type && (
+    {type && (
       <text
-        x={offsetX + 30}
+        x={offsetX + 60}
         y="33"
         fontSize="11"
         fill={textColor}
@@ -77,7 +70,7 @@ const Label = ({
         Type: {type}
       </text>
     )}
-    { mand ? (
+    {mand ? (
       <text
         x={offsetX}
         y="33"
@@ -85,9 +78,8 @@ const Label = ({
         fill="#fff"
         textAnchor="start"
         alignmentBaseline="middle"
-        className="svg-icon"
       >
-        &#xf058;
+        Mand.: Yes
       </text>
     ) : (
       <text
@@ -97,9 +89,8 @@ const Label = ({
         fill="#fff"
         textAnchor="start"
         alignmentBaseline="middle"
-        className="svg-icon"
       >
-        &#xf056;
+        Mand.: No
       </text>
     )}
   </svg>
@@ -113,7 +104,9 @@ export default compose(
     ...rest,
   })),
   withHandlers({
-    handleMouseOver: (props: Object): Function => (event: EventHandler): void => {
+    handleMouseOver: (props: Object): Function => (
+      event: EventHandler
+    ): void => {
       event.persist();
       event.stopPropagation();
 
@@ -122,7 +115,11 @@ export default compose(
         output: [],
       };
       const { mand, type, desc, relations } = props;
-      const { top, left, width } = event.target.parentNode.getBoundingClientRect();
+      const {
+        top,
+        left,
+        width,
+      } = event.target.parentNode.getBoundingClientRect();
 
       relations.forEach(r => {
         const entries = flatten(Object.entries(r));
@@ -154,7 +151,5 @@ export default compose(
       props.toggleTooltip(null);
     },
   }),
-  onlyUpdateForKeys(
-    ['background']
-  ),
+  onlyUpdateForKeys(['background'])
 )(Label);
