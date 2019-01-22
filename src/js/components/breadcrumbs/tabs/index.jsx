@@ -12,6 +12,7 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
+import ResizeObserver from 'resize-observer-polyfill';
 
 type Props = {
   tabs: Array<any>,
