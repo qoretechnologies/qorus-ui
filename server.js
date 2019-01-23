@@ -33,7 +33,7 @@ if (env === 'production') {
     })
   );
   app.use(
-    proxyMiddleware('/log', {
+    proxyMiddleware('/log/', {
       target: `${APIconfig.wsBaseUrl}/log`,
       ws: true,
     })

@@ -1,6 +1,5 @@
 import 'whatwg-fetch';
 import RESOURCES from './resources';
-import * as authActions from './resources/auth/actions';
 import * as workflowActions from './resources/workflows/actions';
 import * as stepActions from './resources/steps/actions';
 import * as errorActions from './resources/errors/actions';
@@ -139,10 +138,6 @@ Object.keys(serviceActions.delegates).forEach(a => {
 Object.assign(actions.services, serviceActions.specials);
 
 actions.jobs = { ...actions.jobs, ...jobActions.specials };
-
-Object.keys(authActions).forEach(a => {
-  actions.auth[a] = authActions[a](actions);
-});
 
 Object.assign(actions.logout, logoutActions);
 

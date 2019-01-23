@@ -8,6 +8,8 @@ import { hot } from 'react-hot-loader/root';
 require('normalize.css/normalize.css');
 require('@blueprintjs/core/dist/blueprint.css');
 require('../fonts/Roboto.ttf');
+require('../fonts/NeoLight.ttf');
+require('../favicon.ico');
 require('@blueprintjs/core/resources/icons/icons-16.eot');
 require('@blueprintjs/core/resources/icons/icons-16.ttf');
 require('@blueprintjs/core/resources/icons/icons-16.woff');

@@ -78,7 +78,7 @@ class AppInfo extends React.Component {
     logout(replace);
   };
 
-  render() {
+  render () {
     if (this.props.info.error) {
       return (
         <Router {...this.props.routerProps} key={Math.random()}>
