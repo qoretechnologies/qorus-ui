@@ -2,7 +2,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const merge = require('webpack-merge');
@@ -10,9 +9,9 @@ const merge = require('webpack-merge');
 // Root path
 const root = path.resolve(__dirname, './');
 
-//*
+//* 
 //* COMMON CONFIG
-//*
+//* 
 let webpackConfig = {
   name: 'qorus',
   context: `${root}/src`,
@@ -40,7 +39,7 @@ let webpackConfig = {
         },
       },
       {
-        test: /\.(html|svg)$/,
+        test: /\.(html|svg|ico)$/,
         use: [
           {
             loader: 'file-loader',
