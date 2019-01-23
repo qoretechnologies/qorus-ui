@@ -12,20 +12,20 @@ import de from 'react-intl/locale-data/de';
 import mapProps from 'recompose/mapProps';
 
 import Topbar from '../components/topbar';
+import Loader from '../components/loader';
 import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
-import Box from '../components/box';
-import CenterWrapper from '../components/layout/center';
 import { Manager as ModalManager } from '../components/modal';
 import actions from '../store/api/actions';
 import { settings } from '../store/ui/actions';
 import messages from '../intl/messages';
 import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
-import { Spinner, Classes, Icon, Intent } from '@blueprintjs/core';
+import { Classes, Icon, Intent } from '@blueprintjs/core';
 import qorusLogo from '../../img/qorus_engine_logo.png';
 import Flex from '../components/Flex';
 import { success, warning } from '../store/ui/bubbles/actions';
+import FullPageLoading from '../components/FullPageLoading';
 
 addLocaleData([...en, ...cs, ...de]);
 const systemSelector = state => state.api.system;
@@ -205,77 +205,13 @@ export default class Root extends Component {
     storeTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  renderSpinnerOrIcon: Function = (synced: boolean): React.Element<any> =>
-    synced ? (
-      <Icon iconName="tick" intent={Intent.SUCCESS} iconSize={20} />
-    ) : (
-      <Spinner className={Classes.SMALL} />
-    );
-
   render() {
     const { currentUser, info, isTablet, health, options } = this.props;
     const isSynced: boolean =
       currentUser.sync && info.sync && health.sync && options.sync;
 
     if (!isSynced) {
-      return (
-        <div className="root" style={{}}>
-          <CenterWrapper>
-            <div
-              style={{
-                width: '600px',
-                textAlign: 'center',
-                paddingBottom: '40px',
-              }}
-            >
-              <img src={qorusLogo} className="loading-logo" />
-              <Box width={250} style={{ margin: '0 auto' }}>
-                <div className="loading-section">
-                  <div className="loading-spinner">
-                    {this.renderSpinnerOrIcon(currentUser.sync)}
-                  </div>
-                  <div className="loading-text">
-                    {currentUser.sync
-                      ? 'User data loaded!'
-                      : 'Loading user data...'}
-                  </div>
-                </div>
-                <div className="loading-section">
-                  <div className="loading-spinner">
-                    {this.renderSpinnerOrIcon(health.sync)}
-                  </div>
-                  <div className="loading-text">
-                    {health.sync
-                      ? 'Health data loaded!'
-                      : 'Loading health data...'}
-                  </div>
-                </div>
-                <div className="loading-section">
-                  <div className="loading-spinner">
-                    {this.renderSpinnerOrIcon(options.sync)}
-                  </div>
-                  <div className="loading-text">
-                    {options.sync
-                      ? 'Options data loaded!'
-                      : 'Loading system options...'}
-                  </div>
-                </div>
-
-                <div className="loading-section">
-                  <div className="loading-spinner">
-                    {this.renderSpinnerOrIcon(info.sync)}
-                  </div>
-                  <div className="loading-text">
-                    {info.sync
-                      ? 'System data loaded!'
-                      : 'Loading system data...'}
-                  </div>
-                </div>
-              </Box>
-            </div>
-          </CenterWrapper>
-        </div>
-      );
+      return <FullPageLoading />;
     }
 
     const locale = currentUser.data.storage.locale

@@ -156,7 +156,8 @@
       font-size: 11px;
       text-align: center;
       text-transform: uppercase;
-      font-family: 'Nunito';
+      font-weight: 100;
+      font-family: 'Roboto';
     }
   }
 }
@@ -269,7 +270,8 @@
         font-size: 11px;
         text-align: center;
         text-transform: uppercase;
-        font-family: 'Nunito';
+        font-weight: 100;
+        font-family: 'Roboto';
       }
     }
   }
@@ -296,7 +298,8 @@
     font-size: 11px;
     text-align: center;
     text-transform: uppercase;
-    font-family: 'Nunito';
+    font-weight: 100;
+    font-family: 'Roboto';
   }
 
   &:not(:nth-child(3n)) {
@@ -360,7 +363,8 @@
       font-size: 11px;
       text-align: center;
       text-transform: uppercase;
-      font-family: 'Nunito';
+      font-weight: 100;
+      font-family: 'Roboto';
     }
   }
 }

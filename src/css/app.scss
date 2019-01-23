@@ -33,6 +33,11 @@ $text-color: #333;
 @import './buttons';
 @import './tables';
 
+@font-face {
+  font-family: 'NeoLight';
+  src: url('../fonts/NeoLight.ttf') format('truetype');
+}
+
 @import '../js/components/layout/style';
 @import '../js/components/autostart/style';
 @import '../js/components/badge/style';
@@ -336,10 +341,6 @@ svg.preloader {
   }
 }
 
-.preloader-text {
-  font-family: 'Orbitron';
-}
-
 .conn-options-item {
   line-height: 2;
 }
@@ -354,10 +355,6 @@ svg.preloader {
 
 .negative-background {
   background-color: lighten($qore-danger, 10);
-}
-
-.nunito {
-  font-family: 'Nunito';
 }
 
 .neosans {

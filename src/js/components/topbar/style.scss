@@ -4,6 +4,7 @@
  * 1. Accomadates for taller navbar brand element.
  * 2. Fixes the rightmost navbar button position.
  */
+
 .topbar {
   z-index: 19;
 }
@@ -33,10 +34,24 @@
   transform: translateX(-50%);
 }
 
+.qore-small-logo {
+  padding: 0 0px 0 5px;
+  vertical-align: middle;
+  height: 44px;
+  display: inline-block !important;
+}
+
+.topbar-instance-on,
 .topbar-instance {
+  vertical-align: bottom;
   display: inline-block;
   line-height: 30px;
-  border-left: 1px solid hsla(0, 0%, 100%, 0.15);
-  margin-left: 10px;
-  padding-left: 10px;
+  padding-left: 6px;
+  font-family: 'NeoLight';
+  padding-bottom: 2px;
+  font-size: 18px;
+}
+
+.topbar-instance-on {
+  color: #aaa;
 }

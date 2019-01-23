@@ -34,7 +34,7 @@ const Flex: Function = ({
       display,
       flexFlow,
       flex,
-      height,
+      height: style?.height || height,
       overflowX: scrollX ? 'auto' : 'hidden',
       overflowY: scrollY ? 'auto' : 'hidden',
     }}

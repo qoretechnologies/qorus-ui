@@ -17,6 +17,7 @@ import {
   MenuDivider,
   InputGroup,
   Classes,
+  Icon,
 } from '@blueprintjs/core';
 import map from 'lodash/map';
 
@@ -171,8 +172,9 @@ export default class Topbar extends Component {
     return (
       <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
         <NavbarGroup>
-          <NavbarHeading className="nunito">
+          <NavbarHeading>
             <img src={light ? logo : whiteLogo} className="qore-small-logo" />
+            <span className="topbar-instance-on">on</span>
             <span className="topbar-instance">{info.data['instance-key']}</span>
           </NavbarHeading>
         </NavbarGroup>
