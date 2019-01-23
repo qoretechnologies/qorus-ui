@@ -16,7 +16,7 @@ import {
   Control as Button,
 } from '../../components/controls';
 import Flex from '../../components/Flex';
-import { FormGroup, InputGroup } from '@blueprintjs/core';
+import { FormGroup, InputGroup, Icon } from '@blueprintjs/core';
 import { post } from '../../store/api/utils';
 import settings from '../../settings';
 import Alert from '../../components/alert';
@@ -55,8 +55,17 @@ const Login: Function = ({
       <img src={logo} style={{ width: 400 }} />
       <form onSubmit={handleFormSubmit}>
         <Box top noPadding width={400}>
-          <Flex flex="0 1 auto" flexFlow="row" className="authorize-header">
-            Log in to {info['instance-key']}
+          <Flex
+            flex="0 1 auto"
+            flexFlow="row"
+            style={{ justifyContent: 'space-between' }}
+            className="authorize-header"
+          >
+            <span>
+              <Icon iconName="log-in" />
+              Log in to {info['instance-key']}
+            </span>
+            <span style={{ color: '#aaa' }}>{info['omq-version']}</span>
           </Flex>
           <Flex flex="10 1 auto" className="authorize-content">
             {hasLogout && (
@@ -105,7 +114,7 @@ const Login: Function = ({
             <ButtonGroup className="pt-fill">
               <Button
                 text="Log in"
-                icon="log-in"
+                icon="small-tick"
                 btnStyle={!loading && 'success'}
                 loading={loading}
                 type="submit"
