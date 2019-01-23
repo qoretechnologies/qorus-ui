@@ -49,8 +49,6 @@ class AppInfo extends React.Component {
     } = this.props;
     const token = window.localStorage.getItem('token');
     if (token || noauth) {
-      console.log('here');
-
       replace('/');
     }
   };
