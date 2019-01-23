@@ -39,7 +39,7 @@ let webpackConfig = {
         },
       },
       {
-        test: /\.(html|svg|ico|ttf|eot)$/,
+        test: /\.(html|svg|ico|eot)$/,
         use: [
           {
             loader: 'file-loader',
@@ -106,6 +106,21 @@ if (process.env.NODE_ENV === 'development') {
     entry: {
       qorus: ['webpack-hot-middleware/client', `${root}/src/index.jsx`],
     },
+    module: {
+      rules: [
+        {
+          test: /\.(ttf)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: '[name].[ext]',
+              },
+            },
+          ],
+        },
+      ]
+    },
     cache: true,
     mode: 'development',
     devtool: 'eval-source-map',
@@ -130,6 +145,21 @@ if (process.env.NODE_ENV === 'development') {
       chunkModules: true,
       modules: true,
       children: true,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(ttf)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: 'fonts/[name].[ext]',
+              },
+            },
+          ],
+        },
+      ]
     },
     plugins: [
       new OptimizeCssAssetsPlugin({
