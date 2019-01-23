@@ -10,6 +10,7 @@
 .idea
 .nfs*
 TAGS
+yarn-error.log
 
 # FS
 ._*

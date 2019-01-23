@@ -69,7 +69,7 @@ export default class Handle extends Component {
    *
    * @param {Object} props
    */
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this._handle = null;
@@ -85,7 +85,7 @@ export default class Handle extends Component {
    *
    * @see getDirection
    */
-  componentWillMount() {
+  componentWillMount () {
     this._position = this.getDirection(this.props);
   }
 
@@ -94,7 +94,7 @@ export default class Handle extends Component {
    *
    * @see getMinimalDimensions
    */
-  componentDidMount() {
+  componentDidMount () {
     this._min = this.getMinimalDimensions(this.props);
   }
 
@@ -105,7 +105,7 @@ export default class Handle extends Component {
    * @see getDirection
    * @see getMinimalDimensions
    */
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     this._position = this.getDirection(nextProps);
     this._min = this.getMinimalDimensions(nextProps);
   }
@@ -115,7 +115,7 @@ export default class Handle extends Component {
    *
    * @see stop
    */
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.stop(null);
   }
 
@@ -129,7 +129,7 @@ export default class Handle extends Component {
    * @see BOTTOM
    * @see LEFT
    */
-  getDirection(props) {
+  getDirection (props) {
     if (!props.top && !props.right && !props.bottom && !props.left) {
       throw new Error(
         'Must set at least one of top, right, bottom or left props'
@@ -157,7 +157,7 @@ export default class Handle extends Component {
    * @param {object} props
    * @return {DOMRect|object}
    */
-  getMinimalDimensions(props) {
+  getMinimalDimensions (props: any) {
     let min;
 
     if (props.minCurrent) {
@@ -179,7 +179,7 @@ export default class Handle extends Component {
    *
    * @return {DOMRect|null}
    */
-  getParentRect() {
+  getParentRect () {
     return (
       this._handle &&
       this._handle.parentElement &&
@@ -196,7 +196,7 @@ export default class Handle extends Component {
    *
    * @return {boolean}
    */
-  isMin() {
+  isMin () {
     const rect = this.getParentRect();
     if (!rect && this.props.minCurrent) return true;
 
@@ -300,7 +300,7 @@ export default class Handle extends Component {
    * @param {MouseEvent} ev
    * @return {object}
    */
-  computeNewStyle(ev) {
+  computeNewStyle (ev) {
     const style = {};
     const rect = this.getParentRect();
 
@@ -365,7 +365,7 @@ export default class Handle extends Component {
    *
    * @return {ReactElement}
    */
-  render() {
+  render () {
     const top = this._position & TOP;
     const right = this._position & RIGHT;
     const bottom = this._position & BOTTOM;

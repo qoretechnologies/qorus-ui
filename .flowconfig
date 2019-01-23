@@ -2,7 +2,6 @@
 .*/node_modules/fbjs
 .*/node_modules/react-event-listener
 .*/node_modules/react-draggable/lib
-.*/node_modules/styled-components/.*
 .*/node_modules/graphql/**/*.
 
 [include]
@@ -10,7 +9,6 @@
 [libs]
 declarations/
 flow/
-styled-components
 
 [options]
 esproposal.decorators=ignore

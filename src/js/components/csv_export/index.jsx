@@ -15,7 +15,7 @@ class CsvExport extends React.Component {
     type: string,
   } = this.props;
 
-  _modal: React.Element<*>;
+  _modal: React$Element<*>;
 
   handleCsvOpen = () => {
     const { collection, type, closeModal } = this.props;
@@ -44,7 +44,7 @@ class CsvExport extends React.Component {
     document.getElementById('csv-text').select();
   };
 
-  render() {
+  render () {
     return (
       <Control
         btnStyle="default"
