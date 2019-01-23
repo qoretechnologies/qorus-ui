@@ -1,5 +1,5 @@
 const addProcess = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },
@@ -20,7 +20,7 @@ const addProcess = {
 };
 
 const removeProcess = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },
@@ -40,7 +40,7 @@ const removeProcess = {
 };
 
 const processMemoryChanged = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },
@@ -75,7 +75,7 @@ const processMemoryChanged = {
 };
 
 const incrementItems = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },
@@ -99,7 +99,7 @@ const incrementItems = {
 };
 
 const decrementItems = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },
@@ -110,11 +110,13 @@ const decrementItems = {
     events.forEach(event => {
       if (event.alert) {
         data['alert-summary'][event.alertType] =
-          data['alert-summary'][event.alertType] - 1;
+          data['alert-summary'][event.alertType] - 1 < 0
+            ? 0
+            : data['alert-summary'][event.alertType] - 1;
       }
 
       if (event.type) {
-        data[event.type] = data[event.type] - 1;
+        data[event.type] = data[event.type] - 1 < 0 ? 0 : data[event.type] - 1;
       }
     });
 
@@ -123,7 +125,7 @@ const decrementItems = {
 };
 
 const updateDone = {
-  next(
+  next (
     state: Object,
     {
       payload: { id },
@@ -141,7 +143,7 @@ const updateDone = {
 };
 
 const init = {
-  next(state: Object) {
+  next (state: Object) {
     const newState = { ...state };
 
     newState.isOnDashboard = true;
@@ -151,7 +153,7 @@ const init = {
 };
 
 const unsync = {
-  next(state: Object) {
+  next (state: Object) {
     const newState = { ...state };
 
     newState.isOnDashboard = false;
@@ -161,13 +163,13 @@ const unsync = {
 };
 
 const killProcess = {
-  next(state: Object) {
+  next (state: Object) {
     return state;
   },
 };
 
 const updateStats = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },
@@ -184,7 +186,7 @@ const updateStats = {
 };
 
 const healthChanged = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },
@@ -203,7 +205,7 @@ const healthChanged = {
 };
 
 const remoteHealthChanged = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },
@@ -226,7 +228,7 @@ const remoteHealthChanged = {
 };
 
 const updateNodeInfo = {
-  next(
+  next (
     state: Object,
     {
       payload: { events },

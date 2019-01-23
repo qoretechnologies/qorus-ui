@@ -37,6 +37,7 @@ type Props = {
   intent?: string,
   text?: any,
   isTablet?: boolean,
+  loading?: boolean,
 };
 
 const Control: Function = ({
@@ -51,6 +52,7 @@ const Control: Function = ({
   text,
   intent,
   isTablet,
+  loading,
 }: Props): React.Element<any> => (
   <Button
     id={id}
@@ -63,6 +65,7 @@ const Control: Function = ({
     iconName={iconName}
     text={isTablet ? (iconName ? undefined : text) : text}
     intent={intent}
+    loading={loading}
   />
 );
 
@@ -125,5 +128,6 @@ export default compose(
     'iconName',
     'isTablet',
     'text',
+    'loading',
   ])
 )(Control);

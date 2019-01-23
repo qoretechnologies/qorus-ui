@@ -24,7 +24,6 @@ import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
 import { Spinner, Classes, Icon, Intent } from '@blueprintjs/core';
 import qorusLogo from '../../img/qorus_engine_logo.png';
-import elementsLogo from '../../img/elements.png';
 import Flex from '../components/Flex';
 import { success, warning } from '../store/ui/bubbles/actions';
 
@@ -220,14 +219,7 @@ export default class Root extends Component {
 
     if (!isSynced) {
       return (
-        <div
-          className="root"
-          style={{
-            background: `url(${elementsLogo})`,
-            backgroundPosition: 'bottom right',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
+        <div className="root" style={{}}>
           <CenterWrapper>
             <div
               style={{

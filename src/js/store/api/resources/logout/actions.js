@@ -9,8 +9,7 @@ const logout = createAction(
     fetchJson('POST', `${settings.REST_BASE_URL}/logout`);
 
     window.localStorage.removeItem('token');
-
-    window.location.href = '/login';
+    window.location.href = '/login?logout=true';
   }
 );
 
