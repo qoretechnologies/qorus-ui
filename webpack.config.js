@@ -39,7 +39,7 @@ let webpackConfig = {
         },
       },
       {
-        test: /\.(html|svg|ico)$/,
+        test: /\.(html|svg|ico|ttf|eot)$/,
         use: [
           {
             loader: 'file-loader',
@@ -59,7 +59,7 @@ let webpackConfig = {
         ],
       },
       {
-        test: /\.(png|jpg|gif|ttf|woff|woff2|eot|mp3)$/,
+        test: /\.(png|jpg|gif|woff|woff2|mp3)$/,
         use: [
           {
             loader: 'url-loader',
