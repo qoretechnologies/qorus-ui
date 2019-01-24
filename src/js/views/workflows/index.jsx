@@ -271,7 +271,7 @@ const Workflows: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb active> Workflows test </Crumb>
+        <Crumb active> Workflows </Crumb>
       </Breadcrumbs>
       <div className="pull-right">
         <ButtonGroup marginRight={3}>

@@ -38,6 +38,26 @@ $text-color: #333;
   src: url('../fonts/NeoLight.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'Roboto';
+  src: url('../fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RobotoSlab';
+  src: url('../fonts/RobotoSlab-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RobotoSlabLight';
+  src: url('../fonts/RobotoSlab-Light.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RobotoLight';
+  src: url('../fonts/Roboto.ttf') format('truetype');
+}
+
 @import '../js/components/layout/style';
 @import '../js/components/autostart/style';
 @import '../js/components/badge/style';
@@ -534,4 +554,12 @@ span.pt-icon-standard {
   &:not(:last-child) {
     margin-bottom: 10px;
   }
+}
+
+.pull-right {
+  float: right !important;
+}
+
+.pull-left {
+  float: left !important;
 }
