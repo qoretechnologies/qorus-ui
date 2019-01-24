@@ -119,7 +119,7 @@ if (process.env.NODE_ENV === 'development') {
             },
           ],
         },
-      ]
+      ],
     },
     cache: true,
     mode: 'development',
@@ -159,7 +159,7 @@ if (process.env.NODE_ENV === 'development') {
             },
           ],
         },
-      ]
+      ],
     },
     plugins: [
       new OptimizeCssAssetsPlugin({
