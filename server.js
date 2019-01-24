@@ -1,8 +1,9 @@
 // @flow
 const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const history = require('connect-history-api-fallback');
 const serveStatic = require('serve-static');
-
 const config = require('./webpack.config');
 
 const app = express();
@@ -13,7 +14,14 @@ if (env === 'production') {
   app.get('*', serveStatic(config.output.path));
 } else {
   // Get webpack
-  const APIconfig = require('./server_config.js');
+  const {
+    API_URL,
+    API_WS_URL,
+    SERVER_URL,
+    IS_SECURE,
+    LOCAL_HOST,
+    LOCAL_PORT,
+  } = require('./server_config.js');
   const webpack = require('webpack');
   const proxyMiddleware = require('http-proxy-middleware');
   const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -25,16 +33,18 @@ if (env === 'production') {
   app.use(history());
 
   // Proxy
-  app.use(proxyMiddleware('/api', { target: APIconfig.restBaseUrl }));
+  app.use(proxyMiddleware('/api', { target: API_URL, secure: false }));
   app.use(
     proxyMiddleware('/apievents', {
-      target: `${APIconfig.wsBaseUrl}/apievents`,
+      target: `${API_WS_URL}/apievents`,
+      secure: false,
       ws: true,
     })
   );
   app.use(
     proxyMiddleware('/log/', {
-      target: `${APIconfig.wsBaseUrl}/log`,
+      target: `${API_WS_URL}/log`,
+      secure: false,
       ws: true,
     })
   );
@@ -58,11 +68,28 @@ if (env === 'production') {
   // Hot reloading
   app.use(webpackHotMiddleware(compiler, { noInfo: false }));
 
-  // Dev config
-  app.listen(process.env.PORT, 'localhost', () => {
-    process.stdout.write(
-      `Qorus Webapp ${app.get('env')} server listening on ` +
-        `http://localhost:${process.env.PORT}\n`
-    );
-  });
+  // Is HTTPS?
+  if (IS_SECURE) {
+    https
+      .createServer(
+        {
+          key: fs.readFileSync('./server.key'),
+          cert: fs.readFileSync('./server.cert'),
+        },
+        app
+      )
+      .listen(LOCAL_PORT, LOCAL_HOST, () => {
+        process.stdout.write(
+          `Qorus Webapp ${app.get('env')} server listening on ` +
+            `${SERVER_URL}\n`
+        );
+      });
+  } else {
+    app.listen(LOCAL_PORT, LOCAL_HOST, () => {
+      process.stdout.write(
+        `Qorus Webapp ${app.get('env')} server listening on ` +
+          `${SERVER_URL}\n`
+      );
+    });
+  }
 }
