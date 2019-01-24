@@ -7,7 +7,7 @@ import Loader from '../loader';
 const FullPageLoading: Function = (): React.Element<any> => (
   <div className="root">
     <Navbar className="pt-fixed-top pt-dark topbar">
-      <Flex flexFlow="row" style={{ height: '100%' }}>
+      <Flex flexFlow="row" height="100%">
         <Flex
           className="pt-skeleton"
           flex="5 1 auto"

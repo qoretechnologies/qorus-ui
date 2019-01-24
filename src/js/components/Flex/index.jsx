@@ -34,11 +34,11 @@ const Flex: Function = ({
       display,
       flexFlow,
       flex,
-      height: style?.height || height,
+      height,
       overflowX: scrollX ? 'auto' : 'hidden',
       overflowY: scrollY ? 'auto' : 'hidden',
     }}
-    id={id ? id : undefined}
+    id={id || undefined}
     ref={ref => flexRef && flexRef(ref)}
     className={className}
   >
