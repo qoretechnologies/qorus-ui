@@ -1,28 +1,13 @@
 import React from 'react';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import shortid from 'shortid';
-import { connect } from 'react-redux';
+import HeadbarDivider from './divider';
 
 type Props = {
   children: Array<React.Element<any>>,
-  width: number,
 };
 
-@connect(
-  (state: Object): Object => ({
-    width: state.ui.settings.width,
-  })
-)
 class Headbar extends React.Component {
   props: Props = this.props;
-
-  _el: any;
-  _id: string = shortid.generate();
-  _observer: any;
-
-  state = {
-    lastMutation: this.props.width,
-  };
 
   handleRef: Function = (ref: any): void => {
     if (ref) {
@@ -30,34 +15,11 @@ class Headbar extends React.Component {
     }
   };
 
-  componentDidMount() {
-    this._observer = new MutationObserver(
-      (): void => {
-        this.setState({ lastMutation: new Date() });
-      }
-    );
-
-    this._observer.observe(document.querySelector(`#headbar_${this._id}`), {
-      attributes: true,
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.width !== nextProps.width) {
-      this.setState({ lastMutation: new Date() });
-    }
-  }
-
-  render() {
+  render () {
     const { children } = this.props;
 
     return (
       <div
-        id={`headbar_${this._id}`}
-        key={this.state.lastMutation}
         className="headbar"
         ref={this.handleRef}
         style={{
@@ -70,4 +32,5 @@ class Headbar extends React.Component {
   }
 }
 
-export default onlyUpdateForKeys(['children', 'width'])(Headbar);
+export default onlyUpdateForKeys(['children'])(Headbar);
+export { HeadbarDivider };

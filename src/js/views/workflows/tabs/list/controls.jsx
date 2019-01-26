@@ -15,7 +15,6 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../../../components/controls';
-import Dropdown, { Control, Item } from '../../../../components/dropdown';
 
 type Props = {
   optimisticDispatch: Function,
@@ -41,7 +40,7 @@ const ActionButton: Function = ({
   compact,
   availableActions,
 }: ControlProps): React.Element<Button> => {
-  const { name, action: actionName, icon } = ORDER_ACTIONS.ALL.find(
+  const { name, action: actionName, icon, intent } = ORDER_ACTIONS.ALL.find(
     (item: Object): boolean => item.action === action
   );
   const disabled: boolean = !includes(availableActions, action);
@@ -49,15 +48,15 @@ const ActionButton: Function = ({
     onActionClick(actionName);
   };
 
-  return compact ? (
+  return (
     <Button
       disabled={disabled}
       title={name}
       iconName={icon}
       onClick={handleClick}
+      btnStyle={intent}
+      big={!compact}
     />
-  ) : (
-    <Item onClick={handleClick} iconName={icon} title={name} disabled={disabled} />
   );
 };
 
@@ -66,63 +65,34 @@ const OrderControls: Function = ({
   handleActionClick,
   compact,
   availableActions,
-}: Props): React.Element<any> =>
-  compact ? (
-    <ButtonGroup>
-      <ActionButton
-        action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
-        onActionClick={handleActionClick}
-        compact={compact}
-        availableActions={availableActions}
-      />
-      <ActionButton
-        action={workflowstatus === 'CANCELED' ? 'uncancel' : 'cancel'}
-        onActionClick={handleActionClick}
-        compact={compact}
-        availableActions={availableActions}
-      />
-      <ActionButton
-        action="retry"
-        onActionClick={handleActionClick}
-        compact={compact}
-        availableActions={availableActions}
-      />
-      <ActionButton
-        action="schedule"
-        onActionClick={handleActionClick}
-        compact={compact}
-        availableActions={availableActions}
-      />
-    </ButtonGroup>
-  ) : (
-    <Dropdown>
-      <Control>Actions</Control>
-      <ActionButton
-        action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
-        onActionClick={handleActionClick}
-        compact={compact}
-        availableActions={availableActions}
-      />
-      <ActionButton
-        action={workflowstatus === 'CANCELED' ? 'uncancel' : 'cancel'}
-        onActionClick={handleActionClick}
-        compact={compact}
-        availableActions={availableActions}
-      />
-      <ActionButton
-        action="retry"
-        onActionClick={handleActionClick}
-        compact={compact}
-        availableActions={availableActions}
-      />
-      <ActionButton
-        action="schedule"
-        onActionClick={handleActionClick}
-        compact={compact}
-        availableActions={availableActions}
-      />
-    </Dropdown>
-  );
+}: Props): React.Element<any> => (
+  <ButtonGroup>
+    <ActionButton
+      action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
+      onActionClick={handleActionClick}
+      compact={compact}
+      availableActions={availableActions}
+    />
+    <ActionButton
+      action={workflowstatus === 'CANCELED' ? 'uncancel' : 'cancel'}
+      onActionClick={handleActionClick}
+      compact={compact}
+      availableActions={availableActions}
+    />
+    <ActionButton
+      action="retry"
+      onActionClick={handleActionClick}
+      compact={compact}
+      availableActions={availableActions}
+    />
+    <ActionButton
+      action="schedule"
+      onActionClick={handleActionClick}
+      compact={compact}
+      availableActions={availableActions}
+    />
+  </ButtonGroup>
+);
 
 export default compose(
   withDispatch(),

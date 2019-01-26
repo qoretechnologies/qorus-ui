@@ -132,12 +132,12 @@ export const ALL_ORDER_STATES = union(ORDER_STATES, CUSTOM_ORDER_STATES);
 
 export const ORDER_ACTIONS = {
   ALL: [
-    { name: 'Block', action: 'block', icon: 'disable', style: 'black' },
-    { name: 'Unblock', action: 'unblock', icon: 'endorsed', style: 'gray' },
-    { name: 'Cancel', action: 'cancel', icon: 'remove', style: 'danger' },
-    { name: 'Uncancel', action: 'uncancel', icon: 'refresh', style: 'warning' },
-    { name: 'Retry', action: 'retry', icon: 'refresh', style: 'success' },
-    { name: 'Schedule', action: 'schedule', icon: 'time', style: 'info' },
+    { name: 'Block', action: 'block', icon: 'disable' },
+    { name: 'Unblock', action: 'unblock', icon: 'disable', intent: 'info' },
+    { name: 'Cancel', action: 'cancel', icon: 'remove' },
+    { name: 'Uncancel', action: 'uncancel', icon: 'remove', intent: 'info' },
+    { name: 'Retry', action: 'retry', icon: 'repeat' },
+    { name: 'Schedule', action: 'schedule', icon: 'time' },
   ],
   BLOCKED: ['unblock'],
   CANCELED: ['uncancel'],

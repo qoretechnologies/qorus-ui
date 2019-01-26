@@ -5,8 +5,10 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { connect } from 'react-redux';
 
-import Dropdown, { Control, Item } from '../../../../components/dropdown';
-import Icon from '../../../../components/icon';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../../components/controls';
 import withModal from '../../../../hocomponents/modal';
 import Lock from './modals/lock';
 import withDispatch from '../../../../hocomponents/withDispatch';
@@ -28,21 +30,16 @@ const OrderLock: Function = ({
   handleLockClick,
   big,
 }: Props): React.Element<any> => (
-  <Dropdown>
-    <Control
+  <ButtonGroup>
+    <Button
       disabled={lock && lock !== username}
-      small={!big}
-      btnStyle={lock ? 'danger' : 'success'}
+      big={big}
+      btnStyle={lock ? 'info' : undefined}
       iconName={lock ? 'lock' : 'unlock'}
-    >
-      {lock || ''}
-    </Control>
-    <Item
-      iconName={lock ? 'unlock' : 'lock'}
-      title={lock ? 'Unlock' : 'Lock'}
-      action={handleLockClick}
+      text={lock || ''}
+      onClick={handleLockClick}
     />
-  </Dropdown>
+  </ButtonGroup>
 );
 
 export default compose(

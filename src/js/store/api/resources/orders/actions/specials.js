@@ -7,6 +7,7 @@ import {
   fetchYaml,
   fetchWithNotifications,
   post,
+  get,
 } from '../../../utils';
 import settings from '../../../../../settings';
 
@@ -92,12 +93,13 @@ const addNoteWebsocket: Function = createAction(
 const updateHierarchy: Function = createAction(
   'ORDERS_UPDATEHIERARCHY',
   async (id: number) => {
-    const hierarchy: Object = await fetchJson(
-      'GET',
-      `${settings.REST_BASE_URL}/orders/${id}/HierarchyInfo`,
-      null,
-      true
+    const hierarchy: Object = await get(
+      `${settings.REST_BASE_URL}/orders/${id}/HierarchyInfo`
     );
+
+    if (hierarchy.err) {
+      return { error: true };
+    }
 
     return { id, hierarchy };
   }
@@ -106,12 +108,13 @@ const updateHierarchy: Function = createAction(
 const updateStepInstances: Function = createAction(
   'ORDERS_UPDATESTEPINSTANCES',
   async (id: number) => {
-    const steps: Object = await fetchJson(
-      'GET',
-      `${settings.REST_BASE_URL}/orders/${id}/StepInstances`,
-      null,
-      true
+    const steps: Object = await get(
+      `${settings.REST_BASE_URL}/orders/${id}/StepInstances`
     );
+
+    if (steps.err) {
+      return { error: true };
+    }
 
     return { id, steps };
   }

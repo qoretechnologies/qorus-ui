@@ -34,7 +34,7 @@ $leftMargin: 0px;
 
       &.expanded {
         color: inherit;
-        font-weight: 500;
+        font-weight: bold;
         background-color: lighten($qore-cobalt, 35);
         border-bottom-left-radius: 0;
       }
