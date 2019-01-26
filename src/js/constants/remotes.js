@@ -5,6 +5,12 @@ const CONN_MAP: Object = {
   qorus: 'REMOTE',
 };
 
+const CONN_MAP_REVERSE: Object = {
+  DATASOURCE: 'datasources',
+  'USER-CONNECTION': 'user',
+  REMOTE: 'qorus',
+};
+
 const DELETE_PERMS_MAP: Object = {
   datasources: ['DATASOURCE-CONTROL', 'DELETE-DATASOURCE'],
   user: ['USER-CONNECTION-CONTROL', 'DELETE-USER-CONNECTION'],
@@ -23,4 +29,10 @@ const EDIT_PERMS_MAP: Object = {
   qorus: ['SERVER-CONNECTION-CONTROL'],
 };
 
-export { CONN_MAP, DELETE_PERMS_MAP, ADD_PERMS_MAP, EDIT_PERMS_MAP };
+export {
+  CONN_MAP,
+  CONN_MAP_REVERSE,
+  DELETE_PERMS_MAP,
+  ADD_PERMS_MAP,
+  EDIT_PERMS_MAP,
+};
