@@ -4,19 +4,37 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Td, Th } from '../new_table';
 import DateComponent from '../date';
+import DatePicker from '../datepicker';
 
 type DateColumnProps = {
   children: any,
   className: string,
+  editable?: boolean,
+  onDateChange?: Function,
 };
 
 const DateColumn: Function = compose(onlyUpdateForKeys(['children']))(
   ({
     children,
     className: className = 'big',
+    editable,
+    onDateChange,
   }: DateColumnProps): React.Element<any> => (
     <Td className={className}>
-      {children ? <DateComponent date={children} /> : '-'}
+      {editable ? (
+        <DatePicker
+          date={children}
+          small
+          onApplyDate={onDateChange}
+          futureOnly
+          className="pt-fill"
+          icon="outdated"
+        />
+      ) : children ? (
+        <DateComponent date={children} />
+      ) : (
+        '-'
+      )}
     </Td>
   )
 );
