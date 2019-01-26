@@ -124,7 +124,14 @@ const NameColumnHeader: Function = ({
 );
 
 export default compose(
-  onlyUpdateForKeys(['link', 'name', 'popoverContent', 'isActive'])
+  onlyUpdateForKeys([
+    'link',
+    'name',
+    'popoverContent',
+    'isActive',
+    'hasAlerts',
+    'className',
+  ])
 )(NameColumn);
 
 export { NameColumnHeader };

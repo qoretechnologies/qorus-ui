@@ -5,6 +5,7 @@ import pickBy from 'lodash/pickBy';
 import { fetchJson, fetchWithNotifications, put, get } from '../../utils';
 import settings from '../../../../settings';
 import { attrsSelector } from '../../../../helpers/remotes';
+import { CONN_MAP_REVERSE } from '../../../../constants/remotes';
 
 const ping: Function = (model: string, type: string, dispatch: Function) =>
   fetchWithNotifications(
@@ -30,9 +31,32 @@ const enabledChange = createAction('REMOTES_ENABLEDCHANGE', events => ({
 const addConnection = createAction('REMOTES_ADDCONNECTION', events => ({
   events,
 }));
-const updateConnection = createAction('REMOTES_UPDATECONNECTION', events => ({
-  events,
-}));
+const updateConnection = createAction(
+  'REMOTES_UPDATECONNECTION',
+  async events => {
+    let models: Array<Object> = events;
+
+    //! If we are on HTTPS, fetch the connection with password
+    if (!settings.IS_HTTP) {
+      models = await Promise.all(
+        models.map(async (model: Object) => {
+          const safeUrl: string = await get(
+            `${settings.REST_BASE_URL}/remote/${
+              CONN_MAP_REVERSE[model.conntype]
+            }/${model.name}/url?with_password=true`
+          );
+
+          return {
+            ...model,
+            safeUrl,
+          };
+        })
+      );
+    }
+
+    return { models };
+  }
+);
 const removeConnectionWS = createAction(
   'REMOTES_REMOVECONNECTIONWS',
   events => ({
@@ -47,27 +71,20 @@ const updateDone: Function = createAction(
 
 const fetchPass: Function = createAction(
   'REMOTES_FETCHPASS',
-  async (
-    remoteType: string,
-    name: string,
-    withPass: boolean,
-    dispatch: Function
-  ): Object => {
-    const model = await fetchWithNotifications(
+  async (remoteType: string, name: string, dispatch: Function): Object => {
+    const safeUrl = await fetchWithNotifications(
       async () =>
         get(
           `${
             settings.REST_BASE_URL
-          }/remote/${remoteType}/${name}?with_password=${
-            withPass ? 'true' : 'false'
-          }`
+          }/remote/${remoteType}/${name}/url?with_password=true`
         ),
       null,
       null,
       dispatch
     );
 
-    return { model };
+    return { safeUrl, name, remoteType };
   }
 );
 
@@ -129,8 +146,6 @@ const deleteConnection: Function = createAction(
       `${name} successfuly deleted`,
       dispatch
     );
-
-    return;
   }
 );
 
@@ -154,8 +169,6 @@ const toggleConnection: Function = createAction(
       `${name} successfuly ${value ? 'enabled' : 'disabled'}`,
       dispatch
     );
-
-    return;
   }
 );
 
@@ -172,8 +185,6 @@ const resetConnection: Function = createAction(
       `${name} successfuly reset`,
       dispatch
     );
-
-    return;
   }
 );
 

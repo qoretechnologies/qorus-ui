@@ -1,7 +1,7 @@
 import { updateItemWithName, setUpdatedToNull } from '../../utils';
 import remove from 'lodash/remove';
 
-import { CONN_MAP } from '../../../../constants/remotes';
+import { CONN_MAP, CONN_MAP_REVERSE } from '../../../../constants/remotes';
 import { buildRemoteHash } from '../../../../helpers/remotes';
 
 const initialState = {
@@ -11,52 +11,52 @@ const initialState = {
 };
 
 const pingRemote = {
-  next(state: Object = initialState): Object {
+  next (state: Object = initialState): Object {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const toggleConnection = {
-  next(state: Object = initialState): Object {
+  next (state: Object = initialState): Object {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const resetConnection = {
-  next(state: Object = initialState): Object {
+  next (state: Object = initialState): Object {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const deleteConnection = {
-  next(state: Object = initialState): Object {
+  next (state: Object = initialState): Object {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const manageConnection = {
-  next(state: Object = initialState): Object {
+  next (state: Object = initialState): Object {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const connectionChange = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { events },
@@ -80,13 +80,13 @@ const connectionChange = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const enabledChange = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { events },
@@ -110,13 +110,13 @@ const enabledChange = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const updateDone = {
-  next(
+  next (
     state,
     {
       payload: { name },
@@ -135,28 +135,26 @@ const updateDone = {
 
     return state;
   },
-  throw(state) {
+  throw (state) {
     return state;
   },
 };
 
 const fetchPass = {
-  next(
+  next (
     state,
     {
-      payload: { model },
+      payload: { safeUrl, name, remoteType },
     }
   ) {
     if (state.sync) {
-      const data = state.data.slice();
-      const connection = data.find(d => d.name === model.name);
+      const data = [...state.data];
+      const connection = data.find(
+        d => d.name === name && CONN_MAP_REVERSE[d.conntype] === remoteType
+      );
 
       if (connection) {
-        const newData = updateItemWithName(
-          model.name,
-          { ...model, fetchedWithPass: true },
-          data
-        );
+        const newData = updateItemWithName(name, { safeUrl }, data);
 
         return { ...state, ...{ data: newData } };
       }
@@ -164,13 +162,13 @@ const fetchPass = {
 
     return state;
   },
-  throw(state) {
+  throw (state) {
     return state;
   },
 };
 
 const addAlert = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -204,7 +202,7 @@ const addAlert = {
 
     return state;
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -214,7 +212,7 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -251,7 +249,7 @@ const clearAlert = {
 
     return state;
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -261,27 +259,29 @@ const clearAlert = {
 };
 
 const updateConnection = {
-  next(
+  next (
     state: Object = initialState,
     {
-      payload: { events },
+      payload: { models },
     }: Object
   ): Object {
     let newData = [...state.data];
 
-    events.forEach(dt => {
+    models.forEach(dt => {
+      console.log(dt);
+
       newData = updateItemWithName(dt.name, { ...dt, _updated: true }, newData);
     });
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const addConnection = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { events },
@@ -295,13 +295,13 @@ const addConnection = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state: Object = initialState): Object {
+  throw (state: Object = initialState): Object {
     return state;
   },
 };
 
 const removeConnectionWs = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { events },

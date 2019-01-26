@@ -32,4 +32,4 @@ const Text: Function = ({
     </Flex>
   );
 
-export default compose(pure(['text', 'expanded']))(Text);
+export default compose(pure(['text', 'expanded', 'hasAlerts']))(Text);

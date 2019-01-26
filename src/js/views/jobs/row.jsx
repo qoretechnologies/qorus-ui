@@ -6,7 +6,6 @@ import withHandlers from 'recompose/withHandlers';
 import classnames from 'classnames';
 
 import { Tr, Td } from '../../components/new_table';
-import Date from '../../components/date';
 import JobControls from './controls';
 import InstancesBar from '../../components/instances_bar';
 import Box from '../../components/box';
@@ -17,7 +16,6 @@ import { SelectColumn } from '../../components/SelectColumn';
 import { IdColumn } from '../../components/IdColumn';
 import { ActionColumn } from '../../components/ActionColumn';
 import { DateColumn } from '../../components/DateColumn';
-import ContentByType from '../../components/ContentByType';
 
 type Props = {
   openPane: Function,

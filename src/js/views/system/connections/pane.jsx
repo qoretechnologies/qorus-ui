@@ -27,6 +27,7 @@ import ContentByType from '../../../components/ContentByType';
 import NameColumn from '../../../components/NameColumn';
 import Loader from '../../../components/loader';
 import settings from '../../../settings';
+import mapProps from 'recompose/mapProps';
 
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find(a => a.name === props.paneId);
@@ -42,6 +43,10 @@ const viewSelector = createSelector(
 
 @connect(viewSelector)
 @withDispatch()
+@mapProps(({ remote, ...rest }) => ({
+  remote: { ...remote, url: settings.IS_HTTP ? remote.url : remote.safeUrl },
+  ...rest,
+}))
 export default class ConnectionsPane extends Component {
   props: {
     remote: Object,
@@ -55,6 +60,7 @@ export default class ConnectionsPane extends Component {
     dispatchAction: Function,
     remoteType: string,
     canEdit: boolean,
+    paneId: string,
   } = this.props;
 
   state: {
@@ -64,25 +70,25 @@ export default class ConnectionsPane extends Component {
   } = {
     error: null,
     options: null,
-    isPassLoaded: this.props.remote.fetchedWithPass,
   };
 
   componentDidMount() {
-    this.props.dispatchAction(
-      actions.remotes.fetchPass,
-      this.props.remoteType,
-      this.props.remote.name,
-      !settings.IS_HTTP
-    );
+    if (!settings.IS_HTTP) {
+      this.props.dispatchAction(
+        actions.remotes.fetchPass,
+        this.props.remoteType,
+        this.props.remote.name
+      );
+    }
   }
 
   componentWillReceiveProps(nextProps: Object) {
-    if (
-      this.props.remote.fetchedWithPass !== nextProps.remote.fetchedWithPass
-    ) {
-      this.setState({
-        isPassLoaded: true,
-      });
+    if (this.props.paneId !== nextProps.paneId && !settings.IS_HTTP) {
+      nextProps.dispatchAction(
+        actions.remotes.fetchPass,
+        nextProps.remoteType,
+        nextProps.remote.name
+      );
     }
   }
 
@@ -157,79 +163,75 @@ export default class ConnectionsPane extends Component {
         onResize={this.props.onResize}
         title={`${this.props.remote.name} detail`}
       >
-        {!isPassLoaded ? (
-          <Loader />
-        ) : (
-          <Box top fill scrollY>
-            <PaneItem title="Overview">
-              {this.state.error && (
-                <Alert bsStyle="danger">{this.state.error}</Alert>
-              )}
-              {settings.IS_HTTP && (
-                <Alert bsStyle="warning" title="Insecure connection">
-                  Passwords are not displayed
-                </Alert>
-              )}
-              <Table condensed clean className="text-table">
+        <Box top fill scrollY>
+          <PaneItem title="Overview">
+            {this.state.error && (
+              <Alert bsStyle="danger">{this.state.error}</Alert>
+            )}
+            {settings.IS_HTTP && (
+              <Alert bsStyle="warning" title="Insecure connection">
+                Passwords are not displayed
+              </Alert>
+            )}
+            <Table condensed clean className="text-table">
+              <Tbody>
+                {this.getData().map(
+                  (val: Object, key: number): React.Element<any> => (
+                    <Tr key={key}>
+                      <Th className="name">
+                        {upperFirst(attrsMapper(val.attr).replace(/_/g, ' '))}
+                      </Th>
+                      {val.editable &&
+                      canEdit &&
+                      val.attr !== 'options' &&
+                      val.attr !== 'opts' ? (
+                        <EditableCell
+                          className="text"
+                          value={val.value}
+                          onSave={this.handleEditSave(val.attr)}
+                        />
+                      ) : (
+                        <Td className="text">
+                          {val.attr === 'options' || val.attr === 'opts' ? (
+                            <Options
+                              data={val.value}
+                              onSave={this.handleEditSave(val.attr)}
+                              canEdit={canEdit}
+                            />
+                          ) : (
+                            <ContentByType content={val.value} />
+                          )}
+                        </Td>
+                      )}
+                    </Tr>
+                  )
+                )}
+              </Tbody>
+            </Table>
+          </PaneItem>
+          <AlertsTable alerts={alerts} />
+          <PaneItem title="Dependencies">
+            {deps && deps.length ? (
+              <Table striped condensed>
                 <Tbody>
-                  {this.getData().map(
-                    (val: Object, key: number): React.Element<any> => (
-                      <Tr key={key}>
-                        <Th className="name">
-                          {upperFirst(attrsMapper(val.attr).replace(/_/g, ' '))}
-                        </Th>
-                        {val.editable &&
-                        canEdit &&
-                        val.attr !== 'options' &&
-                        val.attr !== 'opts' ? (
-                          <EditableCell
-                            className="text"
-                            value={val.value}
-                            onSave={this.handleEditSave(val.attr)}
-                          />
-                        ) : (
-                          <Td className="text">
-                            {val.attr === 'options' || val.attr === 'opts' ? (
-                              <Options
-                                data={val.value}
-                                onSave={this.handleEditSave(val.attr)}
-                                canEdit={canEdit}
-                              />
-                            ) : (
-                              <ContentByType content={val.value} />
-                            )}
-                          </Td>
-                        )}
+                  {deps.map(
+                    (dep: Object, index: number): React.Element<any> => (
+                      <Tr key={index}>
+                        <NameColumn
+                          name={dep.name}
+                          link={getDependencyObjectLink(dep.type, dep)}
+                          type={lowerCase(dep.type)}
+                        />
                       </Tr>
                     )
                   )}
                 </Tbody>
               </Table>
-            </PaneItem>
-            <AlertsTable alerts={alerts} />
-            <PaneItem title="Dependencies">
-              {deps && deps.length ? (
-                <Table striped condensed>
-                  <Tbody>
-                    {deps.map(
-                      (dep: Object, index: number): React.Element<any> => (
-                        <Tr key={index}>
-                          <NameColumn
-                            name={dep.name}
-                            link={getDependencyObjectLink(dep.type, dep)}
-                            type={lowerCase(dep.type)}
-                          />
-                        </Tr>
-                      )
-                    )}
-                  </Tbody>
-                </Table>
-              ) : (
-                <NoData />
-              )}
-            </PaneItem>
-          </Box>
-        )}
+            ) : (
+              <NoData />
+            )}
+          </PaneItem>
+        </Box>
       </Pane>
     );
   }
