@@ -28,6 +28,7 @@ type Props = {
   id?: string,
   name?: string,
   small?: boolean,
+  icon?: string,
 };
 
 @pure(['date', 'futureOnly', 'className'])
@@ -100,7 +101,9 @@ export default class DatePicker extends Component {
     this.props.onApplyDate(date);
   };
 
-  showDatepicker: Function = (): void => {
+  showDatepicker: Function = (event: any): void => {
+    event.stopPropagation();
+
     this.setState({
       showDatepicker: true,
     });
@@ -224,12 +227,12 @@ export default class DatePicker extends Component {
   }
 
   render(): React.Element<any> {
-    const { futureOnly, noButtons, small } = this.props;
+    const { futureOnly, noButtons, small, className, icon } = this.props;
 
     return (
-      <ControlGroup className="vab">
+      <ControlGroup className={`vab ${className}`}>
         <Button
-          iconName="timeline-events"
+          iconName={icon || 'timeline-events'}
           big={!small}
           onClick={this.showDatepicker}
         />
@@ -250,6 +253,7 @@ export default class DatePicker extends Component {
               futureOnly={this.props.futureOnly}
             >
               <Calendar
+                futureOnly={this.props.futureOnly}
                 date={this.state.date}
                 setDate={this.setDate}
                 activeDate={this.state.activeDate}
@@ -267,7 +271,7 @@ export default class DatePicker extends Component {
             placeholder={this.props.placeholder}
             id={this.props.id}
             name={this.props.name}
-            className={small && 'pt-small'}
+            className={small && 'datepicker-input-small pt-small'}
           />
         </Popover>
 

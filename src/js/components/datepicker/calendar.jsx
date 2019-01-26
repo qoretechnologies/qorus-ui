@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import _ from 'lodash';
 import pure from 'recompose/onlyUpdateForKeys';
+import { Icon } from '@blueprintjs/core';
 
 const chunk = (arr: Array<Object>, unit: number): Array<any> => {
   const res: Object = {};
@@ -27,6 +28,7 @@ export default class Calendar extends Component {
     setDate: (date: Object) => void,
     activeDate: Object,
     setActiveDate: () => void,
+    futureOnly: boolean,
   } = this.props;
 
   getDaysOfMonth(): Array<Object> {
@@ -35,7 +37,7 @@ export default class Calendar extends Component {
     const start: Object = moment([year, month]).startOf('isoweek');
     const end: Object = start
       .clone()
-      .add(6, 'weeks')
+      .add(5, 'weeks')
       .add(-1, 'days');
     const days: Array<Object> = [];
     const date: Object = this.props.date;
@@ -71,6 +73,13 @@ export default class Calendar extends Component {
 
       if (start.month() < month) day.css = 'old';
       if (start.month() > month) day.css = 'new';
+
+      if (
+        this.props.futureOnly &&
+        start.valueOf() <
+          moment([moment().year(), moment().month(), moment().date()]).valueOf()
+      )
+        day.css = 'disabled';
       if (day.is_today) day.css += ' today';
       if (day.active) day.css += ' active';
 
@@ -130,11 +139,11 @@ export default class Calendar extends Component {
         <thead>
           <tr>
             <th className="month" onClick={this.prevMonth}>
-              <i className="fa fa-angle-left" />
+              <Icon iconName="chevron-left" />
             </th>
             <th colSpan="5">{this.renderYearAndMonth()}</th>
             <th className="month" onClick={this.nextMonth}>
-              <i className="fa fa-angle-right" />
+              <Icon iconName="chevron-right" />
             </th>
           </tr>
           <tr>
