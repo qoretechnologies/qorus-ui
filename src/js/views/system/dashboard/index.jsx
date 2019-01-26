@@ -576,35 +576,39 @@ export default class Dashboard extends Component {
               </PaneItem>
             </DashboardModule>
           </MasonryPanel>
-          {remotes.length && (
+          {remotes.length ? (
             <MasonryPanel>
               <DashboardModule>
                 <PaneItem title="Remote Instances">
-                  {remotes.map((remote: Object) => (
-                    <div
-                      className="dashboard-module-wide has-link"
-                      key={remote.name}
-                      onClick={() => this.handleModuleClick(remote.url)}
-                    >
+                  {remotes
+                    .filter((remote: Object) => !remote.loopback)
+                    .map((remote: Object) => (
                       <div
-                        className={`dashboard-data-title ${statusHealth(
-                          remote.health
-                        )}`}
+                        className="dashboard-module-wide has-link"
+                        key={remote.name}
+                        onClick={() => this.handleModuleClick(remote.url)}
                       >
-                        {remote.name}
-                      </div>
-                      <div className={`bottom ${statusHealth(remote.health)}`}>
-                        <div className="module">
-                          <div className="top">{remote['instance-key']}</div>
-                          <div className="bottom">key</div>
+                        <div
+                          className={`dashboard-data-title ${statusHealth(
+                            remote.health
+                          )}`}
+                        >
+                          {remote.name}
                         </div>
-                        <div className="module">
-                          <div className="top">{remote.health}</div>
-                          <div className="bottom">health</div>
+                        <div
+                          className={`bottom ${statusHealth(remote.health)}`}
+                        >
+                          <div className="module">
+                            <div className="top">{remote['instance-key']}</div>
+                            <div className="bottom">key</div>
+                          </div>
+                          <div className="module">
+                            <div className="top">{remote.health}</div>
+                            <div className="bottom">health</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                   {canLoadMoreRemotes && (
                     <div
                       className="dashboard-data-loadmore"
@@ -624,7 +628,7 @@ export default class Dashboard extends Component {
                 </PaneItem>
               </DashboardModule>
             </MasonryPanel>
-          )}
+          ) : null}
           <MasonryPanel>
             <DashboardModule>
               <PaneItem
