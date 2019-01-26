@@ -88,14 +88,16 @@ export default class Picker extends Component {
         </ControlGroup>
         <div className="datepicker-submit">
           {this.renderControls()}
-          <Control
-            className="pull-right"
-            intent={Intent.PRIMARY}
-            onClick={this.props.onApplyClick}
-            iconName="small-tick"
-          >
-            Apply
-          </Control>
+          <Controls>
+            <Control
+              className="pull-right"
+              intent={Intent.SUCCESS}
+              onClick={this.props.onApplyClick}
+              iconName="small-tick"
+            >
+              Apply
+            </Control>
+          </Controls>
         </div>
       </div>
     );

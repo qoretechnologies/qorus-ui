@@ -83,7 +83,7 @@ const JobPage = ({
         />
       </Breadcrumbs>
       <Pull right>
-        <Controls {...job} big />
+        <Controls {...job} expiry={job.expiry_date} big />
         {tabQuery === 'instances' && (
           <Search
             defaultValue={searchQuery}
@@ -150,7 +150,7 @@ export default compose(
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       const { date, fetch, id }: Props = this.props;
 
       if (date !== nextProps.date || id !== nextProps.id) {

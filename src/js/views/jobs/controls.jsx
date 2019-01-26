@@ -40,6 +40,9 @@ type Props = {
   schedText: string,
   remote: boolean,
   big: boolean,
+  onExpiryChange: Function,
+  expiry: string,
+  compact: boolean,
 };
 
 const JobControls: Function = ({
@@ -56,6 +59,8 @@ const JobControls: Function = ({
   schedText,
   big,
   remote,
+  expiry,
+  compact,
 }: Props): React.Element<any> =>
   scheduleOnly ? (
     <div>
@@ -68,47 +73,62 @@ const JobControls: Function = ({
       />
     </div>
   ) : (
-    <ButtonGroup>
-      <Button
-        title={enabled ? 'Disable' : 'Enable'}
-        iconName="power"
-        intent={enabled ? Intent.SUCCESS : Intent.DANGER}
-        onClick={handleEnableClick}
-        big={big}
-      />
-      <Button
-        title={active ? 'Deactivate' : 'Activate'}
-        iconName={active ? 'small-tick' : 'cross'}
-        intent={active ? Intent.PRIMARY : Intent.NONE}
-        onClick={handleActivateClick}
-        big={big}
-      />
-      <Button
-        title="Reset"
-        iconName="refresh"
-        big={big}
-        onClick={handleResetClick}
-      />
-      <Button
-        title="Reschedule"
-        iconName="time"
-        onClick={handleScheduleClick}
-        big={big}
-      />
-      <Button
-        title="Set expiry"
-        iconName="tag"
-        onClick={handleExpiryClick}
-        big={big}
-      />
-      <Button
-        title="Set remote"
-        iconName="globe"
-        intent={remote ? Intent.PRIMARY : Intent.NONE}
-        onClick={handleRemoteClick}
-        big={big}
-      />
-    </ButtonGroup>
+    <React.Fragment>
+      <ButtonGroup>
+        <Button
+          title={enabled ? 'Disable' : 'Enable'}
+          iconName="power"
+          intent={enabled ? Intent.SUCCESS : Intent.DANGER}
+          onClick={handleEnableClick}
+          big={big}
+        />
+        <Button
+          title={active ? 'Deactivate' : 'Activate'}
+          iconName={active ? 'offline' : 'offline'}
+          intent={active ? Intent.PRIMARY : Intent.NONE}
+          onClick={handleActivateClick}
+          big={big}
+        />
+        <Button
+          title="Set remote"
+          iconName="globe"
+          intent={remote ? Intent.PRIMARY : Intent.NONE}
+          onClick={handleRemoteClick}
+          big={big}
+        />
+        {!compact && (
+          <Button
+            title="Set expiry"
+            iconName="outdated"
+            btnStyle={expiry && 'info'}
+            onClick={handleExpiryClick}
+            big={big}
+          />
+        )}
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button
+          title="Run"
+          iconName="play"
+          onClick={handleRunClick}
+          big={big}
+        />
+        {!compact && (
+          <Button
+            title="Reset"
+            iconName="refresh"
+            big={big}
+            onClick={handleResetClick}
+          />
+        )}
+        <Button
+          title="Reschedule"
+          iconName="time"
+          onClick={handleScheduleClick}
+          big={big}
+        />
+      </ButtonGroup>
+    </React.Fragment>
   );
 
 export default compose(
@@ -140,7 +160,7 @@ export default compose(
       dispatchAction(actions.jobs.activate, id, active);
     },
     handleRunClick: ({ dispatchAction, id }: Props): Function => (): void => {
-      dispatchAction(actions.jobs.jobsAction, 'run', id);
+      dispatchAction(actions.jobs.run, id);
     },
     handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
       dispatchAction(actions.jobs.jobsAction, 'reset', id);
@@ -177,15 +197,17 @@ export default compose(
       );
     },
     handleExpiryClick: ({
-      optimisticDispatch,
+      onExpiryChange,
       openModal,
       closeModal,
+      expiry,
       id,
     }: Props): Function => (): void => {
       openModal(
         <SetExpiryModal
           onClose={closeModal}
-          action={optimisticDispatch}
+          onExpiryChange={onExpiryChange}
+          expiry={expiry}
           id={id}
         />
       );
@@ -202,5 +224,6 @@ export default compose(
     'day',
     'month',
     'week',
+    'expiry',
   ])
 )(JobControls);

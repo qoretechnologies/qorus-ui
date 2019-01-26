@@ -17,21 +17,18 @@ type Props = {
   handleBatchAction: Function,
   handleEnableClick: Function,
   handleDisableClick: Function,
-  handleRunClick: Function,
   handleResetClick: Function,
 };
 
 const ToolbarActions: Function = ({
   handleEnableClick,
   handleDisableClick,
-  handleRunClick,
   handleResetClick,
 }: Props): ?React.Element<any> => (
   <Dropdown>
     <Control iconName="cog">With selected</Control>
     <Item title="Enable" iconName="power" onClick={handleEnableClick} />
     <Item title="Disable" iconName="power" onClick={handleDisableClick} />
-    <Item title="Run" iconName="play" onClick={handleRunClick} />
     <Item title="Reset" iconName="refresh" onClick={handleResetClick} />
   </Dropdown>
 );
@@ -63,9 +60,6 @@ export default compose(
       handleBatchAction,
     }: Props): Function => (): void => {
       handleBatchAction('disable');
-    },
-    handleRunClick: ({ handleBatchAction }: Props): Function => (): void => {
-      handleBatchAction('run');
     },
     handleResetClick: ({ handleBatchAction }: Props): Function => (): void => {
       handleBatchAction('reset');

@@ -43,11 +43,6 @@ const DetailTab = ({
   <Box top fill>
     <InfoHeader model={model} />
     <Flex scrollY>
-      {isTablet && model.expiry_date && (
-        <PaneItem title="Expiry date">
-          <Date date={model.expiry_date} />
-        </PaneItem>
-      )}
       <PaneItem title="Controls">
         <JobControls
           enabled={model.enabled}
@@ -59,6 +54,7 @@ const DetailTab = ({
           month={model.month}
           week={model.wday}
           remote={model.remote}
+          expiry={model.expiry_date}
         />
         <JobControls
           scheduleOnly

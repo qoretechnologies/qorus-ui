@@ -164,7 +164,7 @@ const jobsAction = createAction(
 
     fetchWithNotifications(
       async () => await fetchJson('PUT', url),
-      `Executing ${action} on job(s) ${id}`,
+      `Executing ${action} on job(s) ${id}...`,
       `${action} successfuly executed on job(s) ${ids}`,
       dispatch
     );
@@ -173,22 +173,26 @@ const jobsAction = createAction(
   }
 );
 
-const expire = createAction('JOBS_EXPIRE', async (id, date, dispatch) => {
-  if (!dispatch) return { id, date };
+const expire = createAction(
+  'JOBS_EXPIRE',
+  async (id, date, onFinish, dispatch) => {
+    fetchWithNotifications(
+      async () => {
+        const res: Object = await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/jobs/${id}?action=setExpiry&date=${date}`
+        );
 
-  fetchWithNotifications(
-    async () =>
-      await fetchJson(
-        'PUT',
-        `${settings.REST_BASE_URL}/jobs/${id}?action=setExpiry&date=${date}`
-      ),
-    `Executing expire on ${id}`,
-    `Expire change executed on ${id}`,
-    dispatch
-  );
+        if (onFinish) onFinish();
 
-  return { id, date };
-});
+        return res;
+      },
+      `Executing expire on ${id}...`,
+      `Expire change executed on ${id}`,
+      dispatch
+    );
+  }
+);
 
 const reschedule = createAction(
   'JOBS_RESCHEDULE',
@@ -200,7 +204,7 @@ const reschedule = createAction(
 
     fetchWithNotifications(
       async () => await fetchJson('PUT', url),
-      `Rescheduling job ${id}`,
+      `Rescheduling job ${id}...`,
       `Job ${id} rescheduled`,
       dispatch
     );
@@ -214,8 +218,21 @@ const activate = createAction('JOBS_ACTIVATE', (id, active, dispatch) => {
 
   fetchWithNotifications(
     async () => await fetchJson('PUT', url),
-    `Activating job ${id}`,
+    `Activating job ${id}...`,
     `Job ${id} activated`,
+    dispatch
+  );
+});
+
+const run = createAction('JOBS_RUN', (id, dispatch) => {
+  const url = `${
+    settings.REST_BASE_URL
+  }/jobs/${id}?action=run`;
+
+  fetchWithNotifications(
+    async () => await fetchJson('PUT', url),
+    `Running job ${id}...`,
+    `Job ${id} ran`,
     dispatch
   );
 });
@@ -229,7 +246,7 @@ const setSLAJob = createAction(
           'PUT',
           `${settings.REST_BASE_URL}/slas/${sla}?action=setJob&job=${job}`
         ),
-      `Setting SLA for job ${job}`,
+      `Setting SLA for job ${job}...`,
       `SLA for job ${job} set`,
       dispatch
     );
@@ -325,4 +342,5 @@ export {
   processStarted,
   processStopped,
   updateBasicData,
+  run,
 };

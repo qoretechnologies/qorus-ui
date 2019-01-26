@@ -268,8 +268,6 @@ const updateConnection = {
     let newData = [...state.data];
 
     models.forEach(dt => {
-      console.log(dt);
-
       newData = updateItemWithName(dt.name, { ...dt, _updated: true }, newData);
     });
 

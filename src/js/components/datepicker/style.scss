@@ -66,15 +66,21 @@
     }
 
     td {
-      cursor: pointer;
+      &:not(.disabled) {
+        cursor: pointer;
+      }
+
+      &.disabled {
+        color: #ddd;
+      }
 
       &.active {
-        background-color: #0a68b4;
+        background-color: $qore-cobalt;
         color: #fff;
       }
 
       &.today:not(.active) {
-        background-color: #e2d7a4;
+        background-color: $bgcolor;
       }
 
       &.new,
@@ -83,7 +89,7 @@
       }
     }
 
-    td,
+    td:not(.disabled),
     th.month {
       &:not(.active):not(.today):hover {
         background-color: #f5f5f5;
@@ -103,6 +109,7 @@
 .pt-input-group.pt-small,
 .pt-control-group.pt-small {
   .pt-input {
+    padding: 0 4px;
     height: 24px;
     line-height: 24px;
   }
