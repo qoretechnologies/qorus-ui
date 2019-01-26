@@ -611,6 +611,12 @@ const activate = {
   },
 };
 
+const run = {
+  next (state = initialState) {
+    return state;
+  },
+};
+
 const setSLAJob = {
   next (state) {
     return state;
@@ -625,23 +631,9 @@ const removeSLAJob = {
 
 const expire = {
   next (
-    state = initialState,
-    {
-      payload: { id, date, error },
-    }
+    state = initialState
   ) {
-    const data = [...state.data];
-    let newData;
-
-    if (error) {
-      newData = updateItemWithId(id, { expiry_date: null }, data);
-    } else if (date) {
-      newData = updateItemWithId(id, { expiry_date: date }, data);
-    } else {
-      return state;
-    }
-
-    return { ...state, ...{ data: newData } };
+    return state;
   },
 };
 
@@ -714,4 +706,5 @@ export {
   processStarted as PROCESSSTARTED,
   processStopped as PROCESSSTOPPED,
   updateBasicData as UPDATEBASICDATA,
+  run as RUN,
 };

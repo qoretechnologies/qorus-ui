@@ -20,6 +20,10 @@ import { IdColumnHeader } from '../../components/IdColumn';
 import { SelectColumnHeader } from '../../components/SelectColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
 import SortingDropdown from '../../components/SortingDropdown';
+import withHandlers from 'recompose/withHandlers';
+import moment from 'moment';
+import { DATE_FORMATS } from '../../constants/dates';
+import withDispatch from '../../hocomponents/withDispatch';
 
 type Props = {
   sortData: Object,
@@ -41,6 +45,8 @@ type Props = {
   selectedIds: Array<number>,
   dateQuery: string,
   changeDateQuery: Function,
+  handleExpiryChange: Function,
+  dispatchAction: Function,
 };
 
 const JobsTable: Function = ({
@@ -63,6 +69,7 @@ const JobsTable: Function = ({
   handleLoadAll,
   dateQuery,
   changeDateQuery,
+  handleExpiryChange,
 }: Props): React.Element<any> => (
   <Table striped hover condensed fixed>
     <Thead>
@@ -105,7 +112,7 @@ const JobsTable: Function = ({
         <Th name="next" iconName="calendar">
           Next run
         </Th>
-        <Th name="expiry_date" iconName="calendar">
+        <Th name="expiry_date" iconName="outdated">
           Expiry Date
         </Th>
         <Th className="separated-cell" iconName="grid">
@@ -129,6 +136,7 @@ const JobsTable: Function = ({
                 updateDone={updateDone}
                 PROGRESS={job['IN-PROGRESS']}
                 isTablet={isTablet}
+                onExpiryChange={handleExpiryChange}
                 {...job}
               />
             )
@@ -147,6 +155,20 @@ export default compose(
       select: actions.jobs.select,
     }
   ),
+  withDispatch(),
+  withHandlers({
+    handleExpiryChange: ({ dispatchAction }: Props): Function => (
+      date: Object,
+      id: number,
+      onClose: Function
+    ): void => {
+      const formatedDate: string = moment(date, DATE_FORMATS.PROP).format(
+        DATE_FORMATS.PROP
+      );
+
+      dispatchAction(actions.jobs.expire, id, formatedDate, onClose);
+    },
+  }),
   queryControl('date'),
   pure([
     'sortData',
