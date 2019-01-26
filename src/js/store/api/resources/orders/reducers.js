@@ -533,13 +533,18 @@ const updateHierarchy: Object = {
   next(
     state: Object,
     {
-      payload: { id, hierarchy },
+      payload: { id, hierarchy, error },
     }: {
       payload: Object,
       id: number,
       hierarchy: Object,
+      error: boolean,
     }
   ): Object {
+    if (error) {
+      return state;
+    }
+    
     const data = updateItemWithId(
       id,
       {
@@ -556,13 +561,18 @@ const updateStepInstances: Object = {
   next(
     state: Object,
     {
-      payload: { id, steps },
+      payload: { id, steps, error },
     }: {
       payload: Object,
       id: number,
       steps: Object,
+      error: boolean,
     }
   ): Object {
+    if (error) {
+      return state;
+    }
+
     const data = updateItemWithId(
       id,
       {
