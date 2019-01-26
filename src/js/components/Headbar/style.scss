@@ -1,4 +1,14 @@
 .headbar {
   height: 30px;
   margin-bottom: 7px;
+
+  .headbar-divider {
+    display: inline-flex;
+    margin: 0 8px 0 5px;
+    width: 1px;
+    height: 22px;
+    line-height: 22px;
+    vertical-align: middle;
+    background-color: #ccc;
+  }
 }

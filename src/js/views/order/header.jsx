@@ -16,7 +16,7 @@ import {
   CrumbTabs,
   CollapsedCrumb,
 } from '../../components/breadcrumbs';
-import Headbar from '../../components/Headbar';
+import Headbar, { HeadbarDivider } from '../../components/Headbar';
 import Pull from '../../components/Pull';
 import { normalizeName } from '../../components/utils';
 import { ALL_ORDER_STATES } from '../../constants/orders';
@@ -97,6 +97,7 @@ export default class OrderHeader extends Component {
             lock={this.props.data.operator_lock}
             big
           />
+          <HeadbarDivider />
           <WorkflowControls
             id={this.props.workflow.id}
             enabled={this.props.workflow.enabled}
