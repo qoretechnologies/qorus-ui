@@ -87,15 +87,19 @@ export default compose(
   patch('load', [false, 'offset', 'filter', 'limit', 'searchData']),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       const { filter, fetch, offset, changeOffset, searchData } = this.props;
 
-      if (searchData !== nextProps.searchData && nextProps.offset !== 0) {
+      //* the only way to check if the searchData object has really changed
+      const searchHasChanged: boolean =
+        JSON.stringify(searchData) !== JSON.stringify(nextProps.searchData);
+
+      if (searchHasChanged && nextProps.offset !== 0) {
         changeOffset(0);
       } else if (
         filter !== nextProps.filter ||
         offset !== nextProps.offset ||
-        searchData !== nextProps.searchData
+        searchHasChanged
       ) {
         fetch(
           nextProps.offset !== 0,

@@ -161,7 +161,7 @@ export default compose(
   ]),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       const {
         id,
         date,
@@ -175,8 +175,12 @@ export default compose(
         searchData,
       } = this.props;
 
+      //* the only way to check if the searchData object has really changed
+      const searchHasChanged: boolean =
+        JSON.stringify(searchData) !== JSON.stringify(nextProps.searchData);
+
       if (
-        (date !== nextProps.date || searchData !== nextProps.searchData) &&
+        (date !== nextProps.date || searchHasChanged) &&
         nextProps.offset !== 0
       ) {
         changeOffset(0);
@@ -186,7 +190,7 @@ export default compose(
         sort !== nextProps.sort ||
         sortDir !== nextProps.sortDir ||
         offset !== nextProps.offset ||
-        searchData !== nextProps.searchData
+        searchHasChanged
       ) {
         fetch(
           id,
