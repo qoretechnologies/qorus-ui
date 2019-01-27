@@ -9,7 +9,6 @@ import Options from './options';
 import JobControls from '../../controls';
 import { Groups, Group } from '../../../../components/groups';
 import AlertsTable from '../../../../components/alerts_table';
-import Date from '../../../../components/date';
 import SLAControl from '../../../../components/sla_control';
 import InfoHeader from '../../../../components/InfoHeader';
 import { resourceSelector } from '../../../../selectors';

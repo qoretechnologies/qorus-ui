@@ -1,6 +1,7 @@
 // @flow
 import { createAction } from 'redux-actions';
 import startsWith from 'lodash/startsWith';
+import includes from 'lodash/includes';
 import { browserHistory } from 'react-router';
 import shortid from 'shortid';
 
@@ -19,6 +20,7 @@ import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
 import {
   getProcessObjectType,
   getProcessObjectInterfaceId,
+  getProcessObjectInterface,
 } from '../../helpers/system';
 import { INTERFACE_IDS } from '../../constants/interfaces';
 
@@ -78,49 +80,27 @@ const handleEvent = (url, data, dispatch, state) => {
           }
         }
         break;
+      case 'PROCESS_MEMORY_CHANGED':
       case 'PROCESS_STARTED': {
         if (state.api.system.sync) {
-          pipeline(eventstr, system.addProcess, info, dispatch);
+          if (eventstr === 'PROCESS_STARTED') {
+            pipeline(eventstr, system.addProcess, info, dispatch);
+          } else {
+            pipeline(eventstr, system.processMemoryChanged, info, dispatch);
+          }
         }
 
-        const iType = getProcessObjectType(info);
+        const interfaceType = getProcessObjectInterface(info);
+        const interfaceIdKey = getProcessObjectInterfaceId(info);
 
-        if (iType === 'workflow') {
-          if (
-            isInterfaceLoaded(
-              'workflows',
-              info[getProcessObjectInterfaceId(info)]
-            )
-          ) {
+        if (includes(['workflows', 'jobs', 'services'], interfaceType)) {
+          const id = info[interfaceIdKey];
+
+          if (isInterfaceLoaded(interfaceType, id)) {
             pipeline(
               eventstr,
-              workflows.processStarted,
-              { id: info[getProcessObjectInterfaceId(info)], info },
-              dispatch
-            );
-          }
-        } else if (iType === 'service') {
-          if (
-            isInterfaceLoaded(
-              'services',
-              info[getProcessObjectInterfaceId(info)]
-            )
-          ) {
-            pipeline(
-              eventstr,
-              services.processStarted,
-              { id: info[getProcessObjectInterfaceId(info)], info },
-              dispatch
-            );
-          }
-        } else if (iType === 'job') {
-          if (
-            isInterfaceLoaded('jobs', info[getProcessObjectInterfaceId(info)])
-          ) {
-            pipeline(
-              eventstr,
-              jobs.processStarted,
-              { id: info[getProcessObjectInterfaceId(info)], info },
+              interfaceActions[interfaceType].processStarted,
+              { id, info },
               dispatch
             );
           }
@@ -128,54 +108,22 @@ const handleEvent = (url, data, dispatch, state) => {
 
         break;
       }
-      case 'PROCESS_MEMORY_CHANGED':
-        if (state.api.system.sync) {
-          pipeline(eventstr, system.processMemoryChanged, info, dispatch);
-        }
-        break;
       case 'PROCESS_STOPPED': {
         if (state.api.system.sync) {
           pipeline(eventstr, system.removeProcess, info, dispatch);
         }
 
-        const iType = getProcessObjectType(info);
+        const interfaceType = getProcessObjectInterface(info);
+        const interfaceIdKey = getProcessObjectInterfaceId(info);
 
-        if (iType === 'workflow') {
-          if (
-            isInterfaceLoaded(
-              'workflows',
-              info[getProcessObjectInterfaceId(info)]
-            )
-          ) {
+        if (includes(['workflows', 'jobs', 'services'], interfaceType)) {
+          const id = info[interfaceIdKey];
+
+          if (isInterfaceLoaded(interfaceType, id)) {
             pipeline(
               eventstr,
-              workflows.processStopped,
-              { id: info[getProcessObjectInterfaceId(info)] },
-              dispatch
-            );
-          }
-        } else if (iType === 'service') {
-          if (
-            isInterfaceLoaded(
-              'services',
-              info[getProcessObjectInterfaceId(info)]
-            )
-          ) {
-            pipeline(
-              eventstr,
-              services.processStopped,
-              { id: info[getProcessObjectInterfaceId(info)] },
-              dispatch
-            );
-          }
-        } else if (iType === 'job') {
-          if (
-            isInterfaceLoaded('jobs', info[getProcessObjectInterfaceId(info)])
-          ) {
-            pipeline(
-              eventstr,
-              jobs.processStopped,
-              { id: info[getProcessObjectInterfaceId(info)] },
+              interfaceActions[interfaceType].processStopped,
+              { id, info },
               dispatch
             );
           }

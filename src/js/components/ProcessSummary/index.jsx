@@ -11,6 +11,7 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../components/controls';
+import moment from 'moment';
 
 type Props = {
   model: Object,
@@ -18,7 +19,15 @@ type Props = {
 };
 
 const ProcessSummary: Function = ({
-  model: { enabled, process: prcs, remote, autostart },
+  model: {
+    enabled,
+    process: prcs,
+    remote,
+    autostart,
+    active,
+    expiry_date: expiry,
+    jobid,
+  },
   handleKillClick,
 }: Props): React.Element<PaneItem> => {
   if (enabled) {
@@ -67,6 +76,28 @@ const ProcessSummary: Function = ({
             <Alert title="Process not running" bsStyle="warning">
               Autostart is zero; to start the workflow automatically, set a
               positive autostart value
+            </Alert>
+          </PaneItem>
+        );
+      }
+
+      // Job not active
+      if (jobid && !active) {
+        return (
+          <PaneItem title="Process summary">
+            <Alert title="Process not running" bsStyle="warning">
+              Job is not active
+            </Alert>
+          </PaneItem>
+        );
+      }
+
+      // Job expired
+      if (jobid && moment(expiry).isBefore(moment())) {
+        return (
+          <PaneItem title="Process summary">
+            <Alert title="Process not running" bsStyle="warning">
+              Job has expired
             </Alert>
           </PaneItem>
         );

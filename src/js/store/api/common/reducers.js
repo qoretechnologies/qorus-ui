@@ -1,7 +1,7 @@
 import { setUpdatedToNull, updateItemWithId } from '../utils';
 
 const processStartedReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -28,7 +28,7 @@ const processStartedReducer = {
 };
 
 const processStoppedReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -55,7 +55,7 @@ const processStoppedReducer = {
 };
 
 const basicDataUpdatedReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
