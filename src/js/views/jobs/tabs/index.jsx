@@ -59,6 +59,7 @@ const JobsDetailTabs: Function = ({
               item: {
                 name: lib.code[0].name,
               },
+              type: 'code',
             }}
             data={lib || {}}
             location={location}
