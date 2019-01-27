@@ -142,6 +142,21 @@ const getProcessObjectType: Function = (prcs: Object) => {
   }
 };
 
+const getProcessObjectInterface: Function = (prcs: Object) => {
+  switch (prcs.type) {
+    case 'qdsp':
+      return 'remotes';
+    case 'qwf':
+      return 'workflows';
+    case 'qsvc':
+      return 'services';
+    case 'qjob':
+      return 'jobs';
+    default:
+      return null;
+  }
+};
+
 const getProcessObjectInterfaceId: Function = (prcs: Object) => {
   switch (prcs.type) {
     case 'qdsp':
@@ -201,6 +216,7 @@ export {
   getProcessObjectLink,
   getProcessObjectType,
   getProcessObjectInterfaceId,
+  getProcessObjectInterface,
   calculateMemory,
   getSlicedRemotes,
   getLineCount,
