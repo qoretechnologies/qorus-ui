@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Icon } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
+import { Link } from 'react-router';
 
 type Props = {
   title: string,
@@ -15,6 +16,7 @@ type Props = {
   handleClick: Function,
   compact: boolean,
   fontSize: number,
+  link?: string,
 };
 
 const TITLE_BASE_SIZE: number = 16;
@@ -25,13 +27,16 @@ const CrumbTab: Function = ({
   handleClick,
   compact,
   fontSize,
+  link,
 }: Props): React.Element<any> => (
   <div
     className={classnames('breadcrumb-tab', { active, compact })}
     onClick={handleClick}
     style={{ fontSize }}
   >
-    {title} {compact && <Icon iconName="caret-down" />}
+    <Link to={link} className="non-decorated-link">
+      {title} {compact && <Icon iconName="caret-down" />}
+    </Link>
   </div>
 );
 

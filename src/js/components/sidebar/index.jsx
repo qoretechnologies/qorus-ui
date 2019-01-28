@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import { browserHistory } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import {
   Menu,
   MenuItem,
@@ -116,33 +116,22 @@ let MenuElement: Function = ({
   intl: { formatMessage },
   handleClick,
 }) => (
-  <MenuItem
-    iconName={iconName}
-    onClick={handleClick}
-    text={!menuCollapsed && name}
-  >
-    {submenu &&
-      submenu.map(item => (
-        <MenuElement
-          key={item.name}
-          iconName={item.icon}
-          link={item.link}
-          name={item.name}
-        />
-      ))}
-  </MenuItem>
+  <Link to={link} className="non-decorated-link">
+    <MenuItem iconName={iconName} text={!menuCollapsed && name}>
+      {submenu &&
+        submenu.map(item => (
+          <MenuElement
+            key={item.name}
+            iconName={item.icon}
+            link={item.link}
+            name={item.name}
+          />
+        ))}
+    </MenuItem>
+  </Link>
 );
 
-MenuElement = compose(
-  injectIntl,
-  withHandlers({
-    handleClick: ({ link }): Function => (): void => {
-      if (link) {
-        browserHistory.push(link);
-      }
-    },
-  })
-)(MenuElement);
+MenuElement = compose(injectIntl)(MenuElement);
 
 const MenuWrapper: Function = ({
   menuCollapsed,

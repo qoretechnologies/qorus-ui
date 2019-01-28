@@ -563,3 +563,8 @@ span.pt-icon-standard {
 .pull-left {
   float: left !important;
 }
+
+.non-decorated-link {
+  color: inherit !important;
+  text-decoration: inherit !important;
+}
