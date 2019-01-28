@@ -15,7 +15,7 @@ export default (store: Object) => (next: Function) => async (
 ): Object => {
   const newAction = { ...action };
 
-  if (action.error && action.payload.res) {
+  if (action && action.error && action.payload.res) {
     const {
       payload: { res, notificationId },
     } = action;
