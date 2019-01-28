@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 
 export default (
@@ -7,24 +8,34 @@ export default (
   prevTitle: ?string = null,
   position: ?'suffix' | 'prefix' = null
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
+  @connect(
+    (state: Object): Object => ({
+      instance: state?.api?.system?.data?.['instance-key'],
+    })
+  )
   class WrappedComponent extends React.Component {
+    props: {
+      instance: string,
+    } = this.props;
+
     _baseTitle: string = '| Qorus Integration Engine';
 
-    componentDidMount() {
+    componentDidMount () {
       this.changeTitle(this.props);
     }
 
-    componentWillReceiveProps(nextProps): void {
+    componentWillReceiveProps (nextProps): void {
       this.changeTitle(nextProps);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
       if (prevTitle) {
         document.title = `${prevTitle} ${this._baseTitle}`;
       }
     }
 
     changeTitle: Function = (props: Object): void => {
+      const { instance } = this.props;
       let changedTitle: ?string;
       const newTitleSel =
         typeof newTitle === 'function' ? newTitle(props) : newTitle;
@@ -35,10 +46,12 @@ export default (
         changedTitle = `${newTitleSel} ${this._baseTitle}`;
       }
 
-      document.title = changedTitle;
+      document.title = instance
+        ? `${instance} | ${changedTitle}`
+        : changedTitle;
     };
 
-    render() {
+    render () {
       return <Component {...this.props} />;
     }
   }
