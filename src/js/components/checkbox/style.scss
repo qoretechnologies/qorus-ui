@@ -1,0 +1,53 @@
+.checkbox-wrapper {
+  margin-bottom: 0;
+  display: inline-block;
+  min-width: 14px;
+  min-height: 14px;
+  line-height: 14px;
+  padding: 0;
+  vertical-align: sub;
+
+  .pt-control-indicator {
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  input:checked ~ .pt-control-indicator {
+    background-color: $qore-cobalt;
+
+    &:hover {
+      background-color: darken($qore-cobalt, 10);
+    }
+  }
+}
+
+.pt-control.pt-checkbox .pt-control-indicator {
+  font-size: 14px;
+}
+
+.pt-control:hover input:checked ~ .pt-control-indicator,
+.pt-control:hover
+  .pt-control.pt-checkbox
+  input:indeterminate
+  ~ .pt-control-indicator,
+.pt-control.pt-checkbox
+  .pt-control:hover
+  input:indeterminate
+  ~ .pt-control-indicator,
+.pt-control.pt-checkbox:hover input:indeterminate ~ .pt-control-indicator {
+  background-color: darken($qore-cobalt, 10);
+}
+
+.pt-control.pt-checkbox input:indeterminate ~ .pt-control-indicator {
+  background-color: $qore-cobalt;
+}
+
+.pt-control input:not(:disabled):active:checked ~ .pt-control-indicator,
+.pt-control.pt-checkbox
+  input:not(:disabled):active:indeterminate
+  ~ .pt-control-indicator {
+  background-color: darken($qore-cobalt, 10);
+}

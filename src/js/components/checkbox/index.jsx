@@ -7,7 +7,7 @@ import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
-import { Icon } from '@blueprintjs/core';
+import { Icon, Checkbox } from '@blueprintjs/core';
 
 import { CHECKBOX_CLASSES } from '../../constants/checkbox';
 
@@ -20,11 +20,17 @@ type Props = {
   className: string,
 };
 
-const Checkbox: Function = ({
+const CheckboxElement: Function = ({
   className,
   handleClick,
+  checkedState,
 }: Props): React.Element<any> => (
-  <Icon iconName={className} onClick={handleClick} iconSize={10} />
+  <Checkbox
+    indeterminate={checkedState === 'HALFCHECKED'}
+    checked={checkedState === 'CHECKED'}
+    onChange={handleClick}
+    className="checkbox-wrapper"
+  />
 );
 
 export default compose(
@@ -33,11 +39,13 @@ export default compose(
     'setChecked',
     ({ checked }: Props): string => checked
   ),
-  mapProps(({ checkedState, ...rest }: Props): Props => ({
-    className: classNames(CHECKBOX_CLASSES[checkedState]),
-    checkedState,
-    ...rest,
-  })),
+  mapProps(
+    ({ checkedState, ...rest }: Props): Props => ({
+      className: classNames(CHECKBOX_CLASSES[checkedState]),
+      checkedState,
+      ...rest,
+    })
+  ),
   withHandlers({
     handleClick: ({ action, setChecked }: Props): Function => (
       event: Object
@@ -46,19 +54,19 @@ export default compose(
       event.preventDefault();
       event.stopPropagation();
 
-      setChecked(
-        (checked: string) => (checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED')
+      setChecked((checked: string) =>
+        checked === 'CHECKED' ? 'UNCHECKED' : 'CHECKED'
       );
 
       if (action) action(event);
     },
   }),
   lifecycle({
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps (nextProps) {
       if (this.props.checked !== nextProps.checked) {
         this.props.setChecked(() => nextProps.checked);
       }
     },
   }),
   pure(['checked', 'checkedState'])
-)(Checkbox);
+)(CheckboxElement);
