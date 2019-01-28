@@ -172,7 +172,12 @@ export default class StepDetailTable extends Component {
           </Table>
         </PaneItem>
         <PaneItem title="Errors for this step">
-          <Errors order={order} filterByStepId={data.stepid} compact />
+          <Errors
+            order={order}
+            filterByStepId={data.stepid}
+            tableId="stepErrors"
+            compact
+          />
         </PaneItem>
       </div>
     );

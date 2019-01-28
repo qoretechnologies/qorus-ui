@@ -46,7 +46,7 @@ const HierarchyTable: Function = ({
 }: Props): React.Element<any> => (
   <EnhancedTable
     collection={hierarchy}
-    tableId="orderErrors"
+    tableId="hierarchy"
     searchBy={[
       'severity',
       'error',
@@ -58,7 +58,7 @@ const HierarchyTable: Function = ({
       'info',
       'description',
     ]}
-    sortDefault={sortDefaults.orderErrors}
+    sortDefault={sortDefaults.hierarchy}
   >
     {({
       handleSearchChange,
@@ -166,9 +166,9 @@ export default compose(
     ({ order, ...rest }: Props): Object => ({
       hierarchy: order.HierarchyInfo
         ? map(order.HierarchyInfo, (hierarchy: Object, id: number) => ({
-            ...hierarchy,
-            id,
-          }))
+          ...hierarchy,
+          id,
+        }))
         : [],
       ...rest,
     })

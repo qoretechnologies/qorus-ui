@@ -13,6 +13,10 @@ export const sortDefaults = {
     historySortBy: 'workflowstatus',
     historySortByKey: { direction: 1, ignoreCase: true },
   },
+  hierarchy: {
+    sortBy: 'level',
+    sortByKey: { direction: 1, ignoreCase: true },
+  },
   instances: {
     sortBy: 'started',
     sortByKey: { direction: -1, ignoreCase: true },
@@ -20,6 +24,14 @@ export const sortDefaults = {
     historySortByKey: { direction: 1, ignoreCase: true },
   },
   orderErrors: {
+    sortBy: 'error',
+    sortByKey: { direction: -1, ignoreCase: true },
+  },
+  compactOrderErrors: {
+    sortBy: 'error',
+    sortByKey: { direction: -1, ignoreCase: true },
+  },
+  stepErrors: {
     sortBy: 'error',
     sortByKey: { direction: -1, ignoreCase: true },
   },

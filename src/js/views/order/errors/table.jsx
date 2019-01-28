@@ -49,6 +49,7 @@ type Props = {
   expanded: boolean,
   handleExpandClick: Function,
   handleCopyClick: Function,
+  tableId: string,
 };
 
 const ErrorsTable: Function = ({
@@ -58,11 +59,12 @@ const ErrorsTable: Function = ({
   compact,
   expanded,
   handleExpandClick,
+  tableId: tableId = 'orderErrors',
   handleCopyClick,
 }: Props): React.Element<Table> => (
   <EnhancedTable
     collection={errors}
-    tableId="orderErrors"
+    tableId={tableId}
     searchBy={[
       'severity',
       'error',
@@ -74,7 +76,7 @@ const ErrorsTable: Function = ({
       'info',
       'description',
     ]}
-    sortDefault={sortDefaults.orderErrors}
+    sortDefault={sortDefaults[tableId]}
   >
     {({
       handleSearchChange,
