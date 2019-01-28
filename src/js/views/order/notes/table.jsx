@@ -25,6 +25,9 @@ import {
 import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
 import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 import ContentByType from '../../../components/ContentByType';
+import Pull from '../../../components/Pull';
+import LoadMore from '../../../components/LoadMore';
+import Search from '../../../containers/search';
 
 type Props = {
   notes: Array<Object>,
@@ -49,10 +52,21 @@ const NotesList: Function = ({ notes }: Props): React.Element<any> => (
     }) => (
       <Table striped condensed fixed>
         <Thead>
-          <FixedRow>
+          <FixedRow className="toolbar-row">
+            <Pull right>
+              <LoadMore
+                canLoadMore={canLoadMore}
+                onLoadMore={handleLoadMore}
+                onLoadAll={handleLoadAll}
+                limit={limit}
+              />
+              <Search onSearchUpdate={handleSearchChange} resource="notes" />
+            </Pull>
+          </FixedRow>
+          <FixedRow {...{ onSortChange, sortData }}>
             <DescriptionColumnHeader name="note">Note</DescriptionColumnHeader>
             <AuthorColumnHeader name="username" />
-            <Th icon="saved" />
+            <Th icon="saved" name="saved" />
             <DateColumnHeader />
             <DateColumnHeader name="modified">Modified</DateColumnHeader>
           </FixedRow>
