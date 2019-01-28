@@ -77,7 +77,11 @@ const ValueMapsTable = ({
             <Th className="narrow" name="mapsize" iconName="info-sign">
               Mapsize
             </Th>
-            <Th classname="narrow" name="throws_exception" iconName="warning-sign">
+            <Th
+              classname="narrow"
+              name="throws_exception"
+              iconName="warning-sign"
+            >
               Throws
             </Th>
             <Th className="narrow" name="valuetype" iconName="code">
@@ -100,7 +104,7 @@ const ValueMapsTable = ({
               {collection.map(
                 (item: Object, index: number): React.Element<any> => (
                   <ValueMapsRow
-                    key={index}
+                    key={item.id}
                     first={index === 0}
                     data={item}
                     isActive={parseInt(paneId, 10) === item.id}

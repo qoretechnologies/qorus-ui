@@ -190,7 +190,7 @@ const ErrorsTable: Function = ({
             <Tbody {...props}>
               {collection.map(
                 (error: Object, index: number): React.Element<any> => (
-                  <Tr key={index} first={index === 0}>
+                  <Tr key={error.error_instanceid} first={index === 0}>
                     <NameColumn name={error.error} />
                     {!compact && <NameColumn name={error.step_name} />}
                     <Td className="medium">{error.severity}</Td>

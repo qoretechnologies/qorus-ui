@@ -95,13 +95,21 @@ const GroupsTable: Function = ({
         <Th name="jobs_count" title="Jobs" iconName={INTERFACE_ICONS.jobs}>
           {isTablet ? 'J' : 'Jobs'}
         </Th>
-        <Th name="vmaps_count" title="Vmaps" iconName={INTERFACE_ICONS.valuemaps}>
+        <Th
+          name="vmaps_count"
+          title="Vmaps"
+          iconName={INTERFACE_ICONS.valuemaps}
+        >
           {isTablet ? 'V' : 'Vmaps'}
         </Th>
         <Th name="roles_count" title="Roles" iconName={INTERFACE_ICONS.roles}>
           {isTablet ? 'R' : 'Roles'}
         </Th>
-        <Th name="mappers_count" title="Mappers" iconName={INTERFACE_ICONS.mappers}>
+        <Th
+          name="mappers_count"
+          title="Mappers"
+          iconName={INTERFACE_ICONS.mappers}
+        >
           {isTablet ? 'M' : 'Mappers'}
         </Th>
         <DescriptionColumnHeader name="description" />
@@ -114,7 +122,7 @@ const GroupsTable: Function = ({
             (group: Object, index: number): React.Element<Row> => (
               <Row
                 first={index === 0}
-                key={index}
+                key={group.id}
                 select={select}
                 updateDone={updateDone}
                 isTablet={isTablet}

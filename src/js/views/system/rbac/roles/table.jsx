@@ -86,7 +86,7 @@ const RolesTable: Function = ({
               {collection.map(
                 (role: Object, index: number): React.Element<RolesRow> => (
                   <RolesRow
-                    first={index === 0}
+                    first={role.name === 0}
                     key={index}
                     model={role}
                     {...rest}

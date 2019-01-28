@@ -97,7 +97,7 @@ const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
             <Tbody {...props}>
               {collection.map(
                 (step: Object, index: number): React.Element<any> => (
-                  <Tr key={index} first={index === 0}>
+                  <Tr key={step.audit_eventid} first={index === 0}>
                     <IdColumn className="medium">{step.audit_eventid}</IdColumn>
                     <NameColumn name={step.event} />
                     <Td className="normal">{step.audit_event_code}</Td>

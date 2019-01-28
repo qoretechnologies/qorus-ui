@@ -173,7 +173,7 @@ const WorkflowsTable: Function = ({
             (workflow: Object, index: number): React.Element<Row> => (
               <Row
                 first={index === 0}
-                key={index}
+                key={workflow.id}
                 isActive={workflow.id === parseInt(paneId, 10)}
                 openPane={openPane}
                 closePane={closePane}

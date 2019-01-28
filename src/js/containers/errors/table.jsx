@@ -118,7 +118,7 @@ const ErrorsTable: Function = ({
                 (error: Object, index: number): React.Element<ErrorRow> => (
                   <ErrorRow
                     first={index === 0}
-                    key={index}
+                    key={error.error}
                     data={error}
                     compact={compact}
                     type={type}

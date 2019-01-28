@@ -196,7 +196,7 @@ export default class OCMDView extends Component {
     return Object.keys(data).map(
       (c, index): React.Element<Item> => (
         <Item
-          key={index}
+          key={c}
           title={c}
           action={this.handleDropdownItemClick}
           selected={this.state.value === c}

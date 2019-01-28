@@ -120,7 +120,7 @@ const UsersTable: Function = ({
                 (user: Object, index: number): React.Element<any> => (
                   <UsersRow
                     first={index === 0}
-                    key={index}
+                    key={user.name}
                     model={user}
                     canEdit={canEdit}
                     canDelete={canDelete}

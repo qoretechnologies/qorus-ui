@@ -79,7 +79,11 @@ const PermsTable: Function = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <NameColumnHeader />
             <ActionColumnHeader />
-            <Th className="text normal" name="permission_type" iconName="info-sign">
+            <Th
+              className="text normal"
+              name="permission_type"
+              iconName="info-sign"
+            >
               Type
             </Th>
             <DescriptionColumnHeader />
@@ -92,7 +96,7 @@ const PermsTable: Function = ({
                 (role: Object, index: number): React.Element<PermsRow> => (
                   <PermsRow
                     first={index === 0}
-                    key={index}
+                    key={role.name}
                     model={role}
                     {...rest}
                   />
