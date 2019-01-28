@@ -1,24 +1,3 @@
-import { WORKFLOW_FILTERS } from '../constants/filters';
-
-const routes = {
-  workflows: {
-    date: '24h',
-    filter: WORKFLOW_FILTERS.ALL,
-  },
-  workflow: {
-    date: '24h',
-    filter: 'All',
-    tabId: 'list',
-  },
-  order: {
-    tabId: 'diagram',
-  },
-  jobs: {
-    date: '24h',
-  },
-  groups: {},
-};
-
 const changeQuery = (
   router: Object,
   location: Object,
@@ -38,6 +17,28 @@ const changeQuery = (
   });
 };
 
+const buildPageLinkWithQueries: Function = (
+  queryIdentifier: string,
+  tabId: string
+): Function => (location: Object): Object => {
+  if (queryIdentifier === 'tab') {
+    return {
+      ...location,
+      query: {
+        tab: tabId.toLowerCase(),
+      },
+    };
+  }
+
+  return {
+    ...location,
+    query: {
+      ...location.query,
+      [queryIdentifier]: tabId.toLowerCase(),
+    },
+  };
+};
+
 const isActive = (to, location) => location.startsWith(to);
 
-export { routes, isActive, changeQuery };
+export { isActive, changeQuery, buildPageLinkWithQueries };

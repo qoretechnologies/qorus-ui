@@ -7,6 +7,7 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Icon } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
 import { Link } from 'react-router';
+import { buildPageLinkWithQueries } from '../../../helpers/router';
 
 type Props = {
   title: string,
@@ -16,7 +17,8 @@ type Props = {
   handleClick: Function,
   compact: boolean,
   fontSize: number,
-  link?: string,
+  local?: boolean,
+  queryIdentifier: string,
 };
 
 const TITLE_BASE_SIZE: number = 16;
@@ -27,23 +29,43 @@ const CrumbTab: Function = ({
   handleClick,
   compact,
   fontSize,
-  link,
+  local,
+  queryIdentifier,
+  tabId,
 }: Props): React.Element<any> => (
   <div
     className={classnames('breadcrumb-tab', { active, compact })}
     onClick={handleClick}
     style={{ fontSize }}
   >
-    <Link to={link} className="non-decorated-link">
-      {title} {compact && <Icon iconName="caret-down" />}
-    </Link>
+    {compact ? (
+      <React.Fragment>
+        {title} <Icon iconName="caret-down" />
+      </React.Fragment>
+    ) : (
+      <React.Fragment>
+        {local ? (
+          title
+        ) : (
+          <Link
+            to={buildPageLinkWithQueries(queryIdentifier, tabId)}
+            className="non-decorated-link"
+          >
+            {title}
+          </Link>
+        )}
+      </React.Fragment>
+    )}
   </div>
 );
 
 export default compose(
   withHandlers({
-    handleClick: ({ tabId, active, onClick }): Function => (): any =>
-      active ? null : onClick ? onClick(tabId.toLowerCase()) : null,
+    handleClick: ({ tabId, active, onClick, local }): Function => (): any => {
+      if (!active && local && onClick) {
+        onClick(tabId.toLowerCase());
+      }
+    },
   }),
   mapProps(
     ({ title, ...rest }): Props => ({
