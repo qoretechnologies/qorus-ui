@@ -13,6 +13,7 @@ import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
 import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import ResizeObserver from 'resize-observer-polyfill';
+import { Link } from 'react-router';
 
 type Props = {
   tabs: Array<any>,
@@ -23,6 +24,7 @@ type Props = {
   compact?: boolean,
   queryIdentifier?: string,
   width: number,
+  local: boolean,
 };
 
 class CrumbTabs extends React.Component {
@@ -95,7 +97,13 @@ class CrumbTabs extends React.Component {
   };
 
   render () {
-    const { tabs, handleTabChange, tabQuery }: Props = this.props;
+    const {
+      tabs,
+      handleTabChange,
+      tabQuery,
+      queryIdentifier: queryIdentifier = 'tab',
+      local,
+    }: Props = this.props;
     const { tabsLen, showTabs } = this.state;
     const tabsCollapsed: boolean = tabs.length > tabsLen;
 
@@ -116,15 +124,26 @@ class CrumbTabs extends React.Component {
       <Pull className="breadcrumb-tabs" handleRef={this.handleRef}>
         {showTabs && [
           newTabs.map(
-            (tab: Object): React.Element<CrumbTab> => (
-              <CrumbTab
-                key={tab.title}
-                active={tab.tabId.toLowerCase() === tabQuery}
-                title={tab.title}
-                tabId={tab.tabId}
-                onClick={handleTabChange}
-              />
-            )
+            (tab: Object): React.Element<CrumbTab> =>
+              local ? (
+                <CrumbTab
+                  key={tab.title}
+                  active={tab.tabId.toLowerCase() === tabQuery}
+                  title={tab.title}
+                  tabId={tab.tabId}
+                  onClick={handleTabChange}
+                />
+              ) : (
+                <CrumbTab
+                  key={tab.title}
+                  active={tab.tabId.toLowerCase() === tabQuery}
+                  title={tab.title}
+                  tabId={tab.tabId}
+                  link={`${
+                    window.location.pathname
+                  }?${queryIdentifier}=${tab.tabId.toLowerCase()}`}
+                />
+              )
           ),
           leftoverTabs.length !== 0 && (
             <Popover
@@ -140,15 +159,25 @@ class CrumbTabs extends React.Component {
                         tab.tabId.toLowerCase() !== tabQuery
                     )
                     .map(
-                      (tab: Object): React.Element<MenuItem> => (
-                        <MenuItem
-                          key={tab.title}
-                          text={tab.title}
-                          onClick={() =>
-                            handleTabChange(tab.tabId.toLowerCase())
-                          }
-                        />
-                      )
+                      (tab: Object): React.Element<MenuItem> =>
+                        local ? (
+                          <MenuItem
+                            key={tab.title}
+                            text={tab.title}
+                            onClick={() =>
+                              handleTabChange(tab.tabId.toLowerCase())
+                            }
+                          />
+                        ) : (
+                          <Link
+                            to={`${
+                              window.location.pathname
+                            }?${queryIdentifier}=${tab.tabId.toLowerCase()}`}
+                            className="non-decorated-link"
+                          >
+                            <MenuItem key={tab.title} text={tab.title} />
+                          </Link>
+                        )
                     )}
                 </Menu>
               }
@@ -203,6 +232,7 @@ export default compose(
     }: Props): Props => ({
       tabQuery: local ? activeTab : tabQuery,
       handleTabChange: local ? onChange : handleTabChange,
+      local,
       ...rest,
     })
   ),

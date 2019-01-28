@@ -173,7 +173,7 @@ const WorkflowTable: Function = ({
             (order: Object, index: number): React.Element<Row> => (
               <Row
                 first={index === 0}
-                key={index}
+                key={order.id}
                 date={date}
                 isTablet={isTablet}
                 searchPage={searchPage}

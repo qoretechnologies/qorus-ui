@@ -135,7 +135,7 @@ class SQLCache extends Component {
             <Box top scrollY>
               {Object.keys(collection).map((col, index) => (
                 <Table
-                  key={index}
+                  key={col}
                   name={col}
                   data={collection[col]}
                   onClick={this.handleClearDatasourceClick}

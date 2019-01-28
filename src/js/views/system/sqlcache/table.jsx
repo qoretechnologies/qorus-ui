@@ -102,7 +102,7 @@ const SQLCacheTable: Function = ({
                 {collection.map((cache, index) => (
                   <CacheRow
                     first={index === 0}
-                    key={index}
+                    key={cache.name}
                     datasource={name}
                     name={cache.name}
                     count={cache.count}

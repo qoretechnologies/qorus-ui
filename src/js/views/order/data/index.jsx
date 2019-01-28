@@ -14,7 +14,7 @@ type Props = {
 
 const DataView = (props: Props) => (
   <Box top fill>
-    <Tabs id="orderDataTabs" active="static" noContainer>
+    <Tabs id="orderDataTabs" active="static" local noContainer>
       <Pane name="Static">
         <StaticView {...props} />
       </Pane>
