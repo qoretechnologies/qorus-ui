@@ -72,7 +72,11 @@ export default class DiagramView extends Component {
       <MasonryPanel>
         <Box top={top} key="errors">
           <PaneItem title="Order Error Instances">
-            <Errors order={this.props.order} compact />
+            <Errors
+              order={this.props.order}
+              tableId="compactOrderErrors"
+              compact
+            />
           </PaneItem>
         </Box>
       </MasonryPanel>,

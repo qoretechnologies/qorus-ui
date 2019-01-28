@@ -15,6 +15,7 @@ type ErrorsViewProps = {
   onCSVClick: Function,
   compact?: boolean,
   handleFilterChange: Function,
+  tableId: string,
 };
 
 const ErrorsView: Function = ({
@@ -22,12 +23,14 @@ const ErrorsView: Function = ({
   onCSVClick,
   compact,
   handleFilterChange,
+  tableId,
 }: ErrorsViewProps) => (
   <ErrorsTable
     compact={compact}
     errors={errors}
     onCSVClick={onCSVClick}
     onFilterChange={handleFilterChange}
+    tableId={tableId}
   />
 );
 
@@ -83,5 +86,5 @@ export default compose(
   }),
   connect(selector),
   csv('errors', 'order_errors'),
-  onlyUpdateForKeys(['errors', 'compact', 'errorFilter'])
+  onlyUpdateForKeys(['errors', 'compact', 'errorFilter', 'tableId'])
 )(ErrorsView);
