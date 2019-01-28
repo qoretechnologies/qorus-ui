@@ -161,7 +161,7 @@ const Property: Function = ({
             </Thead>
             <Tbody>
               {collection.map((datum: Object, key: number) => (
-                <Tr key={key} first={key === 0}>
+                <Tr key={datum.name} first={key === 0}>
                   <Td className="name large">{datum.name}</Td>
                   <Td className="text">
                     <Text text={datum.prop} renderTree caseSensitiveTree />

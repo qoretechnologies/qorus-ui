@@ -35,7 +35,7 @@ const Code: Function = ({
       {Object.keys(data).map(
         (name: string, index: number): React.Element<any> => (
           <Section
-            key={index}
+            key={name}
             name={name}
             items={data[name]}
             onItemClick={handleItemClick}

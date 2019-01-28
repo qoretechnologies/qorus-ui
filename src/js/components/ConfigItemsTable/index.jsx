@@ -47,7 +47,7 @@ const ConfigItemsContainer: Function = ({
   dispatchAction,
   intrf,
 }: ConfigItemsContainerProps): React.Element<any> => {
-  function renderValueContent(item: Object, belongsTo: string) {
+  function renderValueContent (item: Object, belongsTo: string) {
     const saveValue = newValue => {
       dispatchAction(
         actions[intrf].updateConfigItem,
@@ -177,7 +177,7 @@ const ConfigItemsContainer: Function = ({
                         {props => (
                           <Tbody {...props}>
                             {collection.map((item: Object, index: number) => (
-                              <Tr key={index} first={index === 0}>
+                              <Tr key={item.name} first={index === 0}>
                                 <NameColumn name={item.name} />
                                 <Td className="text">
                                   <ContentByType content={item.default_value} />

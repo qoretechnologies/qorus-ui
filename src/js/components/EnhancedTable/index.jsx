@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
@@ -60,5 +59,9 @@ export default compose(
     })
   ),
   loadMore('collection', null, true, 50),
-  sort(({ tableId }) => tableId, 'collection', ({ sortDefault }) => sortDefault)
+  sort(
+    ({ tableId }: EnhancedTableProps) => tableId,
+    'collection',
+    ({ sortDefault }: EnhancedTableProps) => sortDefault
+  )
 )(EnhancedTable);

@@ -76,7 +76,7 @@ const MappersTable = ({
             <Tbody {...props}>
               {collection.map(
                 (item: Object, index: number): React.Element<any> => (
-                  <Tr key={index} first={index === 0}>
+                  <Tr key={item.mapperid} first={index === 0}>
                     <IdColumn>{item.mapperid}</IdColumn>
                     <NameColumn
                       name={normalizeName(item)}

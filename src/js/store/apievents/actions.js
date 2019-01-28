@@ -18,7 +18,6 @@ import { notifications } from '../ui/actions';
 import { pipeline } from '../../helpers/apievents';
 import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
 import {
-  getProcessObjectType,
   getProcessObjectInterfaceId,
   getProcessObjectInterface,
 } from '../../helpers/system';
@@ -471,19 +470,6 @@ const handleEvent = (url, data, dispatch, state) => {
           } else if (state.api.services.sync) {
             dispatch(services.addNew(info.serviceid));
           }
-        }
-        break;
-      case 'SERVICE_AUTOSTART_CHANGE':
-        if (state.api.services.sync) {
-          pipeline(
-            eventstr,
-            services.setAutostart,
-            {
-              id: info.serviceid,
-              autostart: info.autostart,
-            },
-            dispatch
-          );
         }
         break;
       case 'SERVICE_CONFIG_ITEM_CHANGE': {

@@ -53,7 +53,6 @@ class ManageModal extends Component {
     const {
       optimisticDispatch,
       remoteType,
-      originalName,
       remotes,
       onClose,
       edit,
@@ -113,8 +112,7 @@ class ManageModal extends Component {
           optimisticDispatch(
             actions.remotes.manageConnection,
             remoteType,
-            data,
-            originalName
+            data
           );
           onClose();
         }
@@ -126,24 +124,8 @@ class ManageModal extends Component {
     this.setState({ options });
   };
 
-  render() {
-    const {
-      onClose,
-      edit,
-      remoteType,
-      user,
-      type,
-      name,
-      db,
-      charset,
-      port,
-      host,
-      options,
-      opts,
-      pass,
-      desc,
-      url,
-    } = this.props;
+  render () {
+    const { onClose, edit, name, opts, desc, url } = this.props;
 
     return (
       <Modal hasFooter>

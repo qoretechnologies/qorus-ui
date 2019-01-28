@@ -242,6 +242,12 @@ const modifyOrder: Object = {
   },
 };
 
+const addNote = {
+  next(state) {
+    return state;
+  }
+}
+
 const addNoteWebsocket = {
   next(
     state: Object = initialState,
@@ -652,6 +658,7 @@ export {
   addOrder as ADDORDER,
   modifyOrder as MODIFYORDER,
   addNoteWebsocket as ADDNOTEWEBSOCKET,
+  addNote as ADDNOTE,
   updateDone as UPDATEDONE,
   fetchData as FETCHDATA,
   unsync as UNSYNC,

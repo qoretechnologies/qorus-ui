@@ -133,7 +133,7 @@ const ConnectionTable: Function = ({
             (remote: Object, index: number): React.Element<any> => (
               <ConnectionRow
                 first={index === 0}
-                key={index}
+                key={remote.name}
                 isActive={remote.name === paneId}
                 hasAlerts={remote.alerts.length > 0}
                 openPane={openPane}
