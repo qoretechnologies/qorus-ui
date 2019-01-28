@@ -23,7 +23,11 @@ type Props = {
 
 const menu = {
   System: [
-    { name: 'Dashboard', icon: 'timeline-bar-chart', link: '/' },
+    {
+      name: 'Dashboard',
+      icon: 'timeline-bar-chart',
+      link: '/system/dashboard',
+    },
     { name: 'Alerts', icon: 'warning-sign', link: '/system/alerts' },
     { name: 'Cluster', icon: 'heat-grid', link: '/system/cluster' },
     {
@@ -116,7 +120,11 @@ let MenuElement: Function = ({
   intl: { formatMessage },
   handleClick,
 }) => (
-  <Link to={link} className="non-decorated-link">
+  <Link
+    to={link}
+    className="non-decorated-link"
+    activeClassName="active-sidebar-item"
+  >
     <MenuItem iconName={iconName} text={!menuCollapsed && name}>
       {submenu &&
         submenu.map(item => (

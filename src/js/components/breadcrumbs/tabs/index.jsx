@@ -14,6 +14,7 @@ import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import ResizeObserver from 'resize-observer-polyfill';
 import { Link } from 'react-router';
+import { buildPageLinkWithQueries } from '../../../helpers/router';
 
 type Props = {
   tabs: Array<any>,
@@ -124,26 +125,17 @@ class CrumbTabs extends React.Component {
       <Pull className="breadcrumb-tabs" handleRef={this.handleRef}>
         {showTabs && [
           newTabs.map(
-            (tab: Object): React.Element<CrumbTab> =>
-              local ? (
-                <CrumbTab
-                  key={tab.title}
-                  active={tab.tabId.toLowerCase() === tabQuery}
-                  title={tab.title}
-                  tabId={tab.tabId}
-                  onClick={handleTabChange}
-                />
-              ) : (
-                <CrumbTab
-                  key={tab.title}
-                  active={tab.tabId.toLowerCase() === tabQuery}
-                  title={tab.title}
-                  tabId={tab.tabId}
-                  link={`${
-                    window.location.pathname
-                  }?${queryIdentifier}=${tab.tabId.toLowerCase()}`}
-                />
-              )
+            (tab: Object): React.Element<CrumbTab> => (
+              <CrumbTab
+                key={tab.title}
+                active={tab.tabId.toLowerCase() === tabQuery}
+                title={tab.title}
+                tabId={tab.tabId}
+                onClick={handleTabChange}
+                local={local}
+                queryIdentifier={queryIdentifier}
+              />
+            )
           ),
           leftoverTabs.length !== 0 && (
             <Popover
@@ -170,9 +162,10 @@ class CrumbTabs extends React.Component {
                           />
                         ) : (
                           <Link
-                            to={`${
-                              window.location.pathname
-                            }?${queryIdentifier}=${tab.tabId.toLowerCase()}`}
+                            to={buildPageLinkWithQueries(
+                              queryIdentifier,
+                              tab.tabId
+                            )}
                             className="non-decorated-link"
                           >
                             <MenuItem key={tab.title} text={tab.title} />
