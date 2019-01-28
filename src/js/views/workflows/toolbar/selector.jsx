@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 
 import actions from '../../../store/api/actions';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
+import Checkbox from '../../../components/checkbox';
+import { CHECKBOX_STATES } from '../../../constants/checkbox';
 
 type Props = {
   selected: string,
@@ -31,16 +33,8 @@ const ToolbarSelector: Function = ({
   disabled,
 }: Props): React.Element<any> => (
   <Dropdown disabled={disabled}>
-    <Control
-      iconName={
-        selected === 'all'
-          ? 'selection'
-          : selected === 'some'
-          ? 'remove'
-          : 'circle'
-      }
-    >
-      {selectedCount}
+    <Control>
+      <Checkbox checked={CHECKBOX_STATES[selected]} /> {selectedCount || null}
     </Control>
     <Item title="All" onClick={selectAll} />
     <Item title="None" onClick={selectNone} />
