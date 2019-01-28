@@ -92,37 +92,39 @@ export default class NotesView extends Component {
 
   render() {
     return (
-      <Box top scrollY>
-        {this.state.error && (
-          <Callout
-            intent={Intent.DANGER}
-            iconName="warning-sign"
-            title="Note too short"
-          >
-            Please type at least 3 characters
-          </Callout>
-        )}
-        <form onSubmit={this.handleFormSubmit}>
-          <textarea
-            className="pt-input pt-fill"
-            placeholder="Type note... (CTRL/CMD+Enter to submit)"
-            rows="2"
-            onChange={this.handleTextareaChange}
-            onKeyDown={this.handleKeyUp}
-            value={this.state.value}
-          />
-          <Toolbar mt mb>
-            <ButtonGroup>
-              <Button
-                type="submit"
-                text="Add note"
-                iconName="add"
-                intent={Intent.PRIMARY}
-                big
-              />
-            </ButtonGroup>
-          </Toolbar>
-        </form>
+      <Box top>
+        <PaneItem title="New note">
+          {this.state.error && (
+            <Callout
+              intent={Intent.DANGER}
+              iconName="warning-sign"
+              title="Note too short"
+            >
+              Please type at least 3 characters
+            </Callout>
+          )}
+          <form onSubmit={this.handleFormSubmit}>
+            <textarea
+              className="pt-input pt-fill"
+              placeholder="Type note... (CTRL/CMD+Enter to submit)"
+              rows="2"
+              onChange={this.handleTextareaChange}
+              onKeyDown={this.handleKeyUp}
+              value={this.state.value}
+            />
+            <Toolbar mt mb>
+              <ButtonGroup>
+                <Button
+                  type="submit"
+                  text="Add note"
+                  iconName="add"
+                  intent={Intent.PRIMARY}
+                  big
+                />
+              </ButtonGroup>
+            </Toolbar>
+          </form>
+        </PaneItem>
         <PaneItem title="Notes history">
           <NotesList notes={this.props.notes} />
         </PaneItem>
