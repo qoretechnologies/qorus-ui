@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import upperFirst from 'lodash/upperFirst';
+import isObject from 'lodash/isObject';
 
 import {
   Table,
@@ -38,7 +39,7 @@ const GroupDetailTable: Function = ({
 }: Props): React.Element<any> => {
   const renderColumns: Function = (item: Object) => [
     <NameColumn
-      name={item.name}
+      name={isObject(item) ? item.name : item}
       link={buildLinkToInterfaceId(type, item.id)}
       type={type}
     />,
