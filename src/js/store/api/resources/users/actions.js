@@ -54,7 +54,7 @@ const remove: Function = createAction(
       async () =>
         await fetchJson(
           'DELETE',
-          `${settings.REST_BASE_URL}/users/${username}`
+          `${settings.REST_BASE_URL}/users/${encodeURIComponent(username)}`
         ),
       'Deleting user...',
       'User successfuly deleted',
@@ -84,13 +84,17 @@ const update: Function = createAction(
 
     await fetchWithNotifications(
       async () =>
-        await fetchJson('PUT', `${settings.REST_BASE_URL}/users/${username}`, {
-          body: JSON.stringify({
-            name,
-            username,
-            roles,
-          }),
-        }),
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/users/${encodeURIComponent(username)}`,
+          {
+            body: JSON.stringify({
+              name,
+              username,
+              roles,
+            }),
+          }
+        ),
       'Updating user...',
       'User successfuly updated',
       dispatch
