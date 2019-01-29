@@ -22,11 +22,19 @@ const InterfaceTag: Function = ({
   className,
   flex: flex = '1 1 auto',
 }: InterfaceTagProps): React.Element<any> => (
-  <Flex flexFlow="row" flex={flex} className={`interface-tag ${className}`}>
+  <Flex
+    flexFlow="row"
+    flex={flex}
+    className={`interface-tag ${className || ''}`}
+  >
     <Icon iconName={INTERFACE_ICONS[type.toLowerCase()]} />
     <Flex flexFlow="row" className="interface-tag-content">
       {link ? (
-        <Link to={link} className="resource-name-link">
+        <Link
+          to={link}
+          className="resource-name-link"
+          onClick={e => e.stopPropagation()}
+        >
           {title}
         </Link>
       ) : (

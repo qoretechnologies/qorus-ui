@@ -16,6 +16,8 @@ const INTERFACE_ICONS = {
   user: 'people',
   'user-connection': 'people',
   users: 'people',
+  role: 'settings',
+  roles: 'settings',
   sla: 'time',
   slas: 'time',
   valuemap: 'map',

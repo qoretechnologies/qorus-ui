@@ -2,6 +2,7 @@
 import size from 'lodash/size';
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
+import isObject from 'lodash/isObject';
 
 import { normalizeName } from '../components/utils';
 import { INTERFACE_ID_KEYS, INTERFACE_ID_LINKS } from '../constants/interfaces';
@@ -47,14 +48,14 @@ const rebuildConfigHash: Function = (
   const configObj: Object = pullConfigValues
     ? pullConfigFromStepinfo(configHash)
     : {
-        [normalizeName(model)]: map(configHash, mapConfigToArray(model.id)),
-      };
+      [normalizeName(model)]: map(configHash, mapConfigToArray(model.id)),
+    };
 
   let resultObj = { ...configObj };
 
   if (model.global_config) {
     const globalConfigObj: Object = {
-      ['Global Config']: map(model.global_config, mapConfigToArray(model.id)),
+      'Global Config': map(model.global_config, mapConfigToArray(model.id)),
     };
 
     resultObj = { ...globalConfigObj, ...resultObj };
@@ -69,6 +70,11 @@ const rebuildConfigHash: Function = (
 
 const normalizeItem: Function = (item: Object): Object => {
   let normalized: Object = item;
+
+  //! Check if the item passed is actually object
+  if (!isObject(normalized)) {
+    return normalized;
+  }
 
   if (!normalized.normalized) {
     if (item.id) {
