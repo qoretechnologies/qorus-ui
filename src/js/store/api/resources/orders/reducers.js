@@ -17,7 +17,7 @@ const initialState: Object = {
 };
 
 const fetchOrders: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { orders, fetchMore },
@@ -46,7 +46,7 @@ const fetchOrders: Object = {
 };
 
 const changeOffset: Object = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { newOffset },
@@ -59,7 +59,7 @@ const changeOffset: Object = {
 };
 
 const changeServerSort: Object = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { sort },
@@ -72,7 +72,7 @@ const changeServerSort: Object = {
 };
 
 const selectOrder: Object = {
-  next(
+  next (
     state = initialState,
     {
       payload: { id },
@@ -96,7 +96,7 @@ const selectOrder: Object = {
 };
 
 const selectAll = {
-  next(state: Object = initialState) {
+  next (state: Object = initialState) {
     const data = [...state.data];
     const newData = data.map(w => ({ ...w, ...{ _selected: true } }));
 
@@ -105,7 +105,7 @@ const selectAll = {
 };
 
 const selectNone = {
-  next(state: Object = initialState) {
+  next (state: Object = initialState) {
     const data = [...state.data];
     const newData = data.map(w => {
       const copy = { ...w };
@@ -122,7 +122,7 @@ const selectNone = {
 };
 
 const selectInvert = {
-  next(state: Object = initialState) {
+  next (state: Object = initialState) {
     const data = [...state.data];
     const newData = data.map(w => ({ ...w, ...{ _selected: !w._selected } }));
 
@@ -131,14 +131,14 @@ const selectInvert = {
 };
 
 const unselectAll = {
-  next(state: Object) {
+  next (state: Object) {
     const data = [...state.data];
     const newData = data.map(w =>
       w._selected
         ? {
-            ...w,
-            ...{ _selected: false },
-          }
+          ...w,
+          ...{ _selected: false },
+        }
         : w
     );
 
@@ -147,7 +147,7 @@ const unselectAll = {
 };
 
 const addOrder: Object = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { events },
@@ -190,7 +190,7 @@ const addOrder: Object = {
 
     return state;
   },
-  throw(state: Object = initialState, action: Object): Object {
+  throw (state: Object = initialState, action: Object): Object {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -200,7 +200,7 @@ const addOrder: Object = {
 };
 
 const modifyOrder: Object = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { events },
@@ -233,7 +233,7 @@ const modifyOrder: Object = {
 
     return state;
   },
-  throw(state: Object = initialState, action: Object): Object {
+  throw (state: Object = initialState, action: Object): Object {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -243,13 +243,13 @@ const modifyOrder: Object = {
 };
 
 const addNote = {
-  next(state) {
+  next (state) {
     return state;
-  }
-}
+  },
+};
 
 const addNoteWebsocket = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { events },
@@ -277,7 +277,7 @@ const addNoteWebsocket = {
 
     return state;
   },
-  throw(state: Object = initialState, action: Object): Object {
+  throw (state: Object = initialState, action: Object): Object {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -287,7 +287,7 @@ const addNoteWebsocket = {
 };
 
 const updateDone = {
-  next(
+  next (
     state: Object,
     {
       payload: { id },
@@ -306,7 +306,7 @@ const updateDone = {
 
     return state;
   },
-  throw(state: Object, action: Object) {
+  throw (state: Object, action: Object) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -316,7 +316,7 @@ const updateDone = {
 };
 
 const fetchData: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { id, type, data },
@@ -332,7 +332,7 @@ const fetchData: Object = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state: Object, action: Object) {
+  throw (state: Object, action: Object) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -342,7 +342,7 @@ const fetchData: Object = {
 };
 
 const orderAction: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { ids, action, result },
@@ -395,7 +395,7 @@ const orderAction: Object = {
 };
 
 const skipStep: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { orderId, stepid, ind },
@@ -422,7 +422,7 @@ const skipStep: Object = {
 };
 
 const schedule: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { id, date, error, origStatus },
@@ -449,7 +449,7 @@ const schedule: Object = {
 };
 
 const setPriority: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { id, priority },
@@ -465,52 +465,56 @@ const setPriority: Object = {
   },
 };
 
+// Locking / unlocking
 const lock: Object = {
-  next(
+  next (state) {
+    return state;
+  },
+};
+const lockWs: Object = {
+  next (
     state: Object,
     {
-      payload: { id, note, username, type },
+      payload: { events },
     }: {
-      payload: Object,
-      id: number,
-      note: string,
-      username: string,
-      type: string,
+      events: Array<Object>,
     }
   ): Object {
     const data = [...state.data];
-    const order: ?Object = data.find((ord: Object): boolean => ord.id === id);
+    let newData = data;
 
-    if (order) {
-      const currentNotes = order.notes || [];
-      const notes = [
-        ...currentNotes,
-        {
-          saved: true,
-          username,
-          note,
-        },
-      ];
+    events.forEach(({ id, username, note }: Object) => {
+      const order: ?Object = data.find((ord: Object): boolean => ord.id === id);
 
-      const newData = updateItemWithId(
-        id,
-        {
-          operator_lock: type === 'lock' ? username : null,
-          notes,
-          note_count: order.note_count + 1,
-        },
-        data
-      );
+      if (order) {
+        const currentNotes = order.notes || [];
+        const notes = [
+          ...currentNotes,
+          {
+            saved: true,
+            username,
+            note,
+          },
+        ];
 
-      return { ...state, ...{ data: newData } };
-    }
+        newData = updateItemWithId(
+          id,
+          {
+            operator_lock: username,
+            notes,
+            note_count: order.note_count + 1,
+          },
+          data
+        );
+      }
+    });
 
-    return state;
+    return { ...state, ...{ data: newData } };
   },
 };
 
 const updateErrors: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { id, errors },
@@ -536,7 +540,7 @@ const updateErrors: Object = {
 };
 
 const updateHierarchy: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { id, hierarchy, error },
@@ -550,7 +554,7 @@ const updateHierarchy: Object = {
     if (error) {
       return state;
     }
-    
+
     const data = updateItemWithId(
       id,
       {
@@ -564,7 +568,7 @@ const updateHierarchy: Object = {
 };
 
 const updateStepInstances: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { id, steps, error },
@@ -592,7 +596,7 @@ const updateStepInstances: Object = {
 };
 
 const fetchYamlData: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { id, yamlData },
@@ -615,7 +619,7 @@ const fetchYamlData: Object = {
 };
 
 const updateSensitiveData: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { newdata, id, skey, svalue },
@@ -643,13 +647,13 @@ const updateSensitiveData: Object = {
 };
 
 const updateData: Object = {
-  next(state: Object): Object {
+  next (state: Object): Object {
     return state;
   },
 };
 
 const unsync = {
-  next() {
+  next () {
     return { ...initialState };
   },
 };
@@ -676,6 +680,7 @@ export {
   selectInvert as SELECTINVERT,
   unselectAll as UNSELECTALL,
   lock as LOCK,
+  lockWs as LOCKWS,
   setPriority as SETPRIORITY,
   updateStepInstances as UPDATESTEPINSTANCES,
   updateData as UPDATEDATA,

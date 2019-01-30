@@ -231,6 +231,7 @@ const setPriority: Function = createAction(
   }
 );
 
+const lockWs: Function = createAction('ORDERS_LOCKWS', events => ({ events }));
 const lock: Function = createAction(
   'ORDERS_LOCK',
   (
@@ -253,8 +254,6 @@ const lock: Function = createAction(
       `Order ${id} ${type === 'lock' ? 'locked' : 'unlocked'}`,
       dispatch
     );
-
-    return { id, username, note, type };
   }
 );
 
@@ -423,6 +422,7 @@ export {
   changeServerSort,
   select,
   lock,
+  lockWs,
   setPriority,
   updateStepInstances,
   fetchYamlData,
