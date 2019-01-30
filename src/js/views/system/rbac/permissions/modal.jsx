@@ -13,7 +13,7 @@ export default class AddRoleModal extends Component {
     model?: Object,
     title: string,
     perms: Array<string>,
-  };
+  } = this.props;
 
   state: {
     error: ?string,

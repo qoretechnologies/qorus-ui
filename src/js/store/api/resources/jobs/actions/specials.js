@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import queryString from 'query-string';
+import queryString from 'qs';
 import isArray from 'lodash/isArray';
 
 import {
