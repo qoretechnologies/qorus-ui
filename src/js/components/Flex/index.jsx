@@ -27,8 +27,10 @@ const Flex: Function = ({
   scrollY,
   flexRef,
   id,
+  title,
 }: FlexProps): React.Element<any> => (
   <div
+    title={title}
     style={{
       ...style,
       display,

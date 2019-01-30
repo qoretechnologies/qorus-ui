@@ -32,6 +32,7 @@ const Name: Function = ({ link, name, hasAlerts }: NameProps): any =>
   link ? (
     <Link
       to={link}
+      title={name}
       className="resource-name-link"
       title={name}
       onClick={e => e.stopPropagation()}

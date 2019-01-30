@@ -26,6 +26,7 @@ const InterfaceTag: Function = ({
     flexFlow="row"
     flex={flex}
     className={`interface-tag ${className || ''}`}
+    title={title}
   >
     <Icon iconName={INTERFACE_ICONS[type.toLowerCase()]} />
     <Flex flexFlow="row" className="interface-tag-content">
