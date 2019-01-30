@@ -3,7 +3,6 @@ import React from 'react';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
-import moment from 'moment';
 import includes from 'lodash/includes';
 import mapProps from 'recompose/mapProps';
 
@@ -15,13 +14,10 @@ import {
   Th,
   EditableCell,
 } from '../../../components/new_table';
-import Date from '../../../components/date';
-import Datepicker from '../../../components/datepicker';
 import actions from '../../../store/api/actions';
 import { ORDER_ACTIONS, ALL_ORDER_STATES } from '../../../constants/orders';
 import PaneItem from '../../../components/pane_item';
 import withDispatch from '../../../hocomponents/withDispatch';
-import { ButtonGroup } from '@blueprintjs/core';
 import ContentByType from '../../../components/ContentByType';
 import { DateColumn, DateColumnHeader } from '../../../components/DateColumn';
 import { IdColumnHeader, IdColumn } from '../../../components/IdColumn';
@@ -43,6 +39,7 @@ type Props = {
   scheduled?: string,
   synchronous?: boolean,
   label: string,
+  optimisticDispatch: Function,
 };
 
 const DiagramInfoTable: Function = ({
@@ -98,15 +95,9 @@ const DiagramInfoTable: Function = ({
         <Tr>
           <DateColumnHeader>Scheduled</DateColumnHeader>
           {includes(ORDER_ACTIONS[workflowstatus], 'schedule') ? (
-            <Td>
-              <ButtonGroup>
-                <Datepicker
-                  date={scheduled}
-                  onApplyDate={handleSchedule}
-                  futureOnly
-                />
-              </ButtonGroup>
-            </Td>
+            <DateColumn editable onDateChange={handleSchedule}>
+              {scheduled}
+            </DateColumn>
           ) : (
             <DateColumn>{scheduled}</DateColumn>
           )}
@@ -128,12 +119,9 @@ export default compose(
       id,
       workflowstatus,
     }: Props): Function => (date: string): void => {
-      optimisticDispatch(
-        actions.orders.schedule,
-        id,
-        moment(date).format(),
-        workflowstatus
-      );
+      console.log(date);
+
+      optimisticDispatch(actions.orders.schedule, id, date, workflowstatus);
     },
     handlePriorityChange: ({ id, optimisticDispatch }: Props): Function => (
       priority: number
