@@ -95,86 +95,82 @@ export default class StepModal extends Component {
     const { step } = this.props;
     const { class: classData } = step;
 
-    return (
-      <Box top fill>
-        {classData ? (
-          <Tabs className="step-info" active="code" noContainer>
-            <Pane name="Code">
-              <InfoHeader model={classData} />
-              <SourceCode
-                lineOffset={parseInt(classData.offset, 10)}
-                language={classData.language}
-              >
-                {classData.body}
-              </SourceCode>
-            </Pane>
-            <Pane name="Class Info">
-              <InfoTable
-                object={{
-                  ..._.omit(classData, 'offset'),
-                  source: `${classData.source}:${classData.offset}`,
-                }}
-                omit={['body', 'type', 'language_info']}
-              />
-            </Pane>
-            <Pane name="Step Info">
-              <InfoTable object={step} omit={['class', 'functions']} />
-            </Pane>
-            {this.props.step.config && (
-              <Pane key="step-info" name="Config">
-                <ConfigItemsTable
-                  items={rebuildConfigHash(this.props.step)}
-                  intrf="workflows"
-                />
-              </Pane>
-            )}
-          </Tabs>
-        ) : (
-          <Tabs
-            className="step-info"
-            active={this.props.step.functions[0].type}
-            noContainer
+    return classData ? (
+      <Tabs className="step-info" active="code" noContainer>
+        <Pane name="Code">
+          <InfoHeader model={classData} />
+          <SourceCode
+            lineOffset={parseInt(classData.offset, 10)}
+            language={classData.language}
           >
-            {this.props.step.functions.map(func => (
-              <Pane key={func.type} name={_.capitalize(func.type)}>
-                <Tabs
-                  className="step-info__func"
-                  type="pills"
-                  active="code"
-                  noContainer
-                >
-                  <Pane name="Code">
-                    <InfoHeader model={func} />
-                    <SourceCode lineOffset={parseInt(func.offset, 10)}>
-                      {func.body}
-                    </SourceCode>
-                  </Pane>
-                  <Pane name="Function Info">
-                    <InfoTable
-                      object={{
-                        ..._.omit(func, 'offset'),
-                        source: `${func.source}:${func.offset}`,
-                      }}
-                      omit={['body', 'type']}
-                    />
-                  </Pane>
-                </Tabs>
+            {classData.body}
+          </SourceCode>
+        </Pane>
+        <Pane name="Class Info">
+          <InfoTable
+            object={{
+              ..._.omit(classData, 'offset'),
+              source: `${classData.source}:${classData.offset}`,
+            }}
+            omit={['body', 'type', 'language_info']}
+          />
+        </Pane>
+        <Pane name="Step Info">
+          <InfoTable object={step} omit={['class', 'functions']} />
+        </Pane>
+        {this.props.step.config && (
+          <Pane key="step-info" name="Config">
+            <ConfigItemsTable
+              items={rebuildConfigHash(this.props.step)}
+              intrf="workflows"
+            />
+          </Pane>
+        )}
+      </Tabs>
+    ) : (
+      <Tabs
+        className="step-info"
+        active={this.props.step.functions[0].type}
+        noContainer
+      >
+        {this.props.step.functions.map(func => (
+          <Pane key={func.type} name={_.capitalize(func.type)}>
+            <Tabs
+              className="step-info__func"
+              type="pills"
+              active="code"
+              noContainer
+            >
+              <Pane name="Code">
+                <InfoHeader model={func} />
+                <SourceCode lineOffset={parseInt(func.offset, 10)}>
+                  {func.body}
+                </SourceCode>
               </Pane>
-            ))}
-            <Pane key="step-info" name="Step Info">
-              <InfoTable object={this.props.step} omit={['functions']} />
-            </Pane>
-            {this.props.step.config && (
-              <Pane key="step-info" name="Config">
-                <ConfigItemsTable
-                  items={rebuildConfigHash(this.props.step)}
-                  intrf="workflows"
+              <Pane name="Function Info">
+                <InfoTable
+                  object={{
+                    ..._.omit(func, 'offset'),
+                    source: `${func.source}:${func.offset}`,
+                  }}
+                  omit={['body', 'type']}
                 />
               </Pane>
-            )}
-          </Tabs>
+            </Tabs>
+          </Pane>
+        ))}
+        <Pane key="step-info" name="Step Info">
+          <InfoTable object={this.props.step} omit={['functions']} />
+        </Pane>
+        {this.props.step.config && (
+          <Pane key="step-info" name="Config">
+            <ConfigItemsTable
+              items={rebuildConfigHash(this.props.step)}
+              intrf="workflows"
+            />
+          </Pane>
         )}
-      </Box>
+      </Tabs>
     );
   }
 
@@ -194,10 +190,12 @@ export default class StepModal extends Component {
    */
   render() {
     return (
-      <Modal width="70vw">
+      <Modal width="70vw" height={600}>
         {this.renderHeader(this.props.step ? this.props.step : this.props)}
         <Modal.Body>
-          {this.props.step ? this.renderBody() : this.renderLoader()}
+          <Box top fill>
+            {this.props.step ? this.renderBody() : this.renderLoader()}
+          </Box>
         </Modal.Body>
       </Modal>
     );
