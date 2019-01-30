@@ -45,7 +45,7 @@ const handleEvent = (url, data, dispatch, state) => {
     );
 
   dt.forEach(d => {
-    const { info, eventstr, classstr } = d;
+    const { info, eventstr, classstr, caller } = d;
 
     switch (eventstr) {
       case 'NODE_INFO':
@@ -511,6 +511,22 @@ const handleEvent = (url, data, dispatch, state) => {
           } else if (state.api.workflows.sync) {
             dispatch(workflows.addNew(info.workflowid));
           }
+        }
+        break;
+      case 'WORKFLOW_DATA_LOCKED':
+      case 'WORKFLOW_DATA_UNLOCKED':
+        if (isInterfaceLoaded('orders', info.workflow_instanceid)) {
+          pipeline(
+            'LOCK_OPERATION',
+            orders.lockWs,
+            {
+              id: info.workflow_instanceid,
+              note: info.note,
+              username:
+                eventstr === 'WORKFLOW_DATA_LOCKED' ? caller.user : null,
+            },
+            dispatch
+          );
         }
         break;
       case 'WORKFLOW_DATA_SUBMITTED': {
