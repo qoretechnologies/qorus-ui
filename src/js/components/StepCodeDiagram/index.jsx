@@ -841,35 +841,47 @@ export default class StepsTab extends Component {
         >
           <rect {...this.getDefaultParams()} />
           <foreignObject
-            x={4}
-            y={40}
-            width={this.getBoxWidth() - 10}
-            height="30"
+            x={0}
+            y={0}
+            width={this.getBoxWidth()}
+            height={this.getBoxHeight()}
           >
-            <span className="step-diagram-stepname">
-              {this.getStepFullname(stepId)}
-            </span>
-          </foreignObject>
-          {stepInfo.arraytype !== 'NONE' && (
-            <foreignObject x={4} y={4}>
-              <Tag title="Array step">[{arrayStep.length}]</Tag>
-            </foreignObject>
-          )}
-          <foreignObject x={stepInfo.arraytype === 'NONE' ? 4 : 32} y={4}>
-            <Tag title="Type & Status">
-              {type} <Icon iconName="dot" />{' '}
-              {instances && instances[name] ? instances[name].status : 'NONE'}
-            </Tag>
-          </foreignObject>
-          <foreignObject
-            x={222}
-            y={4}
-            onClick={onCodeClick}
-            style={{ cursor: 'pointer' }}
-          >
-            <Tag title="Show code">
-              <Icon iconName="code" />
-            </Tag>
+            <Flex height="100%" style={{ padding: '5px' }}>
+              <div>
+                <Pull>
+                  <Tag title="Type & Status">
+                    {stepInfo.arraytype !== 'NONE' && (
+                      <React.Fragment>
+                        [{arrayStep.length}] <Icon iconName="dot" />
+                      </React.Fragment>
+                    )}
+                    {type} <Icon iconName="dot" />{' '}
+                    {instances && instances[name]
+                      ? instances[name].status
+                      : 'NONE'}
+                  </Tag>
+                </Pull>
+                <Pull right>
+                  <ButtonGroup>
+                    <Button
+                      title="Show step code"
+                      icon="code"
+                      onClick={onCodeClick}
+                    />
+                  </ButtonGroup>
+                </Pull>
+              </div>
+              <Flex
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  clear: 'both',
+                  textAlign: 'center',
+                }}
+              >
+                {this.getStepFullname(stepId)}
+              </Flex>
+            </Flex>
           </foreignObject>
         </g>
       </svg>
