@@ -59,7 +59,9 @@ export default class Ping extends Component {
     if (this.state.error || !this.state.data.ok) {
       return (
         <Box top>
-          <Alert bsStyle="danger">{this.state.data.info}</Alert>
+          <Alert bsStyle="danger" title="Ping unsuccessful">
+            {this.state.data.info}
+          </Alert>
         </Box>
       );
     }
@@ -68,8 +70,9 @@ export default class Ping extends Component {
 
     return (
       <Box top>
-        <Icon iconName="small-tick" intent={Intent.SUCCESS} /> The ping request
-        against {url} took <strong>{result}</strong>.
+        <Alert bsStyle="success" title="Ping successful">
+          The ping request against {url} took <strong>{result}</strong>.
+        </Alert>
       </Box>
     );
   }

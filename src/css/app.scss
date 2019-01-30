@@ -205,6 +205,16 @@ h6,
   }
 }
 
+.pt-callout.pt-intent-success {
+  background-color: lighten($qore-green, 50);
+}
+
+.pt-callout.pt-intent-success[class*='pt-icon-']::before,
+.pt-callout.pt-intent-success h5,
+.pt-callout.pt-intent-success .pt-callout-title {
+  color: $qore-green;
+}
+
 .block {
   display: block !important;
 }
