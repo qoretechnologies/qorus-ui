@@ -1,9 +1,6 @@
-@import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
-
-@import '../../node_modules/prismjs/themes/prism-okaidia';
-@import '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
-
-$font-size-extra-small: floor(($font-size-base * 0.8)); // ~11px
+$font-size-extra-small: 11px;
+$padding-xs-horizontal: 3px;
+$text-muted: #a9a9a9;
 
 $qore-green: #7fba27;
 $qore-purple: #81358a;
@@ -14,6 +11,24 @@ $qore-gray: #8a9ba8;
 $qore-blue: #277fba;
 $qore-cobalt: #5c7080;
 $qore-dark: #383c44;
+
+// Overwrite Blueprint colors
+$green1: darken($qore-green, 20);
+$green2: darken($qore-green, 10);
+$green3: $qore-green;
+$green4: lighten($qore-green, 10);
+$green5: lighten($qore-green, 20);
+
+$blue1: darken($qore-cobalt, 20);
+$blue2: darken($qore-cobalt, 10);
+$blue3: $qore-cobalt;
+$blue4: lighten($qore-cobalt, 10);
+$blue5: lighten($qore-cobalt, 20);
+
+$icon-font-path: '~@blueprintjs/core/resources/icons';
+@import '~@blueprintjs/core/src/blueprint.scss';
+@import '../../node_modules/prismjs/themes/prism-okaidia';
+@import '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
 
 $status-automatic: $qore-purple;
 $status-complete: $qore-green;
@@ -30,7 +45,6 @@ $status-blocked: lighten($qore-danger, 10);
 $bgcolor: #eee;
 $text-color: #333;
 
-@import './buttons';
 @import './tables';
 
 @font-face {
@@ -44,22 +58,11 @@ $text-color: #333;
 }
 
 @font-face {
-  font-family: 'RobotoSlab';
-  src: url('../fonts/RobotoSlab-Regular.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'RobotoSlabLight';
-  src: url('../fonts/RobotoSlab-Light.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'RobotoLight';
   src: url('../fonts/Roboto.ttf') format('truetype');
 }
 
 @import '../js/components/layout/style';
-@import '../js/components/autostart/style';
 @import '../js/components/badge/style';
 @import '../js/components/controls/style';
 @import '../js/components/footer/style';
@@ -97,18 +100,10 @@ $text-color: #333;
 @import '../js/components/alerts_table/style';
 @import '../js/components/checkbox/style';
 
-@import './not-supported';
 @import './root';
-@import './workflow';
 @import './orders';
 @import './pane';
-@import './tabs';
-@import './search';
-@import './library';
-@import './ocmd';
 @import './job';
-@import './jobs';
-@import './alerts';
 @import './auth';
 
 html,
@@ -117,7 +112,7 @@ body,
 .app__wrap,
 .container-fluid {
   height: 100%;
-  font-size: $font-size-base - 2 !important;
+  font-size: 12px !important;
   font-family: 'Roboto', 'Arial';
   background-color: $bgcolor;
 }
@@ -144,50 +139,14 @@ h6,
   line-height: 1;
 }
 
+h5 {
+  font-size: 14px;
+}
+
 .pt-button,
 .pt-input,
 .pt-button[class*='pt-icon-']:before {
   font-size: 12px;
-}
-
-.pt-icon-large.pt-intent-success,
-.pt-icon-standard.pt-intent-success,
-.pt-icon.pt-intent-success {
-  color: $qore-green;
-}
-
-.pt-button-group:not(.pt-minimal) .pt-button {
-  &.pt-intent-success {
-    background-color: $qore-green !important;
-
-    &:hover {
-      box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.4),
-        inset 0 -1px 0 rgba(16, 22, 26, 0.2) !important;
-      background-color: darken($qore-green, 5) !important;
-    }
-  }
-
-  &.pt-intent-primary {
-    background-color: $qore-cobalt !important;
-
-    &:hover {
-      box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.4),
-        inset 0 -1px 0 rgba(16, 22, 26, 0.2) !important;
-      background-color: darken($qore-cobalt, 5) !important;
-    }
-  }
-}
-
-.pt-input-group.pt-intent-primary {
-  .pt-input {
-    box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
-      inset 0 0 0 1px $qore-cobalt, inset 0 0 0 1px rgba(16, 22, 26, 0.15),
-      inset 0 1px 1px rgba(16, 22, 26, 0.2) !important;
-  }
-
-  .pt-icon {
-    color: $qore-cobalt !important;
-  }
 }
 
 .pt-dark .pt-menu-item.pt-intent-primary,
@@ -199,20 +158,6 @@ h6,
 
 .pt-toast {
   font-size: 14px;
-
-  &.pt-intent-success {
-    background-color: $qore-green;
-  }
-}
-
-.pt-callout.pt-intent-success {
-  background-color: lighten($qore-green, 50);
-}
-
-.pt-callout.pt-intent-success[class*='pt-icon-']::before,
-.pt-callout.pt-intent-success h5,
-.pt-callout.pt-intent-success .pt-callout-title {
-  color: $qore-green;
 }
 
 .block {
@@ -276,10 +221,6 @@ pre.line-numbers {
   text-overflow: ellipsis;
 }
 
-.resource-selector {
-  float: left;
-}
-
 .pt-menu.sidebar {
   border-radius: 0;
   height: 100%;
@@ -311,67 +252,6 @@ div.text-component {
   }
 }
 
-.main-loading-text {
-  margin-top: 150px;
-}
-
-.main-error-text,
-.main-loading-text {
-  font-family: 'Nunito';
-}
-
-.default-wrapper {
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f3f3f3+50,ededed+51,ffffff+100;White+Gloss+%232 */
-  background: rgb(255, 255, 255); /* Old browsers */
-  background: -moz-linear-gradient(
-    -45deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(243, 243, 243, 1) 50%,
-    rgba(237, 237, 237, 1) 51%,
-    rgba(255, 255, 255, 1) 100%
-  ); /* FF3.6-15 */
-  background: -webkit-linear-gradient(
-    -45deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(243, 243, 243, 1) 50%,
-    rgba(237, 237, 237, 1) 51%,
-    rgba(255, 255, 255, 1) 100%
-  ); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(243, 243, 243, 1) 50%,
-    rgba(237, 237, 237, 1) 51%,
-    rgba(255, 255, 255, 1) 100%
-  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-}
-
-svg.preloader {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.preloader-rect {
-  fill: none;
-  stroke-width: 8px;
-  stroke: #9ccb3b;
-  stroke-dasharray: 40;
-  stroke-dashoffset: 50%;
-
-  animation: movedash 1.5s forwards 0s infinite;
-}
-
-@keyframes movedash {
-  to {
-    stroke-dashoffset: 250%;
-  }
-}
-
 .conn-options-item {
   line-height: 2;
 }
@@ -396,26 +276,6 @@ svg.preloader {
   font-family: 'NeoMedium';
 }
 
-.dashboard-title {
-  font-family: 'Nunito';
-  font-size: 25px;
-  text-align: center;
-  width: 100%;
-
-  &:not(.with-subtitle) {
-    margin-bottom: 30px;
-  }
-}
-
-.dashboard-subtitle {
-  font-family: 'Nunito';
-  font-size: 18px;
-  margin-bottom: 30px;
-  text-align: center;
-  width: 100%;
-  color: #555;
-}
-
 .vab {
   vertical-align: bottom;
   display: inline-flex;
@@ -434,10 +294,6 @@ pre {
   background-color: $qore-purple;
 }
 
-.pt-progress-bar.pt-intent-success .pt-progress-meter {
-  background-color: $qore-green;
-}
-
 .pt-input-group {
   border-radius: inherit;
 }
@@ -454,6 +310,7 @@ pre {
 p.header-detail {
   font-weight: normal;
   display: inline-block;
+  font-size: 12px;
   color: #555;
 }
 

@@ -45,7 +45,7 @@ th {
 
   &.name {
     /* [2] */
-    font-weight: bold;
+    font-weight: 600;
     text-align: left;
   }
 
@@ -225,7 +225,7 @@ table.table--data {
 
         &.name {
           /* [2] */
-          font-weight: bold;
+          font-weight: 600;
           text-align: left;
         }
 
@@ -335,14 +335,6 @@ table.table--data {
     > tbody tr:first-of-type th {
       border-top: 0 !important;
     }
-  }
-
-  div.shorten {
-    overflow: hidden;
-    height: $line-height-base;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: auto;
   }
 }
 

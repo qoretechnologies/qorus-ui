@@ -59,6 +59,7 @@
     "@babel/register": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
+    "bourbon": "4.3.4",
     "compression-webpack-plugin": "^2.0.0",
     "connect-history-api-fallback": "^1.6.0",
     "css-loader": "^2.1.0",

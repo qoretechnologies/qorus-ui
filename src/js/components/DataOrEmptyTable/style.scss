@@ -19,6 +19,10 @@
     inset 0 -1px 0 lighten($qore-cobalt, 53);
   color: lighten($qore-cobalt, 12);
 
+  h5 {
+    color: $qore-cobalt;
+  }
+
   &.no-data-small {
     height: 45px;
     padding: 0px 12px 0px 10px;

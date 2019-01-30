@@ -46,18 +46,6 @@
   }
 }
 
-.step-info {
-  /**
-   * Adds some vertical space around function navigation which would
-   * be otherwise tucked to the step navigation above and function
-   * details below.
-   */
-  &__func > .nav {
-    margin-top: $line-height-computed / 2;
-    margin-bottom: $line-height-computed / 2;
-  }
-}
-
 span.step-diagram-stepname {
   display: block;
   text-align: center;
