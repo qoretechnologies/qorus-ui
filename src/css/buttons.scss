@@ -1,6 +1,0 @@
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/buttons";
-
-
-.btn-inverse {
-  @include button-variant(#fff, #363636, darken(#363636, 5%));
-}

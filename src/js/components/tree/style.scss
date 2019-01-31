@@ -17,7 +17,7 @@ $leftMargin: 0px;
 
   div.tree-key {
     padding: 5px 8px 5px 2px;
-    font-weight: bold;
+    font-weight: 600;
 
     &.object {
       font-weight: normal;
@@ -34,7 +34,7 @@ $leftMargin: 0px;
 
       &.expanded {
         color: inherit;
-        font-weight: bold;
+        font-weight: 600;
         background-color: lighten($qore-cobalt, 35);
         border-bottom-left-radius: 0;
       }

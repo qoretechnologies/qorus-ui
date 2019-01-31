@@ -19,7 +19,7 @@
   text-align: left;
 
   span {
-    font-weight: bold;
+    font-weight: 600;
   }
 
   .field-detail__showall {
@@ -27,7 +27,7 @@
     position: absolute;
     color: #3a87ad;
     font-size: 11px;
-    font-weight: bold;
+    font-weight: 600;
     bottom: 4px;
     width: 100%;
   }
@@ -140,6 +140,6 @@
 
 .mapper-desc {
   span {
-    font-weight: bold;
+    font-weight: 600;
   }
 }
