@@ -50,13 +50,7 @@ class ManageModal extends Component {
   handleFormSubmit: Function = (event: EventHandler): void => {
     event.preventDefault();
 
-    const {
-      optimisticDispatch,
-      remoteType,
-      remotes,
-      onClose,
-      edit,
-    } = this.props;
+    const { dispatchAction, remoteType, remotes, onClose, edit } = this.props;
     const data = Object.keys(this.refs).reduce(
       (cur: Object, ref: string): Object => ({
         ...cur,
@@ -109,10 +103,11 @@ class ManageModal extends Component {
             error: 'The "options" object is invalid. It cannot be nested.',
           });
         } else {
-          optimisticDispatch(
+          dispatchAction(
             actions.remotes.manageConnection,
             remoteType,
-            data
+            data,
+            null
           );
           onClose();
         }
