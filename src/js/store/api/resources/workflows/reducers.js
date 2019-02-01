@@ -15,6 +15,9 @@ import {
   processStartedReducer,
   processStoppedReducer,
   basicDataUpdatedReducer,
+  loggerReducer,
+  addUpdateLoggerReducer,
+  deleteLoggerReducer,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -164,6 +167,9 @@ const setExecCount = {
 const processStarted = processStartedReducer;
 const processStopped = processStoppedReducer;
 const updateBasicData = basicDataUpdatedReducer;
+const fetchLogger = loggerReducer;
+const addUpdateLogger = addUpdateLoggerReducer;
+const deleteLogger = deleteLoggerReducer;
 
 const setEnabled = {
   next(
@@ -710,4 +716,7 @@ export {
   processStarted as PROCESSSTARTED,
   processStopped as PROCESSSTOPPED,
   updateBasicData as UPDATEBASICDATA,
+  fetchLogger as FETCHLOGGER,
+  addUpdateLogger as ADDUPDATELOGGER,
+  deleteLogger as DELETELOGGER,
 };

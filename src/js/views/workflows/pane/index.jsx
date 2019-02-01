@@ -116,6 +116,7 @@ export default class WorkflowsDetail extends Component {
             },
             'Errors',
             'Code',
+            'Logger',
             'Log',
             'Info',
           ],

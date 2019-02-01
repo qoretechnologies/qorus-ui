@@ -21,6 +21,7 @@ import { ORDER_STATES } from '../../../constants/orders';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import List from './list';
 import Performance from './performance';
+import Logger from '../../../containers/Logger';
 
 type WorkflowDetailTabsProps = {
   workflow: Object,
@@ -123,6 +124,11 @@ const WorkflowDetailTabs: Function = ({
     <SimpleTab name="order stats">
       <Box top fill scrollY>
         <OrderStats renderRows orderStats={workflow.order_stats} />
+      </Box>
+    </SimpleTab>
+    <SimpleTab name="logger">
+      <Box top fill>
+        <Logger id={workflow.id} resource="workflows" />
       </Box>
     </SimpleTab>
     <SimpleTab name="info">

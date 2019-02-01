@@ -4,6 +4,7 @@ import startsWith from 'lodash/startsWith';
 import includes from 'lodash/includes';
 import { browserHistory } from 'react-router';
 import shortid from 'shortid';
+import invert from 'lodash/invert';
 
 import * as alerts from '../api/resources/alerts/actions';
 import * as services from '../api/resources/services/actions/specials';
@@ -22,6 +23,8 @@ import {
   getProcessObjectInterface,
 } from '../../helpers/system';
 import { INTERFACE_IDS } from '../../constants/interfaces';
+import { get } from '../api/utils';
+import settings from '../../settings';
 
 const interfaceActions: Object = {
   workflows,
@@ -44,7 +47,7 @@ const handleEvent = (url, data, dispatch, state) => {
         : item[idKey] === parseFloat(id, 10)
     );
 
-  dt.forEach(d => {
+  dt.forEach(async d => {
     const { info, eventstr, classstr, caller } = d;
 
     switch (eventstr) {
@@ -344,7 +347,12 @@ const handleEvent = (url, data, dispatch, state) => {
               pipeline(
                 `${eventstr}_REMOTE`,
                 remotes.clearAlert,
-                { id: info.id, name: info.name, alertid: info.alertid, type: info.type },
+                {
+                  id: info.id,
+                  name: info.name,
+                  alertid: info.alertid,
+                  type: info.type,
+                },
                 dispatch
               );
             }
@@ -362,7 +370,12 @@ const handleEvent = (url, data, dispatch, state) => {
               pipeline(
                 `${eventstr}_REMOTE`,
                 remotes.clearAlert,
-                { id: info.id, name: info.name, alertid: info.alertid, type: info.type },
+                {
+                  id: info.id,
+                  name: info.name,
+                  alertid: info.alertid,
+                  type: info.type,
+                },
                 dispatch
               );
             }
@@ -380,7 +393,12 @@ const handleEvent = (url, data, dispatch, state) => {
               pipeline(
                 `${eventstr}_REMOTE`,
                 remotes.clearAlert,
-                { id: info.id, name: info.name, alertid: info.alertid, type: info.type },
+                {
+                  id: info.id,
+                  name: info.name,
+                  alertid: info.alertid,
+                  type: info.type,
+                },
                 dispatch
               );
             }
@@ -923,6 +941,72 @@ const handleEvent = (url, data, dispatch, state) => {
         }
 
         break;
+      case 'LOGGER_CREATED':
+      case 'LOGGER_UPDATED': {
+        const isLoaded: boolean = isInterfaceLoaded(
+          info.interface,
+          info.interfaceid
+        );
+
+        if (isLoaded) {
+          const newInfo: Object = { ...info };
+          const reversedLevels: Object = invert(
+            state.api.system.data.logger.logger_levels
+          );
+
+          newInfo.params.level = { [reversedLevels[info.params.level]]: true };
+          newInfo.isNew = eventstr === 'LOGGER_CREATED';
+
+          pipeline(
+            'LOGGER_ACTIONS',
+            workflows.addUpdateLogger,
+            newInfo,
+            dispatch
+          );
+        }
+        break;
+      }
+      case 'LOGGER_DELETED': {
+        const isLoaded: boolean = isInterfaceLoaded(
+          info.interface,
+          info.interfaceid
+        );
+
+        if (isLoaded) {
+          const newInfo: Object = { ...info };
+          const reversedLevels: Object = invert(
+            state.api.system.data.logger.logger_levels
+          );
+
+          newInfo.current_logger.params.level = {
+            [reversedLevels[info.current_logger.params.level]]: true,
+          };
+
+          //! FETCH APPENDERS FOR THE DEFAULT LOGGER
+          const appenders: Array<Object> = await get(
+            `${settings.REST_BASE_URL}/${info.interface}/${
+              info.interfaceid
+            }/logger/appenders`
+          );
+
+          newInfo.appenders = appenders.reduce(
+            (cur: Array<Object>, appender: Object) => [
+              ...cur,
+              {
+                id: appender.id,
+                type: appender.params.appenderType,
+                layoutPattern: appender.params.layoutPattern,
+                name: appender.params.name,
+                rotationCount: appender.params.rotationCount,
+              },
+            ],
+            []
+          );
+
+          pipeline('LOGGER_ACTIONS', workflows.deleteLogger, newInfo, dispatch);
+        }
+        break;
+      }
       default:
         break;
     }

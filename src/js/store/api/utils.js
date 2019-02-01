@@ -232,6 +232,10 @@ export async function post (...args): Promise<any> {
   return await fetchJson('POST', ...args);
 }
 
+export async function del (...args): Promise<any> {
+  return await fetchJson('DELETE', ...args);
+}
+
 export async function fetchYaml (
   method,
   url,
