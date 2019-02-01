@@ -344,7 +344,7 @@ const handleEvent = (url, data, dispatch, state) => {
               pipeline(
                 `${eventstr}_REMOTE`,
                 remotes.clearAlert,
-                { id: info.id, alertid: info.alertid, type: info.type },
+                { id: info.id, name: info.name, alertid: info.alertid, type: info.type },
                 dispatch
               );
             }
@@ -362,7 +362,7 @@ const handleEvent = (url, data, dispatch, state) => {
               pipeline(
                 `${eventstr}_REMOTE`,
                 remotes.clearAlert,
-                { id: info.id, alertid: info.alertid, type: info.type },
+                { id: info.id, name: info.name, alertid: info.alertid, type: info.type },
                 dispatch
               );
             }
@@ -380,7 +380,7 @@ const handleEvent = (url, data, dispatch, state) => {
               pipeline(
                 `${eventstr}_REMOTE`,
                 remotes.clearAlert,
-                { id: info.id, alertid: info.alertid, type: info.type },
+                { id: info.id, name: info.name, alertid: info.alertid, type: info.type },
                 dispatch
               );
             }

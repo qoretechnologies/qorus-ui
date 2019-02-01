@@ -180,7 +180,7 @@ const addAlert = {
 
       events.forEach(dt => {
         const remote = newData.find(
-          r => r.id === dt.id && r.conntype === dt.type
+          r => r.name === dt.name && r.conntype === dt.type
         );
 
         if (remote) {
@@ -224,7 +224,7 @@ const clearAlert = {
 
       events.forEach(dt => {
         const remote = newData.find(
-          r => r.id === dt.id && r.conntype === dt.type
+          r => r.name === dt.name && r.conntype === dt.type
         );
 
         if (remote) {
