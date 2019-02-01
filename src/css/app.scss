@@ -408,6 +408,10 @@ span.pt-icon-standard {
   background-color: #383c44;
 }
 
+.pt-callout:not(:last-child) {
+  margin-bottom: 10px;
+}
+
 .pt-popover.pt-dark .pt-popover-arrow-border,
 .pt-popover.pt-dark .pt-popover-arrow-fill {
   fill: #383c44;

@@ -58,7 +58,12 @@ const ServiceTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="log">
       <Box top fill>
-        <LogContainer resource={`services/${service.id}`} location={location} />
+        <LogContainer
+          id={service.id}
+          intfc="services"
+          resource={`services/${service.id}`}
+          location={location}
+        />
       </Box>
     </SimpleTab>
     <SimpleTab name="mappers">

@@ -119,8 +119,6 @@ export default compose(
       id,
       workflowstatus,
     }: Props): Function => (date: string): void => {
-      console.log(date);
-
       optimisticDispatch(actions.orders.schedule, id, date, workflowstatus);
     },
     handlePriorityChange: ({ id, optimisticDispatch }: Props): Function => (

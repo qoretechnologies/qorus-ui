@@ -6,6 +6,11 @@ import settings from '../../../../../settings';
 import {
   updateConfigItemAction,
   updateBasicDataAction,
+  fetchLoggerAction,
+  addUpdateLoggerAction,
+  deleteLoggerAction,
+  addAppenderAction,
+  deleteAppenderAction,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('WORKFLOWS');
@@ -260,6 +265,11 @@ const updateConfigItemWs = createAction(
 );
 
 const unsync = createAction('WORKFLOWS_UNSYNC');
+const fetchLogger = fetchLoggerAction('workflows');
+const addUpdateLogger = addUpdateLoggerAction('workflows');
+const deleteLogger = deleteLoggerAction('workflows');
+const addAppender = addAppenderAction('workflows');
+const deleteAppender = deleteAppenderAction('workflows');
 
 export {
   setOptions,
@@ -298,4 +308,9 @@ export {
   updateConfigItem,
   updateConfigItemWs,
   updateBasicData,
+  fetchLogger,
+  addUpdateLogger,
+  deleteLogger,
+  addAppender,
+  deleteAppender,
 };

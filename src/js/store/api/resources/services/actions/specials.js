@@ -6,6 +6,11 @@ import settings from '../../../../../settings';
 import {
   updateConfigItemAction,
   updateBasicDataAction,
+  fetchLoggerAction,
+  addUpdateLoggerAction,
+  deleteLoggerAction,
+  addAppenderAction,
+  deleteAppenderAction,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('SERVICES');
@@ -186,6 +191,12 @@ const processStopped = createAction('SERVICES_PROCESSSTOPPED', events => ({
 
 const unsync = createAction('SERVICES_UNSYNC');
 
+const fetchLogger = fetchLoggerAction('services');
+const addUpdateLogger = addUpdateLoggerAction('services');
+const deleteLogger = deleteLoggerAction('services');
+const addAppender = addAppenderAction('services');
+const deleteAppender = deleteAppenderAction('services');
+
 export {
   setOptions,
   fetchLibSources,
@@ -212,4 +223,9 @@ export {
   processStarted,
   processStopped,
   updateBasicData,
+  fetchLogger,
+  addUpdateLogger,
+  deleteLogger,
+  addAppender,
+  deleteAppender,
 };

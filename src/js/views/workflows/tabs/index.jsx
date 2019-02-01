@@ -21,6 +21,7 @@ import { ORDER_STATES } from '../../../constants/orders';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import List from './list';
 import Performance from './performance';
+import Logger from '../../../containers/Logger';
 
 type WorkflowDetailTabsProps = {
   workflow: Object,
@@ -77,6 +78,8 @@ const WorkflowDetailTabs: Function = ({
     <SimpleTab name="log">
       <Box top fill>
         <LogContainer
+          id={workflow.id}
+          intfc="workflows"
           resource={`workflows/${workflow.id}`}
           location={location}
         />

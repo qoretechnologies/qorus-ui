@@ -8,14 +8,19 @@
     }
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true
   },
   "rules": {
     "react/jsx-uses-vars": [2],
     "react/jsx-uses-react": [2],
     "comma-dangle": "off",
     "no-console": "warn",
-    "semi": "off"
+    "semi": "off",
+    "no-unused-expressions": "error",
+    "no-unused-labels": "error",
+    "no-unused-vars": "error",
+    "no-undef": "error"
   },
   "globals": {
     "ReactClass": true,

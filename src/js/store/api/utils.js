@@ -210,10 +210,16 @@ export async function fetchJson (
     jsonRes = 'success';
   }
 
-  if (res.status === 404 || (res.status >= 500 && res.status <= 600)) {
+  if (
+    res.status === 404 ||
+    res.status === 409 ||
+    (res.status >= 500 && res.status <= 600)
+  ) {
+    const desc: string = jsonRes.desc || jsonRes;
+
     return {
       err: true,
-      desc: jsonRes,
+      desc,
     };
   }
 
@@ -230,6 +236,10 @@ export async function get (...args): Promise<any> {
 
 export async function post (...args): Promise<any> {
   return await fetchJson('POST', ...args);
+}
+
+export async function del (...args): Promise<any> {
+  return await fetchJson('DELETE', ...args);
 }
 
 export async function fetchYaml (
