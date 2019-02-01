@@ -28,6 +28,7 @@ import NameColumn from '../../../components/NameColumn';
 import Loader from '../../../components/loader';
 import settings from '../../../settings';
 import mapProps from 'recompose/mapProps';
+import showIfPassed from '../../../hocomponents/show-if-passed';
 
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find(a => a.name === props.paneId);
@@ -42,6 +43,7 @@ const viewSelector = createSelector(
 );
 
 @connect(viewSelector)
+@showIfPassed(({ remote }) => remote)
 @withDispatch()
 @mapProps(({ remote, ...rest }) => ({
   remote: { ...remote, url: settings.IS_HTTP ? remote.url : remote.safeUrl },
