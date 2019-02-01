@@ -76,7 +76,12 @@ const JobsDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="log">
       <Box top fill>
-        <LogContainer resource={`jobs/${model.id}`} location={location} />
+        <LogContainer
+          id={model.id}
+          intfc="jobs"
+          resource={`jobs/${model.id}`}
+          location={location}
+        />
       </Box>
     </SimpleTab>
     <SimpleTab name="mappers">

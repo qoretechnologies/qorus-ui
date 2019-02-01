@@ -9,6 +9,8 @@ import {
   fetchLoggerAction,
   addUpdateLoggerAction,
   deleteLoggerAction,
+  addAppenderAction,
+  deleteAppenderAction,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('WORKFLOWS');
@@ -266,6 +268,8 @@ const unsync = createAction('WORKFLOWS_UNSYNC');
 const fetchLogger = fetchLoggerAction('workflows');
 const addUpdateLogger = addUpdateLoggerAction('workflows');
 const deleteLogger = deleteLoggerAction('workflows');
+const addAppender = addAppenderAction('workflows');
+const deleteAppender = deleteAppenderAction('workflows');
 
 export {
   setOptions,
@@ -307,4 +311,6 @@ export {
   fetchLogger,
   addUpdateLogger,
   deleteLogger,
+  addAppender,
+  deleteAppender,
 };

@@ -12,6 +12,11 @@ import settings from '../../../../../settings';
 import {
   updateConfigItemAction,
   updateBasicDataAction,
+  fetchLoggerAction,
+  addUpdateLoggerAction,
+  deleteLoggerAction,
+  addAppenderAction,
+  deleteAppenderAction,
 } from '../../../common/actions';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
@@ -307,6 +312,11 @@ const selectNone = createAction('JOBS_SELECTNONE');
 const selectInvert = createAction('JOBS_SELECTINVERT');
 const selectAlerts = createAction('JOBS_SELECTALERTS');
 const unsync = createAction('JOBS_UNSYNC');
+const fetchLogger = fetchLoggerAction('jobs');
+const addUpdateLogger = addUpdateLoggerAction('jobs');
+const deleteLogger = deleteLoggerAction('jobs');
+const addAppender = addAppenderAction('jobs');
+const deleteAppender = deleteAppenderAction('jobs');
 
 export {
   setOptions,
@@ -343,4 +353,9 @@ export {
   processStopped,
   updateBasicData,
   run,
+  fetchLogger,
+  addUpdateLogger,
+  deleteLogger,
+  addAppender,
+  deleteAppender,
 };

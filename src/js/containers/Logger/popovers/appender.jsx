@@ -7,6 +7,7 @@ import { FormGroup, InputGroup } from '@blueprintjs/core';
 import withState from 'recompose/withState';
 import Alert from '../../../components/alert';
 import withHandlers from 'recompose/withHandlers';
+import includes from 'lodash/includes';
 import {
   Controls as ButtonGroup,
   Control as Button,
@@ -14,6 +15,7 @@ import {
 import { connect } from 'react-redux';
 import { fetchWithNotifications, post } from '../../../store/api/utils';
 import settings from '../../../settings';
+import Dropdown, { Item, Control } from '../../../components/dropdown';
 
 type NewAppenderPopoverProps = {
   error?: string,
@@ -56,6 +58,8 @@ const NewAppenderPopover: Function = ({
   changeError,
   dispatch,
   isAdding,
+  appendersTypes,
+  appendersFields,
 }: NewAppenderPopoverProps): React.Element<any> => (
   <Box fill top style={{ minWidth: '350px' }}>
     {error && <Alert bsStyle="danger">{error}</Alert>}
@@ -68,59 +72,73 @@ const NewAppenderPopover: Function = ({
       />
     </FormGroup>
 
-    <FormGroup label="Appender type " labelFor="appender-type" requiredLabel>
-      <InputGroup
-        name="appender-type"
-        id="appender-type"
-        value={appenderType}
-        onChange={handleAppenderTypeChange}
-      />
+    <FormGroup label="Appender type " requiredLabel>
+      <Dropdown>
+        <Control>{appenderType || 'Please select'}</Control>
+        {appendersTypes.map((appType: string) => (
+          <Item
+            key={appType}
+            title={appType}
+            onClick={handleAppenderTypeChange}
+          />
+        ))}
+      </Dropdown>
     </FormGroup>
 
-    <FormGroup label="Layout pattern" labelFor="appender-layout">
-      <InputGroup
-        name="appender-layout"
-        id="appender-layout"
-        value={layoutPattern}
-        onChange={handleLayoutPatternChange}
-      />
-    </FormGroup>
+    {includes(appendersFields['layoutPattern'], appenderType) && (
+      <FormGroup label="Layout pattern" labelFor="appender-layout">
+        <InputGroup
+          name="appender-layout"
+          id="appender-layout"
+          value={layoutPattern}
+          onChange={handleLayoutPatternChange}
+        />
+      </FormGroup>
+    )}
 
-    <FormGroup label="Filename" labelFor="appender-filename">
-      <InputGroup
-        name="appender-filename"
-        id="appender-filename"
-        value={filename}
-        onChange={handleFilenameChange}
-      />
-    </FormGroup>
+    {includes(appendersFields['filename'], appenderType) && (
+      <FormGroup label="Filename " labelFor="appender-filename" requiredLabel>
+        <InputGroup
+          name="appender-filename"
+          id="appender-filename"
+          value={filename}
+          onChange={handleFilenameChange}
+        />
+      </FormGroup>
+    )}
 
-    <FormGroup label="Encoding" labelFor="appender-encoding">
-      <InputGroup
-        name="appender-encoding"
-        id="appender-encoding"
-        value={encoding}
-        onChange={handleEncodingChange}
-      />
-    </FormGroup>
+    {includes(appendersFields['encoding'], appenderType) && (
+      <FormGroup label="Encoding" labelFor="appender-encoding">
+        <InputGroup
+          name="appender-encoding"
+          id="appender-encoding"
+          value={encoding}
+          onChange={handleEncodingChange}
+        />
+      </FormGroup>
+    )}
 
-    <FormGroup label="Rotation count" labelFor="appender-rotation">
-      <InputGroup
-        name="appender-rotation"
-        id="appender-rotation"
-        value={rotationCount}
-        onChange={handleRotationCountChange}
-      />
-    </FormGroup>
+    {includes(appendersFields['rotationCount'], appenderType) && (
+      <FormGroup label="Rotation count" labelFor="appender-rotation">
+        <InputGroup
+          name="appender-rotation"
+          id="appender-rotation"
+          value={rotationCount}
+          onChange={handleRotationCountChange}
+        />
+      </FormGroup>
+    )}
 
-    <FormGroup label="Archive pattern" labelFor="appender-archive">
-      <InputGroup
-        name="appender-archive"
-        id="appender-archive"
-        value={archivePattern}
-        onChange={handleArchivePatternChange}
-      />
-    </FormGroup>
+    {includes(appendersFields['archivePattern'], appenderType) && (
+      <FormGroup label="Archive pattern" labelFor="appender-archive">
+        <InputGroup
+          name="appender-archive"
+          id="appender-archive"
+          value={archivePattern}
+          onChange={handleArchivePatternChange}
+        />
+      </FormGroup>
+    )}
 
     <ButtonGroup className="pt-fill">
       <Button
@@ -141,8 +159,13 @@ const NewAppenderPopover: Function = ({
 );
 
 export default compose(
-  connect(),
-  withState('name', 'changeName', null),
+  connect(
+    (state: Object): Object => ({
+      appendersTypes: state.api.system.data.logger.appenders_types,
+      appendersFields: state.api.system.data.logger.appenders_fields,
+    })
+  ),
+  withState('name', 'changeName', ''),
   withState('layoutPattern', 'changeLayoutPattern', null),
   withState('filename', 'changeFilename', null),
   withState('encoding', 'changeEncoding', null),
@@ -179,11 +202,12 @@ export default compose(
       changeEncoding(() => event.target.value);
     },
     handleAppenderTypeChange: ({ changeAppenderType }): Function => (
-      event: Object
+      event: Object,
+      appenderType: string
     ): void => {
       event.persist();
 
-      changeAppenderType(() => event.target.value);
+      changeAppenderType(() => appenderType);
     },
     handleRotationCountChange: ({ changeRotationCount }): Function => (
       event: Object
@@ -214,8 +238,13 @@ export default compose(
       onCancel,
       changeAdding,
     }: NewAppenderPopoverProps): Function => async (): any => {
-      if (name === '' || appenderType === '') {
+      if (name === '' || !appenderType) {
         changeError(() => 'Name and Appender Type fields are required.');
+      } else if (
+        appenderType !== 'LoggerAppenderStdOut' &&
+        (!filename || filename === '')
+      ) {
+        changeError(() => 'Filename is required for this type of appender');
       } else {
         changeAdding(() => true);
 
@@ -250,6 +279,8 @@ export default compose(
     },
   }),
   onlyUpdateForKeys([
+    'appendersTypes',
+    'appendersFields',
     'name',
     'layoutPattern',
     'filename',

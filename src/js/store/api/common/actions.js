@@ -83,10 +83,22 @@ const deleteLoggerAction: Function = (intfc: string): Function =>
     events,
   }));
 
+const addAppenderAction: Function = (intfc: string): Function =>
+  createAction(`${intfc.toUpperCase()}_ADDAPPENDER`, events => ({
+    events,
+  }));
+
+const deleteAppenderAction: Function = (intfc: string): Function =>
+  createAction(`${intfc.toUpperCase()}_DELETEAPPENDER`, events => ({
+    events,
+  }));
+
 export {
   updateConfigItemAction,
   updateBasicDataAction,
   fetchLoggerAction,
   addUpdateLoggerAction,
   deleteLoggerAction,
+  addAppenderAction,
+  deleteAppenderAction,
 };

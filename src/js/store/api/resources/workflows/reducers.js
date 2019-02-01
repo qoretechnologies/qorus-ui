@@ -18,6 +18,8 @@ import {
   loggerReducer,
   addUpdateLoggerReducer,
   deleteLoggerReducer,
+  addAppenderReducer,
+  deleteAppenderReducer,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -170,6 +172,8 @@ const updateBasicData = basicDataUpdatedReducer;
 const fetchLogger = loggerReducer;
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
+const addAppender = addAppenderReducer;
+const deleteAppender = deleteAppenderReducer;
 
 const setEnabled = {
   next(
@@ -719,4 +723,6 @@ export {
   fetchLogger as FETCHLOGGER,
   addUpdateLogger as ADDUPDATELOGGER,
   deleteLogger as DELETELOGGER,
+  addAppender as ADDAPPENDER,
+  deleteAppender as DELETEAPPENDER,
 };

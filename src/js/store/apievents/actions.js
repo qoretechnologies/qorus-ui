@@ -25,6 +25,7 @@ import {
 import { INTERFACE_IDS } from '../../constants/interfaces';
 import { get } from '../api/utils';
 import settings from '../../settings';
+import { formatAppender } from '../../helpers/logger';
 
 const interfaceActions: Object = {
   workflows,
@@ -959,7 +960,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
           pipeline(
             'LOGGER_ACTIONS',
-            workflows.addUpdateLogger,
+            interfaceActions[info.interface].addUpdateLogger,
             newInfo,
             dispatch
           );
@@ -992,18 +993,34 @@ const handleEvent = (url, data, dispatch, state) => {
           newInfo.appenders = appenders.reduce(
             (cur: Array<Object>, appender: Object) => [
               ...cur,
-              {
-                id: appender.id,
-                type: appender.params.appenderType,
-                layoutPattern: appender.params.layoutPattern,
-                name: appender.params.name,
-                rotationCount: appender.params.rotationCount,
-              },
+              formatAppender(appender),
             ],
             []
           );
 
-          pipeline('LOGGER_ACTIONS', workflows.deleteLogger, newInfo, dispatch);
+          pipeline('LOGGER_ACTIONS', interfaceActions[info.interface].deleteLogger, newInfo, dispatch);
+        }
+        break;
+      }
+      case 'APPENDER_CREATED': {
+        const isLoaded: boolean = isInterfaceLoaded(
+          info.interface,
+          info.interfaceid
+        );
+
+        if (isLoaded) {
+          pipeline('APPENDER_ACTIONS', interfaceActions[info.interface].addAppender, info, dispatch);
+        }
+        break;
+      }
+      case 'APPENDER_DELETED': {
+        const isLoaded: boolean = isInterfaceLoaded(
+          info.interface,
+          info.interfaceid
+        );
+
+        if (isLoaded) {
+          pipeline('APPENDER_ACTIONS', interfaceActions[info.interface].deleteAppender, info, dispatch);
         }
         break;
       }

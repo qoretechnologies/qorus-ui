@@ -1,4 +1,5 @@
 import { setUpdatedToNull, updateItemWithId } from '../utils';
+import { formatAppender } from '../../../helpers/logger';
 
 const processStartedReducer = {
   next (
@@ -92,13 +93,7 @@ const loggerReducer = {
       const flattenedAppenders = appenders.reduce(
         (cur: Array<Object>, appender: Object) => [
           ...cur,
-          {
-            id: appender.id,
-            type: appender.params.appenderType,
-            layoutPattern: appender.params.layoutPattern,
-            name: appender.params.name,
-            rotationCount: appender.params.rotationCount,
-          },
+          formatAppender(appender),
         ],
         []
       );
@@ -185,6 +180,73 @@ const deleteLoggerReducer = {
   },
 };
 
+const addAppenderReducer = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        const workflow: Object = data.find(
+          (datum: Object) => datum.id === dt.interfaceid
+        );
+        let appenders: Array<Object> = workflow?.appenders || [];
+        appenders = [...appenders, formatAppender(dt)];
+
+        newData = updateItemWithId(
+          dt.interfaceid,
+          { appenders, _updated: true },
+          newData
+        );
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
+const deleteAppenderReducer = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach(dt => {
+        const workflow: Object = data.find(
+          (datum: Object) => datum.id === dt.interfaceid
+        );
+        const appenders: Array<Object> = workflow.appenders.filter(
+          (appender: Object) => appender.id !== dt.logger_appenderid
+        );
+
+        newData = updateItemWithId(
+          dt.interfaceid,
+          { appenders, _updated: true },
+          newData
+        );
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
 export {
   processStartedReducer,
   processStoppedReducer,
@@ -192,4 +254,6 @@ export {
   loggerReducer,
   addUpdateLoggerReducer,
   deleteLoggerReducer,
+  addAppenderReducer,
+  deleteAppenderReducer,
 };

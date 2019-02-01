@@ -78,6 +78,8 @@ const WorkflowDetailTabs: Function = ({
     <SimpleTab name="log">
       <Box top fill>
         <LogContainer
+          id={workflow.id}
+          intfc="workflows"
           resource={`workflows/${workflow.id}`}
           location={location}
         />
@@ -124,11 +126,6 @@ const WorkflowDetailTabs: Function = ({
     <SimpleTab name="order stats">
       <Box top fill scrollY>
         <OrderStats renderRows orderStats={workflow.order_stats} />
-      </Box>
-    </SimpleTab>
-    <SimpleTab name="logger">
-      <Box top fill>
-        <Logger id={workflow.id} resource="workflows" />
       </Box>
     </SimpleTab>
     <SimpleTab name="info">
