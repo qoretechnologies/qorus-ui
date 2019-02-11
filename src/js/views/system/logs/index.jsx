@@ -38,7 +38,7 @@ const Log: Function = ({ tabQuery }: Props) => (
           <LogContainer resource="alert" />
         </SimpleTab>
         <SimpleTab name="monitor">
-          <LogContainer resource="monitor" />
+          <LogContainer resource="mon" />
         </SimpleTab>
       </SimpleTabs>
     </Box>
