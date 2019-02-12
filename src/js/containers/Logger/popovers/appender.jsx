@@ -63,7 +63,7 @@ const NewAppenderPopover: Function = ({
 }: NewAppenderPopoverProps): React.Element<any> => (
   <Box fill top style={{ minWidth: '350px' }}>
     {error && <Alert bsStyle="danger">{error}</Alert>}
-    <FormGroup label="Name " labelFor="appender-name" requiredLabel>
+    <FormGroup label="Name " labelFor="appender-name">
       <InputGroup
         name="appender-name"
         id="appender-name"
@@ -238,8 +238,8 @@ export default compose(
       onCancel,
       changeAdding,
     }: NewAppenderPopoverProps): Function => async (): any => {
-      if (name === '' || !appenderType) {
-        changeError(() => 'Name and Appender Type fields are required.');
+      if (!appenderType) {
+        changeError(() => 'Appender Type field is required.');
       } else if (
         appenderType !== 'LoggerAppenderStdOut' &&
         (!filename || filename === '')
