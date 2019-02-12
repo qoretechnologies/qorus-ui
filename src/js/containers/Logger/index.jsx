@@ -34,7 +34,7 @@ import Alert from '../../components/alert';
 import { Popover, Position } from '@blueprintjs/core';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
-import { fetchWithNotifications, del } from '../../store/api/utils';
+import { fetchWithNotifications, del, post } from '../../store/api/utils';
 import settings from '../../settings';
 
 type LoggerContainerProps = {
@@ -44,6 +44,7 @@ type LoggerContainerProps = {
   resource: string,
   handleLoggerDeleteClick: Function,
   handleDeleteAppenderClick: Function,
+  handleLoggerDuplicateClick: Function,
 };
 
 const LoggerContainer: Function = ({
@@ -57,6 +58,7 @@ const LoggerContainer: Function = ({
   resource,
   id,
   handleLoggerDeleteClick,
+  handleLoggerDuplicateClick,
 }: LoggerContainerProps): React.Element<any> => (
   <Flex>
     {logger.isDefault && (
@@ -68,7 +70,7 @@ const LoggerContainer: Function = ({
       title="Logger"
       label={
         logger.isDefault ? (
-          <ButtonGroup>
+          <React.Fragment>
             <Popover
               content={
                 <NewLoggerPopover
@@ -80,14 +82,24 @@ const LoggerContainer: Function = ({
               position={Position.LEFT_TOP}
               isOpen={isLoggerPopoverOpen}
             >
-              <Button
-                text="Add logger"
-                icon="add"
-                stopPropagation
-                onClick={() => toggleLoggerPopover(() => true)}
-              />
+              <ButtonGroup>
+                <Button
+                  text="Add new logger"
+                  icon="add"
+                  stopPropagation
+                  onClick={() => toggleLoggerPopover(() => true)}
+                />
+              </ButtonGroup>
             </Popover>
-          </ButtonGroup>
+            <ButtonGroup>
+              <Button
+                text="Clone logger"
+                icon="duplicate"
+                stopPropagation
+                onClick={handleLoggerDuplicateClick}
+              />
+            </ButtonGroup>
+          </React.Fragment>
         ) : (
           <React.Fragment>
             <Popover
@@ -276,6 +288,23 @@ export default compose(
         async () => del(`${settings.REST_BASE_URL}/${resource}/${id}/logger`),
         `Removing logger...`,
         `Logger successfuly removed`,
+        dispatch
+      );
+    },
+    handleLoggerDuplicateClick: ({
+      dispatch,
+      resource,
+      id,
+    }: LoggerContainerProps): Function => (): void => {
+      fetchWithNotifications(
+        async () =>
+          post(
+            `${
+              settings.REST_BASE_URL
+            }/${resource}/${id}/logger?cloneDefault=true`
+          ),
+        `Duplicating logger...`,
+        `Logger successfuly duplicated`,
         dispatch
       );
     },

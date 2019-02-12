@@ -55,7 +55,7 @@ const NewLoggerPopover: Function = ({
 }: NewLoggerPopoverProps): React.Element<any> => (
   <Box fill top style={{ minWidth: '350px' }}>
     {error && <Alert bsStyle="danger">{error}</Alert>}
-    <FormGroup label="Name " labelFor="logger-name" requiredLabel>
+    <FormGroup label="Name " labelFor="logger-name">
       <InputGroup
         name="logger-name"
         id="logger-name"
@@ -147,8 +147,8 @@ export default compose(
       changeAdding,
       data,
     }: NewLoggerPopoverProps): Function => async (): any => {
-      if (name === '' || !level) {
-        changeError(() => 'Name and Level fields are required.');
+      if (!level) {
+        changeError(() => 'Level field is required.');
       } else {
         changeAdding(() => true);
 
