@@ -580,35 +580,31 @@ export default class Dashboard extends Component {
             <MasonryPanel>
               <DashboardModule>
                 <PaneItem title="Remote Instances">
-                  {remotes
-                    .filter((remote: Object) => !remote.loopback)
-                    .map((remote: Object) => (
+                  {remotes.map((remote: Object) => (
+                    <div
+                      className="dashboard-module-wide has-link"
+                      key={remote.name}
+                      onClick={() => this.handleModuleClick(remote.url)}
+                    >
                       <div
-                        className="dashboard-module-wide has-link"
-                        key={remote.name}
-                        onClick={() => this.handleModuleClick(remote.url)}
+                        className={`dashboard-data-title ${statusHealth(
+                          remote.health
+                        )}`}
                       >
-                        <div
-                          className={`dashboard-data-title ${statusHealth(
-                            remote.health
-                          )}`}
-                        >
-                          {remote.name}
+                        {remote.name}
+                      </div>
+                      <div className={`bottom ${statusHealth(remote.health)}`}>
+                        <div className="module">
+                          <div className="top">{remote['instance-key']}</div>
+                          <div className="bottom">key</div>
                         </div>
-                        <div
-                          className={`bottom ${statusHealth(remote.health)}`}
-                        >
-                          <div className="module">
-                            <div className="top">{remote['instance-key']}</div>
-                            <div className="bottom">key</div>
-                          </div>
-                          <div className="module">
-                            <div className="top">{remote.health}</div>
-                            <div className="bottom">health</div>
-                          </div>
+                        <div className="module">
+                          <div className="top">{remote.health}</div>
+                          <div className="bottom">health</div>
                         </div>
                       </div>
-                    ))}
+                    </div>
+                  ))}
                   {canLoadMoreRemotes && (
                     <div
                       className="dashboard-data-loadmore"
