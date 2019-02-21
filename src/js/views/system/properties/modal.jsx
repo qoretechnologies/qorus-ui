@@ -8,6 +8,7 @@ import Dropdown, {
   Item as DItem,
 } from '../../../components/dropdown';
 import Modal from '../../../components/modal';
+import Box from '../../../components/box';
 
 export default class extends Component {
   props: {
@@ -115,8 +116,8 @@ export default class extends Component {
     );
 
   getKeyList: Function = (value: string): Array<string> =>
-    Object.keys(this.props.collection[this.state.domain]).filter(
-      (key: string): boolean => (value ? includes(key, value) : true)
+    this.props.collection[this.state.domain].filter(
+      (item: Object): boolean => (value ? includes(item.name, value) : true)
     );
 
   renderDomains: Function = (): Array<React.Element<any>> =>
@@ -125,11 +126,11 @@ export default class extends Component {
     ));
 
   renderKeys: Function = (): ?Array<React.Element<any>> =>
-    this.getKeyList(this.state.key).map((key: string, index: number) => (
-      <DItem key={index} title={key} action={this.handleKeySelect} />
+    this.getKeyList(this.state.key).map((item: Object, index: number) => (
+      <DItem key={index} title={item.name} action={this.handleKeySelect} />
     ));
 
-  render() {
+  render () {
     const { data, collection } = this.props;
 
     return (
@@ -139,74 +140,78 @@ export default class extends Component {
         </Modal.Header>
         <form onSubmit={this.handleFormSubmit}>
           <Modal.Body>
-            <label htmlFor="domain"> Domain </label>
-            <div className={`form-group ${!data ? 'input-group' : ''}`}>
-              {!data && (
-                <div className="input-group-btn">
-                  <Dropdown
-                    id="props"
-                    show={this.state.showDomains}
-                    onHide={this.handleDomainClose}
-                  >
-                    <DControl> Select </DControl>
-                    {this.renderDomains()}
-                  </Dropdown>
+            <Box top fill>
+              <label htmlFor="domain"> Domain </label>
+              <div className={`form-group ${!data ? 'input-group' : ''}`}>
+                {!data && (
+                  <div className="input-group-btn">
+                    <Dropdown
+                      id="props"
+                      show={this.state.showDomains}
+                      onHide={this.handleDomainClose}
+                    >
+                      <DControl> Select </DControl>
+                      {this.renderDomains()}
+                    </Dropdown>
+                  </div>
+                )}
+                <input
+                  readOnly={data}
+                  ref="domain"
+                  type="text"
+                  id="domain"
+                  value={this.state.domain}
+                  className="pt-input pt-fill"
+                  onChange={this.handleDomainChange}
+                  autoComplete="off"
+                  placeholder="...or specify new domain"
+                />
+              </div>
+              <label htmlFor="key"> Key </label>
+              <div
+                className={`form-group ${
+                  !data || !data.key ? 'input-group' : ''
+                }`}
+              >
+                {(!data || !data.key) && (
+                  <div className="input-group-btn">
+                    <Dropdown
+                      id="props"
+                      show={this.state.showKeys}
+                      onHide={this.handleKeysClose}
+                    >
+                      <DControl disabled={!collection[this.state.domain]}>
+                        {' '}
+                        Select{' '}
+                      </DControl>
+                      {collection[this.state.domain] && this.renderKeys()}
+                    </Dropdown>
+                  </div>
+                )}
+                <input
+                  readOnly={data && data.key}
+                  ref="key"
+                  type="text"
+                  id="key"
+                  value={this.state.key}
+                  className="pt-input pt-fill"
+                  onChange={this.handleKeyChange}
+                  autoComplete="off"
+                  placeholder="...or specify new key"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="value"> Value </label>
+                <div>
+                  <textarea
+                    ref="value"
+                    id="value"
+                    defaultValue={data ? JSON.stringify(data.value) : ''}
+                    className="pt-input pt-fill"
+                  />
                 </div>
-              )}
-              <input
-                readOnly={data}
-                ref="domain"
-                type="text"
-                id="domain"
-                value={this.state.domain}
-                className="form-control"
-                onChange={this.handleDomainChange}
-                autoComplete="off"
-                placeholder="...or specify new domain"
-              />
-            </div>
-            <label htmlFor="key"> Key </label>
-            <div
-              className={`form-group ${
-                !data || !data.key ? 'input-group' : ''
-              }`}
-            >
-              {(!data || !data.key) && (
-                <div className="input-group-btn">
-                  <Dropdown
-                    id="props"
-                    show={this.state.showKeys}
-                    onHide={this.handleKeysClose}
-                  >
-                    <DControl disabled={!collection[this.state.domain]}>
-                      {' '}
-                      Select{' '}
-                    </DControl>
-                    {collection[this.state.domain] && this.renderKeys()}
-                  </Dropdown>
-                </div>
-              )}
-              <input
-                readOnly={data && data.key}
-                ref="key"
-                type="text"
-                id="key"
-                value={this.state.key}
-                className="form-control"
-                onChange={this.handleKeyChange}
-                autoComplete="off"
-                placeholder="...or specify new key"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="value"> Value </label>
-              <textarea
-                ref="value"
-                id="value"
-                defaultValue={data ? JSON.stringify(data.value) : ''}
-                className="form-control"
-              />
-            </div>
+              </div>
+            </Box>
           </Modal.Body>
           <Modal.Footer>
             <div className="pull-right">
