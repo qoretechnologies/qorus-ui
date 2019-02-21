@@ -18,7 +18,9 @@ import {
   InputGroup,
   Classes,
   Icon,
+  ControlGroup,
 } from '@blueprintjs/core';
+import { Controls, Control } from '../../components/controls';
 import map from 'lodash/map';
 
 import de from '../../../img/country_flags/de.png';
@@ -180,15 +182,18 @@ export default class Topbar extends Component {
         </NavbarGroup>
         <NavbarGroup align="right">
           <form onSubmit={this.handleSubmit}>
-            <InputGroup
-              lefticonName="search"
-              placeholder="Quick search"
-              rightElement={this.renderSearchMenu()}
-              value={this.state.quickSearchValue}
-              onChange={e =>
-                this.setState({ quickSearchValue: e.target.value })
-              }
-            />
+            <ControlGroup>
+              <InputGroup
+                lefticonName="search"
+                placeholder="Quick search"
+                rightElement={this.renderSearchMenu()}
+                value={this.state.quickSearchValue}
+                onChange={e =>
+                  this.setState({ quickSearchValue: e.target.value })
+                }
+              />
+              <Control icon="search" type="submit" big />
+            </ControlGroup>
           </form>
           <NavbarDivider />
           <Popover
