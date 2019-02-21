@@ -43,7 +43,7 @@ export default class Search extends Component {
 
   delayedSearch: Function = debounce((value: string): void => {
     this.props.onSearchUpdate(value, false);
-  }, 280);
+  }, 1000);
 
   /**
    * Handles input changes, event is persisted
