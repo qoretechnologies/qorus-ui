@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
 
-import { fetchJson, fetchWithNotifications } from '../../../utils';
+import { fetchJson, fetchWithNotifications, get, put } from '../../../utils';
 import settings from '../../../../../settings';
 import {
   updateConfigItemAction,
@@ -191,11 +191,69 @@ const processStopped = createAction('SERVICES_PROCESSSTOPPED', events => ({
 
 const unsync = createAction('SERVICES_UNSYNC');
 
+// LOGGER
 const fetchLogger = fetchLoggerAction('services');
 const addUpdateLogger = addUpdateLoggerAction('services');
 const deleteLogger = deleteLoggerAction('services');
 const addAppender = addAppenderAction('services');
 const deleteAppender = deleteAppenderAction('services');
+
+// AUTH LABELS
+const fetchAuthLabels = createAction(
+  'SERVICES_FETCHAUTHLABELS',
+  async (id: number) => {
+    const authLabels = await get(
+      `${settings.REST_BASE_URL}/services/${id}/authlabels`
+    );
+
+    return { authLabels, id };
+  }
+);
+
+const updateAuthLabel = createAction(
+  'SERVICES_UPDATEAUTHLABEL',
+  async (
+    id: number,
+    name: string,
+    value: string,
+    originalValue: string,
+    dispatch: Function
+  ): Object => {
+    if (!dispatch) {
+      return {
+        name,
+        value,
+        id,
+      };
+    }
+
+    const result: Object = await fetchWithNotifications(
+      async () =>
+        put(`${settings.REST_BASE_URL}/services/${id}/authlabels`, {
+          body: JSON.stringify({
+            [name]: value,
+          }),
+        }),
+      `Setting ${name} to ${value}...`,
+      `Successfuly set ${name} to ${value}`,
+      dispatch
+    );
+
+    if (result.err) {
+      return {
+        name,
+        value: originalValue,
+        id,
+      };
+    }
+
+    return {
+      name,
+      value,
+      id,
+    };
+  }
+);
 
 export {
   setOptions,
@@ -228,4 +286,6 @@ export {
   deleteLogger,
   addAppender,
   deleteAppender,
+  fetchAuthLabels,
+  updateAuthLabel,
 };

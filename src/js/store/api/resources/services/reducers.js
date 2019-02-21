@@ -1,4 +1,8 @@
-import { updateItemWithId, setUpdatedToNull } from '../../utils';
+import {
+  updateItemWithId,
+  setUpdatedToNull,
+  updateItemWithName,
+} from '../../utils';
 import { normalizeId, normalizeName } from '../utils';
 import remove from 'lodash/remove';
 
@@ -19,6 +23,7 @@ import {
   addAppenderReducer,
   deleteAppenderReducer,
 } from '../../common/reducers';
+import { objectCollectionToArray } from '../../../../helpers/interfaces';
 
 const initialState = { data: [], sync: false, loading: false };
 
@@ -437,11 +442,61 @@ const updateConfigItemWs = {
 
 const processStarted = processStartedReducer;
 const processStopped = processStoppedReducer;
+
+// LOGGER
 const fetchLogger = loggerReducer;
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
 const deleteAppender = deleteAppenderReducer;
+
+// AUTHLABELS
+const fetchAuthLabels = {
+  next (
+    state = initialState,
+    {
+      payload: { authLabels, id },
+    }
+  ) {
+    const stateData = [...state.data];
+    const newData = updateItemWithId(
+      id,
+      {
+        authLabels:
+          authLabels === 'success' ? [] : objectCollectionToArray(authLabels),
+      },
+      stateData
+    );
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const updateAuthLabel = {
+  next (
+    state,
+    {
+      payload: { name, value, id },
+    }
+  ) {
+    const data = [...state.data];
+    const service: Object = data.find(
+      (srvc: Object): boolean => srvc.id === id
+    );
+
+    if (service) {
+      let { authLabels } = service;
+
+      authLabels = updateItemWithName(name, { value }, authLabels);
+
+      const newData = updateItemWithId(id, { authLabels }, data);
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
 
 export {
   setOptions as SETOPTIONS,
@@ -471,4 +526,6 @@ export {
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
   deleteAppender as DELETEAPPENDER,
+  fetchAuthLabels as FETCHAUTHLABELS,
+  updateAuthLabel as UPDATEAUTHLABEL,
 };
