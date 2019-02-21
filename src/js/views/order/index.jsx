@@ -24,6 +24,8 @@ import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import titleManager from '../../hocomponents/TitleManager';
 import Flex from '../../components/Flex';
 import Box from '../../components/box';
+import ConfigItemsTable from '../../components/ConfigItemsTable';
+import { rebuildConfigHash } from '../../helpers/interfaces';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
@@ -195,6 +197,12 @@ export default class Order extends Component {
                 dispatch: this.props.dispatch,
                 isTablet: this.props.isTablet,
               }}
+            />
+          </SimpleTab>
+          <SimpleTab name="config">
+            <ConfigItemsTable
+              items={rebuildConfigHash(this.props.workflow, true)}
+              intrf="workflow"
             />
           </SimpleTab>
           <SimpleTab name="notes">

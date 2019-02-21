@@ -43,7 +43,7 @@ if (env === 'production') {
   );
   app.use(
     proxyMiddleware('/log/', {
-      target: `${API_WS_URL}/log`,
+      target: `${API_WS_URL}`,
       secure: false,
       ws: true,
     })
