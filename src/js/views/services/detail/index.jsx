@@ -133,7 +133,7 @@ export default compose(
             })
           )
           : service.methods
-        : {},
+        : [],
       service,
       ...rest,
     })

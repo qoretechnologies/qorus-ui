@@ -32,7 +32,7 @@ import ServiceTabs from '../tabs';
             })
           )
         : service.methods
-      : {},
+      : [],
     service,
     ...rest,
   })
