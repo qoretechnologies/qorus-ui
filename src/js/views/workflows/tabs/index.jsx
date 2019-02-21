@@ -1,7 +1,5 @@
 // @flow
 import React from 'react';
-import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import DetailTab from './detail';
@@ -21,7 +19,6 @@ import { ORDER_STATES } from '../../../constants/orders';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import List from './list';
 import Performance from './performance';
-import Logger from '../../../containers/Logger';
 
 type WorkflowDetailTabsProps = {
   workflow: Object,

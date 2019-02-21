@@ -20,6 +20,8 @@ import Headbar, { HeadbarDivider } from '../../components/Headbar';
 import Pull from '../../components/Pull';
 import { normalizeName } from '../../components/utils';
 import { ALL_ORDER_STATES } from '../../constants/orders';
+import { rebuildConfigHash } from '../../helpers/interfaces';
+import { countArrayItemsInObject } from '../../utils';
 
 @queryControl('target')
 @queryControl('prevQuery')
@@ -80,6 +82,12 @@ export default class OrderHeader extends Component {
               { title: 'Errors', suffix: `(${size(data.ErrorInstances)})` },
               { title: 'Hierarchy', suffix: `(${size(data.HierarchyInfo)})` },
               { title: 'Audit', suffix: `(${size(data.AuditEvents)})` },
+              {
+                title: 'Config',
+                suffix: `(${countArrayItemsInObject(
+                  rebuildConfigHash(this.props.workflow, true)
+                )})`,
+              },
               'Info',
               { title: 'Notes', suffix: `(${size(data.notes)})` },
               'Log',
