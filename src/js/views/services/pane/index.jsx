@@ -121,6 +121,7 @@ export default class ServicesDetail extends Component {
             { title: 'Mappers', suffix: `(${size(service.mappers)})` },
             { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
             'Resources',
+            'Auth labels',
             'Releases',
             {
               title: 'Config',

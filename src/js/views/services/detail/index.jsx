@@ -69,6 +69,7 @@ const ServicesDetail: Function = ({
             { title: 'Mappers', suffix: `(${size(service.mappers)})` },
             { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
             'Resources',
+            'Auth labels',
             'Releases',
             {
               title: 'Config',
@@ -113,7 +114,7 @@ export default compose(
   patchFuncArgs('load', ['id']),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps (nextProps) {
       const { fetch, id } = this.props;
 
       if (id !== nextProps.id) {
@@ -126,11 +127,11 @@ export default compose(
       methods: service.lib
         ? service.class_based
           ? service.methods.map(
-              (method: Object): Object => ({
-                ...method,
-                ...{ body: service.class_source.class_source },
-              })
-            )
+            (method: Object): Object => ({
+              ...method,
+              ...{ body: service.class_source.class_source },
+            })
+          )
           : service.methods
         : {},
       service,
@@ -149,16 +150,16 @@ export default compose(
     ({ data, service, ...rest }: Object): Object => ({
       data: service.class_based
         ? {
-            ...{
-              code: [
-                {
-                  name: 'Service code',
-                  body: service.class_source.class_source,
-                },
-              ],
-            },
-            ...data,
-          }
+          ...{
+            code: [
+              {
+                name: 'Service code',
+                body: service.class_source.class_source,
+              },
+            ],
+          },
+          ...data,
+        }
         : data,
       configItems: rebuildConfigHash(service),
       service,

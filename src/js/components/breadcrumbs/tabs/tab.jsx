@@ -40,7 +40,9 @@ const CrumbTab: Function = ({
   >
     {compact ? (
       <React.Fragment>
-        {title} <Icon iconName="caret-down" />
+        <a className="breadcrumbs-link non-decorated-link">
+          {title} <Icon iconName="caret-down" />
+        </a>
       </React.Fragment>
     ) : (
       <React.Fragment>

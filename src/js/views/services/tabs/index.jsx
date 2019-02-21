@@ -16,6 +16,7 @@ import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
 import InfoTable from '../../../components/info_table';
 import ProcessTable from '../../../components/ProcessTable';
+import AuthLabels from '../../../containers/AuthLabels';
 
 type ServiceTabsProps = {
   service: Object,
@@ -87,6 +88,11 @@ const ServiceTabs: Function = ({
           resources={service.resources}
           resourceFiles={service.resource_files}
         />
+      </Box>
+    </SimpleTab>
+    <SimpleTab name="auth labels">
+      <Box top fill noPadding>
+        <AuthLabels service={service} />
       </Box>
     </SimpleTab>
     <SimpleTab name="releases">
