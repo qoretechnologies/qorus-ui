@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import { omit, map, size } from 'lodash';
+import { omit, map, size, flow, includes } from 'lodash';
 
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import actions from '../../../store/api/actions';
@@ -23,8 +23,40 @@ import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
 import Flex from '../../../components/Flex';
 import NoDataIf from '../../../components/NoDataIf';
+import { querySelector } from '../../../selectors';
+import { findBy } from '../../../helpers/search';
+import Search from '../../../containers/search';
+import queryControl from '../../../hocomponents/queryControl';
 
 const dataSelector: Function = (state: Object): Object => state.api.props;
+const filterProperties: Function = (query: string): Function => (
+  collection: Object
+): Object => {
+  if (!query) return collection;
+
+  console.log(query);
+
+  return Object.keys(collection).reduce((n, k) => {
+    const obj = Object.keys(collection[k]).reduce(
+      (deep, deepkey) =>
+        includes(deepkey, query) || includes(collection[k][deepkey], query)
+          ? Object.assign(deep, { [deepkey]: collection[k][deepkey] })
+          : deep,
+      {}
+    );
+
+    if (Object.keys(obj).length) {
+      return Object.assign(n, { [k]: obj });
+    }
+
+    if (includes(k, query)) {
+      return Object.assign(n, { [k]: collection[k] });
+    }
+
+    return n;
+  }, {});
+};
+
 const formatData = (): Function => (collection: Object): Object =>
   Object.keys(collection).reduce((result: Object, key: string): Object => {
     const coll = collection[key];
@@ -37,8 +69,12 @@ const formatData = (): Function => (collection: Object): Object =>
   }, {});
 
 const collectionSelector = createSelector(
-  [dataSelector],
-  properties => formatData()(properties.data)
+  [dataSelector, querySelector('search')],
+  (properties, search) =>
+    flow(
+      filterProperties(search),
+      formatData()
+    )(properties.data)
 );
 
 const viewSelector = createSelector(
@@ -62,6 +98,7 @@ const viewSelector = createSelector(
   sync('properties')
 )
 @titleManager('Properties')
+@queryControl('search')
 export default class PropertiesView extends Component {
   props: {
     collection: Object,
@@ -69,6 +106,8 @@ export default class PropertiesView extends Component {
     openModal: Function,
     closeModal: Function,
     optimisicDispatch: Function,
+    changeSearchQuery: Function,
+    searchQuery: string,
   } = this.props;
 
   handleAddClick = (event: EventHandler, data: Object) => {
@@ -100,7 +139,9 @@ export default class PropertiesView extends Component {
   };
 
   render() {
-    const { collection, user } = this.props;
+    const { collection, user, changeSearchQuery, searchQuery } = this.props;
+
+    console.log(collection);
 
     return (
       <Flex>
@@ -124,6 +165,11 @@ export default class PropertiesView extends Component {
                 big
               />
             </ButtonGroup>
+            <Search
+              onSearchUpdate={changeSearchQuery}
+              defaultValue={searchQuery}
+              resource="properties"
+            />
           </Pull>
         </Headbar>
         <NoDataIf condition={size(collection) === 0} big inBox>
