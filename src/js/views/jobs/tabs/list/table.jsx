@@ -27,6 +27,7 @@ import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
 import InstancesBar from '../../../../components/instances_bar';
 import { NameColumnHeader } from '../../../../components/NameColumn';
 import { DateColumnHeader } from '../../../../components/DateColumn';
+import { getInstancesCountByFilters } from '../../../../helpers/interfaces';
 
 type Props = {
   collection: Array<Object>,
@@ -38,11 +39,13 @@ type Props = {
   sort: Function,
   canLoadMore: Function,
   onLoadMore: Function,
+  loadMoreCurrent: number,
   limit: number,
   onCSVClick: Function,
   dateQuery: string,
   changeDateQuery: Function,
   job: Object,
+  filter: string,
 };
 
 const ResultTable = ({
@@ -54,11 +57,13 @@ const ResultTable = ({
   handleHeaderClick,
   canLoadMore,
   onLoadMore,
+  loadMoreCurrent,
   limit,
   onCSVClick,
   dateQuery: dateQuery = '24h',
   changeDateQuery,
   job: { COMPLETE = 0, ERROR = 0, PROGRESS = 0, CRASHED = 0, id },
+  filter,
 }: Props) => (
   <Table fixed condensed hover striped>
     <Thead>
@@ -74,6 +79,17 @@ const ResultTable = ({
             <LoadMore
               canLoadMore={canLoadMore}
               handleLoadMore={onLoadMore}
+              currentCount={loadMoreCurrent}
+              total={
+                filter
+                  ? getInstancesCountByFilters(filter.split(','), {
+                    COMPLETE,
+                    ERROR,
+                    PROGRESS,
+                    CRASHED,
+                  })
+                  : COMPLETE + ERROR + PROGRESS + CRASHED
+              }
               limit={limit}
             />
             <ButtonGroup>

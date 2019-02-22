@@ -33,6 +33,7 @@ import { NameColumnHeader } from '../../../../components/NameColumn';
 import { IdColumnHeader } from '../../../../components/IdColumn';
 import { ActionColumnHeader } from '../../../../components/ActionColumn';
 import { DateColumnHeader } from '../../../../components/DateColumn';
+import { getInstancesCountByFilters } from '../../../../helpers/interfaces';
 
 type Props = {
   sortData: Object,
@@ -45,6 +46,7 @@ type Props = {
   updateDone: Function,
   canLoadMore: boolean,
   onLoadMore: Function,
+  loadMoreCurrent: number,
   isTablet: boolean,
   searchPage?: boolean,
   onCSVClick: Function,
@@ -66,6 +68,7 @@ const WorkflowTable: Function = ({
   handleHeaderClick,
   canLoadMore,
   onLoadMore,
+  loadMoreCurrent,
   isTablet,
   searchPage,
   onCSVClick,
@@ -77,6 +80,7 @@ const WorkflowTable: Function = ({
   location,
   limit,
   children,
+  filterQuery,
 }: Props): React.Element<any> => (
   <Table striped condensed fixed hover>
     <Thead>
@@ -106,6 +110,12 @@ const WorkflowTable: Function = ({
               onLoadMore={onLoadMore}
               limit={limit}
               canLoadMore={canLoadMore}
+              currentCount={loadMoreCurrent}
+              total={
+                filterQuery
+                  ? getInstancesCountByFilters(filterQuery.split(','), workflow)
+                  : workflow.TOTAL
+              }
             />
             {!searchPage && (
               <ButtonGroup>
@@ -200,6 +210,7 @@ export default compose(
     },
   }),
   queryControl('date'),
+  queryControl('filter'),
   pure([
     ...ORDER_STATES_ARRAY,
     'sortData',

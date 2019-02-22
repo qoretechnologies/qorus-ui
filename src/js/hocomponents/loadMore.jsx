@@ -41,6 +41,7 @@ export default (
         handleLoadMore={props.handleLoadMore}
         handleLoadAll={props.handleLoadAll}
         loadMoreTotal={props.total}
+        loadMoreCurrent={length}
       />
     );
   };

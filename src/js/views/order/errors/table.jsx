@@ -85,6 +85,8 @@ const ErrorsTable: Function = ({
       limit,
       collection,
       canLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       sortData,
       onSortChange,
     }: EnhancedTableProps) => (
@@ -139,6 +141,8 @@ const ErrorsTable: Function = ({
                   canLoadMore={canLoadMore}
                   onLoadMore={handleLoadMore}
                   onLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
                 <Search

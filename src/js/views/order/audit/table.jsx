@@ -54,6 +54,8 @@ const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
       handleSearchChange,
       handleLoadAll,
       handleLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       collection,
       canLoadMore,
@@ -69,6 +71,8 @@ const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
                   canLoadMore={canLoadMore}
                   onLoadMore={handleLoadMore}
                   onLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
                 <Search onSearchUpdate={handleSearchChange} resource="audits" />

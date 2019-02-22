@@ -56,6 +56,8 @@ const SQLCacheTable: Function = ({
             handleSearchChange,
             handleLoadAll,
             handleLoadMore,
+            loadMoreCurrent,
+            loadMoreTotal,
             limit,
             collection,
             canLoadMore,
@@ -79,6 +81,8 @@ const SQLCacheTable: Function = ({
                       handleLoadAll={handleLoadAll}
                       handleLoadMore={handleLoadMore}
                       limit={limit}
+                      currentCount={loadMoreCurrent}
+                      total={loadMoreTotal}
                       canLoadMore={canLoadMore}
                     />
                     <Search

@@ -45,6 +45,8 @@ const NotesList: Function = ({ notes }: Props): React.Element<any> => (
       handleSearchChange,
       handleLoadMore,
       handleLoadAll,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       sortData,
       onSortChange,
@@ -58,6 +60,8 @@ const NotesList: Function = ({ notes }: Props): React.Element<any> => (
                 canLoadMore={canLoadMore}
                 onLoadMore={handleLoadMore}
                 onLoadAll={handleLoadAll}
+                currentCount={loadMoreCurrent}
+                total={loadMoreTotal}
                 limit={limit}
               />
               <Search onSearchUpdate={handleSearchChange} resource="notes" />

@@ -39,6 +39,8 @@ type Props = {
   searchPage?: boolean,
   canLoadMore: boolean,
   handleLoadMore: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   sortData: Object,
   onSortChange: Function,
   filter: string,
@@ -56,6 +58,8 @@ const WorkflowOrders: Function = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  loadMoreCurrent,
+  loadMoreTotal,
   sortData,
   onSortChange,
   isTablet,
@@ -77,6 +81,8 @@ const WorkflowOrders: Function = ({
       onLoadMore={handleLoadMore}
       selected={selected}
       selectedIds={selectedIds}
+      loadMoreCurrent={loadMoreCurrent}
+      loadMoreTotal={loadMoreTotal}
       location={location}
       limit={limit}
     >

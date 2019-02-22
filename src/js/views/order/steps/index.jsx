@@ -67,6 +67,8 @@ const StepsTable: Function = ({ steps }: Props): React.Element<Table> => (
                   handleSearchChange,
                   handleLoadAll,
                   handleLoadMore,
+                  loadMoreCurrent,
+                  loadMoreTotal,
                   limit,
                   collection,
                   canLoadMore,
@@ -82,6 +84,8 @@ const StepsTable: Function = ({ steps }: Props): React.Element<Table> => (
                               canLoadMore={canLoadMore}
                               onLoadMore={handleLoadMore}
                               onLoadAll={handleLoadAll}
+                              currentCount={loadMoreCurrent}
+                              total={loadMoreTotal}
                               limit={limit}
                             />
                             <Search

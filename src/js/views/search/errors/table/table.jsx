@@ -32,6 +32,7 @@ type Props = {
   limit: number,
   onCSVClick: Function,
   canLoadMore: boolean,
+  loadMoreCurrent: number,
   children: any,
 };
 
@@ -42,6 +43,7 @@ const WorkflowTable: Function = ({
   canLoadMore,
   children,
   handleLoadMore,
+  loadMoreCurrent,
   limit,
   onCSVClick,
 }: Props): React.Element<any> => (
@@ -63,6 +65,8 @@ const WorkflowTable: Function = ({
               <LoadMore
                 canLoadMore={canLoadMore}
                 handleLoadMore={handleLoadMore}
+                currentCount={loadMoreCurrent}
+                total="?"
                 limit={limit}
               />
             </Pull>

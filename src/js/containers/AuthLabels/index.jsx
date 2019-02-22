@@ -84,6 +84,8 @@ const AuthLabelsContainer: Function = ({
         collection,
         handleLoadMore,
         handleLoadAll,
+        loadMoreCurrent,
+        loadMoreTotal,
         handleSearchChange,
         sortData,
         onSortChange,
@@ -97,6 +99,8 @@ const AuthLabelsContainer: Function = ({
                     canLoadMore={canLoadMore}
                     onLoadMore={handleLoadMore}
                     onLoadAll={handleLoadAll}
+                    currentCount={loadMoreCurrent}
+                    total={loadMoreTotal}
                     limit={limit}
                   />
                   <Search

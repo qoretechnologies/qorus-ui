@@ -96,6 +96,8 @@ const Property: Function = ({
           handleSearchChange,
           handleLoadAll,
           handleLoadMore,
+          loadMoreCurrent,
+          loadMoreTotal,
           limit,
           collection,
           canLoadMore,
@@ -141,6 +143,8 @@ const Property: Function = ({
                     <LoadMore
                       handleLoadAll={handleLoadAll}
                       handleLoadMore={handleLoadMore}
+                      currentCount={loadMoreCurrent}
+                      total={loadMoreTotal}
                       limit={limit}
                       canLoadMore={canLoadMore}
                     />

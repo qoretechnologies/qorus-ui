@@ -34,8 +34,6 @@ const filterProperties: Function = (query: string): Function => (
 ): Object => {
   if (!query) return collection;
 
-  console.log(query);
-
   return Object.keys(collection).reduce((n, k) => {
     const obj = Object.keys(collection[k]).reduce(
       (deep, deepkey) =>
@@ -140,8 +138,6 @@ export default class PropertiesView extends Component {
 
   render() {
     const { collection, user, changeSearchQuery, searchQuery } = this.props;
-
-    console.log(collection);
 
     return (
       <Flex>

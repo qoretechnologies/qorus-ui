@@ -46,6 +46,8 @@ type Props = {
   isTablet: boolean,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   searchQuery: string,
   changeSearchQuery: Function,
   limit: number,
@@ -64,6 +66,8 @@ const Services: Function = ({
   canLoadMore,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   isTablet,
   searchQuery,
   changeSearchQuery,
@@ -99,6 +103,8 @@ const Services: Function = ({
         isTablet={isTablet}
         handleLoadMore={handleLoadMore}
         handleLoadAll={handleLoadAll}
+        loadMoreCurrent={loadMoreCurrent}
+        loadMoreTotal={loadMoreTotal}
         limit={limit}
         sortKeys={sortKeysObj}
       />

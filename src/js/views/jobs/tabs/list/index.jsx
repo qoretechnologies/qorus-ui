@@ -35,10 +35,12 @@ type Props = {
   limit: number,
   canLoadMore: Function,
   handleLoadMore: Function,
+  loadMoreCurrent: number,
   sortData: Object,
   onSortChange: Function,
   isTablet: boolean,
   onCSVClick: Function,
+  filter: string,
 };
 
 const JobResults = ({
@@ -50,11 +52,13 @@ const JobResults = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  loadMoreCurrent,
   sortData,
   onSortChange,
   isTablet,
   onCSVClick,
   job,
+  filter,
 }: Props) => (
   <Flex>
     <Box top noPadding>
@@ -67,11 +71,13 @@ const JobResults = ({
         limit={limit}
         canLoadMore={canLoadMore}
         onLoadMore={handleLoadMore}
+        loadMoreCurrent={loadMoreCurrent}
         sortData={sortData}
         onSortChange={onSortChange}
         isTable={isTablet}
         onCSVClick={onCSVClick}
         job={job}
+        filter={filter}
       />
     </Box>
     {jobQuery && jobQuery !== '' ? (
@@ -154,7 +160,7 @@ export default compose(
   ]),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       const {
         id,
         date,
@@ -205,5 +211,6 @@ export default compose(
     'sort',
     'offset',
     'sortDir',
+    'filter',
   ])
 )(JobResults);

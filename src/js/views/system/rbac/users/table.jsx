@@ -59,6 +59,8 @@ const UsersTable: Function = ({
       canLoadMore,
       handleLoadAll,
       handleLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       sortData,
       onSortChange,
@@ -97,6 +99,8 @@ const UsersTable: Function = ({
                   canLoadMore={canLoadMore}
                   onLoadMore={handleLoadMore}
                   onLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
               </Pull>
