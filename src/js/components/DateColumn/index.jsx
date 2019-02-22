@@ -16,11 +16,11 @@ type DateColumnProps = {
 const DateColumn: Function = compose(onlyUpdateForKeys(['children']))(
   ({
     children,
-    className: className = 'big',
+    className: className = 'date',
     editable,
     onDateChange,
   }: DateColumnProps): React.Element<any> => (
-    <Td className={className}>
+    <Td className={editable ? 'big' : className}>
       {editable ? (
         <DatePicker
           date={children}
