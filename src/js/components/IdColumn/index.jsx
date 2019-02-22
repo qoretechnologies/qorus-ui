@@ -12,7 +12,7 @@ type IdColumnProps = {
 const IdColumn: Function = compose(onlyUpdateForKeys(['children']))(
   ({
     children,
-    className: className = 'narrow',
+    className: className = 'tiny',
   }: IdColumnProps): React.Element<any> => (
     <Td className={className}>{children}</Td>
   )
@@ -33,9 +33,7 @@ const IdColumnHeader: Function = compose(
     icon: icon = 'numbered-list',
     ...rest
   }: IdColumnHeaderProps): React.Element<any> => (
-    <Th name={name} iconName={icon} {...rest}>
-      {children}
-    </Th>
+    <Th name={name} iconName={icon} {...rest} title={children} />
   )
 );
 

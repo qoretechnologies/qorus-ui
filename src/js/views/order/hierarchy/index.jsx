@@ -98,19 +98,17 @@ const HierarchyTable: Function = ({
             <Th iconName="info-sign" name="workflowstatus">
               Status
             </Th>
-            <Th iconName="tree-diagram" name="hierarchy_level">
-              Level
-            </Th>
+            <Th
+              iconName="diagram-tree"
+              name="hierarchy_level"
+              title="Hierarchy level"
+            />
             <Th iconName="warning-sign" name="priority">
               Priority
             </Th>
-            <Th iconName="error" name="business_error">
-              Bus.Err.
-            </Th>
+            <Th iconName="error" name="business_error" title="Business error" />
             {!compact && (
-              <Th iconName="error" name="error_count">
-                Errors
-              </Th>
+              <Th iconName="issue" name="error_count" title="Errors count" />
             )}
             {!compact && (
               <Th iconName="warning-sign" name="warning_count">
@@ -118,14 +116,18 @@ const HierarchyTable: Function = ({
               </Th>
             )}
             {!compact && (
-              <Th iconName="exchange" name="subworkflow">
-                Sub WF
-              </Th>
+              <Th
+                iconName="exchange"
+                name="subworkflow"
+                title="Is subworkflow"
+              />
             )}
             {!compact && (
-              <Th iconName="refresh" name="synchronous">
-                Sync
-              </Th>
+              <Th
+                iconName="refresh"
+                name="synchronous"
+                title="Is synchronous"
+              />
             )}
             {!compact && (
               <DateColumnHeader name="scheduled">Scheduled</DateColumnHeader>
