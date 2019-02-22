@@ -11,16 +11,17 @@
     "browser": true,
     "node": true
   },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "legacyDecorators": true
+    }
+  },
   "rules": {
     "react/jsx-uses-vars": [2],
     "react/jsx-uses-react": [2],
     "comma-dangle": "off",
     "no-console": "warn",
-    "semi": "off",
-    "no-unused-expressions": "error",
-    "no-unused-labels": "error",
-    "no-unused-vars": "error",
-    "no-undef": "error"
+    "semi": "off"
   },
   "globals": {
     "ReactClass": true,
