@@ -39,22 +39,22 @@ const HierarchyRow: Function = ({
     <Td className="medium">
       <span className={`label status-${label}`}>{item.workflowstatus}</span>
     </Td>
-    <Td className="medium">
+    <Td className="tiny">
       <ContentByType content={item.hierarchy_level} />
     </Td>
     <Td className="medium">{item.priority}</Td>
-    <Td className="medium">
+    <Td className="tiny">
       <ContentByType content={item.business_error} />
     </Td>
-    {!compact && <Td className="medium">{item.error_count}</Td>}
+    {!compact && <Td className="narrow">{item.error_count}</Td>}
     {!compact && <Td className="medium">{item.warning_count}</Td>}
     {!compact && (
-      <Td className="medium">
+      <Td className="tiny">
         <ContentByType content={item.subworkflow} />
       </Td>
     )}
     {!compact && (
-      <Td className="narrow">
+      <Td className="tiny">
         <ContentByType content={item.synchronous} />
       </Td>
     )}

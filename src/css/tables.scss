@@ -92,6 +92,11 @@ th {
     width: 150px;
   }
 
+  &.date {
+    /* [4] */
+    width: 110px;
+  }
+
   &.large {
     /* [4] */
     width: 200px;
@@ -300,6 +305,11 @@ table.table--data {
           &.big {
             /* [4] */
             width: 150px;
+          }
+
+          &.date {
+            /* [4] */
+            width: 120px;
           }
 
           &.large {
