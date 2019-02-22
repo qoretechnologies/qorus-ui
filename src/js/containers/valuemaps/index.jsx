@@ -42,6 +42,8 @@ const ValueMapsTable = ({
       handleSearchChange,
       handleLoadAll,
       handleLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       collection,
       canLoadMore,
@@ -58,6 +60,8 @@ const ValueMapsTable = ({
                     handleLoadAll={handleLoadAll}
                     handleLoadMore={handleLoadMore}
                     limit={limit}
+                    currentCount={loadMoreCurrent}
+                    total={loadMoreTotal}
                     canLoadMore={canLoadMore}
                   />
                   {compact && (

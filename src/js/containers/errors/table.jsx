@@ -49,6 +49,8 @@ const ErrorsTable: Function = ({
       canLoadMore,
       handleLoadAll,
       handleLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       sortData,
       onSortChange,
@@ -74,6 +76,8 @@ const ErrorsTable: Function = ({
                   canLoadMore={canLoadMore}
                   onLoadMore={handleLoadMore}
                   onLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
                 {compact && (

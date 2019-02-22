@@ -47,6 +47,8 @@ type Props = {
   changeDateQuery: Function,
   handleExpiryChange: Function,
   dispatchAction: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
 };
 
 const JobsTable: Function = ({
@@ -67,6 +69,8 @@ const JobsTable: Function = ({
   limit,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   dateQuery,
   changeDateQuery,
   handleExpiryChange,
@@ -93,6 +97,8 @@ const JobsTable: Function = ({
               handleLoadAll={handleLoadAll}
               handleLoadMore={handleLoadMore}
               limit={limit}
+              currentCount={loadMoreCurrent}
+              total={loadMoreTotal}
               canLoadMore={canLoadMore}
             />
           </Pull>

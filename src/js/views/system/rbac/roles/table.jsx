@@ -43,6 +43,8 @@ const RolesTable: Function = ({
       canLoadMore,
       handleLoadAll,
       handleLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       sortData,
       onSortChange,
@@ -66,6 +68,8 @@ const RolesTable: Function = ({
                   canLoadMore={canLoadMore}
                   onLoadMore={handleLoadMore}
                   onLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
               </Pull>

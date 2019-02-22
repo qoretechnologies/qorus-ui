@@ -52,6 +52,8 @@ const ResourceTable: Function = ({
           onSortChange,
           handleLoadMore,
           handleLoadAll,
+          loadMoreCurrent,
+          loadMoreTotal,
           canLoadMore,
           limit,
         }: Object) => (
@@ -64,6 +66,8 @@ const ResourceTable: Function = ({
                       onLoadMore={handleLoadMore}
                       onLoadAll={handleLoadAll}
                       canLoadMore={canLoadMore}
+                      currentCount={loadMoreCurrent}
+                      total={loadMoreTotal}
                       limit={limit}
                     />
                     <Search
@@ -126,6 +130,8 @@ const ResourceTable: Function = ({
           handleLoadMore,
           handleLoadAll,
           canLoadMore,
+          loadMoreCurrent,
+          loadMoreTotal,
           limit,
         }: Object) => (
           <Table fixed condensed striped>
@@ -137,6 +143,8 @@ const ResourceTable: Function = ({
                       onLoadMore={handleLoadMore}
                       onLoadAll={handleLoadAll}
                       canLoadMore={canLoadMore}
+                      currentCount={loadMoreCurrent}
+                      total={loadMoreTotal}
                       limit={limit}
                     />
                     <Search

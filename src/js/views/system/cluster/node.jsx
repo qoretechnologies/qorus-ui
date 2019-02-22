@@ -72,6 +72,8 @@ const ClusterNode: Function = ({
         handleLoadAll,
         limit,
         handleSearchChange,
+        loadMoreCurrent,
+        loadMoreTotal,
         canLoadMore,
         sortData,
         onSortChange,
@@ -96,6 +98,8 @@ const ClusterNode: Function = ({
                     onLoadMore={handleLoadMore}
                     onLoadAll={handleLoadAll}
                     limit={limit}
+                    currentCount={loadMoreCurrent}
+                    total={loadMoreTotal}
                     canLoadMore={canLoadMore}
                   />
                   <Search

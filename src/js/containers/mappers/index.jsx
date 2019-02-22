@@ -44,6 +44,8 @@ const MappersTable = ({
       canLoadMore,
       handleLoadMore,
       handleLoadAll,
+      loadMoreCurrent,
+      loadMoreTotal,
     }: EnhancedTableProps) => (
       <Table condensed striped fixed>
         <Thead>
@@ -54,6 +56,8 @@ const MappersTable = ({
                   canLoadMore={canLoadMore}
                   onLoadMore={handleLoadMore}
                   onLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
                 <Search

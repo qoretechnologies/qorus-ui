@@ -42,6 +42,8 @@ type Props = {
   canLoadMore: boolean,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   limit: number,
   isTablet: boolean,
   infoTotalCount: number,
@@ -63,6 +65,8 @@ const GroupsView: Function = ({
   canLoadMore,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   isTablet,
   searchQuery,
   changeSearchQuery,
@@ -108,6 +112,8 @@ const GroupsView: Function = ({
           selectedIds={selectedIds}
           handleLoadMore={handleLoadMore}
           handleLoadAll={handleLoadAll}
+          loadMoreCurrent={loadMoreCurrent}
+          loadMoreTotal={loadMoreTotal}
           limit={limit}
         />
       </Box>

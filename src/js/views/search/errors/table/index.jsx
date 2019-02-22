@@ -29,6 +29,7 @@ type Props = {
   searchPage?: boolean,
   canLoadMore: boolean,
   handleLoadMore: Function,
+  loadMoreCurrent: number,
   sortData: Object,
   onSortChange: Function,
   filter: string,
@@ -42,6 +43,7 @@ const WorkflowOrders: Function = ({
   limit,
   canLoadMore,
   handleLoadMore,
+  loadMoreCurrent,
   sortData,
   onSortChange,
 }: Props): React.Element<any> => (
@@ -51,6 +53,7 @@ const WorkflowOrders: Function = ({
     onSortChange={onSortChange}
     canLoadMore={canLoadMore}
     handleLoadMore={handleLoadMore}
+    loadMoreCurrent={loadMoreCurrent}
     limit={limit}
     onCSVClick={onCSVClick}
   >

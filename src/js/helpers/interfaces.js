@@ -3,6 +3,7 @@ import size from 'lodash/size';
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 import isObject from 'lodash/isObject';
+import includes from 'lodash/includes';
 
 import { normalizeName } from '../components/utils';
 import { INTERFACE_ID_KEYS, INTERFACE_ID_LINKS } from '../constants/interfaces';
@@ -122,10 +123,32 @@ const objectCollectionToArray: Function = (
     []
   );
 
+const getInstancesCountByFilters = (
+  filters: Array<string>,
+  model: Object
+): number => {
+  const transformedFilters: Array<string> = filters.map((filter: string) =>
+    filter.toLowerCase()
+  );
+
+  return reduce(
+    model,
+    (result: number, status: number, key: string) => {
+      if (includes(transformedFilters, key.toLowerCase())) {
+        return result + status;
+      }
+
+      return result;
+    },
+    0
+  );
+};
+
 export {
   pullConfigFromStepinfo,
   rebuildConfigHash,
   normalizeItem,
   buildLinkToInterfaceId,
   objectCollectionToArray,
+  getInstancesCountByFilters,
 };

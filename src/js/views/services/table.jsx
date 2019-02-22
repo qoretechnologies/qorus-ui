@@ -34,6 +34,8 @@ type Props = {
   selectedIds: Array<number>,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   limit: number,
   sortKeys: Object,
 };
@@ -52,6 +54,8 @@ const ServicesTable: Function = ({
   selectedIds,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   limit,
   sortKeys,
 }: Props): React.Element<any> => (
@@ -85,6 +89,8 @@ const ServicesTable: Function = ({
               canLoadMore={canLoadMore}
               handleLoadMore={handleLoadMore}
               handleLoadAll={handleLoadAll}
+              currentCount={loadMoreCurrent}
+              total={loadMoreTotal}
             />
           </Pull>
         </Th>

@@ -130,6 +130,8 @@ const ConfigItemsContainer: Function = ({
                     canLoadMore,
                     handleLoadMore,
                     handleLoadAll,
+                    loadMoreTotal,
+                    loadMoreCurrent,
                     limit,
                     sortData,
                     onSortChange,
@@ -143,6 +145,8 @@ const ConfigItemsContainer: Function = ({
                               canLoadMore={canLoadMore}
                               onLoadMore={handleLoadMore}
                               onLoadAll={handleLoadAll}
+                              currentCount={loadMoreCurrent}
+                              total={loadMoreTotal}
                               limit={limit}
                             />
                             <Search

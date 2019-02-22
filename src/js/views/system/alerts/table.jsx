@@ -33,6 +33,8 @@ type Props = {
   canLoadMore?: boolean,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   openPane: Function,
   closePane: Function,
   paneId: string,
@@ -48,6 +50,8 @@ const AlertsTable: Function = ({
   canLoadMore,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   openPane,
   closePane,
   paneId,
@@ -64,6 +68,8 @@ const AlertsTable: Function = ({
                   canLoadMore={canLoadMore}
                   handleLoadMore={handleLoadMore}
                   handleLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
               </Pull>

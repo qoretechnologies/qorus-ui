@@ -56,6 +56,8 @@ type Props = {
   location: Object,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   limit: number,
   sortKeysObj: Object,
   band: string,
@@ -88,6 +90,8 @@ const WorkflowsTable: Function = ({
   limit,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   sortKeysObj,
 }: Props): React.Element<any> => (
   <Table striped hover condensed fixed>
@@ -118,6 +122,8 @@ const WorkflowsTable: Function = ({
               canLoadMore={canLoadMore}
               handleLoadAll={handleLoadAll}
               handleLoadMore={handleLoadMore}
+              total={loadMoreTotal}
+              currentCount={loadMoreCurrent}
             />
           </Pull>
         </Th>

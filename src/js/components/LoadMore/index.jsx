@@ -8,9 +8,11 @@ import mapProps from 'recompose/mapProps';
 
 type Props = {
   canLoadMore: boolean,
-  limit: number,
+  limit?: number,
   handleLoadMore: Function,
   handleLoadAll?: Function,
+  total: number,
+  currentCount: number,
 };
 
 const LoadMore: Function = ({
@@ -18,11 +20,13 @@ const LoadMore: Function = ({
   limit,
   onLoadMore,
   onLoadAll,
+  total,
+  currentCount,
 }: Props): React.Element<Toolbar> =>
   canLoadMore && (
     <Controls>
       <Control
-        text={`Show ${limit} more...`}
+        text={`Show more (${currentCount} / ${total})`}
         iconName="chevron-down"
         onClick={onLoadMore}
         big
@@ -52,5 +56,5 @@ export default compose(
       ...rest,
     })
   ),
-  onlyUpdateForKeys(['limit', 'canLoadMore'])
+  onlyUpdateForKeys(['limit', 'canLoadMore', 'currentCount', 'total'])
 )(LoadMore);

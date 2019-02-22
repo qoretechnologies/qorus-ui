@@ -64,6 +64,8 @@ const HierarchyTable: Function = ({
       handleSearchChange,
       handleLoadAll,
       handleLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       collection,
       canLoadMore,
@@ -79,6 +81,8 @@ const HierarchyTable: Function = ({
                   canLoadMore={canLoadMore}
                   handleLoadMore={handleLoadMore}
                   handleLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
                 <Search

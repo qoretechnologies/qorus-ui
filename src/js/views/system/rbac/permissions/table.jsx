@@ -48,6 +48,8 @@ const PermsTable: Function = ({
       canLoadMore,
       handleLoadAll,
       handleLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       sortData,
       onSortChange,
@@ -71,6 +73,8 @@ const PermsTable: Function = ({
                   canLoadMore={canLoadMore}
                   onLoadMore={handleLoadMore}
                   onLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
               </Pull>

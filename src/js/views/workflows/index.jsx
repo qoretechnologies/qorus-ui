@@ -227,6 +227,8 @@ type Props = {
   canLoadMore: boolean,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   limit: number,
   isTablet: boolean,
   groupedStates: Object,
@@ -260,6 +262,8 @@ const Workflows: Function = ({
   canLoadMore,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   closePane,
   isTablet,
   totalInstances,
@@ -307,6 +311,8 @@ const Workflows: Function = ({
         limit={limit}
         handleLoadMore={handleLoadMore}
         handleLoadAll={handleLoadAll}
+        loadMoreCurrent={loadMoreCurrent}
+        loadMoreTotal={loadMoreTotal}
         isTablet={isTablet}
         totalInstances={totalInstances}
         selected={selected}

@@ -53,6 +53,8 @@ type Props = {
   canLoadMore: boolean,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   limit: number,
   isTablet: boolean,
   infoTotalCount: number,
@@ -77,6 +79,8 @@ const JobsView: Function = ({
   canLoadMore,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   sortData,
   onSortChange,
   isTablet,
@@ -113,6 +117,8 @@ const JobsView: Function = ({
         limit={limit}
         handleLoadAll={handleLoadAll}
         handleLoadMore={handleLoadMore}
+        loadMoreCurrent={loadMoreCurrent}
+        loadMoreTotal={loadMoreTotal}
         selected={selected}
         selectedIds={selectedIds}
         sortKeys={sortKeysObj}
@@ -181,7 +187,7 @@ export default compose(
   patch('load', ['fetchParams']),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       const { date, selectNone, fetch }: Props = this.props;
 
       if (date !== nextProps.date) {

@@ -34,6 +34,8 @@ type Props = {
   selectedIds: Array<Number>,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   limit: number,
 };
 
@@ -50,6 +52,8 @@ const GroupsTable: Function = ({
   limit,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
 }: Props): React.Element<any> => (
   <Table fixed hover condensed striped>
     <Thead>
@@ -68,6 +72,8 @@ const GroupsTable: Function = ({
               canLoadMore={canLoadMore}
               handleLoadAll={handleLoadAll}
               handleLoadMore={handleLoadMore}
+              currentCount={loadMoreCurrent}
+              total={loadMoreTotal}
               limit={limit}
             />
           </Pull>

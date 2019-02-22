@@ -54,6 +54,8 @@ type Props = {
   canLoadMore?: boolean,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreCurrent: number,
+  loadMoreTotal: number,
   limit: number,
   handleAddClick: Function,
   openModal: Function,
@@ -78,6 +80,8 @@ const ConnectionTable: Function = ({
   canLoadMore,
   handleLoadMore,
   handleLoadAll,
+  loadMoreCurrent,
+  loadMoreTotal,
   limit,
   handleAddClick,
   canDelete,
@@ -101,6 +105,8 @@ const ConnectionTable: Function = ({
               canLoadMore={canLoadMore}
               handleLoadMore={handleLoadMore}
               handleLoadAll={handleLoadAll}
+              currentCount={loadMoreCurrent}
+              total={loadMoreTotal}
               limit={limit}
             />
           </Pull>

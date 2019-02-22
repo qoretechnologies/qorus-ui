@@ -14,6 +14,8 @@ export type EnhancedTableProps = {
   handleSearchChange: Function,
   handleLoadMore: Function,
   handleLoadAll: Function,
+  loadMoreTotal: number,
+  loadMoreCurrent: number,
   limit: number,
   children: Function,
   search: string,

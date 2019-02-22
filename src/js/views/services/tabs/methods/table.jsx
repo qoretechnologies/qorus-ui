@@ -54,6 +54,8 @@ const MethodsTable: Function = ({
       handleSearchChange,
       handleLoadAll,
       handleLoadMore,
+      loadMoreCurrent,
+      loadMoreTotal,
       limit,
       collection,
       canLoadMore,
@@ -69,6 +71,8 @@ const MethodsTable: Function = ({
                   canLoadMore={canLoadMore}
                   handleLoadMore={handleLoadMore}
                   handleLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
                   limit={limit}
                 />
                 <Search
