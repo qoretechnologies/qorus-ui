@@ -24,11 +24,7 @@ const TreeView = ({
   if (!order) return <Loader />;
 
   const handleUpdateClick: Function = (obj: string): void => {
-    updateData(
-      dataObjects[data],
-      obj,
-      order.id
-    );
+    updateData(dataObjects[data], obj, order.id);
   };
 
   return (
@@ -41,6 +37,7 @@ const TreeView = ({
       onUpdateClick={handleUpdateClick}
       id={order.id}
       editableKeys={editableKeys}
+      caseSensitive
     />
   );
 };
