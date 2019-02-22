@@ -93,7 +93,7 @@ const WorkflowHeader: Function = ({
         big
         id={workflow.id}
         autostart={workflow.autostart}
-        execCount={workflow.execCount}
+        execCount={workflow.exec_count}
         withExec
       />
       {tab === 'orders' && (
