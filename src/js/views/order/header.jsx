@@ -1,14 +1,9 @@
 // @flow
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import size from 'lodash/size';
 
 import OrderControls from '../workflows/tabs/list/controls';
-import WorkflowControls from '../workflows/controls';
-import WorkflowAutostart from '../workflows/autostart';
 import Lock from '../workflows/tabs/list/lock';
-import Reschedule from '../workflows/tabs/list/modals/schedule';
-import Dropdown, { Control, Item } from '../../components/dropdown';
 import queryControl from '../../hocomponents/queryControl';
 import {
   Breadcrumbs,
@@ -16,7 +11,7 @@ import {
   CrumbTabs,
   CollapsedCrumb,
 } from '../../components/breadcrumbs';
-import Headbar, { HeadbarDivider } from '../../components/Headbar';
+import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
 import { normalizeName } from '../../components/utils';
 import { ALL_ORDER_STATES } from '../../constants/orders';
@@ -35,7 +30,7 @@ export default class OrderHeader extends Component {
     prevQueryQuery: string,
   } = this.props;
 
-  render() {
+  render () {
     const { prevQueryQuery, targetQuery, workflow, data } = this.props;
 
     const target = targetQuery
@@ -103,20 +98,6 @@ export default class OrderHeader extends Component {
           <Lock
             id={this.props.data.id}
             lock={this.props.data.operator_lock}
-            big
-          />
-          <HeadbarDivider />
-          <WorkflowControls
-            id={this.props.workflow.id}
-            enabled={this.props.workflow.enabled}
-            remote={this.props.workflow.remote}
-            big
-          />
-          <WorkflowAutostart
-            id={this.props.workflow.id}
-            autostart={this.props.workflow.autostart}
-            execCount={this.props.workflow.exec_count}
-            withExec
             big
           />
         </Pull>
