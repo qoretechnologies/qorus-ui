@@ -119,11 +119,9 @@ const TableRow: Function = ({
       hasAlerts={hasAlerts}
       type="workflow"
     />
-    {!isTablet && (
-      <Td key="controls" className="normal">
-        <WorkflowControls id={id} enabled={enabled} remote={remote} />
-      </Td>
-    )}
+    <Td key="controls" className="normal">
+      <WorkflowControls id={id} enabled={enabled} remote={remote} />
+    </Td>
     <Td key="autostart" name="autostart" className="medium">
       <AutoStart id={id} autostart={autostart} execCount={execs} />
     </Td>

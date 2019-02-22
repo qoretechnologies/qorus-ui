@@ -97,7 +97,7 @@ const WorkflowsTable: Function = ({
   <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
-        <Th colspan={isTablet ? 4 : 5}>
+        <Th colspan={5}>
           <Pull>
             <Selector
               selected={selected}
@@ -142,7 +142,7 @@ const WorkflowsTable: Function = ({
         <SelectColumnHeader />
         <IdColumnHeader />
         <NameColumnHeader />
-        {!isTablet && <ActionColumnHeader />}
+        <ActionColumnHeader />
         <Th name="autostart" iconName="automatic-updates">
           Auto / Execs
         </Th>
@@ -171,7 +171,7 @@ const WorkflowsTable: Function = ({
     </Thead>
     <DataOrEmptyTable
       condition={collection.length === 0}
-      cols={isTablet ? 8 : 9}
+      cols={deprecated ? 10 : 9}
     >
       {props => (
         <Tbody {...props}>
