@@ -1,6 +1,6 @@
 /* @flow */
 import { createAction } from 'redux-actions';
-import { fetchWithNotifications, post } from '../../utils';
+import { fetchWithNotifications, post, get } from '../../utils';
 import settings from '../../../../settings';
 
 const init: Function = createAction('SYSTEM_INIT');
@@ -68,6 +68,21 @@ const killProcess: Function = createAction(
   }
 );
 
+// Config items
+const fetchGlobalConfig: Function = createAction(
+  'SYSTEM_FETCHGLOBALCONFIG',
+  async () => {
+    const globalConfig = await get(`${settings.REST_BASE_URL}/system/config`);
+
+    return { globalConfig };
+  }
+);
+
+const updateGlobalConfigItemWs: Function = createAction(
+  'SYSTEM_UPDATEGLOBALCONFIGITEMWS',
+  (events: Array<Object>): Object => ({ events })
+);
+
 const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
 export {
@@ -84,4 +99,6 @@ export {
   healthChanged,
   remoteHealthChanged,
   killProcess,
+  fetchGlobalConfig,
+  updateGlobalConfigItemWs,
 };

@@ -54,14 +54,6 @@ const rebuildConfigHash: Function = (
 
   let resultObj = { ...configObj };
 
-  if (model.global_config) {
-    const globalConfigObj: Object = {
-      'Global Config': map(model.global_config, mapConfigToArray(model.id)),
-    };
-
-    resultObj = { ...globalConfigObj, ...resultObj };
-  }
-
   if (!size(resultObj)) {
     return {};
   }

@@ -1,3 +1,5 @@
+import { updateItemWithName } from '../../utils';
+
 const addProcess = {
   next (
     state: Object,
@@ -268,6 +270,46 @@ const updateNodeInfo = {
   },
 };
 
+// Global Config
+const fetchGlobalConfig = {
+  next (
+    state: Object,
+    {
+      payload: { globalConfig },
+    }
+  ) {
+    const newState = { ...state };
+
+    newState.globalConfig = globalConfig;
+
+    return { ...newState };
+  },
+};
+
+const updateGlobalConfigItemWs = {
+  next (
+    state: Object,
+    {
+      payload: { events },
+    }
+  ) {
+    const newState = { ...state };
+
+    events.forEach(event => {
+      const globalConfig = updateItemWithName(
+        event.item,
+        { value: event.value },
+        [...state.globalConfig],
+        'item'
+      );
+
+      newState.globalConfig = globalConfig;
+    });
+
+    return { ...newState };
+  },
+};
+
 export {
   addProcess as ADDPROCESS,
   removeProcess as REMOVEPROCESS,
@@ -282,4 +324,6 @@ export {
   healthChanged as HEALTHCHANGED,
   remoteHealthChanged as REMOTEHEALTHCHANGED,
   killProcess as KILLPROCESS,
+  fetchGlobalConfig as FETCHGLOBALCONFIG,
+  updateGlobalConfigItemWs as UPDATEGLOBALCONFIGITEMWS,
 };

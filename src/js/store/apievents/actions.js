@@ -62,6 +62,17 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
+      case 'GLOBAL_CONFIG_ITEM_CHANGE': {
+        if (state.api.system.sync && state.api.system.globalConfig) {
+          pipeline(
+            eventstr,
+            system.updateGlobalConfigItemWs,
+            info,
+            dispatch,
+          );
+        }
+        break;
+      }
       case 'WORKFLOW_STATS_UPDATED':
         if (info.tag === 'global') {
           if (state.api.system.sync) {

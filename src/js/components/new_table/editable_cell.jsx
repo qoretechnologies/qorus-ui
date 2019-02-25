@@ -5,6 +5,8 @@ import omit from 'lodash/omit';
 
 import { Control } from '../controls';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import Text from '../text';
+import { ControlGroup } from '@blueprintjs/core';
 
 /**
  * Table data cell component which allows editing value.
@@ -45,7 +47,7 @@ export default class EditableCell extends Component {
    *
    * @param {Object} props
    */
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this._cell = null;
@@ -56,7 +58,7 @@ export default class EditableCell extends Component {
   /**
    * Sets default state values.
    */
-  componentWillMount() {
+  componentWillMount () {
     this.setState({
       value: this.props.value,
       edit: this.props.startEdit,
@@ -70,7 +72,7 @@ export default class EditableCell extends Component {
    *
    * @param {object} nextProps
    */
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (!this.state.edit) {
       this.setState({ value: nextProps.value });
     }
@@ -79,7 +81,7 @@ export default class EditableCell extends Component {
   /**
    * Focuses the input field when editing has been started.
    */
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate (prevProps, prevState) {
     if (this.state.edit && document.activeElement !== this._editField) {
       this._editField.focus();
       document.addEventListener('click', this.handleOutsideClick);
@@ -99,7 +101,7 @@ export default class EditableCell extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     document.removeEventListener('click', this.handleOutsideClick);
   }
 
@@ -158,7 +160,7 @@ export default class EditableCell extends Component {
    *
    * @return {boolean}
    */
-  canEdit() {
+  canEdit () {
     return this.state.edit && this.state.width;
   }
 
@@ -227,7 +229,7 @@ export default class EditableCell extends Component {
    *
    * @return {ReactElement}
    */
-  render() {
+  render () {
     const props = omit(this.props, [
       'value',
       'onSave',
@@ -249,29 +251,32 @@ export default class EditableCell extends Component {
       >
         {this.canEdit() ? (
           <form onSubmit={this.commit} className="editable-form">
-            <input
-              key="input"
-              name="newValue"
-              type={this.props.type}
-              value={this.state.value || ''}
-              onChange={this.onChange}
-              onKeyUp={this.onKeyUp}
-              ref={this.refEditField}
-              min={this.props.min}
-              max={this.props.max}
-              className={this.state.error ? 'form-error' : ''}
-            />
-            <Control
-              className={classNames({ hide: !this.props.showControl })}
-              key="button"
-              type="submit"
-              iconName="plus"
-              btnStyle="primary"
-            />
+            <ControlGroup className="pt-fill">
+              <input
+                key="input"
+                name="newValue"
+                type={this.props.type}
+                value={this.state.value || ''}
+                onChange={this.onChange}
+                onKeyUp={this.onKeyUp}
+                ref={this.refEditField}
+                min={this.props.min}
+                max={this.props.max}
+                className={`pt-input pt-small ${
+                  this.state.error ? 'form-error' : ''
+                }`}
+              />
+              <Control
+                className="pt-fixed"
+                btnStyle="success"
+                type="submit"
+                iconName="small-tick"
+              />
+            </ControlGroup>
           </form>
         ) : (
           <React.Fragment>
-            <span>{this.state.value}</span>
+            <Text text={this.state.value} />
             <Control
               title="Edit"
               iconName="edit"

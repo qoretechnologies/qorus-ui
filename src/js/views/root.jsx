@@ -12,7 +12,6 @@ import de from 'react-intl/locale-data/de';
 import mapProps from 'recompose/mapProps';
 
 import Topbar from '../components/topbar';
-import Loader from '../components/loader';
 import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
 import { Manager as ModalManager } from '../components/modal';
@@ -21,8 +20,6 @@ import { settings } from '../store/ui/actions';
 import messages from '../intl/messages';
 import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
-import { Classes, Icon, Intent } from '@blueprintjs/core';
-import qorusLogo from '../../img/qorus_engine_logo.png';
 import Flex from '../components/Flex';
 import { success, warning } from '../store/ui/bubbles/actions';
 import FullPageLoading from '../components/FullPageLoading';
@@ -62,6 +59,7 @@ const optionsSelector = state => state.api.systemOptions;
     saveDimensions: settings.saveDimensions,
     fetchSystem: actions.system.fetch,
     fetchSystemOptions: actions.systemOptions.fetch,
+    fetchGlobalConfig: actions.system.fetchGlobalConfig,
     fetchCurrentUser: actions.currentUser.fetch,
     storeSidebar: actions.currentUser.storeSidebar,
     storeTheme: actions.currentUser.storeTheme,
@@ -77,17 +75,6 @@ const optionsSelector = state => state.api.systemOptions;
     ...rest,
   })
 )
-@pure([
-  'info',
-  'currentUser',
-  'menu',
-  'location',
-  'children',
-  'isTablet',
-  'sidebarOpen',
-  'health',
-  'children',
-])
 export default class Root extends Component {
   props: {
     children: any,
@@ -118,7 +105,7 @@ export default class Root extends Component {
 
   _modal = null;
 
-  getChildContext() {
+  getChildContext () {
     return {
       openModal: (...args) => this._modal.open(...args),
       closeModal: (...args) => this._modal.close(...args),
@@ -127,7 +114,7 @@ export default class Root extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.fetchGlobalData();
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
@@ -185,9 +172,10 @@ export default class Root extends Component {
     this.props.storeSidebar(sidebarOpen);
   };
 
-  fetchGlobalData() {
+  fetchGlobalData () {
     this.props.fetchSystem();
     this.props.fetchSystemOptions();
+    this.props.fetchGlobalConfig();
     this.props.fetchCurrentUser();
     this.props.fetchHealth();
   }
@@ -205,10 +193,14 @@ export default class Root extends Component {
     storeTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  render() {
+  render () {
     const { currentUser, info, isTablet, health, options } = this.props;
     const isSynced: boolean =
-      currentUser.sync && info.sync && health.sync && options.sync;
+      currentUser.sync &&
+      info.sync &&
+      health.sync &&
+      options.sync &&
+      info.globalConfig;
 
     if (!isSynced) {
       return <FullPageLoading />;
@@ -217,8 +209,8 @@ export default class Root extends Component {
     const locale = currentUser.data.storage.locale
       ? currentUser.data.storage.locale
       : navigator.locale
-      ? navigator.locale
-      : 'en-US';
+        ? navigator.locale
+        : 'en-US';
 
     const isLightTheme = currentUser.data.storage.theme === 'light';
 

@@ -17,7 +17,6 @@ import size from 'lodash/size';
 
 import NameColumn, { NameColumnHeader } from '../NameColumn';
 import DataOrEmptyTable from '../DataOrEmptyTable';
-import { Icon, Intent } from '@blueprintjs/core';
 import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
 import ExpandableItem from '../ExpandableItem';
@@ -35,6 +34,8 @@ import { sortDefaults } from '../../constants/sort';
 import Pull from '../Pull';
 import Dropdown, { Item, Control } from '../../components/dropdown';
 import ContentByType from '../ContentByType';
+import mapProps from 'recompose/mapProps';
+import { connect } from 'react-redux';
 
 type ConfigItemsContainerProps = {
   items: Object,
@@ -52,7 +53,7 @@ const ConfigItemsContainer: Function = ({
       dispatchAction(
         actions[intrf].updateConfigItem,
         item.id,
-        item.name,
+        item.name || item.item,
         newValue,
         belongsTo
       );
@@ -182,7 +183,7 @@ const ConfigItemsContainer: Function = ({
                           <Tbody {...props}>
                             {collection.map((item: Object, index: number) => (
                               <Tr key={item.name} first={index === 0}>
-                                <NameColumn name={item.name} />
+                                <NameColumn name={item.name || item.item} />
                                 <Td className="text">
                                   <ContentByType content={item.default_value} />
                                 </Td>
@@ -191,12 +192,7 @@ const ConfigItemsContainer: Function = ({
                                   <code>{item.type}</code>
                                 </Td>
                                 <Td className="narrow">
-                                  <Icon
-                                    iconName={
-                                      item.mandatory ? 'small-tick' : 'cross'
-                                    }
-                                    intent={item.mandatory && Intent.SUCCESS}
-                                  />
+                                  <ContentByType content={item.mandatory} />
                                 </Td>
                                 <DescriptionColumn>
                                   {item.desc}
@@ -219,6 +215,13 @@ const ConfigItemsContainer: Function = ({
 };
 
 export default compose(
+  connect((state: Object) => ({
+    globalConfig: state.api.system.globalConfig,
+  })),
   withDispatch(),
+  mapProps(({ items, globalConfig, ...rest }) => ({
+    items: { 'Global Config': globalConfig, ...items },
+    ...rest,
+  })),
   onlyUpdateForKeys(['items'])
 )(ConfigItemsContainer);
