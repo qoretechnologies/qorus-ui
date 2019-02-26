@@ -113,6 +113,7 @@ const Login: Function = ({
           <Flex flex="0 1 auto" className="authorize-footer">
             <ButtonGroup className="pt-fill">
               <Button
+                id="submit"
                 text="Log in"
                 icon="small-tick"
                 btnStyle={!loading && 'success'}
