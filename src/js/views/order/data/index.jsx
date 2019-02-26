@@ -4,6 +4,7 @@ import Box from '../../../components/box';
 import StaticView from './static';
 import DynamicView from './dynamic';
 import SensitiveView from './sensitive';
+import StepDataView from './step';
 import KeysView from './keys';
 import Tabs, { Pane } from '../../../components/tabs';
 
@@ -20,6 +21,9 @@ const DataView = (props: Props) => (
       </Pane>
       <Pane name="Dynamic">
         <DynamicView {...props} />
+      </Pane>
+      <Pane name="Step specific">
+        <StepDataView {...props} />
       </Pane>
       <Pane name="Sensitive">
         <SensitiveView {...props} />

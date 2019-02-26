@@ -114,7 +114,9 @@ const WorkflowTable: Function = ({
               total={
                 filterQuery
                   ? getInstancesCountByFilters(filterQuery.split(','), workflow)
-                  : workflow.TOTAL
+                  : workflow
+                    ? workflow.TOTAL
+                    : '?'
               }
             />
             {!searchPage && (
