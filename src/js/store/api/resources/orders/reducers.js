@@ -621,27 +621,7 @@ const fetchYamlData: Object = {
 const updateSensitiveData: Object = {
   next (
     state: Object,
-    {
-      payload: { newdata, id, skey, svalue },
-    }
   ): Object {
-    const data: Array<Object> = [...state.data];
-    const order = data.find((datum: Object): boolean => datum.id === id);
-
-    if (order) {
-      const sensitiveData = order.sensitive_data;
-
-      sensitiveData[skey][svalue].data = jsYaml.safeLoad(newdata);
-
-      const updatedData: Object = updateItemWithId(
-        id,
-        { sensitive_data: sensitiveData },
-        data
-      );
-
-      return { ...state, ...{ updatedData } };
-    }
-
     return state;
   },
 };

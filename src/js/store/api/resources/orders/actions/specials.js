@@ -1,6 +1,7 @@
 /* @flow */
 import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
+import jsyaml from 'js-yaml';
 
 import {
   fetchJson,
@@ -8,6 +9,7 @@ import {
   fetchWithNotifications,
   post,
   get,
+  put,
 } from '../../../utils';
 import settings from '../../../../../settings';
 
@@ -136,7 +138,12 @@ const updateDone = createAction('ORDERS_UPDATEDONE', (id: number) => ({ id }));
 const fetchData = createAction(
   'ORDERS_FETCHDATA',
   async (id: number, type: string) => {
-    const data = type === 'dynamic' ? 'dynamicdata' : type;
+    const data =
+      type === 'dynamic'
+        ? 'dynamicdata'
+        : type === 'sensitive'
+          ? 'sensitive_data'
+          : type;
     const newData = await fetchJson(
       'GET',
       `${settings.REST_BASE_URL}/orders/${id}/${data}`
@@ -305,6 +312,8 @@ const updateData: Function = createAction(
         }
       );
     } else if (type === 'Sensitive') {
+      const parsedData = JSON.parse(newdata);
+
       fetchJson(
         'PUT',
         `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`,
@@ -312,7 +321,7 @@ const updateData: Function = createAction(
           body: JSON.stringify({
             skey,
             svalue,
-            data: newdata,
+            ...parsedData,
           }),
         }
       );
@@ -332,25 +341,39 @@ const updateData: Function = createAction(
 
 const updateSensitiveData: Function = createAction(
   'ORDERS_UPDATESENSITIVEDATA',
-  (newdata: string, id: number, skey: string, svalue: string): Object => {
-    fetchJson(
-      'PUT',
-      `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`,
-      {
-        body: JSON.stringify({
-          skey,
-          svalue,
-          data: newdata,
-        }),
-      }
-    );
+  (
+    newdata: string,
+    id: number,
+    skey: string,
+    svalue: string,
+    onSuccess: Function,
+    dispatch: Function
+  ): Object => {
+    const parsedData = jsyaml.safeLoad(newdata);
 
-    return {
-      newdata,
-      id,
-      skey,
-      svalue,
-    };
+    fetchWithNotifications(
+      async () => {
+        const res = await put(
+          `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`,
+          {
+            body: JSON.stringify({
+              skey,
+              svalue,
+              ...parsedData,
+            }),
+          }
+        );
+
+        if (!res.err) {
+          onSuccess();
+        }
+
+        return res;
+      },
+      'Updating sensitive data...',
+      'Sensitive data successfuly updated!',
+      dispatch
+    );
   }
 );
 
