@@ -1,12 +1,13 @@
 // @flow
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import { fetchJson } from '../../store/api/utils';
 import settings from '../../settings';
 import Modal from '../modal';
 import { Controls, Control } from '../controls';
 import actions from '../../store/api/actions';
+import jsyaml from 'js-yaml';
+import withDispatch from '../../hocomponents/withDispatch';
 
 type Props = {
   onClose: Function,
@@ -16,12 +17,7 @@ type Props = {
   updateSensitiveData: Function,
 };
 
-@connect(
-  null,
-  {
-    updateSensitiveData: actions.orders.updateSensitiveData,
-  }
-)
+@withDispatch()
 export default class SenstiveYamlEditModal extends Component {
   props: Props = this.props;
 
@@ -31,7 +27,7 @@ export default class SenstiveYamlEditModal extends Component {
     data: null,
   };
 
-  async componentWillMount(): any {
+  async componentWillMount (): any {
     const { id, skey, svalue }: Props = this.props;
     const urlAction: string = `action=yamlSensitiveData&skey=${skey}&svalue=${svalue}`;
     const data: Object = await fetchJson(
@@ -39,32 +35,29 @@ export default class SenstiveYamlEditModal extends Component {
       `${settings.REST_BASE_URL}/orders/${id}?${urlAction}`,
       null,
       false,
-      true,
+      true
     );
 
     this.setState({
-      data: data.data,
+      data,
     });
   }
 
   handleSaveClick: Function = (): void => {
-    this.props.updateSensitiveData(
+    this.props.dispatchAction(
+      actions.orders.updateSensitiveData,
       this.refs.data.value,
       this.props.id,
       this.props.skey,
-      this.props.svalue
+      this.props.svalue,
+      this.props.onClose
     );
+  };
 
-    this.props.onClose();
-  }
-
-  render() {
+  render () {
     return (
       <Modal hasFooter>
-        <Modal.Header
-          onClose={this.props.onClose}
-          titleId="yamlEdit"
-        >
+        <Modal.Header onClose={this.props.onClose} titleId="yamlEdit">
           Editing sensitive data
         </Modal.Header>
         <Modal.Body>
@@ -72,7 +65,7 @@ export default class SenstiveYamlEditModal extends Component {
             <textarea
               ref="data"
               className="form-control"
-              defaultValue={this.state.data}
+              defaultValue={jsyaml.safeDump(this.state.data)}
               rows="8"
               cols="50"
             />
