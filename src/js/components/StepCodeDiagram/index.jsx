@@ -877,6 +877,7 @@ export default class StepsTab extends Component {
                   alignItems: 'center',
                   clear: 'both',
                   textAlign: 'center',
+                  wordBreak: 'break-word'
                 }}
               >
                 {this.getStepFullname(stepId)}
