@@ -36,6 +36,7 @@ export default class Tree extends Component {
     customEditData: string,
     customEdit: boolean,
     onEditClick: Function,
+    onKeyEditClick: Function,
     openModal: Function,
     closeModal: Function,
     id: number,
@@ -52,7 +53,7 @@ export default class Tree extends Component {
     showTypes: false,
   };
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps (nextProps: Object) {
     if (nextProps.forceEdit) {
       this.setState({
         mode: 'edit',
@@ -60,7 +61,7 @@ export default class Tree extends Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     if (this.state.mode === 'copy' && document.getElementById('tree-content')) {
       document.getElementById('tree-content').select();
     }
@@ -102,7 +103,7 @@ export default class Tree extends Component {
     this.setState({ items: {}, allExpanded: false });
   };
 
-  renderTree(data, top, k, topKey, level = 1) {
+  renderTree (data, top, k, topKey, level = 1) {
     return Object.keys(data).map((key, index) => {
       const wrapperClass = classNames({
         'tree-component': true,
@@ -151,14 +152,18 @@ export default class Tree extends Component {
       };
 
       const handleEditClick = () => {
-        this.props.openModal(
-          <EditModal
-            onClose={handleEditDone}
-            skey={topKey}
-            svalue={key}
-            id={this.props.id}
-          />
-        );
+        if (this.props.onKeyEditClick) {
+          this.props.onKeyEditClick(topKey, key, this.props.id);
+        } else {
+          this.props.openModal(
+            <EditModal
+              onClose={handleEditDone}
+              skey={topKey}
+              svalue={key}
+              id={this.props.id}
+            />
+          );
+        }
       };
 
       return (
@@ -185,22 +190,25 @@ export default class Tree extends Component {
             </span>
           </div>
           {this.props.editableKeys && topKey && (
-            <span
-              onClick={handleEditClick}
-              className={classNames({ [`level-${level}`]: true })}
-            >
-              {' '}
-              <Icon iconName="edit" tooltip="Edit data" />
-            </span>
+            <ButtonGroup>
+              <Button
+                onClick={handleEditClick}
+                className={classNames(
+                  { [`level-${level}`]: true },
+                  'pt-minimal'
+                )}
+                icon="edit"
+              />
+            </ButtonGroup>
           )}{' '}
           {isExpandable && isObject
             ? this.renderTree(
-                data[key],
-                false,
-                stateKey,
-                top ? key : null,
-                level + 1
-              )
+              data[key],
+              false,
+              stateKey,
+              top ? key : null,
+              level + 1
+            )
             : null}
           {!isObject && <ContentByType content={data[key]} />}
         </div>
@@ -208,7 +216,7 @@ export default class Tree extends Component {
     });
   }
 
-  renderText(data, tabs = '') {
+  renderText (data, tabs = '') {
     let text = '';
 
     Object.keys(data).forEach(key => {
@@ -223,7 +231,7 @@ export default class Tree extends Component {
     return text;
   }
 
-  renderEdit(data) {
+  renderEdit (data) {
     if (this.props.customEdit) {
       if (this.props.customEditData) {
         return JSON.parse(this.props.customEditData);
@@ -247,7 +255,7 @@ export default class Tree extends Component {
       (key: string): boolean => typeof this.props.data[key] === 'object'
     );
 
-  render() {
+  render () {
     const { data, withEdit, compact } = this.props;
     const { mode, showTypes, allExpanded, items } = this.state;
 

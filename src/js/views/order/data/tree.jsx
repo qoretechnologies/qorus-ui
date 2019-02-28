@@ -19,6 +19,7 @@ const TreeView = ({
   onEditClick,
   customEdit,
   editableKeys,
+  onKeyEditClick,
   withEdit,
 }: Object) => {
   if (!order) return <Loader />;
@@ -35,6 +36,7 @@ const TreeView = ({
       customEdit={customEdit}
       customEditData={order.yamlData}
       onUpdateClick={handleUpdateClick}
+      onKeyEditClick={onKeyEditClick}
       id={order.id}
       editableKeys={editableKeys}
       caseSensitive
