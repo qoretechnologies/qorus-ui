@@ -618,10 +618,35 @@ const fetchYamlData: Object = {
   },
 };
 
-const updateSensitiveData: Object = {
+const fetchStepData: Object = {
   next (
     state: Object,
+    {
+      payload: { id, stepData },
+    }: {
+      payload: Object,
+      id: number,
+      stepData: string,
+    }
   ): Object {
+    if (!stepData) {
+      return state;
+    }
+
+    const data = updateItemWithId(
+      id,
+      {
+        stepdata: stepData,
+      },
+      [...state.data]
+    );
+
+    return { ...state, ...{ data } };
+  },
+};
+
+const updateSensitiveData: Object = {
+  next (state: Object): Object {
     return state;
   },
 };
@@ -666,4 +691,5 @@ export {
   updateData as UPDATEDATA,
   updateSensitiveData as UPDATESENSITIVEDATA,
   fetchYamlData as FETCHYAMLACTION,
+  fetchStepData as FETCHSTEPDATA,
 };

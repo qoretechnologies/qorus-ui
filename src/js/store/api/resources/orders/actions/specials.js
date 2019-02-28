@@ -377,6 +377,26 @@ const updateSensitiveData: Function = createAction(
   }
 );
 
+const fetchStepData: Function = createAction(
+  'ORDERS_FETCHSTEPDATA',
+  async (id: number): Object => {
+    const stepData: Object = await get(
+      `${settings.REST_BASE_URL}/orders/${id}/stepdata`
+    );
+
+    if (stepData.err) {
+      return {
+        stepData: null,
+      };
+    }
+
+    return {
+      id,
+      stepData,
+    };
+  }
+);
+
 const fetchYamlAction: Function = createAction(
   'ORDERS_FETCHYAMLACTION',
   async (type: string, id: number): Object => {
@@ -452,4 +472,5 @@ export {
   fetchYamlAction,
   updateSensitiveData,
   addNote,
+  fetchStepData,
 };

@@ -64,12 +64,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'GLOBAL_CONFIG_ITEM_CHANGE': {
         if (state.api.system.sync && state.api.system.globalConfig) {
-          pipeline(
-            eventstr,
-            system.updateGlobalConfigItemWs,
-            info,
-            dispatch,
-          );
+          pipeline(eventstr, system.updateGlobalConfigItemWs, info, dispatch);
         }
         break;
       }
@@ -702,6 +697,19 @@ const handleEvent = (url, data, dispatch, state) => {
         if (order && state.api.orders.sync) {
           dispatch(orders.fetchData(info.workflow_instanceid, info.datatype));
         }
+
+        break;
+      }
+      case 'WORKFLOW_STEP_DATA_UPDATED': {
+        const isLoaded: boolean = isInterfaceLoaded(
+          'orders',
+          info.workflow_instanceid
+        );
+
+        if (isLoaded) {
+          dispatch(orders.fetchStepData(info.workflow_instanceid));
+        }
+
         break;
       }
       case 'WORKFLOW_STEP_CONFIG_ITEM_CHANGE': {
@@ -1009,7 +1017,12 @@ const handleEvent = (url, data, dispatch, state) => {
             []
           );
 
-          pipeline('LOGGER_ACTIONS', interfaceActions[info.interface].deleteLogger, newInfo, dispatch);
+          pipeline(
+            'LOGGER_ACTIONS',
+            interfaceActions[info.interface].deleteLogger,
+            newInfo,
+            dispatch
+          );
         }
         break;
       }
@@ -1020,7 +1033,12 @@ const handleEvent = (url, data, dispatch, state) => {
         );
 
         if (isLoaded) {
-          pipeline('APPENDER_ACTIONS', interfaceActions[info.interface].addAppender, info, dispatch);
+          pipeline(
+            'APPENDER_ACTIONS',
+            interfaceActions[info.interface].addAppender,
+            info,
+            dispatch
+          );
         }
         break;
       }
@@ -1031,7 +1049,12 @@ const handleEvent = (url, data, dispatch, state) => {
         );
 
         if (isLoaded) {
-          pipeline('APPENDER_ACTIONS', interfaceActions[info.interface].deleteAppender, info, dispatch);
+          pipeline(
+            'APPENDER_ACTIONS',
+            interfaceActions[info.interface].deleteAppender,
+            info,
+            dispatch
+          );
         }
         break;
       }
