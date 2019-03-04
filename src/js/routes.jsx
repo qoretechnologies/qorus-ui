@@ -28,12 +28,16 @@ import * as events from './store/apievents/actions';
 
 import Workflow from './views/workflows/detail';
 import Order from './views/order';
-import Services from './views/services';
 import Service from './views/services/detail';
 import Loader from './components/loader';
 
 const OAuthView = Loadable({
   loader: () => import(/* webpackChunkName: "oauth2" */ './views/oauth'),
+  loading: Loader,
+});
+
+const Services = Loadable({
+  loader: () => import(/* webpackChunkName: "services" */ './views/services'),
   loading: Loader,
 });
 
