@@ -414,7 +414,7 @@ const modifyInstance = {
 
     events.forEach(dt => {
       const {
-        data: { jobid, job_instanceid, status },
+        data: { jobid, job_instanceid, status, next },
         modified,
         executed,
       } = dt;
@@ -454,6 +454,7 @@ const modifyInstance = {
             'IN-PROGRESS': progressCount,
             [status]: statusCount,
             last_executed: executed,
+            next,
           },
           newData
         );
@@ -635,9 +636,7 @@ const removeSLAJob = {
 };
 
 const expire = {
-  next (
-    state = initialState
-  ) {
+  next (state = initialState) {
     return state;
   },
 };
