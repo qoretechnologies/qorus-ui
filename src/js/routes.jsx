@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 import { connect } from 'react-redux';
 import { Route, Router, IndexRedirect } from 'react-router';
+import Loadable from 'react-loadable';
 
 import Root from './views/root';
 import Login from './views/auth';
@@ -29,6 +30,12 @@ import Workflow from './views/workflows/detail';
 import Order from './views/order';
 import Services from './views/services';
 import Service from './views/services/detail';
+import Loader from './components/loader';
+
+const OAuthView = Loadable({
+  loader: () => import(/* webpackChunkName: "oauth2" */ './views/oauth'),
+  loading: Loader,
+});
 
 class AppInfo extends React.Component {
   props: {
@@ -108,6 +115,7 @@ class AppInfo extends React.Component {
             <Route path="library" component={Library} />
             <Route path="extensions" component={Extensions} />
             <Route path="extension/:name" component={ExtensionDetail} />
+            <Route path="oauth2" component={OAuthView} />
           </Route>
           <Route
             path="/login"
