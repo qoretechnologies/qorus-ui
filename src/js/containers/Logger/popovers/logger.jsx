@@ -155,9 +155,10 @@ export default compose(
         const fetchRes: Object = await fetchWithNotifications(
           async () => {
             const apiMethod: Function = data ? put : post;
+            const loggerPath: string = id ? `${id}/logger` : 'logger';
 
             return apiMethod(
-              `${settings.REST_BASE_URL}/${resource}/${id}/logger`,
+              `${settings.REST_BASE_URL}/${resource}/${loggerPath}`,
               {
                 body: JSON.stringify({
                   level,

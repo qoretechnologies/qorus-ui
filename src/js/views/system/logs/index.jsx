@@ -23,10 +23,10 @@ const Log: Function = ({ tabQuery }: Props) => (
         <CrumbTabs tabs={['System', 'Http', 'Audit', 'Alert', 'Monitor']} />
       </Breadcrumbs>
     </Headbar>
-    <Box top>
+    <Box top fill>
       <SimpleTabs activeTab={tabQuery}>
         <SimpleTab name="system">
-          <LogContainer resource="system" />
+          <LogContainer resource="system" intfc="system" />
         </SimpleTab>
         <SimpleTab name="http">
           <LogContainer resource="http" />

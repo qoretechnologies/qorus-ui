@@ -31,6 +31,7 @@ const interfaceActions: Object = {
   workflows,
   services,
   jobs,
+  system,
 };
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -963,10 +964,9 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'LOGGER_CREATED':
       case 'LOGGER_UPDATED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          info.interface,
-          info.interfaceid
-        );
+        const isLoaded: boolean = info.interfaceid
+          ? isInterfaceLoaded(info.interface, info.interfaceid)
+          : true;
 
         if (isLoaded) {
           const newInfo: Object = { ...info };
@@ -987,50 +987,61 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'LOGGER_DELETED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          info.interface,
-          info.interfaceid
-        );
+        const isLoaded: boolean = info.interfaceid
+          ? isInterfaceLoaded(info.interface, info.interfaceid)
+          : true;
 
         if (isLoaded) {
           const newInfo: Object = { ...info };
-          const reversedLevels: Object = invert(
-            state.api.system.data.logger.logger_levels
-          );
 
-          newInfo.current_logger.params.level = {
-            [reversedLevels[info.current_logger.params.level]]: true,
-          };
+          //! CHECK IF WE DELETED DEFAULT LOGGER
+          if (!info.current_logger) {
+            pipeline(
+              'LOGGER_ACTIONS',
+              interfaceActions[info.interface].deleteLogger,
+              null,
+              dispatch
+            );
+          } else {
+            const reversedLevels: Object = invert(
+              state.api.system.data.logger.logger_levels
+            );
 
-          //! FETCH APPENDERS FOR THE DEFAULT LOGGER
-          const appenders: Array<Object> = await get(
-            `${settings.REST_BASE_URL}/${info.interface}/${
-              info.interfaceid
-            }/logger/appenders`
-          );
+            newInfo.current_logger.params.level = {
+              [reversedLevels[info.current_logger.params.level]]: true,
+            };
 
-          newInfo.appenders = appenders.reduce(
-            (cur: Array<Object>, appender: Object) => [
-              ...cur,
-              formatAppender(appender),
-            ],
-            []
-          );
+            //! FETCH APPENDERS FOR THE DEFAULT LOGGER
+            const appendersPath = info.interfaceid
+              ? `${info.interfaceid}/logger/appenders`
+              : 'logger/appenders';
 
-          pipeline(
-            'LOGGER_ACTIONS',
-            interfaceActions[info.interface].deleteLogger,
-            newInfo,
-            dispatch
-          );
+            const appenders: Array<Object> = await get(
+              `${settings.REST_BASE_URL}/${info.interface}/${appendersPath}`
+            );
+
+            newInfo.appenders = appenders.reduce(
+              (cur: Array<Object>, appender: Object) => [
+                ...cur,
+                formatAppender(appender),
+              ],
+              []
+            );
+
+            pipeline(
+              'LOGGER_ACTIONS',
+              interfaceActions[info.interface].deleteLogger,
+              newInfo,
+              dispatch
+            );
+          }
         }
         break;
       }
       case 'APPENDER_CREATED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          info.interface,
-          info.interfaceid
-        );
+        const isLoaded: boolean = info.interfaceid
+          ? isInterfaceLoaded(info.interface, info.interfaceid)
+          : true;
 
         if (isLoaded) {
           pipeline(
@@ -1043,10 +1054,9 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'APPENDER_DELETED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          info.interface,
-          info.interfaceid
-        );
+        const isLoaded: boolean = info.interfaceid
+          ? isInterfaceLoaded(info.interface, info.interfaceid)
+          : true;
 
         if (isLoaded) {
           pipeline(

@@ -1,5 +1,5 @@
 const formatAppender: Function = (appender: Object): Object => ({
-  id: appender.appenderid,
+  id: appender.appenderid || appender.logger_appenderid,
   type: appender.params.appenderType,
   layoutPattern: appender.params.layoutPattern,
   name: appender.params.name,

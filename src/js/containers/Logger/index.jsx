@@ -69,7 +69,7 @@ const LoggerContainer: Function = ({
     <PaneItem
       title="Logger"
       label={
-        logger.isDefault ? (
+        logger.isDefault || logger === 'empty' ? (
           <React.Fragment>
             <Popover
               content={
@@ -91,14 +91,16 @@ const LoggerContainer: Function = ({
                 />
               </ButtonGroup>
             </Popover>
-            <ButtonGroup>
-              <Button
-                text="Clone logger"
-                icon="duplicate"
-                stopPropagation
-                onClick={handleLoggerDuplicateClick}
-              />
-            </ButtonGroup>
+            {logger !== 'empty' && (
+              <ButtonGroup>
+                <Button
+                  text="Clone logger"
+                  icon="duplicate"
+                  stopPropagation
+                  onClick={handleLoggerDuplicateClick}
+                />
+              </ButtonGroup>
+            )}
           </React.Fragment>
         ) : (
           <React.Fragment>
@@ -135,122 +137,133 @@ const LoggerContainer: Function = ({
         )
       }
     >
-      <Table fixed striped>
-        <Thead>
-          <FixedRow>
-            <NameColumnHeader />
-            <Th icon="info-sign">Level</Th>
-            <Th icon="info-sign">Additivity</Th>
-          </FixedRow>
-        </Thead>
-        <Tbody>
-          <Tr first>
-            <NameColumn name={logger.name} />
-            <Td>{Object.keys(logger.level)[0]}</Td>
-            <Td>
-              <ContentByType content={logger.additivity} />
-            </Td>
-          </Tr>
-        </Tbody>
-      </Table>
+      {logger !== 'empty' ? (
+        <Table fixed striped>
+          <Thead>
+            <FixedRow>
+              <NameColumnHeader />
+              <Th icon="info-sign">Level</Th>
+              <Th icon="info-sign">Additivity</Th>
+            </FixedRow>
+          </Thead>
+          <Tbody>
+            <Tr first>
+              <NameColumn name={logger.name} />
+              <Td>{Object.keys(logger.level)[0]}</Td>
+              <Td>
+                <ContentByType content={logger.additivity} />
+              </Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      ) : (
+        <Alert bsStyle="info">No logger found for system</Alert>
+      )}
     </PaneItem>
-    <PaneItem
-      title="Appenders"
-      label={
-        !logger.isDefault && (
-          <Popover
-            content={
-              <NewAppenderPopover
-                resource={resource}
-                id={id}
-                onCancel={() => toggleAppenderPopover(() => false)}
+    {logger !== 'empty' && (
+      <PaneItem
+        title="Appenders"
+        label={
+          !logger.isDefault && (
+            <Popover
+              content={
+                <NewAppenderPopover
+                  resource={resource}
+                  id={id}
+                  onCancel={() => toggleAppenderPopover(() => false)}
+                />
+              }
+              position={Position.LEFT_TOP}
+              isOpen={isAppenderPopoverOpen}
+            >
+              <Button
+                text="Add appender"
+                icon="add"
+                stopPropagation
+                onClick={() => toggleAppenderPopover(() => true)}
               />
-            }
-            position={Position.LEFT_TOP}
-            isOpen={isAppenderPopoverOpen}
-          >
-            <Button
-              text="Add appender"
-              icon="add"
-              stopPropagation
-              onClick={() => toggleAppenderPopover(() => true)}
-            />
-          </Popover>
-        )
-      }
-    >
-      <Table fixed condensed striped>
-        <Thead>
-          <FixedRow>
-            <NameColumnHeader />
-            <Th className="text" icon="info-sign">
-              Type
-            </Th>
-            <Th className="text" icon="info-sign">
-              Filename
-            </Th>
-            <Th className="text" icon="info-sign">
-              Encoding
-            </Th>
-            <Th className="text" icon="info-sign">
-              Layout Pattern
-            </Th>
-            <Th icon="refresh" title="Rotation count" />
-            {!logger.isDefault && <Th icon="remove" title="Remove appender" />}
-          </FixedRow>
-        </Thead>
-        <DataOrEmptyTable condition={size(appenders) === 0} cols={7}>
-          {(props: Object) => (
-            <Tbody {...props}>
-              {appenders.map(
-                (appender: Object, index: number): any => (
-                  <Tr first={index === 0} key={appender.id}>
-                    <NameColumn name={appender.name} />
-                    <Td className="text">
-                      <ContentByType content={appender.type} />
-                    </Td>
-                    <Td className="text">
-                      <ContentByType content={appender.filename} />
-                    </Td>
-                    <Td className="text">
-                      <ContentByType content={appender.encoding} />
-                    </Td>
-                    <Td className="text">
-                      <ContentByType content={appender.layoutPattern} />
-                    </Td>
-                    <Td className="narrow">
-                      <ContentByType content={appender.rotationCount} />
-                    </Td>
-                    {!logger.isDefault && (
-                      <Td className="tiny">
-                        <ButtonGroup>
-                          <Button
-                            title="Remove appender"
-                            btnStyle="danger"
-                            icon="remove"
-                            onClick={() =>
-                              handleDeleteAppenderClick(appender.id)
-                            }
-                          />
-                        </ButtonGroup>
-                      </Td>
-                    )}
-                  </Tr>
-                )
+            </Popover>
+          )
+        }
+      >
+        <Table fixed condensed striped>
+          <Thead>
+            <FixedRow>
+              <NameColumnHeader />
+              <Th className="text" icon="info-sign">
+                Type
+              </Th>
+              <Th className="text" icon="info-sign">
+                Filename
+              </Th>
+              <Th className="text" icon="info-sign">
+                Encoding
+              </Th>
+              <Th className="text" icon="info-sign">
+                Layout Pattern
+              </Th>
+              <Th icon="refresh" title="Rotation count" />
+              {!logger.isDefault && (
+                <Th icon="remove" title="Remove appender" />
               )}
-            </Tbody>
-          )}
-        </DataOrEmptyTable>
-      </Table>
-    </PaneItem>
+            </FixedRow>
+          </Thead>
+          <DataOrEmptyTable condition={size(appenders) === 0} cols={7}>
+            {(props: Object) => (
+              <Tbody {...props}>
+                {appenders.map(
+                  (appender: Object, index: number): any => (
+                    <Tr first={index === 0} key={appender.id}>
+                      <NameColumn name={appender.name} />
+                      <Td className="text">
+                        <ContentByType content={appender.type} />
+                      </Td>
+                      <Td className="text">
+                        <ContentByType content={appender.filename} />
+                      </Td>
+                      <Td className="text">
+                        <ContentByType content={appender.encoding} />
+                      </Td>
+                      <Td className="text">
+                        <ContentByType content={appender.layoutPattern} />
+                      </Td>
+                      <Td className="narrow">
+                        <ContentByType content={appender.rotationCount} />
+                      </Td>
+                      {!logger.isDefault && (
+                        <Td className="tiny">
+                          <ButtonGroup>
+                            <Button
+                              title="Remove appender"
+                              btnStyle="danger"
+                              icon="remove"
+                              onClick={() =>
+                                handleDeleteAppenderClick(appender.id)
+                              }
+                            />
+                          </ButtonGroup>
+                        </Td>
+                      )}
+                    </Tr>
+                  )
+                )}
+              </Tbody>
+            )}
+          </DataOrEmptyTable>
+        </Table>
+      </PaneItem>
+    )}
   </Flex>
 );
 
 export default compose(
   connect((state, ownProps) => {
-    const { logger, appenders }: Object = state.api[
-      ownProps.resource
-    ].data.find((res: Object): boolean => res.id === ownProps.id);
+    const { loggerData: logger, appenders }: Object =
+      ownProps.resource === 'system'
+        ? state.api[ownProps.resource].data
+        : state.api[ownProps.resource].data.find(
+          (res: Object): boolean => res.id === ownProps.id
+        );
 
     return {
       logger,
@@ -285,7 +298,11 @@ export default compose(
       id,
     }: LoggerContainerProps): Function => (): void => {
       fetchWithNotifications(
-        async () => del(`${settings.REST_BASE_URL}/${resource}/${id}/logger`),
+        async () => {
+          const loggerPath = id ? `${id}/logger` : 'logger';
+
+          return del(`${settings.REST_BASE_URL}/${resource}/${loggerPath}`);
+        },
         `Removing logger...`,
         `Logger successfuly removed`,
         dispatch
@@ -312,14 +329,19 @@ export default compose(
       dispatch,
       resource,
       id,
-    }: LoggerContainerProps): Function => (id): void => {
+    }: LoggerContainerProps): Function => (appenderId): void => {
       fetchWithNotifications(
-        async () =>
-          del(`${settings.REST_BASE_URL}/${resource}/${id}/logger/appenders`, {
+        async () => {
+          const appendersPath = id
+            ? `${id}/logger/appenders`
+            : 'logger/appenders';
+
+          return del(`${settings.REST_BASE_URL}/${resource}/${appendersPath}`, {
             body: JSON.stringify({
-              id,
+              id: appenderId,
             }),
-          }),
+          });
+        },
         `Removing appender...`,
         `Appender successfuly removed`,
         dispatch
