@@ -10,31 +10,39 @@ import StepdataEdit from './modals/stepdataEdit';
 import { connect } from 'react-redux';
 import { put, fetchWithNotifications } from '../../../store/api/utils';
 import settings from '../../../settings';
+import jsyaml from 'js-yaml';
+import size from 'lodash/size';
+import NoDataIf from '../../../components/NoDataIf';
 
 const StepDataView = ({
   order: { stepdata = [], id },
   handleEditKeyClick,
-}: Object): Array<React.Component<Tree>> =>
-  stepdata.map(
-    (step: Object): React.Component<Tree> => (
-      <PaneItem title={`${normalizeName(step)} (${step.stepid})`}>
-        <Tree
-          key={step.stepid}
-          id={id}
-          data={{ [step.stepid]: step.data }}
-          caseSensitive
-          editableKeys
-          onKeyEditClick={(key: string, ind: number, id: number) => {
-            handleEditKeyClick(
-              JSON.stringify(step.data[ind], null, 4),
-              key,
-              ind
-            );
-          }}
-        />
-      </PaneItem>
-    )
-  );
+}: Object): Array<React.Element<Tree>> => (
+  <NoDataIf condition={size(stepdata) === 0}>
+    {() =>
+      stepdata.map(
+        (step: Object): React.Element<Tree> => (
+          <PaneItem title={`Step: ${normalizeName(step)} (${step.stepid})`}>
+            <Tree
+              key={step.stepid}
+              id={id}
+              data={{ [step.stepid]: step.data }}
+              caseSensitive
+              editableKeys
+              onKeyEditClick={(key: string, ind: number, id: number) => {
+                handleEditKeyClick(
+                  JSON.stringify(step.data[ind], null, 4),
+                  key,
+                  ind
+                );
+              }}
+            />
+          </PaneItem>
+        )
+      )
+    }
+  </NoDataIf>
+);
 
 export default compose(
   connect(),
@@ -48,12 +56,12 @@ export default compose(
       fetchWithNotifications(
         async () => {
           const res: Object = await put(
-            `${settings.REST_BASE_URL}/orders/${order.id}?action=stepData`,
+            `${settings.REST_BASE_URL}/orders/${order.id}?action=yamlStepData`,
             {
               body: JSON.stringify({
                 stepid,
                 ind,
-                newdata: JSON.parse(newData),
+                newdata: jsyaml.safeLoad(newData),
               }),
             }
           );
@@ -84,8 +92,8 @@ export default compose(
       openModal(
         <StepdataEdit
           onClose={closeModal}
-          indexData={data}
           stepId={stepId}
+          orderId={order.id}
           ind={index}
           onSaveClick={handleStepDataSave}
         />
