@@ -210,11 +210,7 @@ export async function fetchJson (
     jsonRes = 'success';
   }
 
-  if (
-    res.status === 404 ||
-    res.status === 409 ||
-    (res.status >= 500 && res.status <= 600)
-  ) {
+  if (res.status >= 400 && res.status <= 600) {
     const desc: string = jsonRes.desc || jsonRes;
 
     return {
