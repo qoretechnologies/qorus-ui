@@ -116,6 +116,7 @@ const WorkflowDetailTabs: Function = ({
       <Box top fill scrollY>
         <ConfigItemsTable
           items={rebuildConfigHash(workflow, true)}
+          globalItems={workflow.global_config}
           intrf="workflows"
         />
       </Box>

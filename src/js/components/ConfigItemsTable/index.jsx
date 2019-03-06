@@ -36,6 +36,7 @@ import Dropdown, { Item, Control } from '../../components/dropdown';
 import ContentByType from '../ContentByType';
 import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
+import includes from 'lodash/includes';
 
 type ConfigItemsContainerProps = {
   items: Object,
@@ -219,6 +220,12 @@ export default compose(
     globalConfig: state.api.system.globalConfig,
   })),
   withDispatch(),
+  mapProps(({ globalConfig, globalItems, ...rest }) => ({
+    globalConfig: globalConfig.filter(configItem =>
+      includes(globalItems ? Object.keys(globalItems) : [], configItem.name)
+    ),
+    ...rest,
+  })),
   mapProps(({ items, globalConfig, ...rest }) => ({
     items: { 'Global Config': globalConfig, ...items },
     ...rest,
