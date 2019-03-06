@@ -68,8 +68,6 @@ const addNew = createAction('WORKFLOWS_ADDNEW', async id => {
     `${settings.REST_BASE_URL}/workflows/${id}`
   );
 
-  console.log(wf);
-
   return { wf };
 });
 
