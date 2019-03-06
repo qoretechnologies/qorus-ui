@@ -1,5 +1,5 @@
 import { updateItemWithId, setUpdatedToNull } from '../../utils';
-import { normalizeId } from '../utils';
+import { normalizeId, normalizeName } from '../utils';
 import remove from 'lodash/remove';
 import includes from 'lodash/includes';
 
@@ -121,7 +121,7 @@ const addNew = {
       const data = [
         ...state.data,
         {
-          ...normalizeId('workflowid', wf),
+          ...normalizeName(normalizeId('workflowid', wf)),
           ...{ _updated: true },
           ...DEFAULTS,
         },
