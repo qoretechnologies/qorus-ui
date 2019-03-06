@@ -228,7 +228,7 @@ const setActive = {
       events.forEach(dt => {
         newData = updateItemWithId(
           dt.id,
-          { active: dt.value, _updated: true },
+          { active: dt.value, next: dt.next, _updated: true },
           newData
         );
       });
