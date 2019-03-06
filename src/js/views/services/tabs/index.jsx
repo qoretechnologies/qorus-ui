@@ -107,7 +107,11 @@ const ServiceTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="config">
       <Box top fill scrollY>
-        <ConfigItemsTable items={configItems} intrf="services" />
+        <ConfigItemsTable
+          items={configItems}
+          globalItems={service.global_config}
+          intrf="services"
+        />
       </Box>
     </SimpleTab>
     <SimpleTab name="info">
