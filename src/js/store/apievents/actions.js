@@ -763,7 +763,7 @@ const handleEvent = (url, data, dispatch, state) => {
           pipeline(
             eventstr,
             jobs.setActive,
-            { id: info.jobid, value: true },
+            { id: info.jobid, value: true, next: info.info.next },
             dispatch
           );
         } else if (state.api.jobs.sync) {

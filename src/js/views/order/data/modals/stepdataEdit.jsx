@@ -2,7 +2,10 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
+import lifecycle from 'recompose/lifecycle';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import jsyaml from 'js-yaml';
+
 import Modal from '../../../../components/modal';
 import Box from '../../../../components/box';
 import { TextArea } from '@blueprintjs/core';
@@ -13,11 +16,17 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../../../components/controls';
+import Loader from '../../../../components/loader';
+import { get } from '../../../../store/api/utils';
+import settings from '../../../../settings';
 
 type StepDataEditModalProps = {
   onClose: Function,
   onSave: Function,
-  indexData: string,
+  data: Object,
+  orderId: number,
+  ind: number,
+  stepId: number,
 };
 
 const StepDataEditModal: Function = ({
@@ -28,17 +37,21 @@ const StepDataEditModal: Function = ({
   ind,
   stepId,
 }: StepDataEditModalProps): React.Element<any> => (
-  <Modal hasFooter>
+  <Modal hasFooter height={400}>
     <Modal.Header titleId="stepDataEdit" onClose={onClose}>
       Edit step {stepId} data for index {ind}
     </Modal.Header>
     <Modal.Body>
       <Box top fill>
-        <TextArea
-          value={data}
-          onChange={handleDataChange}
-          rows={getLineCount(data) > 20 ? 20 : getLineCount(data) + 1}
-        />
+        {data ? (
+          <TextArea
+            value={data}
+            onChange={handleDataChange}
+            rows={getLineCount(data) > 20 ? 20 : getLineCount(data) + 1}
+          />
+        ) : (
+          <Loader />
+        )}
       </Box>
     </Modal.Body>
     <Modal.Footer>
@@ -59,7 +72,19 @@ const StepDataEditModal: Function = ({
 );
 
 export default compose(
-  withState('data', 'changeData', ({ indexData }) => indexData || '{}'),
+  withState('data', 'changeData', null),
+  lifecycle({
+    async componentDidMount () {
+      const { orderId, changeData, stepId, ind } = this.props;
+      const yamlData: Object = await get(
+        `${
+          settings.REST_BASE_URL
+        }/orders/${orderId}?action=yamlStepData&stepid=${stepId}&ind=${ind}`
+      );
+
+      changeData(() => jsyaml.safeDump(yamlData));
+    },
+  }),
   withHandlers({
     handleDataChange: ({ changeData }: StepDataEditModalProps): Function => (
       event: Object

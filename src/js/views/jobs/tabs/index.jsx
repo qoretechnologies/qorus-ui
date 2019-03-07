@@ -106,7 +106,11 @@ const JobsDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="config">
       <Box top fill scrollY>
-        <ConfigItemsTable items={rebuildConfigHash(model)} intrf="jobs" />
+        <ConfigItemsTable
+          items={rebuildConfigHash(model)}
+          globalItems={model.global_config}
+          intrf="jobs"
+        />
       </Box>
     </SimpleTab>
     <SimpleTab name="info">

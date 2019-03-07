@@ -7,37 +7,110 @@ import { Route, Router, IndexRedirect } from 'react-router';
 import Loadable from 'react-loadable';
 
 import Root from './views/root';
-import Login from './views/auth';
-import Ocmd from './views/ocmd';
-import Mapper from './views/mapper';
-import Library from './views/library';
-import User from './views/user';
-import Extensions from './views/extensions';
-import ExtensionDetail from './views/extensions/detail';
 import sync from './hocomponents/sync';
 import websocket from './hocomponents/websocket';
 import actions from './store/api/actions';
-import dashboardRoutes from './routes/dashboard';
-import workflowsRoutes from './routes/workflows';
-import jobsRoutes from './routes/jobs';
-import Job from './views/jobs/detail';
-import searchRoutes from './routes/search';
-import groupsRoutes from './routes/groups';
-import ErrorView from './error';
 import * as events from './store/apievents/actions';
-
-import Workflow from './views/workflows/detail';
-import Order from './views/order';
-import Service from './views/services/detail';
 import Loader from './components/loader';
+import System from './views/system';
+
+const Login = Loadable({
+  loader: () => import(/* webpackChunkName: "login" */ './views/auth'),
+  loading: Loader,
+});
+
+const Ocmd = Loadable({
+  loader: () => import(/* webpackChunkName: "ocmd" */ './views/ocmd'),
+  loading: Loader,
+});
+
+const Groups = Loadable({
+  loader: () => import(/* webpackChunkName: "groups" */ './views/groups'),
+  loading: Loader,
+});
+
+const Jobs = Loadable({
+  loader: () => import(/* webpackChunkName: "jobs" */ './views/jobs'),
+  loading: Loader,
+});
+
+const Mapper = Loadable({
+  loader: () => import(/* webpackChunkName: "mapper" */ './views/mapper'),
+  loading: Loader,
+});
+
+const Library = Loadable({
+  loader: () => import(/* webpackChunkName: "library" */ './views/library'),
+  loading: Loader,
+});
+
+const User = Loadable({
+  loader: () => import(/* webpackChunkName: "user" */ './views/user'),
+  loading: Loader,
+});
+
+const Extensions = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "extensions" */ './views/extensions'),
+  loading: Loader,
+});
+
+const ExtensionDetail = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "extension-detail" */ './views/extensions/detail'),
+  loading: Loader,
+});
+
+const Job = Loadable({
+  loader: () => import(/* webpackChunkName: "job" */ './views/jobs/detail'),
+  loading: Loader,
+});
+
+const ErrorView = Loadable({
+  loader: () => import(/* webpackChunkName: "error" */ './error'),
+  loading: Loader,
+});
 
 const OAuthView = Loadable({
   loader: () => import(/* webpackChunkName: "oauth2" */ './views/oauth'),
   loading: Loader,
 });
 
+const Order = Loadable({
+  loader: () => import(/* webpackChunkName: "order" */ './views/order'),
+  loading: Loader,
+});
+
+const Service = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "service" */ './views/services/detail'),
+  loading: Loader,
+});
+
+const Search = Loadable({
+  loader: () => import(/* webpackChunkName: "search" */ './views/search'),
+  loading: Loader,
+});
+
+const Workflow = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "workflow" */ './views/workflows/detail'),
+  loading: Loader,
+});
+
 const Services = Loadable({
   loader: () => import(/* webpackChunkName: "services" */ './views/services'),
+  loading: Loader,
+});
+
+const Workflows = Loadable({
+  loader: () => import(/* webpackChunkName: "workflows" */ './views/workflows'),
+  loading: Loader,
+});
+
+const Sla = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "sla" */ './views/system/slas/detail'),
   loading: Loader,
 });
 
@@ -92,7 +165,7 @@ class AppInfo extends React.Component {
   render () {
     if (this.props.info.error) {
       return (
-        <Router {...this.props.routerProps} key={Math.random()}>
+        <Router {...this.props.routerProps}>
           <Route path="/error" component={ErrorView} />
         </Router>
       );
@@ -100,19 +173,34 @@ class AppInfo extends React.Component {
 
     if (this.props.info.sync) {
       return (
-        <Router {...this.props.routerProps} key={Math.random()}>
+        <Router {...this.props.routerProps}>
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
             <IndexRedirect to="/system/dashboard" />
-            {dashboardRoutes()}
-            {workflowsRoutes()}
+            <Route path="/system" component={System}>
+              <IndexRedirect to="dashboard" />
+              <Route path="dashboard" component={System.Dashboard} />
+              <Route path="alerts" component={System.Alerts} />
+              <Route path="options" component={System.Options} />
+              <Route path="remote" component={System.Connections} />
+              <Route path="props" component={System.Properties} />
+              <Route path="slas" component={System.Slas} />
+              <Route path="sla/:id" component={Sla} />
+              <Route path="values" component={System.Valuemaps} />
+              <Route path="sqlcache" component={System.SqlCache} />
+              <Route path="http" component={System.HttpServices} />
+              <Route path="info" component={System.Info} />
+              <Route path="logs" component={System.Logs} />
+              <Route path="rbac" component={System.RBAC} />
+              <Route path="errors" component={System.Errors} />
+              <Route path="releases" component={System.Releases} />
+              <Route path="cluster" component={System.Cluster} />
+              <Route path="orderStats" component={System.OrderStats} />
+            </Route>
             <Route path="workflow/:id" component={Workflow} />
             <Route path="order/:id/:date" component={Order} />
             <Route path="services" component={Services} />
             <Route path="service/:id" component={Service} />
-            {jobsRoutes()}
             <Route path="job/:id" component={Job} />
-            {searchRoutes()}
-            {groupsRoutes()}
             <Route path="ocmd" component={Ocmd} />
             <Route path="user" component={User} />
             <Route path="mappers/:id" component={Mapper} />
@@ -120,6 +208,10 @@ class AppInfo extends React.Component {
             <Route path="extensions" component={Extensions} />
             <Route path="extension/:name" component={ExtensionDetail} />
             <Route path="oauth2" component={OAuthView} />
+            <Route path="groups" component={Groups} />
+            <Route path="jobs" component={Jobs} />
+            <Route path="search" component={Search} />
+            <Route path="workflows" component={Workflows} />
           </Route>
           <Route
             path="/login"
