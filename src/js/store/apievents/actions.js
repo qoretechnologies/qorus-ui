@@ -25,12 +25,13 @@ import {
 import { INTERFACE_IDS } from '../../constants/interfaces';
 import { get } from '../api/utils';
 import settings from '../../settings';
-import { formatAppender } from '../../helpers/logger';
+import { formatAppender, getLoggerIntfcType } from '../../helpers/logger';
 
 const interfaceActions: Object = {
   workflows,
   services,
   jobs,
+  system,
 };
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -963,15 +964,15 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'LOGGER_CREATED':
       case 'LOGGER_UPDATED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          info.interface,
-          info.interfaceid
-        );
+        const isLoaded: boolean = info.interfaceid
+          ? isInterfaceLoaded(info.interface, info.interfaceid)
+          : true;
+        const intfc: string = getLoggerIntfcType(info.interface);
 
         if (isLoaded) {
           const newInfo: Object = { ...info };
           const reversedLevels: Object = invert(
-            state.api.system.data.logger.logger_levels
+            state.api.system.data.loggerParams.logger_levels
           );
 
           newInfo.params.level = { [reversedLevels[info.params.level]]: true };
@@ -979,7 +980,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
           pipeline(
             'LOGGER_ACTIONS',
-            interfaceActions[info.interface].addUpdateLogger,
+            interfaceActions[intfc].addUpdateLogger,
             newInfo,
             dispatch
           );
@@ -987,55 +988,68 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'LOGGER_DELETED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          info.interface,
-          info.interfaceid
-        );
+        const isLoaded: boolean = info.interfaceid
+          ? isInterfaceLoaded(info.interface, info.interfaceid)
+          : true;
+        const intfc: string = getLoggerIntfcType(info.interface);
 
         if (isLoaded) {
           const newInfo: Object = { ...info };
-          const reversedLevels: Object = invert(
-            state.api.system.data.logger.logger_levels
-          );
 
-          newInfo.current_logger.params.level = {
-            [reversedLevels[info.current_logger.params.level]]: true,
-          };
+          //! CHECK IF WE DELETED DEFAULT LOGGER
+          if (!info.current_logger) {
+            pipeline(
+              'LOGGER_ACTIONS',
+              interfaceActions[intfc].deleteLogger,
+              null,
+              dispatch
+            );
+          } else {
+            const reversedLevels: Object = invert(
+              state.api.system.data.loggerParams.logger_levels
+            );
 
-          //! FETCH APPENDERS FOR THE DEFAULT LOGGER
-          const appenders: Array<Object> = await get(
-            `${settings.REST_BASE_URL}/${info.interface}/${
-              info.interfaceid
-            }/logger/appenders`
-          );
+            newInfo.current_logger.params.level = {
+              [reversedLevels[info.current_logger.params.level]]: true,
+            };
 
-          newInfo.appenders = appenders.reduce(
-            (cur: Array<Object>, appender: Object) => [
-              ...cur,
-              formatAppender(appender),
-            ],
-            []
-          );
+            //! FETCH APPENDERS FOR THE DEFAULT LOGGER
+            const appendersPath = info.interfaceid
+              ? `${info.interfaceid}/logger/appenders`
+              : `${info.interface}/logger/appenders`;
 
-          pipeline(
-            'LOGGER_ACTIONS',
-            interfaceActions[info.interface].deleteLogger,
-            newInfo,
-            dispatch
-          );
+            const appenders: Array<Object> = await get(
+              `${settings.REST_BASE_URL}/${intfc}/${appendersPath}`
+            );
+
+            newInfo.appenders = appenders.reduce(
+              (cur: Array<Object>, appender: Object) => [
+                ...cur,
+                formatAppender(appender),
+              ],
+              []
+            );
+
+            pipeline(
+              'LOGGER_ACTIONS',
+              interfaceActions[intfc].deleteLogger,
+              newInfo,
+              dispatch
+            );
+          }
         }
         break;
       }
       case 'APPENDER_CREATED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          info.interface,
-          info.interfaceid
-        );
+        const isLoaded: boolean = info.interfaceid
+          ? isInterfaceLoaded(info.interface, info.interfaceid)
+          : true;
+        const intfc: string = getLoggerIntfcType(info.interface);
 
         if (isLoaded) {
           pipeline(
             'APPENDER_ACTIONS',
-            interfaceActions[info.interface].addAppender,
+            interfaceActions[intfc].addAppender,
             info,
             dispatch
           );
@@ -1043,15 +1057,28 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'APPENDER_DELETED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          info.interface,
-          info.interfaceid
-        );
+        const isLoaded: boolean = info.interfaceid
+          ? isInterfaceLoaded(info.interface, info.interfaceid)
+          : true;
+        const intfc: string = includes(
+          [
+            'http',
+            'audit',
+            'monitoring',
+            'alert',
+            'qorus-core',
+            'qorus-master',
+            'qdsp',
+          ],
+          info.interface
+        )
+          ? 'system'
+          : info.interface;
 
         if (isLoaded) {
           pipeline(
             'APPENDER_ACTIONS',
-            interfaceActions[info.interface].deleteAppender,
+            interfaceActions[intfc].deleteAppender,
             info,
             dispatch
           );

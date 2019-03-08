@@ -3,6 +3,14 @@ import { createAction } from 'redux-actions';
 import { fetchWithNotifications, post, get } from '../../utils';
 import settings from '../../../../settings';
 
+import {
+  fetchLoggerAction,
+  addUpdateLoggerAction,
+  deleteLoggerAction,
+  addAppenderAction,
+  deleteAppenderAction,
+} from '../../common/actions';
+
 const init: Function = createAction('SYSTEM_INIT');
 const unsync: Function = createAction('SYSTEM_UNSYNC');
 
@@ -85,6 +93,13 @@ const updateGlobalConfigItemWs: Function = createAction(
 
 const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
+// LOGGER
+const fetchLogger = fetchLoggerAction('system');
+const addUpdateLogger = addUpdateLoggerAction('system');
+const deleteLogger = deleteLoggerAction('system');
+const addAppender = addAppenderAction('system');
+const deleteAppender = deleteAppenderAction('system');
+
 export {
   addProcess,
   processMemoryChanged,
@@ -101,4 +116,9 @@ export {
   killProcess,
   fetchGlobalConfig,
   updateGlobalConfigItemWs,
+  fetchLogger,
+  addUpdateLogger,
+  deleteLogger,
+  addAppender,
+  deleteAppender,
 };

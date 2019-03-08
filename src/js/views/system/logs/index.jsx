@@ -23,22 +23,22 @@ const Log: Function = ({ tabQuery }: Props) => (
         <CrumbTabs tabs={['System', 'Http', 'Audit', 'Alert', 'Monitor']} />
       </Breadcrumbs>
     </Headbar>
-    <Box top>
+    <Box top fill>
       <SimpleTabs activeTab={tabQuery}>
         <SimpleTab name="system">
-          <LogContainer resource="system" />
+          <LogContainer resource="system" intfc="system" id="qorus-core" />
         </SimpleTab>
         <SimpleTab name="http">
-          <LogContainer resource="http" />
+          <LogContainer resource="http" intfc="system" id="http" />
         </SimpleTab>
         <SimpleTab name="audit">
-          <LogContainer resource="audit" />
+          <LogContainer resource="audit" intfc="system" id="audit" />
         </SimpleTab>
         <SimpleTab name="alert">
-          <LogContainer resource="alert" />
+          <LogContainer resource="alert" intfc="system" id="alert" />
         </SimpleTab>
         <SimpleTab name="monitor">
-          <LogContainer resource="mon" />
+          <LogContainer resource="mon" intfc="system" id="monitoring" />
         </SimpleTab>
       </SimpleTabs>
     </Box>

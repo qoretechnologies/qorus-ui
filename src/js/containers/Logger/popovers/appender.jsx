@@ -161,8 +161,8 @@ const NewAppenderPopover: Function = ({
 export default compose(
   connect(
     (state: Object): Object => ({
-      appendersTypes: state.api.system.data.logger.appenders_types,
-      appendersFields: state.api.system.data.logger.appenders_fields,
+      appendersTypes: state.api.system.data.loggerParams.appenders_types,
+      appendersFields: state.api.system.data.loggerParams.appenders_fields,
     })
   ),
   withState('name', 'changeName', ''),
@@ -248,22 +248,22 @@ export default compose(
       } else {
         changeAdding(() => true);
 
+        const appendersPath: string = id
+          ? `${id}/logger/appenders`
+          : 'logger/appenders';
         const fetchRes: Object = await fetchWithNotifications(
           async () =>
-            post(
-              `${settings.REST_BASE_URL}/${resource}/${id}/logger/appenders`,
-              {
-                body: JSON.stringify({
-                  name,
-                  layoutPattern,
-                  filename,
-                  encoding,
-                  appenderType,
-                  rotationCount,
-                  archivePattern,
-                }),
-              }
-            ),
+            post(`${settings.REST_BASE_URL}/${resource}/${appendersPath}`, {
+              body: JSON.stringify({
+                name,
+                layoutPattern,
+                filename,
+                encoding,
+                appenderType,
+                rotationCount,
+                archivePattern,
+              }),
+            }),
           `Adding new appender...`,
           `New appender successfuly added`,
           dispatch

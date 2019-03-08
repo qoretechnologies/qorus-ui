@@ -1,5 +1,13 @@
 import { updateItemWithName } from '../../utils';
 
+import {
+  loggerReducer,
+  addUpdateLoggerReducer,
+  deleteLoggerReducer,
+  addAppenderReducer,
+  deleteAppenderReducer,
+} from '../../common/reducers';
+
 const addProcess = {
   next (
     state: Object,
@@ -310,6 +318,13 @@ const updateGlobalConfigItemWs = {
   },
 };
 
+// LOGGER
+const fetchLogger = loggerReducer;
+const addUpdateLogger = addUpdateLoggerReducer;
+const deleteLogger = deleteLoggerReducer;
+const addAppender = addAppenderReducer;
+const deleteAppender = deleteAppenderReducer;
+
 export {
   addProcess as ADDPROCESS,
   removeProcess as REMOVEPROCESS,
@@ -326,4 +341,9 @@ export {
   killProcess as KILLPROCESS,
   fetchGlobalConfig as FETCHGLOBALCONFIG,
   updateGlobalConfigItemWs as UPDATEGLOBALCONFIGITEMWS,
+  fetchLogger as FETCHLOGGER,
+  addUpdateLogger as ADDUPDATELOGGER,
+  deleteLogger as DELETELOGGER,
+  addAppender as ADDAPPENDER,
+  deleteAppender as DELETEAPPENDER,
 };

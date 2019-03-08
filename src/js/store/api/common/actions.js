@@ -47,29 +47,36 @@ const fetchLoggerAction: Function = (intfc: string): Function =>
   createAction(
     `${intfc.toUpperCase()}_FETCHLOGGER`,
     async (id: number, dispatch: Function) => {
+      const loggerPath: string = id ? `/${id}/logger` : '/logger';
+      const appendersPath: string = id
+        ? `/${id}/logger/appenders`
+        : '/logger/appenders';
+
       const logger: Object = await fetchWithNotifications(
         async () =>
-          await get(`${settings.REST_BASE_URL}/${intfc}/${id}/logger`),
+          await get(`${settings.REST_BASE_URL}/${intfc}/${loggerPath}`),
         null,
         null,
         dispatch
       );
 
-      const appenders: Object = await fetchWithNotifications(
-        async () =>
-          await get(
-            `${settings.REST_BASE_URL}/${intfc}/${id}/logger/appenders`
-          ),
-        null,
-        null,
-        dispatch
-      );
+      if (logger !== 'success') {
+        const appenders: Object = await fetchWithNotifications(
+          async () =>
+            await get(`${settings.REST_BASE_URL}/${intfc}/${appendersPath}`),
+          null,
+          null,
+          dispatch
+        );
 
-      return {
-        logger,
-        appenders,
-        id,
-      };
+        return {
+          logger,
+          appenders: appenders === 'success' ? [] : appenders,
+          id,
+        };
+      }
+
+      return { empty: true };
     }
   );
 
