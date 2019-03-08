@@ -161,8 +161,8 @@ const NewAppenderPopover: Function = ({
 export default compose(
   connect(
     (state: Object): Object => ({
-      appendersTypes: state.api.system.data.logger.appenders_types,
-      appendersFields: state.api.system.data.logger.appenders_fields,
+      appendersTypes: state.api.system.data.loggerParams.appenders_types,
+      appendersFields: state.api.system.data.loggerParams.appenders_fields,
     })
   ),
   withState('name', 'changeName', ''),

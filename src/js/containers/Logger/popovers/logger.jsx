@@ -102,7 +102,7 @@ const NewLoggerPopover: Function = ({
 export default compose(
   connect(
     (state: Object): Object => ({
-      loggerLevels: state.api.system.data.logger.logger_levels,
+      loggerLevels: state.api.system.data.loggerParams.logger_levels,
     })
   ),
   withState('name', 'changeName', ({ data }) => data?.name || ''),

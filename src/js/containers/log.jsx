@@ -59,7 +59,11 @@ const LogContainer = props => (
     </Pane>
     {props.intfc && (
       <Pane name="Settings">
-        <Logger id={props.id} resource={props.intfc} />
+        <Logger
+          id={props.id}
+          resource={props.intfc}
+          isSystem={props.isSystem}
+        />
       </Pane>
     )}
   </Tabs>

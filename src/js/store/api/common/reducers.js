@@ -93,6 +93,7 @@ const loggerReducer = {
     let data;
 
     if (logger) {
+      const isNotSystem = isArray(state.data);
       const flattenedAppenders = appenders.reduce(
         (cur: Array<Object>, appender: Object) => [
           ...cur,
@@ -101,14 +102,16 @@ const loggerReducer = {
         []
       );
 
-      if (!id) {
+      if (!isNotSystem) {
         data = {
           ...state.data,
           loggerData: {
-            ...logger.params,
-            isDefault: false,
+            [id]: {
+              ...logger.params,
+              isDefault: logger.interface_table_name === 'system',
+              appenders: flattenedAppenders,
+            },
           },
-          appenders: flattenedAppenders,
         };
       } else {
         data = updateItemWithId(
@@ -156,16 +159,29 @@ const addUpdateLoggerReducer = {
       }
 
       events.forEach(dt => {
-        let itemUpdate: Object = { loggerData: dt.params, _updated: true };
+        let itemUpdate: Object;
 
-        if (dt.isNew) {
-          itemUpdate = { ...itemUpdate, appenders: [] };
-        }
+        if (!dt.interfaceid) {
+          const appenders = dt.isNew
+            ? []
+            : state.data.loggerData[dt.interface].appenders;
+          itemUpdate = {
+            loggerData: { [dt.interface]: { ...dt.params, appenders } },
+            _updated: true,
+          };
 
-        if (dt.interfaceid) {
-          newData = updateItemWithId(dt.interfaceid, itemUpdate, newData);
-        } else {
           newData = { ...newData, ...itemUpdate };
+        } else {
+          itemUpdate = {
+            loggerData: dt.params,
+            _updated: true,
+          };
+
+          if (dt.isNew) {
+            itemUpdate = { ...itemUpdate, appenders: [] };
+          }
+
+          newData = updateItemWithId(dt.interfaceid, itemUpdate, newData);
         }
       });
 
@@ -196,8 +212,17 @@ const deleteLoggerReducer = {
 
       events.forEach(dt => {
         //* Default logger was deleted
-        if (!dt) {
-          newData = { ...newData, loggerData: 'empty' };
+        if (!isNotSystem) {
+          newData = {
+            ...newData,
+            loggerData: {
+              [dt.interface]: {
+                ...dt.current_logger.params,
+                isDefault: dt.current_logger.interface_table_name === 'system',
+                appenders: dt.appenders,
+              },
+            },
+          };
         } else {
           newData = updateItemWithId(
             dt.interfaceid,
@@ -248,7 +273,9 @@ const addAppenderReducer = {
           intfc = newData;
         }
 
-        let appenders: Array<Object> = intfc?.appenders || [];
+        let appenders: Array<Object> = dt.interfaceid
+          ? intfc?.appenders || []
+          : newData.loggerData?.[dt.interface]?.appenders || [];
         appenders = [...appenders, formatAppender(dt)];
 
         if (dt.interfaceid) {
@@ -258,7 +285,11 @@ const addAppenderReducer = {
             newData
           );
         } else {
-          newData = { ...newData, appenders };
+          let loggerData = newData.loggerData;
+
+          loggerData[dt.interface].appenders = appenders;
+
+          newData = { ...newData, loggerData };
         }
       });
 
@@ -296,7 +327,10 @@ const deleteAppenderReducer = {
           intfc = newData;
         }
 
-        const appenders: Array<Object> = intfc.appenders.filter(
+        const appendersArr: string = dt.interfaceid
+          ? intfc.appenders
+          : intfc.loggerData[dt.interface].appenders;
+        const appenders: Array<Object> = appendersArr.filter(
           (appender: Object) => appender.id !== dt.logger_appenderid
         );
 
@@ -307,7 +341,11 @@ const deleteAppenderReducer = {
             newData
           );
         } else {
-          newData = { ...newData, appenders };
+          let loggerData = newData.loggerData;
+
+          loggerData[dt.interface].appenders = appenders;
+
+          newData = { ...newData, loggerData };
         }
       });
 

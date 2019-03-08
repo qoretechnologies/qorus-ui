@@ -71,7 +71,7 @@ const fetchLoggerAction: Function = (intfc: string): Function =>
 
         return {
           logger,
-          appenders,
+          appenders: appenders === 'success' ? [] : appenders,
           id,
         };
       }

@@ -258,12 +258,17 @@ const LoggerContainer: Function = ({
 
 export default compose(
   connect((state, ownProps) => {
-    const { loggerData: logger, appenders }: Object =
+    let { loggerData: logger, appenders }: Object =
       ownProps.resource === 'system'
-        ? state.api[ownProps.resource].data
+        ? state.api.system.data
         : state.api[ownProps.resource].data.find(
           (res: Object): boolean => res.id === ownProps.id
         );
+
+    if (ownProps.resource === 'system') {
+      logger = logger?.[ownProps.id];
+      appenders = logger?.appenders;
+    }
 
     return {
       logger,
@@ -299,7 +304,7 @@ export default compose(
     }: LoggerContainerProps): Function => (): void => {
       fetchWithNotifications(
         async () => {
-          const loggerPath = id ? `${id}/logger` : 'logger';
+          const loggerPath = `${id}/logger`;
 
           return del(`${settings.REST_BASE_URL}/${resource}/${loggerPath}`);
         },

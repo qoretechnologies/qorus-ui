@@ -25,7 +25,7 @@ import {
 import { INTERFACE_IDS } from '../../constants/interfaces';
 import { get } from '../api/utils';
 import settings from '../../settings';
-import { formatAppender } from '../../helpers/logger';
+import { formatAppender, getLoggerIntfcType } from '../../helpers/logger';
 
 const interfaceActions: Object = {
   workflows,
@@ -967,11 +967,12 @@ const handleEvent = (url, data, dispatch, state) => {
         const isLoaded: boolean = info.interfaceid
           ? isInterfaceLoaded(info.interface, info.interfaceid)
           : true;
+        const intfc: string = getLoggerIntfcType(info.interface);
 
         if (isLoaded) {
           const newInfo: Object = { ...info };
           const reversedLevels: Object = invert(
-            state.api.system.data.logger.logger_levels
+            state.api.system.data.loggerParams.logger_levels
           );
 
           newInfo.params.level = { [reversedLevels[info.params.level]]: true };
@@ -979,7 +980,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
           pipeline(
             'LOGGER_ACTIONS',
-            interfaceActions[info.interface].addUpdateLogger,
+            interfaceActions[intfc].addUpdateLogger,
             newInfo,
             dispatch
           );
@@ -990,6 +991,7 @@ const handleEvent = (url, data, dispatch, state) => {
         const isLoaded: boolean = info.interfaceid
           ? isInterfaceLoaded(info.interface, info.interfaceid)
           : true;
+        const intfc: string = getLoggerIntfcType(info.interface);
 
         if (isLoaded) {
           const newInfo: Object = { ...info };
@@ -998,13 +1000,13 @@ const handleEvent = (url, data, dispatch, state) => {
           if (!info.current_logger) {
             pipeline(
               'LOGGER_ACTIONS',
-              interfaceActions[info.interface].deleteLogger,
+              interfaceActions[intfc].deleteLogger,
               null,
               dispatch
             );
           } else {
             const reversedLevels: Object = invert(
-              state.api.system.data.logger.logger_levels
+              state.api.system.data.loggerParams.logger_levels
             );
 
             newInfo.current_logger.params.level = {
@@ -1014,10 +1016,10 @@ const handleEvent = (url, data, dispatch, state) => {
             //! FETCH APPENDERS FOR THE DEFAULT LOGGER
             const appendersPath = info.interfaceid
               ? `${info.interfaceid}/logger/appenders`
-              : 'logger/appenders';
+              : `${info.interface}/logger/appenders`;
 
             const appenders: Array<Object> = await get(
-              `${settings.REST_BASE_URL}/${info.interface}/${appendersPath}`
+              `${settings.REST_BASE_URL}/${intfc}/${appendersPath}`
             );
 
             newInfo.appenders = appenders.reduce(
@@ -1030,7 +1032,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
             pipeline(
               'LOGGER_ACTIONS',
-              interfaceActions[info.interface].deleteLogger,
+              interfaceActions[intfc].deleteLogger,
               newInfo,
               dispatch
             );
@@ -1042,11 +1044,12 @@ const handleEvent = (url, data, dispatch, state) => {
         const isLoaded: boolean = info.interfaceid
           ? isInterfaceLoaded(info.interface, info.interfaceid)
           : true;
+        const intfc: string = getLoggerIntfcType(info.interface);
 
         if (isLoaded) {
           pipeline(
             'APPENDER_ACTIONS',
-            interfaceActions[info.interface].addAppender,
+            interfaceActions[intfc].addAppender,
             info,
             dispatch
           );
@@ -1057,11 +1060,25 @@ const handleEvent = (url, data, dispatch, state) => {
         const isLoaded: boolean = info.interfaceid
           ? isInterfaceLoaded(info.interface, info.interfaceid)
           : true;
+        const intfc: string = includes(
+          [
+            'http',
+            'audit',
+            'monitoring',
+            'alert',
+            'qorus-core',
+            'qorus-master',
+            'qdsp',
+          ],
+          info.interface
+        )
+          ? 'system'
+          : info.interface;
 
         if (isLoaded) {
           pipeline(
             'APPENDER_ACTIONS',
-            interfaceActions[info.interface].deleteAppender,
+            interfaceActions[intfc].deleteAppender,
             info,
             dispatch
           );
