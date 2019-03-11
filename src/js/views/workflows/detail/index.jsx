@@ -24,6 +24,8 @@ import titleManager from '../../../hocomponents/TitleManager';
 import queryControl from '../../../hocomponents/queryControl';
 import Flex from '../../../components/Flex';
 import WorkflowDetailTabs from '../tabs';
+import showIfPassed from '../../../hocomponents/show-if-passed';
+import Loader from '../../../components/loader';
 
 type Props = {
   workflow: Object,
@@ -48,25 +50,27 @@ const Workflow: Function = ({
   tabQuery,
   searchQuery,
   changeSearchQuery,
-}: Props): React.Element<any> => (
-  <Flex>
-    <Header
-      workflow={workflow}
-      date={date}
-      location={location}
-      onSearch={changeSearchQuery}
-      searchQuery={searchQuery}
-      tab={tabQuery}
-    />
-    <WorkflowDetailTabs
-      workflow={workflow}
-      location={location}
-      date={date}
-      linkDate={linkDate}
-      activeTab={tabQuery}
-    />
-  </Flex>
-);
+  meta,
+}: Props): React.Element<any> =>
+  console.log(meta) || (
+    <Flex>
+      <Header
+        workflow={workflow}
+        date={date}
+        location={location}
+        onSearch={changeSearchQuery}
+        searchQuery={searchQuery}
+        tab={tabQuery}
+      />
+      <WorkflowDetailTabs
+        workflow={workflow}
+        location={location}
+        date={date}
+        linkDate={linkDate}
+        activeTab={tabQuery}
+      />
+    </Flex>
+  );
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
@@ -106,17 +110,19 @@ export default compose(
     })
   ),
   mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      fetchParams: { lib_source: true, date: formatDate(date).format() },
-      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
-      date,
-      ...rest,
-    })
+    ({ date, ...rest }: Props): Object =>
+      console.log('SYNC', rest.meta.sync) || {
+        fetchParams: { lib_source: true, date: formatDate(date).format() },
+        linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+        date,
+        ...rest,
+      }
   ),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
+  showIfPassed(({ workflow }) => workflow, <Loader />),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       const { date, unselectAll, fetch, id }: Props = this.props;
 
       if (date !== nextProps.date || id !== nextProps.id) {
@@ -128,6 +134,6 @@ export default compose(
   withTabs('orders'),
   queryControl('search'),
   titleManager(({ workflow }: Props): string => workflow.name),
-  pure(['workflow', 'date', 'id', 'location', 'tabQuery']),
+  pure(['workflow', 'date', 'id', 'location', 'tabQuery', 'meta']),
   unsync()
 )(Workflow);
