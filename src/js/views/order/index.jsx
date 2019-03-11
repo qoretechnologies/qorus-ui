@@ -40,8 +40,8 @@ const workflowSelector = (state, props) => {
 
   return workflow
     ? state.api.workflows.data.find(
-        w => parseInt(workflow.workflowid, 10) === parseInt(w.id, 10)
-      )
+      w => parseInt(workflow.workflowid, 10) === parseInt(w.id, 10)
+    )
     : null;
 };
 
@@ -80,19 +80,19 @@ export default class Order extends Component {
     dispatch: PropTypes.func,
   };
 
-  getChildContext() {
+  getChildContext () {
     return {
       dispatch: this.props.dispatch,
     };
   }
 
-  componentWillMount() {
+  componentWillMount () {
     const { id } = this.props.params;
 
     this.fetch(id);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps (nextProps: Object) {
     const { id } = this.props.params;
     const { id: nextId } = nextProps.params;
 
@@ -101,7 +101,7 @@ export default class Order extends Component {
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     const { dispatch } = this.props;
 
     dispatch(actions.orders.unsync());
@@ -121,7 +121,7 @@ export default class Order extends Component {
     );
   };
 
-  render() {
+  render () {
     if (!this.props.workflow) {
       return <Loader />;
     }

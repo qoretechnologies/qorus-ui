@@ -18,6 +18,7 @@ import {
 import withHandlers from 'recompose/withHandlers';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import { countArrayItemsInObject } from '../../../utils';
+import showIfPassed from '../../../hocomponents/show-if-passed';
 
 type Props = {
   setAutostart: Function,
@@ -108,6 +109,7 @@ const WorkflowHeader: Function = ({
 );
 
 export default compose(
+  showIfPassed(({ workflow }) => workflow),
   withRouter,
   withHandlers({
     handleAlertClick: ({ router, date, workflow }): Function => (): void => {

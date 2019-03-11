@@ -8,7 +8,6 @@ import { Tr, Td } from '../../../components/new_table';
 import { ALL_ORDER_STATES } from '../../../constants/orders';
 import NameColumn from '../../../components/NameColumn';
 import { DateColumn } from '../../../components/DateColumn';
-import { IdColumn } from '../../../components/IdColumn';
 import ContentByType from '../../../components/ContentByType';
 
 type Props = {
@@ -28,7 +27,12 @@ const HierarchyRow: Function = ({
   first,
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    <NameColumn name={id} link={`/order/${id}/24h`} type="order" />
+    <NameColumn
+      name={id}
+      link={`/order/${id}/24h`}
+      type="order"
+      className="normal"
+    />
     <NameColumn
       name={`${[...Array(item.hierarchy_level)].map((): string => '--')} ${
         item.name
