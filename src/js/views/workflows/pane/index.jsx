@@ -57,11 +57,11 @@ export default class WorkflowsDetail extends Component {
     band: string,
   } = this.props;
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.load(this.props.paneId, this.props.fetchParams.date);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps (nextProps: Object) {
     if (this.props.paneId !== nextProps.paneId) {
       this.props.load(nextProps.paneId, this.props.fetchParams.date);
     }
@@ -71,7 +71,7 @@ export default class WorkflowsDetail extends Component {
     this.props.onClose(['globalErrQuery', 'workflowErrQuery']);
   };
 
-  render() {
+  render () {
     const {
       workflow,
       systemOptions,
@@ -87,7 +87,9 @@ export default class WorkflowsDetail extends Component {
       return null;
     }
 
-    const configItems: Array<Object> = rebuildConfigHash(workflow, true);
+    const configItemsCount: number =
+      countArrayItemsInObject(rebuildConfigHash(workflow, true)) +
+      size(workflow.global_config);
 
     return (
       <DetailPane
@@ -103,7 +105,7 @@ export default class WorkflowsDetail extends Component {
             'Process',
             {
               title: 'Config',
-              suffix: `(${countArrayItemsInObject(configItems)})`,
+              suffix: `(${configItemsCount})`,
             },
             'Releases',
             {

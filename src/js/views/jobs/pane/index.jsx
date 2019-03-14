@@ -50,7 +50,8 @@ const Detail = ({
         'Releases',
         {
           title: 'Config',
-          suffix: `(${countArrayItemsInObject(configItems)})`,
+          suffix: `(${countArrayItemsInObject(configItems) +
+            size(model.global_config)})`,
         },
         'Code',
         'Log',
@@ -71,12 +72,12 @@ const Detail = ({
 );
 
 const fetchLibSourceOnMountAndOnChange = lifecycle({
-  async componentWillMount() {
+  async componentWillMount () {
     const { model, fetchLibSources } = this.props;
     await fetchLibSources(model);
   },
 
-  async componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps (nextProps) {
     const { model } = this.props;
     const { model: nextModel, fetchLibSources } = nextProps;
 

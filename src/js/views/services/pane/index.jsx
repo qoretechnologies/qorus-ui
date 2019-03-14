@@ -26,11 +26,11 @@ import ServiceTabs from '../tabs';
     methods: service.lib
       ? service.class_based
         ? service.methods.map(
-            (method: Object): Object => ({
-              ...method,
-              ...{ body: service.class_source.class_source },
-            })
-          )
+          (method: Object): Object => ({
+            ...method,
+            ...{ body: service.class_source.class_source },
+          })
+        )
         : service.methods
       : [],
     service,
@@ -49,16 +49,16 @@ import ServiceTabs from '../tabs';
   ({ data, service, ...rest }: Object): Object => ({
     data: service.class_based
       ? {
-          ...{
-            code: [
-              {
-                name: 'Service code',
-                body: service.class_source.class_source,
-              },
-            ],
-          },
-          ...data,
-        }
+        ...{
+          code: [
+            {
+              name: 'Service code',
+              body: service.class_source.class_source,
+            },
+          ],
+        },
+        ...data,
+      }
       : data,
     service,
     ...rest,
@@ -78,17 +78,17 @@ export default class ServicesDetail extends Component {
     data: Object,
   } = this.props;
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.load(this.props.paneId);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps (nextProps: Object) {
     if (this.props.paneId !== nextProps.paneId) {
       this.props.load(nextProps.paneId);
     }
   }
 
-  render() {
+  render () {
     const {
       service,
       paneTab,
@@ -103,7 +103,9 @@ export default class ServicesDetail extends Component {
       return null;
     }
 
-    const configItems: Array<Object> = rebuildConfigHash(service);
+    const configItems: Object = rebuildConfigHash(service);
+    const configItemsCount: number =
+      countArrayItemsInObject(configItems) + size(service.global_config);
 
     return (
       <DetailPane
@@ -125,7 +127,7 @@ export default class ServicesDetail extends Component {
             'Releases',
             {
               title: 'Config',
-              suffix: `(${countArrayItemsInObject(configItems)})`,
+              suffix: `(${configItemsCount})`,
             },
             'Info',
           ],
