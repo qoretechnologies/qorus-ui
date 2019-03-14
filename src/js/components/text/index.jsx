@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import Flex from '../Flex';
 import Tree from '../tree';
+import ContentByType from '../ContentByType';
 
 type Props = {
   text: any,
@@ -27,7 +28,7 @@ const Text: Function = ({
           'text-component-expanded'} ${hasAlerts && 'has-alerts'}`}
         title={text}
       >
-        {text}
+        <ContentByType content={text} />
       </div>
     </Flex>
   );

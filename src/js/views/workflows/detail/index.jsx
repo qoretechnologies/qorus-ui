@@ -50,27 +50,25 @@ const Workflow: Function = ({
   tabQuery,
   searchQuery,
   changeSearchQuery,
-  meta,
-}: Props): React.Element<any> =>
-  console.log(meta) || (
-    <Flex>
-      <Header
-        workflow={workflow}
-        date={date}
-        location={location}
-        onSearch={changeSearchQuery}
-        searchQuery={searchQuery}
-        tab={tabQuery}
-      />
-      <WorkflowDetailTabs
-        workflow={workflow}
-        location={location}
-        date={date}
-        linkDate={linkDate}
-        activeTab={tabQuery}
-      />
-    </Flex>
-  );
+}: Props): React.Element<any> => (
+  <Flex>
+    <Header
+      workflow={workflow}
+      date={date}
+      location={location}
+      onSearch={changeSearchQuery}
+      searchQuery={searchQuery}
+      tab={tabQuery}
+    />
+    <WorkflowDetailTabs
+      workflow={workflow}
+      location={location}
+      date={date}
+      linkDate={linkDate}
+      activeTab={tabQuery}
+    />
+  </Flex>
+);
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
   state.api.workflows.data.find(
@@ -110,13 +108,12 @@ export default compose(
     })
   ),
   mapProps(
-    ({ date, ...rest }: Props): Object =>
-      console.log('SYNC', rest.meta.sync) || {
-        fetchParams: { lib_source: true, date: formatDate(date).format() },
-        linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
-        date,
-        ...rest,
-      }
+    ({ date, ...rest }: Props): Object => ({
+      fetchParams: { lib_source: true, date: formatDate(date).format() },
+      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+      date,
+      ...rest,
+    })
   ),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
