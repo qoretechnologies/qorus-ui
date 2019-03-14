@@ -54,7 +54,7 @@ const ConfigItemsContainer: Function = ({
       dispatchAction(
         actions[intrf].updateConfigItem,
         item.id,
-        item.name || item.item,
+        item.name,
         newValue,
         belongsTo
       );
@@ -184,7 +184,7 @@ const ConfigItemsContainer: Function = ({
                           <Tbody {...props}>
                             {collection.map((item: Object, index: number) => (
                               <Tr key={item.name} first={index === 0}>
-                                <NameColumn name={item.name || item.item} />
+                                <NameColumn name={item.name} />
                                 <Td className="text">
                                   <ContentByType content={item.default_value} />
                                 </Td>

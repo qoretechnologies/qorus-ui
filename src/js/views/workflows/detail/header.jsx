@@ -52,7 +52,7 @@ const WorkflowHeader: Function = ({
             title: 'Config',
             suffix: `(${countArrayItemsInObject(
               rebuildConfigHash(workflow, true)
-            )})`,
+            ) + size(workflow.global_config)})`,
           },
           'Releases',
           {
