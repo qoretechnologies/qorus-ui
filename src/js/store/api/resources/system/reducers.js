@@ -302,13 +302,14 @@ const updateGlobalConfigItemWs = {
     }
   ) {
     const newState = { ...state };
+    const newData = [...state.globalConfig];
 
     events.forEach(event => {
       const globalConfig = updateItemWithName(
         event.item,
         { value: event.value },
-        [...state.globalConfig],
-        'item'
+        newData,
+        'name'
       );
 
       newState.globalConfig = globalConfig;
