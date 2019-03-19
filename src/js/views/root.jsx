@@ -229,8 +229,8 @@ export default class Root extends Component {
           />
           <div className="root__center">
             <Sidebar
-              light={isLightTheme}
-              menuCollapsed={!this.props.sidebarOpen}
+              isLight={isLightTheme}
+              isCollapsed={!this.props.sidebarOpen}
               toggleMenu={this.toggleMenu}
               isTablet={isTablet}
             />
