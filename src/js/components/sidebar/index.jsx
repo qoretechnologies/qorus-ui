@@ -7,11 +7,13 @@ import map from 'lodash/map';
 import Scroll from 'react-scrollbar';
 
 import SidebarSection from './section';
+import { Icon } from '@blueprintjs/core';
 
 type SidebarProps = {
   isTablet: boolean,
   isCollapsed: boolean,
   isLight: boolean,
+  toggleMenu: Function,
 };
 
 const menu: Object = {
@@ -61,21 +63,33 @@ const Sidebar: Function = ({
   isTablet,
   isCollapsed,
   isLight,
+  toggleMenu,
 }: SidebarProps): React.Element<any> => (
-  <Scroll
-    horizontal={false}
+  <div
     className={classnames('sidebar', isLight ? 'light' : 'dark', {
       expanded: !isCollapsed,
     })}
   >
-    {map(menu, (menuData: Array<Object>, menuKey: string) => (
-      <SidebarSection
-        sectionData={menuData}
-        key={menuKey}
-        isCollapsed={isCollapsed}
-      />
-    ))}
-  </Scroll>
+    <Scroll horizontal={false} className="sidebarScroll">
+      {map(menu, (menuData: Array<Object>, menuKey: string) => (
+        <SidebarSection
+          sectionData={menuData}
+          key={menuKey}
+          isCollapsed={isCollapsed}
+        />
+      ))}
+    </Scroll>
+    <div className="sidebarSection">
+      <div className="sidebarItem" onClick={toggleMenu}>
+        <Icon
+          iconName={
+            isCollapsed ? 'double-chevron-right' : 'double-chevron-left'
+          }
+        />{' '}
+        {!isCollapsed && 'Collapse'}
+      </div>
+    </div>
+  </div>
 );
 
 export default compose(

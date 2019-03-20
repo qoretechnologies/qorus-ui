@@ -22,4 +22,6 @@ const SidebarSection: Function = ({
   </div>
 );
 
-export default compose(onlyUpdateForKeys(['sectionData']))(SidebarSection);
+export default compose(onlyUpdateForKeys(['sectionData', 'isCollapsed']))(
+  SidebarSection
+);

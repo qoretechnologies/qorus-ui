@@ -3,7 +3,11 @@
   height: calc(100vh - 80px);
   font-size: 14px;
 
-  width: 50px;
+  // Custom scrollbar
+  .sidebarScroll {
+    height: calc(100vh - 130px);
+  }
+
   &.expanded {
     min-width: 180px !important;
     max-width: 180px !important;
@@ -14,10 +18,16 @@
       span.pt-icon-standard {
         margin-right: 10px;
       }
+
+      .submenuExpand {
+        margin-left: 10px;
+      }
     }
   }
 
   &:not(.expanded) {
+    min-width: 50px !important;
+    max-width: 50px !important;
     .sidebarItem {
       text-align: center;
     }
@@ -29,31 +39,43 @@
     color: #bfccd6;
 
     .sidebarSection {
-      border-bottom: 1px solid darken($qore-dark, 2);
+      border-color: darken($qore-dark, 2);
+    }
+
+    .sidebarSubItem {
+      background-color: lighten($qore-dark, 5);
+      border-left: 5px solid #bfccd6;
     }
 
     .sidebarItem:hover {
-      background-color: lighten($qore-dark, 3);
+      background-color: lighten($qore-dark, 7);
     }
   }
 
   &.light {
     background-color: #fff;
     border-right: 1px solid darken(#fff, 7);
-    color: #444;
+    color: #555;
 
     .sidebarSection {
-      border-bottom: 1px solid darken(#fff, 7);
+      border-color: darken(#fff, 7);
+    }
+
+    .sidebarSubItem {
+      background-color: darken(#fff, 5);
+      border-left: 5px solid #555;
     }
 
     .sidebarItem:hover {
-      background-color: darken(#fff, 3);
+      background-color: darken(#fff, 7);
     }
   }
 
   // Section
   .sidebarSection {
     padding: 5px 0;
+
+    border-top: 1px solid;
 
     .sidebarLink {
       color: inherit;
@@ -70,6 +92,12 @@
       }
 
       padding: 12px;
+    }
+
+    .sidebarSubItem.active,
+    .sidebarItem.active {
+      color: $qore-cobalt;
+      border-left-color: $qore-cobalt;
     }
   }
 }
