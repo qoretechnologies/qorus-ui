@@ -40,5 +40,16 @@ const buildPageLinkWithQueries: Function = (
 };
 
 const isActive = (to, location) => location.startsWith(to);
+const isActiveMulti: Function = (to: Array<string>, location: Object) => {
+  let active: boolean = false;
 
-export { isActive, changeQuery, buildPageLinkWithQueries };
+  to.forEach((path: string) => {
+    if (isActive(path, location)) {
+      active = true;
+    }
+  });
+
+  return active;
+};
+
+export { isActive, changeQuery, buildPageLinkWithQueries, isActiveMulti };

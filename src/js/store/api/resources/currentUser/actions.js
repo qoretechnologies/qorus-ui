@@ -127,6 +127,29 @@ const storeSettings: Function = (setting: string, value: any): Function => (
   dispatch(updateStorage(storage, username));
 };
 
+const storeFavoriteMenuItem: Function = (
+  itemData: Object,
+  remove: boolean
+): Function => (dispatch: Function, getState: Function): void => {
+  const { storage: storage = {}, username } = getState().api.currentUser.data;
+
+  storage.favoriteMenuItems = storage.favoriteMenuItems || [];
+
+  // Remove the favorite item
+  if (remove) {
+    storage.favoriteMenuItems = storage.favoriteMenuItems.filter(
+      (menuItem: Object): boolean => menuItem.name !== itemData.name
+    );
+    // Else add it
+  } else {
+    const newItemData: Object = { ...itemData, isFavorite: true };
+
+    storage.favoriteMenuItems.push(newItemData);
+  }
+
+  dispatch(updateStorage(storage, username));
+};
+
 const clearStorage: Function = (): Function => (
   dispatch: Function,
   getState: Function
@@ -147,4 +170,5 @@ export {
   storeTheme,
   clearStorage,
   storeSettings,
+  storeFavoriteMenuItem,
 };

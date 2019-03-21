@@ -85,7 +85,7 @@ class ValueMapsRow extends Component {
           isActive={isActive}
           name={data.name}
           onDetailClick={!compact && this.handleDetailClick}
-          link={compact && `system/values?paneId=${data.id}`}
+          link={compact && `valuemaps?paneId=${data.id}`}
           type={compact && 'valuemaps'}
         />
         {!compact && (

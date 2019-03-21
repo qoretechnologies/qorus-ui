@@ -1,6 +1,8 @@
 /* @flow */
 import classNames from 'classnames';
 import round from 'lodash/round';
+import size from 'lodash/size';
+import reduce from 'lodash/reduce';
 
 const statusHealth: Function = (health: string): string =>
   classNames({
@@ -30,12 +32,12 @@ const alertTypeToResource: Object = {
     query: 'paneId',
   },
   'USER-CONNECTION': {
-    resource: 'system/remote',
+    resource: 'remote',
     uses: 'name',
     query: 'tab=user&paneId',
   },
   REMOTE: {
-    resource: 'system/remote',
+    resource: 'remote',
     uses: 'name',
     query: 'tab=qorus&paneId',
   },
@@ -50,7 +52,7 @@ const alertTypeToResource: Object = {
     suffix: '/19700101',
   },
   DATASOURCE: {
-    resource: 'system/remote',
+    resource: 'remote',
     uses: 'name',
     query: 'paneId',
   },
@@ -115,7 +117,7 @@ const typeToString: Function = (val: any): any => {
 const getProcessObjectLink: Function = (prcs: Object) => {
   switch (prcs.type) {
     case 'qdsp':
-      return `/system/remote?paneId=${prcs.client_id}`;
+      return `/remote?paneId=${prcs.client_id}`;
     case 'qwf':
       return `/workflows?paneId=${prcs.wfid}&paneTab=detail`;
     case 'qsvc':
@@ -207,6 +209,17 @@ const getLineCount: Function = (value: string): number => {
   }
 };
 
+const transformMenu: Function = (
+  menu: Object,
+  favoriteItems: Array<Object>
+): Object => {
+  if (!size(favoriteItems)) {
+    return menu;
+  }
+
+  return { Favorites: favoriteItems, ...menu };
+};
+
 export {
   statusHealth,
   utf8ToB64,
@@ -220,4 +233,5 @@ export {
   calculateMemory,
   getSlicedRemotes,
   getLineCount,
+  transformMenu,
 };

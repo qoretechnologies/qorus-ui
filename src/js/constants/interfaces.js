@@ -65,13 +65,13 @@ const INTERFACE_ID_LINKS: Object = {
   jobs: '/jobs?paneId=',
   mapper: '/mappers/',
   mappers: '/mappers/',
-  role: '/system/rbac?tab=roles&search=',
-  valuemap: '/system/values?paneId=',
-  vmap: '/system/values?paneId=',
-  valuemaps: '/system/values?paneId=',
-  vmaps: '/system/values?paneId=',
-  'value maps': '/system/values?paneId=',
-  'value map': '/system/values?paneId=',
+  role: '/rbac?tab=roles&search=',
+  valuemap: '/valuemaps?paneId=',
+  vmap: '/valuemaps?paneId=',
+  valuemaps: '/valuemaps?paneId=',
+  vmaps: '/valuemaps?paneId=',
+  'value maps': '/valuemaps?paneId=',
+  'value map': '/valuemaps?paneId=',
 };
 
 export {

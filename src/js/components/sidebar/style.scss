@@ -23,6 +23,16 @@
         margin-left: 10px;
       }
     }
+
+    .sidebarSubItem {
+      padding-left: 24px;
+    }
+
+    .sidebarFavorite {
+      position: absolute;
+      top: 9px;
+      right: 10px;
+    }
   }
 
   &:not(.expanded) {
@@ -43,12 +53,19 @@
     }
 
     .sidebarSubItem {
-      background-color: lighten($qore-dark, 5);
+      background-color: lighten($qore-dark, 3);
       border-left: 5px solid #bfccd6;
     }
 
     .sidebarItem:hover {
       background-color: lighten($qore-dark, 7);
+    }
+
+    .sidebarSubItem.active,
+    .sidebarItem.active {
+      color: #fff;
+      border-left-color: #fff;
+      background-color: lighten($qore-dark, 5);
     }
   }
 
@@ -62,12 +79,19 @@
     }
 
     .sidebarSubItem {
-      background-color: darken(#fff, 5);
+      background-color: darken(#fff, 3);
       border-left: 5px solid #555;
     }
 
     .sidebarItem:hover {
       background-color: darken(#fff, 7);
+    }
+
+    .sidebarSubItem.active,
+    .sidebarItem.active {
+      color: $qore-purple;
+      border-left-color: $qore-purple;
+      background-color: darken(#fff, 5);
     }
   }
 
@@ -78,7 +102,13 @@
     border-top: 1px solid;
 
     .sidebarLink {
+      display: inline-block;
       color: inherit;
+      width: 100%;
+
+      .pt-popover-target {
+        width: 100%;
+      }
 
       &:hover {
         text-decoration: none;
@@ -86,7 +116,9 @@
     }
 
     .sidebarItem {
-      span.pt-icon-standard {
+      position: relative;
+
+      span.pt-icon-standard:not(.sidebarFavorite) {
         display: inline-block;
         font-size: 16px;
       }
@@ -94,10 +126,10 @@
       padding: 12px;
     }
 
-    .sidebarSubItem.active,
-    .sidebarItem.active {
-      color: $qore-cobalt;
-      border-left-color: $qore-cobalt;
+    .sidebarItem,
+    .sidebarSubItem {
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
     }
   }
 }
