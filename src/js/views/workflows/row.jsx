@@ -35,6 +35,7 @@ type Props = {
   handleCheckboxClick: Function,
   handleHighlightEnd: Function,
   handleDetailClick: Function,
+  handleSlaBarClick: Function,
   handleAutostartChange: Function,
   updateDone: Function,
   id: number,
@@ -67,6 +68,7 @@ const TableRow: Function = ({
   date,
   handleCheckboxClick,
   handleDetailClick,
+  handleSlaBarClick,
   handleHighlightEnd,
   id,
   _selected,
@@ -156,7 +158,7 @@ const TableRow: Function = ({
         workflowId={id}
         showPct
         minWidth={25}
-        link={`/workflows?paneId=${id}&paneTab=order+stats`}
+        onClick={handleSlaBarClick}
       />
     </Td>
     <Td className="normal">
@@ -170,7 +172,7 @@ const TableRow: Function = ({
         instances={slaStats}
         totalInstances={totalSlaStats}
         workflowId={id}
-        link={`/workflows?paneId=${id}&paneTab=order+stats`}
+        onClick={handleSlaBarClick}
       />
     </Td>
   </Tr>
@@ -195,6 +197,20 @@ export default compose(
         closePane(['globalErrQuery', 'workflowErrQuery']);
       } else {
         openPane(id);
+      }
+    },
+    handleSlaBarClick: ({
+      openPane,
+      id,
+      closePane,
+      isActive,
+    }: Props): Function => (event: Object): void => {
+      event.stopPropagation();
+
+      if (isActive) {
+        closePane(['globalErrQuery', 'workflowErrQuery']);
+      } else {
+        openPane(id, 'order stats');
       }
     },
   }),
