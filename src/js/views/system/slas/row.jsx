@@ -41,7 +41,7 @@ const SLARow: Function = ({
 }: Props): React.Element<any> => (
   <Tr key={slaid} first={first}>
     <IdColumn>{slaid}</IdColumn>
-    <NameColumn name={name} link={`/system/sla/${slaid}`} type="sla" />
+    <NameColumn name={name} link={`/sla/${slaid}`} type="sla" />
     <DescriptionColumn>{description}</DescriptionColumn>
     <Td className="text">
       <Text text={units} />

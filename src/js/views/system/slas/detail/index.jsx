@@ -54,7 +54,7 @@ const SLADetail: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb link="/system/slas"> SLAs </Crumb>
+        <Crumb link="/slas"> SLAs </Crumb>
         <Crumb>
           {sla.name} <small>({sla.slaid})</small>
         </Crumb>
@@ -126,8 +126,8 @@ export default compose(
       minDate:
         !minDateQuery || minDateQuery === ''
           ? moment()
-              .add(-1, 'weeks')
-              .format(DATE_FORMATS.URL_FORMAT)
+            .add(-1, 'weeks')
+            .format(DATE_FORMATS.URL_FORMAT)
           : minDateQuery,
       maxDate: !maxDateQuery || maxDateQuery === '' ? '' : maxDateQuery,
       ...rest,

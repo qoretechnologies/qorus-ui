@@ -50,26 +50,26 @@ const searchableViews = {
   Services: 'services?',
   Jobs: 'jobs?',
   Groups: 'groups?',
-  ['Ongoing Alerts']: 'system/alerts?',
-  ['Transient Alerts']: 'system/alerts?tab=transient&',
+  'Ongoing Alerts': 'system/alerts?',
+  'Transient Alerts': 'system/alerts?tab=transient&',
   Options: 'system/options?',
-  Datasources: 'system/remote?',
-  ['User Connections']: 'system/remote?tab=user&',
-  ['Qorus Connections']: 'system/remote?tab=qorus&',
+  Datasources: 'remote?',
+  'User Connections': 'remote?tab=user&',
+  'Qorus Connections': 'remote?tab=qorus&',
   Properties: 'system/props?',
-  SLAs: 'system/slas?',
-  Users: 'system/rbac?',
-  Roles: 'system/rbac?tab=roles&',
-  Permissions: 'system/rbac?tab=permissions&',
-  Errors: 'system/errors?',
-  ['SQL Cache']: 'system/sqlcache?',
-  ['Value Maps']: 'system/values?',
-  ['Code Library']: 'library?',
-  ['Orders by ID']: {
+  SLAs: 'slas?',
+  Users: 'rbac?',
+  Roles: 'rbac?tab=roles&',
+  Permissions: 'rbac?tab=permissions&',
+  Errors: 'errors?',
+  'SQL Cache': 'system/sqlcache?',
+  'Value Maps': 'values?',
+  'Code Library': 'library?',
+  'Orders by ID': {
     link: 'search?',
     queryName: 'ids',
   },
-  ['Orders by value']: {
+  'Orders by value': {
     link: 'search?',
     queryName: 'keyvalue',
   },
@@ -162,7 +162,7 @@ export default class Topbar extends Component {
     );
   };
 
-  render() {
+  render () {
     const {
       light,
       onThemeClick,

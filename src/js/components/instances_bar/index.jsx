@@ -16,6 +16,7 @@ type Props = {
   wrapperWidth: string | number,
   link?: string,
   big?: boolean,
+  onClick: Function,
 };
 
 const InstancesBar: Function = ({
@@ -30,6 +31,7 @@ const InstancesBar: Function = ({
   wrapperWidth: wrapperWidth = '100%',
   link,
   big,
+  onClick,
 }: Props): React.Element<any> => (
   <div
     className={`instances-bar-wrapper ${big ? 'instances-bar-big' : ''}`}
@@ -48,7 +50,11 @@ const InstancesBar: Function = ({
             key={index}
           >
             <Link
-              to={link || `/${type}/${id}?filter=${state.title}&date=${date}`}
+              to={
+                onClick
+                  ? null
+                  : link || `/${type}/${id}?filter=${state.title}&date=${date}`
+              }
             >
               <div
                 className={`instances-bar bar-${state.label}`}
@@ -56,6 +62,7 @@ const InstancesBar: Function = ({
                 style={{
                   width: `${state.width}%`,
                 }}
+                onClick={onClick}
               >
                 <div className={`instance-bar-value bar-${state.label}`}>
                   {showPct

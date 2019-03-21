@@ -2,12 +2,12 @@
 import React from 'react';
 import PaneItem from '../pane_item';
 
-import Dropdown, { Item, Control } from '../dropdown';
 import DispositionChart from '../disposition_chart';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import BandDropdown from './dropdown';
 
 type Props = {
   orderStats: Array<Object>,
@@ -32,14 +32,10 @@ const MultiDispostionChart: Function = ({
   <PaneItem
     title={title}
     label={
-      <Dropdown>
-        <Control small iconName="time">
-          {chartTab}
-        </Control>
-        <Item title="1 hour band" action={handleChartTabChange} />
-        <Item title="4 hour band" action={handleChartTabChange} />
-        <Item title="24 hour band" action={handleChartTabChange} />
-      </Dropdown>
+      <BandDropdown
+        chartTab={chartTab}
+        onChartTabChange={handleChartTabChange}
+      />
     }
   >
     {orderStats.map(

@@ -357,7 +357,7 @@ export default class Dashboard extends Component {
                   <div
                     className="dashboard-data-title"
                     onClick={() =>
-                      this.handleModuleClick('/system/remote?tab=qorus')
+                      this.handleModuleClick('/remote?tab=qorus')
                     }
                   >
                     Qorus
@@ -365,7 +365,7 @@ export default class Dashboard extends Component {
                   <div
                     className="dashboard-data-top"
                     onClick={() =>
-                      this.handleModuleClick('/system/remote?tab=qorus')
+                      this.handleModuleClick('/remote?tab=qorus')
                     }
                   >
                     <div className="db-data-content">{system.remote_total}</div>
@@ -377,7 +377,7 @@ export default class Dashboard extends Component {
                     }`}
                     onClick={() =>
                       this.handleModuleClick(
-                        '/system/remote?tab=qorus&search=has_alerts:true'
+                        '/remote?tab=qorus&search=has_alerts:true'
                       )
                     }
                   >
@@ -390,13 +390,13 @@ export default class Dashboard extends Component {
                 <div className="dashboard-data-module has-link">
                   <div
                     className="dashboard-data-title"
-                    onClick={() => this.handleModuleClick('/system/remote')}
+                    onClick={() => this.handleModuleClick('/remote')}
                   >
                     Datasource
                   </div>
                   <div
                     className="dashboard-data-top"
-                    onClick={() => this.handleModuleClick('/system/remote')}
+                    onClick={() => this.handleModuleClick('/remote')}
                   >
                     <div className="db-data-content">
                       {system.datasource_total}
@@ -409,7 +409,7 @@ export default class Dashboard extends Component {
                     }`}
                     onClick={() =>
                       this.handleModuleClick(
-                        '/system/remote?search=has_alerts:true'
+                        '/remote?search=has_alerts:true'
                       )
                     }
                   >
@@ -423,7 +423,7 @@ export default class Dashboard extends Component {
                   <div
                     className="dashboard-data-title"
                     onClick={() =>
-                      this.handleModuleClick('/system/remote?tab=user')
+                      this.handleModuleClick('/remote?tab=user')
                     }
                   >
                     User
@@ -431,7 +431,7 @@ export default class Dashboard extends Component {
                   <div
                     className="dashboard-data-top"
                     onClick={() =>
-                      this.handleModuleClick('/system/remote?tab=user')
+                      this.handleModuleClick('/remote?tab=user')
                     }
                   >
                     <div className="db-data-content">{system.user_total}</div>
@@ -443,7 +443,7 @@ export default class Dashboard extends Component {
                     }`}
                     onClick={() =>
                       this.handleModuleClick(
-                        '/system/remote?tab=user&search=has_alerts:true'
+                        '/remote?tab=user&search=has_alerts:true'
                       )
                     }
                   >

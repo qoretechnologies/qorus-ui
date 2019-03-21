@@ -1,209 +1,89 @@
 // @flow
 import React from 'react';
-import { injectIntl } from 'react-intl';
-import { browserHistory, Link } from 'react-router';
-import {
-  Menu,
-  MenuItem,
-  MenuDivider,
-  Icon,
-  Tooltip,
-  Position,
-} from '@blueprintjs/core';
-import map from 'lodash/map';
-import withHandlers from 'recompose/withHandlers';
 import compose from 'recompose/compose';
+import classnames from 'classnames';
+import map from 'lodash/map';
+import Scroll from 'react-scrollbar';
 
-type Props = {
-  menuCollapsed?: boolean,
-  toggleMenu: Function,
+import SidebarSection from './section';
+import { Icon } from '@blueprintjs/core';
+import withState from 'recompose/withState';
+import withHandlers from 'recompose/withHandlers';
+import mapProps from 'recompose/mapProps';
+import { transformMenu } from '../../helpers/system';
+
+type SidebarProps = {
   isTablet: boolean,
-  light?: boolean,
+  isCollapsed: boolean,
+  isLight: boolean,
+  toggleMenu: Function,
+  location: Object,
+  expandedSection: string,
+  handleSectionToggle: Function,
+  menu: Object,
+  favoriteItems: Array<Object>,
 };
-
-const menu = {
-  System: [
-    {
-      name: 'Dashboard',
-      icon: 'timeline-bar-chart',
-      link: '/system/dashboard',
-    },
-    { name: 'Alerts', icon: 'warning-sign', link: '/system/alerts' },
-    { name: 'Cluster', icon: 'heat-grid', link: '/system/cluster' },
-    {
-      name: 'Order Stats',
-      icon: 'vertical-bar-chart-asc',
-      link: '/system/orderStats',
-    },
-    { name: 'Options', icon: 'cog', link: '/system/options' },
-    { name: 'Connections', icon: 'left-join', link: '/system/remote' },
-    { name: 'Properties', icon: 'properties', link: '/system/props' },
-    { name: 'SLAs', icon: 'time', link: '/system/slas' },
-    { name: 'Releases', icon: 'git-push', link: '/system/releases' },
-    {
-      name: 'More',
-      icon: 'more',
-      submenu: [
-        { name: 'Info', icon: 'info-sign', link: '/system/info' },
-        { name: 'Logs', icon: 'comparison', link: '/system/logs' },
-        { name: 'RBAC', icon: 'people', link: '/system/rbac' },
-        { name: 'Errors', icon: 'error', link: '/system/errors' },
-        { name: 'Cache', icon: 'database', link: '/system/sqlcache' },
-        { name: 'HTTP Services', icon: 'globe-network', link: '/system/http' },
-        { name: 'Valuemaps', icon: 'map', link: '/system/values' },
-      ],
-    },
-  ],
-  Interfaces: [
-    { name: 'Workflows', icon: 'exchange', link: '/workflows' },
-    { name: 'Services', icon: 'merge-links', link: '/services' },
-    { name: 'Jobs', icon: 'calendar', link: '/jobs' },
-    { name: 'Groups', icon: 'group-objects', link: '/groups' },
-  ],
-  Other: [
-    { name: 'Search', icon: 'search', link: '/search' },
-    { name: 'OCMD', icon: 'code', link: '/ocmd' },
-    { name: 'Library', icon: 'book', link: '/library' },
-    { name: 'Extensions', icon: 'layout', link: '/extensions' },
-  ],
-};
-
-const tabletMenu = {
-  System: [
-    {
-      name: 'System',
-      icon: 'cog',
-      submenu: [
-        { name: 'Dashboard', icon: 'timeline-bar-chart', link: '/' },
-        { name: 'Alerts', icon: 'warning-sign', link: '/system/alerts' },
-        { name: 'Cluster', icon: 'heat-grid', link: '/system/cluster' },
-        {
-          name: 'Order Stats',
-          icon: 'vertical-bar-chart-asc',
-          link: '/system/orderStats',
-        },
-        { name: 'Options', icon: 'cog', link: '/system/options' },
-        { name: 'Connections', icon: 'left-join', link: '/system/remote' },
-        { name: 'Properties', icon: 'properties', link: '/system/props' },
-        { name: 'SLAs', icon: 'time', link: '/system/slas' },
-        { name: 'Releases', icon: 'git-push', link: '/system/releases' },
-        { name: 'Info', icon: 'info-sign', link: '/system/info' },
-        { name: 'Logs', icon: 'comparison', link: '/system/logs' },
-        { name: 'RBAC', icon: 'people', link: '/system/rbac' },
-        { name: 'Errors', icon: 'error', link: '/system/errors' },
-        { name: 'Cache', icon: 'database', link: '/system/sqlcache' },
-        { name: 'HTTP Services', icon: 'home', link: '/system/http' },
-        { name: 'Valuemaps', icon: 'map', link: '/system/values' },
-      ],
-    },
-  ],
-  Interfaces: [
-    { name: 'Workflows', icon: 'exchange', link: '/workflows' },
-    { name: 'Services', icon: 'merge-links', link: '/services' },
-    { name: 'Jobs', icon: 'calendar', link: '/jobs' },
-    { name: 'Groups', icon: 'merge-links', link: '/groups' },
-  ],
-  Other: [
-    { name: 'Search', icon: 'search', link: '/search' },
-    { name: 'OCMD', icon: 'code', link: '/ocmd' },
-    { name: 'Library', icon: 'book', link: '/library' },
-    { name: 'Extensions', icon: 'layout', link: '/extensions' },
-  ],
-};
-
-let MenuElement: Function = ({
-  iconName,
-  name,
-  submenu,
-  link,
-  menuCollapsed,
-  intl: { formatMessage },
-  handleClick,
-}) => (
-  <Link
-    to={link}
-    className="non-decorated-link"
-    activeClassName="active-sidebar-item"
-  >
-    <MenuItem iconName={iconName} text={!menuCollapsed && name}>
-      {submenu &&
-        submenu.map(item => (
-          <MenuElement
-            key={item.name}
-            iconName={item.icon}
-            link={item.link}
-            name={item.name}
-          />
-        ))}
-    </MenuItem>
-  </Link>
-);
-
-MenuElement = compose(injectIntl)(MenuElement);
-
-const MenuWrapper: Function = ({
-  menuCollapsed,
-  toggleMenu,
-  intl: { formatMessage },
-  isTablet,
-}: Props) => (
-  <Menu className={`sidebar ${menuCollapsed ? '' : 'full'}`}>
-    {map(isTablet ? tabletMenu : menu, (values: Object, key: string) => (
-      <div key={key}>
-        {!menuCollapsed && (
-          <li className="pt-menu-header">
-            <h6>{key}</h6>
-          </li>
-        )}
-        {values.map(({ name, icon, link, submenu }) =>
-          menuCollapsed ? (
-            <Tooltip
-              key={name}
-              content={name}
-              position={submenu ? Position.BOTTOM : Position.RIGHT}
-            >
-              <MenuElement
-                iconName={icon}
-                link={link}
-                name={name}
-                submenu={submenu}
-                menuCollapsed
-              />
-            </Tooltip>
-          ) : (
-            <MenuElement
-              key={name}
-              iconName={icon}
-              link={link}
-              name={name}
-              submenu={submenu}
-            />
-          )
-        )}
-        <MenuDivider />
-      </div>
-    ))}
-    {menuCollapsed ? (
-      <MenuItem iconName="menu-open" onClick={toggleMenu} />
-    ) : (
-      <MenuItem
-        iconName="menu"
-        label={<Icon iconName="caret-left" />}
-        text="Collapse"
-        onClick={toggleMenu}
-      />
-    )}
-  </Menu>
-);
 
 const Sidebar: Function = ({
   isTablet,
-  light,
-  ...rest
-}: Props): React.Element<any> => (
-  <div className={light ? '' : 'pt-dark'}>
-    <MenuWrapper isTablet={isTablet} {...rest} />
+  isCollapsed,
+  isLight,
+  toggleMenu,
+  location,
+  expandedSection,
+  handleSectionToggle,
+  menu,
+  favoriteItems,
+}: SidebarProps): React.Element<any> => (
+  <div
+    className={classnames('sidebar', isLight ? 'light' : 'dark', {
+      expanded: !isCollapsed,
+    })}
+  >
+    <Scroll horizontal={false} className="sidebarScroll">
+      {map(menu, (menuData: Array<Object>, menuKey: string) => (
+        <SidebarSection
+          location={location}
+          sectionData={menuData}
+          key={menuKey}
+          isCollapsed={isCollapsed}
+          expandedSection={expandedSection}
+          onSectionToggle={handleSectionToggle}
+          favoriteItems={favoriteItems}
+        />
+      ))}
+    </Scroll>
+    <div className="sidebarSection">
+      <div className="sidebarItem" onClick={toggleMenu}>
+        <Icon
+          iconName={
+            isCollapsed ? 'double-chevron-right' : 'double-chevron-left'
+          }
+        />{' '}
+        {!isCollapsed && 'Collapse'}
+      </div>
+    </div>
   </div>
 );
 
-export default injectIntl(Sidebar);
+export default compose(
+  withState('expandedSection', 'toggleSectionExpand', null),
+  withHandlers({
+    handleSectionToggle: ({ toggleSectionExpand }): Function => (
+      sectionId: string
+    ): void => {
+      toggleSectionExpand(currentSectionId => {
+        if (currentSectionId === sectionId) {
+          return null;
+        }
+
+        return sectionId;
+      });
+    },
+  }),
+  mapProps(({ menu, favoriteItems, ...rest }) => ({
+    menu: transformMenu(menu, favoriteItems),
+    favoriteItems,
+    ...rest,
+  }))
+)(Sidebar);

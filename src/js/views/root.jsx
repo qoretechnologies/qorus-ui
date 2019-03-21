@@ -27,7 +27,7 @@ import FullPageLoading from '../components/FullPageLoading';
 addLocaleData([...en, ...cs, ...de]);
 const systemSelector = state => state.api.system;
 const currentUserSelector = state => state.api.currentUser;
-const menuSelector = state => state.menu;
+const menuSelector = state => state.ui.menu;
 const settingsSelector = state => state.ui.settings;
 const healthSelector = state => state.api.health;
 const optionsSelector = state => state.api.systemOptions;
@@ -94,6 +94,7 @@ export default class Root extends Component {
     storeTheme: Function,
     sendSuccess: Function,
     sendWarning: Function,
+    menu: Object,
   } = this.props;
 
   static childContextTypes = {
@@ -194,7 +195,7 @@ export default class Root extends Component {
   };
 
   render () {
-    const { currentUser, info, isTablet, health, options } = this.props;
+    const { currentUser, info, isTablet, health, options, menu } = this.props;
     const isSynced: boolean =
       currentUser.sync &&
       info.sync &&
@@ -212,38 +213,40 @@ export default class Root extends Component {
         ? navigator.locale
         : 'en-US';
 
+    const { favoriteMenuItems = [] } = currentUser.data.storage;
     const isLightTheme = currentUser.data.storage.theme === 'light';
 
     return (
-      <IntlProvider locale={locale} messages={messages(locale)}>
-        <div className="root">
-          <Topbar
-            info={info}
-            health={health}
-            locale={locale}
+      <div className="root">
+        <Topbar
+          info={info}
+          health={health}
+          locale={locale}
+          isTablet={isTablet}
+          light={isLightTheme}
+          onThemeClick={this.onThemeChange}
+          user={currentUser.data}
+          location={this.props.location}
+        />
+        <div className="root__center">
+          <Sidebar
+            isLight={isLightTheme}
+            isCollapsed={!this.props.sidebarOpen}
+            toggleMenu={this.toggleMenu}
             isTablet={isTablet}
-            light={isLightTheme}
-            onThemeClick={this.onThemeChange}
-            user={currentUser.data}
             location={this.props.location}
+            menu={menu.data}
+            favoriteItems={favoriteMenuItems}
           />
-          <div className="root__center">
-            <Sidebar
-              light={isLightTheme}
-              menuCollapsed={!this.props.sidebarOpen}
-              toggleMenu={this.toggleMenu}
-              isTablet={isTablet}
-            />
-            <Flex className="section" scrollX>
-              <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
-            </Flex>
-          </div>
-          <Footer path={this.props.location.pathname} info={info.data} />
-          <ModalManager ref={this.refModal} />
-          <Notifications />
-          <Bubbles />
+          <Flex className="section" scrollX>
+            <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
+          </Flex>
         </div>
-      </IntlProvider>
+        <Footer path={this.props.location.pathname} info={info.data} />
+        <ModalManager ref={this.refModal} />
+        <Notifications />
+        <Bubbles />
+      </div>
     );
   }
 }
