@@ -179,6 +179,7 @@ const ConfigItemsContainer: Function = ({
                       <DataOrEmptyTable
                         condition={!collection || collection.length === 0}
                         cols={6}
+                        small
                       >
                         {props => (
                           <Tbody {...props}>
