@@ -32,44 +32,36 @@ import withDispatch from '../../hocomponents/withDispatch';
 type AuthLabelsContainerProps = {
   service: Object,
   optimisticDispatch: Function,
+  authLabelValues: Array<string>,
 };
 
 const AuthLabelsDropdown: Function = compose(
   withDispatch(),
-  onlyUpdateForKeys(['label', 'service'])
-)(({ label, service, optimisticDispatch }: Object) => (
+  onlyUpdateForKeys(['label', 'id'])
+)(({ label, id, optimisticDispatch, values }: Object) => (
   <Dropdown>
     <Control small>{label.value}</Control>
-    <Item
-      title="default"
-      action={(event, value) => {
-        optimisticDispatch(
-          actions.services.updateAuthLabel,
-          service.id,
-          label.name,
-          value,
-          label.value
-        );
-      }}
-    />
-    <Item
-      title="permissive"
-      action={(event, value) => {
-        optimisticDispatch(
-          actions.services.updateAuthLabel,
-          service.id,
-          label.name,
-          value,
-          label.value
-        );
-      }}
-    />
+    {values.map((val: string) => (
+      <Item
+        title={val}
+        action={(event, value) => {
+          optimisticDispatch(
+            actions.services.updateAuthLabel,
+            id,
+            label.name,
+            value,
+            label.value
+          );
+        }}
+      />
+    ))}
   </Dropdown>
 ));
 
 const AuthLabelsContainer: Function = ({
   service,
   optimisticDispatch,
+  authLabelValues,
 }: AuthLabelsContainerProps): React.Element<any> => (
   <Flex>
     <EnhancedTable
@@ -124,7 +116,11 @@ const AuthLabelsContainer: Function = ({
                   <Tr first={index === 0} key={index}>
                     <NameColumn name={label.name} />
                     <Td className="text">
-                      <AuthLabelsDropdown label={label} service={service} />
+                      <AuthLabelsDropdown
+                        label={label}
+                        id={service.id}
+                        values={authLabelValues}
+                      />
                     </Td>
                   </Tr>
                 ))}
@@ -139,7 +135,9 @@ const AuthLabelsContainer: Function = ({
 
 export default compose(
   connect(
-    null,
+    (state: Object): Object => ({
+      authLabelValues: state.api.system.data.auth_label_values || [],
+    }),
     {
       fetch: actions.services.fetchAuthLabels,
     }
@@ -158,5 +156,5 @@ export default compose(
     },
   }),
   showIfPassed(({ service }) => service.authLabels, <Loader />),
-  onlyUpdateForKeys(['authLabels', 'service'])
+  onlyUpdateForKeys(['authLabels', 'service', 'authLabelValues'])
 )(AuthLabelsContainer);
