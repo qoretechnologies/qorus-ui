@@ -11,6 +11,7 @@ import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 import { transformMenu } from '../../helpers/system';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 type SidebarProps = {
   isTablet: boolean,
@@ -22,6 +23,7 @@ type SidebarProps = {
   handleSectionToggle: Function,
   menu: Object,
   favoriteItems: Array<Object>,
+  plugins: Array<string>,
 };
 
 const Sidebar: Function = ({
@@ -81,9 +83,11 @@ export default compose(
       });
     },
   }),
-  mapProps(({ menu, favoriteItems, ...rest }) => ({
-    menu: transformMenu(menu, favoriteItems),
+  mapProps(({ menu, favoriteItems, plugins, ...rest }) => ({
+    menu: transformMenu(menu, favoriteItems, plugins),
     favoriteItems,
+    plugins,
     ...rest,
-  }))
+  })),
+  onlyUpdateForKeys(['menu', 'favoriteItems', 'plugins'])
 )(Sidebar);

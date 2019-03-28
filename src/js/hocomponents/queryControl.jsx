@@ -72,6 +72,7 @@ export default (
         ...{
           [`${qName}Query`]: query,
           [`change${upperFirst(qName)}Query`]: func,
+          allQueryObj: location.query,
         },
         ...this.props,
       };

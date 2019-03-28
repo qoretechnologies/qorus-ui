@@ -38,7 +38,7 @@ const ResourceTable: Function = ({
   resourceFiles,
 }: Props): React.Element<any> => (
   <Tabs active="resources">
-    <Pane name="Resources">
+    <Pane name="Resources" suffix={size(resources)}>
       <EnhancedTable
         collection={objectCollectionToArray(resources)}
         searchBy={['name', 'desc', 'type', 'info']}
@@ -115,7 +115,7 @@ const ResourceTable: Function = ({
         )}
       </EnhancedTable>
     </Pane>
-    <Pane name="Resource files">
+    <Pane name="Resource files" suffix={size(resourceFiles)}>
       <EnhancedTable
         collection={resourceFiles}
         searchBy={['name', 'type']}

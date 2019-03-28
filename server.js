@@ -34,6 +34,7 @@ if (env === 'production') {
 
   // Proxy
   app.use(proxyMiddleware('/api', { target: API_URL, secure: false }));
+  app.use(proxyMiddleware('/oauth2/v1', { target: API_URL, secure: false }));
   app.use(
     proxyMiddleware('/apievents', {
       target: `${API_WS_URL}/apievents`,

@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import round from 'lodash/round';
 import size from 'lodash/size';
 import reduce from 'lodash/reduce';
+import upperFirst from 'lodash/upperFirst';
+import includes from 'lodash/includes';
 
 const statusHealth: Function = (health: string): string =>
   classNames({
@@ -211,14 +213,89 @@ const getLineCount: Function = (value: string): number => {
 
 const transformMenu: Function = (
   menu: Object,
-  favoriteItems: Array<Object>
+  favoriteItems: Array<Object>,
+  plugins: Array<string>
 ): Object => {
-  if (!size(favoriteItems)) {
-    return menu;
+  let newMenu: Object = { ...menu };
+
+  if (size(plugins)) {
+    newMenu = {
+      ...newMenu,
+      Plugins: [
+        {
+          name: 'Plugins',
+          icon: 'helper-management',
+          activePaths: ['/plugins'],
+          submenu: createPluginsMenu(plugins),
+        },
+      ],
+    };
   }
 
-  return { Favorites: favoriteItems, ...menu };
+  if (size(favoriteItems)) {
+    newMenu = reduce(
+      newMenu,
+      (cur, menuSection: Array<Object>, name: string) => {
+        let newSection = [...menuSection];
+
+        newSection = newSection
+          .map((newSectionItem: Object) => {
+            const copySectionItem: Object = { ...newSectionItem };
+
+            if (copySectionItem.submenu) {
+              copySectionItem.submenu = copySectionItem.submenu.filter(
+                (submenuItem: Object) =>
+                  !favoriteItems.find(
+                    (favoriteItem: Object) =>
+                      favoriteItem.name === submenuItem.name
+                  )
+              );
+
+              if (size(copySectionItem.submenu)) {
+                return copySectionItem;
+              }
+            } else {
+              if (
+                !favoriteItems.find(
+                  (favoriteItem: Object) =>
+                    favoriteItem.name === copySectionItem.name
+                )
+              ) {
+                return copySectionItem;
+              }
+            }
+          })
+          .filter((newSectionItem: Object) => newSectionItem);
+
+        return { ...cur, [name]: newSection };
+      },
+      {}
+    );
+
+    newMenu = { Favorites: favoriteItems, ...newMenu };
+  }
+
+  return newMenu;
 };
+
+const createPluginsMenu: Function = (plugins: Array<string>): Array<Object> =>
+  plugins.map((plugin: string) => ({
+    name: upperFirst(plugin),
+    link: `/plugins/${plugin}`,
+    icon: getPluginIcon(plugin),
+  }));
+
+const getPluginIcon: Function = (plugin: string): string => {
+  switch (plugin) {
+    case 'oauth2':
+      return 'id-number';
+    default:
+      return 'help';
+  }
+};
+
+const hasPlugin: Function = (pluginName: string, plugins: Array<string>) =>
+  plugins && plugins.includes(pluginName);
 
 export {
   statusHealth,
@@ -234,4 +311,5 @@ export {
   getSlicedRemotes,
   getLineCount,
   transformMenu,
+  hasPlugin,
 };

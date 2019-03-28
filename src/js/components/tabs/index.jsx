@@ -27,7 +27,7 @@ class Tabs extends React.Component {
     active: this.props.active,
   };
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps (nextProps: Props) {
     if (this.props.active !== nextProps.active) {
       this.setState({
         active: nextProps.active,
@@ -49,15 +49,26 @@ class Tabs extends React.Component {
     }
   };
 
-  render() {
+  render () {
     const { children, tabs, rightElement } = this.props;
     const { active } = this.state;
     const getTabs: Array<string> =
       tabs ||
-      React.Children.map(
-        children,
-        (child: any) => child && upperFirst(child.props.name)
-      );
+      React.Children.map(children, (child: any) => {
+        if (child) {
+          let { name, suffix } = child.props;
+          suffix = suffix || suffix === 0 ? suffix : null;
+
+          return suffix !== null
+            ? {
+              title: upperFirst(name),
+              suffix: `(${suffix})`,
+            }
+            : upperFirst(name);
+        }
+
+        return null;
+      });
 
     return (
       <Flex>
