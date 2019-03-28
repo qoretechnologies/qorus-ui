@@ -28,6 +28,7 @@ type Props = {
   disabled?: boolean,
   onHide?: Function,
   position?: string,
+  alwaysShowSelectedCount?: boolean,
 };
 
 @pure(['children', 'show', 'selected', 'disabled', 'className'])
@@ -47,7 +48,7 @@ export default class Dropdown extends Component {
     filterValue: string,
   };
 
-  componentWillMount(): void {
+  componentWillMount (): void {
     let sel;
     const { selected, def } = this.props;
 
@@ -65,7 +66,7 @@ export default class Dropdown extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  componentWillReceiveProps (nextProps: Props): void {
     if (this.state.showDropdown !== nextProps.show) {
       this.setState({
         showDropdown: nextProps.show,
@@ -79,7 +80,7 @@ export default class Dropdown extends Component {
     }
   }
 
-  componentWillUnmount(): void {
+  componentWillUnmount (): void {
     document.removeEventListener('keyup', this.handleMarkedChange);
   }
 
@@ -95,7 +96,7 @@ export default class Dropdown extends Component {
         return children || 'Please select';
       }
 
-      return selected.length > 3
+      return selected.length > 3 || this.props.alwaysShowSelectedCount
         ? `${selected.length} selected`
         : selected.join(', ');
     }
@@ -222,7 +223,7 @@ export default class Dropdown extends Component {
   /**
    * Renders the seleciton dropdown to the component
    */
-  renderDropdown(): ?React.Element<any> {
+  renderDropdown (): ?React.Element<any> {
     const { filterValue } = this.state;
 
     if (
@@ -256,7 +257,7 @@ export default class Dropdown extends Component {
     return null;
   }
 
-  renderDropdownList(): ?React.Element<any> {
+  renderDropdownList (): ?React.Element<any> {
     return React.Children.map(this.props.children, (c, index) => {
       if (!c || c.type.displayName === 'DropdownControl') return null;
 
@@ -299,7 +300,7 @@ export default class Dropdown extends Component {
     });
   }
 
-  renderDropdownControl(): ?React.Element<any> {
+  renderDropdownControl (): ?React.Element<any> {
     return React.Children.map(this.props.children, c => {
       if (!c || c.type.displayName !== 'DropdownControl') return undefined;
 
@@ -317,7 +318,7 @@ export default class Dropdown extends Component {
     });
   }
 
-  renderSubmit(): ?React.Element<Button> {
+  renderSubmit (): ?React.Element<Button> {
     if (this.props.multi && this.props.onSubmit && !this.props.submitOnBlur) {
       return (
         <Button text={this.props.submitLabel} onClick={this.handleSubmit} />
@@ -327,7 +328,7 @@ export default class Dropdown extends Component {
     return undefined;
   }
 
-  render(): React.Element<any> {
+  render (): React.Element<any> {
     const { onSubmit, submitOnBlur } = this.props;
 
     return (
