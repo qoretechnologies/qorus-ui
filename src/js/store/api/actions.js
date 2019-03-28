@@ -27,6 +27,7 @@ import * as slaEventsActions from './resources/slas/events/actions';
 import * as slaPerfActions from './resources/slas/perf/actions';
 import * as systemActions from './resources/system/actions';
 import * as instancesActions from './resources/instances/actions';
+import * as clientsActions from './resources/clients/actions';
 
 import {
   combineResourceActions,
@@ -131,6 +132,8 @@ Object.assign(actions.groups, groupsActions);
 Object.assign(actions.errors, errorActions);
 
 Object.assign(actions.systemOptions, optionActions);
+
+Object.assign(actions.clients, clientsActions);
 
 Object.keys(serviceActions.delegates).forEach(a => {
   actions.services[a] = serviceActions.delegates[a](actions);

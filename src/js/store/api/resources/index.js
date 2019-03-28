@@ -284,4 +284,8 @@ export default [
     name: 'slaperf',
     url: `${settings.REST_BASE_URL}/slas`,
   },
+  {
+    name: 'clients',
+    url: `${settings.OAUTH_URL}/clients`,
+  },
 ];
