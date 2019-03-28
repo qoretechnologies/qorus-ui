@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
-import withMutationObserver from '../../hocomponents/withMutationObserver';
 import ResizeObserver from 'resize-observer-polyfill';
 
 type Props = {
@@ -17,6 +16,7 @@ type Props = {
   first?: boolean,
   title?: string,
   key?: any,
+  active?: boolean,
 };
 
 @updateOnlyForKeys(['children', 'className', 'sortData', 'highlight', 'first'])
@@ -29,15 +29,15 @@ export default class Tr extends Component {
     highlight: false,
   };
 
-  componentDidMount() {
+  componentDidMount () {
     this.startHighlight(this.props.highlight);
   }
 
-  componentWillReceiveProps(nextProps: Object): void {
+  componentWillReceiveProps (nextProps: Object): void {
     this.startHighlight(nextProps.highlight);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     clearTimeout(this._highlightTimeout);
 
     if (this.props.onHighlightEnd && this.props.highlight) {
@@ -174,25 +174,36 @@ export default class Tr extends Component {
     if (this.props.onHighlightEnd) this.props.onHighlightEnd();
   };
 
-  render() {
-    const { children, className, sortData, onSortChange, title } = this.props;
+  render () {
+    const {
+      children,
+      className,
+      sortData,
+      onSortChange,
+      title,
+      active,
+    } = this.props;
     const { highlight } = this.state;
 
     return (
       <tr
-        className={classNames(className, {
-          'row-highlight': highlight,
-        })}
+        className={classNames(
+          {
+            'row-highlight': highlight,
+            'row-active': active,
+          },
+          className
+        )}
         onClick={this.handleClick}
         ref={this.handleRef}
         title={title}
       >
         {sortData && onSortChange
           ? React.Children.map(children, (child: any, key) =>
-              child
-                ? React.cloneElement(child, { key, sortData, onSortChange })
-                : undefined
-            )
+            child
+              ? React.cloneElement(child, { key, sortData, onSortChange })
+              : undefined
+          )
           : children}
       </tr>
     );

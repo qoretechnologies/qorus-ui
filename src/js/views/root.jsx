@@ -235,7 +235,7 @@ export default class Root extends Component {
             location={this.props.location}
             menu={menu.data}
             favoriteItems={favoriteMenuItems}
-            plugins={info.plugins || []}
+            plugins={info.plugins}
           />
           <Flex className="section" scrollX>
             <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>

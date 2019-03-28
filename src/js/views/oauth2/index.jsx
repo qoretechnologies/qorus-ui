@@ -42,9 +42,16 @@ import withHandlers from 'recompose/withHandlers';
 import withDispatch from '../../hocomponents/withDispatch';
 import AddClientModal from './modals/add';
 import Header from './header';
+import pane from '../../hocomponents/pane';
+import ClientsPane from './pane';
 
 type ClientsViewProps = {
   clients: Object | Array<Object>,
+  handleAddClientClick: Function,
+  handleUpdateClientClick: Function,
+  handleDeleteClientClick: Function,
+  openPane: Function,
+  paneId: string,
 };
 
 const ClientsView: Function = ({
@@ -52,6 +59,8 @@ const ClientsView: Function = ({
   handleAddClientClick,
   handleUpdateClientClick,
   handleDeleteClientClick,
+  openPane,
+  paneId,
 }: ClientsViewProps): React.Element<any> => (
   <Flex>
     <Header />
@@ -108,9 +117,6 @@ const ClientsView: Function = ({
                   Secret
                 </Th>
                 <AuthorColumnHeader name="username">Parent</AuthorColumnHeader>
-                <Th className="text" icon="cog">
-                  Permissions
-                </Th>
               </FixedRow>
             </Thead>
             <DataOrEmptyTable condition={size(collection) === 0} cols={4}>
@@ -118,8 +124,18 @@ const ClientsView: Function = ({
                 <Tbody {...props}>
                   {collection.map(
                     (client: Object, index: number): React.Element<Tr> => (
-                      <Tr key={index} first={index === 0}>
-                        <NameColumn name={client.client_id} />
+                      <Tr
+                        key={index}
+                        first={index === 0}
+                        active={paneId === client.client_id}
+                      >
+                        <NameColumn
+                          name={client.client_id}
+                          onDetailClick={() => {
+                            openPane(client.client_id);
+                          }}
+                          isActive={paneId === client.client_id}
+                        />
                         <ActionColumn>
                           <ButtonGroup>
                             <Button
@@ -145,15 +161,6 @@ const ClientsView: Function = ({
                         </ActionColumn>
                         <Td className="text">{client.client_secret}</Td>
                         <AuthorColumn>{client.username}</AuthorColumn>
-                        <Td className="text">
-                          {size(client.permissions) &&
-                            client.permissions.map(
-                              (permission: string, index: number): string =>
-                                `${
-                                  index === 0 ? permission : `, ${permission}`
-                                }`
-                            )}
-                        </Td>
                       </Tr>
                     )
                   )}
@@ -276,6 +283,7 @@ export default compose(
       );
     },
   }),
+  pane(ClientsPane, ['handleUpdateClientClick']),
   titleManager('OAuth2 Plugin'),
-  onlyUpdateForKeys(['clients'])
+  onlyUpdateForKeys(['clients', 'paneId'])
 )(ClientsView);

@@ -15,6 +15,7 @@ import Loader from './components/loader';
 import System from './views/system';
 import FullPageLoading from './components/FullPageLoading';
 import { hasPlugin } from './helpers/system';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 const Login = Loadable({
   loader: () => import(/* webpackChunkName: "login" */ './views/auth'),
@@ -111,6 +112,17 @@ const Sla = Loadable({
   loading: Loader,
 });
 
+const OAuth2View: any = Loadable({
+  loader: () => import(/* webpackChunkName: "oauth2" */ './views/oauth2'),
+  loading: Loader,
+});
+
+const AuthorizeView: any = Loadable({
+  loader: () =>
+    import(/* webpackChunkName: "oauth2-authorize" */ './views/oauth2/authorize'),
+  loading: Loader,
+});
+
 let AuthenticateCodeView;
 if (process.env.NODE_ENV === 'development') {
   AuthenticateCodeView = Loadable({
@@ -179,7 +191,7 @@ class AppInfo extends React.Component {
   };
 
   render () {
-    const { info, system, routerProps } = this.props;
+    let { info, plugins, routerProps, systemSync } = this.props;
     const token: string = window.localStorage.getItem('token');
 
     if (info.error) {
@@ -203,9 +215,7 @@ class AppInfo extends React.Component {
       );
     }
 
-    system.plugins = ['oauth2'];
-
-    if (system.sync) {
+    if (systemSync) {
       return (
         <Router {...this.props.routerProps}>
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
@@ -220,21 +230,10 @@ class AppInfo extends React.Component {
             <Route path="/rbac" component={System.RBAC} />
             <Route path="/errors" component={System.Errors} />
             <Route path="/releases" component={System.Releases} />
-            {hasPlugin('oauth2', system.plugins) && (
-              <Route
-                path="/plugins/oauth2"
-                component={() => {
-                  const OAuth2View: any = Loadable({
-                    loader: () =>
-                      import(/* webpackChunkName: "oauth2" */ './views/oauth2'),
-                    loading: Loader,
-                  });
-
-                  return <OAuth2View />;
-                }}
-              />
+            {hasPlugin('oauth2', plugins) && (
+              <Route path="/plugins/oauth2" component={OAuth2View} />
             )}
-            {hasPlugin('oauth2', system.plugins) &&
+            {hasPlugin('oauth2', plugins) &&
               process.env.NODE_ENV === 'development' && (
               <Route
                 path="/plugins/oauth2/code"
@@ -267,19 +266,11 @@ class AppInfo extends React.Component {
             <Route path="search" component={Search} />
             <Route path="workflows" component={Workflows} />
           </Route>
-          {hasPlugin('oauth2', system.plugins) && (
+          {hasPlugin('oauth2', plugins) && (
             <Route
               onEnter={this.requireAuthenticated}
               path="/plugins/oauth2/authorize"
-              component={() => {
-                const AuthorizeView: any = Loadable({
-                  loader: () =>
-                    import(/* webpackChunkName: "oauth2-authorize" */ './views/oauth2/authorize'),
-                  loading: Loader,
-                });
-
-                return <AuthorizeView info={this.props.info} />;
-              }}
+              component={AuthorizeView}
               onEnter={this.requireAuthenticated}
             />
           )}
@@ -297,7 +288,8 @@ export default compose(
   connect(
     state => ({
       info: state.api.info,
-      system: state.api.system,
+      plugins: state.api.system.data.plugins,
+      systemSync: state.api.system.sync,
     }),
     {
       load: actions.info.fetch,
@@ -319,5 +311,6 @@ export default compose(
     false,
     false,
     false
-  )
+  ),
+  onlyUpdateForKeys(['plugins', 'info', 'systemSync'])
 )(AppInfo);

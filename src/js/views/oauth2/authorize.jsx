@@ -128,7 +128,9 @@ const AuthenticateView: Function = ({
 export default compose(
   withState('hasDenied', 'deny', false),
   queryControl(),
-  connect(),
+  connect(state => ({
+    info: state.api.info,
+  })),
   withHandlers({
     handleDenyClick: ({ deny }): Function => (): void => {
       deny(() => true);
@@ -160,5 +162,5 @@ export default compose(
       }
     },
   }),
-  onlyUpdateForKeys(['allQuery', 'hasDenied', 'hasApproved'])
+  onlyUpdateForKeys(['allQuery', 'hasDenied', 'hasApproved', 'info'])
 )(AuthenticateView);

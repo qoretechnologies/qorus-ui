@@ -15,9 +15,8 @@ import Pull from '../../components/Pull';
 const OAuth2Header: Function = (): React.Element<any> => (
   <Headbar>
     <Breadcrumbs>
-      <Crumb active link="/oauth2">
-        OAuth2 Plugin
-      </Crumb>
+      <Crumb>Plugins</Crumb>
+      <Crumb active>OAuth2</Crumb>
     </Breadcrumbs>
     <Pull right>
       {process.env.NODE_ENV === 'development' && (

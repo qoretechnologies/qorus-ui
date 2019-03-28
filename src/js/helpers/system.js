@@ -4,6 +4,7 @@ import round from 'lodash/round';
 import size from 'lodash/size';
 import reduce from 'lodash/reduce';
 import upperFirst from 'lodash/upperFirst';
+import includes from 'lodash/includes';
 
 const statusHealth: Function = (health: string): string =>
   classNames({
@@ -217,10 +218,6 @@ const transformMenu: Function = (
 ): Object => {
   let newMenu: Object = { ...menu };
 
-  if (size(favoriteItems)) {
-    newMenu = { Favorites: favoriteItems, ...newMenu };
-  }
-
   if (size(plugins)) {
     newMenu = {
       ...newMenu,
@@ -233,6 +230,49 @@ const transformMenu: Function = (
         },
       ],
     };
+  }
+
+  if (size(favoriteItems)) {
+    newMenu = reduce(
+      newMenu,
+      (cur, menuSection: Array<Object>, name: string) => {
+        let newSection = [...menuSection];
+
+        newSection = newSection
+          .map((newSectionItem: Object) => {
+            const copySectionItem: Object = { ...newSectionItem };
+
+            if (copySectionItem.submenu) {
+              copySectionItem.submenu = copySectionItem.submenu.filter(
+                (submenuItem: Object) =>
+                  !favoriteItems.find(
+                    (favoriteItem: Object) =>
+                      favoriteItem.name === submenuItem.name
+                  )
+              );
+
+              if (size(copySectionItem.submenu)) {
+                return copySectionItem;
+              }
+            } else {
+              if (
+                !favoriteItems.find(
+                  (favoriteItem: Object) =>
+                    favoriteItem.name === copySectionItem.name
+                )
+              ) {
+                return copySectionItem;
+              }
+            }
+          })
+          .filter((newSectionItem: Object) => newSectionItem);
+
+        return { ...cur, [name]: newSection };
+      },
+      {}
+    );
+
+    newMenu = { Favorites: favoriteItems, ...newMenu };
   }
 
   return newMenu;

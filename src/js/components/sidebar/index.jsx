@@ -88,5 +88,6 @@ export default compose(
     favoriteItems,
     plugins,
     ...rest,
-  }))
+  })),
+  onlyUpdateForKeys(['menu', 'favoriteItems', 'plugins'])
 )(Sidebar);

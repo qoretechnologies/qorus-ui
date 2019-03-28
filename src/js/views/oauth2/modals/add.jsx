@@ -28,6 +28,7 @@ const AddClientModal: Function = ({
   permissions,
   userPermissions,
   handleAllPermissionsClick,
+  data,
 }: AddClientModalProps): React.Element<any> => (
   <form onSubmit={handleFormSubmit}>
     <Modal hasFooter>
@@ -43,6 +44,7 @@ const AddClientModal: Function = ({
               inline
             >
               <InputGroup
+                disabled={data}
                 id="client-id"
                 onChange={handleClientIdChange}
                 value={clientId}

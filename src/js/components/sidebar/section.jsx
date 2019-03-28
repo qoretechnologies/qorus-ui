@@ -5,6 +5,8 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import map from 'lodash/map';
 
 import SidebarItem from './item';
+import showIfPassed from '../../hocomponents/show-if-passed';
+import size from 'lodash/size';
 
 type SidebarSectionProps = {
   favoriteItems: Array<Object>,
@@ -38,4 +40,6 @@ const SidebarSection: Function = ({
   </div>
 );
 
-export default SidebarSection;
+export default showIfPassed(({ sectionData }) => size(sectionData))(
+  SidebarSection
+);

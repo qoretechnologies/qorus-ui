@@ -121,13 +121,6 @@ let SidebarItem: Function = ({
   );
 
 SidebarItem = compose(
-  showIfPassed(({ favoriteItems, itemData }) => {
-    const isFavorited = favoriteItems.find(
-      (item: Object) => item.name === itemData.name
-    );
-
-    return itemData.isFavorite || !isFavorited;
-  }),
   withDispatch(),
   withState('isHovered', 'changeHovered', false),
   withHandlers({
