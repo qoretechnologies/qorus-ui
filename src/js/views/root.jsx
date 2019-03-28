@@ -57,7 +57,6 @@ const optionsSelector = state => state.api.systemOptions;
   ),
   {
     saveDimensions: settings.saveDimensions,
-    fetchSystem: actions.system.fetch,
     fetchSystemOptions: actions.systemOptions.fetch,
     fetchGlobalConfig: actions.system.fetchGlobalConfig,
     fetchCurrentUser: actions.currentUser.fetch,
@@ -174,7 +173,6 @@ export default class Root extends Component {
   };
 
   fetchGlobalData () {
-    this.props.fetchSystem();
     this.props.fetchSystemOptions();
     this.props.fetchGlobalConfig();
     this.props.fetchCurrentUser();
@@ -237,6 +235,7 @@ export default class Root extends Component {
             location={this.props.location}
             menu={menu.data}
             favoriteItems={favoriteMenuItems}
+            plugins={info.plugins || []}
           />
           <Flex className="section" scrollX>
             <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>

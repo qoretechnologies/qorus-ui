@@ -13,6 +13,8 @@ import actions from './store/api/actions';
 import * as events from './store/apievents/actions';
 import Loader from './components/loader';
 import System from './views/system';
+import FullPageLoading from './components/FullPageLoading';
+import { hasPlugin } from './helpers/system';
 
 const Login = Loadable({
   loader: () => import(/* webpackChunkName: "login" */ './views/auth'),
@@ -71,11 +73,6 @@ const ErrorView = Loadable({
   loading: Loader,
 });
 
-const OAuthView = Loadable({
-  loader: () => import(/* webpackChunkName: "oauth2" */ './views/oauth'),
-  loading: Loader,
-});
-
 const Order = Loadable({
   loader: () => import(/* webpackChunkName: "order" */ './views/order'),
   loading: Loader,
@@ -114,12 +111,31 @@ const Sla = Loadable({
   loading: Loader,
 });
 
+let AuthenticateCodeView;
+if (process.env.NODE_ENV === 'development') {
+  AuthenticateCodeView = Loadable({
+    loader: () =>
+      import(/* webpackChunkName: "oauth2Code" */ './views/oauth2/mock/code'),
+    loading: Loader,
+  });
+}
+
 class AppInfo extends React.Component {
   props: {
     info: Object,
     logout: Function,
     routerProps: Object,
   } = this.props;
+
+  componentDidMount () {
+    const { noauth } = this.props.info.data;
+    const token = window.localStorage.getItem('token');
+
+    if (token || noauth) {
+      this.props.loadSystem();
+    }
+  }
+
   /**
    * requireAnonymous - redirect to main page if user authenticated
    * @param  {*} nextState next router state
@@ -163,7 +179,10 @@ class AppInfo extends React.Component {
   };
 
   render () {
-    if (this.props.info.error) {
+    const { info, system, routerProps } = this.props;
+    const token: string = window.localStorage.getItem('token');
+
+    if (info.error) {
       return (
         <Router {...this.props.routerProps}>
           <Route path="/error" component={ErrorView} />
@@ -171,7 +190,22 @@ class AppInfo extends React.Component {
       );
     }
 
-    if (this.props.info.sync) {
+    if (!token && !info.noauth) {
+      return (
+        <Router {...routerProps}>
+          <Route
+            path="/login"
+            component={Login}
+            onEnter={this.requireAnonymous}
+          />
+          <Route path="*" onEnter={this.requireAuthenticated} />
+        </Router>
+      );
+    }
+
+    system.plugins = ['oauth2'];
+
+    if (system.sync) {
       return (
         <Router {...this.props.routerProps}>
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
@@ -186,6 +220,27 @@ class AppInfo extends React.Component {
             <Route path="/rbac" component={System.RBAC} />
             <Route path="/errors" component={System.Errors} />
             <Route path="/releases" component={System.Releases} />
+            {hasPlugin('oauth2', system.plugins) && (
+              <Route
+                path="/plugins/oauth2"
+                component={() => {
+                  const OAuth2View: any = Loadable({
+                    loader: () =>
+                      import(/* webpackChunkName: "oauth2" */ './views/oauth2'),
+                    loading: Loader,
+                  });
+
+                  return <OAuth2View />;
+                }}
+              />
+            )}
+            {hasPlugin('oauth2', system.plugins) &&
+              process.env.NODE_ENV === 'development' && (
+              <Route
+                path="/plugins/oauth2/code"
+                component={AuthenticateCodeView}
+              />
+            )}
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
               <Route path="alerts" component={System.Alerts} />
@@ -207,24 +262,34 @@ class AppInfo extends React.Component {
             <Route path="library" component={Library} />
             <Route path="extensions" component={Extensions} />
             <Route path="extension/:name" component={ExtensionDetail} />
-            <Route path="oauth2" component={OAuthView} />
             <Route path="groups" component={Groups} />
             <Route path="jobs" component={Jobs} />
             <Route path="search" component={Search} />
             <Route path="workflows" component={Workflows} />
           </Route>
-          <Route
-            path="/login"
-            component={Login}
-            onEnter={this.requireAnonymous}
-          />
+          {hasPlugin('oauth2', system.plugins) && (
+            <Route
+              onEnter={this.requireAuthenticated}
+              path="/plugins/oauth2/authorize"
+              component={() => {
+                const AuthorizeView: any = Loadable({
+                  loader: () =>
+                    import(/* webpackChunkName: "oauth2-authorize" */ './views/oauth2/authorize'),
+                  loading: Loader,
+                });
+
+                return <AuthorizeView info={this.props.info} />;
+              }}
+              onEnter={this.requireAuthenticated}
+            />
+          )}
           <Route path="/logout" onEnter={this.logout} />
           <Route path="/error" component={ErrorView} />
         </Router>
       );
     }
 
-    return null;
+    return <FullPageLoading />;
   }
 }
 
@@ -232,9 +297,11 @@ export default compose(
   connect(
     state => ({
       info: state.api.info,
+      system: state.api.system,
     }),
     {
       load: actions.info.fetch,
+      loadSystem: actions.system.fetch,
       logout: actions.logout.logout,
       message: events.message,
       close: events.disconnect,
