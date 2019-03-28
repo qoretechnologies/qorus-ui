@@ -122,7 +122,12 @@ export default class ServicesDetail extends Component {
             { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
             { title: 'Mappers', suffix: `(${size(service.mappers)})` },
             { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
-            'Resources',
+            {
+              title: 'Resources',
+              suffix: `(${size(service.resources)} / ${size(
+                service.resource_files
+              )})`,
+            },
             'Auth labels',
             'Releases',
             {
