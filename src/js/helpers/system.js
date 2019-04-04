@@ -86,6 +86,10 @@ const interfaceTypeToResource: Object = {
 const getAlertObjectLink: Function = (type: string, data: Object): string => {
   const res = alertTypeToResource[type];
 
+  if (!res) {
+    return '#';
+  }
+
   // eslint-disable-next-line
   return `/${res.resource}${
     res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`
@@ -97,6 +101,10 @@ const getDependencyObjectLink: Function = (
   data: Object
 ): string => {
   const res = interfaceTypeToResource[type];
+
+  if (!res) {
+    return '#';
+  }
 
   // eslint-disable-next-line
   return `/${res.resource}${

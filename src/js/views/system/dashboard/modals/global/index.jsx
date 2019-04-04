@@ -13,6 +13,7 @@ import sort from '../../../../../hocomponents/sort';
 import { sortDefaults } from '../../../../../constants/sort';
 import GlobalTable from './table';
 import { orderStatsPct } from '../../../../../helpers/orders';
+import Alert from '../../../../../components/alert';
 
 type Props = {
   onClose: Function,
@@ -40,8 +41,8 @@ const StatsModal: Function = ({
       {text} for {band}
     </Modal.Header>
     <Modal.Body>
-      <h5> Total {totalOrderStats} workflow orders </h5>
-      <Box top>
+      <Box top fill>
+        <Alert> {totalOrderStats} workflow orders processed </Alert>
         <Tabs active="global" noContainer>
           <Pane name="Global">
             <GlobalTable
@@ -120,27 +121,24 @@ export default compose(
     ({ workflows, totalOrderStats, ...rest }: Props): Props => ({
       workflows: workflows.map(workflow => ({
         ...workflow,
-        completedTotalPct:
-          orderStatsPct(workflow.completed, totalOrderStats) / 100,
-        automaticallyTotalPct:
-          orderStatsPct(workflow.automatically, totalOrderStats) / 100,
-        manuallyTotalPct:
-          orderStatsPct(workflow.manually, totalOrderStats) / 100,
-        completedLocalPct:
-          orderStatsPct(
-            workflow.completed,
-            workflow.completed + workflow.automatically + workflow.manually
-          ) / 100,
-        automaticallyLocalPct:
-          orderStatsPct(
-            workflow.automatically,
-            workflow.completed + workflow.automatically + workflow.manually
-          ) / 100,
-        manuallyLocalPct:
-          orderStatsPct(
-            workflow.manually,
-            workflow.completed + workflow.automatically + workflow.manually
-          ) / 100,
+        completedTotalPct: orderStatsPct(workflow.completed, totalOrderStats),
+        automaticallyTotalPct: orderStatsPct(
+          workflow.automatically,
+          totalOrderStats
+        ),
+        manuallyTotalPct: orderStatsPct(workflow.manually, totalOrderStats),
+        completedLocalPct: orderStatsPct(
+          workflow.completed,
+          workflow.completed + workflow.automatically + workflow.manually
+        ),
+        automaticallyLocalPct: orderStatsPct(
+          workflow.automatically,
+          workflow.completed + workflow.automatically + workflow.manually
+        ),
+        manuallyLocalPct: orderStatsPct(
+          workflow.manually,
+          workflow.completed + workflow.automatically + workflow.manually
+        ),
       })),
       totalOrderStats,
       ...rest,

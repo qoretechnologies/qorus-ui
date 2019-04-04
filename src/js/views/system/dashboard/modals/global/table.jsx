@@ -9,7 +9,11 @@ import {
   Th,
   Tr,
   Td,
+  FixedRow,
 } from '../../../../../components/new_table';
+import NameColumn, {
+  NameColumnHeader,
+} from '../../../../../components/NameColumn';
 import {
   ProgressBar,
   Intent,
@@ -31,12 +35,10 @@ const GlobalModalTable: Function = ({
   onSortChange,
   local,
 }: Props) => (
-  <Table condensed striped height={400}>
+  <Table fixed condensed striped height={400}>
     <Thead>
-      <Tr {...{ sortData, onSortChange }}>
-        <Th className="name" name="name">
-          Name
-        </Th>
+      <FixedRow {...{ sortData, onSortChange }}>
+        <NameColumnHeader />
         <Th name={local ? 'completedLocalPct' : 'completedTotalPct'}>
           C (No errors)
         </Th>
@@ -46,21 +48,21 @@ const GlobalModalTable: Function = ({
         <Th name={local ? 'manuallyLocalPct' : 'manuallyTotalPct'}>
           M (Recovered Manually)
         </Th>
-      </Tr>
+      </FixedRow>
     </Thead>
     <Tbody>
-      {workflows.map((workflow: Object) => {
+      {workflows.map((workflow: Object, index: number) => {
         const totalStats: number = local
           ? workflow.completed + workflow.automatically + workflow.manually
           : totalOrderStats;
 
         return (
-          <Tr key={workflow.id}>
-            <Td className="name">
-              <Link to={`/workflows?paneId${workflow.id}`}>
-                {workflow.name}
-              </Link>
-            </Td>
+          <Tr key={workflow.id} first={index === 0}>
+            <NameColumn
+              name={workflow.name}
+              type="workflow"
+              link={`/workflows?paneId=${workflow.id}&paneTab=order stats`}
+            />
             <Td>
               {workflow.completed} (
               {orderStatsPct(workflow.completed, totalStats)}

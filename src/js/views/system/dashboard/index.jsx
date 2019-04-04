@@ -74,13 +74,13 @@ export default class Dashboard extends Component {
       this.props.health.data.remote && this.props.health.data.remote.length > 5,
   };
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(actions.system.fetch());
     this.props.dispatch(actions.health.fetch());
     this.props.dispatch(actions.system.init());
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.dispatch(actions.system.unsync());
   }
 
@@ -95,9 +95,8 @@ export default class Dashboard extends Component {
       nodeTab,
     });
   };
-
-  handleModuleClick: Function = (url: string): void => {
-    browserHistory.push(url);
+  handleModuleClick: Function = (connection: string): void => {
+    browserHistory.push(`/remote?tab=qorus&paneId=${connection}`);
   };
 
   handleLoadMoreRemotesClick: Function = (): void => {
@@ -109,7 +108,7 @@ export default class Dashboard extends Component {
     });
   };
 
-  render() {
+  render () {
     if (!this.props.health.sync) return <Loader />;
 
     const { system, health, isTablet, currentUser } = this.props;
@@ -356,17 +355,13 @@ export default class Dashboard extends Component {
                 <div className="dashboard-data-module has-link">
                   <div
                     className="dashboard-data-title"
-                    onClick={() =>
-                      this.handleModuleClick('/remote?tab=qorus')
-                    }
+                    onClick={() => this.handleModuleClick('/remote?tab=qorus')}
                   >
                     Qorus
                   </div>
                   <div
                     className="dashboard-data-top"
-                    onClick={() =>
-                      this.handleModuleClick('/remote?tab=qorus')
-                    }
+                    onClick={() => this.handleModuleClick('/remote?tab=qorus')}
                   >
                     <div className="db-data-content">{system.remote_total}</div>
                     <div className="db-data-label"> total </div>
@@ -408,9 +403,7 @@ export default class Dashboard extends Component {
                       system.datasource_alerts ? 'has-alerts' : ''
                     }`}
                     onClick={() =>
-                      this.handleModuleClick(
-                        '/remote?search=has_alerts:true'
-                      )
+                      this.handleModuleClick('/remote?search=has_alerts:true')
                     }
                   >
                     <div className="db-data-content">
@@ -422,17 +415,13 @@ export default class Dashboard extends Component {
                 <div className="dashboard-data-module has-link">
                   <div
                     className="dashboard-data-title"
-                    onClick={() =>
-                      this.handleModuleClick('/remote?tab=user')
-                    }
+                    onClick={() => this.handleModuleClick('/remote?tab=user')}
                   >
                     User
                   </div>
                   <div
                     className="dashboard-data-top"
-                    onClick={() =>
-                      this.handleModuleClick('/remote?tab=user')
-                    }
+                    onClick={() => this.handleModuleClick('/remote?tab=user')}
                   >
                     <div className="db-data-content">{system.user_total}</div>
                     <div className="db-data-label"> total </div>
@@ -584,7 +573,7 @@ export default class Dashboard extends Component {
                     <div
                       className="dashboard-module-wide has-link"
                       key={remote.name}
-                      onClick={() => this.handleModuleClick(remote.url)}
+                      onClick={() => this.handleModuleClick(remote.name)}
                     >
                       <div
                         className={`dashboard-data-title ${statusHealth(
