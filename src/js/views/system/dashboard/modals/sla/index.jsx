@@ -13,6 +13,7 @@ import SLATable from './table';
 import { sortDefaults } from '../../../../../constants/sort';
 import sort from '../../../../../hocomponents/sort';
 import { orderStatsPct } from '../../../../../helpers/orders';
+import Alert from '../../../../../components/alert';
 
 type Props = {
   onClose: Function,
@@ -39,8 +40,8 @@ const StatsModal: Function = ({
       {text} for {band}
     </Modal.Header>
     <Modal.Body>
-      <h5> Total {totalOrderStats} workflow orders </h5>
-      <Box top>
+      <Box top fill>
+        <Alert> {totalOrderStats} workflow orders processed </Alert>
         <Tabs active="global" noContainer>
           <Pane name="Global">
             <SLATable
@@ -116,15 +117,16 @@ export default compose(
     ({ workflows, totalOrderStats, ...rest }: Props): Props => ({
       workflows: workflows.map(workflow => ({
         ...workflow,
-        inSlaTotalPct: orderStatsPct(workflow.inSla, totalOrderStats) / 100,
-        outOfSlaTotalPct:
-          orderStatsPct(workflow.outOfSla, totalOrderStats) / 100,
-        inSlaLocalPct:
-          orderStatsPct(workflow.inSla, workflow.inSla + workflow.outOfSla) /
-          100,
-        outOfSlaLocalPct:
-          orderStatsPct(workflow.outOfSla, workflow.inSla + workflow.outOfSla) /
-          100,
+        inSlaTotalPct: orderStatsPct(workflow.inSla, totalOrderStats),
+        outOfSlaTotalPct: orderStatsPct(workflow.outOfSla, totalOrderStats),
+        inSlaLocalPct: orderStatsPct(
+          workflow.inSla,
+          workflow.inSla + workflow.outOfSla
+        ),
+        outOfSlaLocalPct: orderStatsPct(
+          workflow.outOfSla,
+          workflow.inSla + workflow.outOfSla
+        ),
       })),
       totalOrderStats,
       ...rest,

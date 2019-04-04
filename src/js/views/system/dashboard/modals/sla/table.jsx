@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { Link } from 'react-router';
 
 import {
   Table,
@@ -9,12 +8,16 @@ import {
   Th,
   Tr,
   Td,
+  FixedRow,
 } from '../../../../../components/new_table';
 import {
   ProgressBar,
   Intent,
 } from '../../../../../../../node_modules/@blueprintjs/core';
 import { orderStatsPct } from '../../../../../helpers/orders';
+import NameColumn, {
+  NameColumnHeader,
+} from '../../../../../components/NameColumn';
 
 type Props = {
   workflows: Array<Object>,
@@ -31,31 +34,29 @@ const GlobalModalTable: Function = ({
   onSortChange,
   local,
 }: Props) => (
-  <Table condensed striped height={400}>
+  <Table fixed condensed striped height={400}>
     <Thead>
-      <Tr {...{ sortData, onSortChange }}>
-        <Th className="name" name="name">
-          Name
-        </Th>
+      <FixedRow {...{ sortData, onSortChange }}>
+        <NameColumnHeader />
         <Th name={local ? 'inSlaLocalPct' : 'inSlaTotalPct'}>In SLA</Th>
         <Th name={local ? 'outOfSlaLocalPct' : 'outOfSlaTotalPct'}>
           Out of SLA
         </Th>
-      </Tr>
+      </FixedRow>
     </Thead>
     <Tbody>
-      {workflows.map((workflow: Object) => {
+      {workflows.map((workflow: Object, index: number) => {
         const totalStats: number = local
           ? workflow.inSla + workflow.outOfSla
           : totalOrderStats;
 
         return (
-          <Tr key={workflow.id}>
-            <Td className="name">
-              <Link to={`/workflows?paneId${workflow.id}`}>
-                {workflow.name}
-              </Link>
-            </Td>
+          <Tr key={workflow.id} first={index === 0}>
+            <NameColumn
+              name={workflow.name}
+              link={`/workflows?paneId=${workflow.id}&paneTab=order stats`}
+              type="workflow"
+            />
             <Td>
               {workflow.inSla} ({orderStatsPct(workflow.inSla, totalStats)}
               %)
