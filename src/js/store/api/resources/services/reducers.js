@@ -22,6 +22,7 @@ import {
   deleteLoggerReducer,
   addAppenderReducer,
   deleteAppenderReducer,
+  updateConfigItemWsCommon,
 } from '../../common/reducers';
 import { objectCollectionToArray } from '../../../../helpers/interfaces';
 
@@ -413,33 +414,7 @@ const unsync = {
   },
 };
 
-const updateConfigItemWs = {
-  next (
-    state = initialState,
-    {
-      payload: { events },
-    }
-  ) {
-    let newData: Array<Object> = [...state.data];
-
-    events.forEach((dt: Object) => {
-      const service: Object = newData.find(
-        (wf: Object): boolean => wf.id === dt.serviceid
-      );
-
-      if (service) {
-        const { config } = service;
-
-        config[dt.item].value = dt.value;
-
-        newData = updateItemWithId(dt.serviceid, { _updated: true }, newData);
-      }
-    });
-
-    return { ...state, ...{ data: newData } };
-  },
-};
-
+const updateConfigItemWs = updateConfigItemWsCommon;
 const processStarted = processStartedReducer;
 const processStopped = processStoppedReducer;
 

@@ -29,9 +29,10 @@ type Props = {
   name?: string,
   small?: boolean,
   icon?: string,
+  disabled?: boolean,
 };
 
-@pure(['date', 'futureOnly', 'className'])
+@pure(['date', 'futureOnly', 'className', 'disabled'])
 export default class DatePicker extends Component {
   props: Props = this.props;
 
@@ -46,11 +47,11 @@ export default class DatePicker extends Component {
     showDatepicker: boolean,
   };
 
-  componentWillMount(): void {
+  componentWillMount (): void {
     this.setupDate(this.props);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  componentWillReceiveProps (nextProps: Props): void {
     if (this.props.date !== nextProps.date) {
       this.setupDate(nextProps);
     }
@@ -198,11 +199,11 @@ export default class DatePicker extends Component {
     }
   };
 
-  renderDatepicker(): ?React.Element<any> {
+  renderDatepicker (): ?React.Element<any> {
     if (!this.state.showDatepicker) return null;
   }
 
-  renderControls(): ?React.Element<Controls> {
+  renderControls (): ?React.Element<Controls> {
     if (this.props.futureOnly || this.props.noButtons) return null;
 
     return (
@@ -226,8 +227,15 @@ export default class DatePicker extends Component {
     );
   }
 
-  render(): React.Element<any> {
-    const { futureOnly, noButtons, small, className, icon } = this.props;
+  render (): React.Element<any> {
+    const {
+      futureOnly,
+      noButtons,
+      small,
+      className,
+      icon,
+      disabled,
+    } = this.props;
 
     return (
       <ControlGroup className={`vab ${className}`}>
@@ -235,6 +243,7 @@ export default class DatePicker extends Component {
           iconName={icon || 'timeline-events'}
           big={!small}
           onClick={this.showDatepicker}
+          disabled={disabled}
         />
         <Popover
           isOpen={this.state.showDatepicker}
@@ -272,14 +281,20 @@ export default class DatePicker extends Component {
             id={this.props.id}
             name={this.props.name}
             className={small && 'datepicker-input-small pt-small'}
+            disabled={disabled}
           />
         </Popover>
 
         {!futureOnly && !noButtons && (
-          <Button text="All" onClick={this.handleAllClick} big={!small} />
+          <Button
+            text="All"
+            onClick={this.handleAllClick}
+            big={!small}
+            disabled={disabled}
+          />
         )}
         {!futureOnly && !noButtons && (
-          <Dropdown>
+          <Dropdown disabled={disabled}>
             <DropdownControl small={small} />
             <DropdownItem title="Now" onClick={this.handleNowClick} />
             <DropdownItem title="Today" onClick={this.handleTodayClick} />

@@ -10,8 +10,8 @@ const statusHealth: Function = (health: string): string =>
   classNames({
     danger: health === 'RED' || health === 'ERROR',
     success: health === 'GREEN',
-    warning: health === 'YELLOW' || health === 'UNKNOWN',
-    none: health === 'UNREACHABLE',
+    warning: health === 'YELLOW',
+    none: health === 'UNREACHABLE' || health === 'UNKNOWN',
   });
 
 const utf8ToB64: Function = (str: string): string =>

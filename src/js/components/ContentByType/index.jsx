@@ -33,7 +33,9 @@ const ContentByType: Function = ({
     newContent = isContentDate ? <Date date={content} /> : newContent;
 
     return inTable ? (
-      <Flex className={className}>{newContent}</Flex>
+      <Flex className={className} title={content}>
+        {newContent}
+      </Flex>
     ) : (
       <div className={className}>{newContent}</div>
     );

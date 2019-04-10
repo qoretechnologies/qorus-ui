@@ -22,7 +22,7 @@ const Text: Function = ({
   text && typeof text === 'object' ? (
     <Tree data={text} caseSensitive={caseSensitiveTree} />
   ) : (
-    <Flex flexFlow="row">
+    <Flex flexFlow="row" title={text}>
       <div
         className={`text-component ${expanded &&
           'text-component-expanded'} ${hasAlerts && 'has-alerts'}`}

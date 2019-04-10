@@ -115,9 +115,13 @@ const WorkflowDetailTabs: Function = ({
     <SimpleTab name="config">
       <Box top fill scrollY>
         <ConfigItemsTable
-          items={rebuildConfigHash(workflow, true)}
+          items={{
+            ...rebuildConfigHash(workflow),
+            ...rebuildConfigHash(workflow, true),
+          }}
           globalItems={workflow.global_config}
           intrf="workflows"
+          intrfId={workflow.id}
         />
       </Box>
     </SimpleTab>

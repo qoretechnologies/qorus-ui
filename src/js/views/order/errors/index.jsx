@@ -47,7 +47,7 @@ const transformErrors = (order, filter, stepId) => {
     copy.error_type = e.business_error ? 'Business' : 'Other';
     copy.step_name = order.StepInstances.find(
       s => s.stepid === e.stepid
-    ).stepname;
+    )?.stepname;
 
     return copy;
   }).filter(d => includes(filter, d.severity) || includes(filter, 'ALL'));

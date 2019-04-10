@@ -20,6 +20,7 @@ import {
   deleteLoggerReducer,
   addAppenderReducer,
   deleteAppenderReducer,
+  updateConfigItemWsCommon,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -647,33 +648,7 @@ const setRemote = {
   },
 };
 
-const updateConfigItemWs = {
-  next (
-    state = initialState,
-    {
-      payload: { events },
-    }
-  ) {
-    let newData: Array<Object> = [...state.data];
-
-    events.forEach((dt: Object) => {
-      const job: Object = newData.find(
-        (jb: Object): boolean => jb.id === dt.jobid
-      );
-
-      if (job) {
-        const { config } = job;
-
-        config[dt.item].value = dt.value;
-
-        newData = updateItemWithId(dt.jobid, { _updated: true }, newData);
-      }
-    });
-
-    return { ...state, ...{ data: newData } };
-  },
-};
-
+const updateConfigItemWs = updateConfigItemWsCommon;
 const processStarted = processStartedReducer;
 const processStopped = processStoppedReducer;
 const fetchLogger = loggerReducer;

@@ -1,6 +1,6 @@
 import { isNumber, isString, curry, get, reduce } from 'lodash';
 
-export function prep(val, des) {
+export function prep (val, des) {
   let returnVal;
 
   if (isNumber(val)) {
@@ -14,7 +14,7 @@ export function prep(val, des) {
   return returnVal;
 }
 
-export function comparator(key, history, order, c1, c2) {
+export function comparator (key, history, order, c1, c2) {
   // needs speed improvements
   const k10 = prep(get(c1, key));
   const k20 = prep(get(c2, key));
@@ -35,7 +35,7 @@ export function comparator(key, history, order, c1, c2) {
 
 export const compare = curry(comparator);
 
-export function slugify(value) {
+export function slugify (value) {
   return value
     .toLowerCase()
     .replace(/\-|\_+/g, '-')
@@ -54,10 +54,13 @@ export const whenDefaultEnabled = fn => (ev, ...rest) =>
 export const countArrayItemsInObject: Function = (obj: Object): number =>
   reduce(obj, (count: number, items: Array<Object>) => count + items.length, 0);
 
+export const countConfigItems: Function = (obj: Object): number =>
+  reduce(obj, (count: number, items: Object) => count + items.data.length, 0);
+
 export const flattenObject = (obj: Object): Object =>
   Object.assign(
     {},
-    ...(function _flatten(o) {
+    ...(function _flatten (o) {
       return [].concat(
         ...Object.keys(o).map(k =>
           typeof o[k] === 'object' ? _flatten(o[k]) : { [k]: o[k] }

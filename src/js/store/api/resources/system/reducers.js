@@ -6,6 +6,7 @@ import {
   deleteLoggerReducer,
   addAppenderReducer,
   deleteAppenderReducer,
+  updateConfigItemWsCommon,
 } from '../../common/reducers';
 
 const addProcess = {
@@ -294,30 +295,7 @@ const fetchGlobalConfig = {
   },
 };
 
-const updateGlobalConfigItemWs = {
-  next (
-    state: Object,
-    {
-      payload: { events },
-    }
-  ) {
-    const newState = { ...state };
-    const newData = [...state.globalConfig];
-
-    events.forEach(event => {
-      const globalConfig = updateItemWithName(
-        event.item,
-        { value: event.value },
-        newData,
-        'name'
-      );
-
-      newState.globalConfig = globalConfig;
-    });
-
-    return { ...newState };
-  },
-};
+const updateConfigItemWs = updateConfigItemWsCommon;
 
 // LOGGER
 const fetchLogger = loggerReducer;
@@ -341,7 +319,7 @@ export {
   remoteHealthChanged as REMOTEHEALTHCHANGED,
   killProcess as KILLPROCESS,
   fetchGlobalConfig as FETCHGLOBALCONFIG,
-  updateGlobalConfigItemWs as UPDATEGLOBALCONFIGITEMWS,
+  updateConfigItemWs as UPDATECONFIGITEMWS,
   fetchLogger as FETCHLOGGER,
   addUpdateLogger as ADDUPDATELOGGER,
   deleteLogger as DELETELOGGER,

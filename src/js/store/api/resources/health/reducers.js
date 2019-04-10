@@ -1,5 +1,5 @@
-const changed = {
-  next(
+const remoteChanged = {
+  next (
     state: Object,
     {
       payload: { events },
@@ -21,4 +21,4 @@ const changed = {
   },
 };
 
-export { changed as CHANGED };
+export { remoteChanged as REMOTECHANGED };

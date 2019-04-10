@@ -9,6 +9,7 @@ import {
   deleteLoggerAction,
   addAppenderAction,
   deleteAppenderAction,
+  updateConfigItemWsCommon,
 } from '../../common/actions';
 
 const init: Function = createAction('SYSTEM_INIT');
@@ -86,10 +87,7 @@ const fetchGlobalConfig: Function = createAction(
   }
 );
 
-const updateGlobalConfigItemWs: Function = createAction(
-  'SYSTEM_UPDATEGLOBALCONFIGITEMWS',
-  (events: Array<Object>): Object => ({ events })
-);
+const updateConfigItemWs: Function = updateConfigItemWsCommon('SYSTEM');
 
 const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
@@ -115,7 +113,7 @@ export {
   remoteHealthChanged,
   killProcess,
   fetchGlobalConfig,
-  updateGlobalConfigItemWs,
+  updateConfigItemWs,
   fetchLogger,
   addUpdateLogger,
   deleteLogger,

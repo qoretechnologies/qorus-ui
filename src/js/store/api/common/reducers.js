@@ -1,6 +1,67 @@
-import { setUpdatedToNull, updateItemWithId } from '../utils';
+import {
+  setUpdatedToNull,
+  updateItemWithId,
+  updateItemWithName,
+} from '../utils';
 import { formatAppender } from '../../../helpers/logger';
 import isArray from 'lodash/isArray';
+
+const updateConfigItemWsCommon = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    let newState = { ...state };
+    let newData = newState.data;
+
+    events.forEach((dt: Object) => {
+      if (dt.id) {
+        newData = [...newData];
+
+        const intrf: Object = newData.find(
+          (datum: Object): boolean => datum.id === dt.id
+        );
+
+        if (intrf) {
+          const { config } = intrf;
+
+          if (dt.stepid) {
+            const step: Object = intrf.stepinfo.find(
+              (stp: Object) => stp.stepid === dt.stepid
+            );
+
+            step.config[dt.item].value = dt.value;
+            step.config[dt.item].actual_value = dt.actual_value;
+            step.config[dt.item].override = dt.override;
+          } else {
+            config[dt.item].value = dt.value;
+            config[dt.item].actual_value = dt.actual_value;
+            config[dt.item].override = dt.override;
+          }
+
+          newData = updateItemWithId(dt.id, { _updated: true }, newData);
+          newState = { ...newState, ...{ data: newData } };
+        }
+      } else {
+        const globalConfig = updateItemWithName(
+          dt.item,
+          {
+            value: dt.value,
+          },
+          newState.globalConfig,
+          'name'
+        );
+
+        newState.globalConfig = globalConfig;
+        newState = { ...newState };
+      }
+    });
+
+    return newState;
+  },
+};
 
 const processStartedReducer = {
   next (
@@ -365,4 +426,5 @@ export {
   deleteLoggerReducer,
   addAppenderReducer,
   deleteAppenderReducer,
+  updateConfigItemWsCommon,
 };

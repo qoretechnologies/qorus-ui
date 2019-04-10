@@ -23,6 +23,7 @@ const qorusTypeMapper = {
   string: 'string',
   number: 'number',
   boolean: 'boolean',
+  null: 'null',
 };
 
 @withModal()

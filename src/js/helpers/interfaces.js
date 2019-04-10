@@ -18,7 +18,10 @@ const mapConfigToArray = (id: number): Function => (
   id,
 });
 
-const pullConfigFromStepinfo: Function = (stepArray: Array<Object>): Object => {
+const pullConfigFromStepinfo: Function = (
+  stepArray: Array<Object>,
+  id: number
+): Object => {
   const resultObj: Object = {};
 
   stepArray
@@ -34,7 +37,11 @@ const pullConfigFromStepinfo: Function = (stepArray: Array<Object>): Object => {
           step.stepid
         }) [${step.steptype}]`;
 
-        resultObj[belongsTo] = newConfig;
+        resultObj[belongsTo] = {
+          id,
+          stepId: step.stepid,
+          data: newConfig,
+        };
       }
     );
 
@@ -47,9 +54,12 @@ const rebuildConfigHash: Function = (
 ): Object => {
   const configHash = pullConfigValues ? model.stepinfo : model.config || {};
   const configObj: Object = pullConfigValues
-    ? pullConfigFromStepinfo(configHash)
+    ? pullConfigFromStepinfo(configHash, model.id)
     : {
-      [normalizeName(model)]: map(configHash, mapConfigToArray(model.id)),
+      [normalizeName(model)]: {
+        id: model.id,
+        data: map(configHash, mapConfigToArray(model.id)),
+      },
     };
 
   let resultObj = { ...configObj };

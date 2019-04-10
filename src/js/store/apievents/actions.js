@@ -63,12 +63,6 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
-      case 'GLOBAL_CONFIG_ITEM_CHANGE': {
-        if (state.api.system.sync && state.api.system.globalConfig) {
-          pipeline(eventstr, system.updateGlobalConfigItemWs, info, dispatch);
-        }
-        break;
-      }
       case 'WORKFLOW_STATS_UPDATED':
         if (info.tag === 'global') {
           if (state.api.system.sync) {
@@ -498,13 +492,6 @@ const handleEvent = (url, data, dispatch, state) => {
           }
         }
         break;
-      case 'SERVICE_CONFIG_ITEM_CHANGE': {
-        if (state.api.services.sync) {
-          pipeline(eventstr, services.updateConfigItemWs, info, dispatch);
-        }
-
-        break;
-      }
       case 'WORKFLOW_STOP':
         if (state.api.workflows.sync) {
           pipeline(
@@ -713,9 +700,34 @@ const handleEvent = (url, data, dispatch, state) => {
 
         break;
       }
-      case 'WORKFLOW_STEP_CONFIG_ITEM_CHANGE': {
-        if (state.api.workflows.sync) {
-          pipeline(eventstr, workflows.updateConfigItemWs, info, dispatch);
+      case 'CONFIG_ITEM_CHANGED': {
+        let isLoaded;
+        let interfaceId;
+        let interfaceName = `${info.interfaceType.toLowerCase()}s`;
+
+        if (info.interfaceType === 'global') {
+          isLoaded = state.api.system.sync;
+          interfaceName = 'system';
+        } else {
+          interfaceName = `${info.interfaceType.toLowerCase()}s`;
+          interfaceId = info[INTERFACE_IDS[interfaceName]];
+          isLoaded = isInterfaceLoaded(interfaceName, interfaceId);
+        }
+
+        if (isLoaded) {
+          pipeline(
+            eventstr,
+            interfaceActions[interfaceName].updateConfigItemWs,
+            {
+              value: info.value,
+              override: info.override,
+              actual_value: info.actual_value,
+              stepid: info.stepid,
+              id: interfaceId,
+              item: info.item,
+            },
+            dispatch
+          );
         }
 
         break;
@@ -806,13 +818,6 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       }
-      case 'JOB_CONFIG_ITEM_CHANGE': {
-        if (state.api.jobs.sync) {
-          pipeline(eventstr, jobs.updateConfigItemWs, info, dispatch);
-        }
-
-        break;
-      }
       case 'CONNECTION_UP':
         if (state.api.remotes.sync) {
           pipeline(
@@ -884,7 +889,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'SYSTEM_REMOTE_HEALTH_CHANGED':
         if (state.api.system.sync) {
-          pipeline(eventstr, health.remoteHealthChanged, info, dispatch);
+          pipeline(eventstr, health.remoteChanged, info, dispatch);
         }
         break;
       case 'GROUP_STATUS_CHANGED':

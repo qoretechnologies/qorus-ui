@@ -202,7 +202,7 @@ class AppInfo extends React.Component {
       );
     }
 
-    if (!token && !info.noauth) {
+    if (!token && !info.data.noauth) {
       return (
         <Router {...routerProps}>
           <Route
@@ -230,16 +230,16 @@ class AppInfo extends React.Component {
             <Route path="/rbac" component={System.RBAC} />
             <Route path="/errors" component={System.Errors} />
             <Route path="/releases" component={System.Releases} />
-            {hasPlugin('oauth2', plugins) && (
+            {hasPlugin('oauth2', plugins) ? (
               <Route path="/plugins/oauth2" component={OAuth2View} />
-            )}
+            ) : null}
             {hasPlugin('oauth2', plugins) &&
-              process.env.NODE_ENV === 'development' && (
-              <Route
-                path="/plugins/oauth2/code"
-                component={AuthenticateCodeView}
-              />
-            )}
+            process.env.NODE_ENV === 'development' ? (
+                <Route
+                  path="/plugins/oauth2/code"
+                  component={AuthenticateCodeView}
+                />
+              ) : null}
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
               <Route path="alerts" component={System.Alerts} />
@@ -266,14 +266,14 @@ class AppInfo extends React.Component {
             <Route path="search" component={Search} />
             <Route path="workflows" component={Workflows} />
           </Route>
-          {hasPlugin('oauth2', plugins) && (
+          {hasPlugin('oauth2', plugins) ? (
             <Route
               onEnter={this.requireAuthenticated}
               path="/plugins/oauth2/authorize"
               component={AuthorizeView}
               onEnter={this.requireAuthenticated}
             />
-          )}
+          ) : null}
           <Route path="/logout" onEnter={this.logout} />
           <Route path="/error" component={ErrorView} />
         </Router>
@@ -302,7 +302,7 @@ export default compose(
   defaultProps({
     url: 'apievents',
   }),
-  sync('info', false),
+  sync('info', true),
   websocket(
     {
       onMessage: 'message',
