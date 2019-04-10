@@ -3,7 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 import { connect } from 'react-redux';
-import { Route, Router, IndexRedirect } from 'react-router';
+import { Route, Router, IndexRedirect, Redirect } from 'react-router';
 import Loadable from 'react-loadable';
 
 import Root from './views/root';
@@ -276,6 +276,7 @@ class AppInfo extends React.Component {
           ) : null}
           <Route path="/logout" onEnter={this.logout} />
           <Route path="/error" component={ErrorView} />
+          <Redirect from="*" to="/" />
         </Router>
       );
     }
