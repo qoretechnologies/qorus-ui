@@ -57,7 +57,7 @@ export default class ConfigItemsModal extends Component {
 
     this.setState({
       yamlData,
-      value: jsyaml.safeDump(yamlData.value),
+      value: yamlData.value,
     });
   }
 
@@ -85,10 +85,7 @@ export default class ConfigItemsModal extends Component {
   handleOverrideChange: Function = (override): void => {
     if (override) {
       this.setState({
-        value:
-          this.props.item.type === 'hash' || this.props.item.type === 'list'
-            ? jsyaml.safeDump(this.state.yamlData.value)
-            : this.props.item.value || '',
+        value: this.props.item.value || '',
         error: false,
       });
     }
@@ -98,9 +95,7 @@ export default class ConfigItemsModal extends Component {
 
   handleSaveClick: Function = (): void => {
     const value: any =
-      this.props.item.type === 'hash' || this.props.item.type === 'list'
-        ? jsyaml.safeLoad(this.state.value)
-        : this.state.value;
+      this.state.value;
 
     this.props.onSubmit(
       this.props.item,
