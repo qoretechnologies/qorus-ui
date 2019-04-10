@@ -16,6 +16,7 @@ type Props = {
   id?: string,
   name?: string,
   className?: string,
+  disabled: boolean,
 };
 
 const Input = (props: Props) => (
@@ -30,6 +31,7 @@ const Input = (props: Props) => (
     id={props.id}
     name={props.name}
     className={props.className}
+    disabled={props.disabled}
   />
 );
 
@@ -45,5 +47,5 @@ const addKeyUpHandler = withHandlers({
 
 export default compose(
   addKeyUpHandler,
-  pure(['inputDate'])
+  pure(['inputDate', 'disabled'])
 )(Input);

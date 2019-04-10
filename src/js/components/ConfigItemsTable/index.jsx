@@ -20,92 +20,63 @@ import DataOrEmptyTable from '../DataOrEmptyTable';
 import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
 import ExpandableItem from '../ExpandableItem';
-import DatePicker from '../datepicker';
+
 import NoDataIf from '../NoDataIf';
 import LoadMore from '../LoadMore';
 import Search from '../../containers/search';
 import EnhancedTable from '../EnhancedTable';
-import {
-  DescriptionColumn,
-  DescriptionColumnHeader,
-} from '../DescriptionColumn';
+import { ActionColumnHeader, ActionColumn } from '../ActionColumn';
 import type { EnhancedTableProps } from '../EnhancedTable';
 import { sortDefaults } from '../../constants/sort';
 import Pull from '../Pull';
-import Dropdown, { Item, Control } from '../../components/dropdown';
+
 import ContentByType from '../ContentByType';
 import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import includes from 'lodash/includes';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
+import modal from '../../hocomponents/modal';
+import ConfigItemsModal from './modal';
+import Tree from '../tree';
 
 type ConfigItemsContainerProps = {
   items: Object,
   dispatchAction: Function,
   intrf: string,
+  openModal: Function,
 };
 
 const ConfigItemsContainer: Function = ({
   items,
   dispatchAction,
   intrf,
+  showDescription,
+  openModal,
+  closeModal,
+  intrfId,
 }: ConfigItemsContainerProps): React.Element<any> => {
-  function renderValueContent (item: Object, belongsTo: string) {
-    const saveValue = newValue => {
-      dispatchAction(
-        actions[intrf].updateConfigItem,
-        item.id,
-        item.name,
-        newValue,
-        belongsTo
-      );
-    };
-
-    switch (item.type) {
-      case 'bool':
-        return (
-          <Td className="text large">
-            <Dropdown>
-              <Control small>{item.value ? 'True' : 'False'}</Control>
-              <Item
-                title="True"
-                onClick={() => {
-                  saveValue(true);
-                }}
-              />
-              <Item
-                title="False"
-                onClick={() => {
-                  saveValue(false);
-                }}
-              />
-            </Dropdown>
-          </Td>
-        );
-      case 'date':
-        return (
-          <Td className="text large">
-            <DatePicker
-              date={item.value}
-              onApplyDate={(newValue: any) => {
-                saveValue(newValue);
-              }}
-              noButtons
-              small
-            />
-          </Td>
-        );
-      default:
-        return (
-          <EditableCell
-            className="text large"
-            value={item.value}
-            onSave={(newValue: any) => {
-              saveValue(newValue);
-            }}
-          />
-        );
-    }
-  }
+  const saveValue = (
+    item,
+    belongsTo,
+    newValue,
+    isOverride: boolean,
+    onSuccess,
+    stepId?
+  ) => {
+    dispatchAction(
+      actions[intrf].updateConfigItem,
+      item.id,
+      stepId,
+      item.name,
+      newValue,
+      belongsTo,
+      isOverride,
+      onSuccess
+    );
+  };
 
   return (
     <NoDataIf condition={size(items) === 0} big>
@@ -115,7 +86,7 @@ const ConfigItemsContainer: Function = ({
             <ExpandableItem title={belongsTo} key={belongsTo} show>
               {() => (
                 <EnhancedTable
-                  collection={configItems}
+                  collection={configItems.data}
                   searchBy={[
                     'name',
                     'default_value',
@@ -159,21 +130,24 @@ const ConfigItemsContainer: Function = ({
                         </FixedRow>
                         <FixedRow {...{ sortData, onSortChange }}>
                           <NameColumnHeader />
-                          <Th className="text" name="default_value">
-                            Default
-                          </Th>
+                          <ActionColumnHeader icon="edit">
+                            {''}
+                          </ActionColumnHeader>
+
                           <Th
                             className="text"
                             iconName="info-sign"
-                            name="value"
+                            name="actual_value"
                           >
                             Value
                           </Th>
-                          <Th iconName="code" name="type">
-                            Type
+
+                          <Th className="text" name="default_value">
+                            Default val.
                           </Th>
-                          <Th iconName="asterisk">Req.</Th>
-                          <DescriptionColumnHeader />
+                          <Th iconName="code" name="type" />
+                          <Th name="level">Level</Th>
+                          <Th iconName="asterisk" />
                         </FixedRow>
                       </Thead>
                       <DataOrEmptyTable
@@ -183,24 +157,79 @@ const ConfigItemsContainer: Function = ({
                       >
                         {props => (
                           <Tbody {...props}>
-                            {collection.map((item: Object, index: number) => (
-                              <Tr key={item.name} first={index === 0}>
-                                <NameColumn name={item.name} />
-                                <Td className="text">
-                                  <ContentByType content={item.default_value} />
-                                </Td>
-                                {renderValueContent(item, belongsTo)}
-                                <Td className="narrow">
-                                  <code>{item.type}</code>
-                                </Td>
-                                <Td className="narrow">
-                                  <ContentByType content={item.mandatory} />
-                                </Td>
-                                <DescriptionColumn>
-                                  {item.desc}
-                                </DescriptionColumn>
-                              </Tr>
-                            ))}
+                            {collection.map((item: Object, index: number) => {
+                              const value =
+                                belongsTo === 'Global Config'
+                                  ? item.value
+                                  : item.actual_value;
+                              return (
+                                <React.Fragment>
+                                  <Tr key={item.name} first={index === 0}>
+                                    <NameColumn name={item.name} />
+                                    <ActionColumn>
+                                      <ButtonGroup>
+                                        <Button
+                                          icon="edit"
+                                          title="Edit this value"
+                                          onClick={() => {
+                                            openModal(
+                                              <ConfigItemsModal
+                                                onClose={closeModal}
+                                                item={item}
+                                                belongsTo={belongsTo}
+                                                onSubmit={saveValue}
+                                                intrf={intrf}
+                                                intrfId={configItems.id}
+                                                stepId={configItems.stepId}
+                                              />
+                                            );
+                                          }}
+                                        />
+                                      </ButtonGroup>
+                                    </ActionColumn>
+                                    <Td className="text">
+                                      {item.type === 'hash' ||
+                                      item.type === 'list' ? (
+                                          <Tree compact data={value} />
+                                        ) : (
+                                          <ContentByType
+                                            inTable
+                                            content={value}
+                                          />
+                                        )}
+                                    </Td>
+                                    <Td className="text">
+                                      {item.type === 'hash' ||
+                                      item.type === 'list' ? (
+                                          <Tree
+                                            compact
+                                            data={item.default_value}
+                                          />
+                                        ) : (
+                                          <ContentByType
+                                            inTable
+                                            content={item.default_value}
+                                          />
+                                        )}
+                                    </Td>
+                                    <Td className="narrow">
+                                      <code>{item.type}</code>
+                                    </Td>
+                                    <Td className="narrow">{item.level}</Td>
+                                    <Td className="tiny">
+                                      <ContentByType content={item.mandatory} />
+                                    </Td>
+                                  </Tr>
+                                  {showDescription && (
+                                    <Tr>
+                                      <Td className="text" colspan={5}>
+                                        {item.desc}
+                                      </Td>
+                                    </Tr>
+                                  )}
+                                </React.Fragment>
+                              );
+                            })}
                           </Tbody>
                         )}
                       </DataOrEmptyTable>
@@ -220,15 +249,19 @@ export default compose(
   connect((state: Object) => ({
     globalConfig: state.api.system.globalConfig,
   })),
+  modal(),
   withDispatch(),
   mapProps(({ globalConfig, globalItems, ...rest }) => ({
     globalConfig: globalConfig.filter(configItem =>
-      includes(globalItems ? Object.keys(globalItems) : [], configItem.name)
+      includes(
+        globalItems ? Object.keys(globalItems) : [],
+        configItem.name || configItem.item
+      )
     ),
     ...rest,
   })),
   mapProps(({ items, globalConfig, ...rest }) => ({
-    items: { 'Global Config': globalConfig, ...items },
+    items: { 'Global Config': { data: globalConfig }, ...items },
     ...rest,
   })),
   onlyUpdateForKeys(['items'])

@@ -10,7 +10,7 @@ import DetailPane from '../../../components/pane';
 
 import titleManager from '../../../hocomponents/TitleManager';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import { countArrayItemsInObject } from '../../../utils';
+import { countArrayItemsInObject, countConfigItems } from '../../../utils';
 import WorkflowDetailTabs from '../tabs';
 
 const workflowSelector: Function = (state: Object, props: Object): Object =>
@@ -88,8 +88,10 @@ export default class WorkflowsDetail extends Component {
     }
 
     const configItemsCount: number =
-      countArrayItemsInObject(rebuildConfigHash(workflow, true)) +
-      size(workflow.global_config);
+      countConfigItems({
+        ...rebuildConfigHash(workflow, true),
+        ...rebuildConfigHash(workflow),
+      }) + size(workflow.global_config);
 
     return (
       <DetailPane

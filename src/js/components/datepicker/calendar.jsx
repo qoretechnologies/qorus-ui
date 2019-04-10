@@ -31,7 +31,7 @@ export default class Calendar extends Component {
     futureOnly: boolean,
   } = this.props;
 
-  getDaysOfMonth(): Array<Object> {
+  getDaysOfMonth (): Array<Object> {
     const month: number = this.props.date.month();
     const year: number = this.props.date.year();
     const start: Object = moment([year, month]).startOf('isoweek');
@@ -59,8 +59,9 @@ export default class Calendar extends Component {
       if (
         start.valueOf() ===
         moment([moment().year(), moment().month(), moment().date()]).valueOf()
-      )
+      ) {
         day.is_today = true;
+      }
       if (
         start.valueOf() ===
         moment([
@@ -68,8 +69,9 @@ export default class Calendar extends Component {
           activeDate.month(),
           activeDate.date(),
         ]).valueOf()
-      )
+      ) {
         day.active = true;
+      }
 
       if (start.month() < month) day.css = 'old';
       if (start.month() > month) day.css = 'new';
@@ -78,8 +80,9 @@ export default class Calendar extends Component {
         this.props.futureOnly &&
         start.valueOf() <
           moment([moment().year(), moment().month(), moment().date()]).valueOf()
-      )
+      ) {
         day.css = 'disabled';
+      }
       if (day.is_today) day.css += ' today';
       if (day.active) day.css += ' active';
 
@@ -133,7 +136,7 @@ export default class Calendar extends Component {
     }, []);
   };
 
-  render(): React.Element<any> {
+  render (): React.Element<any> {
     return (
       <table className="table table-condensed">
         <thead>

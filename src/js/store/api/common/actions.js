@@ -8,13 +8,16 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
     `${intfc}_UPDATE_CONFIG_ITEM`,
     (
       id: number | string,
+      stepId: ?number,
       configItemName: string,
       newValue: any,
       belongsTo: string,
+      isOverride: boolean,
+      onSuccess: Function,
       dispatch: Function
     ): void => {
       const intfcToApiPath: Object = {
-        WORKFLOWS: 'steps',
+        WORKFLOWS: stepId ? 'steps' : 'workflows',
         SERVICES: 'services',
         JOBS: 'jobs',
       };
@@ -22,17 +25,24 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       const url =
         belongsTo === 'Global Config'
           ? `${settings.REST_BASE_URL}/system/config/${configItemName}`
-          : `${settings.REST_BASE_URL}/${
-            intfcToApiPath[intfc]
-          }/${id}/config/${configItemName}`;
+          : `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}/${stepId ||
+              id}/config/${configItemName}?action=yaml`;
 
       fetchWithNotifications(
-        async (): Promise<*> =>
-          await put(url, {
+        async (): Promise<*> => {
+          const res = await put(url, {
             body: JSON.stringify({
               value: newValue,
+              override: isOverride,
             }),
-          }),
+          });
+
+          if (!res.err) {
+            onSuccess();
+          }
+
+          return res;
+        },
         `Updating value for ${configItemName}...`,
         `${configItemName} value updated successfuly`,
         dispatch
@@ -100,6 +110,11 @@ const deleteAppenderAction: Function = (intfc: string): Function =>
     events,
   }));
 
+const updateConfigItemWsCommon: Function = (intfc: string): Function =>
+  createAction(`${intfc.toUpperCase()}_UPDATECONFIGITEMWS`, events => ({
+    events,
+  }));
+
 export {
   updateConfigItemAction,
   updateBasicDataAction,
@@ -108,4 +123,5 @@ export {
   deleteLoggerAction,
   addAppenderAction,
   deleteAppenderAction,
+  updateConfigItemWsCommon,
 };

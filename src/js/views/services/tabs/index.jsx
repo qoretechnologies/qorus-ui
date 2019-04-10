@@ -111,6 +111,7 @@ const ServiceTabs: Function = ({
           items={configItems}
           globalItems={service.global_config}
           intrf="services"
+          intrfId={service.id}
         />
       </Box>
     </SimpleTab>

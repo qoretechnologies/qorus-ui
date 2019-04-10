@@ -11,6 +11,7 @@ import {
   deleteLoggerAction,
   addAppenderAction,
   deleteAppenderAction,
+  updateConfigItemWsCommon,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('WORKFLOWS');
@@ -259,10 +260,7 @@ const setRemote = createAction('WORKFLOWS_SETREMOTE', (id, value, dispatch) => {
 });
 
 const updateConfigItem: Function = updateConfigItemAction('WORKFLOWS');
-const updateConfigItemWs = createAction(
-  'WORKFLOWS_UPDATECONFIGITEMWS',
-  events => ({ events })
-);
+const updateConfigItemWs: Function = updateConfigItemWsCommon('WORKFLOWS');
 
 const unsync = createAction('WORKFLOWS_UNSYNC');
 const fetchLogger = fetchLoggerAction('workflows');

@@ -11,6 +11,7 @@ import {
   deleteLoggerAction,
   addAppenderAction,
   deleteAppenderAction,
+  updateConfigItemWsCommon,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('SERVICES');
@@ -177,10 +178,7 @@ const setRemote = createAction(
 );
 
 const updateConfigItem: Function = updateConfigItemAction('SERVICES');
-const updateConfigItemWs = createAction(
-  'SERVICES_UPDATECONFIGITEMWS',
-  events => ({ events })
-);
+const updateConfigItemWs: Function = updateConfigItemWsCommon('SERVICES');
 
 const processStarted = createAction('SERVICES_PROCESSSTARTED', events => ({
   events,

@@ -95,8 +95,8 @@ export default class Dashboard extends Component {
       nodeTab,
     });
   };
-  handleModuleClick: Function = (connection: string): void => {
-    browserHistory.push(`/remote?tab=qorus&paneId=${connection}`);
+  handleModuleClick: Function = (url: string): void => {
+    browserHistory.push(url);
   };
 
   handleLoadMoreRemotesClick: Function = (): void => {
@@ -573,7 +573,11 @@ export default class Dashboard extends Component {
                     <div
                       className="dashboard-module-wide has-link"
                       key={remote.name}
-                      onClick={() => this.handleModuleClick(remote.name)}
+                      onClick={() =>
+                        this.handleModuleClick(
+                          `/remote?tab=qorus&paneId=${remote.name}`
+                        )
+                      }
                     >
                       <div
                         className={`dashboard-data-title ${statusHealth(
@@ -583,11 +587,21 @@ export default class Dashboard extends Component {
                         {remote.name}
                       </div>
                       <div className={`bottom ${statusHealth(remote.health)}`}>
-                        <div className="module">
+                        <div
+                          className="module"
+                          style={{
+                            opacity: remote.health === 'UNKNOWN' ? 0.4 : 1,
+                          }}
+                        >
                           <div className="top">{remote['instance-key']}</div>
                           <div className="bottom">key</div>
                         </div>
-                        <div className="module">
+                        <div
+                          className="module"
+                          style={{
+                            opacity: remote.health === 'UNKNOWN' ? 0.4 : 1,
+                          }}
+                        >
                           <div className="top">{remote.health}</div>
                           <div className="bottom">health</div>
                         </div>

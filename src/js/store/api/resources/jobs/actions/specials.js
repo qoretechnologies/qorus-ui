@@ -17,6 +17,7 @@ import {
   deleteLoggerAction,
   addAppenderAction,
   deleteAppenderAction,
+  updateConfigItemWsCommon,
 } from '../../../common/actions';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
@@ -230,9 +231,7 @@ const activate = createAction('JOBS_ACTIVATE', (id, active, dispatch) => {
 });
 
 const run = createAction('JOBS_RUN', (id, dispatch) => {
-  const url = `${
-    settings.REST_BASE_URL
-  }/jobs/${id}?action=run`;
+  const url = `${settings.REST_BASE_URL}/jobs/${id}?action=run`;
 
   fetchWithNotifications(
     async () => await fetchJson('PUT', url),
@@ -295,9 +294,7 @@ const setRemote = createAction(
 );
 
 const updateConfigItem: Function = updateConfigItemAction('JOBS');
-const updateConfigItemWs = createAction('JOBS_UPDATECONFIGITEMWS', events => ({
-  events,
-}));
+const updateConfigItemWs = updateConfigItemWsCommon('JOBS');
 
 const processStarted = createAction('JOBS_PROCESSSTARTED', events => ({
   events,

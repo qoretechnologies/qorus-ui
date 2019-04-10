@@ -1,8 +1,8 @@
 import { createAction } from 'redux-actions';
 
-const remoteHealthChanged: Function = createAction(
-  'HEALTH_CHANGED',
+const remoteChanged: Function = createAction(
+  'HEALTH_REMOTECHANGED',
   events => ({ events })
 );
 
-export { remoteHealthChanged };
+export { remoteChanged };

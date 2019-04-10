@@ -20,6 +20,7 @@ import {
   deleteLoggerReducer,
   addAppenderReducer,
   deleteAppenderReducer,
+  updateConfigItemWsCommon,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -33,7 +34,7 @@ const initialState = { data: [], sync: false, loading: false };
  * @param {string|number} value
  * @return {array}
  */
-function getDataWithOption(data, workflowId, name, value) {
+function getDataWithOption (data, workflowId, name, value) {
   const workflow = data.find(w => w.id === workflowId);
   const options = Array.from(workflow.options);
   const optIdx = options.findIndex(o => o.name === name);
@@ -57,14 +58,14 @@ function getDataWithOption(data, workflowId, name, value) {
  * @param {string} name
  * @return {object|null}
  */
-function findOption(data, workflowId, name) {
+function findOption (data, workflowId, name) {
   const workflow = data.find(w => w.id === workflowId);
 
   return workflow ? workflow.options.find(o => o.name === name) : null;
 }
 
 const setOptions = {
-  next(state = initialState, action) {
+  next (state = initialState, action) {
     return Object.assign({}, state, {
       data: getDataWithOption(
         state.data,
@@ -74,7 +75,7 @@ const setOptions = {
       ),
     });
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     const option = findOption(state.data, action.meta.option.name);
 
     return Object.assign({}, state, {
@@ -92,7 +93,7 @@ const setOptions = {
 };
 
 const fetchLibSources = {
-  next(state = initialState, action) {
+  next (state = initialState, action) {
     return Object.assign({}, state, {
       data: updateItemWithId(
         action.meta.workflowId,
@@ -101,7 +102,7 @@ const fetchLibSources = {
       ),
     });
   },
-  throw(state = initialState, action) {
+  throw (state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -111,7 +112,7 @@ const fetchLibSources = {
 };
 
 const addNew = {
-  next(
+  next (
     state = initialState,
     {
       payload: { wf },
@@ -135,7 +136,7 @@ const addNew = {
 };
 
 const setExecCount = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -176,7 +177,7 @@ const addAppender = addAppenderReducer;
 const deleteAppender = deleteAppenderReducer;
 
 const setEnabled = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -203,7 +204,7 @@ const setEnabled = {
 };
 
 const updateStats = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -230,16 +231,16 @@ const updateStats = {
 };
 
 const unselectAll = {
-  next(state) {
+  next (state) {
     const data = [...state.data];
     const newData = data.map(
       // eslint-disable-next-line
       w =>
         w._selected
           ? {
-              ...w,
-              ...{ _selected: false },
-            }
+            ...w,
+            ...{ _selected: false },
+          }
           : w
     );
 
@@ -248,7 +249,7 @@ const unselectAll = {
 };
 
 const updateDone = {
-  next(
+  next (
     state,
     {
       payload: { id },
@@ -266,7 +267,7 @@ const updateDone = {
 };
 
 const addOrder = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -301,7 +302,7 @@ const addOrder = {
 };
 
 const processOrderEvent = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -360,7 +361,7 @@ const processOrderEvent = {
 };
 
 const modifyOrder = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -403,7 +404,7 @@ const modifyOrder = {
 };
 
 const fixOrders = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -454,7 +455,7 @@ const fixOrders = {
 };
 
 const addAlert = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -487,7 +488,7 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next(
+  next (
     state = initialState,
     {
       payload: { events },
@@ -522,7 +523,7 @@ const clearAlert = {
 };
 
 const selectWorkflow = {
-  next(
+  next (
     state = initialState,
     {
       payload: { id },
@@ -533,31 +534,31 @@ const selectWorkflow = {
 };
 
 const selectAllWorkflows = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectAll(state);
   },
 };
 
 const selectNoneWorkflows = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectNone(state);
   },
 };
 
 const invertSelection = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectInvert(state);
   },
 };
 
 const selectWithAlerts = {
-  next(state = initialState) {
+  next (state = initialState) {
     return selectAlerts(state);
   },
 };
 
 const selectRunning = {
-  next(state = initialState) {
+  next (state = initialState) {
     const data = [...state.data];
     const newData = data.map(w => {
       const copy = { ...w };
@@ -576,7 +577,7 @@ const selectRunning = {
 };
 
 const selectStopped = {
-  next(state = initialState) {
+  next (state = initialState) {
     const data = [...state.data];
     const newData = data.map(w => {
       const copy = { ...w };
@@ -595,7 +596,7 @@ const selectStopped = {
 };
 
 const setDeprecated = {
-  next(
+  next (
     state = initialState,
     {
       payload: { ids, value },
@@ -617,13 +618,13 @@ const setDeprecated = {
 };
 
 const setAutostart = {
-  next(state = initialState) {
+  next (state = initialState) {
     return state;
   },
 };
 
 const setThreshold = {
-  next(
+  next (
     state = initialState,
     {
       payload: { id, value },
@@ -637,19 +638,19 @@ const setThreshold = {
 };
 
 const setRemote = {
-  next(state = initialState) {
+  next (state = initialState) {
     return state;
   },
 };
 
 const unsync = {
-  next() {
+  next () {
     return { ...initialState };
   },
 };
 
 const fetchList = {
-  next(
+  next (
     state = initialState,
     {
       payload: { result },
@@ -659,34 +660,7 @@ const fetchList = {
   },
 };
 
-const updateConfigItemWs = {
-  next(
-    state = initialState,
-    {
-      payload: { events },
-    }
-  ) {
-    let newData: Array<Object> = [...state.data];
-
-    events.forEach((dt: Object) => {
-      const workflow: Object = newData.find(
-        (wf: Object): boolean => wf.id === dt.workflowid
-      );
-
-      if (workflow) {
-        const step: Object = workflow.stepinfo.find(
-          (stp: Object) => stp.stepid === dt.stepid
-        );
-
-        step.config[dt.item].value = dt.value;
-
-        newData = updateItemWithId(dt.workflowid, { _updated: true }, newData);
-      }
-    });
-
-    return { ...state, ...{ data: newData } };
-  },
-};
+const updateConfigItemWs = updateConfigItemWsCommon;
 
 export {
   setOptions as SETOPTIONS,
