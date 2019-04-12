@@ -44,9 +44,12 @@ const MultiDispostionChart: Function = ({
           <DispositionChart
             key={stats.label}
             stats={stats}
-            onDispositionChartClick={onDispositionChartClick}
-            dispositionLegendHandlers={dispositionLegendHandlers}
-            onSLAChartClick={onSLAChartClick}
+            onDispositionChartClick={() => {
+              onDispositionChartClick(chartTab);
+            }}
+            onSLAChartClick={() => {
+              onSLAChartClick(chartTab);
+            }}
           />
         )
     )}

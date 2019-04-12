@@ -35,7 +35,7 @@ const GlobalModalTable: Function = ({
   onSortChange,
   local,
 }: Props) => (
-  <Table fixed condensed striped height={400}>
+  <Table fixed condensed striped>
     <Thead>
       <FixedRow {...{ sortData, onSortChange }}>
         <NameColumnHeader />

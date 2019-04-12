@@ -14,6 +14,9 @@ import { sortDefaults } from '../../../../../constants/sort';
 import sort from '../../../../../hocomponents/sort';
 import { orderStatsPct } from '../../../../../helpers/orders';
 import Alert from '../../../../../components/alert';
+import Band from '../../../../../views/workflows/toolbar/band';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
 
 type Props = {
   onClose: Function,
@@ -34,6 +37,7 @@ const StatsModal: Function = ({
   totalOrderStats,
   onSortChange,
   sortData,
+  handleBandChange,
 }: Props) => (
   <Modal width={700}>
     <Modal.Header titleId="slamodal" onClose={onClose}>
@@ -42,15 +46,11 @@ const StatsModal: Function = ({
     <Modal.Body>
       <Box top fill>
         <Alert> {totalOrderStats} workflow orders processed </Alert>
-        <Tabs active="global" noContainer>
-          <Pane name="Global">
-            <SLATable
-              workflows={workflows}
-              totalOrderStats={totalOrderStats}
-              onSortChange={onSortChange}
-              sortData={sortData}
-            />
-          </Pane>
+        <Tabs
+          active="local"
+          noContainer
+          rightElement={<Band band={band} onChange={handleBandChange} />}
+        >
           <Pane name="Local">
             <SLATable
               workflows={workflows}
@@ -58,6 +58,14 @@ const StatsModal: Function = ({
               onSortChange={onSortChange}
               sortData={sortData}
               local
+            />
+          </Pane>
+          <Pane name="Global">
+            <SLATable
+              workflows={workflows}
+              totalOrderStats={totalOrderStats}
+              onSortChange={onSortChange}
+              sortData={sortData}
             />
           </Pane>
         </Tabs>
@@ -80,6 +88,12 @@ export default compose(
     }
   ),
   sync('meta'),
+  withState('band', 'changeBand', ({ band }) => band),
+  withHandlers({
+    handleBandChange: ({ changeBand }) => (event, title) => {
+      changeBand(title);
+    },
+  }),
   mapProps(
     ({ workflows, orderStats, band, ...rest }: Props): Props => ({
       totalOrderStats: orderStats

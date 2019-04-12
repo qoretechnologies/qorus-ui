@@ -14,6 +14,9 @@ import { sortDefaults } from '../../../../../constants/sort';
 import GlobalTable from './table';
 import { orderStatsPct } from '../../../../../helpers/orders';
 import Alert from '../../../../../components/alert';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import Band from '../../../../../views/workflows/toolbar/band';
 
 type Props = {
   onClose: Function,
@@ -35,6 +38,7 @@ const StatsModal: Function = ({
   totalOrderStats,
   sortData,
   onSortChange,
+  handleBandChange,
 }: Props) => (
   <Modal width={700}>
     <Modal.Header title="statsmodal" onClose={onClose}>
@@ -43,15 +47,11 @@ const StatsModal: Function = ({
     <Modal.Body>
       <Box top fill>
         <Alert> {totalOrderStats} workflow orders processed </Alert>
-        <Tabs active="global" noContainer>
-          <Pane name="Global">
-            <GlobalTable
-              workflows={workflows}
-              totalOrderStats={totalOrderStats}
-              onSortChange={onSortChange}
-              sortData={sortData}
-            />
-          </Pane>
+        <Tabs
+          active="local"
+          noContainer
+          rightElement={<Band band={band} onChange={handleBandChange} />}
+        >
           <Pane name="Local">
             <GlobalTable
               workflows={workflows}
@@ -59,6 +59,14 @@ const StatsModal: Function = ({
               onSortChange={onSortChange}
               sortData={sortData}
               local
+            />
+          </Pane>
+          <Pane name="Global">
+            <GlobalTable
+              workflows={workflows}
+              totalOrderStats={totalOrderStats}
+              onSortChange={onSortChange}
+              sortData={sortData}
             />
           </Pane>
         </Tabs>
@@ -81,6 +89,12 @@ export default compose(
     }
   ),
   sync('meta'),
+  withState('band', 'changeBand', ({ band }) => band),
+  withHandlers({
+    handleBandChange: ({ changeBand }) => (event, title) => {
+      changeBand(title);
+    },
+  }),
   mapProps(
     ({ workflows, orderStats, band, ...rest }: Props): Props => ({
       totalOrderStats: orderStats
