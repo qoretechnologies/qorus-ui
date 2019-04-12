@@ -269,7 +269,7 @@ export default class Dropdown extends Component {
 
       if (
         filterValue !== '' &&
-        !c.props.title.toLowerCase().includes(filterValue.toLowerCase())
+        !c.props.title?.toLowerCase().includes(filterValue.toLowerCase())
       ) {
         return null;
       }

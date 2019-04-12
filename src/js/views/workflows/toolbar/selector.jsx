@@ -5,7 +5,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 
 import actions from '../../../store/api/actions';
-import Dropdown, { Control, Item } from '../../../components/dropdown';
+import Dropdown, { Control, Item, Divider } from '../../../components/dropdown';
 import Checkbox from '../../../components/checkbox';
 import { CHECKBOX_STATES } from '../../../constants/checkbox';
 
@@ -39,8 +39,10 @@ const ToolbarSelector: Function = ({
     <Item title="All" onClick={selectAll} />
     <Item title="None" onClick={selectNone} />
     <Item title="Invert" onClick={selectInvert} />
+    <Divider />
     <Item title="Running" onClick={selectRunning} />
     <Item title="Stopped" onClick={selectStopped} />
+    <Divider />
     <Item title="With alerts" onClick={selectAlerts} />
   </Dropdown>
 );
