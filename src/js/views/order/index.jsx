@@ -200,10 +200,17 @@ export default class Order extends Component {
             />
           </SimpleTab>
           <SimpleTab name="config">
-            <ConfigItemsTable
-              items={rebuildConfigHash(this.props.workflow, true)}
-              intrf="workflow"
-            />
+            <Box top fill scrollY>
+              <ConfigItemsTable
+                items={{
+                  ...rebuildConfigHash(this.props.workflow),
+                  ...rebuildConfigHash(this.props.workflow, true),
+                }}
+                globalItems={this.props.workflow.global_config}
+                intrf="workflow"
+                intrfId={this.props.workflow.id}
+              />
+            </Box>
           </SimpleTab>
           <SimpleTab name="notes">
             <NotesView

@@ -16,7 +16,7 @@ import Pull from '../../components/Pull';
 import { normalizeName } from '../../components/utils';
 import { ALL_ORDER_STATES } from '../../constants/orders';
 import { rebuildConfigHash } from '../../helpers/interfaces';
-import { countArrayItemsInObject } from '../../utils';
+import { countArrayItemsInObject, countConfigItems } from '../../utils';
 
 @queryControl('target')
 @queryControl('prevQuery')
@@ -79,9 +79,10 @@ export default class OrderHeader extends Component {
               { title: 'Audit', suffix: `(${size(data.AuditEvents)})` },
               {
                 title: 'Config',
-                suffix: `(${countArrayItemsInObject(
-                  rebuildConfigHash(this.props.workflow, true)
-                )})`,
+                suffix: `(${countConfigItems({
+                  ...rebuildConfigHash(this.props.workflow, true),
+                  ...rebuildConfigHash(this.props.workflow),
+                }) + size(this.props.workflow.global_config)})`,
               },
               'Info',
               { title: 'Notes', suffix: `(${size(data.notes)})` },
