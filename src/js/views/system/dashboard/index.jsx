@@ -216,35 +216,22 @@ export default class Dashboard extends Component {
                 <MultiDispositionChart
                   title="Global order stats"
                   orderStats={system.order_stats}
-                  onDispositionChartClick={() => {
+                  onDispositionChartClick={band => {
                     this.props.openModal(
                       <GlobalModal
                         onClose={this.props.closeModal}
                         text="Global chart data"
-                        band={this.state.chartTab}
+                        band={band}
                       />
                     );
                   }}
-                  dispositionLegendHandlers={map(
-                    DISPOSITIONS,
-                    (label, disp) => () => {
-                      this.props.openModal(
-                        <StatsModal
-                          onClose={this.props.closeModal}
-                          disposition={disp}
-                          text={label}
-                          band={this.state.chartTab}
-                        />
-                      );
-                    }
-                  )}
-                  onSLAChartClick={() => {
+                  onSLAChartClick={band => {
                     this.props.openModal(
                       <SLAModal
                         onClose={this.props.closeModal}
                         in_sla
                         text="In SLA"
-                        band={this.state.chartTab}
+                        band={band}
                       />
                     );
                   }}
