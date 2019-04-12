@@ -31,7 +31,7 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import unsync from '../../../hocomponents/unsync';
 import Flex from '../../../components/Flex';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import { countArrayItemsInObject } from '../../../utils';
+import { countConfigItems } from '../../../utils';
 
 type Props = {
   job: Object,
@@ -74,7 +74,7 @@ const JobPage = ({
             'Releases',
             {
               title: 'Config',
-              suffix: `(${countArrayItemsInObject(configItems) +
+              suffix: `(${countConfigItems(configItems) +
                 size(job.global_config)})`,
             },
             'Code',

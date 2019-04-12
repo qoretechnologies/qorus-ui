@@ -110,6 +110,7 @@ const JobsDetailTabs: Function = ({
           items={rebuildConfigHash(model)}
           globalItems={model.global_config}
           intrf="jobs"
+          intrfId={model.id}
         />
       </Box>
     </SimpleTab>

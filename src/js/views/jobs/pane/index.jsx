@@ -11,7 +11,7 @@ import show from '../../../hocomponents/show-if-passed';
 import titleManager from '../../../hocomponents/TitleManager';
 import Pane from '../../../components/pane';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import { countArrayItemsInObject } from '../../../utils';
+import { countArrayItemsInObject, countConfigItems } from '../../../utils';
 import JobsDetailTabs from '../tabs';
 
 const Detail = ({
@@ -50,7 +50,7 @@ const Detail = ({
         'Releases',
         {
           title: 'Config',
-          suffix: `(${countArrayItemsInObject(configItems) +
+          suffix: `(${countConfigItems(configItems) +
             size(model.global_config)})`,
         },
         'Code',
