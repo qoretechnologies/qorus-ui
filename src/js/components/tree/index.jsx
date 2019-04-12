@@ -16,6 +16,7 @@ import Flex from '../Flex';
 import ContentByType from '../ContentByType';
 import { getType } from '../../helpers/functions';
 import { getLineCount } from '../../helpers/system';
+import connect from 'react-redux/lib/connect/connect';
 
 const qorusTypeMapper = {
   array: 'list',
@@ -27,6 +28,9 @@ const qorusTypeMapper = {
 };
 
 @withModal()
+@connect(state => ({
+  settings: state.api.currentUser.data.storage.settings,
+}))
 export default class Tree extends Component {
   props: {
     data: Object | Array<any>,
@@ -50,8 +54,8 @@ export default class Tree extends Component {
   state = {
     mode: 'normal',
     items: {},
-    allExpanded: this.props.expanded,
-    showTypes: false,
+    allExpanded: this.props.settings.treeDefaultExpanded || this.props.expanded,
+    showTypes: this.props.settings.treeDefaultDataTypes || false,
   };
 
   componentWillReceiveProps (nextProps: Object) {
