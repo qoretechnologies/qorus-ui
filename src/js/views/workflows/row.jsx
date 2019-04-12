@@ -111,7 +111,7 @@ const TableRow: Function = ({
               <InstancesChart width={400} states={states} instances={rest} />
             </PaneItem>
           )}
-          <ProcessSummary model={{ enabled, remote, ...rest }} />
+          <ProcessSummary model={{ enabled, remote, autostart, ...rest }} />
         </Box>
       }
       link={`/workflow/${id}?date=${date}`}
