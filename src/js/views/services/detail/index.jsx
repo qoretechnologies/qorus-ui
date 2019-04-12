@@ -7,7 +7,7 @@ import size from 'lodash/size';
 import actions from '../../../store/api/actions';
 import titleManager from '../../../hocomponents/TitleManager';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import { countArrayItemsInObject } from '../../../utils';
+import { countArrayItemsInObject, countConfigItems } from '../../../utils';
 import ServiceTabs from '../tabs';
 import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
@@ -73,7 +73,7 @@ const ServicesDetail: Function = ({
             'Releases',
             {
               title: 'Config',
-              suffix: `(${countArrayItemsInObject(configItems) +
+              suffix: `(${countConfigItems(configItems) +
                 size(service.global_config)})`,
             },
             'Info',
