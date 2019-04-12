@@ -26,6 +26,10 @@ const UserSettings: Function = ({
   handleNotificationsCheckboxChange,
   handleNotificationsSoundCheckboxChange,
   soundCheckboxDisabled,
+  handleTreeExpandCheckboxChange,
+  treeDefaultExpanded,
+  handleTreeDataTypesCheckboxChange,
+  treeDefaultDataTypes,
 }: Props) => (
   <Box fill top scrollY>
     <PaneItem title="Live Notifications">
@@ -45,6 +49,18 @@ const UserSettings: Function = ({
         onChange={handleNotificationsSoundCheckboxChange}
         checked={notificationsSound}
         disabled={soundCheckboxDisabled}
+      />
+    </PaneItem>
+    <PaneItem title="Tree rendering">
+      <Checkbox
+        label="Always show data types"
+        onChange={handleTreeDataTypesCheckboxChange}
+        checked={treeDefaultDataTypes}
+      />
+      <Checkbox
+        label="Expanded by default"
+        onChange={handleTreeExpandCheckboxChange}
+        checked={treeDefaultExpanded}
       />
     </PaneItem>
   </Box>
@@ -71,13 +87,23 @@ export default compose(
     }: Props): Function => (): void => {
       storeSettings('notificationsEnabled', !notificationsEnabled);
     },
-  }),
-  withHandlers({
     handleNotificationsSoundCheckboxChange: ({
       storeSettings,
       notificationsSound,
     }: Props): Function => (): void => {
       storeSettings('notificationsSound', !notificationsSound);
+    },
+    handleTreeExpandCheckboxChange: ({
+      storeSettings,
+      treeDefaultExpanded,
+    }) => (): void => {
+      storeSettings('treeDefaultExpanded', !treeDefaultExpanded);
+    },
+    handleTreeDataTypesCheckboxChange: ({
+      storeSettings,
+      treeDefaultDataTypes,
+    }) => (): void => {
+      storeSettings('treeDefaultDataTypes', !treeDefaultDataTypes);
     },
   })
 )(UserSettings);
