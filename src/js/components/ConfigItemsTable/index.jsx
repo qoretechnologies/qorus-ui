@@ -133,7 +133,6 @@ const ConfigItemsContainer: Function = ({
                           <ActionColumnHeader icon="edit">
                             {''}
                           </ActionColumnHeader>
-
                           <Th
                             className="text"
                             iconName="info-sign"
@@ -152,7 +151,7 @@ const ConfigItemsContainer: Function = ({
                       </Thead>
                       <DataOrEmptyTable
                         condition={!collection || collection.length === 0}
-                        cols={6}
+                        cols={7}
                         small
                       >
                         {props => (
