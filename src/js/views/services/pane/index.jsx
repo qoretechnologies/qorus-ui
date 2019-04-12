@@ -8,7 +8,7 @@ import DetailPane from '../../../components/pane';
 import actions from '../../../store/api/actions';
 import titleManager from '../../../hocomponents/TitleManager';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import { countArrayItemsInObject } from '../../../utils';
+import { countArrayItemsInObject, countConfigItems } from '../../../utils';
 import ServiceTabs from '../tabs';
 
 @connect(
@@ -103,9 +103,9 @@ export default class ServicesDetail extends Component {
       return null;
     }
 
-    const configItems: Object = rebuildConfigHash(service);
     const configItemsCount: number =
-      countArrayItemsInObject(configItems) + size(service.global_config);
+      countConfigItems(rebuildConfigHash(service)) +
+      size(service.global_config);
 
     return (
       <DetailPane
@@ -141,7 +141,6 @@ export default class ServicesDetail extends Component {
       >
         <ServiceTabs
           service={service}
-          configItems={configItems}
           activeTab={paneTab}
           methods={methods}
           location={location}

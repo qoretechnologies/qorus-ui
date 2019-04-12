@@ -17,6 +17,7 @@ import ConfigItemsTable from '../../../components/ConfigItemsTable';
 import InfoTable from '../../../components/info_table';
 import ProcessTable from '../../../components/ProcessTable';
 import AuthLabels from '../../../containers/AuthLabels';
+import { rebuildConfigHash } from '../../../helpers/interfaces';
 
 type ServiceTabsProps = {
   service: Object,
@@ -108,7 +109,7 @@ const ServiceTabs: Function = ({
     <SimpleTab name="config">
       <Box top fill scrollY>
         <ConfigItemsTable
-          items={configItems}
+          items={rebuildConfigHash(service)}
           globalItems={service.global_config}
           intrf="services"
           intrfId={service.id}
