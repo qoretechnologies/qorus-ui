@@ -17,7 +17,7 @@ import {
 } from '../../../components/controls';
 import withHandlers from 'recompose/withHandlers';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import { countArrayItemsInObject } from '../../../utils';
+import { countArrayItemsInObject, countConfigItems } from '../../../utils';
 import showIfPassed from '../../../hocomponents/show-if-passed';
 
 type Props = {
@@ -50,9 +50,10 @@ const WorkflowHeader: Function = ({
           'Process',
           {
             title: 'Config',
-            suffix: `(${countArrayItemsInObject(
-              rebuildConfigHash(workflow, true)
-            ) + size(workflow.global_config)})`,
+            suffix: `(${countConfigItems({
+              ...rebuildConfigHash(workflow, true),
+              ...rebuildConfigHash(workflow),
+            }) + size(workflow.global_config)})`,
           },
           'Releases',
           {
