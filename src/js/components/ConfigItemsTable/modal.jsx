@@ -17,6 +17,11 @@ import Loader from '../loader';
 import jsyaml from 'js-yaml';
 import moment from 'moment';
 import { DATE_FORMATS } from '../../constants/dates';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
+import Pull from '../Pull';
 
 type Props = {
   onClose: Function,
@@ -44,6 +49,8 @@ export default class ConfigItemsModal extends Component {
     const stepPath: string = this.props.stepId
       ? `/stepinfo/${this.props.stepId}`
       : '';
+
+    console.log(this.props.intrf);
 
     const interfacePath: string = this.props.intrfId
       ? `${this.props.intrf}/${this.props.intrfId}${stepPath}`
@@ -93,9 +100,14 @@ export default class ConfigItemsModal extends Component {
     this.setState({ override });
   };
 
+  handleDefaultClick = () => {
+    this.setState({
+      value: this.props.item.default_value,
+    });
+  };
+
   handleSaveClick: Function = (): void => {
-    const value: any =
-      this.state.value;
+    const value: any = this.state.value;
 
     this.props.onSubmit(
       this.props.item,
@@ -226,6 +238,15 @@ export default class ConfigItemsModal extends Component {
                   <div className="header">
                     <Icon iconName={!override ? 'selection' : 'circle'} /> Use
                     item's value
+                    <Pull right>
+                      <ButtonGroup>
+                        <Button
+                          label="Set default value"
+                          disabled={override}
+                          onClick={this.handleDefaultClick}
+                        />
+                      </ButtonGroup>
+                    </Pull>
                   </div>
                   <div className="body">
                     {error && (

@@ -2,6 +2,7 @@
 /flow-typed
 /node_modules
 /dist
+/cypress/screenshots
 
 # Runtime
 /.*.pid

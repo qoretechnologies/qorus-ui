@@ -181,9 +181,10 @@ export default class Topbar extends Component {
           </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} id="quickSearchForm">
             <ControlGroup>
               <InputGroup
+                id="quickSearch"
                 lefticonName="search"
                 placeholder="Quick search"
                 rightElement={this.renderSearchMenu()}
@@ -277,6 +278,7 @@ export default class Topbar extends Component {
                 this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY
               }
               onClick={this.handleNotificationsClick}
+              id="notificationsToggle"
             />
           </ButtonGroup>
           <NavbarDivider />
@@ -313,6 +315,7 @@ export default class Topbar extends Component {
             <Button
               iconName={light ? 'moon' : 'flash'}
               onClick={onThemeClick}
+              id="themeToggle"
             />
           </ButtonGroup>
         </NavbarGroup>
