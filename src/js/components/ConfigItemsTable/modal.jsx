@@ -50,8 +50,6 @@ export default class ConfigItemsModal extends Component {
       ? `/stepinfo/${this.props.stepId}`
       : '';
 
-    console.log(this.props.intrf);
-
     const interfacePath: string = this.props.intrfId
       ? `${this.props.intrf}/${this.props.intrfId}${stepPath}`
       : 'system';
@@ -92,17 +90,22 @@ export default class ConfigItemsModal extends Component {
   handleOverrideChange: Function = (override): void => {
     if (override) {
       this.setState({
-        value: this.props.item.value || '',
+        value: this.state.yamlData.value,
+        override: true,
+        error: false,
+      });
+    } else {
+      this.setState({
+        value: this.state.yamlData.value,
+        override: false,
         error: false,
       });
     }
-
-    this.setState({ override });
   };
 
   handleDefaultClick = () => {
     this.setState({
-      value: this.props.item.default_value,
+      value: this.props.yamlData.default_value,
     });
   };
 
