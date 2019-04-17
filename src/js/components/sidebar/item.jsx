@@ -106,6 +106,7 @@ let SidebarItem: Function = ({
         className={classnames('sidebarItem', {
           sidebarSubItem: subItem,
           active: isActive,
+          submenuCategory: onExpandClick,
         })}
         onClick={onExpandClick}
       >

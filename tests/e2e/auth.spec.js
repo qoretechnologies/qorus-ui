@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 context('Authorization', () => {
   beforeEach(() => {
     cy.visit('/login');
@@ -18,19 +20,17 @@ context('Authorization', () => {
   });
 
   it('logs in successfuly', () => {
-    cy.wait(1000);
     cy.get('#username').type('admin');
     cy.get('#password').type('admin');
     cy.get('#submit').click();
     cy.location().should(location => {
       expect(location.hash).to.be.empty;
-      expect(location.href).to.eq('https://localhost:3004/system/dashboard');
+      expect(location.href).to.eq('https://localhost:3004/dashboard');
     });
   });
 
   it('logs in successfuly and redirects to next url', () => {
     cy.visit('/login?next=/workflows');
-    cy.wait(1000);
     cy.get('#username').type('admin');
     cy.get('#password').type('admin');
     cy.get('#submit').click();

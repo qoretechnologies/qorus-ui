@@ -55,7 +55,7 @@ const Sidebar: Function = ({
         />
       ))}
     </Scroll>
-    <div className="sidebarSection">
+    <div className="sidebarSection" id="menuCollapse">
       <div className="sidebarItem" onClick={toggleMenu}>
         <Icon
           iconName={

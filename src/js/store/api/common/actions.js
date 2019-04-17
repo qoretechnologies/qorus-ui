@@ -24,7 +24,9 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
 
       const url =
         belongsTo === 'Global Config'
-          ? `${settings.REST_BASE_URL}/system/config/${configItemName}`
+          ? `${
+            settings.REST_BASE_URL
+          }/system/config/${configItemName}?action=yaml`
           : `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}/${stepId ||
               id}/config/${configItemName}?action=yaml`;
 

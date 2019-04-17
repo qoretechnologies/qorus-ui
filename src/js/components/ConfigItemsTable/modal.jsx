@@ -45,6 +45,8 @@ export default class ConfigItemsModal extends Component {
       ? `/stepinfo/${this.props.stepId}`
       : '';
 
+    console.log(this.props.intrf);
+
     const interfacePath: string = this.props.intrfId
       ? `${this.props.intrf}/${this.props.intrfId}${stepPath}`
       : 'system';
@@ -94,8 +96,7 @@ export default class ConfigItemsModal extends Component {
   };
 
   handleSaveClick: Function = (): void => {
-    const value: any =
-      this.state.value;
+    const value: any = this.state.value;
 
     this.props.onSubmit(
       this.props.item,

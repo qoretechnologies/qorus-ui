@@ -23,3 +23,31 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('visitAfterLogin', url => {
+  cy.request({
+    method: 'POST',
+    url: 'https://localhost:3004/api/latest/public/login',
+    body: {
+      pass: 'admin',
+      user: 'admin',
+    },
+  }).then(data => {
+    window.localStorage.setItem('token', data.body.token);
+
+    // Clear local storage
+    cy.request({
+      method: 'PUT',
+      url: 'https://localhost:3004/api/latest/users/admin',
+      body: {
+        storage: {},
+      },
+      headers: {
+        'Qorus-Token': data.body.token,
+      },
+    }).then(() => {
+      cy.visit(url);
+      cy.wait(1000);
+    });
+  });
+});
