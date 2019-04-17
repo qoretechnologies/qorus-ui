@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Intent, Icon } from '@blueprintjs/core';
-import upperFirst from 'lodash/upperFirst';
 import size from 'lodash/size';
 
 import Alert from '../alert';
@@ -119,9 +118,7 @@ export default class Tree extends Component {
       });
 
       const dataType: string = getType(data[key]);
-      const displayKey: string = this.props.caseSensitive
-        ? key
-        : upperFirst(key);
+      const displayKey: string = key;
       const stateKey = k ? `${k}_${key}` : key;
       let isObject = typeof data[key] === 'object' && data[key] !== null;
       let isExpandable =
