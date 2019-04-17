@@ -33,10 +33,16 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       fetchWithNotifications(
         async (): Promise<*> => {
           const res = await put(url, {
-            body: JSON.stringify({
-              value: newValue,
-              override: isOverride,
-            }),
+            body: JSON.stringify(
+              isOverride
+                ? {
+                  override: true,
+                }
+                : {
+                  value: newValue,
+                  override: false,
+                }
+            ),
           });
 
           if (!res.err) {
