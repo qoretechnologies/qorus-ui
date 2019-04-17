@@ -107,9 +107,9 @@ class ManageModal extends Component {
             actions.remotes.manageConnection,
             remoteType,
             data,
-            null
+            null,
+            onClose
           );
-          onClose();
         }
       }
     }
