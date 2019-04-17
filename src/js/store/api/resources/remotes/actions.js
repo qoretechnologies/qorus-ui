@@ -94,35 +94,56 @@ const clearAlert = createAction('REMOTES_CLEARALERT', events => ({ events }));
 
 const manageConnection: Function = createAction(
   'REMOTES_MANAGECONNECTION',
-  (remoteType: string, data: Object, name: string, dispatch: Function) => {
+  (
+    remoteType: string,
+    data: Object,
+    name: string,
+    onSuccess: Function,
+    dispatch: Function
+  ) => {
     const { editable } = attrsSelector(null, { remoteType });
     let newData = data;
 
     if (!name) {
       fetchWithNotifications(
-        async () =>
-          await fetchJson(
+        async () => {
+          const res = await fetchJson(
             'POST',
             `${settings.REST_BASE_URL}/remote/${remoteType}`,
             {
               body: JSON.stringify(newData),
             }
-          ),
+          );
+
+          if (!res.err) {
+            onSuccess();
+          }
+
+          return res;
+        },
         `Creating ${data.name}...`,
         `${data.name} successfuly created`,
         dispatch
       );
     } else {
       newData = pickBy(data, (val, key) => editable.includes(key));
+
       fetchWithNotifications(
-        async () =>
-          await fetchJson(
+        async () => {
+          const res = await fetchJson(
             'PUT',
             `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
             {
               body: JSON.stringify(newData),
             }
-          ),
+          );
+
+          if (!res.err) {
+            onSuccess();
+          }
+
+          return res;
+        },
         `Saving ${name}...`,
         `${name} successfuly modified`,
         dispatch
