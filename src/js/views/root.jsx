@@ -51,12 +51,14 @@ const optionsSelector = state => state.api.systemOptions;
       currentUser,
       menu,
       isTablet: stngs.tablet,
+      isMaximized: stngs.isMaximized,
       health,
       options,
     })
   ),
   {
     saveDimensions: settings.saveDimensions,
+    maximize: settings.maximize,
     fetchSystemOptions: actions.systemOptions.fetch,
     fetchGlobalConfig: actions.system.fetchGlobalConfig,
     fetchCurrentUser: actions.currentUser.fetch,
@@ -118,6 +120,15 @@ export default class Root extends Component {
     this.fetchGlobalData();
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
+
+    // add listener for esc key to remove the maximize mode
+    window.addEventListener('keyup', event => {
+      if (event.which === 27) {
+        if (this.props.isMaximized) {
+          this.props.maximize();
+        }
+      }
+    });
 
     if (process.env.NODE_ENV !== 'production') {
       const { sendSuccess, sendWarning } = this.props;
@@ -193,7 +204,17 @@ export default class Root extends Component {
   };
 
   render () {
-    const { currentUser, info, isTablet, health, options, menu } = this.props;
+    const {
+      currentUser,
+      info,
+      isTablet,
+      health,
+      options,
+      menu,
+      isMaximized,
+      maximize,
+      location,
+    } = this.props;
     const isSynced: boolean =
       currentUser.sync &&
       info.sync &&
@@ -215,33 +236,41 @@ export default class Root extends Component {
     const isLightTheme = currentUser.data.storage.theme === 'light';
 
     return (
-      <div className="root">
-        <Topbar
-          info={info}
-          health={health}
-          locale={locale}
-          isTablet={isTablet}
-          light={isLightTheme}
-          onThemeClick={this.onThemeChange}
-          user={currentUser.data}
-          location={this.props.location}
-        />
-        <div className="root__center">
-          <Sidebar
-            isLight={isLightTheme}
-            isCollapsed={!this.props.sidebarOpen}
-            toggleMenu={this.toggleMenu}
+      <div className={`root ${isMaximized && 'maximized'}`}>
+        {!isMaximized && (
+          <Topbar
+            onMaximizeClick={maximize}
+            info={info}
+            health={health}
+            locale={locale}
             isTablet={isTablet}
-            location={this.props.location}
-            menu={menu.data}
-            favoriteItems={favoriteMenuItems}
-            plugins={info.plugins}
+            light={isLightTheme}
+            onThemeClick={this.onThemeChange}
+            user={currentUser.data}
+            location={location}
+            sendWarning={this.props.sendWarning}
           />
+        )}
+        <div className="root__center">
+          {!isMaximized && (
+            <Sidebar
+              isLight={isLightTheme}
+              isCollapsed={!this.props.sidebarOpen}
+              toggleMenu={this.toggleMenu}
+              isTablet={isTablet}
+              location={this.props.location}
+              menu={menu.data}
+              favoriteItems={favoriteMenuItems}
+              plugins={info.plugins}
+            />
+          )}
           <Flex className="section" scrollX>
             <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
           </Flex>
         </div>
-        <Footer path={this.props.location.pathname} info={info.data} />
+        {!isMaximized && (
+          <Footer path={this.props.location.pathname} info={info.data} />
+        )}
         <ModalManager ref={this.refModal} />
         <Notifications />
         <Bubbles />

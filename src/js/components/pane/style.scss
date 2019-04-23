@@ -28,10 +28,14 @@ $pane-font-color: #000;
   z-index: $zindex-notifications-pane;
 }
 
+.root:not(.maximized) .pane {
+  bottom: 30px; /* [1] */
+}
+
 .pane {
   position: absolute; /* [1] */
   top: 0; /* [1] */
-  bottom: 30px; /* [1] */
+  bottom: 0;
   z-index: $zindex-pane;
   padding: 10px;
   max-width: 80%; /* [2] */

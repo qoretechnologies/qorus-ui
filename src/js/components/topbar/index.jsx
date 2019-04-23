@@ -91,6 +91,7 @@ export type Props = {
   user: Object,
   openPane: Function,
   notificationStatus: boolean,
+  onMaximizeClick: Function,
 };
 
 @connect(
@@ -168,6 +169,8 @@ export default class Topbar extends Component {
       onThemeClick,
       health: { data },
       info,
+      onMaximizeClick,
+      sendWarning,
     } = this.props;
     const [countryCode] = this.props.locale.split('-');
 
@@ -311,6 +314,19 @@ export default class Topbar extends Component {
               </Button>
             </ButtonGroup>
           </Popover> */}
+          <ButtonGroup minimal>
+            <Button
+              iconName="maximize"
+              onClick={() => {
+                sendWarning(
+                  'Full screen mode activated. Press [ESC] to leave.',
+                  'fullscreen'
+                );
+                onMaximizeClick();
+              }}
+              id="maximize"
+            />
+          </ButtonGroup>
           <ButtonGroup minimal>
             <Button
               iconName={light ? 'moon' : 'flash'}
