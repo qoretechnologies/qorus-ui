@@ -55,22 +55,33 @@ const ConfigItemsContainer: Function = ({
   return (
     <NoDataIf condition={size(items) === 0} big>
       {() => (
-        <div>
-          {map(items, (configItems: Array<Object>, belongsTo: string) => (
-            <ExpandableItem title={belongsTo} key={belongsTo} show>
-              {() => (
-                <Table
-                  configItems={configItems}
-                  belongsTo={belongsTo}
-                  intrf={intrf}
-                  saveValue={saveValue}
-                  openModal={openModal}
-                  closeModal={closeModal}
-                />
-              )}
-            </ExpandableItem>
-          ))}
-        </div>
+        <React.Fragment>
+          {map(items, (configItems: Array<Object>, belongsTo: string) =>
+            configItems.isGlobal ? (
+              <Table
+                configItems={configItems}
+                belongsTo={belongsTo}
+                intrf={intrf}
+                saveValue={saveValue}
+                openModal={openModal}
+                closeModal={closeModal}
+              />
+            ) : (
+              <ExpandableItem title={belongsTo} key={belongsTo} show>
+                {() => (
+                  <Table
+                    configItems={configItems}
+                    belongsTo={belongsTo}
+                    intrf={intrf}
+                    saveValue={saveValue}
+                    openModal={openModal}
+                    closeModal={closeModal}
+                  />
+                )}
+              </ExpandableItem>
+            )
+          )}
+        </React.Fragment>
       )}
     </NoDataIf>
   );
