@@ -67,11 +67,11 @@ export default class ChartComponent extends Component {
     chart: {},
   };
 
-  componentDidMount() {
+  componentDidMount () {
     this.renderChart(this.props);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps (nextProps: Object) {
     if (this.props.labels !== nextProps.labels && this.state.chart.data) {
       const chart = this.state.chart;
       const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
@@ -97,7 +97,7 @@ export default class ChartComponent extends Component {
     }
   }
 
-  getOptionsData(data: Array<Object>): Object {
+  getOptionsData (data: Array<Object>): Object {
     const unit: string = this.props.unit || getUnit(getMaxValue(data));
     const stepSize: number =
       this.props.stepSize || getStepSize(data, this.props.isNotTime);
@@ -108,7 +108,7 @@ export default class ChartComponent extends Component {
     };
   }
 
-  getOptions(data: Array<Object>) {
+  getOptions (data: Array<Object>) {
     const { stepSize, unit } = this.getOptionsData(data);
     const { yMin, yMax } = this.props;
     const min = yMin ? yMin - yMin / 10 : 0;
@@ -131,7 +131,7 @@ export default class ChartComponent extends Component {
           tooltips: {
             mode: 'label',
             callbacks: {
-              label(item) {
+              label (item) {
                 return item.yLabel + unit;
               },
             },
@@ -252,7 +252,7 @@ export default class ChartComponent extends Component {
     }
   };
 
-  render(): React.Element<any> {
+  render (): React.Element<any> {
     return (
       <div
         className={`chart-wrapper ${

@@ -14,6 +14,10 @@ export default handleActions(
       state: Object,
       { payload: { width, height } }
     ) => ({ ...state, ...{ width, height, tablet: width < 1400 } }),
+    [ACTIONS.MAXIMIZE]: (state: Object) => ({
+      ...state,
+      ...{ isMaximized: !state.isMaximized },
+    }),
   },
   initialState
 );
