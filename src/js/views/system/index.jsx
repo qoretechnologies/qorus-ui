@@ -17,6 +17,7 @@ import Slas from './slas';
 import Cluster from './cluster';
 import OrderStats from './order_stats';
 import Flex from '../../components/Flex';
+import ConfigItems from './config_items';
 
 type Props = {
   location: Object,
@@ -50,5 +51,6 @@ System.Releases = Releases;
 System.Slas = Slas;
 System.Cluster = Cluster;
 System.OrderStats = OrderStats;
+System.ConfigItems = ConfigItems;
 
 export default System;

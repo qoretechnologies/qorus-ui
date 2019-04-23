@@ -72,6 +72,7 @@ const initialState: Object = {
           { name: 'Properties', icon: 'properties', link: '/system/props' },
           { name: 'Cache', icon: 'database', link: '/system/sqlcache' },
           { name: 'HTTP Services', icon: 'social-media', link: '/system/http' },
+          // { name: 'Config Items', icon: 'cog', link: '/system/config-items' },
         ],
       },
     ],

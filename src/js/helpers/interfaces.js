@@ -9,13 +9,13 @@ import { normalizeName } from '../components/utils';
 import { INTERFACE_ID_KEYS, INTERFACE_ID_LINKS } from '../constants/interfaces';
 import { normalizeId } from '../store/api/resources/utils';
 
-const mapConfigToArray = (id: number): Function => (
+const mapConfigToArray = (id: number, globalView: boolean): Function => (
   configItem: Object,
   configKey: string
 ): Object => ({
   ...configItem,
-  name: configKey,
-  id,
+  name: globalView ? configItem.name : configKey,
+  id: globalView ? null : id,
 });
 
 const pullConfigFromStepinfo: Function = (
@@ -50,7 +50,8 @@ const pullConfigFromStepinfo: Function = (
 
 const rebuildConfigHash: Function = (
   model: Object,
-  pullConfigValues: boolean
+  pullConfigValues: boolean,
+  isGlobal: Boolean
 ): Object => {
   const configHash = pullConfigValues ? model.stepinfo : model.config || {};
   const configObj: Object = pullConfigValues
@@ -58,7 +59,8 @@ const rebuildConfigHash: Function = (
     : {
       [normalizeName(model)]: {
         id: model.id,
-        data: map(configHash, mapConfigToArray(model.id)),
+        data: map(configHash, mapConfigToArray(model.id, isGlobal)),
+        isGlobal,
       },
     };
 

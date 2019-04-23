@@ -62,33 +62,35 @@ const ConfigItemsTable: Function = ({
       onSortChange,
       handleSearchChange,
     }: EnhancedTableProps) => (
-      <Table striped condensed fixed>
+      <Table striped condensed fixed hover>
         <Thead>
           <FixedRow className="toolbar-row">
-            <Pull>
-              <ButtonGroup>
-                <Button
-                  label="Show descriptions"
-                  iconName="align-left"
-                  btnStyle={showDescription ? 'primary' : ''}
-                  onClick={handleToggleDescription}
+            <Th>
+              <Pull>
+                <ButtonGroup>
+                  <Button
+                    label="Show descriptions"
+                    iconName="align-left"
+                    btnStyle={showDescription ? 'primary' : ''}
+                    onClick={handleToggleDescription}
+                  />
+                </ButtonGroup>
+              </Pull>
+              <Pull right>
+                <LoadMore
+                  canLoadMore={canLoadMore}
+                  onLoadMore={handleLoadMore}
+                  onLoadAll={handleLoadAll}
+                  currentCount={loadMoreCurrent}
+                  total={loadMoreTotal}
+                  limit={limit}
                 />
-              </ButtonGroup>
-            </Pull>
-            <Pull right>
-              <LoadMore
-                canLoadMore={canLoadMore}
-                onLoadMore={handleLoadMore}
-                onLoadAll={handleLoadAll}
-                currentCount={loadMoreCurrent}
-                total={loadMoreTotal}
-                limit={limit}
-              />
-              <Search
-                onSearchUpdate={handleSearchChange}
-                resource="configItems"
-              />
-            </Pull>
+                <Search
+                  onSearchUpdate={handleSearchChange}
+                  resource="configItems"
+                />
+              </Pull>
+            </Th>
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
             <NameColumnHeader />
@@ -113,6 +115,8 @@ const ConfigItemsTable: Function = ({
           {props => (
             <Tbody {...props}>
               {collection.map((item: Object, index: number) => {
+                console.log(item);
+
                 const value =
                   belongsTo === 'Global Config'
                     ? item.value
