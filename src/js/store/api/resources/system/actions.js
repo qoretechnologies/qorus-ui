@@ -65,10 +65,15 @@ const killProcess: Function = createAction(
   (processId: number, onFinish: Function, dispatch: Function): void => {
     fetchWithNotifications(
       async () => {
-        await post(
+        const res = await post(
           `${settings.REST_BASE_URL}/system/processes/${processId}?action=kill`
         );
-        onFinish();
+
+        if (!res.err && onFinish) {
+          onFinish();
+        }
+
+        return res;
       },
       `Killing process ${processId}...`,
       `Process ${processId} killed.`,

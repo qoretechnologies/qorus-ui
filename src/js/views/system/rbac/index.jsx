@@ -16,6 +16,7 @@ import Pull from '../../../components/Pull';
 import queryControl from '../../../hocomponents/queryControl';
 import { connect } from 'react-redux';
 import Flex from '../../../components/Flex';
+import viewBehindPermission from '../../../hocomponents/viewBehindPermission';
 
 type Props = {
   tabQuery: string,
@@ -73,6 +74,7 @@ const RBAC: Function = ({
 );
 
 export default compose(
+  viewBehindPermission(['USER-CONTROL']),
   connect(
     (state: Object): Object => ({
       users: state.api.users.data,

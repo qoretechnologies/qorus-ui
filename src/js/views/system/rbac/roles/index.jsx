@@ -146,7 +146,7 @@ export default class RBACRoles extends Component {
     );
   };
 
-  render() {
+  render () {
     const { permissions } = this.props.user;
     const canEdit = hasPermission(
       permissions,

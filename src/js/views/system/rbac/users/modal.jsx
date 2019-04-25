@@ -54,6 +54,7 @@ export default class AddUserModal extends Component {
   };
 
   handleRoleSelect: Function = (roles): void => {
+    console.log(roles);
     this.setState({
       roles,
     });
@@ -114,11 +115,11 @@ export default class AddUserModal extends Component {
   renderRoles: Function = (): ?Array<React.Element<DropItem>> =>
     this.props.rolesModel
       ? this.props.rolesModel.map(role => (
-          <DropItem key={role.role} title={role.role} />
-        ))
+        <DropItem key={role.role} title={role.role} />
+      ))
       : null;
 
-  render() {
+  render () {
     const { model, onClose, rbacExternal } = this.props;
 
     return (
@@ -209,7 +210,7 @@ export default class AddUserModal extends Component {
                   id="roles"
                   multi
                   onSelect={this.handleRoleSelect}
-                  selected={model ? model.roles : null}
+                  selected={model ? this.state.roles : null}
                 >
                   <DropControl> Select roles </DropControl>
                   {this.renderRoles()}

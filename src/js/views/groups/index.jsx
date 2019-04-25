@@ -29,6 +29,7 @@ import Search from '../../containers/search';
 import queryControl from '../../hocomponents/queryControl';
 import Flex from '../../components/Flex';
 import Controls from './controls';
+import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 
 type Props = {
   sortData: Object,
@@ -169,6 +170,7 @@ const selector: Function = createSelector(
 );
 
 export default compose(
+  hasInterfaceAccess('groups', 'Groups'),
   connect(
     selector,
     {

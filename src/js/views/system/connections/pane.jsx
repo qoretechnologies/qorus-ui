@@ -74,7 +74,7 @@ export default class ConnectionsPane extends Component {
     options: null,
   };
 
-  componentDidMount() {
+  componentDidMount () {
     if (!settings.IS_HTTP) {
       this.props.dispatchAction(
         actions.remotes.fetchPass,
@@ -84,7 +84,7 @@ export default class ConnectionsPane extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps (nextProps: Object) {
     if (this.props.paneId !== nextProps.paneId && !settings.IS_HTTP) {
       nextProps.dispatchAction(
         actions.remotes.fetchPass,
@@ -146,13 +146,14 @@ export default class ConnectionsPane extends Component {
           actions.remotes.manageConnection,
           remoteType,
           data,
-          this.props.remote.name
+          this.props.remote.name,
+          null
         );
       }
     }
   };
 
-  render() {
+  render () {
     const { deps, alerts, locked } = this.props.remote;
     const { isPassLoaded } = this.state;
 
@@ -187,24 +188,24 @@ export default class ConnectionsPane extends Component {
                       canEdit &&
                       val.attr !== 'options' &&
                       val.attr !== 'opts' ? (
-                        <EditableCell
-                          className="text"
-                          value={val.value}
-                          onSave={this.handleEditSave(val.attr)}
-                        />
-                      ) : (
-                        <Td className="text">
-                          {val.attr === 'options' || val.attr === 'opts' ? (
-                            <Options
-                              data={val.value}
-                              onSave={this.handleEditSave(val.attr)}
-                              canEdit={canEdit}
-                            />
-                          ) : (
-                            <ContentByType content={val.value} />
-                          )}
-                        </Td>
-                      )}
+                          <EditableCell
+                            className="text"
+                            value={val.value}
+                            onSave={this.handleEditSave(val.attr)}
+                          />
+                        ) : (
+                          <Td className="text">
+                            {val.attr === 'options' || val.attr === 'opts' ? (
+                              <Options
+                                data={val.value}
+                                onSave={this.handleEditSave(val.attr)}
+                                canEdit={canEdit}
+                              />
+                            ) : (
+                              <ContentByType content={val.value} />
+                            )}
+                          </Td>
+                        )}
                     </Tr>
                   )
                 )}

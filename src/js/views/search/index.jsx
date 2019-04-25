@@ -21,6 +21,7 @@ import queryControl from '../../hocomponents/queryControl';
 import { connect } from 'react-redux';
 import HistoryModal from './modals/history';
 import Flex from '../../components/Flex';
+import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 
 type Props = {
   location: Object,
@@ -72,6 +73,7 @@ const Search: Function = ({
 );
 
 export default compose(
+  hasInterfaceAccess('workflows', 'Orders', 'Search'),
   withModal(),
   withTabs('orders'),
   connect(

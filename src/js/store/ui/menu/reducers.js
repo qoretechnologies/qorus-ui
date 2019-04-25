@@ -25,7 +25,7 @@ const initialState: Object = {
         activePaths: ['/service'],
       },
       { name: 'Jobs', icon: 'calendar', link: '/jobs', activePaths: ['/job'] },
-      { name: 'Groups', icon: 'merge-links', link: '/groups' },
+      { name: 'Groups', icon: 'group-objects', link: '/groups' },
       { name: 'Connections', icon: 'left-join', link: '/remote' },
       { name: 'Search', icon: 'search', link: '/search' },
     ],

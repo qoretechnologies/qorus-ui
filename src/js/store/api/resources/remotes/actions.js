@@ -115,7 +115,7 @@ const manageConnection: Function = createAction(
             }
           );
 
-          if (!res.err) {
+          if (!res.err && onSuccess) {
             onSuccess();
           }
 
@@ -138,7 +138,7 @@ const manageConnection: Function = createAction(
             }
           );
 
-          if (!res.err) {
+          if (!res.err && onSuccess) {
             onSuccess();
           }
 
