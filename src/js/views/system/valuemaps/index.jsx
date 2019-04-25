@@ -20,6 +20,7 @@ import titleManager from '../../../hocomponents/TitleManager';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
 import Flex from '../../../components/Flex';
+import hasInterfaceAccess from '../../../hocomponents/hasInterfaceAccess';
 
 type Props = {
   onSearchChange: Function,
@@ -41,7 +42,7 @@ const ValueMaps: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb active>Valuemaps</Crumb>
+        <Crumb active>Value maps</Crumb>
       </Breadcrumbs>
       <Pull right>
         <Search
@@ -83,6 +84,7 @@ const state = createSelector(
 );
 
 export default compose(
+  hasInterfaceAccess('vmaps', 'Value maps'),
   connect(
     state,
     {

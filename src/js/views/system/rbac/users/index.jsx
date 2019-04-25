@@ -148,7 +148,7 @@ export default class RBACUsers extends Component {
     );
   };
 
-  render() {
+  render () {
     const { permissions } = this.props.user;
     const canEdit = hasPermission(
       permissions,

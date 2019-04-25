@@ -106,6 +106,7 @@ const viewSelector: Function = createSelector(
 );
 
 export default compose(
+  withTabs('datasources'),
   defaultProps({ query: { action: 'all' } }),
   connect(
     viewSelector,
@@ -133,6 +134,5 @@ export default compose(
       ...rest,
     })
   ),
-  withTabs('datasources'),
   queryControl('search')
 )(Connections);

@@ -37,6 +37,7 @@ import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 import LoadMore from '../../../components/LoadMore';
 import { NameColumnHeader } from '../../../components/NameColumn';
 import queryControl from '../../../hocomponents/queryControl';
+import viewBehindPermission from '../../../hocomponents/viewBehindPermission';
 
 type Props = {
   location: Object,
@@ -158,6 +159,19 @@ const ConnectionTable: Function = ({
 );
 
 export default compose(
+  viewBehindPermission(
+    props => {
+      if (props.type === 'qorus') {
+        return ['READ_SERVER_CONNECTION', 'SERVER_CONNECTION_CONTROL'];
+      } else if (props.type === 'user') {
+        return ['READ_USER_CONNECTION', 'USER_CONNECTION_CONTROL'];
+      }
+
+      return null;
+    },
+    'or',
+    true
+  ),
   withRouter,
   queryControl('search'),
   mapProps(

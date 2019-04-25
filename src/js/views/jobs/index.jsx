@@ -33,6 +33,7 @@ import Pull from '../../components/Pull';
 import CsvControl from '../../components/CsvControl';
 import Search from '../../containers/search';
 import Flex from '../../components/Flex';
+import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 
 type Props = {
   jobs: Array<Object>,
@@ -158,6 +159,7 @@ const selector: Function = createSelector(
 );
 
 export default compose(
+  hasInterfaceAccess('jobs', 'Jobs'),
   connect(
     selector,
     {

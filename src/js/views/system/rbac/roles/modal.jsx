@@ -19,7 +19,8 @@ import actions from '../../../../store/api/actions';
 import sync from '../../../../hocomponents/sync';
 
 const usersSelector: Function = (state: Object): Object => state.api.users;
-const permissionsSelector: Function = (state: Object): Object => state.api.perms;
+const permissionsSelector: Function = (state: Object): Object =>
+  state.api.perms;
 const groupsSelector: Function = (state: Object): Object => state.api.groups;
 const roleNameSelector: Function = (state: Object, props: Object): ?string => {
   if (!props.model) return null;
@@ -27,30 +28,22 @@ const roleNameSelector: Function = (state: Object, props: Object): ?string => {
   return props.model.role;
 };
 
-const filterUsers: Function = (role): Function => (data: Array<Object>): ?Array<Object> => {
+const filterUsers: Function = (role): Function => (
+  data: Array<Object>
+): ?Array<Object> => {
   if (!role) return null;
 
-  return data.filter(user => (
-    includes(user.roles, role)
-  ));
+  return data.filter(user => includes(user.roles, role));
 };
 
 const usersCollection: Function = createSelector(
-  [
-    usersSelector,
-    roleNameSelector,
-  ], (users, role) => flowRight(
-    filterUsers(role),
-  )(users.data)
+  [usersSelector, roleNameSelector],
+  (users, role) => flowRight(filterUsers(role))(users.data)
 );
 
 const viewSelector: Function = createSelector(
-  [
-    usersSelector,
-    usersCollection,
-    permissionsSelector,
-    groupsSelector,
-  ], (users, usersModel, permissions, groups) => ({
+  [usersSelector, usersCollection, permissionsSelector, groupsSelector],
+  (users, usersModel, permissions, groups) => ({
     permissions,
     groups,
     users,
@@ -71,10 +64,10 @@ const viewSelector: Function = createSelector(
   ),
   sync('users', true, 'loadUsers'),
   sync('permissions', true, 'loadPerms'),
-  sync('groups', true, 'loadGroups'),
+  sync('groups', true, 'loadGroups')
 )
 export default class AddRoleModal extends Component {
-  props:{
+  props: {
     permsModel?: Array<Object>,
     groupsModel?: Array<Object>,
     roles?: Array<Object>,
@@ -110,15 +103,13 @@ export default class AddRoleModal extends Component {
   handleSaveClick: Function = (): void => {
     const { name, desc } = this.refs;
 
-    if (
-      name.value === '' ||
-      desc.value === ''
-    ) {
+    if (name.value === '' || desc.value === '') {
       this.setState({
         error: 'Please fill all fields marked with *',
       });
     } else if (
-      !this.props.model && find(this.props.roles, { role: name.value })
+      !this.props.model &&
+      find(this.props.roles, { role: name.value })
     ) {
       this.setState({
         error: 'A role with this name already exists.',
@@ -128,7 +119,7 @@ export default class AddRoleModal extends Component {
         name.value,
         desc.value,
         this.state.perms,
-        this.state.groups,
+        this.state.groups
       );
     }
   };
@@ -139,43 +130,35 @@ export default class AddRoleModal extends Component {
     this.handleSaveClick();
   };
 
-  renderPerms: Function = (): ?Array<React.Element<DropItem>> => (
-    this.props.permsModel ? this.props.permsModel.map(p => (
-      <DropItem
-        key={p.name}
-        title={p.name}
-      />
-    )) : null
-  );
+  renderPerms: Function = (): ?Array<React.Element<DropItem>> =>
+    this.props.permsModel
+      ? this.props.permsModel.map(p => <DropItem key={p.name} title={p.name} />)
+      : null;
 
-  renderGroups: Function = (): ?Array<React.Element<DropItem>> => (
-    this.props.groupsModel ? this.props.groupsModel.map(g => (
-      <DropItem
-        key={g.name}
-        title={g.name}
-      />
-    )) : null
-  );
+  renderGroups: Function = (): ?Array<React.Element<DropItem>> =>
+    this.props.groupsModel
+      ? this.props.groupsModel.map(g => (
+        <DropItem key={g.name} title={g.name} />
+      ))
+      : null;
 
-  render() {
+  render () {
     const { model, onClose, usersModel } = this.props;
 
     return (
-      <form
-        className="form-horizontal"
-        onSubmit={this.handleFormSubmit}
-      >
+      <form className="form-horizontal" onSubmit={this.handleFormSubmit}>
         <Modal hasFooter>
-          <Modal.Header
-            titleId="addUserModal"
-            onClose={onClose}
-          >{ this.props.title }</Modal.Header>
+          <Modal.Header titleId="addUserModal" onClose={onClose}>
+            {this.props.title}
+          </Modal.Header>
           <Modal.Body>
-            { this.state.error && (
-              <Alert bsStyle="danger">{ this.state.error }</Alert>
+            {this.state.error && (
+              <Alert bsStyle="danger">{this.state.error}</Alert>
             )}
             <div className="form-group">
-              <label htmlFor="name" className="col-sm-4 control-label">Role name *</label>
+              <label htmlFor="name" className="col-sm-4 control-label">
+                Role name *
+              </label>
               <div className="col-sm-6">
                 <input
                   readOnly={model}
@@ -188,7 +171,9 @@ export default class AddRoleModal extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="desc" className="col-sm-4 control-label">Description *</label>
+              <label htmlFor="desc" className="col-sm-4 control-label">
+                Description *
+              </label>
               <div className="col-sm-6">
                 <textarea
                   ref="desc"
@@ -199,51 +184,48 @@ export default class AddRoleModal extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label
-                htmlFor="perms"
-                className="col-sm-4 control-label"
-              > Permissions </label>
+              <label htmlFor="perms" className="col-sm-4 control-label">
+                {' '}
+                Permissions{' '}
+              </label>
               <div className="col-sm-6">
                 <Dropdown
                   id="perms"
                   multi
                   onSelect={this.handlePermsSelect}
-                  selected={model ? model.permissions : null}
+                  selected={model ? this.state.permissions : null}
                 >
                   <DropControl> Select permissions </DropControl>
-                  { this.renderPerms() }
+                  {this.renderPerms()}
                 </Dropdown>
               </div>
             </div>
             <div className="form-group">
-              <label
-                htmlFor="groups"
-                className="col-sm-4 control-label"
-              > Groups </label>
+              <label htmlFor="groups" className="col-sm-4 control-label">
+                {' '}
+                Groups{' '}
+              </label>
               <div className="col-sm-6">
                 <Dropdown
                   id="groups"
                   multi
                   onSelect={this.handleGroupsSelect}
-                  selected={model ? model.groups : null}
+                  selected={model ? this.state.groups : null}
                 >
                   <DropControl> Select groups </DropControl>
-                  { this.renderGroups() }
+                  {this.renderGroups()}
                 </Dropdown>
               </div>
             </div>
-            { usersModel && usersModel.length > 0 && (
+            {usersModel && usersModel.length > 0 && (
               <div className="form-group">
-                <label
-                  className="col-sm-4 control-label"
-                > Users with role </label>
+                <label className="col-sm-4 control-label">
+                  {' '}
+                  Users with role{' '}
+                </label>
                 <div className="col-sm-6">
-                  { usersModel.map((u, index) => (
-                    <Badge
-                      key={index}
-                      val={u.username}
-                      label="info"
-                    />
+                  {usersModel.map((u, index) => (
+                    <Badge key={index} val={u.username} label="info" />
                   ))}
                 </div>
               </div>
@@ -258,12 +240,7 @@ export default class AddRoleModal extends Component {
                 action={onClose}
                 type="button"
               />
-              <Button
-                label="Save"
-                big
-                btnStyle="success"
-                type="submit"
-              />
+              <Button label="Save" big btnStyle="success" type="submit" />
             </Controls>
           </Modal.Footer>
         </Modal>

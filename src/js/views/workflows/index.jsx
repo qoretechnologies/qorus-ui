@@ -46,6 +46,7 @@ import Search from '../../containers/search';
 import queryControl from '../../hocomponents/queryControl';
 import Headbar from '../../components/Headbar';
 import Flex from '../../components/Flex';
+import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 
 const filterSearch: Function = (search: string): Function => (
   workflows: Array<Object>
@@ -326,6 +327,7 @@ const Workflows: Function = ({
 );
 
 export default compose(
+  hasInterfaceAccess('workflows', 'Workflows'),
   connect(
     viewSelector,
     {

@@ -20,6 +20,7 @@ import Headbar from '../../components/Headbar';
 import Flex from '../../components/Flex';
 import withTabs from '../../hocomponents/withTabs';
 import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
+import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 
 const MapperInfo = ({
   mapper,
@@ -98,6 +99,7 @@ const mapperInfoSelector = createSelector(
 );
 
 export default compose(
+  hasInterfaceAccess('mappers', 'Mappers'),
   pure,
   connect(
     mapperInfoSelector,
@@ -106,7 +108,7 @@ export default compose(
     }
   ),
   lifecycle({
-    componentWillMount() {
+    componentWillMount () {
       const { load, mapperId } = this.props;
 
       load({}, mapperId);

@@ -115,8 +115,6 @@ const ConfigItemsTable: Function = ({
           {props => (
             <Tbody {...props}>
               {collection.map((item: Object, index: number) => {
-                console.log(item);
-
                 const value =
                   belongsTo === 'Global Config'
                     ? item.value

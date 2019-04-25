@@ -68,11 +68,15 @@ const connectionChange = {
       let newData = updatedData;
 
       events.forEach((dt: Object) => {
-        newData = updateItemWithName(
-          dt.name,
-          { up: dt.up, enabled: dt.enabled, _updated: true },
-          newData
-        );
+        const exists = state.data.find(conn => conn.name === dt.name);
+
+        if (exists) {
+          newData = updateItemWithName(
+            dt.name,
+            { up: dt.up, enabled: dt.enabled, _updated: true },
+            newData
+          );
+        }
       });
 
       return { ...state, ...{ data: newData } };
@@ -268,7 +272,14 @@ const updateConnection = {
     let newData = [...state.data];
 
     models.forEach(dt => {
-      newData = updateItemWithName(dt.name, { ...dt, _updated: true }, newData);
+      const exists = state.data.find(conn => conn.name === dt.name);
+      if (exists) {
+        newData = updateItemWithName(
+          dt.name,
+          { ...dt, _updated: true },
+          newData
+        );
+      }
     });
 
     return { ...state, ...{ data: newData } };
