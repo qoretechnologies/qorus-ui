@@ -94,9 +94,30 @@ const fetchLoggerAction: Function = (intfc: string): Function =>
         };
       }
 
-      return { empty: true };
+      return { id, empty: true };
     }
   );
+
+const fetchDefaultLoggerAction: Function = (intfc: string): Function =>
+  createAction(`${intfc.toUpperCase()}_FETCHDEFAULTLOGGER`, async intfc => {
+    const logger = await get(
+      `${settings.REST_BASE_URL}/${intfc}?action=defaultLogger`
+    );
+
+    if (logger !== 'success') {
+      const appenders: Object = await get(
+        `${settings.REST_BASE_URL}/${intfc}?action=defaultLoggerAppenders`
+      );
+
+      return {
+        logger,
+        appenders: appenders === 'success' ? [] : appenders,
+        intfc,
+      };
+    }
+
+    return { intfc, empty: true };
+  });
 
 const addUpdateLoggerAction: Function = (intfc: string): Function =>
   createAction(`${intfc.toUpperCase()}_ADDUPDATELOGGER`, events => ({
@@ -132,4 +153,5 @@ export {
   addAppenderAction,
   deleteAppenderAction,
   updateConfigItemWsCommon,
+  fetchDefaultLoggerAction,
 };

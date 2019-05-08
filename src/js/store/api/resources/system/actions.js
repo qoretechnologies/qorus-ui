@@ -10,6 +10,7 @@ import {
   addAppenderAction,
   deleteAppenderAction,
   updateConfigItemWsCommon,
+  fetchDefaultLoggerAction,
 } from '../../common/actions';
 
 const init: Function = createAction('SYSTEM_INIT');
@@ -98,6 +99,7 @@ const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
 // LOGGER
 const fetchLogger = fetchLoggerAction('system');
+const fetchDefaultLogger = fetchDefaultLoggerAction('system');
 const addUpdateLogger = addUpdateLoggerAction('system');
 const deleteLogger = deleteLoggerAction('system');
 const addAppender = addAppenderAction('system');
@@ -120,6 +122,7 @@ export {
   fetchGlobalConfig,
   updateConfigItemWs,
   fetchLogger,
+  fetchDefaultLogger,
   addUpdateLogger,
   deleteLogger,
   addAppender,

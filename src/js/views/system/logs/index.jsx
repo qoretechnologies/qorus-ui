@@ -9,6 +9,11 @@ import Headbar from '../../../components/Headbar';
 import titleManager from '../../../hocomponents/TitleManager';
 import withTabs from '../../../hocomponents/withTabs';
 import Flex from '../../../components/Flex';
+import lifecycle from 'recompose/lifecycle';
+import showIfPassed from '../../../hocomponents/show-if-passed';
+import actions from '../../../store/api/actions';
+import { connect } from 'react-redux';
+import Loader from '../../../components/loader';
 
 type Props = {
   tabQuery: string,
@@ -46,6 +51,20 @@ const Log: Function = ({ tabQuery }: Props) => (
 );
 
 export default compose(
+  connect(
+    state => ({
+      defaultLogger: state.api.system.data.defaultLoggers?.system,
+    }),
+    {
+      fetchDefaultLogger: actions.system.fetchDefaultLogger,
+    }
+  ),
+  lifecycle({
+    componentWillMount () {
+      this.props.fetchDefaultLogger('system');
+    },
+  }),
+  showIfPassed(({ defaultLogger }) => defaultLogger, <Loader />),
   withTabs('system'),
   titleManager('Logs')
 )(Log);

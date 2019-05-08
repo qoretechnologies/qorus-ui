@@ -969,26 +969,50 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'LOGGER_CREATED':
       case 'LOGGER_UPDATED': {
-        const isLoaded: boolean = info.interfaceid
-          ? isInterfaceLoaded(info.interface, info.interfaceid)
-          : true;
-        const intfc: string = getLoggerIntfcType(info.interface);
+        const newInfo: Object = { ...info };
+        const reversedLevels: Object = invert(
+          state.api.system.data.loggerParams.logger_levels
+        );
 
-        if (isLoaded) {
-          const newInfo: Object = { ...info };
-          const reversedLevels: Object = invert(
-            state.api.system.data.loggerParams.logger_levels
-          );
+        newInfo.params.level = { [reversedLevels[info.params.level]]: true };
+        newInfo.isNew = eventstr === 'LOGGER_CREATED';
 
-          newInfo.params.level = { [reversedLevels[info.params.level]]: true };
-          newInfo.isNew = eventstr === 'LOGGER_CREATED';
-
+        // We are updating / adding default logger
+        if (info.interface_table_name) {
+          console.log('UPDATING DEFULT LOGGER FOR', info.interface_table_name);
           pipeline(
             'LOGGER_ACTIONS',
-            interfaceActions[intfc].addUpdateLogger,
+            system.addUpdateDefaultLogger,
             newInfo,
             dispatch
           );
+        } else {
+          // Check if the loader we are updating is loaded
+          const intfc = getLoggerIntfcType(info.interface);
+          const intfcId =
+            intfc === 'system' ? info.interface : info.interfaceid;
+          let isLoaded;
+
+          if (intfc === 'system') {
+            isLoaded =
+              state.api.system.sync &&
+              state.api.system.logs.find((item: Object) => item.id === intfcId);
+          } else {
+            isLoaded = info.interfaceid
+              ? isInterfaceLoaded(info.interface, info.interfaceid)
+              : true;
+          }
+
+          console.log('UPDATING LOGGER FOR', intfcId, isLoaded);
+
+          if (isLoaded) {
+            pipeline(
+              'LOGGER_ACTIONS',
+              interfaceActions[intfc].addUpdateLogger,
+              newInfo,
+              dispatch
+            );
+          }
         }
         break;
       }

@@ -7,6 +7,7 @@ import {
   addAppenderReducer,
   deleteAppenderReducer,
   updateConfigItemWsCommon,
+  defaultLoggerReducer,
 } from '../../common/reducers';
 
 const addProcess = {
@@ -299,6 +300,7 @@ const updateConfigItemWs = updateConfigItemWsCommon;
 
 // LOGGER
 const fetchLogger = loggerReducer;
+const fetchDefaultLogger = defaultLoggerReducer;
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
@@ -321,6 +323,7 @@ export {
   fetchGlobalConfig as FETCHGLOBALCONFIG,
   updateConfigItemWs as UPDATECONFIGITEMWS,
   fetchLogger as FETCHLOGGER,
+  fetchDefaultLogger as FETCHDEFAULTLOGGER,
   addUpdateLogger as ADDUPDATELOGGER,
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
