@@ -101,7 +101,16 @@ const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 const fetchLogger = fetchLoggerAction('system');
 const fetchDefaultLogger = fetchDefaultLoggerAction('system');
 const addUpdateLogger = addUpdateLoggerAction('system');
+const addUpdateDefaultLogger = createAction(
+  'SYSTEM_ADDUPDATEDEFAULTLOGGER',
+  (events: Array<Object>): Object => ({ events })
+);
+// Deleting loggers
 const deleteLogger = deleteLoggerAction('system');
+const deleteDefaultLogger = createAction(
+  'SYSTEM_DELETEDEFAULTLOGGER',
+  (events: Array<Object>): Object => ({ events })
+);
 const addAppender = addAppenderAction('system');
 const deleteAppender = deleteAppenderAction('system');
 
@@ -124,7 +133,9 @@ export {
   fetchLogger,
   fetchDefaultLogger,
   addUpdateLogger,
+  addUpdateDefaultLogger,
   deleteLogger,
   addAppender,
   deleteAppender,
+  deleteDefaultLogger,
 };

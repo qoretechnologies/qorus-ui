@@ -9,6 +9,7 @@ import {
   updateConfigItemWsCommon,
   defaultLoggerReducer,
 } from '../../common/reducers';
+import isArray from 'lodash/isArray';
 
 const addProcess = {
   next (
@@ -305,6 +306,65 @@ const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
 const deleteAppender = deleteAppenderReducer;
+const addUpdateDefaultLogger = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let newData = { ...state.data };
+      // Check if the defaultLoggers hash exists
+      if (!newData.defaultLoggers) {
+        newData.defaultLoggers = {};
+      }
+      // Go through the events
+      events.forEach(dt => {
+        // New default logger was added
+        if (dt.isNew) {
+          // Add the default logger
+          newData.defaultLoggers[dt.interface] = {
+            loggerData: {
+              logger: dt.params,
+              appenders: [],
+            },
+          };
+        } else {
+          // Get the current items loggerData
+          // so we can get the appenders
+          newData.defaultLoggers[dt.interface].loggerData.logger = dt.params;
+        }
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
+// Deleting DEFAULT logger
+const deleteDefaultLogger = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let newData = { ...state.data };
+      // Go through the events
+      events.forEach(dt => {
+        newData.defaultLoggers[dt.interface].loggerData.logger = 'empty';
+      });
+      // Update interface
+      return { ...state, ...{ data: newData } };
+    }
+    // Return default state
+    return state;
+  },
+};
 
 export {
   addProcess as ADDPROCESS,
@@ -328,4 +388,6 @@ export {
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
   deleteAppender as DELETEAPPENDER,
+  addUpdateDefaultLogger as ADDUPDATEDEFAULTLOGGER,
+  deleteDefaultLogger as DELETEDEFAULTLOGGER,
 };

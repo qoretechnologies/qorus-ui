@@ -218,14 +218,18 @@ const LoggerContainer: Function = ({
 
 export default compose(
   connect((state, ownProps) => {
+    console.log(ownProps);
     let { loggerData }: Object = state.api[ownProps.resource][
       ownProps.resource === 'system' ? 'logs' : 'data'
     ].find((res: Object): boolean => res.id === ownProps.id);
+
+    console.log(loggerData);
 
     return {
       ...loggerData,
     };
   }),
+  showIfPassed(({ logger }) => logger, <Loader />),
   withDispatch(),
   withState('isLoggerPopoverOpen', 'toggleLoggerPopover', false),
   withState('isAppenderPopoverOpen', 'toggleAppenderPopover', false),

@@ -152,11 +152,17 @@ const loggerReducer = {
     }
   ) {
     let data;
+    let editedData;
     const isSystem = !isArray(state.data);
 
-    const flattenedAppenders =
-      logger &&
-      appenders.reduce(
+    // Check if this interface is using a default logger
+    // or any logger
+    if (empty || logger.isDefault) {
+      editedData = {
+        isUsingDefaultLogger: true,
+      };
+    } else {
+      const flattenedAppenders = appenders.reduce(
         (cur: Array<Object>, appender: Object) => [
           ...cur,
           formatAppender(appender),
@@ -164,19 +170,24 @@ const loggerReducer = {
         []
       );
 
-    data = updateItemWithId(
-      id,
-      {
-        isUsingDefaultLogger: logger.interface_table_name,
+      editedData = {
+        isUsingDefaultLogger: false,
         loggerData: {
-          logger: empty ? 'empty' : logger.params,
+          logger: logger.params,
           appenders: flattenedAppenders,
         },
-      },
+      };
+    }
+
+    data = updateItemWithId(
+      id,
+      editedData,
       isSystem ? [...state.logs] : [...state.data]
     );
 
     if (isSystem) {
+      console.log(data);
+
       return { ...state, ...{ logs: data } };
     }
 
@@ -192,8 +203,20 @@ const defaultLoggerReducer = {
     }
   ) {
     let data = { ...state.data };
+    let editedData;
 
-    if (logger) {
+    if (empty) {
+      editedData = {
+        defaultLoggers: {
+          ...state.data.defaultLoggers,
+          [intfc]: {
+            loggerData: {
+              logger: 'empty',
+            },
+          },
+        },
+      };
+    } else {
       const flattenedAppenders = appenders.reduce(
         (cur: Array<Object>, appender: Object) => [
           ...cur,
@@ -202,28 +225,23 @@ const defaultLoggerReducer = {
         []
       );
 
-      data = {
-        ...state.data,
+      editedData = {
         defaultLoggers: {
-          [intfc]: {
-            logger: logger.params,
-            appenders: flattenedAppenders,
-            isDefault: true,
-          },
           ...state.data.defaultLoggers,
-        },
-      };
-    } else {
-      data = {
-        ...state.data,
-        defaultLoggers: {
           [intfc]: {
-            logger: 'empty',
+            loggerData: {
+              logger: logger.params,
+              appenders: flattenedAppenders,
+            },
           },
-          ...state.data.defaultLoggers,
         },
       };
     }
+
+    data = {
+      ...state.data,
+      ...editedData,
+    };
 
     return { ...state, ...{ data } };
   },
@@ -265,9 +283,7 @@ const addUpdateLoggerReducer = {
           };
         } else {
           // Get the current items loggerData
-          const { loggerData } = newData.find(
-            item => item.id === dt.interfaceid
-          );
+          const { loggerData } = newData.find(item => item.id === dt.id);
 
           itemUpdate = {
             isUsingDefaultLogger: false,
@@ -279,10 +295,13 @@ const addUpdateLoggerReducer = {
           };
         }
 
-        newData = updateItemWithId(dt.interfaceid, itemUpdate, newData);
+        console.log(itemUpdate);
+
+        newData = updateItemWithId(dt.id, itemUpdate, newData);
       });
 
       if (isSystem) {
+        console.log({ ...state, ...{ logs: newData } });
         return { ...state, ...{ logs: newData } };
       }
 
@@ -293,6 +312,7 @@ const addUpdateLoggerReducer = {
   },
 };
 
+// Deleting CONCRETE logger
 const deleteLoggerReducer = {
   next (
     state,
@@ -301,45 +321,35 @@ const deleteLoggerReducer = {
     }
   ) {
     if (state && state.sync) {
-      const isNotSystem = isArray(state.data);
+      // If this is under system
+      const isSystem = !isArray(state.data);
       let newData;
-
-      if (isNotSystem) {
+      // If we are updating system or interface
+      // logger
+      if (!isSystem) {
         newData = [...state.data];
         newData = setUpdatedToNull(newData);
       } else {
-        newData = { ...state.data };
+        newData = [...state.logs];
       }
-
+      // Loop through the events
       events.forEach(dt => {
-        //* Default logger was deleted
-        if (!isNotSystem) {
-          newData = {
-            ...newData,
-            loggerData: {
-              [dt.interface]: {
-                ...dt.current_logger.params,
-                isDefault: dt.current_logger.interface_table_name === 'system',
-                appenders: dt.appenders,
-              },
-            },
-          };
-        } else {
-          newData = updateItemWithId(
-            dt.interfaceid,
-            {
-              loggerData: {
-                ...dt.current_logger.params,
-                isDefault: !!dt.current_logger.interface_table_name,
-              },
-              appenders: dt.appenders,
-              _updated: true,
-            },
-            newData
-          );
-        }
+        newData = updateItemWithId(
+          dt.id,
+          {
+            // This interface is automatically using default logger
+            // We don't care if there isn't one
+            isUsingDefaultLogger: true,
+            loggerData: null,
+          },
+          newData
+        );
       });
-
+      // Update system
+      if (isSystem) {
+        return { ...state, ...{ logs: newData } };
+      }
+      // Update interface
       return { ...state, ...{ data: newData } };
     }
 

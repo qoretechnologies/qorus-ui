@@ -216,9 +216,9 @@ export function createResourceReducers (
         loading: false,
         logs: [
           { id: 'http' },
-          { id: 'system' },
+          { id: 'qorus-core' },
           { id: 'audit' },
-          { id: 'mon' },
+          { id: 'monitoring' },
           { id: 'alert' },
         ],
       };

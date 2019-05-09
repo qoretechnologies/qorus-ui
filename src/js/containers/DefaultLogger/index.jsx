@@ -47,9 +47,11 @@ const DefaultLoggerContainer: Function = ({
   logger,
   appenders,
   isLoggerPopoverOpen,
+  isDefaultLoggerPopoverOpen,
   isLoggerEditPopoverOpen,
   isAppenderPopoverOpen,
   toggleLoggerPopover,
+  toggleDefaultLoggerPopover,
   toggleLoggerEditPopover,
   toggleAppenderPopover,
   handleDeleteAppenderClick,
@@ -59,12 +61,33 @@ const DefaultLoggerContainer: Function = ({
   handleLoggerDuplicateClick,
 }: LoggerContainerProps): React.Element<any> => (
   <Flex>
-    <Alert bsStyle="warning">This interface is using default logger.</Alert>
-    <PaneItem
-      title="Logger"
-      label={
-        <React.Fragment>
+    {logger === 'empty' ? (
+      <PaneItem
+        title="Logger"
+        label={
           <React.Fragment>
+            <Popover
+              content={
+                <NewLoggerPopover
+                  resource={resource}
+                  onCancel={() => toggleDefaultLoggerPopover(() => false)}
+                />
+              }
+              position={Position.LEFT_TOP}
+              isOpen={isDefaultLoggerPopoverOpen}
+            >
+              <ButtonGroup>
+                <Button
+                  text="Add new default logger"
+                  icon="add"
+                  stopPropagation
+                  onClick={() => {
+                    toggleLoggerPopover(() => false);
+                    toggleDefaultLoggerPopover(() => true);
+                  }}
+                />
+              </ButtonGroup>
+            </Popover>
             <Popover
               content={
                 <NewLoggerPopover
@@ -83,165 +106,205 @@ const DefaultLoggerContainer: Function = ({
                   stopPropagation
                   onClick={() => {
                     toggleLoggerPopover(() => true);
-                    toggleLoggerEditPopover(() => false);
+                    toggleDefaultLoggerPopover(() => false);
                   }}
                 />
               </ButtonGroup>
             </Popover>
-            <ButtonGroup>
-              <Button
-                text="Clone logger"
-                icon="duplicate"
-                stopPropagation
-                onClick={handleLoggerDuplicateClick}
-              />
-            </ButtonGroup>
           </React.Fragment>
-          <Popover
-            content={
-              <NewLoggerPopover
-                resource={resource}
-                id={id}
-                data={logger}
-                onCancel={() => toggleLoggerEditPopover(() => false)}
-              />
-            }
-            position={Position.LEFT_TOP}
-            isOpen={isLoggerEditPopoverOpen}
-          >
-            <ButtonGroup>
-              <Button
-                text="Edit logger"
-                icon="edit"
-                stopPropagation
-                onClick={() => {
-                  toggleLoggerEditPopover(() => true);
-                  toggleLoggerPopover(() => false);
-                }}
-              />
-            </ButtonGroup>
-          </Popover>
-          <ButtonGroup>
-            <Button
-              text="Delete logger"
-              btnStyle="danger"
-              icon="remove"
-              onClick={handleLoggerDeleteClick}
-            />
-          </ButtonGroup>
-        </React.Fragment>
-      }
-    >
-      <Table fixed striped>
-        <Thead>
-          <FixedRow>
-            <NameColumnHeader />
-            <Th icon="info-sign">Level</Th>
-            <Th icon="info-sign">Additivity</Th>
-          </FixedRow>
-        </Thead>
-        <Tbody>
-          <Tr first>
-            <NameColumn name={logger.name} />
-            <Td>{Object.keys(logger.level)[0]}</Td>
-            <Td>
-              <ContentByType content={logger.additivity} />
-            </Td>
-          </Tr>
-        </Tbody>
-      </Table>
-    </PaneItem>
-    <PaneItem
-      title="Appenders"
-      label={
-        <Popover
-          content={
-            <NewAppenderPopover
-              resource={resource}
-              id={id}
-              onCancel={() => toggleAppenderPopover(() => false)}
-            />
+        }
+      >
+        <Alert bsStyle="danger"> Nope </Alert>
+      </PaneItem>
+    ) : (
+      <React.Fragment>
+        <Alert bsStyle="warning">This interface is using default logger.</Alert>
+        <PaneItem
+          title="Logger"
+          label={
+            <React.Fragment>
+              <React.Fragment>
+                <Popover
+                  content={
+                    <NewLoggerPopover
+                      resource={resource}
+                      id={id}
+                      onCancel={() => toggleLoggerPopover(() => false)}
+                    />
+                  }
+                  position={Position.LEFT_TOP}
+                  isOpen={isLoggerPopoverOpen}
+                >
+                  <ButtonGroup>
+                    <Button
+                      text="Add new logger"
+                      icon="add"
+                      stopPropagation
+                      onClick={() => {
+                        toggleLoggerPopover(() => true);
+                        toggleLoggerEditPopover(() => false);
+                      }}
+                    />
+                  </ButtonGroup>
+                </Popover>
+                <ButtonGroup>
+                  <Button
+                    text="Clone logger"
+                    icon="duplicate"
+                    stopPropagation
+                    onClick={handleLoggerDuplicateClick}
+                  />
+                </ButtonGroup>
+              </React.Fragment>
+              <Popover
+                content={
+                  <NewLoggerPopover
+                    resource={resource}
+                    id={id}
+                    data={logger}
+                    onCancel={() => toggleLoggerEditPopover(() => false)}
+                  />
+                }
+                position={Position.LEFT_TOP}
+                isOpen={isLoggerEditPopoverOpen}
+              >
+                <ButtonGroup>
+                  <Button
+                    text="Edit logger"
+                    icon="edit"
+                    stopPropagation
+                    onClick={() => {
+                      toggleLoggerEditPopover(() => true);
+                      toggleLoggerPopover(() => false);
+                    }}
+                  />
+                </ButtonGroup>
+              </Popover>
+              <ButtonGroup>
+                <Button
+                  text="Delete logger"
+                  btnStyle="danger"
+                  icon="remove"
+                  onClick={handleLoggerDeleteClick}
+                />
+              </ButtonGroup>
+            </React.Fragment>
           }
-          position={Position.LEFT_TOP}
-          isOpen={isAppenderPopoverOpen}
         >
-          <Button
-            text="Add appender"
-            icon="add"
-            stopPropagation
-            onClick={() => toggleAppenderPopover(() => true)}
-          />
-        </Popover>
-      }
-    >
-      <Table fixed condensed striped>
-        <Thead>
-          <FixedRow>
-            <NameColumnHeader />
-            <Th className="text" icon="info-sign">
-              Type
-            </Th>
-            <Th className="text" icon="info-sign">
-              Filename
-            </Th>
-            <Th className="text" icon="info-sign">
-              Encoding
-            </Th>
-            <Th className="text" icon="info-sign">
-              Layout Pattern
-            </Th>
-            <Th icon="refresh" title="Rotation count" />
-            <Th icon="remove" title="Remove appender" />
-          </FixedRow>
-        </Thead>
-        <DataOrEmptyTable condition={size(appenders) === 0} cols={7}>
-          {(props: Object) => (
-            <Tbody {...props}>
-              {appenders.map(
-                (appender: Object, index: number): any => (
-                  <Tr first={index === 0} key={appender.id}>
-                    <NameColumn name={appender.name} />
-                    <Td className="text">
-                      <ContentByType content={appender.type} />
-                    </Td>
-                    <Td className="text">
-                      <ContentByType content={appender.filename} />
-                    </Td>
-                    <Td className="text">
-                      <ContentByType content={appender.encoding} />
-                    </Td>
-                    <Td className="text">
-                      <ContentByType content={appender.layoutPattern} />
-                    </Td>
-                    <Td className="narrow">
-                      <ContentByType content={appender.rotationCount} />
-                    </Td>
-                    <Td className="tiny">
-                      <ButtonGroup>
-                        <Button
-                          title="Remove appender"
-                          btnStyle="danger"
-                          icon="remove"
-                          onClick={() => handleDeleteAppenderClick(appender.id)}
-                        />
-                      </ButtonGroup>
-                    </Td>
-                  </Tr>
-                )
-              )}
+          <Table fixed striped>
+            <Thead>
+              <FixedRow>
+                <NameColumnHeader />
+                <Th icon="info-sign">Level</Th>
+                <Th icon="info-sign">Additivity</Th>
+              </FixedRow>
+            </Thead>
+            <Tbody>
+              <Tr first>
+                <NameColumn name={logger.name} />
+                <Td>{Object.keys(logger.level)[0]}</Td>
+                <Td>
+                  <ContentByType content={logger.additivity} />
+                </Td>
+              </Tr>
             </Tbody>
-          )}
-        </DataOrEmptyTable>
-      </Table>
-    </PaneItem>
+          </Table>
+        </PaneItem>
+        <PaneItem
+          title="Appenders"
+          label={
+            <Popover
+              content={
+                <NewAppenderPopover
+                  resource={resource}
+                  id={id}
+                  onCancel={() => toggleAppenderPopover(() => false)}
+                />
+              }
+              position={Position.LEFT_TOP}
+              isOpen={isAppenderPopoverOpen}
+            >
+              <Button
+                text="Add appender"
+                icon="add"
+                stopPropagation
+                onClick={() => toggleAppenderPopover(() => true)}
+              />
+            </Popover>
+          }
+        >
+          <Table fixed condensed striped>
+            <Thead>
+              <FixedRow>
+                <NameColumnHeader />
+                <Th className="text" icon="info-sign">
+                  Type
+                </Th>
+                <Th className="text" icon="info-sign">
+                  Filename
+                </Th>
+                <Th className="text" icon="info-sign">
+                  Encoding
+                </Th>
+                <Th className="text" icon="info-sign">
+                  Layout Pattern
+                </Th>
+                <Th icon="refresh" title="Rotation count" />
+                <Th icon="remove" title="Remove appender" />
+              </FixedRow>
+            </Thead>
+            <DataOrEmptyTable condition={size(appenders) === 0} cols={7}>
+              {(props: Object) => (
+                <Tbody {...props}>
+                  {appenders.map(
+                    (appender: Object, index: number): any => (
+                      <Tr first={index === 0} key={appender.id}>
+                        <NameColumn name={appender.name} />
+                        <Td className="text">
+                          <ContentByType content={appender.type} />
+                        </Td>
+                        <Td className="text">
+                          <ContentByType content={appender.filename} />
+                        </Td>
+                        <Td className="text">
+                          <ContentByType content={appender.encoding} />
+                        </Td>
+                        <Td className="text">
+                          <ContentByType content={appender.layoutPattern} />
+                        </Td>
+                        <Td className="narrow">
+                          <ContentByType content={appender.rotationCount} />
+                        </Td>
+                        <Td className="tiny">
+                          <ButtonGroup>
+                            <Button
+                              title="Remove appender"
+                              btnStyle="danger"
+                              icon="remove"
+                              onClick={() =>
+                                handleDeleteAppenderClick(appender.id)
+                              }
+                            />
+                          </ButtonGroup>
+                        </Td>
+                      </Tr>
+                    )
+                  )}
+                </Tbody>
+              )}
+            </DataOrEmptyTable>
+          </Table>
+        </PaneItem>
+      </React.Fragment>
+    )}
   </Flex>
 );
 
 export default compose(
   connect((state, ownProps) => {
-    let { logger, appenders }: Object = state.api.system.data.defaultLoggers[
-      ownProps.resource
-    ];
+    let {
+      loggerData: { logger, appenders },
+    }: Object = state.api.system.data.defaultLoggers[ownProps.resource];
 
     return {
       logger,
@@ -250,6 +313,7 @@ export default compose(
   }),
   withDispatch(),
   withState('isLoggerPopoverOpen', 'toggleLoggerPopover', false),
+  withState('isDefaultLoggerPopoverOpen', 'toggleDefaultLoggerPopover', false),
   withState('isLoggerEditPopoverOpen', 'toggleLoggerEditPopover', false),
   withState('isAppenderPopoverOpen', 'toggleAppenderPopover', false),
   withHandlers({
@@ -311,6 +375,7 @@ export default compose(
     'logger',
     'appenders',
     'isLoggerPopoverOpen',
+    'isDefaultLoggerPopoverOpen',
     'isLoggerEditPopoverOpen',
     'isAppenderPopoverOpen',
   ])

@@ -18,45 +18,60 @@ const LoggerContainer: Function = ({
   isUsingDefaultLogger,
   ...rest
 }: LoggerContainerProps): React.Element<any> =>
-  isUsingDefaultLogger ? (
-    <DefaultLogger {...rest} />
+  !rest.loggerFetched ? (
+    <Loader />
   ) : (
-    <ConcreteLogger {...rest} />
+    <React.Fragment>
+      {isUsingDefaultLogger ? (
+        <DefaultLogger {...rest} />
+      ) : (
+        <ConcreteLogger {...rest} />
+      )}
+    </React.Fragment>
   );
 
 export default compose(
   connect((state, ownProps) => {
-    let { isUsingDefaultLogger, loggerData }: Object = state.api[
-      ownProps.resource
-    ][ownProps.resource === 'system' ? 'logs' : 'data'].find(
-      (res: Object): boolean => res.id === ownProps.id
-    );
+    let { isUsingDefaultLogger }: Object = state.api[ownProps.resource][
+      ownProps.resource === 'system' ? 'logs' : 'data'
+    ].find((res: Object): boolean => res.id === ownProps.id);
 
     console.log(isUsingDefaultLogger);
 
     return {
       isUsingDefaultLogger,
-      loggerData,
     };
   }),
   withDispatch(),
+  withState('loggerFetched', 'setLoggerFetched', false),
   lifecycle({
     async componentDidMount () {
-      const { id, resource, dispatchAction, loggerData } = this.props;
+      const {
+        id,
+        resource,
+        dispatchAction,
+        loggerFetched,
+        setLoggerFetched,
+      } = this.props;
 
-      if (!loggerData) {
-        dispatchAction(actions[resource].fetchLogger, id);
+      if (!loggerFetched) {
+        await dispatchAction(actions[resource].fetchLogger, id);
+        setLoggerFetched(() => true);
       }
     },
-    componentWillReceiveProps (nextProps: LoggerContainerProps) {
+    async componentWillReceiveProps (nextProps: LoggerContainerProps) {
       if (this.props.id !== nextProps.id) {
-        nextProps.dispatchAction(
+        nextProps.setLoggerFetched(() => false);
+      }
+
+      if (!nextProps.loggerFetched) {
+        await nextProps.dispatchAction(
           actions[nextProps.resource].fetchLogger,
           nextProps.id
         );
+        nextProps.setLoggerFetched(() => true);
       }
     },
   }),
-  showIfPassed(({ loggerData }) => loggerData, <Loader />),
-  onlyUpdateForKeys(['id', 'loggerData', 'isUsingDefaultLogger'])
+  onlyUpdateForKeys(['loggerFetched', 'isUsingDefaultLogger'])
 )(LoggerContainer);
