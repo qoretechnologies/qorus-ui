@@ -195,58 +195,6 @@ const loggerReducer = {
   },
 };
 
-const defaultLoggerReducer = {
-  next (
-    state,
-    {
-      payload: { logger, appenders, intfc, empty },
-    }
-  ) {
-    let data = { ...state.data };
-    let editedData;
-
-    if (empty) {
-      editedData = {
-        defaultLoggers: {
-          ...state.data.defaultLoggers,
-          [intfc]: {
-            loggerData: {
-              logger: 'empty',
-            },
-          },
-        },
-      };
-    } else {
-      const flattenedAppenders = appenders.reduce(
-        (cur: Array<Object>, appender: Object) => [
-          ...cur,
-          formatAppender(appender),
-        ],
-        []
-      );
-
-      editedData = {
-        defaultLoggers: {
-          ...state.data.defaultLoggers,
-          [intfc]: {
-            loggerData: {
-              logger: logger.params,
-              appenders: flattenedAppenders,
-            },
-          },
-        },
-      };
-    }
-
-    data = {
-      ...state.data,
-      ...editedData,
-    };
-
-    return { ...state, ...{ data } };
-  },
-};
-
 const addUpdateLoggerReducer = {
   next (
     state,
@@ -477,5 +425,4 @@ export {
   addAppenderReducer,
   deleteAppenderReducer,
   updateConfigItemWsCommon,
-  defaultLoggerReducer,
 };

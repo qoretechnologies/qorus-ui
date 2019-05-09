@@ -99,7 +99,24 @@ const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
 // LOGGER
 const fetchLogger = fetchLoggerAction('system');
-const fetchDefaultLogger = fetchDefaultLoggerAction('system');
+const fetchDefaultLogger = createAction(
+  `SYSTEM_FETCHDEFAULTLOGGER`,
+  async intfc => {
+    const [logger, appenders] = await Promise.all([
+      get(`${settings.REST_BASE_URL}/${intfc}?action=defaultLogger`),
+      get(`${settings.REST_BASE_URL}/${intfc}?action=defaultLoggerAppenders`),
+    ]);
+
+    console.log(logger, appenders);
+
+    return {
+      empty: logger === 'success',
+      logger,
+      appenders: appenders === 'success' ? [] : appenders,
+      intfc,
+    };
+  }
+);
 const addUpdateLogger = addUpdateLoggerAction('system');
 const addUpdateDefaultLogger = createAction(
   'SYSTEM_ADDUPDATEDEFAULTLOGGER',

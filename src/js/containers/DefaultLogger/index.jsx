@@ -41,6 +41,7 @@ type LoggerContainerProps = {
   handleLoggerDeleteClick: Function,
   handleDeleteAppenderClick: Function,
   handleLoggerDuplicateClick: Function,
+  name: string,
 };
 
 const DefaultLoggerContainer: Function = ({
@@ -59,11 +60,13 @@ const DefaultLoggerContainer: Function = ({
   id,
   handleLoggerDeleteClick,
   handleLoggerDuplicateClick,
+  name: name = 'Logger',
+  defaultOnly,
 }: LoggerContainerProps): React.Element<any> => (
-  <Flex>
+  <React.Fragment>
     {logger === 'empty' ? (
       <PaneItem
-        title="Logger"
+        title={name}
         label={
           <React.Fragment>
             <Popover
@@ -88,74 +91,81 @@ const DefaultLoggerContainer: Function = ({
                 />
               </ButtonGroup>
             </Popover>
-            <Popover
-              content={
-                <NewLoggerPopover
-                  resource={resource}
-                  id={id}
-                  onCancel={() => toggleLoggerPopover(() => false)}
-                />
-              }
-              position={Position.LEFT_TOP}
-              isOpen={isLoggerPopoverOpen}
-            >
-              <ButtonGroup>
-                <Button
-                  text="Add new logger"
-                  icon="add"
-                  stopPropagation
-                  onClick={() => {
-                    toggleLoggerPopover(() => true);
-                    toggleDefaultLoggerPopover(() => false);
-                  }}
-                />
-              </ButtonGroup>
-            </Popover>
+            {!defaultOnly && (
+              <Popover
+                content={
+                  <NewLoggerPopover
+                    resource={resource}
+                    id={id}
+                    onCancel={() => toggleLoggerPopover(() => false)}
+                  />
+                }
+                position={Position.LEFT_TOP}
+                isOpen={isLoggerPopoverOpen}
+              >
+                <ButtonGroup>
+                  <Button
+                    text="Add new logger"
+                    icon="add"
+                    stopPropagation
+                    onClick={() => {
+                      toggleLoggerPopover(() => true);
+                      toggleDefaultLoggerPopover(() => false);
+                    }}
+                  />
+                </ButtonGroup>
+              </Popover>
+            )}
           </React.Fragment>
         }
       >
-        <Alert bsStyle="danger"> Nope </Alert>
+        <Alert bsStyle="danger">
+          There is no logger defined for {resource}. Use the buttons above to
+          create a default logger{' '}
+          {!defaultOnly && 'or concrete loggers for this interface'}.
+        </Alert>
       </PaneItem>
     ) : (
       <React.Fragment>
-        <Alert bsStyle="warning">This interface is using default logger.</Alert>
         <PaneItem
-          title="Logger"
+          title={name}
           label={
             <React.Fragment>
-              <React.Fragment>
-                <Popover
-                  content={
-                    <NewLoggerPopover
-                      resource={resource}
-                      id={id}
-                      onCancel={() => toggleLoggerPopover(() => false)}
-                    />
-                  }
-                  position={Position.LEFT_TOP}
-                  isOpen={isLoggerPopoverOpen}
-                >
+              {!defaultOnly && (
+                <React.Fragment>
+                  <Popover
+                    content={
+                      <NewLoggerPopover
+                        resource={resource}
+                        id={id}
+                        onCancel={() => toggleLoggerPopover(() => false)}
+                      />
+                    }
+                    position={Position.LEFT_TOP}
+                    isOpen={isLoggerPopoverOpen}
+                  >
+                    <ButtonGroup>
+                      <Button
+                        text="Add new logger"
+                        icon="add"
+                        stopPropagation
+                        onClick={() => {
+                          toggleLoggerPopover(() => true);
+                          toggleLoggerEditPopover(() => false);
+                        }}
+                      />
+                    </ButtonGroup>
+                  </Popover>
                   <ButtonGroup>
                     <Button
-                      text="Add new logger"
-                      icon="add"
+                      text="Clone logger"
+                      icon="duplicate"
                       stopPropagation
-                      onClick={() => {
-                        toggleLoggerPopover(() => true);
-                        toggleLoggerEditPopover(() => false);
-                      }}
+                      onClick={handleLoggerDuplicateClick}
                     />
                   </ButtonGroup>
-                </Popover>
-                <ButtonGroup>
-                  <Button
-                    text="Clone logger"
-                    icon="duplicate"
-                    stopPropagation
-                    onClick={handleLoggerDuplicateClick}
-                  />
-                </ButtonGroup>
-              </React.Fragment>
+                </React.Fragment>
+              )}
               <Popover
                 content={
                   <NewLoggerPopover
@@ -191,6 +201,11 @@ const DefaultLoggerContainer: Function = ({
             </React.Fragment>
           }
         >
+          {!defaultOnly && (
+            <Alert bsStyle="warning">
+              This interface is using default logger.
+            </Alert>
+          )}
           <Table fixed striped>
             <Thead>
               <FixedRow>
@@ -211,7 +226,7 @@ const DefaultLoggerContainer: Function = ({
           </Table>
         </PaneItem>
         <PaneItem
-          title="Appenders"
+          title={`${name} Appenders`}
           label={
             <Popover
               content={
@@ -297,7 +312,7 @@ const DefaultLoggerContainer: Function = ({
         </PaneItem>
       </React.Fragment>
     )}
-  </Flex>
+  </React.Fragment>
 );
 
 export default compose(

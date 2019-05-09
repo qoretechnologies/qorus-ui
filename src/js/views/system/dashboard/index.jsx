@@ -75,8 +75,6 @@ export default class Dashboard extends Component {
   };
 
   componentWillMount () {
-    this.props.dispatch(actions.system.fetch());
-    this.props.dispatch(actions.health.fetch());
     this.props.dispatch(actions.system.init());
   }
 
