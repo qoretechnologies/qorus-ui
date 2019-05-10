@@ -107,8 +107,6 @@ const fetchDefaultLogger = createAction(
       get(`${settings.REST_BASE_URL}/${intfc}?action=defaultLoggerAppenders`),
     ]);
 
-    console.log(logger, appenders);
-
     return {
       empty: logger === 'success',
       logger,
@@ -129,7 +127,15 @@ const deleteDefaultLogger = createAction(
   (events: Array<Object>): Object => ({ events })
 );
 const addAppender = addAppenderAction('system');
+const addDefaultAppender = createAction(
+  'SYSTEM_ADDDEFAULTAPPENDER',
+  (events: Array<Object>): Object => ({ events })
+);
 const deleteAppender = deleteAppenderAction('system');
+const deleteDefaultAppender = createAction(
+  'SYSTEM_DELETEDEFAULTAPPENDER',
+  (events: Array<Object>): Object => ({ events })
+);
 
 export {
   addProcess,
@@ -153,6 +159,8 @@ export {
   addUpdateDefaultLogger,
   deleteLogger,
   addAppender,
+  addDefaultAppender,
   deleteAppender,
+  deleteDefaultAppender,
   deleteDefaultLogger,
 };

@@ -186,8 +186,6 @@ const loggerReducer = {
     );
 
     if (isSystem) {
-      console.log(data);
-
       return { ...state, ...{ logs: data } };
     }
 
@@ -243,13 +241,10 @@ const addUpdateLoggerReducer = {
           };
         }
 
-        console.log(itemUpdate);
-
         newData = updateItemWithId(dt.id, itemUpdate, newData);
       });
 
       if (isSystem) {
-        console.log({ ...state, ...{ logs: newData } });
         return { ...state, ...{ logs: newData } };
       }
 
@@ -313,44 +308,30 @@ const addAppenderReducer = {
     }
   ) {
     if (state && state.sync) {
-      const isNotSystem = isArray(state.data);
+      const isSystem = !isArray(state.data);
       let newData;
 
-      if (isNotSystem) {
+      if (!isSystem) {
         newData = [...state.data];
         newData = setUpdatedToNull(newData);
       } else {
-        newData = { ...state.data };
+        newData = [...state.logs];
       }
-
+      // Go through the events
       events.forEach(dt => {
-        let intfc;
-
-        if (dt.interfaceid) {
-          intfc = newData.find((datum: Object) => datum.id === dt.interfaceid);
-        } else {
-          intfc = newData;
-        }
-
-        let appenders: Array<Object> = dt.interfaceid
-          ? intfc?.appenders || []
-          : newData.loggerData?.[dt.interface]?.appenders || [];
-        appenders = [...appenders, formatAppender(dt)];
-
-        if (dt.interfaceid) {
-          newData = updateItemWithId(
-            dt.interfaceid,
-            { appenders, _updated: true },
-            newData
-          );
-        } else {
-          let loggerData = newData.loggerData;
-
-          loggerData[dt.interface].appenders = appenders;
-
-          newData = { ...newData, loggerData };
-        }
+        // Get the interface loggerData
+        const { loggerData } = newData.find(
+          (datum: Object) => datum.id === dt.id
+        );
+        // Add the new appender to the loggerData
+        loggerData.appenders.push(formatAppender(dt));
+        // Update the data
+        newData = updateItemWithId(dt.id, { loggerData }, newData);
       });
+
+      if (isSystem) {
+        return { ...state, ...{ logs: newData } };
+      }
 
       return { ...state, ...{ data: newData } };
     }
@@ -367,46 +348,32 @@ const deleteAppenderReducer = {
     }
   ) {
     if (state && state.sync) {
-      const isNotSystem = isArray(state.data);
+      const isSystem = !isArray(state.data);
       let newData;
 
-      if (isNotSystem) {
+      if (!isSystem) {
         newData = [...state.data];
         newData = setUpdatedToNull(newData);
       } else {
-        newData = { ...state.data };
+        newData = [...state.logs];
       }
 
       events.forEach(dt => {
-        let intfc;
-
-        if (dt.interfaceid) {
-          intfc = newData.find((datum: Object) => datum.id === dt.interfaceid);
-        } else {
-          intfc = newData;
-        }
-
-        const appendersArr: string = dt.interfaceid
-          ? intfc.appenders
-          : intfc.loggerData[dt.interface].appenders;
-        const appenders: Array<Object> = appendersArr.filter(
-          (appender: Object) => appender.id !== dt.logger_appenderid
+        // Get the interface loggerData
+        const { loggerData } = newData.find(
+          (datum: Object) => datum.id === dt.id
         );
-
-        if (dt.interfaceid) {
-          newData = updateItemWithId(
-            dt.interfaceid,
-            { appenders, _updated: true },
-            newData
-          );
-        } else {
-          let loggerData = newData.loggerData;
-
-          loggerData[dt.interface].appenders = appenders;
-
-          newData = { ...newData, loggerData };
-        }
+        // Remove the appender
+        loggerData.appenders = loggerData.appenders.filter(
+          appender => appender.id !== dt.logger_appenderid
+        );
+        // Update the data
+        newData = updateItemWithId(dt.interfaceid, { loggerData }, newData);
       });
+
+      if (isSystem) {
+        return { ...state, ...{ logs: newData } };
+      }
 
       return { ...state, ...{ data: newData } };
     }

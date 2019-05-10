@@ -248,9 +248,7 @@ export default compose(
       } else {
         changeAdding(() => true);
 
-        const appendersPath: string = id
-          ? `${id}/logger/appenders`
-          : 'logger/appenders';
+        const appendersPath: string = '?action=defaultLoggerAppenders';
         const fetchRes: Object = await fetchWithNotifications(
           async () =>
             post(`${settings.REST_BASE_URL}/${resource}/${appendersPath}`, {

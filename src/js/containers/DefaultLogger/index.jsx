@@ -268,7 +268,7 @@ const DefaultLoggerContainer: Function = ({
                 <Th icon="remove" title="Remove appender" />
               </FixedRow>
             </Thead>
-            <DataOrEmptyTable condition={size(appenders) === 0} cols={7}>
+            <DataOrEmptyTable condition={size(appenders) === 0} cols={7} small>
               {(props: Object) => (
                 <Tbody {...props}>
                   {appenders.map(

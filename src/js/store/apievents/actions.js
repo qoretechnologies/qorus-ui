@@ -1045,47 +1045,68 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'APPENDER_CREATED': {
-        const isLoaded: boolean = info.interfaceid
-          ? isInterfaceLoaded(info.interface, info.interfaceid)
-          : true;
-        const intfc: string = getLoggerIntfcType(info.interface);
-
-        if (isLoaded) {
+        const newInfo = { ...info };
+        // Create default appender
+        if (info.isDefault) {
           pipeline(
             'APPENDER_ACTIONS',
-            interfaceActions[intfc].addAppender,
+            system.addDefaultAppender,
             info,
             dispatch
           );
+        } else {
+          newInfo.id = newInfo.interfaceid || newInfo.interface;
+          // Check if this interface is loaded
+          const isLoaded = info.interfaceid
+            ? isInterfaceLoaded(info.interface, info.interfaceid)
+            : state.api.system.sync &&
+              state.api.system.logs.find(
+                (item: Object) => item.id === info.interface
+              );
+
+          if (isLoaded) {
+            const intfc: string = getLoggerIntfcType(info.interface);
+            pipeline(
+              'APPENDER_ACTIONS',
+              interfaceActions[intfc].addAppender,
+              newInfo,
+              dispatch
+            );
+          }
         }
         break;
       }
       case 'APPENDER_DELETED': {
-        const isLoaded: boolean = info.interfaceid
-          ? isInterfaceLoaded(info.interface, info.interfaceid)
-          : true;
-        const intfc: string = includes(
-          [
-            'http',
-            'audit',
-            'monitoring',
-            'alert',
-            'qorus-core',
-            'qorus-master',
-            'qdsp',
-          ],
-          info.interface
-        )
-          ? 'system'
-          : info.interface;
-
-        if (isLoaded) {
+        const newInfo = { ...info };
+        // Create default appender
+        if (info.isDefault) {
           pipeline(
             'APPENDER_ACTIONS',
-            interfaceActions[intfc].deleteAppender,
+            system.deleteDefaultAppender,
             info,
             dispatch
           );
+        } else {
+          newInfo.id = newInfo.interfaceid || newInfo.interface;
+          // Check if this interface is loaded
+          const isLoaded = info.interfaceid
+            ? isInterfaceLoaded(info.interface, info.interfaceid)
+            : state.api.system.sync &&
+              state.api.system.logs.find(
+                (item: Object) => item.id === info.interface
+              );
+
+          if (isLoaded) {
+            // Get the interface
+            const intfc = getLoggerIntfcType(info.interface);
+            // Send the action to the pipeline
+            pipeline(
+              'APPENDER_ACTIONS',
+              interfaceActions[intfc].deleteAppender,
+              newInfo,
+              dispatch
+            );
+          }
         }
         break;
       }

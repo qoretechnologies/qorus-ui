@@ -32,11 +32,9 @@ const LoggerContainer: Function = ({
 
 export default compose(
   connect((state, ownProps) => {
-    let { isUsingDefaultLogger }: Object = state.api[ownProps.resource][
+    const { isUsingDefaultLogger }: Object = state.api[ownProps.resource][
       ownProps.resource === 'system' ? 'logs' : 'data'
     ].find((res: Object): boolean => res.id === ownProps.id);
-
-    console.log(isUsingDefaultLogger);
 
     return {
       isUsingDefaultLogger,

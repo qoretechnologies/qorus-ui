@@ -356,7 +356,58 @@ const fetchDefaultLogger = {
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
+const addDefaultAppender = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let data = { ...state.data };
+      // Go through the events
+      events.forEach(dt => {
+        // Update the appenders for this interface
+        data.defaultLoggers[dt.interface].loggerData.appenders.push(
+          formatAppender(dt)
+        );
+      });
+      // Modify the state
+      return { ...state, ...{ data } };
+    }
+
+    return state;
+  },
+};
 const deleteAppender = deleteAppenderReducer;
+const deleteDefaultAppender = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let data = { ...state.data };
+      // Go through the events
+      events.forEach(dt => {
+        // Update the appenders for this interface
+        data.defaultLoggers[
+          dt.interface
+        ].loggerData.appenders = data.defaultLoggers[
+          dt.interface
+        ].loggerData.appenders.filter(
+          appender => appender.id !== dt.logger_appenderid
+        );
+      });
+      // Modify the state
+      return { ...state, ...{ data } };
+    }
+
+    return state;
+  },
+};
+
 const addUpdateDefaultLogger = {
   next (
     state,
@@ -438,7 +489,9 @@ export {
   addUpdateLogger as ADDUPDATELOGGER,
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
+  addDefaultAppender as ADDDEFAULTAPPENDER,
   deleteAppender as DELETEAPPENDER,
+  deleteDefaultAppender as DELETEDEFAULTAPPENDER,
   addUpdateDefaultLogger as ADDUPDATEDEFAULTLOGGER,
   deleteDefaultLogger as DELETEDEFAULTLOGGER,
 };
