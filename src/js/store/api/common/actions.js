@@ -94,7 +94,7 @@ const fetchLoggerAction: Function = (intfc: string): Function =>
         };
       }
 
-      return { empty: true };
+      return { id, empty: true };
     }
   );
 

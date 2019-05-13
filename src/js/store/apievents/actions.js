@@ -969,72 +969,71 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'LOGGER_CREATED':
       case 'LOGGER_UPDATED': {
-        const isLoaded: boolean = info.interfaceid
-          ? isInterfaceLoaded(info.interface, info.interfaceid)
-          : true;
-        const intfc: string = getLoggerIntfcType(info.interface);
+        const newInfo: Object = { ...info };
+        const reversedLevels: Object = invert(
+          state.api.system.data.loggerParams.logger_levels
+        );
 
-        if (isLoaded) {
-          const newInfo: Object = { ...info };
-          const reversedLevels: Object = invert(
-            state.api.system.data.loggerParams.logger_levels
-          );
+        newInfo.params.level = { [reversedLevels[info.params.level]]: true };
+        newInfo.isNew = eventstr === 'LOGGER_CREATED';
 
-          newInfo.params.level = { [reversedLevels[info.params.level]]: true };
-          newInfo.isNew = eventstr === 'LOGGER_CREATED';
-
+        // We are updating / adding default logger
+        if (info.isDefault) {
           pipeline(
             'LOGGER_ACTIONS',
-            interfaceActions[intfc].addUpdateLogger,
+            system.addUpdateDefaultLogger,
             newInfo,
             dispatch
           );
+        } else {
+          newInfo.id = newInfo.interfaceid || newInfo.interface;
+          // Check if the interface we are updating is loaded
+          const intfc = getLoggerIntfcType(info.interface);
+          const isLoaded = newInfo.interfaceid
+            ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
+            : state.api.system.sync &&
+              state.api.system.logs.find(
+                (item: Object) => item.id === newInfo.interface
+              );
+
+          if (isLoaded) {
+            pipeline(
+              'LOGGER_ACTIONS',
+              interfaceActions[intfc].addUpdateLogger,
+              newInfo,
+              dispatch
+            );
+          }
         }
         break;
       }
       case 'LOGGER_DELETED': {
-        const isLoaded: boolean = info.interfaceid
-          ? isInterfaceLoaded(info.interface, info.interfaceid)
-          : true;
-        const intfc: string = getLoggerIntfcType(info.interface);
-
-        if (isLoaded) {
-          const newInfo: Object = { ...info };
-
-          //! CHECK IF WE DELETED DEFAULT LOGGER
-          if (!info.current_logger) {
-            pipeline(
-              'LOGGER_ACTIONS',
-              interfaceActions[intfc].deleteLogger,
-              null,
-              dispatch
-            );
-          } else {
-            const reversedLevels: Object = invert(
-              state.api.system.data.loggerParams.logger_levels
-            );
-
-            newInfo.current_logger.params.level = {
-              [reversedLevels[info.current_logger.params.level]]: true,
-            };
-
-            //! FETCH APPENDERS FOR THE DEFAULT LOGGER
-            const appendersPath = info.interfaceid
-              ? `${info.interfaceid}/logger/appenders`
-              : `${info.interface}/logger/appenders`;
-
-            const appenders: Array<Object> = await get(
-              `${settings.REST_BASE_URL}/${intfc}/${appendersPath}`
-            );
-
-            newInfo.appenders = appenders.reduce(
-              (cur: Array<Object>, appender: Object) => [
-                ...cur,
-                formatAppender(appender),
-              ],
-              []
-            );
-
+        // Modify the levels
+        const newInfo: Object = { ...info };
+        // Check if default logger was deleted
+        if (newInfo.isDefault) {
+          pipeline(
+            'LOGGER_ACTIONS',
+            system.deleteDefaultLogger,
+            newInfo,
+            dispatch
+          );
+        } else {
+          // We are deleting concrete logger
+          newInfo.id = newInfo.interfaceid || newInfo.interface;
+          // Check if this interface is loaded
+          const isLoaded = newInfo.interfaceid
+            ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
+            : state.api.system.sync &&
+              state.api.system.logs.find(
+                (item: Object) => item.id === newInfo.interface
+              );
+          // If the interface is loaded
+          if (isLoaded) {
+            // If the interface is one of the system logs
+            // set the interface to system
+            const intfc = getLoggerIntfcType(info.interface);
+            // Delete the log
             pipeline(
               'LOGGER_ACTIONS',
               interfaceActions[intfc].deleteLogger,
@@ -1046,47 +1045,68 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'APPENDER_CREATED': {
-        const isLoaded: boolean = info.interfaceid
-          ? isInterfaceLoaded(info.interface, info.interfaceid)
-          : true;
-        const intfc: string = getLoggerIntfcType(info.interface);
-
-        if (isLoaded) {
+        const newInfo = { ...info };
+        // Create default appender
+        if (info.isDefault) {
           pipeline(
             'APPENDER_ACTIONS',
-            interfaceActions[intfc].addAppender,
+            system.addDefaultAppender,
             info,
             dispatch
           );
+        } else {
+          newInfo.id = newInfo.interfaceid || newInfo.interface;
+          // Check if this interface is loaded
+          const isLoaded = info.interfaceid
+            ? isInterfaceLoaded(info.interface, info.interfaceid)
+            : state.api.system.sync &&
+              state.api.system.logs.find(
+                (item: Object) => item.id === info.interface
+              );
+
+          if (isLoaded) {
+            const intfc: string = getLoggerIntfcType(info.interface);
+            pipeline(
+              'APPENDER_ACTIONS',
+              interfaceActions[intfc].addAppender,
+              newInfo,
+              dispatch
+            );
+          }
         }
         break;
       }
       case 'APPENDER_DELETED': {
-        const isLoaded: boolean = info.interfaceid
-          ? isInterfaceLoaded(info.interface, info.interfaceid)
-          : true;
-        const intfc: string = includes(
-          [
-            'http',
-            'audit',
-            'monitoring',
-            'alert',
-            'qorus-core',
-            'qorus-master',
-            'qdsp',
-          ],
-          info.interface
-        )
-          ? 'system'
-          : info.interface;
-
-        if (isLoaded) {
+        const newInfo = { ...info };
+        // Create default appender
+        if (info.isDefault) {
           pipeline(
             'APPENDER_ACTIONS',
-            interfaceActions[intfc].deleteAppender,
+            system.deleteDefaultAppender,
             info,
             dispatch
           );
+        } else {
+          newInfo.id = newInfo.interfaceid || newInfo.interface;
+          // Check if this interface is loaded
+          const isLoaded = info.interfaceid
+            ? isInterfaceLoaded(info.interface, info.interfaceid)
+            : state.api.system.sync &&
+              state.api.system.logs.find(
+                (item: Object) => item.id === info.interface
+              );
+
+          if (isLoaded) {
+            // Get the interface
+            const intfc = getLoggerIntfcType(info.interface);
+            // Send the action to the pipeline
+            pipeline(
+              'APPENDER_ACTIONS',
+              interfaceActions[intfc].deleteAppender,
+              newInfo,
+              dispatch
+            );
+          }
         }
         break;
       }

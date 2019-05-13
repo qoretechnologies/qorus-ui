@@ -54,7 +54,6 @@ export default class AddUserModal extends Component {
   };
 
   handleRoleSelect: Function = (roles): void => {
-    console.log(roles);
     this.setState({
       roles,
     });

@@ -152,9 +152,16 @@ const loggerReducer = {
     }
   ) {
     let data;
+    let editedData;
+    const isSystem = !isArray(state.data);
 
-    if (logger) {
-      const isNotSystem = isArray(state.data);
+    // Check if this interface is using a default logger
+    // or any logger
+    if (empty || logger.isDefault) {
+      editedData = {
+        isUsingDefaultLogger: true,
+      };
+    } else {
       const flattenedAppenders = appenders.reduce(
         (cur: Array<Object>, appender: Object) => [
           ...cur,
@@ -163,38 +170,24 @@ const loggerReducer = {
         []
       );
 
-      if (!isNotSystem) {
-        data = {
-          ...state.data,
-          loggerData: {
-            [id]: {
-              ...logger.params,
-              isDefault: logger.interface_table_name === 'system',
-              appenders: flattenedAppenders,
-            },
-          },
-        };
-      } else {
-        data = updateItemWithId(
-          id,
-          {
-            loggerData: {
-              ...logger.params,
-              isDefault: !!logger.interface_table_name,
-            },
-            appenders: flattenedAppenders,
-          },
-          [...state.data]
-        );
-      }
-
-      return { ...state, ...{ data } };
+      editedData = {
+        isUsingDefaultLogger: false,
+        loggerData: {
+          logger: logger.params,
+          appenders: flattenedAppenders,
+        },
+      };
     }
 
-    data = {
-      ...state.data,
-      loggerData: 'empty',
-    };
+    data = updateItemWithId(
+      id,
+      editedData,
+      isSystem ? [...state.logs] : [...state.data]
+    );
+
+    if (isSystem) {
+      return { ...state, ...{ logs: data } };
+    }
 
     return { ...state, ...{ data } };
   },
@@ -209,42 +202,51 @@ const addUpdateLoggerReducer = {
   ) {
     if (state && state.sync) {
       // Check if this is system or interfaces
-      const isNotSystem = isArray(state.data);
+      const isSystem = !isArray(state.data);
       let newData;
 
-      if (isNotSystem) {
+      // If this is not a system log
+      // Get the interface data
+      if (!isSystem) {
         newData = [...state.data];
         newData = setUpdatedToNull(newData);
       } else {
-        newData = { ...state.data };
+        // Otherwise get the logs data
+        newData = [...state.logs];
       }
 
       events.forEach(dt => {
-        let itemUpdate: Object;
+        let itemUpdate;
 
-        if (!dt.interfaceid) {
-          const appenders = dt.isNew
-            ? []
-            : state.data.loggerData[dt.interface].appenders;
+        if (dt.isNew) {
           itemUpdate = {
-            loggerData: { [dt.interface]: { ...dt.params, appenders } },
+            isUsingDefaultLogger: false,
+            loggerData: {
+              logger: dt.params,
+              appenders: [],
+            },
             _updated: true,
           };
-
-          newData = { ...newData, ...itemUpdate };
         } else {
+          // Get the current items loggerData
+          const { loggerData } = newData.find(item => item.id === dt.id);
+
           itemUpdate = {
-            loggerData: dt.params,
+            isUsingDefaultLogger: false,
+            loggerData: {
+              logger: dt.params,
+              appenders: loggerData.appenders,
+            },
             _updated: true,
           };
-
-          if (dt.isNew) {
-            itemUpdate = { ...itemUpdate, appenders: [] };
-          }
-
-          newData = updateItemWithId(dt.interfaceid, itemUpdate, newData);
         }
+
+        newData = updateItemWithId(dt.id, itemUpdate, newData);
       });
+
+      if (isSystem) {
+        return { ...state, ...{ logs: newData } };
+      }
 
       return { ...state, ...{ data: newData } };
     }
@@ -253,6 +255,7 @@ const addUpdateLoggerReducer = {
   },
 };
 
+// Deleting CONCRETE logger
 const deleteLoggerReducer = {
   next (
     state,
@@ -261,45 +264,35 @@ const deleteLoggerReducer = {
     }
   ) {
     if (state && state.sync) {
-      const isNotSystem = isArray(state.data);
+      // If this is under system
+      const isSystem = !isArray(state.data);
       let newData;
-
-      if (isNotSystem) {
+      // If we are updating system or interface
+      // logger
+      if (!isSystem) {
         newData = [...state.data];
         newData = setUpdatedToNull(newData);
       } else {
-        newData = { ...state.data };
+        newData = [...state.logs];
       }
-
+      // Loop through the events
       events.forEach(dt => {
-        //* Default logger was deleted
-        if (!isNotSystem) {
-          newData = {
-            ...newData,
-            loggerData: {
-              [dt.interface]: {
-                ...dt.current_logger.params,
-                isDefault: dt.current_logger.interface_table_name === 'system',
-                appenders: dt.appenders,
-              },
-            },
-          };
-        } else {
-          newData = updateItemWithId(
-            dt.interfaceid,
-            {
-              loggerData: {
-                ...dt.current_logger.params,
-                isDefault: !!dt.current_logger.interface_table_name,
-              },
-              appenders: dt.appenders,
-              _updated: true,
-            },
-            newData
-          );
-        }
+        newData = updateItemWithId(
+          dt.id,
+          {
+            // This interface is automatically using default logger
+            // We don't care if there isn't one
+            isUsingDefaultLogger: true,
+            loggerData: null,
+          },
+          newData
+        );
       });
-
+      // Update system
+      if (isSystem) {
+        return { ...state, ...{ logs: newData } };
+      }
+      // Update interface
       return { ...state, ...{ data: newData } };
     }
 
@@ -315,44 +308,30 @@ const addAppenderReducer = {
     }
   ) {
     if (state && state.sync) {
-      const isNotSystem = isArray(state.data);
+      const isSystem = !isArray(state.data);
       let newData;
 
-      if (isNotSystem) {
+      if (!isSystem) {
         newData = [...state.data];
         newData = setUpdatedToNull(newData);
       } else {
-        newData = { ...state.data };
+        newData = [...state.logs];
       }
-
+      // Go through the events
       events.forEach(dt => {
-        let intfc;
-
-        if (dt.interfaceid) {
-          intfc = newData.find((datum: Object) => datum.id === dt.interfaceid);
-        } else {
-          intfc = newData;
-        }
-
-        let appenders: Array<Object> = dt.interfaceid
-          ? intfc?.appenders || []
-          : newData.loggerData?.[dt.interface]?.appenders || [];
-        appenders = [...appenders, formatAppender(dt)];
-
-        if (dt.interfaceid) {
-          newData = updateItemWithId(
-            dt.interfaceid,
-            { appenders, _updated: true },
-            newData
-          );
-        } else {
-          let loggerData = newData.loggerData;
-
-          loggerData[dt.interface].appenders = appenders;
-
-          newData = { ...newData, loggerData };
-        }
+        // Get the interface loggerData
+        const { loggerData } = newData.find(
+          (datum: Object) => datum.id === dt.id
+        );
+        // Add the new appender to the loggerData
+        loggerData.appenders.push(formatAppender(dt));
+        // Update the data
+        newData = updateItemWithId(dt.id, { loggerData }, newData);
       });
+
+      if (isSystem) {
+        return { ...state, ...{ logs: newData } };
+      }
 
       return { ...state, ...{ data: newData } };
     }
@@ -369,46 +348,32 @@ const deleteAppenderReducer = {
     }
   ) {
     if (state && state.sync) {
-      const isNotSystem = isArray(state.data);
+      const isSystem = !isArray(state.data);
       let newData;
 
-      if (isNotSystem) {
+      if (!isSystem) {
         newData = [...state.data];
         newData = setUpdatedToNull(newData);
       } else {
-        newData = { ...state.data };
+        newData = [...state.logs];
       }
 
       events.forEach(dt => {
-        let intfc;
-
-        if (dt.interfaceid) {
-          intfc = newData.find((datum: Object) => datum.id === dt.interfaceid);
-        } else {
-          intfc = newData;
-        }
-
-        const appendersArr: string = dt.interfaceid
-          ? intfc.appenders
-          : intfc.loggerData[dt.interface].appenders;
-        const appenders: Array<Object> = appendersArr.filter(
-          (appender: Object) => appender.id !== dt.logger_appenderid
+        // Get the interface loggerData
+        const { loggerData } = newData.find(
+          (datum: Object) => datum.id === dt.id
         );
-
-        if (dt.interfaceid) {
-          newData = updateItemWithId(
-            dt.interfaceid,
-            { appenders, _updated: true },
-            newData
-          );
-        } else {
-          let loggerData = newData.loggerData;
-
-          loggerData[dt.interface].appenders = appenders;
-
-          newData = { ...newData, loggerData };
-        }
+        // Remove the appender
+        loggerData.appenders = loggerData.appenders.filter(
+          appender => appender.id !== dt.logger_appenderid
+        );
+        // Update the data
+        newData = updateItemWithId(dt.interfaceid, { loggerData }, newData);
       });
+
+      if (isSystem) {
+        return { ...state, ...{ logs: newData } };
+      }
 
       return { ...state, ...{ data: newData } };
     }

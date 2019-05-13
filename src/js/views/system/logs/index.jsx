@@ -9,6 +9,12 @@ import Headbar from '../../../components/Headbar';
 import titleManager from '../../../hocomponents/TitleManager';
 import withTabs from '../../../hocomponents/withTabs';
 import Flex from '../../../components/Flex';
+import lifecycle from 'recompose/lifecycle';
+import showIfPassed from '../../../hocomponents/show-if-passed';
+import actions from '../../../store/api/actions';
+import { connect } from 'react-redux';
+import Loader from '../../../components/loader';
+import DefaultLogger from '../../../containers/DefaultLogger';
 
 type Props = {
   tabQuery: string,
@@ -20,32 +26,88 @@ const Log: Function = ({ tabQuery }: Props) => (
     <Headbar>
       <Breadcrumbs>
         <Crumb>Logs</Crumb>
-        <CrumbTabs tabs={['System', 'Http', 'Audit', 'Alert', 'Monitor']} />
+        <CrumbTabs
+          tabs={[
+            'System',
+            'Http',
+            'Audit',
+            'Alert',
+            'Monitor',
+            'Default Loggers',
+          ]}
+        />
       </Breadcrumbs>
     </Headbar>
-    <Box top fill>
-      <SimpleTabs activeTab={tabQuery}>
-        <SimpleTab name="system">
+
+    <SimpleTabs activeTab={tabQuery}>
+      <SimpleTab name="system">
+        <Box top fill scrollY>
           <LogContainer resource="system" intfc="system" id="qorus-core" />
-        </SimpleTab>
-        <SimpleTab name="http">
+        </Box>
+      </SimpleTab>
+      <SimpleTab name="http">
+        <Box top fill scrollY>
           <LogContainer resource="http" intfc="system" id="http" />
-        </SimpleTab>
-        <SimpleTab name="audit">
+        </Box>
+      </SimpleTab>
+      <SimpleTab name="audit">
+        <Box top fill scrollY>
           <LogContainer resource="audit" intfc="system" id="audit" />
-        </SimpleTab>
-        <SimpleTab name="alert">
+        </Box>
+      </SimpleTab>
+      <SimpleTab name="alert">
+        <Box top fill scrollY>
           <LogContainer resource="alert" intfc="system" id="alert" />
-        </SimpleTab>
-        <SimpleTab name="monitor">
+        </Box>
+      </SimpleTab>
+      <SimpleTab name="monitor">
+        <Box top fill scrollY>
           <LogContainer resource="mon" intfc="system" id="monitoring" />
-        </SimpleTab>
-      </SimpleTabs>
-    </Box>
+        </Box>
+      </SimpleTab>
+      <SimpleTab name="default loggers">
+        <Box top fill scrollY>
+          <DefaultLogger
+            name="System default logger"
+            defaultOnly
+            resource="system"
+          />
+          <DefaultLogger
+            name="Workflows default logger"
+            defaultOnly
+            resource="workflows"
+          />
+          <DefaultLogger
+            name="Services default logger"
+            defaultOnly
+            resource="services"
+          />
+          <DefaultLogger
+            name="Jobs default logger"
+            defaultOnly
+            resource="jobs"
+          />
+        </Box>
+      </SimpleTab>
+    </SimpleTabs>
   </Flex>
 );
 
 export default compose(
+  connect(
+    state => ({
+      defaultLogger: state.api.system.data.defaultLoggers?.system,
+    }),
+    {
+      fetchDefaultLogger: actions.system.fetchDefaultLogger,
+    }
+  ),
+  lifecycle({
+    componentWillMount () {
+      this.props.fetchDefaultLogger('system');
+    },
+  }),
+  showIfPassed(({ defaultLogger }) => defaultLogger, <Loader />),
   withTabs('system'),
   titleManager('Logs')
 )(Log);

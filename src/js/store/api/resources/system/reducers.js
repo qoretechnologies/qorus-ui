@@ -7,7 +7,10 @@ import {
   addAppenderReducer,
   deleteAppenderReducer,
   updateConfigItemWsCommon,
+  defaultLoggerReducer,
 } from '../../common/reducers';
+import isArray from 'lodash/isArray';
+import { formatAppender } from '../../../../helpers/logger';
 
 const addProcess = {
   next (
@@ -299,10 +302,171 @@ const updateConfigItemWs = updateConfigItemWsCommon;
 
 // LOGGER
 const fetchLogger = loggerReducer;
+const fetchDefaultLogger = {
+  next (
+    state,
+    {
+      payload: { logger, appenders, intfc, empty },
+    }
+  ) {
+    let data = { ...state.data };
+    let editedData;
+
+    if (empty) {
+      editedData = {
+        defaultLoggers: {
+          ...state.data.defaultLoggers,
+          [intfc]: {
+            loggerData: {
+              logger: 'empty',
+            },
+          },
+        },
+      };
+    } else {
+      const flattenedAppenders = appenders.reduce(
+        (cur: Array<Object>, appender: Object) => [
+          ...cur,
+          formatAppender(appender),
+        ],
+        []
+      );
+
+      editedData = {
+        defaultLoggers: {
+          ...state.data.defaultLoggers,
+          [intfc]: {
+            loggerData: {
+              logger: logger.params,
+              appenders: flattenedAppenders,
+            },
+          },
+        },
+      };
+    }
+
+    data = {
+      ...state.data,
+      ...editedData,
+    };
+
+    return { ...state, ...{ data } };
+  },
+};
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
+const addDefaultAppender = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let data = { ...state.data };
+      // Go through the events
+      events.forEach(dt => {
+        // Update the appenders for this interface
+        data.defaultLoggers[dt.interface].loggerData.appenders.push(
+          formatAppender(dt)
+        );
+      });
+      // Modify the state
+      return { ...state, ...{ data } };
+    }
+
+    return state;
+  },
+};
 const deleteAppender = deleteAppenderReducer;
+const deleteDefaultAppender = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let data = { ...state.data };
+      // Go through the events
+      events.forEach(dt => {
+        // Update the appenders for this interface
+        data.defaultLoggers[
+          dt.interface
+        ].loggerData.appenders = data.defaultLoggers[
+          dt.interface
+        ].loggerData.appenders.filter(
+          appender => appender.id !== dt.logger_appenderid
+        );
+      });
+      // Modify the state
+      return { ...state, ...{ data } };
+    }
+
+    return state;
+  },
+};
+
+const addUpdateDefaultLogger = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let newData = { ...state.data };
+      // Check if the defaultLoggers hash exists
+      if (!newData.defaultLoggers) {
+        newData.defaultLoggers = {};
+      }
+      // Go through the events
+      events.forEach(dt => {
+        // New default logger was added
+        if (dt.isNew) {
+          // Add the default logger
+          newData.defaultLoggers[dt.interface] = {
+            loggerData: {
+              logger: dt.params,
+              appenders: [],
+            },
+          };
+        } else {
+          // Get the current items loggerData
+          // so we can get the appenders
+          newData.defaultLoggers[dt.interface].loggerData.logger = dt.params;
+        }
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
+// Deleting DEFAULT logger
+const deleteDefaultLogger = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let newData = { ...state.data };
+      // Go through the events
+      events.forEach(dt => {
+        newData.defaultLoggers[dt.interface].loggerData.logger = 'empty';
+      });
+      // Update interface
+      return { ...state, ...{ data: newData } };
+    }
+    // Return default state
+    return state;
+  },
+};
 
 export {
   addProcess as ADDPROCESS,
@@ -321,8 +485,13 @@ export {
   fetchGlobalConfig as FETCHGLOBALCONFIG,
   updateConfigItemWs as UPDATECONFIGITEMWS,
   fetchLogger as FETCHLOGGER,
+  fetchDefaultLogger as FETCHDEFAULTLOGGER,
   addUpdateLogger as ADDUPDATELOGGER,
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
+  addDefaultAppender as ADDDEFAULTAPPENDER,
   deleteAppender as DELETEAPPENDER,
+  deleteDefaultAppender as DELETEDEFAULTAPPENDER,
+  addUpdateDefaultLogger as ADDUPDATEDEFAULTLOGGER,
+  deleteDefaultLogger as DELETEDEFAULTLOGGER,
 };

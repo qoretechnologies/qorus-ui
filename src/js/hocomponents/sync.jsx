@@ -22,7 +22,7 @@ export default (
       hasStartedLoading: false,
     };
 
-    componentDidMount() {
+    componentDidMount () {
       const load = this.props[loadFunc] || this.props.load;
       const value = this.props[propName];
 
@@ -35,7 +35,7 @@ export default (
       }
     }
 
-    componentDidUpdate(nextProps) {
+    componentDidUpdate (nextProps) {
       const load = nextProps[loadFunc] || nextProps.load;
       const value = nextProps[propName];
 
@@ -48,7 +48,7 @@ export default (
       }
     }
 
-    render() {
+    render () {
       if (showLoader && !this.props[propName].sync) {
         return <Loader />;
       }

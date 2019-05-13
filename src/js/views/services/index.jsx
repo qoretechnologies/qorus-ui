@@ -29,6 +29,9 @@ import queryControl from '../../hocomponents/queryControl';
 import Search from '../../containers/search';
 import CsvControl from '../../components/CsvControl';
 import Flex from '../../components/Flex';
+import lifecycle from 'recompose/lifecycle';
+import showIfPassed from '../../hocomponents/show-if-passed';
+import Loader from '../../components/loader';
 
 type Props = {
   sortData: Object,
@@ -133,12 +136,14 @@ const selector: Function = createSelector(
     servicesSelector,
     systemOptionsSelector,
     resourceSelector('services'),
+    resourceSelector('system'),
     settingsSelector,
   ],
-  (services, systemOptions, meta, settings) => ({
+  (services, systemOptions, meta, system, settings) => ({
     services,
     systemOptions,
     meta,
+    defaultLogger: system.data.defaultLoggers?.services,
     isTablet: settings.tablet,
   })
 );
@@ -149,18 +154,26 @@ export default compose(
     {
       load: actions.services.fetch,
       unsync: actions.services.unsync,
+      fetchDefaultLogger: actions.system.fetchDefaultLogger,
     }
   ),
+  sync('meta'),
   withInfoBar('services'),
   withSort('services', 'services', sortDefaults.services),
   loadMore('services', 'services', true, 50),
-  sync('meta'),
+  lifecycle({
+    componentDidMount () {
+      this.props.fetchDefaultLogger('services');
+    },
+  }),
+  showIfPassed(({ defaultLogger }) => defaultLogger, <Loader />),
   withPane(ServicesDetail, ['systemOptions', 'location'], 'detail', 'services'),
   selectable('services'),
   withCSV('services', 'services'),
   titleManager('Services'),
   queryControl('search'),
   pure([
+    'defaultLogger',
     'services',
     'systemOptions',
     'selected',

@@ -10,6 +10,7 @@ import {
   addAppenderAction,
   deleteAppenderAction,
   updateConfigItemWsCommon,
+  fetchDefaultLoggerAction,
 } from '../../common/actions';
 
 const init: Function = createAction('SYSTEM_INIT');
@@ -98,10 +99,43 @@ const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
 // LOGGER
 const fetchLogger = fetchLoggerAction('system');
+const fetchDefaultLogger = createAction(
+  `SYSTEM_FETCHDEFAULTLOGGER`,
+  async intfc => {
+    const [logger, appenders] = await Promise.all([
+      get(`${settings.REST_BASE_URL}/${intfc}?action=defaultLogger`),
+      get(`${settings.REST_BASE_URL}/${intfc}?action=defaultLoggerAppenders`),
+    ]);
+
+    return {
+      empty: logger === 'success',
+      logger,
+      appenders: appenders === 'success' ? [] : appenders,
+      intfc,
+    };
+  }
+);
 const addUpdateLogger = addUpdateLoggerAction('system');
+const addUpdateDefaultLogger = createAction(
+  'SYSTEM_ADDUPDATEDEFAULTLOGGER',
+  (events: Array<Object>): Object => ({ events })
+);
+// Deleting loggers
 const deleteLogger = deleteLoggerAction('system');
+const deleteDefaultLogger = createAction(
+  'SYSTEM_DELETEDEFAULTLOGGER',
+  (events: Array<Object>): Object => ({ events })
+);
 const addAppender = addAppenderAction('system');
+const addDefaultAppender = createAction(
+  'SYSTEM_ADDDEFAULTAPPENDER',
+  (events: Array<Object>): Object => ({ events })
+);
 const deleteAppender = deleteAppenderAction('system');
+const deleteDefaultAppender = createAction(
+  'SYSTEM_DELETEDEFAULTAPPENDER',
+  (events: Array<Object>): Object => ({ events })
+);
 
 export {
   addProcess,
@@ -120,8 +154,13 @@ export {
   fetchGlobalConfig,
   updateConfigItemWs,
   fetchLogger,
+  fetchDefaultLogger,
   addUpdateLogger,
+  addUpdateDefaultLogger,
   deleteLogger,
   addAppender,
+  addDefaultAppender,
   deleteAppender,
+  deleteDefaultAppender,
+  deleteDefaultLogger,
 };

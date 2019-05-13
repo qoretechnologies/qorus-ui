@@ -12,11 +12,11 @@ const initialState = {
   loading: false,
 };
 
-function getResourceByName(resources, name) {
+function getResourceByName (resources, name) {
   return resources.find(r => r.name === name);
 }
 
-export function createResourceReducers(
+export function createResourceReducers (
   actions,
   resources = [],
   iniState = initialState
@@ -36,7 +36,7 @@ export function createResourceReducers(
         specialReducers[resource][actn.toUpperCase()];
 
       handlers[name] = {
-        next(state, action) {
+        next (state, action) {
           let data;
 
           if (action.payload) {
@@ -139,7 +139,7 @@ export function createResourceReducers(
             loading: false,
           };
         },
-        throw(state, action) {
+        throw (state, action) {
           if (
             isSpecialReducer &&
             specialReducers[resource][actn.toUpperCase()].throw
@@ -208,6 +208,19 @@ export function createResourceReducers(
         limit: 50,
         sort: 'sla_eventid',
         sortDir: true,
+      };
+    } else if (resource === 'system') {
+      initState = {
+        data: {},
+        sync: false,
+        loading: false,
+        logs: [
+          { id: 'http' },
+          { id: 'qorus-core' },
+          { id: 'audit' },
+          { id: 'monitoring' },
+          { id: 'alert' },
+        ],
       };
     }
 

@@ -146,6 +146,7 @@ export default compose(
       onCancel,
       changeAdding,
       data,
+      isDefault,
     }: NewLoggerPopoverProps): Function => async (): any => {
       if (!level) {
         changeError(() => 'Level field is required.');
@@ -155,10 +156,18 @@ export default compose(
         const fetchRes: Object = await fetchWithNotifications(
           async () => {
             const apiMethod: Function = data ? put : post;
-            const loggerPath: string = id ? `${id}/logger` : 'logger';
+            let loggerPath: string;
+
+            if (id) {
+              loggerPath = `/${id}/logger`;
+            } else if (isDefault) {
+              loggerPath = '?action=defaultLogger';
+            } else {
+              loggerPath = 'logger';
+            }
 
             return apiMethod(
-              `${settings.REST_BASE_URL}/${resource}/${loggerPath}`,
+              `${settings.REST_BASE_URL}/${resource}${loggerPath}`,
               {
                 body: JSON.stringify({
                   level,

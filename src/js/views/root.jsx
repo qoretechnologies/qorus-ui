@@ -65,6 +65,7 @@ const optionsSelector = state => state.api.systemOptions;
     storeSidebar: actions.currentUser.storeSidebar,
     storeTheme: actions.currentUser.storeTheme,
     fetchHealth: actions.health.fetch,
+    fetchDefaultLogger: actions.system.fetchDefaultLogger,
     sendSuccess: success,
     sendWarning: warning,
   }
@@ -116,8 +117,8 @@ export default class Root extends Component {
     };
   }
 
-  componentDidMount () {
-    this.fetchGlobalData();
+  async componentDidMount () {
+    await this.fetchGlobalData();
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
 
@@ -183,12 +184,19 @@ export default class Root extends Component {
     this.props.storeSidebar(sidebarOpen);
   };
 
-  fetchGlobalData () {
+  fetchGlobalData = async () => {
+    await Promise.all([
+      this.props.fetchDefaultLogger('system'),
+      this.props.fetchDefaultLogger('services'),
+      this.props.fetchDefaultLogger('workflows'),
+      this.props.fetchDefaultLogger('jobs'),
+    ]);
+
     this.props.fetchSystemOptions();
     this.props.fetchGlobalConfig();
     this.props.fetchCurrentUser();
     this.props.fetchHealth();
-  }
+  };
 
   refModal = modal => {
     this._modal = modal;
