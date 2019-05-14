@@ -19,6 +19,7 @@ import { ORDER_STATES } from '../../../constants/orders';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import List from './list';
 import Performance from './performance';
+import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
 
 type WorkflowDetailTabsProps = {
   workflow: Object,
@@ -114,12 +115,14 @@ const WorkflowDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="config">
       <Box top fill scrollY>
+        <GlobalConfigItemsTable
+          globalItems={workflow.global_config}
+          intrf="system"
+        />
         <ConfigItemsTable
           items={{
-            ...rebuildConfigHash(workflow),
             ...rebuildConfigHash(workflow, true),
           }}
-          globalItems={workflow.global_config}
           intrf="workflows"
           intrfId={workflow.id}
         />

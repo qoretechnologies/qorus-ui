@@ -23,6 +23,12 @@ type ConfigItemsContainerProps = {
   openModal: Function,
 };
 
+const intrfToLevelType = {
+  workflows: 'step',
+  services: 'service',
+  jobs: 'job',
+};
+
 const ConfigItemsContainer: Function = ({
   items,
   dispatchAction,
@@ -46,8 +52,6 @@ const ConfigItemsContainer: Function = ({
       stepId,
       item.name,
       newValue,
-      belongsTo,
-      isOverride,
       onSuccess
     );
   };
@@ -56,31 +60,21 @@ const ConfigItemsContainer: Function = ({
     <NoDataIf condition={size(items) === 0} big>
       {() => (
         <React.Fragment>
-          {map(items, (configItems: Array<Object>, belongsTo: string) =>
-            configItems.isGlobal ? (
-              <Table
-                configItems={configItems}
-                belongsTo={belongsTo}
-                intrf={intrf}
-                saveValue={saveValue}
-                openModal={openModal}
-                closeModal={closeModal}
-              />
-            ) : (
-              <ExpandableItem title={belongsTo} key={belongsTo} show>
-                {() => (
-                  <Table
-                    configItems={configItems}
-                    belongsTo={belongsTo}
-                    intrf={intrf}
-                    saveValue={saveValue}
-                    openModal={openModal}
-                    closeModal={closeModal}
-                  />
-                )}
-              </ExpandableItem>
-            )
-          )}
+          {map(items, (configItems: Array<Object>, belongsTo: string) => (
+            <ExpandableItem title={belongsTo} key={belongsTo} show>
+              {() => (
+                <Table
+                  configItems={configItems}
+                  belongsTo={belongsTo}
+                  intrf={intrf}
+                  levelType={intrfToLevelType[intrf]}
+                  saveValue={saveValue}
+                  openModal={openModal}
+                  closeModal={closeModal}
+                />
+              )}
+            </ExpandableItem>
+          ))}
         </React.Fragment>
       )}
     </NoDataIf>
@@ -88,23 +82,7 @@ const ConfigItemsContainer: Function = ({
 };
 
 export default compose(
-  connect((state: Object) => ({
-    globalConfig: state.api.system.globalConfig,
-  })),
   modal(),
   withDispatch(),
-  mapProps(({ globalConfig, globalItems, ...rest }) => ({
-    globalConfig: globalConfig.filter(configItem =>
-      includes(
-        globalItems ? Object.keys(globalItems) : [],
-        configItem.name || configItem.item
-      )
-    ),
-    ...rest,
-  })),
-  mapProps(({ items, globalConfig, ...rest }) => ({
-    items: { 'Global Config': { data: globalConfig }, ...items },
-    ...rest,
-  })),
   onlyUpdateForKeys(['items'])
 )(ConfigItemsContainer);

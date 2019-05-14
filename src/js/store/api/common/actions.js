@@ -1,6 +1,6 @@
 // @flow
 import { createAction } from 'redux-actions';
-import { fetchWithNotifications, put, get } from '../utils';
+import { fetchWithNotifications, put, get, del } from '../utils';
 import settings from '../../../settings';
 
 const updateConfigItemAction: Function = (intfc: string): Function =>
@@ -11,8 +11,6 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       stepId: ?number,
       configItemName: string,
       newValue: any,
-      belongsTo: string,
-      isOverride: boolean,
       onSuccess: Function,
       dispatch: Function
     ): void => {
@@ -22,8 +20,10 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
         JOBS: 'jobs',
       };
 
+      console.log(newValue);
+
       const url =
-        belongsTo === 'Global Config'
+        intfc === 'SYSTEM'
           ? `${
             settings.REST_BASE_URL
           }/system/config/${configItemName}?action=yaml`
@@ -33,16 +33,9 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       fetchWithNotifications(
         async (): Promise<*> => {
           const res = await put(url, {
-            body: JSON.stringify(
-              isOverride
-                ? {
-                  override: true,
-                }
-                : {
-                  value: newValue,
-                  override: false,
-                }
-            ),
+            body: JSON.stringify({
+              value: newValue,
+            }),
           });
 
           if (!res.err) {
@@ -53,6 +46,44 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
         },
         `Updating value for ${configItemName}...`,
         `${configItemName} value updated successfuly`,
+        dispatch
+      );
+    }
+  );
+
+const deleteConfigItemAction: Function = (intfc: string): Function =>
+  createAction(
+    `${intfc}_DELETE_CONFIG_ITEM`,
+    (
+      id: number | string,
+      stepId: ?number,
+      configItemName: string,
+      onSuccess: Function,
+      dispatch: Function
+    ): void => {
+      const intfcToApiPath: Object = {
+        SYSTEM: 'system',
+        WORKFLOWS: stepId ? 'steps' : 'workflows',
+        SERVICES: 'services',
+        JOBS: 'jobs',
+      };
+
+      const url = `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}${
+        id ? `/${id}` : '/'
+      }/config/${configItemName}`;
+
+      fetchWithNotifications(
+        async (): Promise<*> => {
+          const res = await del(url);
+
+          if (!res.err && onSuccess) {
+            onSuccess();
+          }
+
+          return res;
+        },
+        `Deleting value for ${configItemName}...`,
+        `${configItemName} value deleted successfuly`,
         dispatch
       );
     }
@@ -132,4 +163,5 @@ export {
   addAppenderAction,
   deleteAppenderAction,
   updateConfigItemWsCommon,
+  deleteConfigItemAction,
 };

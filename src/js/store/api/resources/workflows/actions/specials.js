@@ -12,6 +12,7 @@ import {
   addAppenderAction,
   deleteAppenderAction,
   updateConfigItemWsCommon,
+  deleteConfigItemAction,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('WORKFLOWS');
@@ -260,6 +261,7 @@ const setRemote = createAction('WORKFLOWS_SETREMOTE', (id, value, dispatch) => {
 });
 
 const updateConfigItem: Function = updateConfigItemAction('WORKFLOWS');
+const deleteConfigItem: Function = deleteConfigItemAction('WORKFLOWS');
 const updateConfigItemWs: Function = updateConfigItemWsCommon('WORKFLOWS');
 
 const unsync = createAction('WORKFLOWS_UNSYNC');
@@ -311,4 +313,5 @@ export {
   deleteLogger,
   addAppender,
   deleteAppender,
+  deleteConfigItem,
 };

@@ -703,16 +703,20 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'CONFIG_ITEM_CHANGED': {
         let isLoaded;
         let interfaceId;
-        let interfaceName = `${info.interfaceType.toLowerCase()}s`;
+        const interfaceType =
+          info.interfaceType === 'step' ? 'workflow' : info.interfaceType;
+        let interfaceName = `${interfaceType.toLowerCase()}s`;
 
-        if (info.interfaceType === 'global') {
+        if (interfaceType === 'global') {
           isLoaded = state.api.system.sync;
           interfaceName = 'system';
         } else {
-          interfaceName = `${info.interfaceType.toLowerCase()}s`;
+          interfaceName = `${interfaceType.toLowerCase()}s`;
           interfaceId = info[INTERFACE_IDS[interfaceName]];
           isLoaded = isInterfaceLoaded(interfaceName, interfaceId);
         }
+
+        console.log(interfaceId, info);
 
         if (isLoaded) {
           pipeline(
@@ -720,10 +724,10 @@ const handleEvent = (url, data, dispatch, state) => {
             interfaceActions[interfaceName].updateConfigItemWs,
             {
               value: info.value,
-              override: info.override,
-              actual_value: info.actual_value,
               stepid: info.stepid,
+              level: info.level,
               id: interfaceId,
+              interfaceName,
               item: info.item,
             },
             dispatch

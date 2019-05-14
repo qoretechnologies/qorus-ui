@@ -11,6 +11,8 @@ import {
   deleteAppenderAction,
   updateConfigItemWsCommon,
   fetchDefaultLoggerAction,
+  deleteConfigItemAction,
+  updateConfigItemAction,
 } from '../../common/actions';
 
 const init: Function = createAction('SYSTEM_INIT');
@@ -94,6 +96,8 @@ const fetchGlobalConfig: Function = createAction(
 );
 
 const updateConfigItemWs: Function = updateConfigItemWsCommon('SYSTEM');
+const updateConfigItem: Function = updateConfigItemAction('SYSTEM');
+const deleteConfigItem: Function = deleteConfigItemAction('SYSTEM');
 
 const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 
@@ -163,4 +167,6 @@ export {
   deleteAppender,
   deleteDefaultAppender,
   deleteDefaultLogger,
+  deleteConfigItem,
+  updateConfigItem,
 };

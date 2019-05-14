@@ -33,18 +33,17 @@ const updateConfigItemWsCommon = {
             );
 
             step.config[dt.item].value = dt.value;
-            step.config[dt.item].actual_value = dt.actual_value;
-            step.config[dt.item].override = dt.override;
+            step.config[dt.item].level = dt.level;
           } else {
             config[dt.item].value = dt.value;
-            config[dt.item].actual_value = dt.actual_value;
-            config[dt.item].override = dt.override;
+            config[dt.item].level = dt.level;
           }
 
           newData = updateItemWithId(dt.id, { _updated: true }, newData);
           newState = { ...newState, ...{ data: newData } };
         }
       } else {
+        console.log(dt);
         const globalConfig = updateItemWithName(
           dt.item,
           {

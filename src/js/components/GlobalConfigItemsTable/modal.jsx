@@ -35,29 +35,20 @@ export default class ConfigItemsModal extends Component {
 
   state: {
     value: any,
-    override: boolean,
     error: boolean,
     yamlData?: string,
   } = {
     value: this.props.item.value,
-    override: this.props.item.override,
     error: false,
     yamlData: null,
   };
 
   async componentDidMount () {
-    const stepPath: string = this.props.stepId
-      ? `/stepinfo/${this.props.stepId}`
-      : '';
-
-    const interfacePath: string = this.props.intrfId
-      ? `${this.props.intrf}/${this.props.intrfId}${stepPath}`
-      : 'system';
-
+    const { intrf, intrfId, item } = this.props;
     const yamlData: Object = await get(
-      `${settings.REST_BASE_URL}/${interfacePath}/config/${
-        this.props.item.name
-      }?action=yaml`
+      `${settings.REST_BASE_URL}/${intrf}${
+        intrfId ? `/${intrfId}` : ''
+      }/config/${item.name}?action=yaml`
     );
 
     this.setState({
@@ -87,36 +78,12 @@ export default class ConfigItemsModal extends Component {
     }
   };
 
-  handleOverrideChange: Function = (override): void => {
-    if (override) {
-      this.setState({
-        value: this.state.yamlData.value,
-        override: true,
-        error: false,
-      });
-    } else {
-      this.setState({
-        value: this.state.yamlData.value,
-        override: false,
-        error: false,
-      });
-    }
-  };
-
-  handleDefaultClick = () => {
-    this.setState({
-      value: this.props.yamlData.default_value,
-    });
-  };
-
   handleSaveClick: Function = (): void => {
     const value: any = this.state.value;
 
     this.props.onSubmit(
       this.props.item,
-      this.props.belongsTo,
       value,
-      this.state.override,
       () => {
         this.props.onClose();
       },
@@ -190,7 +157,7 @@ export default class ConfigItemsModal extends Component {
 
   render () {
     const { onClose, item } = this.props;
-    const { override, error, yamlData } = this.state;
+    const { error, yamlData } = this.state;
 
     return (
       <Modal hasFooter>
@@ -204,18 +171,7 @@ export default class ConfigItemsModal extends Component {
             ) : (
               <React.Fragment>
                 <div className="configItemsEditor">
-                  <div className="header">
-                    {item.name}
-                    <Pull right>
-                      <ButtonGroup>
-                        <Button
-                          label="Set default value"
-                          disabled={override}
-                          onClick={this.handleDefaultClick}
-                        />
-                      </ButtonGroup>
-                    </Pull>
-                  </div>
+                  <div className="header">{item.name}</div>
                   <div className="body">
                     {error && (
                       <Alert bsStyle="danger">

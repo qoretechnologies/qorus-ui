@@ -12,6 +12,7 @@ import {
   addAppenderAction,
   deleteAppenderAction,
   updateConfigItemWsCommon,
+  deleteConfigItemAction,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('SERVICES');
@@ -178,6 +179,7 @@ const setRemote = createAction(
 );
 
 const updateConfigItem: Function = updateConfigItemAction('SERVICES');
+const deleteConfigItem: Function = deleteConfigItemAction('SERVICES');
 const updateConfigItemWs: Function = updateConfigItemWsCommon('SERVICES');
 
 const processStarted = createAction('SERVICES_PROCESSSTARTED', events => ({
@@ -286,4 +288,5 @@ export {
   deleteAppender,
   fetchAuthLabels,
   updateAuthLabel,
+  deleteConfigItem,
 };

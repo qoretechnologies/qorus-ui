@@ -21,8 +21,9 @@ import ConfigItemsModal from './modal';
 import Tree from '../tree';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
-import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
+import actions from '../../store/api/actions';
+import AddConfigItemModal from './addModal';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -34,7 +35,7 @@ type ConfigItemsTableProps = {
   intrf: string,
   belongsTo: string,
   showDescription: boolean,
-  levelType: string,
+  globalItems: any,
 };
 
 const ConfigItemsTable: Function = ({
@@ -47,7 +48,7 @@ const ConfigItemsTable: Function = ({
   showDescription,
   handleToggleDescription,
   dispatchAction,
-  levelType,
+  globalItems,
 }: ConfigItemsTableProps): React.Element<any> => (
   <EnhancedTable
     collection={configItems.data}
@@ -74,10 +75,17 @@ const ConfigItemsTable: Function = ({
               <Pull>
                 <ButtonGroup>
                   <Button
-                    label="Show descriptions"
-                    iconName="align-left"
-                    btnStyle={showDescription ? 'primary' : ''}
-                    onClick={handleToggleDescription}
+                    icon="add"
+                    title="Add new"
+                    onClick={() => {
+                      openModal(
+                        <AddConfigItemModal
+                          onClose={closeModal}
+                          onSubmit={saveValue}
+                          globalConfig={globalItems}
+                        />
+                      );
+                    }}
                   />
                 </ButtonGroup>
               </Pull>
@@ -99,22 +107,16 @@ const ConfigItemsTable: Function = ({
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
             <NameColumnHeader />
-            <ActionColumnHeader icon="edit">{''}</ActionColumnHeader>
-            <Th name="level">Level</Th>
-            <Th className="text" iconName="info-sign" name="actual_value">
+            <ActionColumnHeader>{''}</ActionColumnHeader>
+            <Th className="text" iconName="info-sign" name="value">
               Value
             </Th>
-
-            <Th className="text" name="default_value">
-              Default val.
-            </Th>
             <Th iconName="code" name="type" />
-            <Th iconName="asterisk" />
           </FixedRow>
         </Thead>
         <DataOrEmptyTable
           condition={!collection || collection.length === 0}
-          cols={7}
+          cols={4}
           small
         >
           {props => (
@@ -145,14 +147,12 @@ const ConfigItemsTable: Function = ({
                         <Button
                           icon="cross"
                           title="Remove this value"
-                          disabled={!item.level.startsWith(levelType)}
                           btnStyle="danger"
                           onClick={() => {
-                            console.log(configItems.stepid);
                             dispatchAction(
-                              actions[intrf].deleteConfigItem,
-                              configItems.id,
-                              configItems.stepId,
+                              actions.system.deleteConfigItem,
+                              null,
+                              null,
                               item.name,
                               null
                             );
@@ -160,7 +160,6 @@ const ConfigItemsTable: Function = ({
                         />
                       </ButtonGroup>
                     </ActionColumn>
-                    <Td className="medium">{item.level}</Td>
                     <Td
                       className={`text ${item.level === 'workflow' ||
                         item.level === 'global'}`}
@@ -171,27 +170,10 @@ const ConfigItemsTable: Function = ({
                         <ContentByType inTable content={item.value} />
                       )}
                     </Td>
-                    <Td className="text">
-                      {item.type === 'hash' || item.type === 'list' ? (
-                        <Tree compact data={item.default_value} />
-                      ) : (
-                        <ContentByType inTable content={item.default_value} />
-                      )}
-                    </Td>
                     <Td className="narrow">
                       <code>{item.type}</code>
                     </Td>
-                    <Td className="tiny">
-                      <ContentByType content={item.mandatory} />
-                    </Td>
                   </Tr>
-                  {showDescription && (
-                    <Tr>
-                      <Td className="text" colspan={7}>
-                        {item.desc}
-                      </Td>
-                    </Tr>
-                  )}
                 </React.Fragment>
               ))}
             </Tbody>
@@ -204,11 +186,5 @@ const ConfigItemsTable: Function = ({
 
 export default compose(
   withDispatch(),
-  withState('showDescription', 'toggleDescription', false),
-  withHandlers({
-    handleToggleDescription: ({ toggleDescription }) => () => {
-      toggleDescription(value => !value);
-    },
-  }),
   onlyUpdateForKeys(['configItems', 'showDescription'])
 )(ConfigItemsTable);
