@@ -716,8 +716,6 @@ const handleEvent = (url, data, dispatch, state) => {
           isLoaded = isInterfaceLoaded(interfaceName, interfaceId);
         }
 
-        console.log(interfaceId, info);
-
         if (isLoaded) {
           pipeline(
             eventstr,

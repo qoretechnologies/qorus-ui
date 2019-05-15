@@ -138,6 +138,7 @@ const ConfigItemsTable: Function = ({
                                 intrf={intrf}
                                 intrfId={configItems.id}
                                 stepId={configItems.stepId}
+                                levelType={levelType}
                               />
                             );
                           }}
@@ -148,7 +149,6 @@ const ConfigItemsTable: Function = ({
                           disabled={!item.level.startsWith(levelType)}
                           btnStyle="danger"
                           onClick={() => {
-                            console.log(configItems.stepid);
                             dispatchAction(
                               actions[intrf].deleteConfigItem,
                               configItems.id,

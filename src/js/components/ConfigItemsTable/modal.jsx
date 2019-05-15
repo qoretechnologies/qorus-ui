@@ -28,6 +28,9 @@ type Props = {
   item: Object,
   belongsTo: string,
   onSubmit: Function,
+  levelType: string,
+  intrf: string,
+  intrfId: number,
 };
 
 export default class ConfigItemsModal extends Component {
@@ -46,24 +49,30 @@ export default class ConfigItemsModal extends Component {
   };
 
   async componentDidMount () {
-    const stepPath: string = this.props.stepId
-      ? `/stepinfo/${this.props.stepId}`
-      : '';
+    const { intrf, stepId, levelType, intrfId, item } = this.props;
+    if (item.level.startsWith(levelType)) {
+      const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
 
-    const interfacePath: string = this.props.intrfId
-      ? `${this.props.intrf}/${this.props.intrfId}${stepPath}`
-      : 'system';
+      const interfacePath: string = intrfId
+        ? `${intrf}/${intrfId}${stepPath}`
+        : 'system';
 
-    const yamlData: Object = await get(
-      `${settings.REST_BASE_URL}/${interfacePath}/config/${
-        this.props.item.name
-      }?action=yaml`
-    );
+      const yamlData: Object = await get(
+        `${settings.REST_BASE_URL}/${interfacePath}/config/${
+          item.name
+        }?action=yaml`
+      );
 
-    this.setState({
-      yamlData,
-      value: yamlData.value,
-    });
+      this.setState({
+        yamlData,
+        value: yamlData.value,
+      });
+    } else {
+      this.setState({
+        yamlData: true,
+        value: '',
+      });
+    }
   }
 
   handleValueChange: Function = (value): void => {
@@ -87,22 +96,6 @@ export default class ConfigItemsModal extends Component {
     }
   };
 
-  handleOverrideChange: Function = (override): void => {
-    if (override) {
-      this.setState({
-        value: this.state.yamlData.value,
-        override: true,
-        error: false,
-      });
-    } else {
-      this.setState({
-        value: this.state.yamlData.value,
-        override: false,
-        error: false,
-      });
-    }
-  };
-
   handleDefaultClick = () => {
     this.setState({
       value: this.props.yamlData.default_value,
@@ -114,9 +107,7 @@ export default class ConfigItemsModal extends Component {
 
     this.props.onSubmit(
       this.props.item,
-      this.props.belongsTo,
       value,
-      this.state.override,
       () => {
         this.props.onClose();
       },

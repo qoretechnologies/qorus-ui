@@ -38,14 +38,7 @@ const ConfigItemsContainer: Function = ({
   closeModal,
   intrfId,
 }: ConfigItemsContainerProps): React.Element<any> => {
-  const saveValue = (
-    item,
-    belongsTo,
-    newValue,
-    isOverride: boolean,
-    onSuccess,
-    stepId?
-  ) => {
+  const saveValue = (item, newValue, onSuccess, stepId?) => {
     dispatchAction(
       actions[intrf].updateConfigItem,
       item.id,

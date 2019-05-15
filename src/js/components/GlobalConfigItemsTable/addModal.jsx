@@ -23,6 +23,7 @@ import {
 } from '../../components/controls';
 import Pull from '../Pull';
 import map from 'lodash/map';
+import pickBy from 'lodash/pickBy';
 
 type Props = {
   onClose: Function,
@@ -136,17 +137,18 @@ export default class AddConfigItemModal extends Component {
   render () {
     const { onClose, globalConfig } = this.props;
     const { error, selectedItem } = this.state;
+    const globalConfigItems = pickBy(globalConfig, (data, name) => !data.value);
 
     return (
       <Modal hasFooter>
         <Modal.Header onClose={onClose} titleId="yamlEdit">
-          Add new global value for this workflow
+          Add new global value for this interface
         </Modal.Header>
         <Modal.Body>
           <Box top fill>
             <Dropdown>
               <DControl>{selectedItem?.name || 'Please select'}</DControl>
-              {map(globalConfig, (data, name) => (
+              {map(globalConfigItems, (data, name) => (
                 <Item
                   title={name}
                   onClick={(event, name) =>
