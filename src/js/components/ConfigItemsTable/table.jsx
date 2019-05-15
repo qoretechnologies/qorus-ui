@@ -51,7 +51,7 @@ const ConfigItemsTable: Function = ({
 }: ConfigItemsTableProps): React.Element<any> => (
   <EnhancedTable
     collection={configItems.data}
-    searchBy={['name', 'default_value', 'value', 'type', 'mandatory', 'desc']}
+    searchBy={['name', 'default_value', 'value', 'type', 'desc']}
     tableId={belongsTo}
     sortDefault={sortDefaults.configItems}
   >
@@ -100,6 +100,7 @@ const ConfigItemsTable: Function = ({
           <FixedRow {...{ sortData, onSortChange }}>
             <NameColumnHeader />
             <ActionColumnHeader icon="edit">{''}</ActionColumnHeader>
+            <Th name="strictly_local">Local</Th>
             <Th name="level">Level</Th>
             <Th className="text" iconName="info-sign" name="actual_value">
               Value
@@ -109,7 +110,6 @@ const ConfigItemsTable: Function = ({
               Default val.
             </Th>
             <Th iconName="code" name="type" />
-            <Th iconName="asterisk" />
           </FixedRow>
         </Thead>
         <DataOrEmptyTable
@@ -160,6 +160,9 @@ const ConfigItemsTable: Function = ({
                         />
                       </ButtonGroup>
                     </ActionColumn>
+                    <Td className="narrow">
+                      <ContentByType content={item.strictly_local} />
+                    </Td>
                     <Td className="medium">{item.level}</Td>
                     <Td
                       className={`text ${item.level === 'workflow' ||
@@ -180,9 +183,6 @@ const ConfigItemsTable: Function = ({
                     </Td>
                     <Td className="narrow">
                       <code>{item.type}</code>
-                    </Td>
-                    <Td className="tiny">
-                      <ContentByType content={item.mandatory} />
                     </Td>
                   </Tr>
                   {showDescription && (

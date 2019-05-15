@@ -76,6 +76,7 @@ const ConfigItemsTable: Function = ({
                 <ButtonGroup>
                   <Button
                     icon="add"
+                    label="Add new"
                     title="Add new"
                     onClick={() => {
                       openModal(

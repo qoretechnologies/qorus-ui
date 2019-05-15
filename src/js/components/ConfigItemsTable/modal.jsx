@@ -98,7 +98,7 @@ export default class ConfigItemsModal extends Component {
 
   handleDefaultClick = () => {
     this.setState({
-      value: this.props.yamlData.default_value,
+      value: this.state.yamlData.default_value,
     });
   };
 

@@ -146,6 +146,10 @@ export default class AddConfigItemModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <Box top fill>
+            <Alert bsStyle="warning">
+              Creating new global config value will affect all interfaces using
+              this item.
+            </Alert>
             <Dropdown>
               <DControl>{selectedItem?.name || 'Please select'}</DControl>
               {map(globalConfigItems, data => (
@@ -163,9 +167,10 @@ export default class AddConfigItemModal extends Component {
                 />
               ))}
             </Dropdown>
-            <br />
+
             {selectedItem && (
               <React.Fragment>
+                <br />
                 <div className="configItemsEditor">
                   <div className="header">{selectedItem.name}</div>
                   <div className="body">
