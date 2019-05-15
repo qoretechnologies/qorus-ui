@@ -147,9 +147,9 @@ const WorkflowConfigItemsTable: Function = ({
                           }}
                         />
                         <Button
-                          icon="cross"
+                          icon="undo"
                           title="Remove this value"
-                          btnStyle="danger"
+                          btnStyle="warning"
                           onClick={() => {
                             dispatchAction(
                               actions.workflows.deleteConfigItem,

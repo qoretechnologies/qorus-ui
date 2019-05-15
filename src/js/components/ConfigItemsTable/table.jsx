@@ -144,10 +144,10 @@ const ConfigItemsTable: Function = ({
                           }}
                         />
                         <Button
-                          icon="cross"
+                          icon="undo"
                           title="Remove this value"
                           disabled={!item.level.startsWith(levelType)}
-                          btnStyle="danger"
+                          btnStyle="warning"
                           onClick={() => {
                             dispatchAction(
                               actions[intrf].deleteConfigItem,
