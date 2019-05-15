@@ -9,7 +9,6 @@ const eventAction: Function = (
   dispatch: Function
 ): void => {
   if (container[ev].length) {
-    console.log(container[ev], func);
     setTimeout(() => {
       dispatch(func(container[ev]));
       container[ev] = [];

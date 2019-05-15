@@ -34,6 +34,7 @@ const GlobalConfigItemsContainer: Function = ({
   intrfId,
   globalConfig,
   globalItems,
+  isGlobal,
 }: GlobalConfigItemsContainerProps): React.Element<any> => {
   const saveValue = (item, newValue, onSuccess, stepId?) => {
     dispatchAction(
@@ -46,15 +47,14 @@ const GlobalConfigItemsContainer: Function = ({
     );
   };
 
-  console.log(globalItems);
-
   return (
     <NoDataIf condition={size(items) === 0} big>
       {() => (
         <React.Fragment>
           {map(items, (configItems: Array<Object>, belongsTo: string) =>
-            configItems.isGlobal ? (
+            isGlobal ? (
               <Table
+                globalItems={globalItems}
                 configItems={configItems}
                 intrf={intrf}
                 saveValue={saveValue}

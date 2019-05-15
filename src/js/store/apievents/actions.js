@@ -744,7 +744,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
         if (isLoaded) {
           pipeline(
-            eventstr,
+            `${eventstr}_${interfaceName}`,
             interfaceActions[interfaceName].updateBasicData,
             { ...info, id: interfaceId },
             dispatch

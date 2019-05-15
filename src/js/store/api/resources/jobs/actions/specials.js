@@ -18,6 +18,7 @@ import {
   addAppenderAction,
   deleteAppenderAction,
   updateConfigItemWsCommon,
+  deleteConfigItemAction,
 } from '../../../common/actions';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
@@ -294,6 +295,7 @@ const setRemote = createAction(
 );
 
 const updateConfigItem: Function = updateConfigItemAction('JOBS');
+const deleteConfigItem: Function = deleteConfigItemAction('JOBS');
 const updateConfigItemWs = updateConfigItemWsCommon('JOBS');
 
 const processStarted = createAction('JOBS_PROCESSSTARTED', events => ({
@@ -355,4 +357,5 @@ export {
   deleteLogger,
   addAppender,
   deleteAppender,
+  deleteConfigItem,
 };

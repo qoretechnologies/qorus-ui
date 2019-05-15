@@ -36,9 +36,10 @@ type ConfigItemsTableProps = {
   belongsTo: string,
   showDescription: boolean,
   globalItems: any,
+  intrfId: number,
 };
 
-const ConfigItemsTable: Function = ({
+const WorkflowConfigItemsTable: Function = ({
   configItems,
   belongsTo,
   openModal,
@@ -49,6 +50,7 @@ const ConfigItemsTable: Function = ({
   handleToggleDescription,
   dispatchAction,
   globalItems,
+  intrfId,
 }: ConfigItemsTableProps): React.Element<any> => (
   <EnhancedTable
     collection={configItems.data}
@@ -138,8 +140,7 @@ const ConfigItemsTable: Function = ({
                                 belongsTo={belongsTo}
                                 onSubmit={saveValue}
                                 intrf={intrf}
-                                intrfId={configItems.id}
-                                stepId={configItems.stepId}
+                                intrfId={intrfId}
                               />
                             );
                           }}
@@ -150,8 +151,8 @@ const ConfigItemsTable: Function = ({
                           btnStyle="danger"
                           onClick={() => {
                             dispatchAction(
-                              actions.system.deleteConfigItem,
-                              null,
+                              actions.workflows.deleteConfigItem,
+                              intrfId,
                               null,
                               item.name,
                               null
@@ -187,4 +188,4 @@ const ConfigItemsTable: Function = ({
 export default compose(
   withDispatch(),
   onlyUpdateForKeys(['configItems', 'showDescription', 'globalConfig'])
-)(ConfigItemsTable);
+)(WorkflowConfigItemsTable);

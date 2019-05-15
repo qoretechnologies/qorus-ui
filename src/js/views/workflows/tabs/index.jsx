@@ -16,10 +16,14 @@ import OrderStats from '../../../components/OrderStats';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
 import ProcessTable from '../../../components/ProcessTable';
 import { ORDER_STATES } from '../../../constants/orders';
-import { rebuildConfigHash } from '../../../helpers/interfaces';
+import {
+  rebuildConfigHash,
+  objectCollectionToArray,
+} from '../../../helpers/interfaces';
 import List from './list';
 import Performance from './performance';
 import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
+import WorkflowConfigItemsTable from '../../../components/WorkflowConfigItemsTable';
 
 type WorkflowDetailTabsProps = {
   workflow: Object,
@@ -118,6 +122,11 @@ const WorkflowDetailTabs: Function = ({
         <GlobalConfigItemsTable
           globalItems={workflow.global_config}
           intrf="system"
+        />
+        <WorkflowConfigItemsTable
+          globalItems={objectCollectionToArray(workflow.config)}
+          intrf="workflows"
+          intrfId={workflow.id}
         />
         <ConfigItemsTable
           items={{
