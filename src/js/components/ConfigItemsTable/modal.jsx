@@ -50,7 +50,7 @@ export default class ConfigItemsModal extends Component {
 
   async componentDidMount () {
     const { intrf, stepId, levelType, intrfId, item } = this.props;
-    if (item.level.startsWith(levelType)) {
+    if (item.level.startsWith(levelType) || item.level === 'default') {
       const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
 
       const interfacePath: string = intrfId
@@ -65,7 +65,7 @@ export default class ConfigItemsModal extends Component {
 
       this.setState({
         yamlData,
-        value: yamlData.value,
+        value: item.level.startsWith(levelType) ? yamlData.value : '',
       });
     } else {
       this.setState({
