@@ -68,8 +68,10 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
         JOBS: 'jobs',
       };
 
+      let realId: number = stepId || id;
+
       const url = `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}${
-        id ? `/${id}` : '/'
+        realId ? `/${realId}` : '/'
       }/config/${configItemName}`;
 
       fetchWithNotifications(
