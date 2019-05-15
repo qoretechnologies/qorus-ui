@@ -16,6 +16,9 @@ const updateConfigItemWsCommon = {
     let newState = { ...state };
     let newData = newState.data;
 
+    console.log(newState);
+    console.log(newState.globalConfig);
+
     events.forEach((dt: Object) => {
       if (dt.id) {
         newData = [...newData];
@@ -43,7 +46,6 @@ const updateConfigItemWsCommon = {
           newState = { ...newState, ...{ data: newData } };
         }
       } else {
-        console.log(dt);
         const globalConfig = updateItemWithName(
           dt.name,
           {

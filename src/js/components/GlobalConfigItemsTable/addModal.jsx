@@ -148,15 +148,15 @@ export default class AddConfigItemModal extends Component {
           <Box top fill>
             <Dropdown>
               <DControl>{selectedItem?.name || 'Please select'}</DControl>
-              {map(globalConfigItems, (data, name) => (
+              {map(globalConfigItems, data => (
                 <Item
-                  title={name}
+                  title={data.name}
                   onClick={(event, name) =>
                     this.setState({
                       value: null,
                       selectedItem: {
                         name,
-                        type: globalConfig[name].type,
+                        type: data.type,
                       },
                     })
                   }

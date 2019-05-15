@@ -152,6 +152,7 @@ const deleteAppenderAction: Function = (intfc: string): Function =>
   }));
 
 const updateConfigItemWsCommon: Function = (intfc: string): Function =>
+  console.log(intfc) ||
   createAction(`${intfc.toUpperCase()}_UPDATECONFIGITEMWS`, events => ({
     events,
   }));

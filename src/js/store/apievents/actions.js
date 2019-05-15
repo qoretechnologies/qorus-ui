@@ -705,7 +705,7 @@ const handleEvent = (url, data, dispatch, state) => {
         let interfaceId;
         const interfaceType =
           info.interfaceType === 'step' ? 'workflow' : info.interfaceType;
-        let interfaceName = `${interfaceType.toLowerCase()}s`;
+        let interfaceName;
 
         if (interfaceType === 'global') {
           isLoaded = state.api.system.sync;
@@ -718,7 +718,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
         if (isLoaded) {
           pipeline(
-            eventstr,
+            `${eventstr}_${interfaceName}`,
             interfaceActions[interfaceName].updateConfigItemWs,
             {
               value: info.value,

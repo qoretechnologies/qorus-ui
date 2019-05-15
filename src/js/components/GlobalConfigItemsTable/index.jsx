@@ -32,6 +32,7 @@ const GlobalConfigItemsContainer: Function = ({
   openModal,
   closeModal,
   intrfId,
+  globalConfig,
   globalItems,
 }: GlobalConfigItemsContainerProps): React.Element<any> => {
   const saveValue = (item, newValue, onSuccess, stepId?) => {
@@ -44,6 +45,8 @@ const GlobalConfigItemsContainer: Function = ({
       onSuccess
     );
   };
+
+  console.log(globalItems);
 
   return (
     <NoDataIf condition={size(items) === 0} big>
@@ -94,12 +97,20 @@ export default compose(
         )
       )
       .filter(configItem => configItem.value),
-    globalItems,
+    globalItems: globalConfig
+      .filter(configItem =>
+        includes(
+          globalItems ? Object.keys(globalItems) : [],
+          configItem.name || configItem.item
+        )
+      )
+      .filter(configItem => !configItem.value),
     ...rest,
   })),
   mapProps(({ globalConfig, ...rest }) => ({
     items: { 'Global Config': { data: globalConfig } },
+    globalConfig,
     ...rest,
   })),
-  onlyUpdateForKeys(['items', 'globalConfig'])
+  onlyUpdateForKeys(['items', 'globalConfig', 'globalItems'])
 )(GlobalConfigItemsContainer);
