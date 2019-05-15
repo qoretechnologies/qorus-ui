@@ -726,7 +726,7 @@ const handleEvent = (url, data, dispatch, state) => {
               level: info.level,
               id: interfaceId,
               interfaceName,
-              item: info.item,
+              name: info.name,
             },
             dispatch
           );
