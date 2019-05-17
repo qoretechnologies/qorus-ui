@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import map from 'lodash/map';
 import size from 'lodash/size';
+import isNull from 'lodash/isNull';
 
 import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
@@ -73,8 +74,8 @@ export default compose(
   modal(),
   withDispatch(),
   mapProps(({ globalConfig, globalItems, ...rest }) => ({
-    globalConfig: globalItems.filter(configItem => configItem.value),
-    globalItems: globalItems.filter(configItem => !configItem.value),
+    globalConfig: globalItems.filter(configItem => !isNull(configItem.value)),
+    globalItems: globalItems.filter(configItem => isNull(configItem.value)),
     ...rest,
   })),
   mapProps(({ globalConfig, ...rest }) => ({

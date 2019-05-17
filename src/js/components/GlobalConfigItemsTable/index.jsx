@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import map from 'lodash/map';
 import size from 'lodash/size';
+import isNull from 'lodash/isNull';
 
 import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
@@ -96,7 +97,7 @@ export default compose(
           configItem.name || configItem.item
         )
       )
-      .filter(configItem => configItem.value),
+      .filter(configItem => !isNull(configItem.value)),
     globalItems: globalConfig
       .filter(configItem =>
         includes(
@@ -104,7 +105,7 @@ export default compose(
           configItem.name || configItem.item
         )
       )
-      .filter(configItem => !configItem.value),
+      .filter(configItem => isNull(configItem.value)),
     ...rest,
   })),
   mapProps(({ globalConfig, ...rest }) => ({

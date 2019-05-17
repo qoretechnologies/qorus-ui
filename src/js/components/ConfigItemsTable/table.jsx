@@ -144,7 +144,7 @@ const ConfigItemsTable: Function = ({
                           }}
                         />
                         <Button
-                          icon="undo"
+                          icon="cross"
                           title="Remove this value"
                           disabled={!item.level.startsWith(levelType)}
                           btnStyle="warning"

@@ -146,9 +146,9 @@ const ConfigItemsTable: Function = ({
                           }}
                         />
                         <Button
-                          icon="undo"
+                          icon="cross"
                           title="Remove this value"
-                          btnStyle="warning"
+                          btnStyle="danger"
                           onClick={() => {
                             dispatchAction(
                               actions.system.deleteConfigItem,

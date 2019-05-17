@@ -23,6 +23,7 @@ import {
 } from '../../components/controls';
 import Pull from '../Pull';
 import map from 'lodash/map';
+import isNull from 'lodash/isNull';
 import pickBy from 'lodash/pickBy';
 
 type Props = {
@@ -41,7 +42,7 @@ export default class AddConfigItemModal extends Component {
     yamlData?: string,
     selectedItem: Object,
   } = {
-    value: null,
+    value: '',
     error: false,
     yamlData: null,
     selectedItem: null,
@@ -62,7 +63,7 @@ export default class AddConfigItemModal extends Component {
     this.setState({ value, error: false });
 
     try {
-      jsyaml.safeLoad(value);
+      jsyaml.safeDump(value);
     } catch (e) {
       this.setState({ error: true });
     }
@@ -71,7 +72,13 @@ export default class AddConfigItemModal extends Component {
   handleSaveClick: Function = (): void => {
     const { value, selectedItem } = this.state;
 
-    this.props.onSubmit(selectedItem, value, this.props.onClose, null);
+    let newValue = value;
+
+    if (selectedItem.type === 'string') {
+      newValue = jsyaml.safeDump(value);
+    }
+
+    this.props.onSubmit(selectedItem, newValue, this.props.onClose, null);
   };
 
   renderValueContent: Function = (): React.Element<any> => {
@@ -137,7 +144,9 @@ export default class AddConfigItemModal extends Component {
   render () {
     const { onClose, globalConfig } = this.props;
     const { error, selectedItem } = this.state;
-    const globalConfigItems = pickBy(globalConfig, (data, name) => !data.value);
+    const globalConfigItems = pickBy(globalConfig, (data, name) =>
+      isNull(data.value)
+    );
 
     return (
       <Modal hasFooter>
@@ -157,7 +166,7 @@ export default class AddConfigItemModal extends Component {
                   title={data.name}
                   onClick={(event, name) =>
                     this.setState({
-                      value: null,
+                      value: '',
                       selectedItem: {
                         name,
                         type: data.type,

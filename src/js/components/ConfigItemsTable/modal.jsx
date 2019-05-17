@@ -90,7 +90,7 @@ export default class ConfigItemsModal extends Component {
     this.setState({ value, error: false });
 
     try {
-      jsyaml.safeLoad(value);
+      jsyaml.safeDump(value);
     } catch (e) {
       this.setState({ error: true });
     }
@@ -105,9 +105,15 @@ export default class ConfigItemsModal extends Component {
   handleSaveClick: Function = (): void => {
     const value: any = this.state.value;
 
+    let newValue = value;
+
+    if (this.props.item.type === 'string') {
+      newValue = jsyaml.safeDump(value);
+    }
+
     this.props.onSubmit(
       this.props.item,
-      value,
+      newValue,
       () => {
         this.props.onClose();
       },
