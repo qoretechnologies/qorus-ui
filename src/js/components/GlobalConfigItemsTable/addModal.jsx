@@ -22,58 +22,31 @@ import {
   Control as Button,
 } from '../../components/controls';
 import Pull from '../Pull';
+import map from 'lodash/map';
+import isNull from 'lodash/isNull';
+import pickBy from 'lodash/pickBy';
 
 type Props = {
   onClose: Function,
   item: Object,
-  belongsTo: string,
   onSubmit: Function,
-  levelType: string,
-  intrf: string,
-  intrfId: number,
+  globalConfig: Object,
 };
 
-export default class ConfigItemsModal extends Component {
+export default class AddConfigItemModal extends Component {
   props: Props = this.props;
 
   state: {
     value: any,
-    override: boolean,
     error: boolean,
     yamlData?: string,
+    selectedItem: Object,
   } = {
-    value: this.props.item.value,
-    override: this.props.item.override,
+    value: '',
     error: false,
     yamlData: null,
+    selectedItem: null,
   };
-
-  async componentDidMount () {
-    const { intrf, stepId, levelType, intrfId, item } = this.props;
-    if (item.level.startsWith(levelType) || item.level === 'default') {
-      const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
-
-      const interfacePath: string = intrfId
-        ? `${intrf}/${intrfId}${stepPath}`
-        : 'system';
-
-      const yamlData: Object = await get(
-        `${settings.REST_BASE_URL}/${interfacePath}/config/${
-          item.name
-        }?action=yaml`
-      );
-
-      this.setState({
-        yamlData,
-        value: item.level.startsWith(levelType) ? yamlData.value : '',
-      });
-    } else {
-      this.setState({
-        yamlData: true,
-        value: '',
-      });
-    }
-  }
 
   handleValueChange: Function = (value): void => {
     this.setState({ value });
@@ -96,36 +69,22 @@ export default class ConfigItemsModal extends Component {
     }
   };
 
-  handleDefaultClick = () => {
-    this.setState({
-      value: this.state.yamlData.default_value,
-    });
-  };
-
   handleSaveClick: Function = (): void => {
-    const value: any = this.state.value;
+    const { value, selectedItem } = this.state;
 
     let newValue = value;
 
-    if (this.props.item.type === 'string') {
+    if (selectedItem.type === 'string') {
       newValue = jsyaml.safeDump(value);
     }
 
-    this.props.onSubmit(
-      this.props.item,
-      newValue,
-      () => {
-        this.props.onClose();
-      },
-      this.props.stepId
-    );
+    this.props.onSubmit(selectedItem, newValue, this.props.onClose, null);
   };
 
   renderValueContent: Function = (): React.Element<any> => {
-    const { item } = this.props;
-    const { override } = this.state;
+    const { selectedItem } = this.state;
 
-    switch (item.type) {
+    switch (selectedItem.type) {
       case 'bool':
         return (
           <Dropdown>
@@ -147,7 +106,6 @@ export default class ConfigItemsModal extends Component {
       case 'date':
         return (
           <DatePicker
-            disabled={override}
             date={this.state.value}
             onApplyDate={(newValue: any) => {
               this.handleDateChange(newValue);
@@ -164,7 +122,6 @@ export default class ConfigItemsModal extends Component {
             className="pt-fill"
             rows={getLineCount(this.state.value, null, 4)}
             value={this.state.value}
-            disabled={this.state.override}
             onChange={(event: any) => {
               this.handleObjectChange(event.target.value);
             }}
@@ -176,7 +133,6 @@ export default class ConfigItemsModal extends Component {
             className="pt-fill"
             rows={getLineCount(this.state.value, null, 4)}
             value={this.state.value}
-            disabled={this.state.override}
             onChange={(event: any) => {
               this.handleObjectChange(event.target.value);
             }}
@@ -186,33 +142,46 @@ export default class ConfigItemsModal extends Component {
   };
 
   render () {
-    const { onClose, item } = this.props;
-    const { override, error, yamlData } = this.state;
+    const { onClose, globalConfig } = this.props;
+    const { error, selectedItem } = this.state;
+    const globalConfigItems = pickBy(globalConfig, (data, name) =>
+      isNull(data.value)
+    );
 
     return (
       <Modal hasFooter>
         <Modal.Header onClose={onClose} titleId="yamlEdit">
-          Editing '{item.name}' config item
+          Add new global value for this interface
         </Modal.Header>
         <Modal.Body>
           <Box top fill>
-            {!yamlData ? (
-              <Loader />
-            ) : (
+            <Alert bsStyle="warning">
+              Creating new global config value will affect all interfaces using
+              this item.
+            </Alert>
+            <Dropdown>
+              <DControl>{selectedItem?.name || 'Please select'}</DControl>
+              {map(globalConfigItems, data => (
+                <Item
+                  title={data.name}
+                  onClick={(event, name) =>
+                    this.setState({
+                      value: '',
+                      selectedItem: {
+                        name,
+                        type: data.type,
+                      },
+                    })
+                  }
+                />
+              ))}
+            </Dropdown>
+
+            {selectedItem && (
               <React.Fragment>
+                <br />
                 <div className="configItemsEditor">
-                  <div className="header">
-                    {item.name}
-                    <Pull right>
-                      <ButtonGroup>
-                        <Button
-                          label="Set default value"
-                          disabled={override}
-                          onClick={this.handleDefaultClick}
-                        />
-                      </ButtonGroup>
-                    </Pull>
-                  </div>
+                  <div className="header">{selectedItem.name}</div>
                   <div className="body">
                     {error && (
                       <Alert bsStyle="danger">
@@ -233,7 +202,7 @@ export default class ConfigItemsModal extends Component {
               <Control
                 label="Save"
                 btnStyle="success"
-                disabled={error}
+                disabled={error || !selectedItem}
                 action={this.handleSaveClick}
                 big
               />

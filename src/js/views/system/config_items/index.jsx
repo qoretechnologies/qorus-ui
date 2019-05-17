@@ -5,8 +5,11 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import Flex from '../../../components/Flex';
 import { connect } from 'react-redux';
 import Box from '../../../components/box';
-import ConfigItemsTable from '../../../components/ConfigItemsTable';
-import { rebuildConfigHash } from '../../../helpers/interfaces';
+import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
+import {
+  rebuildConfigHash,
+  arrayCollectionToObject,
+} from '../../../helpers/interfaces';
 import Headbar from '../../../components/Headbar';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import pane from '../../../hocomponents/pane';
@@ -24,15 +27,9 @@ const ConfigItemsView: Function = ({
       </Breadcrumbs>
     </Headbar>
     <Box top fill noPadding>
-      <ConfigItemsTable
-        items={rebuildConfigHash(
-          {
-            name: 'Global Config',
-            config: configItems,
-          },
-          false,
-          true
-        )}
+      <GlobalConfigItemsTable
+        isGlobal
+        globalItems={arrayCollectionToObject(configItems)}
         intrf="system"
       />
     </Box>

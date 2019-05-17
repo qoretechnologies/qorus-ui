@@ -9,13 +9,15 @@ const eventAction: Function = (
   dispatch: Function
 ): void => {
   if (container[ev].length) {
-    dispatch(func(container[ev]));
-    container[ev] = [];
+    setTimeout(() => {
+      dispatch(func(container[ev]));
+      container[ev] = [];
 
-    clearInterval(intervals[ev]);
-    clearTimeout(timeOuts[ev]);
-    delete intervals[ev];
-    delete timeOuts[ev];
+      clearInterval(intervals[ev]);
+      clearTimeout(timeOuts[ev]);
+      delete intervals[ev];
+      delete timeOuts[ev];
+    }, 100);
   }
 };
 

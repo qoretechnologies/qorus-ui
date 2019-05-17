@@ -127,6 +127,19 @@ const objectCollectionToArray: Function = (
     []
   );
 
+const arrayCollectionToObject: Function = (
+  collection: Object,
+  keyName: string = 'name'
+): Array<Object> =>
+  reduce(
+    collection,
+    (newCollection: Object, datum: Object, key: string) => ({
+      ...newCollection,
+      [datum[keyName]]: datum,
+    }),
+    {}
+  );
+
 const getInstancesCountByFilters = (
   filters: Array<string>,
   model: Object
@@ -154,5 +167,6 @@ export {
   normalizeItem,
   buildLinkToInterfaceId,
   objectCollectionToArray,
+  arrayCollectionToObject,
   getInstancesCountByFilters,
 };

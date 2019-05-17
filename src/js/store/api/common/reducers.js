@@ -32,13 +32,11 @@ const updateConfigItemWsCommon = {
               (stp: Object) => stp.stepid === dt.stepid
             );
 
-            step.config[dt.item].value = dt.value;
-            step.config[dt.item].actual_value = dt.actual_value;
-            step.config[dt.item].override = dt.override;
+            step.config[dt.name].value = dt.value;
+            step.config[dt.name].level = dt.level;
           } else {
-            config[dt.item].value = dt.value;
-            config[dt.item].actual_value = dt.actual_value;
-            config[dt.item].override = dt.override;
+            config[dt.name].value = dt.value;
+            config[dt.name].level = dt.level;
           }
 
           newData = updateItemWithId(dt.id, { _updated: true }, newData);
@@ -46,7 +44,7 @@ const updateConfigItemWsCommon = {
         }
       } else {
         const globalConfig = updateItemWithName(
-          dt.item,
+          dt.name,
           {
             value: dt.value,
           },

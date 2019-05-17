@@ -28,51 +28,33 @@ type Props = {
   item: Object,
   belongsTo: string,
   onSubmit: Function,
-  levelType: string,
-  intrf: string,
-  intrfId: number,
 };
 
-export default class ConfigItemsModal extends Component {
+export default class WorkflowConfigItemsModal extends Component {
   props: Props = this.props;
 
   state: {
     value: any,
-    override: boolean,
     error: boolean,
     yamlData?: string,
   } = {
     value: this.props.item.value,
-    override: this.props.item.override,
     error: false,
     yamlData: null,
   };
 
   async componentDidMount () {
-    const { intrf, stepId, levelType, intrfId, item } = this.props;
-    if (item.level.startsWith(levelType) || item.level === 'default') {
-      const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
+    const { intrf, intrfId, item } = this.props;
+    const yamlData: Object = await get(
+      `${settings.REST_BASE_URL}/${intrf}${
+        intrfId ? `/${intrfId}` : ''
+      }/config/${item.name}?action=yaml`
+    );
 
-      const interfacePath: string = intrfId
-        ? `${intrf}/${intrfId}${stepPath}`
-        : 'system';
-
-      const yamlData: Object = await get(
-        `${settings.REST_BASE_URL}/${interfacePath}/config/${
-          item.name
-        }?action=yaml`
-      );
-
-      this.setState({
-        yamlData,
-        value: item.level.startsWith(levelType) ? yamlData.value : '',
-      });
-    } else {
-      this.setState({
-        yamlData: true,
-        value: '',
-      });
-    }
+    this.setState({
+      yamlData,
+      value: yamlData.value,
+    });
   }
 
   handleValueChange: Function = (value): void => {
@@ -90,30 +72,18 @@ export default class ConfigItemsModal extends Component {
     this.setState({ value, error: false });
 
     try {
-      jsyaml.safeDump(value);
+      jsyaml.safeLoad(value);
     } catch (e) {
       this.setState({ error: true });
     }
   };
 
-  handleDefaultClick = () => {
-    this.setState({
-      value: this.state.yamlData.default_value,
-    });
-  };
-
   handleSaveClick: Function = (): void => {
     const value: any = this.state.value;
 
-    let newValue = value;
-
-    if (this.props.item.type === 'string') {
-      newValue = jsyaml.safeDump(value);
-    }
-
     this.props.onSubmit(
       this.props.item,
-      newValue,
+      value,
       () => {
         this.props.onClose();
       },
@@ -187,7 +157,7 @@ export default class ConfigItemsModal extends Component {
 
   render () {
     const { onClose, item } = this.props;
-    const { override, error, yamlData } = this.state;
+    const { error, yamlData } = this.state;
 
     return (
       <Modal hasFooter>
@@ -201,18 +171,7 @@ export default class ConfigItemsModal extends Component {
             ) : (
               <React.Fragment>
                 <div className="configItemsEditor">
-                  <div className="header">
-                    {item.name}
-                    <Pull right>
-                      <ButtonGroup>
-                        <Button
-                          label="Set default value"
-                          disabled={override}
-                          onClick={this.handleDefaultClick}
-                        />
-                      </ButtonGroup>
-                    </Pull>
-                  </div>
+                  <div className="header">{item.name}</div>
                   <div className="body">
                     {error && (
                       <Alert bsStyle="danger">

@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import map from 'lodash/map';
 import size from 'lodash/size';
+import isNull from 'lodash/isNull';
 
 import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
@@ -11,25 +12,18 @@ import ExpandableItem from '../ExpandableItem';
 
 import NoDataIf from '../NoDataIf';
 import mapProps from 'recompose/mapProps';
-import { connect } from 'react-redux';
-import includes from 'lodash/includes';
 import modal from '../../hocomponents/modal';
 import Table from './table';
 
-type ConfigItemsContainerProps = {
+type GlobalConfigItemsContainerProps = {
   items: Object,
   dispatchAction: Function,
   intrf: string,
   openModal: Function,
+  globalItems: Object,
 };
 
-const intrfToLevelType = {
-  workflows: 'step',
-  services: 'service',
-  jobs: 'job',
-};
-
-const ConfigItemsContainer: Function = ({
+const WorkflowConfigItemsContainer: Function = ({
   items,
   dispatchAction,
   intrf,
@@ -37,11 +31,13 @@ const ConfigItemsContainer: Function = ({
   openModal,
   closeModal,
   intrfId,
-}: ConfigItemsContainerProps): React.Element<any> => {
+  globalConfig,
+  globalItems,
+}: GlobalConfigItemsContainerProps): React.Element<any> => {
   const saveValue = (item, newValue, onSuccess, stepId?) => {
     dispatchAction(
-      actions[intrf].updateConfigItem,
-      item.id,
+      actions.workflows.updateConfigItem,
+      intrfId,
       stepId,
       item.name,
       newValue,
@@ -57,10 +53,10 @@ const ConfigItemsContainer: Function = ({
             <ExpandableItem title={belongsTo} key={belongsTo} show>
               {() => (
                 <Table
+                  globalItems={globalItems}
                   configItems={configItems}
-                  belongsTo={belongsTo}
                   intrf={intrf}
-                  levelType={intrfToLevelType[intrf]}
+                  intrfId={intrfId}
                   saveValue={saveValue}
                   openModal={openModal}
                   closeModal={closeModal}
@@ -77,5 +73,15 @@ const ConfigItemsContainer: Function = ({
 export default compose(
   modal(),
   withDispatch(),
-  onlyUpdateForKeys(['items'])
-)(ConfigItemsContainer);
+  mapProps(({ globalConfig, globalItems, ...rest }) => ({
+    globalConfig: globalItems.filter(configItem => !isNull(configItem.value)),
+    globalItems: globalItems.filter(configItem => isNull(configItem.value)),
+    ...rest,
+  })),
+  mapProps(({ globalConfig, ...rest }) => ({
+    items: { 'Workflow Config': { data: globalConfig } },
+    globalConfig,
+    ...rest,
+  })),
+  onlyUpdateForKeys(['items', 'globalConfig', 'globalItems'])
+)(WorkflowConfigItemsContainer);

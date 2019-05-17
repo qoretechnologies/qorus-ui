@@ -16,6 +16,7 @@ import Releases from '../../../containers/releases';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
 import InfoTable from '../../../components/info_table';
 import Instances from './list';
+import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
 
 type JobsDetailTabsProps = {
   activeTab: string,
@@ -106,9 +107,12 @@ const JobsDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="config">
       <Box top fill scrollY>
+        <GlobalConfigItemsTable
+          globalItems={model.global_config}
+          intrf="system"
+        />
         <ConfigItemsTable
           items={rebuildConfigHash(model)}
-          globalItems={model.global_config}
           intrf="jobs"
           intrfId={model.id}
         />

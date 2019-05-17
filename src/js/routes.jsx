@@ -60,7 +60,9 @@ const Extensions = Loadable({
 
 const ExtensionDetail = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "extension-detail" */ './views/extensions/detail'),
+    import(
+      /* webpackChunkName: "extension-detail" */ './views/extensions/detail'
+    ),
   loading: Loader,
 });
 
@@ -119,7 +121,9 @@ const OAuth2View: any = Loadable({
 
 const AuthorizeView: any = Loadable({
   loader: () =>
-    import(/* webpackChunkName: "oauth2-authorize" */ './views/oauth2/authorize'),
+    import(
+      /* webpackChunkName: "oauth2-authorize" */ './views/oauth2/authorize'
+    ),
   loading: Loader,
 });
 
@@ -249,7 +253,7 @@ class AppInfo extends React.Component {
               <Route path="http" component={System.HttpServices} />
               <Route path="cluster" component={System.Cluster} />
               <Route path="orderStats" component={System.OrderStats} />
-              {/* <Route path="config-items" component={System.ConfigItems} /> */}
+              <Route path="config-items" component={System.ConfigItems} />
             </Route>
             <Route path="workflow/:id" component={Workflow} />
             <Route path="order/:id/:date" component={Order} />
