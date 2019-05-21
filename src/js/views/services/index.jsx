@@ -136,14 +136,12 @@ const selector: Function = createSelector(
     servicesSelector,
     systemOptionsSelector,
     resourceSelector('services'),
-    resourceSelector('system'),
     settingsSelector,
   ],
   (services, systemOptions, meta, system, settings) => ({
     services,
     systemOptions,
     meta,
-    defaultLogger: system.data.defaultLoggers?.services,
     isTablet: settings.tablet,
   })
 );
@@ -154,19 +152,12 @@ export default compose(
     {
       load: actions.services.fetch,
       unsync: actions.services.unsync,
-      fetchDefaultLogger: actions.system.fetchDefaultLogger,
     }
   ),
   sync('meta'),
   withInfoBar('services'),
   withSort('services', 'services', sortDefaults.services),
   loadMore('services', 'services', true, 50),
-  lifecycle({
-    componentDidMount () {
-      this.props.fetchDefaultLogger('services');
-    },
-  }),
-  showIfPassed(({ defaultLogger }) => defaultLogger, <Loader />),
   withPane(ServicesDetail, ['systemOptions', 'location'], 'detail', 'services'),
   selectable('services'),
   withCSV('services', 'services'),

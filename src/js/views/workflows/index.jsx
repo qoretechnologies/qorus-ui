@@ -47,8 +47,6 @@ import queryControl from '../../hocomponents/queryControl';
 import Headbar from '../../components/Headbar';
 import Flex from '../../components/Flex';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
-import Loader from '../../components/loader';
-import showIfPassed from '../../hocomponents/show-if-passed';
 
 const filterSearch: Function = (search: string): Function => (
   workflows: Array<Object>
@@ -179,7 +177,6 @@ const totalInstancesSelector: Function = createSelector(
 const viewSelector = createSelector(
   [
     resourceSelector('workflows'),
-    resourceSelector('system'),
     resourceSelector('currentUser'),
     collectionSelector,
     systemOptionsSelector,
@@ -190,7 +187,6 @@ const viewSelector = createSelector(
   ],
   (
     workflows,
-    system,
     user,
     collection,
     systemOptions,
@@ -200,7 +196,6 @@ const viewSelector = createSelector(
     totalInstances
   ): Object => ({
     meta: workflows,
-    defaultLogger: system.data.defaultLoggers?.workflows,
     user,
     workflows: collection,
     systemOptions,
@@ -340,7 +335,6 @@ export default compose(
       fetch: actions.workflows.fetch,
       unsync: actions.workflows.unsync,
       unselectAll: actions.workflows.unselectAll,
-      fetchDefaultLogger: actions.system.fetchDefaultLogger,
     }
   ),
   mapProps(
@@ -382,9 +376,6 @@ export default compose(
     },
   }),
   lifecycle({
-    componentWillMount () {
-      this.props.fetchDefaultLogger('workflows');
-    },
     componentWillReceiveProps (nextProps: Props) {
       const { deprecated, date, unselectAll, fetch } = this.props;
 
@@ -394,7 +385,6 @@ export default compose(
       }
     },
   }),
-  showIfPassed(({ defaultLogger }) => defaultLogger, <Loader />),
   withPane(
     WorkflowsDetail,
     [
