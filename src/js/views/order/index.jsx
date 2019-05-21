@@ -29,6 +29,8 @@ import {
   rebuildConfigHash,
   objectCollectionToArray,
 } from '../../helpers/interfaces';
+import GlobalConfigItemsTable from '../../components/GlobalConfigItemsTable';
+import WorkflowConfigItemsTable from '../../components/WorkflowConfigItemsTable';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
