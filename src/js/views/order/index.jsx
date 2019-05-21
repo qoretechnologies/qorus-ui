@@ -25,7 +25,10 @@ import titleManager from '../../hocomponents/TitleManager';
 import Flex from '../../components/Flex';
 import Box from '../../components/box';
 import ConfigItemsTable from '../../components/ConfigItemsTable';
-import { rebuildConfigHash } from '../../helpers/interfaces';
+import {
+  rebuildConfigHash,
+  objectCollectionToArray,
+} from '../../helpers/interfaces';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
@@ -201,13 +204,22 @@ export default class Order extends Component {
           </SimpleTab>
           <SimpleTab name="config">
             <Box top fill scrollY>
+              <GlobalConfigItemsTable
+                globalItems={this.props.workflow.global_config}
+                intrf="system"
+              />
+              <WorkflowConfigItemsTable
+                globalItems={objectCollectionToArray(
+                  this.props.workflow.config
+                )}
+                intrf="workflows"
+                intrfId={this.props.workflow.id}
+              />
               <ConfigItemsTable
                 items={{
-                  ...rebuildConfigHash(this.props.workflow),
                   ...rebuildConfigHash(this.props.workflow, true),
                 }}
-                globalItems={this.props.workflow.global_config}
-                intrf="workflow"
+                intrf="workflows"
                 intrfId={this.props.workflow.id}
               />
             </Box>
