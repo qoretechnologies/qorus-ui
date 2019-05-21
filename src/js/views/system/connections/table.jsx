@@ -162,9 +162,9 @@ export default compose(
   viewBehindPermission(
     props => {
       if (props.type === 'qorus') {
-        return ['READ_SERVER_CONNECTION', 'SERVER_CONNECTION_CONTROL'];
+        return ['READ-SERVER-CONNECTION', 'SERVER-CONNECTION-CONTROL'];
       } else if (props.type === 'user') {
-        return ['READ_USER_CONNECTION', 'USER_CONNECTION_CONTROL'];
+        return ['READ-USER-CONNECTION', 'USER-CONNECTION-CONTROL'];
       }
 
       return null;
