@@ -138,7 +138,7 @@ const selector: Function = createSelector(
     resourceSelector('services'),
     settingsSelector,
   ],
-  (services, systemOptions, meta, system, settings) => ({
+  (services, systemOptions, meta, settings) => ({
     services,
     systemOptions,
     meta,
