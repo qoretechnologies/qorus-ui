@@ -107,7 +107,10 @@ export default class ConfigItemsModal extends Component {
 
     let newValue = value;
 
-    if (this.props.item.type === 'string' && value === '') {
+    if (
+      this.props.item.type === 'bool' ||
+      (this.props.item.type === 'string' && value === '')
+    ) {
       newValue = jsyaml.safeDump(value);
     }
 
