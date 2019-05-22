@@ -81,9 +81,15 @@ export default class ConfigItemsModal extends Component {
   handleSaveClick: Function = (): void => {
     const value: any = this.state.value;
 
+    let newValue = value;
+
+    if (this.props.item.type === 'bool') {
+      newValue = jsyaml.safeDump(value);
+    }
+
     this.props.onSubmit(
       this.props.item,
-      value,
+      newValue,
       () => {
         this.props.onClose();
       },

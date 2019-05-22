@@ -74,7 +74,7 @@ export default class AddConfigItemModal extends Component {
 
     let newValue = value;
 
-    if (selectedItem.type === 'string') {
+    if (selectedItem.type === 'bool' || selectedItem.type === 'string') {
       newValue = jsyaml.safeDump(value);
     }
 
