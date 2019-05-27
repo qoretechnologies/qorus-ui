@@ -136,6 +136,7 @@ export default class StepsTab extends Component {
         patch={this.getStepInfo(stepId).patch}
         steptype={this.getStepInfo(stepId).steptype}
         onClose={this.props.closeModal}
+        workflow={this.props.workflow}
       />
     );
   };

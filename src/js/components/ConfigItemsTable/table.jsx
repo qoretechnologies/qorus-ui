@@ -35,6 +35,7 @@ type ConfigItemsTableProps = {
   belongsTo: string,
   showDescription: boolean,
   levelType: string,
+  stepId?: number,
 };
 
 const ConfigItemsTable: Function = ({
@@ -44,10 +45,12 @@ const ConfigItemsTable: Function = ({
   closeModal,
   saveValue,
   intrf,
+  intrfId,
   showDescription,
   handleToggleDescription,
   dispatchAction,
   levelType,
+  stepId,
 }: ConfigItemsTableProps): React.Element<any> => (
   <EnhancedTable
     collection={configItems.data}
@@ -136,8 +139,8 @@ const ConfigItemsTable: Function = ({
                                 belongsTo={belongsTo}
                                 onSubmit={saveValue}
                                 intrf={intrf}
-                                intrfId={configItems.id}
-                                stepId={configItems.stepId}
+                                intrfId={configItems.id || intrfId}
+                                stepId={configItems.stepId || stepId}
                                 levelType={levelType}
                               />
                             );
@@ -151,8 +154,8 @@ const ConfigItemsTable: Function = ({
                           onClick={() => {
                             dispatchAction(
                               actions[intrf].deleteConfigItem,
-                              configItems.id,
-                              configItems.stepId,
+                              configItems.id || intrfId,
+                              configItems.stepId || stepId,
                               item.name,
                               null
                             );

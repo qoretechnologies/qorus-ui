@@ -21,6 +21,7 @@ type ConfigItemsContainerProps = {
   dispatchAction: Function,
   intrf: string,
   openModal: Function,
+  stepId?: number,
 };
 
 const intrfToLevelType = {
@@ -37,12 +38,13 @@ const ConfigItemsContainer: Function = ({
   openModal,
   closeModal,
   intrfId,
+  stepId,
 }: ConfigItemsContainerProps): React.Element<any> => {
-  const saveValue = (item, newValue, onSuccess, stepId?) => {
+  const saveValue = (item, newValue, onSuccess, newStepId?) => {
     dispatchAction(
       actions[intrf].updateConfigItem,
-      item.id,
-      stepId,
+      item.id || intrfId,
+      newStepId || stepId,
       item.name,
       newValue,
       onSuccess
@@ -64,6 +66,8 @@ const ConfigItemsContainer: Function = ({
                   saveValue={saveValue}
                   openModal={openModal}
                   closeModal={closeModal}
+                  stepId={stepId}
+                  intrfId={intrfId}
                 />
               )}
             </ExpandableItem>
@@ -77,5 +81,5 @@ const ConfigItemsContainer: Function = ({
 export default compose(
   modal(),
   withDispatch(),
-  onlyUpdateForKeys(['items'])
+  onlyUpdateForKeys(['items', 'stepId', 'intrf'])
 )(ConfigItemsContainer);
