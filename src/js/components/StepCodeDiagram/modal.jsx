@@ -17,7 +17,13 @@ import ConfigItemsTable from '../ConfigItemsTable';
 import { rebuildConfigHash } from '../../helpers/interfaces';
 
 @connect(
-  (state, props) => ({ step: state.api.steps.data[props.id] }),
+  (state, props) => ({
+    step: state.api.steps.data[props.id],
+    workflows: state.api.workflows.data,
+    stepWithConfig: state.api.workflows.data
+      .find(workflow => workflow.id === props.workflow.id)
+      .stepinfo.find(step => step.stepid === props.id),
+  }),
   dispatch =>
     bindActionCreators(
       {
@@ -36,12 +42,13 @@ export default class StepModal extends Component {
     step: Object,
     onClose: Function,
     fetchStep: Function,
+    workflow: Object,
   } = this.props;
 
   /**
    * Fetches detailed information about step.
    */
-  componentWillMount() {
+  componentWillMount () {
     this.props.fetchStep(this.props.id);
   }
 
@@ -50,7 +57,7 @@ export default class StepModal extends Component {
    *
    * @param {{ id: number }} nextProps
    */
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (this.props.id !== nextProps.id) {
       nextProps.fetchStep(nextProps.id);
     }
@@ -67,7 +74,7 @@ export default class StepModal extends Component {
    * @param {string} steptype
    * @return {ReactElement}
    */
-  renderHeader({ name, version, patch, steptype }) {
+  renderHeader ({ name, version, patch, steptype }) {
     return (
       <Modal.Header titleId="stepTableModalLabel" onClose={this.props.onClose}>
         {`${name} `}
@@ -91,7 +98,7 @@ export default class StepModal extends Component {
    *
    * @return {ReactElement}
    */
-  renderBody() {
+  renderBody () {
     const { step } = this.props;
     const { class: classData } = step;
 
@@ -121,8 +128,10 @@ export default class StepModal extends Component {
         {this.props.step.config && (
           <Pane key="step-info" name="Config">
             <ConfigItemsTable
-              items={rebuildConfigHash(this.props.step)}
+              items={rebuildConfigHash(this.props.stepWithConfig)}
               intrf="workflows"
+              intrfId={this.props.workflow.id}
+              stepId={this.props.step.stepid}
             />
           </Pane>
         )}
@@ -165,8 +174,11 @@ export default class StepModal extends Component {
         {this.props.step.config && (
           <Pane key="step-info" name="Config">
             <ConfigItemsTable
-              items={rebuildConfigHash(this.props.step)}
+              items={{
+                ...rebuildConfigHash(this.props.workflow, true),
+              }}
               intrf="workflows"
+              intrfId={this.props.workflow.id}
             />
           </Pane>
         )}
@@ -179,7 +191,7 @@ export default class StepModal extends Component {
    *
    * @return {ReactElement}
    */
-  renderLoader() {
+  renderLoader () {
     return <Loader />;
   }
 
@@ -188,7 +200,7 @@ export default class StepModal extends Component {
    *
    * @return {ReactElement}
    */
-  render() {
+  render () {
     return (
       <Modal width="70vw" height={600}>
         {this.renderHeader(this.props.step ? this.props.step : this.props)}

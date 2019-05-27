@@ -31,6 +31,7 @@ type Props = {
   levelType: string,
   intrf: string,
   intrfId: number,
+  stepId: number,
 };
 
 export default class ConfigItemsModal extends Component {
@@ -49,6 +50,8 @@ export default class ConfigItemsModal extends Component {
   };
 
   async componentDidMount () {
+    console.log(this.props);
+
     const { intrf, stepId, levelType, intrfId, item } = this.props;
     if (item.level.startsWith(levelType) || item.level === 'default') {
       const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
