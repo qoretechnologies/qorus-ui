@@ -11,6 +11,7 @@ import * as services from '../api/resources/services/actions/specials';
 import * as workflows from '../api/resources/workflows/actions/specials';
 import * as orders from '../api/resources/orders/actions/specials';
 import * as jobs from '../api/resources/jobs/actions/specials';
+import * as instances from '../api/resources/instances/actions';
 import * as groups from '../api/resources/groups/actions';
 import * as remotes from '../api/resources/remotes/actions';
 import * as system from '../api/resources/system/actions';
@@ -32,6 +33,7 @@ const interfaceActions: Object = {
   services,
   jobs,
   system,
+  instances,
 };
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -787,12 +789,22 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'JOB_INSTANCE_START': {
-        const job = state.api.jobs.data.find(jb => jb.id === info.jobid);
+        const isLoaded: boolean = isInterfaceLoaded('jobs', info.jobid);
 
-        if (job) {
+        if (isLoaded) {
           pipeline(
             eventstr,
             jobs.addInstance,
+            {
+              data: info,
+              started: d.time,
+              executed: d.time,
+            },
+            dispatch
+          );
+          pipeline(
+            `${eventstr}_INSTANCE`,
+            instances.addInstance,
             {
               data: info,
               started: d.time,
@@ -804,9 +816,9 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'JOB_INSTANCE_STOP': {
-        const job = state.api.jobs.data.find(jb => jb.id === info.jobid);
+        const isLoaded: boolean = isInterfaceLoaded('jobs', info.jobid);
 
-        if (job) {
+        if (isLoaded) {
           pipeline(
             eventstr,
             jobs.modifyInstance,
@@ -814,6 +826,17 @@ const handleEvent = (url, data, dispatch, state) => {
               data: info,
               modified: d.time,
               executed: d.time,
+            },
+            dispatch
+          );
+          pipeline(
+            `${eventstr}_INSTANCE`,
+            instances.modifyInstance,
+            {
+              data: info,
+              modified: d.time,
+              executed: d.time,
+              completed: info.end,
             },
             dispatch
           );

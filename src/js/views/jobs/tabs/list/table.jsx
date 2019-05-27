@@ -62,7 +62,7 @@ const ResultTable = ({
   onCSVClick,
   dateQuery: dateQuery = '24h',
   changeDateQuery,
-  job: { COMPLETE = 0, ERROR = 0, PROGRESS = 0, CRASHED = 0, id },
+  job: { COMPLETE = 0, ERROR = 0, PROGRESS = 0, CRASHED = 0, id, ...jobRest },
   filter,
 }: Props) => (
   <Table fixed condensed hover striped>
@@ -85,10 +85,10 @@ const ResultTable = ({
                   ? getInstancesCountByFilters(filter.split(','), {
                     COMPLETE,
                     ERROR,
-                    PROGRESS,
+                    'IN-PROGRESS': jobRest['IN-PROGRESS'] || 0,
                     CRASHED,
                   })
-                  : COMPLETE + ERROR + PROGRESS + CRASHED
+                  : COMPLETE + ERROR + (jobRest['IN-PROGRESS'] || 0) + CRASHED
               }
               limit={limit}
             />
@@ -100,17 +100,19 @@ const ResultTable = ({
               states={[
                 { name: 'COMPLETE', label: 'complete', title: 'Complete' },
                 { name: 'ERROR', label: 'error', title: 'Error' },
-                { name: 'PROGRESS', label: 'waiting', title: 'In-progress' },
+                { name: 'IN-PROGRESS', label: 'waiting', title: 'In-progress' },
                 { name: 'CRASHED', label: 'blocked', title: 'Crashed' },
               ]}
               instances={{
                 COMPLETE,
                 ERROR,
-                PROGRESS,
+                'IN-PROGRESS': jobRest['IN-PROGRESS'] || 0,
                 CRASHED,
               }}
               type="job"
-              totalInstances={COMPLETE + ERROR + PROGRESS + CRASHED}
+              totalInstances={
+                COMPLETE + ERROR + (jobRest['IN-PROGRESS'] || 0) + CRASHED
+              }
               id={id}
               date={dateQuery}
               wrapperWidth={300}

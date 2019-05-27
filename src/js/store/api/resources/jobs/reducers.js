@@ -351,44 +351,17 @@ const addInstance = {
 
     events.forEach(dt => {
       const job = newData.find(d => d.id === dt.data.jobid);
+      const progressCount = job['IN-PROGRESS'] ? job['IN-PROGRESS'] + 1 : 1;
 
-      if (job.results && job.results.sync) {
-        const resultData = job.results.data.slice();
-        const updatedResultData = setUpdatedToNull(resultData);
-        const newResultData = [
-          ...updatedResultData,
-          {
-            jobid: dt.data.jobid,
-            job_instanceid: dt.data.job_instanceid,
-            id: dt.data.job_instanceid,
-            name: dt.data.name,
-            version: dt.data.version,
-            started: dt.started,
-            jobstatus: 'IN-PROGRESS',
-            _updated: true,
-          },
-        ];
-
-        newData = updateItemWithId(
-          dt.data.jobid,
-          {
-            results: { ...job.results, ...{ data: newResultData } },
-          },
-          newData
-        );
-      } else {
-        const progressCount = job['IN-PROGRESS'] ? job['IN-PROGRESS'] + 1 : 1;
-
-        newData = updateItemWithId(
-          dt.data.jobid,
-          {
-            _updated: true,
-            'IN-PROGRESS': progressCount,
-            last_executed: dt.executed,
-          },
-          newData
-        );
-      }
+      newData = updateItemWithId(
+        dt.data.jobid,
+        {
+          _updated: true,
+          'IN-PROGRESS': progressCount,
+          last_executed: dt.executed,
+        },
+        newData
+      );
     });
 
     return { ...state, ...{ data: newData } };
@@ -421,27 +394,7 @@ const modifyInstance = {
       } = dt;
       const job = newData.find(d => d.id === jobid);
 
-      if (job.results && job.results.sync) {
-        const instances = job.results.data.slice();
-        const updatedInstances = setUpdatedToNull(instances);
-        const resultsData = updateItemWithId(
-          job_instanceid,
-          {
-            _updated: true,
-            jobstatus: status,
-            modified,
-          },
-          updatedInstances
-        );
-
-        newData = updateItemWithId(
-          jobid,
-          {
-            results: { ...job.results, ...{ data: resultsData } },
-          },
-          newData
-        );
-      } else {
+      
         const progressCount =
           !job['IN-PROGRESS'] || job['IN-PROGRESS'] - 1 < 0
             ? 0
@@ -459,7 +412,7 @@ const modifyInstance = {
           },
           newData
         );
-      }
+    
     });
 
     return { ...state, ...{ data: newData } };
