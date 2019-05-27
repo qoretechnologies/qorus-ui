@@ -13,7 +13,7 @@ const initialState: Object = {
 };
 
 const fetchInstances: Object = {
-  next(
+  next (
     state: Object,
     {
       payload: { instances, fetchMore },
@@ -44,7 +44,7 @@ const fetchInstances: Object = {
 };
 
 const changeOffset: Object = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { newOffset },
@@ -57,7 +57,7 @@ const changeOffset: Object = {
 };
 
 const changeServerSort: Object = {
-  next(
+  next (
     state: Object = initialState,
     {
       payload: { sort },
@@ -70,8 +70,66 @@ const changeServerSort: Object = {
 };
 
 const unsync = {
-  next() {
+  next () {
     return initialState;
+  },
+};
+
+const addInstance = {
+  next (
+    state: Object,
+    {
+      payload: { events },
+    }: Object
+  ) {
+    let newData = [...state.data];
+
+    events.forEach((dt: Object) => {
+      newData.push({
+        jobid: dt.data.jobid,
+        job_instanceid: dt.data.job_instanceid,
+        id: dt.data.job_instanceid,
+        name: dt.data.name,
+        version: dt.data.version,
+        started: dt.started,
+        jobstatus: 'IN-PROGRESS',
+        _updated: true,
+      });
+    });
+
+    return { ...state, ...{ data: newData } };
+  },
+};
+
+const modifyInstance = {
+  next (
+    state: Object,
+    {
+      payload: { events },
+    }: Object
+  ) {
+    let newData = [...state.data];
+
+    events.forEach((dt: Object) => {
+      const {
+        data: { job_instanceid, status },
+        completed,
+        modified,
+      } = dt;
+
+      newData = updateItemWithId(
+        job_instanceid,
+        {
+          _updated: true,
+          jobstatus: status,
+          modified,
+          completed,
+        },
+        newData
+      );
+    });
+
+    return { ...state, ...{ data: newData } };
   },
 };
 
@@ -80,4 +138,6 @@ export {
   changeOffset as CHANGEOFFSET,
   changeServerSort as CHANGESERVERSORT,
   unsync as UNSYNC,
+  addInstance as ADDINSTANCE,
+  modifyInstance as MODIFYINSTANCE,
 };

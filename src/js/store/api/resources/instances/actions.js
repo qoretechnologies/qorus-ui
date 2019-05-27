@@ -34,6 +34,13 @@ const fetchInstances = createAction(
   }
 );
 
+const addInstance = createAction('INSTANCES_ADDINSTANCE', events => ({
+  events,
+}));
+const modifyInstance = createAction('INSTANCES_MODIFYINSTANCE', events => ({
+  events,
+}));
+
 const changeOffset = createAction(
   'INSTANCES_CHANGEOFFSET',
   (newOffset: number): Object => ({ newOffset })
@@ -45,4 +52,11 @@ const changeServerSort = createAction(
 
 const unsync = createAction('INSTANCES_UNSYNC');
 
-export { fetchInstances, changeOffset, changeServerSort, unsync };
+export {
+  fetchInstances,
+  changeOffset,
+  changeServerSort,
+  unsync,
+  addInstance,
+  modifyInstance,
+};
