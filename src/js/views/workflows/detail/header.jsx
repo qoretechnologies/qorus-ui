@@ -52,8 +52,7 @@ const WorkflowHeader: Function = ({
             title: 'Config',
             suffix: `(${countConfigItems({
               ...rebuildConfigHash(workflow, true),
-              ...rebuildConfigHash(workflow),
-            }) + size(workflow.global_config)})`,
+            })})`,
           },
           'Releases',
           {

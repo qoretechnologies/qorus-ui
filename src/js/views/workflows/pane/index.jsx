@@ -87,11 +87,9 @@ export default class WorkflowsDetail extends Component {
       return null;
     }
 
-    const configItemsCount: number =
-      countConfigItems({
-        ...rebuildConfigHash(workflow, true),
-        ...rebuildConfigHash(workflow),
-      }) + size(workflow.global_config);
+    const configItemsCount: number = countConfigItems({
+      ...rebuildConfigHash(workflow, true),
+    });
 
     return (
       <DetailPane

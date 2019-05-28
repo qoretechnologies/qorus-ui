@@ -73,8 +73,7 @@ const ServicesDetail: Function = ({
             'Releases',
             {
               title: 'Config',
-              suffix: `(${countConfigItems(configItems) +
-                size(service.global_config)})`,
+              suffix: `(${countConfigItems(configItems)})`,
             },
             'Info',
           ]}

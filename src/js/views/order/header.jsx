@@ -81,8 +81,7 @@ export default class OrderHeader extends Component {
                 title: 'Config',
                 suffix: `(${countConfigItems({
                   ...rebuildConfigHash(this.props.workflow, true),
-                  ...rebuildConfigHash(this.props.workflow),
-                }) + size(this.props.workflow.global_config)})`,
+                })})`,
               },
               'Info',
               { title: 'Notes', suffix: `(${size(data.notes)})` },

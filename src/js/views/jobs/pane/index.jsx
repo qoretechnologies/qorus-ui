@@ -50,8 +50,7 @@ const Detail = ({
         'Releases',
         {
           title: 'Config',
-          suffix: `(${countConfigItems(configItems) +
-            size(model.global_config)})`,
+          suffix: `(${countConfigItems(configItems)})`,
         },
         'Code',
         'Log',
