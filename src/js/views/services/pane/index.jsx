@@ -103,9 +103,9 @@ export default class ServicesDetail extends Component {
       return null;
     }
 
-    const configItemsCount: number =
-      countConfigItems(rebuildConfigHash(service)) +
-      size(service.global_config);
+    const configItemsCount: number = countConfigItems(
+      rebuildConfigHash(service)
+    );
 
     return (
       <DetailPane

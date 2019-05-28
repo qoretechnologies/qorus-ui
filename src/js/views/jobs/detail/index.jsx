@@ -74,8 +74,7 @@ const JobPage = ({
             'Releases',
             {
               title: 'Config',
-              suffix: `(${countConfigItems(configItems) +
-                size(job.global_config)})`,
+              suffix: `(${countConfigItems(configItems)})`,
             },
             'Code',
             'Log',
