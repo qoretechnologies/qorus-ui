@@ -8,6 +8,7 @@ const formatAppender: Function = (appender: Object): Object => ({
   rotationCount: appender.params.rotationCount,
   filename: appender.params.filename,
   encoding: appender.params.encoding,
+  archivePattern: appender.params.archivePattern,
 });
 
 const getLoggerIntfcType: Function = (intfc: string): string =>

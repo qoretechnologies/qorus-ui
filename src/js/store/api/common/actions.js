@@ -144,6 +144,11 @@ const addAppenderAction: Function = (intfc: string): Function =>
     events,
   }));
 
+const editAppenderAction: Function = (intfc: string): Function =>
+  createAction(`${intfc.toUpperCase()}_EDITAPPENDER`, events => ({
+    events,
+  }));
+
 const deleteAppenderAction: Function = (intfc: string): Function =>
   createAction(`${intfc.toUpperCase()}_DELETEAPPENDER`, events => ({
     events,
@@ -161,6 +166,7 @@ export {
   addUpdateLoggerAction,
   deleteLoggerAction,
   addAppenderAction,
+  editAppenderAction,
   deleteAppenderAction,
   updateConfigItemWsCommon,
   deleteConfigItemAction,

@@ -13,6 +13,7 @@ import {
   fetchDefaultLoggerAction,
   deleteConfigItemAction,
   updateConfigItemAction,
+  editAppenderAction,
 } from '../../common/actions';
 
 const init: Function = createAction('SYSTEM_INIT');
@@ -131,8 +132,13 @@ const deleteDefaultLogger = createAction(
   (events: Array<Object>): Object => ({ events })
 );
 const addAppender = addAppenderAction('system');
+const editAppender = editAppenderAction('system');
 const addDefaultAppender = createAction(
   'SYSTEM_ADDDEFAULTAPPENDER',
+  (events: Array<Object>): Object => ({ events })
+);
+const editDefaultAppender = createAction(
+  'SYSTEM_EDITDEFAULTAPPENDER',
   (events: Array<Object>): Object => ({ events })
 );
 const deleteAppender = deleteAppenderAction('system');
@@ -163,10 +169,12 @@ export {
   addUpdateDefaultLogger,
   deleteLogger,
   addAppender,
+  editAppender,
   addDefaultAppender,
   deleteAppender,
   deleteDefaultAppender,
   deleteDefaultLogger,
   deleteConfigItem,
   updateConfigItem,
+  editDefaultAppender,
 };

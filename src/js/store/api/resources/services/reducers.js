@@ -23,6 +23,7 @@ import {
   addAppenderReducer,
   deleteAppenderReducer,
   updateConfigItemWsCommon,
+  editAppenderReducer,
 } from '../../common/reducers';
 import { objectCollectionToArray } from '../../../../helpers/interfaces';
 
@@ -423,6 +424,7 @@ const fetchLogger = loggerReducer;
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
+const editAppender = editAppenderReducer;
 const deleteAppender = deleteAppenderReducer;
 
 // AUTHLABELS
@@ -500,6 +502,7 @@ export {
   addUpdateLogger as ADDUPDATELOGGER,
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
+  editAppender as EDITAPPENDER,
   deleteAppender as DELETEAPPENDER,
   fetchAuthLabels as FETCHAUTHLABELS,
   updateAuthLabel as UPDATEAUTHLABEL,

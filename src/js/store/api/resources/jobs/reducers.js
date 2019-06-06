@@ -21,6 +21,7 @@ import {
   addAppenderReducer,
   deleteAppenderReducer,
   updateConfigItemWsCommon,
+  editAppenderReducer,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -394,25 +395,23 @@ const modifyInstance = {
       } = dt;
       const job = newData.find(d => d.id === jobid);
 
-      
-        const progressCount =
-          !job['IN-PROGRESS'] || job['IN-PROGRESS'] - 1 < 0
-            ? 0
-            : job['IN-PROGRESS'] - 1;
-        const statusCount = job[status] ? job[status] + 1 : 1;
+      const progressCount =
+        !job['IN-PROGRESS'] || job['IN-PROGRESS'] - 1 < 0
+          ? 0
+          : job['IN-PROGRESS'] - 1;
+      const statusCount = job[status] ? job[status] + 1 : 1;
 
-        newData = updateItemWithId(
-          jobid,
-          {
-            _updated: true,
-            'IN-PROGRESS': progressCount,
-            [status]: statusCount,
-            last_executed: executed,
-            next,
-          },
-          newData
-        );
-    
+      newData = updateItemWithId(
+        jobid,
+        {
+          _updated: true,
+          'IN-PROGRESS': progressCount,
+          [status]: statusCount,
+          last_executed: executed,
+          next,
+        },
+        newData
+      );
     });
 
     return { ...state, ...{ data: newData } };
@@ -608,6 +607,7 @@ const fetchLogger = loggerReducer;
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
+const editAppender = editAppenderReducer;
 const deleteAppender = deleteAppenderReducer;
 
 export {
@@ -649,4 +649,5 @@ export {
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
   deleteAppender as DELETEAPPENDER,
+  editAppender as EDITAPPENDER,
 };

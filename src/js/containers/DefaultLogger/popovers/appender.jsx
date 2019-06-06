@@ -13,7 +13,7 @@ import {
   Control as Button,
 } from '../../../components/controls';
 import { connect } from 'react-redux';
-import { fetchWithNotifications, post } from '../../../store/api/utils';
+import { fetchWithNotifications, post, put } from '../../../store/api/utils';
 import settings from '../../../settings';
 import Dropdown, { Item, Control } from '../../../components/dropdown';
 
@@ -163,15 +163,33 @@ export default compose(
     (state: Object): Object => ({
       appendersTypes: state.api.system.data.loggerParams.appenders_types,
       appendersFields: state.api.system.data.loggerParams.appenders_fields,
+      appendersDefaults:
+        state.api.system.data.loggerParams.default_appender_params,
     })
   ),
-  withState('name', 'changeName', ''),
-  withState('layoutPattern', 'changeLayoutPattern', null),
-  withState('filename', 'changeFilename', null),
-  withState('encoding', 'changeEncoding', null),
-  withState('appenderType', 'changeAppenderType', null),
-  withState('rotationCount', 'changeRotationCount', 0),
-  withState('archivePattern', 'changeArchivePattern', null),
+  withState('name', 'changeName', ({ data }) => data?.name || ''),
+  withState(
+    'layoutPattern',
+    'changeLayoutPattern',
+    ({ data }) => data?.layoutPattern
+  ),
+  withState('filename', 'changeFilename', ({ data }) => data?.filename),
+  withState('encoding', 'changeEncoding', ({ data }) => data?.encoding),
+  withState(
+    'appenderType',
+    'changeAppenderType',
+    ({ data }) => console.log(data) || data?.type
+  ),
+  withState(
+    'rotationCount',
+    'changeRotationCount',
+    ({ data }) => data?.rotationCount || 0
+  ),
+  withState(
+    'archivePattern',
+    'changeArchivePattern',
+    ({ data }) => data?.archivePattern
+  ),
   withState('error', 'changeError', null),
   withState('isAdding', 'changeAdding', false),
   withHandlers({
@@ -180,49 +198,129 @@ export default compose(
 
       changeName(() => event.target.value);
     },
+  }),
+  withHandlers({
     handleLayoutPatternChange: ({ changeLayoutPattern }): Function => (
-      event: Object
-    ): void => {
-      event.persist();
-
-      changeLayoutPattern(() => event.target.value);
-    },
-    handleFilenameChange: ({ changeFilename }): Function => (
-      event: Object
-    ): void => {
-      event.persist();
-
-      changeFilename(() => event.target.value);
-    },
-    handleEncodingChange: ({ changeEncoding }): Function => (
-      event: Object
-    ): void => {
-      event.persist();
-
-      changeEncoding(() => event.target.value);
-    },
-    handleAppenderTypeChange: ({ changeAppenderType }): Function => (
       event: Object,
-      appenderType: string
+      value?: string
     ): void => {
-      event.persist();
+      if (event) {
+        event.persist();
+      }
 
-      changeAppenderType(() => appenderType);
+      changeLayoutPattern(() => (event ? event.target.value : value));
     },
+  }),
+  withHandlers({
+    handleFilenameChange: ({ changeFilename }): Function => (
+      event: Object,
+      value?: string
+    ): void => {
+      if (event) {
+        event.persist();
+      }
+
+      changeFilename(() => (event ? event.target.value : value));
+    },
+  }),
+  withHandlers({
+    handleEncodingChange: ({ changeEncoding }): Function => (
+      event: Object,
+      value?: string
+    ): void => {
+      if (event) {
+        event.persist();
+      }
+
+      changeEncoding(() => (event ? event.target.value : value));
+    },
+  }),
+  withHandlers({
     handleRotationCountChange: ({ changeRotationCount }): Function => (
-      event: Object
+      event: Object,
+      value?: string
     ): void => {
-      event.persist();
+      if (event) {
+        event.persist();
+      }
 
-      changeRotationCount(() => event.target.value);
+      changeRotationCount(() => (event ? event.target.value : value));
     },
+  }),
+  withHandlers({
     handleArchivePatternChange: ({ changeArchivePattern }): Function => (
-      event: Object
+      event: Object,
+      value?: string
     ): void => {
+      if (event) {
+        event.persist();
+      }
+
+      changeArchivePattern(() => (event ? event.target.value : value));
+    },
+  }),
+  withHandlers({
+    handleAppenderTypeChange: ({
+      changeAppenderType,
+      appendersDefaults,
+      resource,
+      handleFilenameChange,
+      handleEncodingChange,
+      handleLayoutPatternChange,
+      handleArchivePatternChange,
+      handleRotationCountChange,
+      data,
+    }): Function => (event: Object, appenderType: string): void => {
       event.persist();
 
-      changeArchivePattern(() => event.target.value);
+      changeAppenderType(() => {
+        // Set the filename default
+        if (!data && appenderType !== 'LoggerAppenderStdOut') {
+          let defaultFilename: string;
+
+          switch (resource) {
+            case 'jobs':
+              defaultFilename = appendersDefaults[appenderType].filename.job;
+              break;
+            case 'services':
+              defaultFilename =
+                appendersDefaults[appenderType].filename.service;
+              break;
+            case 'workflows':
+              defaultFilename =
+                appendersDefaults[appenderType].filename.workflow;
+              break;
+            default:
+              defaultFilename = appendersDefaults[appenderType].filename.system;
+              break;
+          }
+
+          handleEncodingChange(null, appendersDefaults[appenderType].encoding);
+          handleLayoutPatternChange(
+            null,
+            appendersDefaults[appenderType].layoutPattern
+          );
+          handleFilenameChange(null, defaultFilename);
+
+          // Change also archive pattern and rotation count
+          // for FileRotate appenders
+          if (appenderType === 'LoggerAppenderFileRotate') {
+            handleArchivePatternChange(
+              null,
+              appendersDefaults[appenderType].archivePattern
+            );
+            handleRotationCountChange(
+              null,
+              appendersDefaults[appenderType].rotationCount
+            );
+          }
+        }
+
+        return appenderType;
+      });
     },
+  }),
+  withHandlers({
     handleSubmit: ({
       name,
       layoutPattern,
@@ -237,6 +335,7 @@ export default compose(
       dispatch,
       onCancel,
       changeAdding,
+      data,
     }: NewAppenderPopoverProps): Function => async (): any => {
       if (!appenderType) {
         changeError(() => 'Appender Type field is required.');
@@ -248,10 +347,11 @@ export default compose(
       } else {
         changeAdding(() => true);
 
+        const method = data ? put : post;
         const appendersPath: string = '?action=defaultLoggerAppenders';
         const fetchRes: Object = await fetchWithNotifications(
           async () =>
-            post(`${settings.REST_BASE_URL}/${resource}/${appendersPath}`, {
+            method(`${settings.REST_BASE_URL}/${resource}/${appendersPath}`, {
               body: JSON.stringify({
                 name,
                 layoutPattern,
@@ -260,6 +360,7 @@ export default compose(
                 appenderType,
                 rotationCount,
                 archivePattern,
+                id: data?.id,
               }),
             }),
           `Adding new appender...`,

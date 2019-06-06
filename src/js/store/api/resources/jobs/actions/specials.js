@@ -19,6 +19,7 @@ import {
   deleteAppenderAction,
   updateConfigItemWsCommon,
   deleteConfigItemAction,
+  editAppenderAction,
 } from '../../../common/actions';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
@@ -315,6 +316,7 @@ const fetchLogger = fetchLoggerAction('jobs');
 const addUpdateLogger = addUpdateLoggerAction('jobs');
 const deleteLogger = deleteLoggerAction('jobs');
 const addAppender = addAppenderAction('jobs');
+const editAppender = editAppenderAction('jobs');
 const deleteAppender = deleteAppenderAction('jobs');
 
 export {
@@ -358,4 +360,5 @@ export {
   addAppender,
   deleteAppender,
   deleteConfigItem,
+  editAppender,
 };

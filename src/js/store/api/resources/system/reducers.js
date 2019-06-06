@@ -8,6 +8,7 @@ import {
   deleteAppenderReducer,
   updateConfigItemWsCommon,
   defaultLoggerReducer,
+  editAppenderReducer,
 } from '../../common/reducers';
 import isArray from 'lodash/isArray';
 import { formatAppender } from '../../../../helpers/logger';
@@ -356,6 +357,7 @@ const fetchDefaultLogger = {
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
+const editAppender = editAppenderReducer;
 const addDefaultAppender = {
   next (
     state,
@@ -371,6 +373,37 @@ const addDefaultAppender = {
         data.defaultLoggers[dt.interface].loggerData.appenders.push(
           formatAppender(dt)
         );
+      });
+      // Modify the state
+      return { ...state, ...{ data } };
+    }
+
+    return state;
+  },
+};
+const editDefaultAppender = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      let data = { ...state.data };
+      // Go through the events
+      events.forEach(dt => {
+        // Update the appenders for this interface
+        data.defaultLoggers[
+          dt.interface
+        ].loggerData.appenders = data.defaultLoggers[
+          dt.interface
+        ].loggerData.appenders.map(appender => {
+          if (appender.id === dt.logger_appenderid) {
+            return formatAppender(dt);
+          }
+
+          return appender;
+        });
       });
       // Modify the state
       return { ...state, ...{ data } };
@@ -489,9 +522,11 @@ export {
   addUpdateLogger as ADDUPDATELOGGER,
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
+  editAppender as EDITAPPENDER,
   addDefaultAppender as ADDDEFAULTAPPENDER,
   deleteAppender as DELETEAPPENDER,
   deleteDefaultAppender as DELETEDEFAULTAPPENDER,
   addUpdateDefaultLogger as ADDUPDATEDEFAULTLOGGER,
   deleteDefaultLogger as DELETEDEFAULTLOGGER,
+  editDefaultAppender as EDITDEFAULTAPPENDER,
 };

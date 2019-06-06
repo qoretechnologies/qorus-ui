@@ -13,6 +13,7 @@ import {
   deleteAppenderAction,
   updateConfigItemWsCommon,
   deleteConfigItemAction,
+  editAppenderAction,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('SERVICES');
@@ -196,6 +197,7 @@ const fetchLogger = fetchLoggerAction('services');
 const addUpdateLogger = addUpdateLoggerAction('services');
 const deleteLogger = deleteLoggerAction('services');
 const addAppender = addAppenderAction('services');
+const editAppender = editAppenderAction('services');
 const deleteAppender = deleteAppenderAction('services');
 
 // AUTH LABELS
@@ -285,6 +287,7 @@ export {
   addUpdateLogger,
   deleteLogger,
   addAppender,
+  editAppender,
   deleteAppender,
   fetchAuthLabels,
   updateAuthLabel,

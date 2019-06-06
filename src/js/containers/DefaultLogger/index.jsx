@@ -51,10 +51,12 @@ const DefaultLoggerContainer: Function = ({
   isDefaultLoggerPopoverOpen,
   isLoggerEditPopoverOpen,
   isAppenderPopoverOpen,
+  isEditAppenderPopoverOpen,
   toggleLoggerPopover,
   toggleDefaultLoggerPopover,
   toggleLoggerEditPopover,
   toggleAppenderPopover,
+  toggleEditAppenderPopover,
   handleDeleteAppenderClick,
   resource,
   id,
@@ -290,8 +292,31 @@ const DefaultLoggerContainer: Function = ({
                         <Td className="narrow">
                           <ContentByType content={appender.rotationCount} />
                         </Td>
-                        <Td className="tiny">
+                        <Td className="narrow">
                           <ButtonGroup>
+                            <Popover
+                              content={
+                                <NewAppenderPopover
+                                  resource={resource}
+                                  id={id}
+                                  data={appender}
+                                  onCancel={() =>
+                                    toggleEditAppenderPopover(() => false)
+                                  }
+                                />
+                              }
+                              position={Position.LEFT_TOP}
+                              isOpen={isEditAppenderPopoverOpen}
+                            >
+                              <Button
+                                text="Edit appender"
+                                icon="edit"
+                                stopPropagation
+                                onClick={() =>
+                                  toggleEditAppenderPopover(() => true)
+                                }
+                              />
+                            </Popover>
                             <Button
                               title="Remove appender"
                               btnStyle="danger"
@@ -331,6 +356,7 @@ export default compose(
   withState('isDefaultLoggerPopoverOpen', 'toggleDefaultLoggerPopover', false),
   withState('isLoggerEditPopoverOpen', 'toggleLoggerEditPopover', false),
   withState('isAppenderPopoverOpen', 'toggleAppenderPopover', false),
+  withState('isEditAppenderPopoverOpen', 'toggleEditAppenderPopover', false),
   withHandlers({
     handleLoggerDeleteClick: ({
       dispatch,
@@ -393,5 +419,6 @@ export default compose(
     'isDefaultLoggerPopoverOpen',
     'isLoggerEditPopoverOpen',
     'isAppenderPopoverOpen',
+    'isEditAppenderPopoverOpen',
   ])
 )(DefaultLoggerContainer);
