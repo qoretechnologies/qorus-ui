@@ -13,6 +13,7 @@ import {
   deleteAppenderAction,
   updateConfigItemWsCommon,
   deleteConfigItemAction,
+  editAppenderAction,
 } from '../../../common/actions';
 
 const updateBasicData = updateBasicDataAction('WORKFLOWS');
@@ -269,6 +270,7 @@ const fetchLogger = fetchLoggerAction('workflows');
 const addUpdateLogger = addUpdateLoggerAction('workflows');
 const deleteLogger = deleteLoggerAction('workflows');
 const addAppender = addAppenderAction('workflows');
+const editAppender = editAppenderAction('workflows');
 const deleteAppender = deleteAppenderAction('workflows');
 
 export {
@@ -314,4 +316,5 @@ export {
   addAppender,
   deleteAppender,
   deleteConfigItem,
+  editAppender,
 };

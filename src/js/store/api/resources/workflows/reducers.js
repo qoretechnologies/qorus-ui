@@ -21,6 +21,7 @@ import {
   addAppenderReducer,
   deleteAppenderReducer,
   updateConfigItemWsCommon,
+  editAppenderReducer,
 } from '../../common/reducers';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -174,6 +175,7 @@ const fetchLogger = loggerReducer;
 const addUpdateLogger = addUpdateLoggerReducer;
 const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
+const editAppender = editAppenderReducer;
 const deleteAppender = deleteAppenderReducer;
 
 const setEnabled = {
@@ -699,4 +701,5 @@ export {
   deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
   deleteAppender as DELETEAPPENDER,
+  editAppender as EDITAPPENDER,
 };

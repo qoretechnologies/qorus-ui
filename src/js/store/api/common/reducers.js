@@ -338,6 +338,55 @@ const addAppenderReducer = {
   },
 };
 
+const editAppenderReducer = {
+  next (
+    state,
+    {
+      payload: { events },
+    }
+  ) {
+    if (state && state.sync) {
+      const isSystem = !isArray(state.data);
+      let newData;
+
+      if (!isSystem) {
+        newData = [...state.data];
+        newData = setUpdatedToNull(newData);
+      } else {
+        newData = [...state.logs];
+      }
+      // Go through the events
+      events.forEach(dt => {
+        // Get the interface loggerData
+        const { loggerData } = newData.find(
+          (datum: Object) => datum.id === dt.id
+        );
+        // Add the new appender to the loggerData
+        loggerData.appenders = loggerData.appenders.map(appender => {
+          if (appender.id === dt.logger_appenderid) {
+            return formatAppender(dt);
+          }
+
+          return appender;
+        });
+
+        console.log(loggerData);
+
+        // Update the data
+        newData = updateItemWithId(dt.id, { loggerData }, newData);
+      });
+
+      if (isSystem) {
+        return { ...state, ...{ logs: newData } };
+      }
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+};
+
 const deleteAppenderReducer = {
   next (
     state,
@@ -388,6 +437,7 @@ export {
   addUpdateLoggerReducer,
   deleteLoggerReducer,
   addAppenderReducer,
+  editAppenderReducer,
   deleteAppenderReducer,
   updateConfigItemWsCommon,
 };

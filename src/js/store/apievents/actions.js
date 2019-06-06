@@ -1101,6 +1101,38 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       }
+      case 'APPENDER_UPDATED': {
+        const newInfo = { ...info };
+        // Create default appender
+        if (info.isDefault) {
+          pipeline(
+            'APPENDER_ACTIONS',
+            system.editDefaultAppender,
+            info,
+            dispatch
+          );
+        } else {
+          newInfo.id = newInfo.interfaceid || newInfo.interface;
+          // Check if this interface is loaded
+          const isLoaded = info.interfaceid
+            ? isInterfaceLoaded(info.interface, info.interfaceid)
+            : state.api.system.sync &&
+              state.api.system.logs.find(
+                (item: Object) => item.id === info.interface
+              );
+
+          if (isLoaded) {
+            const intfc: string = getLoggerIntfcType(info.interface);
+            pipeline(
+              'APPENDER_ACTIONS',
+              interfaceActions[intfc].editAppender,
+              newInfo,
+              dispatch
+            );
+          }
+        }
+        break;
+      }
       case 'APPENDER_DELETED': {
         const newInfo = { ...info };
         // Create default appender
