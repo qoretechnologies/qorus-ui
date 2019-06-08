@@ -87,6 +87,7 @@ const ServiceTabs: Function = ({
     <SimpleTab name="resources">
       <Box top fill>
         <ResourceTab
+          id={service.id}
           resources={service.resources}
           resourceFiles={service.resource_files}
         />
