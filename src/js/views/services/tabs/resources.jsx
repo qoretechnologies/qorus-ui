@@ -27,15 +27,28 @@ import {
   DescriptionColumnHeader,
   DescriptionColumn,
 } from '../../../components/DescriptionColumn';
+import compose from 'recompose/compose';
+import modal from '../../../hocomponents/modal';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
+import ResourceFileModal from './modals/resourceFile';
 
 type Props = {
   resources: Object,
   resourceFiles: Array<Object>,
+  openModal: Function,
+  closeModal: Function,
+  id: number,
 };
 
 const ResourceTable: Function = ({
   resources,
   resourceFiles,
+  openModal,
+  closeModal,
+  id,
 }: Props): React.Element<any> => (
   <Tabs active="resources">
     <Pane name="Resources" suffix={size(resources)}>
@@ -159,6 +172,7 @@ const ResourceTable: Function = ({
                 <Th className="narrow" name="type">
                   Type
                 </Th>
+                <Th>Content</Th>
               </FixedRow>
             </Thead>
             <DataOrEmptyTable
@@ -175,6 +189,22 @@ const ResourceTable: Function = ({
                       <Tr key={key} first={key === 0}>
                         <NameColumn name={name} />
                         <Td className="narrow">{type}</Td>
+                        <Td className="medium">
+                          <ButtonGroup>
+                            <Button
+                              text="View contents"
+                              onClick={() => {
+                                openModal(
+                                  <ResourceFileModal
+                                    id={id}
+                                    name={name}
+                                    onClose={closeModal}
+                                  />
+                                );
+                              }}
+                            />
+                          </ButtonGroup>
+                        </Td>
                       </Tr>
                     )
                   )}
@@ -188,4 +218,7 @@ const ResourceTable: Function = ({
   </Tabs>
 );
 
-export default pure(['resources', 'resourceFiles'])(ResourceTable);
+export default compose(
+  modal(),
+  pure(['resources', 'resourceFiles'])
+)(ResourceTable);
