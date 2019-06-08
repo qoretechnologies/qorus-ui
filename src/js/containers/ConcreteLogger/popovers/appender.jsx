@@ -60,104 +60,103 @@ const NewAppenderPopover: Function = ({
   isAdding,
   appendersTypes,
   appendersFields,
-}: NewAppenderPopoverProps): React.Element<any> =>
-  console.log(appenderType) || (
-    <Box fill top style={{ minWidth: '350px' }}>
-      {error && <Alert bsStyle="danger">{error}</Alert>}
-      <FormGroup label="Name " labelFor="appender-name">
+}: NewAppenderPopoverProps): React.Element<any> => (
+  <Box fill top style={{ minWidth: '350px' }}>
+    {error && <Alert bsStyle="danger">{error}</Alert>}
+    <FormGroup label="Name " labelFor="appender-name">
+      <InputGroup
+        name="appender-name"
+        id="appender-name"
+        value={name}
+        onChange={handleNameChange}
+      />
+    </FormGroup>
+
+    <FormGroup label="Appender type " requiredLabel>
+      <Dropdown>
+        <Control>{appenderType || 'Please select'}</Control>
+        {appendersTypes.map((appType: string) => (
+          <Item
+            key={appType}
+            title={appType}
+            onClick={handleAppenderTypeChange}
+          />
+        ))}
+      </Dropdown>
+    </FormGroup>
+
+    {includes(appendersFields['layoutPattern'], appenderType) && (
+      <FormGroup label="Layout pattern" labelFor="appender-layout">
         <InputGroup
-          name="appender-name"
-          id="appender-name"
-          value={name}
-          onChange={handleNameChange}
+          name="appender-layout"
+          id="appender-layout"
+          value={layoutPattern}
+          onChange={handleLayoutPatternChange}
         />
       </FormGroup>
+    )}
 
-      <FormGroup label="Appender type " requiredLabel>
-        <Dropdown>
-          <Control>{appenderType || 'Please select'}</Control>
-          {appendersTypes.map((appType: string) => (
-            <Item
-              key={appType}
-              title={appType}
-              onClick={handleAppenderTypeChange}
-            />
-          ))}
-        </Dropdown>
+    {includes(appendersFields['filename'], appenderType) && (
+      <FormGroup label="Filename " labelFor="appender-filename" requiredLabel>
+        <InputGroup
+          name="appender-filename"
+          id="appender-filename"
+          value={filename}
+          onChange={handleFilenameChange}
+        />
       </FormGroup>
+    )}
 
-      {includes(appendersFields['layoutPattern'], appenderType) && (
-        <FormGroup label="Layout pattern" labelFor="appender-layout">
-          <InputGroup
-            name="appender-layout"
-            id="appender-layout"
-            value={layoutPattern}
-            onChange={handleLayoutPatternChange}
-          />
-        </FormGroup>
-      )}
-
-      {includes(appendersFields['filename'], appenderType) && (
-        <FormGroup label="Filename " labelFor="appender-filename" requiredLabel>
-          <InputGroup
-            name="appender-filename"
-            id="appender-filename"
-            value={filename}
-            onChange={handleFilenameChange}
-          />
-        </FormGroup>
-      )}
-
-      {includes(appendersFields['encoding'], appenderType) && (
-        <FormGroup label="Encoding" labelFor="appender-encoding">
-          <InputGroup
-            name="appender-encoding"
-            id="appender-encoding"
-            value={encoding}
-            onChange={handleEncodingChange}
-          />
-        </FormGroup>
-      )}
-
-      {includes(appendersFields['rotationCount'], appenderType) && (
-        <FormGroup label="Rotation count" labelFor="appender-rotation">
-          <InputGroup
-            name="appender-rotation"
-            id="appender-rotation"
-            value={rotationCount}
-            onChange={handleRotationCountChange}
-          />
-        </FormGroup>
-      )}
-
-      {includes(appendersFields['archivePattern'], appenderType) && (
-        <FormGroup label="Archive pattern" labelFor="appender-archive">
-          <InputGroup
-            name="appender-archive"
-            id="appender-archive"
-            value={archivePattern}
-            onChange={handleArchivePatternChange}
-          />
-        </FormGroup>
-      )}
-
-      <ButtonGroup className="pt-fill">
-        <Button
-          text="Cancel"
-          icon="cross"
-          onClick={onCancel}
-          disabled={isAdding}
+    {includes(appendersFields['encoding'], appenderType) && (
+      <FormGroup label="Encoding" labelFor="appender-encoding">
+        <InputGroup
+          name="appender-encoding"
+          id="appender-encoding"
+          value={encoding}
+          onChange={handleEncodingChange}
         />
-        <Button
-          disabled={isAdding}
-          btnStyle="success"
-          text="Submit"
-          icon="small-tick"
-          onClick={handleSubmit}
+      </FormGroup>
+    )}
+
+    {includes(appendersFields['rotationCount'], appenderType) && (
+      <FormGroup label="Rotation count" labelFor="appender-rotation">
+        <InputGroup
+          name="appender-rotation"
+          id="appender-rotation"
+          value={rotationCount}
+          onChange={handleRotationCountChange}
         />
-      </ButtonGroup>
-    </Box>
-  );
+      </FormGroup>
+    )}
+
+    {includes(appendersFields['archivePattern'], appenderType) && (
+      <FormGroup label="Archive pattern" labelFor="appender-archive">
+        <InputGroup
+          name="appender-archive"
+          id="appender-archive"
+          value={archivePattern}
+          onChange={handleArchivePatternChange}
+        />
+      </FormGroup>
+    )}
+
+    <ButtonGroup className="pt-fill">
+      <Button
+        text="Cancel"
+        icon="cross"
+        onClick={onCancel}
+        disabled={isAdding}
+      />
+      <Button
+        disabled={isAdding}
+        btnStyle="success"
+        text="Submit"
+        icon="small-tick"
+        onClick={handleSubmit}
+      />
+    </ButtonGroup>
+  </Box>
+);
 
 export default compose(
   connect(
@@ -176,11 +175,7 @@ export default compose(
   ),
   withState('filename', 'changeFilename', ({ data }) => data?.filename),
   withState('encoding', 'changeEncoding', ({ data }) => data?.encoding),
-  withState(
-    'appenderType',
-    'changeAppenderType',
-    ({ data }) => console.log(data) || data?.type
-  ),
+  withState('appenderType', 'changeAppenderType', ({ data }) => data?.type),
   withState(
     'rotationCount',
     'changeRotationCount',
@@ -366,8 +361,10 @@ export default compose(
                 id: data?.id,
               }),
             }),
-          `Adding new appender...`,
-          `New appender successfuly added`,
+          data ? 'Editing appender' : `Adding new appender...`,
+          data
+            ? 'Appender successfuly edited'
+            : `New appender successfuly added`,
           dispatch
         );
 
