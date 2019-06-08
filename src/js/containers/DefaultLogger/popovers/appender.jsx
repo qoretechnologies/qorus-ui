@@ -175,11 +175,7 @@ export default compose(
   ),
   withState('filename', 'changeFilename', ({ data }) => data?.filename),
   withState('encoding', 'changeEncoding', ({ data }) => data?.encoding),
-  withState(
-    'appenderType',
-    'changeAppenderType',
-    ({ data }) => console.log(data) || data?.type
-  ),
+  withState('appenderType', 'changeAppenderType', ({ data }) => data?.type),
   withState(
     'rotationCount',
     'changeRotationCount',
@@ -363,8 +359,10 @@ export default compose(
                 id: data?.id,
               }),
             }),
-          `Adding new appender...`,
-          `New appender successfuly added`,
+          data ? `Editing appender...` : `Adding new appender...`,
+          data
+            ? `Appender successfuly edited`
+            : `New appender successfuly added`,
           dispatch
         );
 
