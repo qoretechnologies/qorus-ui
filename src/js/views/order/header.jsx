@@ -83,6 +83,7 @@ export default class OrderHeader extends Component {
                   ...rebuildConfigHash(this.props.workflow, true),
                 })})`,
               },
+              'Mappers',
               'Info',
               { title: 'Notes', suffix: `(${size(data.notes)})` },
               'Log',

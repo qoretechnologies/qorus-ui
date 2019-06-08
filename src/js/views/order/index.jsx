@@ -31,6 +31,7 @@ import {
 } from '../../helpers/interfaces';
 import GlobalConfigItemsTable from '../../components/GlobalConfigItemsTable';
 import WorkflowConfigItemsTable from '../../components/WorkflowConfigItemsTable';
+import MappersTable from '../../containers/mappers';
 
 const orderSelector = (state, props) =>
   state.api.orders.data.find(
@@ -224,6 +225,11 @@ export default class Order extends Component {
                 intrf="workflows"
                 intrfId={this.props.workflow.id}
               />
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="mappers">
+            <Box top fill noPadding>
+              <MappersTable mappers={this.props.workflow.mappers} />
             </Box>
           </SimpleTab>
           <SimpleTab name="notes">
