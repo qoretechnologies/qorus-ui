@@ -49,9 +49,7 @@ export default class ConfigItemsModal extends Component {
     yamlData: null,
   };
 
-  async componentDidMount () {
-    console.log(this.props);
-
+  async componentDidMount() {
     const { intrf, stepId, levelType, intrfId, item } = this.props;
     if (item.level.startsWith(levelType) || item.level === 'default') {
       const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
@@ -110,10 +108,7 @@ export default class ConfigItemsModal extends Component {
 
     let newValue = value;
 
-    if (
-      this.props.item.type === 'bool' ||
-      (this.props.item.type === 'string' && value === '')
-    ) {
+    if (this.props.item.type === 'string' && value === '') {
       newValue = jsyaml.safeDump(value);
     }
 
@@ -135,17 +130,19 @@ export default class ConfigItemsModal extends Component {
       case 'bool':
         return (
           <Dropdown>
-            <DControl small>{this.state.value ? 'True' : 'False'}</DControl>
+            <DControl small>
+              {this.state.value === 'true' ? 'True' : 'False'}
+            </DControl>
             <Item
               title="True"
               onClick={() => {
-                this.handleValueChange(true);
+                this.handleValueChange('true');
               }}
             />
             <Item
               title="False"
               onClick={() => {
-                this.handleValueChange(false);
+                this.handleValueChange('false');
               }}
             />
           </Dropdown>
@@ -191,7 +188,7 @@ export default class ConfigItemsModal extends Component {
     }
   };
 
-  render () {
+  render() {
     const { onClose, item } = this.props;
     const { override, error, yamlData } = this.state;
 
