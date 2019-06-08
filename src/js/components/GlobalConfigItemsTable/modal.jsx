@@ -83,10 +83,6 @@ export default class ConfigItemsModal extends Component {
 
     let newValue = value;
 
-    if (this.props.item.type === 'bool') {
-      newValue = jsyaml.safeDump(value);
-    }
-
     this.props.onSubmit(
       this.props.item,
       newValue,
@@ -105,17 +101,19 @@ export default class ConfigItemsModal extends Component {
       case 'bool':
         return (
           <Dropdown>
-            <DControl small>{this.state.value ? 'True' : 'False'}</DControl>
+            <DControl small>
+              {this.state.value === 'true' ? 'True' : 'False'}
+            </DControl>
             <Item
               title="True"
               onClick={() => {
-                this.handleValueChange(true);
+                this.handleValueChange('true');
               }}
             />
             <Item
               title="False"
               onClick={() => {
-                this.handleValueChange(false);
+                this.handleValueChange('false');
               }}
             />
           </Dropdown>
