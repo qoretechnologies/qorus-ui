@@ -19,7 +19,10 @@ const getRelations = (fieldSource: Object, inputs: Object): Array<Object> =>
   Object.entries(fieldSource)
     .map(
       ([key, value]: [string, any]): any => {
-        const str = value.replace(/ /g, '');
+        let str = value.replace(/ /g, '');
+        str = value.replace(/\n/g, '');
+        str = value.replace(/\s+/g, '');
+
         const regex = /^[.({]"name":+"([-.\w]+)"/;
         const matching = str.match(regex);
 
@@ -47,7 +50,7 @@ const getRelations = (fieldSource: Object, inputs: Object): Array<Object> =>
     )
     .filter(item => item);
 
-function hasRelation(array, input, output) {
+function hasRelation (array, input, output) {
   return !!array.find(item => {
     const [[outputValue, inputValue]] = Object.entries(item);
     return inputValue === input && outputValue === output;
