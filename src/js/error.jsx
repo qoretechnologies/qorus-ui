@@ -15,10 +15,13 @@ type Props = {
 
 const ErrorView: Function = ({ next }: Props): React.Element<any> => (
   <div className="center-wrapper default-wrapper">
-    <h3 className="main-error-text"><Icon iconName="warning" /> Oooops... </h3>
+    <h3 className="main-error-text">
+      <Icon iconName="warning" /> Oooops...{' '}
+    </h3>
     <div className="error-wrapper">
-      The Qorus server cannot be reached at the moment. We will reload the page once the server
-      becomes available again. <a href={next}>Reload manually</a>
+      The Qorus server cannot be reached at the moment. We will reload the page
+      once the server becomes available again.{' '}
+      <a href={next}>Reload manually</a>
     </div>
   </div>
 );
@@ -28,8 +31,8 @@ export default compose(
     next: !next || next === '' || next === '/error' ? '/' : next,
   })),
   lifecycle({
-    componentDidMount() {
-      setInterval(async () => {
+    componentDidMount () {
+      async function checkServer () {
         const res = await fetchResponse(
           'GET',
           `${settings.REST_BASE_URL}/public/info`,
@@ -41,9 +44,12 @@ export default compose(
         const { next } = this.props;
 
         if (res.status !== 500) {
-          window.location.href = !next || next === '' || next === '/error' ? '/' : next;
+          window.location.href =
+            !next || next === '' || next === '/error' ? '/' : next;
         }
-      }, 30000);
+      }
+      checkServer();
+      setInterval(checkServer, 30000);
     },
-  }),
+  })
 )(ErrorView);
