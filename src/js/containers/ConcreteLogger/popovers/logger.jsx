@@ -105,7 +105,7 @@ export default compose(
       loggerLevels: state.api.system.data.loggerParams.logger_levels,
     })
   ),
-  withState('name', 'changeName', ({ data }) => data?.name || ''),
+  withState('name', 'changeName', ({ data }) => data?.name || 'MyCustomLogger'),
   withState(
     'level',
     'changeLevel',
