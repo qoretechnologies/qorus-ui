@@ -32,6 +32,8 @@ export default compose(
   })),
   lifecycle({
     componentDidMount () {
+      const { next } = this.props;
+
       async function checkServer () {
         const res = await fetchResponse(
           'GET',
@@ -40,8 +42,6 @@ export default compose(
           false,
           false
         );
-
-        const { next } = this.props;
 
         if (res.status !== 500) {
           window.location.href =
