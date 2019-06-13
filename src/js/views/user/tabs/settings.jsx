@@ -23,6 +23,7 @@ type Props = {
 const UserSettings: Function = ({
   notificationsSound,
   notificationsEnabled,
+  notificationsBrowser,
   handleNotificationsCheckboxChange,
   handleNotificationsSoundCheckboxChange,
   soundCheckboxDisabled,
@@ -30,6 +31,7 @@ const UserSettings: Function = ({
   treeDefaultExpanded,
   handleTreeDataTypesCheckboxChange,
   treeDefaultDataTypes,
+  handleNotificationsBrowserChange,
 }: Props) => (
   <Box fill top scrollY>
     <PaneItem title="Live Notifications">
@@ -50,6 +52,13 @@ const UserSettings: Function = ({
         checked={notificationsSound}
         disabled={soundCheckboxDisabled}
       />
+      <PaneItem title="Browser Notifications">
+        <Checkbox
+          label="Enable browser notifications"
+          onChange={handleNotificationsBrowserChange}
+          checked={notificationsBrowser}
+        />
+      </PaneItem>
     </PaneItem>
     <PaneItem title="Tree rendering">
       <Checkbox
@@ -92,6 +101,33 @@ export default compose(
       notificationsSound,
     }: Props): Function => (): void => {
       storeSettings('notificationsSound', !notificationsSound);
+    },
+    handleNotificationsBrowserChange: ({
+      storeSettings,
+      notificationsBrowser,
+    }) => () => {
+      // If the notifications are turned on
+      if (notificationsBrowser) {
+        // Turn them off
+        storeSettings('notificationsBrowser', false);
+      } else {
+        // Ask the user for notification permisisons
+        if ('Notification' in window) {
+          // Check if user already granted the notifications
+          if (Notification.permission === 'granted') {
+            // Turn them on
+            storeSettings('notificationsBrowser', true);
+          } else if (Notification.permission === 'default') {
+            // Ask the user for notifications
+            // access
+            Notification.requestPermission().then(permission => {
+              if (permission === 'granted') {
+                storeSettings('notificationsBrowser', true);
+              }
+            });
+          }
+        }
+      }
     },
     handleTreeExpandCheckboxChange: ({
       storeSettings,
