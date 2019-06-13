@@ -10,11 +10,34 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import moment from 'moment';
 import Flex from '../Flex';
+import withState from 'recompose/withState';
+import lifecycle from 'recompose/lifecycle';
 
 type Props = {
   collection: Array<Object>,
   paneTab: string,
 };
+
+let NotificationTime = ({ time }) => (
+  <div className="text-muted">
+    {moment(time)
+      .startOf('second')
+      .from(moment())}
+  </div>
+);
+
+NotificationTime = compose(
+  withState('timeInt', 'setTimeInt', 0),
+  lifecycle({
+    componentDidMount () {
+      const { setTimeInt } = this.props;
+      // Create an interval and update the time state
+      setInterval(() => {
+        setTimeInt(() => Date.now());
+      }, 60000);
+    },
+  })
+)(NotificationTime);
 
 const NotificationList: Function = ({ collection }: Props) => (
   <NoDataIf condition={collection.length === 0} big inBox>
@@ -24,13 +47,7 @@ const NotificationList: Function = ({ collection }: Props) => (
           <PaneItem
             key={alert.notificationId}
             title={alert.alert}
-            label={
-              <div className="text-muted">
-                {moment(alert.when)
-                  .startOf('second')
-                  .fromNow()}
-              </div>
-            }
+            label={<NotificationTime time={alert.when} />}
           >
             <Link to={getAlertObjectLink(alert.type, alert)}>
               {alert.object}
@@ -51,8 +68,8 @@ export default compose(
       collection:
         paneTab !== 'all'
           ? collection.filter(
-              (alert: Object) => alert.notificationType === paneTab
-            )
+            (alert: Object) => alert.notificationType === paneTab
+          )
           : collection,
       paneTab,
       ...rest,

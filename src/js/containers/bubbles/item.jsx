@@ -9,6 +9,7 @@ import mapProps from 'recompose/mapProps';
 import { bubbles, notifications } from '../../store/ui/actions';
 import { Bubble } from '../../components/bubbles';
 import queryControl from '../../hocomponents/queryControl';
+import qoreLogo from '../../../img/qore_logo_purple.png';
 
 const timeoutByBubbleType = {
   WARNING: '30000',
@@ -25,6 +26,7 @@ type Props = {
   changeNotificationsPaneQuery: Function,
   stack: number,
   notificationsSound: boolean,
+  notificationsBrowser: boolean,
   dismissNotification: Function,
   deleteBubble: Function,
 };
@@ -33,14 +35,28 @@ export class BubbleItem extends React.Component {
   props: Props = this.props;
   _timeout: any;
 
-  componentDidMount() {
-    const { timeout, bubble } = this.props;
+  componentDidMount () {
+    const { timeout, bubble, notificationsBrowser, type, stack } = this.props;
     const timeoutByType = timeout || timeoutByBubbleType[bubble.type];
+
+    // Check if user has browser notifications turned on
+    if (notificationsBrowser && type === 'notification') {
+      // Send new notification
+      const notif = new Notification(`New Qorus alert raised (${stack})`, {
+        body: bubble.notificationType,
+        icon: qoreLogo,
+        tag: shortid.generate(),
+      });
+      // Open notifications pane on click
+      notif.onclick = () => {
+        this.props.changeNotificationsPaneQuery('open');
+      };
+    }
 
     this._timeout = setTimeout(this.handleDelete, timeoutByType);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps (nextProps: Props) {
     if (
       this.props.bubble.type !== nextProps.bubble.type &&
       this.props.bubble.type === 'WARNING'
@@ -81,15 +97,15 @@ export class BubbleItem extends React.Component {
     }
   };
 
-  render() {
-    const { bubble: item, type, stack, notificationsSound } = this.props;
-    const message: string = item.notificationType || item.message;
+  render () {
+    const { bubble, type, stack, notificationsSound } = this.props;
+    const message: string = bubble.notificationType || bubble.message;
 
     return (
       <Bubble
         onClick={this.handleDelete}
         onViewClick={type === 'notification' && this.handleView}
-        type={item.type.toLowerCase()}
+        type={bubble.type.toLowerCase()}
         stack={stack}
         notification={type === 'notification'}
         notificationsSound={notificationsSound}
@@ -111,6 +127,7 @@ export default compose(
       },
     }) => ({
       notificationsSound: storage.settings.notificationsSound,
+      notificationsBrowser: storage.settings.notificationsBrowser,
     }),
     {
       ...bubbles,
@@ -125,5 +142,10 @@ export default compose(
     ...props,
   })),
   queryControl('notificationsPane'),
-  onlyUpdateForKeys(['bubble', 'timeout', 'notificationsSound'])
+  onlyUpdateForKeys([
+    'bubble',
+    'timeout',
+    'notificationsSound',
+    'notificationsBrowser',
+  ])
 )(BubbleItem);

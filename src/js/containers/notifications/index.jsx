@@ -41,17 +41,20 @@ const groupNotifications: Function = (state: Object): Object => {
   const { data } = state.ui.notifications;
   const groupedNotifications: Object = {};
 
-  data.filter((datum: Object) => !datum.read).forEach(
-    (datum: Object): void => {
-      const objectItem: any = groupedNotifications[datum.alert];
+  data
+    .filter((datum: Object) => !datum.read)
+    .forEach(
+      (datum: Object): void => {
+        const objectItem: any = groupedNotifications[datum.alert];
 
-      if (!objectItem) {
-        groupedNotifications[datum.alert] = 0;
+        if (!objectItem) {
+          groupedNotifications[datum.alert] = 0;
+        }
+
+        groupedNotifications[datum.alert] =
+          groupedNotifications[datum.alert] + 1;
       }
-
-      groupedNotifications[datum.alert] = groupedNotifications[datum.alert] + 1;
-    }
-  );
+    );
   return groupedNotifications;
 };
 
