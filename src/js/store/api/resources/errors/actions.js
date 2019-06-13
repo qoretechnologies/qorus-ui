@@ -24,30 +24,38 @@ const createOrUpdate: Function = createAction(
     type: string,
     id: number | string,
     data: Object,
+    onSuccess: Function,
     dispatch: Function
   ): ?Object => {
-    if (!dispatch) {
-      return { type, id, data };
-    }
-
     const dt =
       type === 'workflow' ? { ...data, ...{ forceworkflow: true } } : data;
 
-    await fetchWithNotifications(
-      async () =>
-        await fetchJson(
+    const result = await fetchWithNotifications(
+      async () => {
+        const res = await fetchJson(
           'POST',
           `${settings.REST_BASE_URL}/errors/${type}${
             id && id !== 'omit' ? `/${id}` : ''
           }?action=createOrUpdate`,
           { body: JSON.stringify(dt) }
-        ),
+        );
+
+        if (!res.err) {
+          onSuccess();
+        }
+
+        return res;
+      },
       'Saving changes...',
       'Changes saved',
       dispatch
     );
 
-    return {};
+    if (result.err) {
+      return {};
+    }
+
+    return { type, id, data };
   }
 );
 
