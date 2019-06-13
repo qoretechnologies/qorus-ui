@@ -2,10 +2,17 @@
 import React, { Component } from 'react';
 
 import Modal from '../modal';
-import { Controls, Control } from '../controls';
 import Box from '../box';
 import ContentByType from '../ContentByType';
-import { Icon, TextArea } from '@blueprintjs/core';
+import {
+  Icon,
+  TextArea,
+  Popover,
+  Button as Btn,
+  ButtonGroup as BtnGrp,
+  Intent,
+  Position,
+} from '@blueprintjs/core';
 import DatePicker from '../datepicker';
 import Dropdown, { Item, Control as DControl } from '../../components/dropdown';
 import { getLineCount } from '../../helpers/system';
@@ -66,7 +73,7 @@ export default class ConfigItemsModal extends Component {
 
       this.setState({
         yamlData,
-        value: item.level.startsWith(levelType) ? yamlData.value : '',
+        value: yamlData.value,
       });
     } else {
       this.setState({
@@ -190,7 +197,7 @@ export default class ConfigItemsModal extends Component {
 
   render() {
     const { onClose, item } = this.props;
-    const { override, error, yamlData } = this.state;
+    const { override, error, yamlData, value } = this.state;
 
     return (
       <Modal hasFooter>
@@ -231,16 +238,44 @@ export default class ConfigItemsModal extends Component {
         </Modal.Body>
         <Modal.Footer>
           <div className="pull-right">
-            <Controls grouped noControls>
-              <Control label="Cancel" btnStyle="default" action={onClose} big />
-              <Control
-                label="Save"
-                btnStyle="success"
-                disabled={error}
-                action={this.handleSaveClick}
-                big
-              />
-            </Controls>
+            <ButtonGroup>
+              <Button label="Cancel" btnStyle="default" action={onClose} big />
+              {value === yamlData?.default_value ? (
+                <Popover
+                  position={Position.TOP}
+                  content={
+                    <Box fill top style={{ width: '300px' }}>
+                      <p>
+                        The value submitted is same as default value, but will
+                        not change when default value is changed in the future.
+                      </p>
+                      <BtnGrp>
+                        <Btn
+                          className="pt-fill"
+                          text="Submit anyway"
+                          intent={Intent.SUCCESS}
+                          onClick={this.handleSaveClick}
+                        />
+                      </BtnGrp>
+                    </Box>
+                  }
+                >
+                  <Btn
+                    text="Save"
+                    iconName="warning-sign"
+                    intent={Intent.WARNING}
+                  />
+                </Popover>
+              ) : (
+                <Button
+                  label="Save"
+                  btnStyle="success"
+                  disabled={error}
+                  action={this.handleSaveClick}
+                  big
+                />
+              )}
+            </ButtonGroup>
           </div>
         </Modal.Footer>
       </Modal>
