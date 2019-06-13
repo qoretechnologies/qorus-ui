@@ -189,10 +189,15 @@ export default compose(
   withState('error', 'changeError', null),
   withState('isAdding', 'changeAdding', false),
   withHandlers({
-    handleNameChange: ({ changeName }): Function => (event: Object): void => {
-      event.persist();
+    handleNameChange: ({ changeName }): Function => (
+      event: Object,
+      value?: string
+    ): void => {
+      if (event) {
+        event.persist();
+      }
 
-      changeName(() => event.target.value);
+      changeName(() => (event ? event.target.value : value));
     },
   }),
   withHandlers({
@@ -266,6 +271,7 @@ export default compose(
       handleLayoutPatternChange,
       handleArchivePatternChange,
       handleRotationCountChange,
+      handleNameChange,
     }): Function => (event: Object, appenderType: string): void => {
       event.persist();
 
@@ -311,6 +317,8 @@ export default compose(
             );
           }
         }
+
+        handleNameChange(null, appendersDefaults[appenderType].name);
 
         return appenderType;
       });
