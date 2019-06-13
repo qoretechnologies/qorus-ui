@@ -37,7 +37,7 @@ type Props = {
   type: string,
   openModal: Function,
   closeModal: Function,
-  optimisticDispatch: Function,
+  dispatchAction: Function,
   id: string | number,
   height: string | number,
 };
@@ -51,13 +51,13 @@ const ErrorsContainer: Function = ({
   type,
   openModal,
   closeModal,
+  dispatchAction,
   optimisticDispatch,
   id,
   height,
 }: Props): React.Element<any> => {
   const handleFormSubmit: Function = (data: Object) => {
-    optimisticDispatch(actions.errors.createOrUpdate, type, id, data);
-    closeModal();
+    dispatchAction(actions.errors.createOrUpdate, type, id, data, closeModal);
   };
 
   const handleModalOpen: Function = (data: Object) => {
