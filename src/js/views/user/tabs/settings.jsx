@@ -10,6 +10,8 @@ import actions from '../../../store/api/actions';
 import mapProps from 'recompose/mapProps';
 import Alert from '../../../components/alert';
 import Box from '../../../components/box';
+import { Modules } from '../../../constants/settings';
+import { map } from 'lodash';
 
 type Props = {
   storage: Object,
@@ -32,6 +34,8 @@ const UserSettings: Function = ({
   handleTreeDataTypesCheckboxChange,
   treeDefaultDataTypes,
   handleNotificationsBrowserChange,
+  dashboardModules,
+  handleDashboardModulesChange,
 }: Props) => (
   <Box fill top scrollY>
     <PaneItem title="Live Notifications">
@@ -71,6 +75,23 @@ const UserSettings: Function = ({
         onChange={handleTreeExpandCheckboxChange}
         checked={treeDefaultExpanded}
       />
+    </PaneItem>
+    <PaneItem title="Dashboard" id="dashboard">
+      <Alert bsStyle="info" iconName="notifications">
+        Below you can select which panels are displayed on the dashboard
+      </Alert>
+      {map(Modules, (dModule, name) => (
+        <Checkbox
+          label={name}
+          checked={dashboardModules.includes(dModule)}
+          onChange={() => {
+            handleDashboardModulesChange(
+              dModule,
+              !dashboardModules.includes(dModule)
+            );
+          }}
+        />
+      ))}
     </PaneItem>
   </Box>
 );
@@ -140,6 +161,22 @@ export default compose(
       treeDefaultDataTypes,
     }) => (): void => {
       storeSettings('treeDefaultDataTypes', !treeDefaultDataTypes);
+    },
+    handleDashboardModulesChange: ({ storeSettings, dashboardModules }) => (
+      module: string,
+      value: boolean
+    ): void => {
+      let newDashboardModules;
+
+      if (value) {
+        // Add the module
+        newDashboardModules = [...dashboardModules, module];
+      } else {
+        // Remove the module
+        newDashboardModules = dashboardModules.filter(mod => mod !== module);
+      }
+
+      storeSettings('dashboardModules', newDashboardModules);
     },
   })
 )(UserSettings);

@@ -131,10 +131,7 @@ export default [
     name: 'currentUser',
     url: `${settings.REST_BASE_URL}/users?action=current`,
     initialState: { data: {} },
-    transform: item =>
-      item.storage
-        ? injectStorageDefaults(item)
-        : { ...item, ...{ storage: { settings: {} } } },
+    transform: item => injectStorageDefaults(item),
   },
   {
     name: 'services',

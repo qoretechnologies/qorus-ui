@@ -94,14 +94,32 @@ export const processRESTResponse = (
 };
 
 export const injectStorageDefaults = (currentUserData: Object): Object => {
-  const { storage } = currentUserData;
+  let { storage } = currentUserData;
+
+  if (!storage) {
+    storage = {};
+  }
 
   if (!storage.settings) {
     storage.settings = {
       notificationsEnabled: true,
       notificationsSound: true,
     };
+
+    if (!storage.settings.dashboardModules) {
+      storage.settings.dashboardModules = [
+        'orderStats',
+        'interfaces',
+        'connections',
+        'cluster',
+        'overview',
+        'remotes',
+        'nodeData',
+      ];
+    }
   }
+
+  currentUserData.storage = storage;
 
   return currentUserData;
 };
