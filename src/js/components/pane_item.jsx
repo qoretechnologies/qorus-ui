@@ -6,14 +6,16 @@ type Props = {
   title?: string,
   label?: React.Element<any>,
   children?: any,
+  id?: string,
 };
 
 const PaneItem: Function = ({
   title,
   children,
   label,
+  id,
 }: Props): React.Element<any> => (
-  <div className="pane-item">
+  <div className="pane-item" id={id}>
     {(title || label) && (
       <div className="pane-item-header">
         {title && <h5 className="pane-item-title">{title}</h5>}

@@ -27,6 +27,13 @@ import MultiDispositionChart from '../../../components/MultiDispositionChart';
 import Flex from '../../../components/Flex';
 import { MasonryLayout, MasonryPanel } from '../../../components/MasonryLayout';
 import Nodes from './dropdowns/Nodes';
+import Headbar from '../../../components/Headbar';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import Pull from '../../../components/Pull';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
 
 const viewSelector = createSelector(
   [
@@ -106,10 +113,16 @@ export default class Dashboard extends Component {
     });
   };
 
+  hasModule = mod =>
+    this.props.currentUser.data.storage.settings.dashboardModules.includes(mod);
+
+  getModulesCount = () =>
+    this.props.currentUser.data.storage.settings.dashboardModules.length;
+
   render () {
     if (!this.props.health.sync) return <Loader />;
 
-    const { system, health, isTablet, currentUser } = this.props;
+    const { system, health, isTablet } = this.props;
     let { remotes, canLoadMoreRemotes } = this.state;
 
     remotes = remotes || [];
@@ -206,482 +219,546 @@ export default class Dashboard extends Component {
     };
 
     return (
-      <Flex scrollY>
-        <MasonryLayout columns={isTablet ? 2 : 3}>
-          {system.order_stats && (
-            <MasonryPanel>
-              <DashboardModule>
-                <MultiDispositionChart
-                  title="Global order stats"
-                  orderStats={system.order_stats}
-                  onDispositionChartClick={band => {
-                    this.props.openModal(
-                      <GlobalModal
-                        onClose={this.props.closeModal}
-                        text="Global chart data"
-                        band={band}
-                      />
-                    );
-                  }}
-                  onSLAChartClick={band => {
-                    this.props.openModal(
-                      <SLAModal
-                        onClose={this.props.closeModal}
-                        in_sla
-                        text="In SLA"
-                        band={band}
-                      />
-                    );
-                  }}
-                />
-              </DashboardModule>
-            </MasonryPanel>
-          )}
-          <MasonryPanel>
-            <DashboardModule>
-              <PaneItem title="Interfaces">
-                <div className="dashboard-data-module has-link">
-                  <div
-                    className="dashboard-data-title"
-                    onClick={() => this.handleModuleClick('/workflows')}
-                  >
-                    {' '}
-                    Workflows{' '}
-                  </div>
-                  <div
-                    className="dashboard-data-top"
-                    onClick={() => this.handleModuleClick('/workflows')}
-                  >
-                    <div className="db-data-content">
-                      {system.workflow_total}
-                    </div>
-                    <div className="db-data-label"> total </div>
-                  </div>
-                  <div
-                    className={`dashboard-data-bottom ${
-                      system.workflow_alerts ? 'has-alerts' : ''
-                    }`}
-                    onClick={() =>
-                      this.handleModuleClick(
-                        '/workflows?search=has_alerts:true'
-                      )
-                    }
-                  >
-                    <div className="db-data-content">
-                      {system.workflow_alerts}
-                    </div>
-                    <div className="db-data-label"> with alerts </div>
-                  </div>
-                </div>
-                <div className="dashboard-data-module has-link">
-                  <div
-                    className="dashboard-data-title"
-                    onClick={() => this.handleModuleClick('/services')}
-                  >
-                    {' '}
-                    Services{' '}
-                  </div>
-                  <div
-                    className="dashboard-data-top"
-                    onClick={() => this.handleModuleClick('/services')}
-                  >
-                    <div className="db-data-content">
-                      {system.service_total}
-                    </div>
-                    <div className="db-data-label"> total </div>
-                  </div>
-                  <div
-                    className={`dashboard-data-bottom ${
-                      system.service_alerts ? 'has-alerts' : ''
-                    }`}
-                    onClick={() =>
-                      this.handleModuleClick('/services?search=has_alerts:true')
-                    }
-                  >
-                    <div className="db-data-content">
-                      {system.service_alerts}
-                    </div>
-                    <div className="db-data-label"> with alerts </div>
-                  </div>
-                </div>
-                <div className="dashboard-data-module has-link">
-                  <div
-                    className="dashboard-data-title"
-                    onClick={() => this.handleModuleClick('/jobs')}
-                  >
-                    {' '}
-                    Jobs{' '}
-                  </div>
-                  <div
-                    className="dashboard-data-top"
-                    onClick={() => this.handleModuleClick('/jobs')}
-                  >
-                    <div className="db-data-content">{system.job_total}</div>
-                    <div className="db-data-label"> total </div>
-                  </div>
-                  <div
-                    className={`dashboard-data-bottom ${
-                      system.job_alerts ? 'has-alerts' : ''
-                    }`}
-                    onClick={() =>
-                      this.handleModuleClick('/jobs?search=has_alerts:true')
-                    }
-                  >
-                    <div className="db-data-content">{system.job_alerts}</div>
-                    <div className="db-data-label"> with alerts </div>
-                  </div>
-                </div>
-              </PaneItem>
-            </DashboardModule>
-          </MasonryPanel>
-          <MasonryPanel>
-            <DashboardModule>
-              <PaneItem title="Connections">
-                <div className="dashboard-data-module has-link">
-                  <div
-                    className="dashboard-data-title"
-                    onClick={() => this.handleModuleClick('/remote?tab=qorus')}
-                  >
-                    Qorus
-                  </div>
-                  <div
-                    className="dashboard-data-top"
-                    onClick={() => this.handleModuleClick('/remote?tab=qorus')}
-                  >
-                    <div className="db-data-content">{system.remote_total}</div>
-                    <div className="db-data-label"> total </div>
-                  </div>
-                  <div
-                    className={`dashboard-data-bottom ${
-                      system.remote_alerts ? 'has-alerts' : ''
-                    }`}
-                    onClick={() =>
-                      this.handleModuleClick(
-                        '/remote?tab=qorus&search=has_alerts:true'
-                      )
-                    }
-                  >
-                    <div className="db-data-content">
-                      {system.remote_alerts}
-                    </div>
-                    <div className="db-data-label"> with alerts </div>
-                  </div>
-                </div>
-                <div className="dashboard-data-module has-link">
-                  <div
-                    className="dashboard-data-title"
-                    onClick={() => this.handleModuleClick('/remote')}
-                  >
-                    Datasource
-                  </div>
-                  <div
-                    className="dashboard-data-top"
-                    onClick={() => this.handleModuleClick('/remote')}
-                  >
-                    <div className="db-data-content">
-                      {system.datasource_total}
-                    </div>
-                    <div className="db-data-label"> total </div>
-                  </div>
-                  <div
-                    className={`dashboard-data-bottom ${
-                      system.datasource_alerts ? 'has-alerts' : ''
-                    }`}
-                    onClick={() =>
-                      this.handleModuleClick('/remote?search=has_alerts:true')
-                    }
-                  >
-                    <div className="db-data-content">
-                      {system.datasource_alerts}
-                    </div>
-                    <div className="db-data-label"> with alerts </div>
-                  </div>
-                </div>
-                <div className="dashboard-data-module has-link">
-                  <div
-                    className="dashboard-data-title"
-                    onClick={() => this.handleModuleClick('/remote?tab=user')}
-                  >
-                    User
-                  </div>
-                  <div
-                    className="dashboard-data-top"
-                    onClick={() => this.handleModuleClick('/remote?tab=user')}
-                  >
-                    <div className="db-data-content">{system.user_total}</div>
-                    <div className="db-data-label"> total </div>
-                  </div>
-                  <div
-                    className={`dashboard-data-bottom ${
-                      system.user_alerts ? 'has-alerts' : ''
-                    }`}
-                    onClick={() =>
-                      this.handleModuleClick(
-                        '/remote?tab=user&search=has_alerts:true'
-                      )
-                    }
-                  >
-                    <div className="db-data-content">{system.user_alerts}</div>
-                    <div className="db-data-label"> with alerts </div>
-                  </div>
-                </div>
-              </PaneItem>
-            </DashboardModule>
-          </MasonryPanel>
-          <MasonryPanel>
-            <DashboardModule>
-              <PaneItem title="Cluster">
-                <div className="module-wrapper">
-                  <div className="dashboard-module-small">
-                    <div className="top">{calculateMemory(clusterMemory)}</div>
-                    <div className="bottom">Memory</div>
-                  </div>
-                  <div className="dashboard-module-small">
-                    <div className="top">
-                      {Object.keys(system.cluster_info).length}
-                    </div>
-                    <div className="bottom">Node(s)</div>
-                  </div>
-                  <div className="dashboard-module-small">
-                    <div className="top">
-                      {Object.keys(system.processes).length}
-                    </div>
-                    <div className="bottom">Processes</div>
-                  </div>
-                </div>
-                {Object.keys(system.cluster_info).map((node: string) => {
-                  const memory: string = calculateMemory(
-                    system.cluster_info[node].node_priv
-                  );
-
-                  const memoryInUse: string = calculateMemory(
-                    system.cluster_info[node].node_ram_in_use
-                  );
-
-                  const loadPct: string =
-                    system.cluster_info[node].node_load_pct;
-
-                  const processName = Object.keys(system.processes).find(
-                    process => system.processes[process].node === node
-                  );
-
-                  const processes: number = Object.keys(
-                    system.processes
-                  ).filter(
-                    (process: string) => system.processes[process].node === node
-                  ).length;
-
-                  return (
-                    <div
-                      className="dashboard-module-wide has-link"
-                      key={node}
-                      onClick={() => this.handleModuleClick('/system/cluster')}
-                    >
-                      <div className="dashboard-data-title">
-                        {system.processes[processName].node}
-                      </div>
-                      <div className="bottom">
-                        <div className="module">
-                          <div className="top">{memory}</div>
-                          <div className="bottom">RAM used by Qorus</div>
-                        </div>
-                        <div className="module">
-                          <div className="top">{processes}</div>
-                          <div className="bottom">Processes</div>
-                        </div>
-                      </div>
-                      <div className="bottom">
-                        <div className="module">
-                          <div className="top">{memoryInUse}</div>
-                          <div className="bottom">Total RAM used</div>
-                        </div>
-                        <div className="module">
-                          <div className="top">{round(loadPct, 2)}%</div>
-                          <div className="bottom">CPU load</div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </PaneItem>
-            </DashboardModule>
-          </MasonryPanel>
-          <MasonryPanel>
-            <DashboardModule>
-              <PaneItem title="System Overview">
-                <div className="dashboard-module-overview">
-                  <div className="module overview-module">
-                    <div>{health.data['instance-key']}</div>
-                    <div>instance</div>
-                  </div>
-                  <div
-                    className={`module overview-module ${statusHealth(
-                      health.data.health
-                    )}`}
-                  >
-                    <div>{health.data.health}</div>
-                    <div>health</div>
-                  </div>
-                </div>
-                <div className="dashboard-module-overview">
-                  <div
-                    className={`module overview-module ${
-                      system['alert-summary'].ongoing !== 0 ? 'danger' : 'none'
-                    } has-link`}
-                    onClick={() => this.handleModuleClick('/system/alerts')}
-                  >
-                    <div>{system['alert-summary'].ongoing}</div>
-                    <div>ongoing alerts</div>
-                  </div>
-                  <div
-                    className={`module overview-module ${
-                      system['alert-summary'].transient !== 0
-                        ? 'danger'
-                        : 'success'
-                    } has-link`}
-                    onClick={() =>
-                      this.handleModuleClick('/system/alerts?tab=transient')
-                    }
-                  >
-                    <div>{system['alert-summary'].transient}</div>
-                    <div>transient alerts</div>
-                  </div>
-                </div>
-              </PaneItem>
-            </DashboardModule>
-          </MasonryPanel>
-          {remotes.length ? (
-            <MasonryPanel>
-              <DashboardModule>
-                <PaneItem title="Remote Instances">
-                  {remotes.map((remote: Object) => (
-                    <div
-                      className="dashboard-module-wide has-link"
-                      key={remote.name}
-                      onClick={() =>
-                        this.handleModuleClick(
-                          `/remote?tab=qorus&paneId=${remote.name}`
-                        )
-                      }
-                    >
+      <Flex>
+        <Headbar>
+          <Breadcrumbs>
+            <Crumb active>Dashboard</Crumb>
+          </Breadcrumbs>
+          <Pull right>
+            <ButtonGroup>
+              <Button
+                text="Settings"
+                icon="cog"
+                onClick={() => {
+                  browserHistory.push('/user?tab=settings#dashboard');
+                }}
+              />
+            </ButtonGroup>
+          </Pull>
+        </Headbar>
+        <Flex scrollY>
+          <MasonryLayout
+            columns={this.getModulesCount() < 4 ? 1 : isTablet ? 2 : 3}
+          >
+            {this.hasModule('orderStats') && system.order_stats && (
+              <MasonryPanel>
+                <DashboardModule>
+                  <MultiDispositionChart
+                    title="Global order stats"
+                    orderStats={system.order_stats}
+                    onDispositionChartClick={band => {
+                      this.props.openModal(
+                        <GlobalModal
+                          onClose={this.props.closeModal}
+                          text="Global chart data"
+                          band={band}
+                        />
+                      );
+                    }}
+                    onSLAChartClick={band => {
+                      this.props.openModal(
+                        <SLAModal
+                          onClose={this.props.closeModal}
+                          in_sla
+                          text="In SLA"
+                          band={band}
+                        />
+                      );
+                    }}
+                  />
+                </DashboardModule>
+              </MasonryPanel>
+            )}
+            {this.hasModule('interfaces') && (
+              <MasonryPanel>
+                <DashboardModule>
+                  <PaneItem title="Interfaces">
+                    <div className="dashboard-data-module has-link">
                       <div
-                        className={`dashboard-data-title ${statusHealth(
-                          remote.health
+                        className="dashboard-data-title"
+                        onClick={() => this.handleModuleClick('/workflows')}
+                      >
+                        {' '}
+                        Workflows{' '}
+                      </div>
+                      <div
+                        className="dashboard-data-top"
+                        onClick={() => this.handleModuleClick('/workflows')}
+                      >
+                        <div className="db-data-content">
+                          {system.workflow_total}
+                        </div>
+                        <div className="db-data-label"> total </div>
+                      </div>
+                      <div
+                        className={`dashboard-data-bottom ${
+                          system.workflow_alerts ? 'has-alerts' : ''
+                        }`}
+                        onClick={() =>
+                          this.handleModuleClick(
+                            '/workflows?search=has_alerts:true'
+                          )
+                        }
+                      >
+                        <div className="db-data-content">
+                          {system.workflow_alerts}
+                        </div>
+                        <div className="db-data-label"> with alerts </div>
+                      </div>
+                    </div>
+                    <div className="dashboard-data-module has-link">
+                      <div
+                        className="dashboard-data-title"
+                        onClick={() => this.handleModuleClick('/services')}
+                      >
+                        {' '}
+                        Services{' '}
+                      </div>
+                      <div
+                        className="dashboard-data-top"
+                        onClick={() => this.handleModuleClick('/services')}
+                      >
+                        <div className="db-data-content">
+                          {system.service_total}
+                        </div>
+                        <div className="db-data-label"> total </div>
+                      </div>
+                      <div
+                        className={`dashboard-data-bottom ${
+                          system.service_alerts ? 'has-alerts' : ''
+                        }`}
+                        onClick={() =>
+                          this.handleModuleClick(
+                            '/services?search=has_alerts:true'
+                          )
+                        }
+                      >
+                        <div className="db-data-content">
+                          {system.service_alerts}
+                        </div>
+                        <div className="db-data-label"> with alerts </div>
+                      </div>
+                    </div>
+                    <div className="dashboard-data-module has-link">
+                      <div
+                        className="dashboard-data-title"
+                        onClick={() => this.handleModuleClick('/jobs')}
+                      >
+                        {' '}
+                        Jobs{' '}
+                      </div>
+                      <div
+                        className="dashboard-data-top"
+                        onClick={() => this.handleModuleClick('/jobs')}
+                      >
+                        <div className="db-data-content">
+                          {system.job_total}
+                        </div>
+                        <div className="db-data-label"> total </div>
+                      </div>
+                      <div
+                        className={`dashboard-data-bottom ${
+                          system.job_alerts ? 'has-alerts' : ''
+                        }`}
+                        onClick={() =>
+                          this.handleModuleClick('/jobs?search=has_alerts:true')
+                        }
+                      >
+                        <div className="db-data-content">
+                          {system.job_alerts}
+                        </div>
+                        <div className="db-data-label"> with alerts </div>
+                      </div>
+                    </div>
+                  </PaneItem>
+                </DashboardModule>
+              </MasonryPanel>
+            )}
+            {this.hasModule('connections') && (
+              <MasonryPanel>
+                <DashboardModule>
+                  <PaneItem title="Connections">
+                    <div className="dashboard-data-module has-link">
+                      <div
+                        className="dashboard-data-title"
+                        onClick={() =>
+                          this.handleModuleClick('/remote?tab=qorus')
+                        }
+                      >
+                        Qorus
+                      </div>
+                      <div
+                        className="dashboard-data-top"
+                        onClick={() =>
+                          this.handleModuleClick('/remote?tab=qorus')
+                        }
+                      >
+                        <div className="db-data-content">
+                          {system.remote_total}
+                        </div>
+                        <div className="db-data-label"> total </div>
+                      </div>
+                      <div
+                        className={`dashboard-data-bottom ${
+                          system.remote_alerts ? 'has-alerts' : ''
+                        }`}
+                        onClick={() =>
+                          this.handleModuleClick(
+                            '/remote?tab=qorus&search=has_alerts:true'
+                          )
+                        }
+                      >
+                        <div className="db-data-content">
+                          {system.remote_alerts}
+                        </div>
+                        <div className="db-data-label"> with alerts </div>
+                      </div>
+                    </div>
+                    <div className="dashboard-data-module has-link">
+                      <div
+                        className="dashboard-data-title"
+                        onClick={() => this.handleModuleClick('/remote')}
+                      >
+                        Datasource
+                      </div>
+                      <div
+                        className="dashboard-data-top"
+                        onClick={() => this.handleModuleClick('/remote')}
+                      >
+                        <div className="db-data-content">
+                          {system.datasource_total}
+                        </div>
+                        <div className="db-data-label"> total </div>
+                      </div>
+                      <div
+                        className={`dashboard-data-bottom ${
+                          system.datasource_alerts ? 'has-alerts' : ''
+                        }`}
+                        onClick={() =>
+                          this.handleModuleClick(
+                            '/remote?search=has_alerts:true'
+                          )
+                        }
+                      >
+                        <div className="db-data-content">
+                          {system.datasource_alerts}
+                        </div>
+                        <div className="db-data-label"> with alerts </div>
+                      </div>
+                    </div>
+                    <div className="dashboard-data-module has-link">
+                      <div
+                        className="dashboard-data-title"
+                        onClick={() =>
+                          this.handleModuleClick('/remote?tab=user')
+                        }
+                      >
+                        User
+                      </div>
+                      <div
+                        className="dashboard-data-top"
+                        onClick={() =>
+                          this.handleModuleClick('/remote?tab=user')
+                        }
+                      >
+                        <div className="db-data-content">
+                          {system.user_total}
+                        </div>
+                        <div className="db-data-label"> total </div>
+                      </div>
+                      <div
+                        className={`dashboard-data-bottom ${
+                          system.user_alerts ? 'has-alerts' : ''
+                        }`}
+                        onClick={() =>
+                          this.handleModuleClick(
+                            '/remote?tab=user&search=has_alerts:true'
+                          )
+                        }
+                      >
+                        <div className="db-data-content">
+                          {system.user_alerts}
+                        </div>
+                        <div className="db-data-label"> with alerts </div>
+                      </div>
+                    </div>
+                  </PaneItem>
+                </DashboardModule>
+              </MasonryPanel>
+            )}
+            {this.hasModule('cluster') && (
+              <MasonryPanel>
+                <DashboardModule>
+                  <PaneItem title="Cluster">
+                    <div className="module-wrapper">
+                      <div className="dashboard-module-small">
+                        <div className="top">
+                          {calculateMemory(clusterMemory)}
+                        </div>
+                        <div className="bottom">Memory</div>
+                      </div>
+                      <div className="dashboard-module-small">
+                        <div className="top">
+                          {Object.keys(system.cluster_info).length}
+                        </div>
+                        <div className="bottom">Node(s)</div>
+                      </div>
+                      <div className="dashboard-module-small">
+                        <div className="top">
+                          {Object.keys(system.processes).length}
+                        </div>
+                        <div className="bottom">Processes</div>
+                      </div>
+                    </div>
+                    {Object.keys(system.cluster_info).map((node: string) => {
+                      const memory: string = calculateMemory(
+                        system.cluster_info[node].node_priv
+                      );
+
+                      const memoryInUse: string = calculateMemory(
+                        system.cluster_info[node].node_ram_in_use
+                      );
+
+                      const loadPct: string =
+                        system.cluster_info[node].node_load_pct;
+
+                      const processName = Object.keys(system.processes).find(
+                        process => system.processes[process].node === node
+                      );
+
+                      const processes: number = Object.keys(
+                        system.processes
+                      ).filter(
+                        (process: string) =>
+                          system.processes[process].node === node
+                      ).length;
+
+                      return (
+                        <div
+                          className="dashboard-module-wide has-link"
+                          key={node}
+                          onClick={() =>
+                            this.handleModuleClick('/system/cluster')
+                          }
+                        >
+                          <div className="dashboard-data-title">
+                            {system.processes[processName].node}
+                          </div>
+                          <div className="bottom">
+                            <div className="module">
+                              <div className="top">{memory}</div>
+                              <div className="bottom">RAM used by Qorus</div>
+                            </div>
+                            <div className="module">
+                              <div className="top">{processes}</div>
+                              <div className="bottom">Processes</div>
+                            </div>
+                          </div>
+                          <div className="bottom">
+                            <div className="module">
+                              <div className="top">{memoryInUse}</div>
+                              <div className="bottom">Total RAM used</div>
+                            </div>
+                            <div className="module">
+                              <div className="top">{round(loadPct, 2)}%</div>
+                              <div className="bottom">CPU load</div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </PaneItem>
+                </DashboardModule>
+              </MasonryPanel>
+            )}
+            {this.hasModule('overview') && (
+              <MasonryPanel>
+                <DashboardModule>
+                  <PaneItem title="System Overview">
+                    <div className="dashboard-module-overview">
+                      <div className="module overview-module">
+                        <div>{health.data['instance-key']}</div>
+                        <div>instance</div>
+                      </div>
+                      <div
+                        className={`module overview-module ${statusHealth(
+                          health.data.health
                         )}`}
                       >
-                        {remote.name}
-                      </div>
-                      <div className={`bottom ${statusHealth(remote.health)}`}>
-                        <div
-                          className="module"
-                          style={{
-                            opacity: remote.health === 'UNKNOWN' ? 0.4 : 1,
-                          }}
-                        >
-                          <div className="top">{remote['instance-key']}</div>
-                          <div className="bottom">key</div>
-                        </div>
-                        <div
-                          className="module"
-                          style={{
-                            opacity: remote.health === 'UNKNOWN' ? 0.4 : 1,
-                          }}
-                        >
-                          <div className="top">{remote.health}</div>
-                          <div className="bottom">health</div>
-                        </div>
+                        <div>{health.data.health}</div>
+                        <div>health</div>
                       </div>
                     </div>
-                  ))}
-                  {canLoadMoreRemotes && (
-                    <div
-                      className="dashboard-data-loadmore"
-                      onClick={this.handleLoadMoreRemotesClick}
-                    >
-                      Show all
+                    <div className="dashboard-module-overview">
+                      <div
+                        className={`module overview-module ${
+                          system['alert-summary'].ongoing !== 0
+                            ? 'danger'
+                            : 'none'
+                        } has-link`}
+                        onClick={() => this.handleModuleClick('/system/alerts')}
+                      >
+                        <div>{system['alert-summary'].ongoing}</div>
+                        <div>ongoing alerts</div>
+                      </div>
+                      <div
+                        className={`module overview-module ${
+                          system['alert-summary'].transient !== 0
+                            ? 'danger'
+                            : 'success'
+                        } has-link`}
+                        onClick={() =>
+                          this.handleModuleClick('/system/alerts?tab=transient')
+                        }
+                      >
+                        <div>{system['alert-summary'].transient}</div>
+                        <div>transient alerts</div>
+                      </div>
                     </div>
-                  )}
-                  {!canLoadMoreRemotes && remotes.length > 5 ? (
-                    <div
-                      className="dashboard-data-loadmore"
-                      onClick={this.handleLoadMoreRemotesClick}
-                    >
-                      Show less
-                    </div>
-                  ) : null}
-                </PaneItem>
-              </DashboardModule>
-            </MasonryPanel>
-          ) : null}
-          <MasonryPanel>
-            <DashboardModule>
-              <PaneItem
-                title="Node Memory Progression"
-                label={
-                  <Nodes
-                    nodeTab={this.state.nodeTab}
-                    nodes={Object.keys(system.cluster_info)}
-                    onTabChange={this.handleNodeTabChange}
-                  />
-                }
-              >
-                <ChartComponent
-                  title={`${this.state.nodeTab} (${calculateMemory(
-                    currentNodeData.node_ram
-                  )} total RAM)`}
-                  width="100%"
-                  height={115}
-                  isNotTime
-                  stepSize={(yMax + yMax / 10) / 3}
-                  unit=" GiB"
-                  yMax={yMax}
-                  empty={currentNodeData.mem_history.length === 0}
-                  labels={history.map(
-                    (hist: Object): string => formatChartTime(hist.timestamp)
-                  )}
-                  datasets={
-                    memoryLimitChart
-                      ? [nodeChart, nodeInUseChart, memoryLimitChart]
-                      : [nodeChart, nodeInUseChart]
-                  }
-                />
-              </PaneItem>
-              <PaneItem title="Node CPU load">
-                <ChartComponent
-                  title={`${this.state.nodeTab} (${
-                    currentNodeData.node_cpu_count
-                  } CPUs)`}
-                  width="100%"
-                  height={115}
-                  isNotTime
-                  unit="%"
-                  empty={currentNodeData.mem_history.length === 0}
-                  labels={procHistory.map(
-                    (hist: Object): string => formatChartTime(hist.timestamp)
-                  )}
-                  datasets={[nodeCPUChart]}
-                />
-              </PaneItem>
-              <PaneItem title="Node Process Count History">
-                <ChartComponent
-                  title={`${this.state.nodeTab} (${
-                    currentNodeData.process_count
-                  } processes)`}
-                  width="100%"
-                  height={115}
-                  isNotTime
-                  unit=" "
-                  stepSize={20}
-                  empty={procHistory.length === 0}
-                  labels={procHistory.map(
-                    (hist: Object): string => formatChartTime(hist.timestamp)
-                  )}
-                  datasets={[nodeProcChart]}
-                />
-              </PaneItem>
-            </DashboardModule>
-          </MasonryPanel>
-        </MasonryLayout>
+                  </PaneItem>
+                </DashboardModule>
+              </MasonryPanel>
+            )}
+            {this.hasModule('remotes') && remotes.length ? (
+              <MasonryPanel>
+                <DashboardModule>
+                  <PaneItem title="Remote Instances">
+                    {remotes.map((remote: Object) => (
+                      <div
+                        className="dashboard-module-wide has-link"
+                        key={remote.name}
+                        onClick={() =>
+                          this.handleModuleClick(
+                            `/remote?tab=qorus&paneId=${remote.name}`
+                          )
+                        }
+                      >
+                        <div
+                          className={`dashboard-data-title ${statusHealth(
+                            remote.health
+                          )}`}
+                        >
+                          {remote.name}
+                        </div>
+                        <div
+                          className={`bottom ${statusHealth(remote.health)}`}
+                        >
+                          <div
+                            className="module"
+                            style={{
+                              opacity: remote.health === 'UNKNOWN' ? 0.4 : 1,
+                            }}
+                          >
+                            <div className="top">{remote['instance-key']}</div>
+                            <div className="bottom">key</div>
+                          </div>
+                          <div
+                            className="module"
+                            style={{
+                              opacity: remote.health === 'UNKNOWN' ? 0.4 : 1,
+                            }}
+                          >
+                            <div className="top">{remote.health}</div>
+                            <div className="bottom">health</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {canLoadMoreRemotes && (
+                      <div
+                        className="dashboard-data-loadmore"
+                        onClick={this.handleLoadMoreRemotesClick}
+                      >
+                        Show all
+                      </div>
+                    )}
+                    {!canLoadMoreRemotes && remotes.length > 5 ? (
+                      <div
+                        className="dashboard-data-loadmore"
+                        onClick={this.handleLoadMoreRemotesClick}
+                      >
+                        Show less
+                      </div>
+                    ) : null}
+                  </PaneItem>
+                </DashboardModule>
+              </MasonryPanel>
+            ) : null}
+            {this.hasModule('nodeData') && (
+              <MasonryPanel>
+                <DashboardModule>
+                  <PaneItem
+                    title="Node Memory Progression"
+                    label={
+                      <Nodes
+                        nodeTab={this.state.nodeTab}
+                        nodes={Object.keys(system.cluster_info)}
+                        onTabChange={this.handleNodeTabChange}
+                      />
+                    }
+                  >
+                    <ChartComponent
+                      title={`${this.state.nodeTab} (${calculateMemory(
+                        currentNodeData.node_ram
+                      )} total RAM)`}
+                      width="100%"
+                      height={115}
+                      isNotTime
+                      stepSize={(yMax + yMax / 10) / 3}
+                      unit=" GiB"
+                      yMax={yMax}
+                      empty={currentNodeData.mem_history.length === 0}
+                      labels={history.map(
+                        (hist: Object): string =>
+                          formatChartTime(hist.timestamp)
+                      )}
+                      datasets={
+                        memoryLimitChart
+                          ? [nodeChart, nodeInUseChart, memoryLimitChart]
+                          : [nodeChart, nodeInUseChart]
+                      }
+                    />
+                  </PaneItem>
+                  <PaneItem title="Node CPU load">
+                    <ChartComponent
+                      title={`${this.state.nodeTab} (${
+                        currentNodeData.node_cpu_count
+                      } CPUs)`}
+                      width="100%"
+                      height={115}
+                      isNotTime
+                      unit="%"
+                      empty={currentNodeData.mem_history.length === 0}
+                      labels={procHistory.map(
+                        (hist: Object): string =>
+                          formatChartTime(hist.timestamp)
+                      )}
+                      datasets={[nodeCPUChart]}
+                    />
+                  </PaneItem>
+                  <PaneItem title="Node Process Count History">
+                    <ChartComponent
+                      title={`${this.state.nodeTab} (${
+                        currentNodeData.process_count
+                      } processes)`}
+                      width="100%"
+                      height={115}
+                      isNotTime
+                      unit=" "
+                      stepSize={20}
+                      empty={procHistory.length === 0}
+                      labels={procHistory.map(
+                        (hist: Object): string =>
+                          formatChartTime(hist.timestamp)
+                      )}
+                      datasets={[nodeProcChart]}
+                    />
+                  </PaneItem>
+                </DashboardModule>
+              </MasonryPanel>
+            )}
+          </MasonryLayout>
+        </Flex>
       </Flex>
     );
   }
