@@ -105,18 +105,18 @@ export const injectStorageDefaults = (currentUserData: Object): Object => {
       notificationsEnabled: true,
       notificationsSound: true,
     };
+  }
 
-    if (!storage.settings.dashboardModules) {
-      storage.settings.dashboardModules = [
-        'orderStats',
-        'interfaces',
-        'connections',
-        'cluster',
-        'overview',
-        'remotes',
-        'nodeData',
-      ];
-    }
+  if (!storage.settings.dashboardModules) {
+    storage.settings.dashboardModules = [
+      'orderStats',
+      'interfaces',
+      'connections',
+      'cluster',
+      'overview',
+      'remotes',
+      'nodeData',
+    ];
   }
 
   currentUserData.storage = storage;
