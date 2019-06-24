@@ -29,7 +29,7 @@ const WorkflowControls: Function = ({
 }: Props): React.Element<any> => (
   <Controls marginRight={big ? 3 : 0}>
     <Control
-      title="Enable / Disable"
+      title={enabled ? 'Disable' : 'Enable'}
       iconName="power"
       btnStyle={enabled ? 'success' : 'danger'}
       onClick={handleToggleEnabledClick}
@@ -42,7 +42,7 @@ const WorkflowControls: Function = ({
       onClick={handleResetClick}
     />
     <Control
-      title="Remote"
+      title={remote ? 'Set as not remote' : 'Set as remote'}
       iconName="globe"
       btnStyle={remote ? 'info' : 'default'}
       onClick={handleRemoteClick}
