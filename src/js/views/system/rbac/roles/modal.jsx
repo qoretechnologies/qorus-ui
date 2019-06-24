@@ -17,6 +17,8 @@ import Alert from '../../../../components/alert';
 import Badge from '../../../../components/badge';
 import actions from '../../../../store/api/actions';
 import sync from '../../../../hocomponents/sync';
+import patchFuncArgs from '../../../../hocomponents/patchFuncArgs';
+import defaultProps from 'recompose/defaultProps';
 
 const usersSelector: Function = (state: Object): Object => state.api.users;
 const permissionsSelector: Function = (state: Object): Object =>
@@ -64,6 +66,10 @@ const viewSelector: Function = createSelector(
   ),
   sync('users', true, 'loadUsers'),
   sync('permissions', true, 'loadPerms'),
+  defaultProps({
+    fetchParams: { no_synthetic: true },
+  }),
+  patchFuncArgs('loadGroups', ['fetchParams']),
   sync('groups', true, 'loadGroups')
 )
 export default class AddRoleModal extends Component {

@@ -22,11 +22,11 @@ export default class OptionModal extends Component {
     value: this.props.model.value || 'null',
   };
 
-  componentDidMount() {
+  componentDidMount () {
     window.addEventListener('keyup', this.handleEnterPress);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.removeEventListener('keyup', this.handleEnterPress);
   }
 
@@ -54,14 +54,12 @@ export default class OptionModal extends Component {
   };
 
   handleEnterPress = event => {
-    console.log(event.key);
-
     if (event.key === 'Enter') {
       this.handleFormSubmit();
     }
   };
 
-  renderValue() {
+  renderValue () {
     const { model } = this.props;
     let min;
     let max;
@@ -85,8 +83,8 @@ export default class OptionModal extends Component {
             model.interval[1] === 'UNLIMITED'
               ? Number.MAX_SAFE_INTEGER
               : model.interval[1] > model.interval[0]
-              ? model.interval[1]
-              : model.interval[0];
+                ? model.interval[1]
+                : model.interval[0];
         }
 
         return (
@@ -111,7 +109,7 @@ export default class OptionModal extends Component {
     }
   }
 
-  render() {
+  render () {
     const { model, onClose } = this.props;
 
     return (
