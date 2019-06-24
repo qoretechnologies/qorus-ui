@@ -309,7 +309,7 @@ const DefaultLoggerContainer: Function = ({
                               isOpen={isEditAppenderPopoverOpen}
                             >
                               <Button
-                                text="Edit appender"
+                                title="Edit appender"
                                 icon="edit"
                                 stopPropagation
                                 onClick={() =>

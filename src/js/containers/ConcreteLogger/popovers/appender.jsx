@@ -272,6 +272,7 @@ export default compose(
       handleArchivePatternChange,
       handleRotationCountChange,
       handleNameChange,
+      name,
     }): Function => (event: Object, appenderType: string): void => {
       event.persist();
 
@@ -318,7 +319,10 @@ export default compose(
           }
         }
 
-        handleNameChange(null, appendersDefaults[appenderType].name);
+        // Only change name if it hasn't been set
+        if (name === '') {
+          handleNameChange(null, appendersDefaults[appenderType].name);
+        }
 
         return appenderType;
       });
