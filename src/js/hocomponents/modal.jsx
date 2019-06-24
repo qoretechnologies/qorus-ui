@@ -16,17 +16,33 @@ export default (): Function => (Component: ReactClass<*>): ReactClass<*> => {
 
     modal: ?ReactClass<*> = null;
 
+    componentWillUnmount () {
+      window.removeEventListener('keyup', this.handleEscPress);
+    }
+
     handleOpenModal: Function = (Modal: ReactClass<*>): void => {
       this.modal = Modal;
+
+      // Register keyboard events
+      window.addEventListener('keyup', this.handleEscPress);
 
       this.context.openModal(this.modal);
     };
 
     handleCloseModal: Function = (): void => {
       this.context.closeModal(this.modal);
+      window.removeEventListener('keyup', this.handleEscPress);
     };
 
-    render() {
+    handleEscPress = event => {
+      event.stopPropagation();
+
+      if (event.key === 'Escape') {
+        this.handleCloseModal();
+      }
+    };
+
+    render () {
       return (
         <Component
           openModal={this.handleOpenModal}
