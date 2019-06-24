@@ -6,6 +6,8 @@ import Dropdown, {
   Control as DToggle,
   Item as DItem,
 } from '../../../components/dropdown';
+import Box from '../../../components/box';
+import PaneItem from '../../../components/pane_item';
 
 export default class OptionModal extends Component {
   props: {
@@ -19,6 +21,14 @@ export default class OptionModal extends Component {
   } = {
     value: this.props.model.value || 'null',
   };
+
+  componentDidMount() {
+    window.addEventListener('keyup', this.handleEnterPress);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keyup', this.handleEnterPress);
+  }
 
   handleInputChange: Function = (event: EventHandler): void => {
     this.setState({
@@ -35,16 +45,26 @@ export default class OptionModal extends Component {
     });
   };
 
-  handleFormSubmit: Function = (event: EventHandler): void => {
-    event.preventDefault();
+  handleFormSubmit: Function = (event?: EventHandler): void => {
+    if (event) {
+      event.preventDefault();
+    }
 
     this.props.onSave(this.props.model.name, this.state.value);
   };
 
+  handleEnterPress = event => {
+    console.log(event.key);
+
+    if (event.key === 'Enter') {
+      this.handleFormSubmit();
+    }
+  };
+
   renderValue() {
     const { model } = this.props;
-    let min = undefined;
-    let max = undefined;
+    let min;
+    let max;
 
     switch (this.props.model.expects) {
       case 'bool':
@@ -101,19 +121,27 @@ export default class OptionModal extends Component {
             {model.name}
           </Modal.Header>
           <Modal.Body>
-            <h4> Description </h4>
-            <p>{model.desc}</p>
-            <h4> Expects </h4>
-            <code>{model.expects}</code>
-            <h4> Interval </h4>
-            <p>{model.interval ? JSON.stringify(model.interval) : 'No data'}</p>
-            <h4> Default Value </h4>
-            <code>{model.default ? model.default.toString() : 'null'}</code>
-            <h4> Current Value </h4>
-            {this.renderValue()}
+            <Box fill top scrollY>
+              <PaneItem title="Description">
+                <p>{model.desc}</p>
+              </PaneItem>
+              <PaneItem title="Expects">
+                <code>{model.expects}</code>
+              </PaneItem>
+              <PaneItem title="Interval">
+                <p>
+                  {model.interval ? JSON.stringify(model.interval) : 'No data'}
+                </p>
+              </PaneItem>
+              <PaneItem title="Default value">
+                <code>{model.default ? model.default.toString() : 'null'}</code>
+              </PaneItem>
+              <PaneItem title="Current value">{this.renderValue()}</PaneItem>
+            </Box>
           </Modal.Body>
           <Modal.Footer>
             <Controls noControls grouped>
+              <Control label="Cancel" big onClick={this.props.onClose} />
               <Control type="submit" label="Save" btnStyle="success" big />
             </Controls>
           </Modal.Footer>

@@ -6,10 +6,15 @@ import settings from '../../../../../settings';
 
 const setOption: Function = createAction(
   'SYSTEMOPTIONS_SETOPTION',
-  async (option: string, value: any, dispatch: Function): Object => {
+  async (
+    option: string,
+    value: any,
+    onSuccess: Function,
+    dispatch: Function
+  ): Object => {
     fetchWithNotifications(
-      async () =>
-        await fetchJson(
+      async () => {
+        const res = await fetchJson(
           'PUT',
           `${settings.REST_BASE_URL}/system/options/${option}`,
           {
@@ -18,7 +23,14 @@ const setOption: Function = createAction(
               value,
             }),
           }
-        ),
+        );
+
+        if (!res.error) {
+          onSuccess();
+        }
+
+        return res;
+      },
       `Saving ${option}...`,
       'Changes saved successfuly',
       dispatch

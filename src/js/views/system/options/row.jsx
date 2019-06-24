@@ -56,7 +56,12 @@ const OptionRow: Function = ({
 }: Props): React.Element<any> => (
   <Tr first={first}>
     <Td className="narrow">
-      {status === 'locked' && <Icon title="This option is locked and cannot be changed while Qorus is running" iconName="lock" />}
+      {status === 'locked' && (
+        <Icon
+          title="This option is locked and cannot be changed while Qorus is running"
+          iconName="lock"
+        />
+      )}
     </Td>
     <NameColumn name={name} />
     <Td className="big">
@@ -130,8 +135,7 @@ export default compose(
       closeModal,
       name,
     }: Props): Function => (model: Object, value: any): void => {
-      dispatchAction(actions.systemOptions.setOption, name, value);
-      closeModal();
+      dispatchAction(actions.systemOptions.setOption, name, value, closeModal);
     },
   }),
   withHandlers({
