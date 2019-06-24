@@ -90,7 +90,7 @@ const JobControls: Function = ({
           big={big}
         />
         <Button
-          title="Set remote"
+          title={remote ? 'Set as not remote' : 'Set as remote'}
           iconName="globe"
           intent={remote ? Intent.PRIMARY : Intent.NONE}
           onClick={handleRemoteClick}

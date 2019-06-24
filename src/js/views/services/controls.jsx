@@ -68,7 +68,7 @@ const ServiceControls: Function = ({
     />
     <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
     <Button
-      title="Remote"
+      title={remote ? 'Set as not remote' : 'Set as remote'}
       iconName="globe"
       intent={remote ? Intent.PRIMARY : Intent.NONE}
       onClick={handleRemoteClick}
