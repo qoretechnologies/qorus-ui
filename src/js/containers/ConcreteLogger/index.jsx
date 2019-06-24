@@ -210,7 +210,7 @@ const LoggerContainer: Function = ({
                               isOpen={isEditAppenderPopoverOpen}
                             >
                               <Button
-                                text="Edit appender"
+                                title="Edit appender"
                                 icon="edit"
                                 stopPropagation
                                 onClick={() =>
@@ -248,6 +248,7 @@ export default compose(
     ].find((res: Object): boolean => res.id === ownProps.id);
 
     return {
+      update: Date.now(),
       ...loggerData,
     };
   }),
@@ -289,6 +290,7 @@ export default compose(
     },
   }),
   onlyUpdateForKeys([
+    'update',
     'logger',
     'appenders',
     'isLoggerPopoverOpen',
