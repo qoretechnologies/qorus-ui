@@ -147,6 +147,7 @@ export default compose(
       changeAdding,
       data,
       isDefault,
+      url,
     }: NewLoggerPopoverProps): Function => async (): any => {
       if (!level) {
         changeError(() => 'Level field is required.');
@@ -161,7 +162,7 @@ export default compose(
               : '?action=defaultLogger';
 
             return apiMethod(
-              `${settings.REST_BASE_URL}/${resource}${loggerPath}`,
+              `${settings.REST_BASE_URL}/${url || resource}${loggerPath}`,
               {
                 body: JSON.stringify({
                   level,

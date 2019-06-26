@@ -62,6 +62,7 @@ const LogContainer = props => (
         <Logger
           id={props.id}
           resource={props.intfc}
+          url={props.url}
           isSystem={props.isSystem}
         />
       </Pane>

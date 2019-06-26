@@ -42,6 +42,7 @@ type LoggerContainerProps = {
   handleDeleteAppenderClick: Function,
   handleLoggerDuplicateClick: Function,
   name: string,
+  url: string,
 };
 
 const DefaultLoggerContainer: Function = ({
@@ -64,6 +65,7 @@ const DefaultLoggerContainer: Function = ({
   handleLoggerDuplicateClick,
   name: name = 'Logger',
   defaultOnly,
+  url,
 }: LoggerContainerProps): React.Element<any> => (
   <React.Fragment>
     {logger === 'empty' ? (
@@ -75,6 +77,7 @@ const DefaultLoggerContainer: Function = ({
               content={
                 <NewLoggerPopover
                   resource={resource}
+                  url={url}
                   onCancel={() => toggleDefaultLoggerPopover(() => false)}
                 />
               }
@@ -98,6 +101,7 @@ const DefaultLoggerContainer: Function = ({
                 content={
                   <NewLoggerPopover
                     resource={resource}
+                    url={url}
                     id={id}
                     onCancel={() => toggleLoggerPopover(() => false)}
                   />
@@ -139,6 +143,7 @@ const DefaultLoggerContainer: Function = ({
                     content={
                       <NewLoggerPopover
                         resource={resource}
+                        url={url}
                         id={id}
                         onCancel={() => toggleLoggerPopover(() => false)}
                       />
@@ -172,6 +177,7 @@ const DefaultLoggerContainer: Function = ({
                 content={
                   <NewLoggerPopover
                     resource={resource}
+                    url={url}
                     id={id}
                     data={logger}
                     onCancel={() => toggleLoggerEditPopover(() => false)}
@@ -234,6 +240,7 @@ const DefaultLoggerContainer: Function = ({
               content={
                 <NewAppenderPopover
                   resource={resource}
+                  url={url}
                   id={id}
                   onCancel={() => toggleAppenderPopover(() => false)}
                 />
@@ -298,6 +305,7 @@ const DefaultLoggerContainer: Function = ({
                               content={
                                 <NewAppenderPopover
                                   resource={resource}
+                                  url={url}
                                   id={id}
                                   data={appender}
                                   onCancel={() =>
@@ -347,6 +355,7 @@ export default compose(
     }: Object = state.api.system.data.defaultLoggers[ownProps.resource];
 
     return {
+      update: Date.now(),
       logger,
       appenders,
     };
@@ -361,12 +370,15 @@ export default compose(
     handleLoggerDeleteClick: ({
       dispatch,
       resource,
+      url,
       logger,
       id,
     }: LoggerContainerProps): Function => (): void => {
       fetchWithNotifications(
         async () =>
-          del(`${settings.REST_BASE_URL}/${resource}?action=defaultLogger`),
+          del(
+            `${settings.REST_BASE_URL}/${url || resource}?action=defaultLogger`
+          ),
         `Removing logger...`,
         `Logger successfuly removed`,
         dispatch
@@ -375,14 +387,14 @@ export default compose(
     handleLoggerDuplicateClick: ({
       dispatch,
       resource,
+      url,
       id,
     }: LoggerContainerProps): Function => (): void => {
       fetchWithNotifications(
         async () =>
           post(
-            `${
-              settings.REST_BASE_URL
-            }/${resource}/${id}/logger?cloneDefault=true`
+            `${settings.REST_BASE_URL}/${url ||
+              resource}/${id}/logger?cloneDefault=true`
           ),
         `Duplicating logger...`,
         `Logger successfuly duplicated`,
@@ -392,14 +404,14 @@ export default compose(
     handleDeleteAppenderClick: ({
       dispatch,
       resource,
+      url,
       id,
     }: LoggerContainerProps): Function => (appenderId): void => {
       fetchWithNotifications(
         async () =>
           del(
-            `${
-              settings.REST_BASE_URL
-            }/${resource}?action=defaultLoggerAppenders`,
+            `${settings.REST_BASE_URL}/${url ||
+              resource}?action=defaultLoggerAppenders`,
             {
               body: JSON.stringify({
                 id: appenderId,
@@ -413,6 +425,7 @@ export default compose(
     },
   }),
   onlyUpdateForKeys([
+    'update',
     'logger',
     'appenders',
     'isLoggerPopoverOpen',

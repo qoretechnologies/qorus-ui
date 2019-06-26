@@ -344,6 +344,7 @@ export default compose(
       onCancel,
       changeAdding,
       data,
+      url,
     }: NewAppenderPopoverProps): Function => async (): any => {
       if (!appenderType) {
         changeError(() => 'Appender Type field is required.');
@@ -359,18 +360,21 @@ export default compose(
         const appendersPath: string = '?action=defaultLoggerAppenders';
         const fetchRes: Object = await fetchWithNotifications(
           async () =>
-            method(`${settings.REST_BASE_URL}/${resource}/${appendersPath}`, {
-              body: JSON.stringify({
-                name,
-                layoutPattern,
-                filename,
-                encoding,
-                appenderType,
-                rotationCount,
-                archivePattern,
-                id: data?.id,
-              }),
-            }),
+            method(
+              `${settings.REST_BASE_URL}/${url || resource}/${appendersPath}`,
+              {
+                body: JSON.stringify({
+                  name,
+                  layoutPattern,
+                  filename,
+                  encoding,
+                  appenderType,
+                  rotationCount,
+                  archivePattern,
+                  id: data?.id,
+                }),
+              }
+            ),
           data ? `Editing appender...` : `Adding new appender...`,
           data
             ? `Appender successfuly edited`

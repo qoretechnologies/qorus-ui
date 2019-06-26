@@ -92,18 +92,19 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
 const updateBasicDataAction: Function = (intfc: string): Function =>
   createAction(`${intfc}_UPDATEBASICDATA`, events => ({ events }));
 
-const fetchLoggerAction: Function = (intfc: string): Function =>
+const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
   createAction(
     `${intfc.toUpperCase()}_FETCHLOGGER`,
-    async (id: number, dispatch: Function) => {
+    async (id: number | string, dispatch: Function) => {
       const loggerPath: string = id ? `/${id}/logger` : '/logger';
       const appendersPath: string = id
         ? `/${id}/logger/appenders`
         : '/logger/appenders';
 
+      url = url || intfc;
+
       const logger: Object = await fetchWithNotifications(
-        async () =>
-          await get(`${settings.REST_BASE_URL}/${intfc}/${loggerPath}`),
+        async () => await get(`${settings.REST_BASE_URL}/${url}/${loggerPath}`),
         null,
         null,
         dispatch
@@ -112,7 +113,7 @@ const fetchLoggerAction: Function = (intfc: string): Function =>
       if (logger !== 'success') {
         const appenders: Object = await fetchWithNotifications(
           async () =>
-            await get(`${settings.REST_BASE_URL}/${intfc}/${appendersPath}`),
+            await get(`${settings.REST_BASE_URL}/${url}/${appendersPath}`),
           null,
           null,
           dispatch

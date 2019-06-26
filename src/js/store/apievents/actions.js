@@ -34,6 +34,7 @@ const interfaceActions: Object = {
   jobs,
   system,
   instances,
+  remotes,
 };
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -48,7 +49,7 @@ const handleEvent = (url, data, dispatch, state) => {
     state.api[interfaceType].data.find((item: Object) =>
       customComparator
         ? customComparator(item)
-        : item[idKey] === parseFloat(id, 10)
+        : item[idKey] == id || item.name === id
     );
 
   dt.forEach(async d => {
@@ -995,6 +996,8 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'LOGGER_CREATED':
       case 'LOGGER_UPDATED': {
         const newInfo: Object = { ...info };
+        newInfo.interface =
+          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         const reversedLevels: Object = invert(
           state.api.system.data.loggerParams.logger_levels
         );
@@ -1013,7 +1016,7 @@ const handleEvent = (url, data, dispatch, state) => {
         } else {
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if the interface we are updating is loaded
-          const intfc = getLoggerIntfcType(info.interface);
+          const intfc = getLoggerIntfcType(newInfo.interface);
           const isLoaded = newInfo.interfaceid
             ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
@@ -1035,6 +1038,8 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'LOGGER_DELETED': {
         // Modify the levels
         const newInfo: Object = { ...info };
+        newInfo.interface =
+          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Check if default logger was deleted
         if (newInfo.isDefault) {
           pipeline(
@@ -1057,7 +1062,7 @@ const handleEvent = (url, data, dispatch, state) => {
           if (isLoaded) {
             // If the interface is one of the system logs
             // set the interface to system
-            const intfc = getLoggerIntfcType(info.interface);
+            const intfc = getLoggerIntfcType(newInfo.interface);
             // Delete the log
             pipeline(
               'LOGGER_ACTIONS',
@@ -1071,26 +1076,28 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'APPENDER_CREATED': {
         const newInfo = { ...info };
+        newInfo.interface =
+          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Create default appender
         if (info.isDefault) {
           pipeline(
             'APPENDER_ACTIONS',
             system.addDefaultAppender,
-            info,
+            newInfo,
             dispatch
           );
         } else {
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if this interface is loaded
           const isLoaded = info.interfaceid
-            ? isInterfaceLoaded(info.interface, info.interfaceid)
+            ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
               state.api.system.logs.find(
-                (item: Object) => item.id === info.interface
+                (item: Object) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
-            const intfc: string = getLoggerIntfcType(info.interface);
+            const intfc: string = getLoggerIntfcType(newInfo.interface);
             pipeline(
               'APPENDER_ACTIONS',
               interfaceActions[intfc].addAppender,
@@ -1103,26 +1110,28 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'APPENDER_UPDATED': {
         const newInfo = { ...info };
+        newInfo.interface =
+          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Create default appender
         if (info.isDefault) {
           pipeline(
             'APPENDER_ACTIONS',
             system.editDefaultAppender,
-            info,
+            newInfo,
             dispatch
           );
         } else {
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if this interface is loaded
-          const isLoaded = info.interfaceid
-            ? isInterfaceLoaded(info.interface, info.interfaceid)
+          const isLoaded = newInfo.interfaceid
+            ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
               state.api.system.logs.find(
-                (item: Object) => item.id === info.interface
+                (item: Object) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
-            const intfc: string = getLoggerIntfcType(info.interface);
+            const intfc: string = getLoggerIntfcType(newInfo.interface);
             pipeline(
               'APPENDER_ACTIONS',
               interfaceActions[intfc].editAppender,
@@ -1135,27 +1144,30 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'APPENDER_DELETED': {
         const newInfo = { ...info };
+        newInfo.interface =
+          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
+
         // Create default appender
-        if (info.isDefault) {
+        if (newInfo.isDefault) {
           pipeline(
             'APPENDER_ACTIONS',
             system.deleteDefaultAppender,
-            info,
+            newInfo,
             dispatch
           );
         } else {
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if this interface is loaded
-          const isLoaded = info.interfaceid
-            ? isInterfaceLoaded(info.interface, info.interfaceid)
+          const isLoaded = newInfo.interfaceid
+            ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
               state.api.system.logs.find(
-                (item: Object) => item.id === info.interface
+                (item: Object) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
             // Get the interface
-            const intfc = getLoggerIntfcType(info.interface);
+            const intfc = getLoggerIntfcType(newInfo.interface);
             // Send the action to the pipeline
             pipeline(
               'APPENDER_ACTIONS',

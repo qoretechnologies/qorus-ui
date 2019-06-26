@@ -3,6 +3,14 @@ import remove from 'lodash/remove';
 
 import { CONN_MAP, CONN_MAP_REVERSE } from '../../../../constants/remotes';
 import { buildRemoteHash } from '../../../../helpers/remotes';
+import {
+  loggerReducer,
+  addUpdateLoggerReducer,
+  deleteLoggerReducer,
+  addAppenderReducer,
+  deleteAppenderReducer,
+  editAppenderReducer,
+} from '../../common/reducers';
 
 const initialState = {
   data: [],
@@ -330,6 +338,14 @@ const removeConnectionWs = {
   },
 };
 
+// LOGGER
+const fetchLogger = loggerReducer;
+const addUpdateLogger = addUpdateLoggerReducer;
+const deleteLogger = deleteLoggerReducer;
+const addAppender = addAppenderReducer;
+const editAppender = editAppenderReducer;
+const deleteAppender = deleteAppenderReducer;
+
 export {
   pingRemote as PINGREMOTE,
   connectionChange as CONNECTIONCHANGE,
@@ -345,4 +361,10 @@ export {
   updateConnection as UPDATECONNECTION,
   addConnection as ADDCONNECTION,
   fetchPass as FETCHPASS,
+  fetchLogger as FETCHLOGGER,
+  addUpdateLogger as ADDUPDATELOGGER,
+  deleteLogger as DELETELOGGER,
+  addAppender as ADDAPPENDER,
+  editAppender as EDITAPPENDER,
+  deleteAppender as DELETEAPPENDER,
 };

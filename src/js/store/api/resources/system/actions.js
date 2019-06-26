@@ -106,10 +106,13 @@ const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
 const fetchLogger = fetchLoggerAction('system');
 const fetchDefaultLogger = createAction(
   `SYSTEM_FETCHDEFAULTLOGGER`,
-  async intfc => {
+  async (intfc, url?: string) => {
     const [logger, appenders] = await Promise.all([
-      get(`${settings.REST_BASE_URL}/${intfc}?action=defaultLogger`),
-      get(`${settings.REST_BASE_URL}/${intfc}?action=defaultLoggerAppenders`),
+      get(`${settings.REST_BASE_URL}/${url || intfc}?action=defaultLogger`),
+      get(
+        `${settings.REST_BASE_URL}/${url ||
+          intfc}?action=defaultLoggerAppenders`
+      ),
     ]);
 
     return {
