@@ -6,6 +6,14 @@ import { fetchJson, fetchWithNotifications, put, get } from '../../utils';
 import settings from '../../../../settings';
 import { attrsSelector } from '../../../../helpers/remotes';
 import { CONN_MAP_REVERSE } from '../../../../constants/remotes';
+import {
+  fetchLoggerAction,
+  deleteLoggerAction,
+  addUpdateLoggerAction,
+  addAppenderAction,
+  editAppenderAction,
+  deleteAppenderAction,
+} from '../../common/actions';
 
 const ping: Function = (model: string, type: string, dispatch: Function) =>
   fetchWithNotifications(
@@ -209,6 +217,13 @@ const resetConnection: Function = createAction(
   }
 );
 
+const fetchLogger = fetchLoggerAction('remotes', 'remote/datasources');
+const addUpdateLogger = addUpdateLoggerAction('remotes', 'remote/datasources');
+const deleteLogger = deleteLoggerAction('remotes', 'remote/datasources');
+const addAppender = addAppenderAction('remotes', 'remote/datasources');
+const editAppender = editAppenderAction('remotes', 'remote/datasources');
+const deleteAppender = deleteAppenderAction('remotes', 'remote/datasources');
+
 export {
   pingRemote,
   connectionChange,
@@ -224,4 +239,10 @@ export {
   addConnection,
   updateConnection,
   removeConnectionWS,
+  fetchLogger,
+  addUpdateLogger,
+  deleteLogger,
+  addAppender,
+  editAppender,
+  deleteAppender,
 };

@@ -202,7 +202,7 @@ export default compose(
   ),
   withSort(({ type }: Props): string => type, 'remotes', sortDefaults.remote),
   withLoadMore('remotes', null, true, 50),
-  withPane(ConnectionPane, ['remoteType', 'canEdit'], null, 'connections'),
+  withPane(ConnectionPane, ['remoteType', 'canEdit'], 'detail', 'connections'),
   withModal(),
   withHandlers({
     handleAddClick: ({

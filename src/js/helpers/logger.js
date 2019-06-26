@@ -13,15 +13,7 @@ const formatAppender: Function = (appender: Object): Object => ({
 
 const getLoggerIntfcType: Function = (intfc: string): string =>
   includes(
-    [
-      'http',
-      'audit',
-      'monitoring',
-      'alert',
-      'qorus-core',
-      'qorus-master',
-      'qdsp',
-    ],
+    ['http', 'audit', 'monitoring', 'alert', 'qorus-core', 'qorus-master'],
     intfc
   )
     ? 'system'

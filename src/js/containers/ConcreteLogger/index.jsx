@@ -45,6 +45,7 @@ type LoggerContainerProps = {
   handleLoggerDeleteClick: Function,
   handleDeleteAppenderClick: Function,
   handleLoggerDuplicateClick: Function,
+  url: string,
 };
 
 const LoggerContainer: Function = ({
@@ -61,6 +62,7 @@ const LoggerContainer: Function = ({
   id,
   handleLoggerDeleteClick,
   handleLoggerDuplicateClick,
+  url,
 }: LoggerContainerProps): React.Element<any> => (
   <Flex>
     {logger === 'empty' && (
@@ -79,6 +81,7 @@ const LoggerContainer: Function = ({
                 content={
                   <NewLoggerPopover
                     resource={resource}
+                    url={url}
                     id={id}
                     data={logger}
                     onCancel={() => toggleLoggerPopover(() => false)}
@@ -134,6 +137,7 @@ const LoggerContainer: Function = ({
                 content={
                   <NewAppenderPopover
                     resource={resource}
+                    url={url}
                     id={id}
                     onCancel={() => toggleAppenderPopover(() => false)}
                   />
@@ -200,6 +204,7 @@ const LoggerContainer: Function = ({
                                 <NewAppenderPopover
                                   resource={resource}
                                   id={id}
+                                  url={url}
                                   data={appender}
                                   onCancel={() =>
                                     toggleEditAppenderPopover(() => false)
@@ -261,11 +266,13 @@ export default compose(
     handleLoggerDeleteClick: ({
       dispatch,
       resource,
+      url,
       logger,
       id,
     }: LoggerContainerProps): Function => (): void => {
       fetchWithNotifications(
-        async () => del(`${settings.REST_BASE_URL}/${resource}/${id}/logger`),
+        async () =>
+          del(`${settings.REST_BASE_URL}/${url || resource}/${id}/logger`),
         `Removing logger...`,
         `Logger successfuly removed`,
         dispatch
@@ -274,15 +281,20 @@ export default compose(
     handleDeleteAppenderClick: ({
       dispatch,
       resource,
+      url,
       id,
     }: LoggerContainerProps): Function => (appenderId): void => {
       fetchWithNotifications(
         async () =>
-          del(`${settings.REST_BASE_URL}/${resource}/${id}/logger/appenders`, {
-            body: JSON.stringify({
-              id: appenderId,
-            }),
-          }),
+          del(
+            `${settings.REST_BASE_URL}/${url ||
+              resource}/${id}/logger/appenders`,
+            {
+              body: JSON.stringify({
+                id: appenderId,
+              }),
+            }
+          ),
         `Removing appender...`,
         `Appender successfuly removed`,
         dispatch

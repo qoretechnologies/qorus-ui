@@ -47,22 +47,22 @@ const Log: Function = ({ tabQuery }: Props) => (
       </SimpleTab>
       <SimpleTab name="http">
         <Box top fill scrollY>
-          <LogContainer resource="http" intfc="system" id="http" />
+          <LogContainer resource="http" intfc="system" id="HTTP" />
         </Box>
       </SimpleTab>
       <SimpleTab name="audit">
         <Box top fill scrollY>
-          <LogContainer resource="audit" intfc="system" id="audit" />
+          <LogContainer resource="audit" intfc="system" id="AUDIT" />
         </Box>
       </SimpleTab>
       <SimpleTab name="alert">
         <Box top fill scrollY>
-          <LogContainer resource="alert" intfc="system" id="alert" />
+          <LogContainer resource="alert" intfc="system" id="ALERT" />
         </Box>
       </SimpleTab>
       <SimpleTab name="monitor">
         <Box top fill scrollY>
-          <LogContainer resource="mon" intfc="system" id="monitoring" />
+          <LogContainer resource="mon" intfc="system" id="MONITORING" />
         </Box>
       </SimpleTab>
       <SimpleTab name="default loggers">
@@ -86,6 +86,11 @@ const Log: Function = ({ tabQuery }: Props) => (
             name="Jobs default logger"
             defaultOnly
             resource="jobs"
+          />
+          <DefaultLogger
+            name="Datasources default logger"
+            defaultOnly
+            resource="remotes"
           />
         </Box>
       </SimpleTab>

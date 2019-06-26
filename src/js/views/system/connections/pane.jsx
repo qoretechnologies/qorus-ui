@@ -29,6 +29,9 @@ import Loader from '../../../components/loader';
 import settings from '../../../settings';
 import mapProps from 'recompose/mapProps';
 import showIfPassed from '../../../hocomponents/show-if-passed';
+import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
+import Logger from '../../../containers/Logger';
+import LogContainer from '../../../containers/log';
 
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find(a => a.name === props.paneId);
@@ -155,6 +158,7 @@ export default class ConnectionsPane extends Component {
 
   render () {
     const { deps, alerts, locked } = this.props.remote;
+    const { paneTab, paneId } = this.props;
     const { isPassLoaded } = this.state;
 
     const canEdit = !locked && this.props.canEdit;
@@ -165,76 +169,96 @@ export default class ConnectionsPane extends Component {
         onClose={this.props.onClose}
         onResize={this.props.onResize}
         title={`${this.props.remote.name} detail`}
+        tabs={{
+          tabs: ['Detail', 'Log'],
+          queryIdentifier: 'paneTab',
+        }}
       >
-        <Box top fill scrollY>
-          <PaneItem title="Overview">
-            {this.state.error && (
-              <Alert bsStyle="danger">{this.state.error}</Alert>
-            )}
-            {settings.IS_HTTP && (
-              <Alert bsStyle="warning" title="Insecure connection">
-                Passwords are not displayed
-              </Alert>
-            )}
-            <Table condensed clean className="text-table">
-              <Tbody>
-                {this.getData().map(
-                  (val: Object, key: number): React.Element<any> => (
-                    <Tr key={key}>
-                      <Th className="name">
-                        {upperFirst(attrsMapper(val.attr).replace(/_/g, ' '))}
-                      </Th>
-                      {val.editable &&
-                      canEdit &&
-                      val.attr !== 'options' &&
-                      val.attr !== 'opts' ? (
-                          <EditableCell
-                            className="text"
-                            value={val.value}
-                            onSave={this.handleEditSave(val.attr)}
-                          />
-                        ) : (
-                          <Td className="text">
-                            {val.attr === 'options' || val.attr === 'opts' ? (
-                              <Options
-                                data={val.value}
+        <SimpleTabs activeTab={paneTab}>
+          <SimpleTab name="detail">
+            <Box top fill scrollY>
+              <PaneItem title="Overview">
+                {this.state.error && (
+                  <Alert bsStyle="danger">{this.state.error}</Alert>
+                )}
+                {settings.IS_HTTP && (
+                  <Alert bsStyle="warning" title="Insecure connection">
+                    Passwords are not displayed
+                  </Alert>
+                )}
+                <Table condensed clean className="text-table">
+                  <Tbody>
+                    {this.getData().map(
+                      (val: Object, key: number): React.Element<any> => (
+                        <Tr key={key}>
+                          <Th className="name">
+                            {upperFirst(
+                              attrsMapper(val.attr).replace(/_/g, ' ')
+                            )}
+                          </Th>
+                          {val.editable &&
+                          canEdit &&
+                          val.attr !== 'options' &&
+                          val.attr !== 'opts' ? (
+                              <EditableCell
+                                className="text"
+                                value={val.value}
                                 onSave={this.handleEditSave(val.attr)}
-                                canEdit={canEdit}
                               />
                             ) : (
-                              <ContentByType content={val.value} />
+                              <Td className="text">
+                                {val.attr === 'options' || val.attr === 'opts' ? (
+                                  <Options
+                                    data={val.value}
+                                    onSave={this.handleEditSave(val.attr)}
+                                    canEdit={canEdit}
+                                  />
+                                ) : (
+                                  <ContentByType content={val.value} />
+                                )}
+                              </Td>
                             )}
-                          </Td>
-                        )}
-                    </Tr>
-                  )
+                        </Tr>
+                      )
+                    )}
+                  </Tbody>
+                </Table>
+              </PaneItem>
+              <AlertsTable alerts={alerts} />
+              <PaneItem title="Dependencies">
+                {deps && deps.length ? (
+                  <Table striped condensed>
+                    <Tbody>
+                      {deps.map(
+                        (dep: Object, index: number): React.Element<any> => (
+                          <Tr key={index}>
+                            <NameColumn
+                              name={dep.name}
+                              link={getDependencyObjectLink(dep.type, dep)}
+                              type={lowerCase(dep.type)}
+                            />
+                          </Tr>
+                        )
+                      )}
+                    </Tbody>
+                  </Table>
+                ) : (
+                  <NoData />
                 )}
-              </Tbody>
-            </Table>
-          </PaneItem>
-          <AlertsTable alerts={alerts} />
-          <PaneItem title="Dependencies">
-            {deps && deps.length ? (
-              <Table striped condensed>
-                <Tbody>
-                  {deps.map(
-                    (dep: Object, index: number): React.Element<any> => (
-                      <Tr key={index}>
-                        <NameColumn
-                          name={dep.name}
-                          link={getDependencyObjectLink(dep.type, dep)}
-                          type={lowerCase(dep.type)}
-                        />
-                      </Tr>
-                    )
-                  )}
-                </Tbody>
-              </Table>
-            ) : (
-              <NoData />
-            )}
-          </PaneItem>
-        </Box>
+              </PaneItem>
+            </Box>
+          </SimpleTab>
+          <SimpleTab name="log">
+            <Box top fill scrollY>
+              <LogContainer
+                id={paneId}
+                intfc="remotes"
+                url="remote/datasources"
+                resource={`qdsp/${paneId}`}
+              />
+            </Box>
+          </SimpleTab>
+        </SimpleTabs>
       </Pane>
     );
   }

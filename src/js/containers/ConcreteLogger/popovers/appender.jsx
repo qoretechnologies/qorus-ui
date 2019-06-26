@@ -340,6 +340,7 @@ export default compose(
       changeError,
       id,
       resource,
+      url,
       dispatch,
       onCancel,
       changeAdding,
@@ -361,18 +362,21 @@ export default compose(
           : 'logger/appenders';
         const fetchRes: Object = await fetchWithNotifications(
           async () =>
-            method(`${settings.REST_BASE_URL}/${resource}/${appendersPath}`, {
-              body: JSON.stringify({
-                name,
-                layoutPattern,
-                filename,
-                encoding,
-                appenderType,
-                rotationCount,
-                archivePattern,
-                id: data?.id,
-              }),
-            }),
+            method(
+              `${settings.REST_BASE_URL}/${url || resource}/${appendersPath}`,
+              {
+                body: JSON.stringify({
+                  name,
+                  layoutPattern,
+                  filename,
+                  encoding,
+                  appenderType,
+                  rotationCount,
+                  archivePattern,
+                  id: data?.id,
+                }),
+              }
+            ),
           data ? 'Editing appender' : `Adding new appender...`,
           data
             ? 'Appender successfuly edited'

@@ -190,6 +190,7 @@ export default class Root extends Component {
       this.props.fetchDefaultLogger('services'),
       this.props.fetchDefaultLogger('workflows'),
       this.props.fetchDefaultLogger('jobs'),
+      this.props.fetchDefaultLogger('remotes', 'remote/datasources'),
     ]);
 
     this.props.fetchSystemOptions();
