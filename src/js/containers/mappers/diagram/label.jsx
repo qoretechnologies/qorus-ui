@@ -6,6 +6,15 @@ import withHandlers from 'recompose/withHandlers';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import includes from 'lodash/includes';
 import flatten from 'lodash/flatten';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../../components/controls';
+import Pull from '../../../components/Pull';
+import { Tooltip } from '@blueprintjs/core';
+import map from 'lodash/map';
+import omit from 'lodash/omit';
+import ContentByType from '../../../components/ContentByType';
 
 const Label = ({
   x,
@@ -21,6 +30,10 @@ const Label = ({
   onClick,
   mand,
   type,
+  isSelected,
+  details,
+  onCodeClick,
+  onInfoClick,
 }: {
   x: Number | string,
   y: Number | string,
@@ -33,9 +46,11 @@ const Label = ({
   handleMouseOver?: Function,
   handleMouseOut?: Function,
   onClick?: Function,
-  mand: boolean,
-  type: string,
+  onCodeClick: Function,
+  onInfoClick: Function,
+  details: any,
   descShown: boolean,
+  isSelected: boolean,
 }) => (
   <svg
     x={x}
@@ -47,109 +62,80 @@ const Label = ({
     onClick={onClick}
     className="mapper-label"
   >
-    <rect x="0" y="0" height={height} width={width} fill={background} />
-    <text
-      x={offsetX}
-      y="15"
-      fill={textColor}
-      textAnchor="start"
-      alignmentBaseline="middle"
-      className="diagram-rect-name"
-    >
-      {children}
-    </text>
-    {type && (
-      <text
-        x={offsetX + 60}
-        y="33"
-        fontSize="11"
-        fill={textColor}
-        textAnchor="start"
-        alignmentBaseline="middle"
+    <rect x="0" y="0" height={height} width={width} fill="#ffffff" />
+    <foreignObject width={width} height={height}>
+      <div
+        style={{
+          padding: 0,
+          margin: 0,
+          height,
+          position: 'relative',
+          fontSize: '13px',
+          lineHeight: `${height}px`,
+          border: isSelected ? '2px solid #d99e0b' : '2px solid #5c7080',
+          borderRadius: '3px',
+          backgroundImage:
+            isSelected &&
+            'linear-gradient(to right bottom, transparent, #d99e0b)',
+        }}
       >
-        Type: {type}
-      </text>
-    )}
-    {mand ? (
-      <text
-        x={offsetX}
-        y="33"
-        fontSize="11"
-        fill="#fff"
-        textAnchor="start"
-        alignmentBaseline="middle"
-      >
-        Mand.: Yes
-      </text>
-    ) : (
-      <text
-        x={offsetX}
-        y="33"
-        fontSize="11"
-        fill="#fff"
-        textAnchor="start"
-        alignmentBaseline="middle"
-      >
-        Mand.: No
-      </text>
-    )}
+        <Tooltip
+          content={
+            <div>
+              {map(omit(details, 'code'), (detailData, key) => (
+                <p>
+                  <strong>{key}</strong>: <ContentByType content={detailData} />
+                </p>
+              ))}
+            </div>
+          }
+          rootElementTag="div"
+          className="mapperTooltip"
+        >
+          <div style={{ width: '100%', height: '100%' }}>
+            <div
+              style={{
+                position: 'absolute',
+                height: '30px',
+                lineHeight: '30px',
+                left: 0,
+                right: 0,
+                padding: '0 3px',
+              }}
+            >
+              <Pull right>
+                <ButtonGroup>
+                  <Button
+                    icon="info-sign"
+                    onClick={() => onInfoClick(details, 'info')}
+                  />
+                  {details.code && (
+                    <Button
+                      icon="code"
+                      onClick={() => onCodeClick(details, 'code')}
+                    />
+                  )}
+                </ButtonGroup>
+              </Pull>
+            </div>
+            {children}
+          </div>
+        </Tooltip>
+      </div>
+    </foreignObject>
   </svg>
 );
 
 export default compose(
-  mapProps(({ details, ...rest }) => ({
-    mand: details.mand,
-    type: details.type,
-    desc: details.desc,
-    ...rest,
-  })),
   withHandlers({
     handleMouseOver: (props: Object): Function => (
       event: EventHandler
     ): void => {
-      event.persist();
-      event.stopPropagation();
-
-      const target = {
-        input: null,
-        output: [],
-      };
-      const { mand, type, desc, relations } = props;
-      const {
-        top,
-        left,
-        width,
-      } = event.target.parentNode.getBoundingClientRect();
-
-      relations.forEach(r => {
-        const entries = flatten(Object.entries(r));
-
-        if (includes(entries, props.children)) {
-          if (target.input !== entries[1]) {
-            target.input = entries[1];
-          }
-
-          target.output.push(entries[0]);
-        }
-      });
-
       props.onMouseOver();
-      props.toggleTooltip({
-        mand,
-        type,
-        desc,
-        target,
-        position: {
-          top,
-          left,
-          width,
-        },
-      });
     },
     handleMouseOut: (props: Object): Function => () => {
       props.onMouseOut();
-      props.toggleTooltip(null);
     },
   }),
-  onlyUpdateForKeys(['background'])
+  onlyUpdateForKeys(['isSelected'])
 )(Label);

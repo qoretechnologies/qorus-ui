@@ -4,27 +4,32 @@ import omit from 'lodash/omit';
 
 import InfoTable from '../../../components/info_table';
 import SourceCode from '../../../components/source_code';
+import Tabs, { Pane } from '../../../components/tabs';
+import Box from '../../../components/box';
+import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 
 type Props = {
   data: Object,
-}
-
-const DiagramDetail: Function = ({ data: { name, data, code } }: Props): React.Element<any> => {
-  const newCode = code.indexOf('code') > 0 ?
-    code.substring(code.indexOf(':') + 2, code.length) : code;
-  const newData = omit(data, 'code');
-
-  return (
-    <div>
-      <h4> Showing detail for { name }</h4>
-      <InfoTable object={newData} />
-      {code && (
-        <SourceCode>
-          { newCode }
-        </SourceCode>
-      )}
-    </div>
-  );
 };
+
+const DiagramDetail: Function = ({
+  data: { code, ...rest },
+  tab,
+}: Props): React.Element<any> => (
+  <Tabs active={tab}>
+    <Pane name="Info">
+      <Box top fill>
+        <InfoTable object={rest} />
+      </Box>
+    </Pane>
+    {code && (
+      <Pane name="Code">
+        <Box top fill>
+          <SourceCode>{code}</SourceCode>
+        </Box>
+      </Pane>
+    )}
+  </Tabs>
+);
 
 export default DiagramDetail;

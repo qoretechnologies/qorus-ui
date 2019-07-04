@@ -8,13 +8,13 @@ type Props = {
   onClose: Function,
 };
 
-const DetailModal: Function = ({ detail, onClose }: Props): any => (
+const DetailModal: Function = ({ detail, onClose, tab }: Props): any => (
   <Modal width={600}>
     <Modal.Header onClose={onClose} titleId="diagram-modal">
       Detail
     </Modal.Header>
     <Modal.Body>
-      <DiagramDetail data={detail} />
+      <DiagramDetail data={detail} tab={tab} />
     </Modal.Body>
   </Modal>
 );

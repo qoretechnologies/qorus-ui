@@ -17,9 +17,9 @@ export default (
   name: string,
   breadcrumbsTitle?: string
 ): Function => (Component: ReactClass<*>): ReactClass<*> => {
-  const hasInterfaceAccess = ({ userData, ...rest }) => {
+  const hasInterfaceAccess = ({ userData, info, ...rest }) => {
     const hasInterfaces: boolean =
-      userData.has_default || userData[prop].length;
+      info.noauth || userData.has_default || userData[prop].length;
 
     if (!hasInterfaces) {
       return (
@@ -45,6 +45,7 @@ export default (
 
   return compose(
     connect(state => ({
+      info: state.api.info.data,
       userData: state.api.currentUser.data,
     }))
   )(hasInterfaceAccess);
