@@ -4,7 +4,7 @@
 
   &.string {
     word-break: break-all;
-    color: lighten($text-color, 10);
+    color: inherit;
   }
 
   &.number {
@@ -12,6 +12,6 @@
   }
 
   &.null {
-    color: lighten($text-color, 20);
+    color: inherit;
   }
 }

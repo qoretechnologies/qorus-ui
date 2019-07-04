@@ -289,12 +289,14 @@ export default class Tree extends Component {
                   />
                 ) : null,
               ]}
-              <Button
-                iconName="code"
-                text={!compact && 'Show types'}
-                btnStyle={showTypes && 'primary'}
-                onClick={this.handleTypesClick}
-              />
+              {!this.props.noControls && (
+                <Button
+                  iconName="code"
+                  text={!compact && 'Show types'}
+                  btnStyle={showTypes && 'primary'}
+                  onClick={this.handleTypesClick}
+                />
+              )}
             </ButtonGroup>
           </Pull>
           {!this.props.noControls && (

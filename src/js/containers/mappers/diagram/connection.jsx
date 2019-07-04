@@ -16,7 +16,7 @@ type Props = {
   svgWidth: number,
   offsetX: number,
   lineColor: string,
-}
+};
 
 const DiagramConnection: Function = ({
   rectWidth,
@@ -32,6 +32,7 @@ const DiagramConnection: Function = ({
   type,
   item,
   lineColor,
+  isSelected,
 }: Props): ?React.Element<any> => {
   const polySize = 5;
   const [[outputValue, inputValue]] = Object.entries(item);
@@ -44,34 +45,45 @@ const DiagramConnection: Function = ({
         <line
           // $FlowIssue: wtf??
           key={`${inputValue}_to_${outputValue}`}
-          x1={rectWidth + (polySize - 1)}
+          x1={rectWidth + (polySize - 1) + 1}
           y1={
-            inputOffsetY + (headerHeight + inputPosition *
-            (rectHeight + paddingElements) + rectHeight / 2)
+            inputOffsetY +
+            (headerHeight +
+              inputPosition * (rectHeight + paddingElements) +
+              rectHeight / 2)
           }
-          x2={svgWidth + offsetX - (rectWidth * 2.5) - polySize}
+          x2={rectWidth + rectWidth / 2 - polySize + 1}
           y2={
-            outputOffsetY + (headerHeight + outputPosition *
-            (rectHeight + paddingElements) + rectHeight / 2)
+            outputOffsetY +
+            (headerHeight +
+              outputPosition * (rectHeight + paddingElements) +
+              rectHeight / 2)
           }
-          stroke={lineColor}
+          stroke={isSelected ? '#d99e0b' : '#5c7080'}
         />
       );
     default: {
-      const x = type === 'input-arrow' ?
-        rectWidth :
-        (svgWidth + offsetX - (rectWidth * 2.5) - polySize);
+      const x =
+        type === 'input-arrow'
+          ? rectWidth
+          : rectWidth + rectWidth / 2 - polySize;
       const pos = type === 'input-arrow' ? inputPosition : outputPosition;
 
       return (
         <svg
-          x={x}
+          x={x + 1}
           y={
-            inputOffsetY + (headerHeight + pos *
-            (rectHeight + paddingElements) + rectHeight / 2 - polySize)
+            inputOffsetY +
+            (headerHeight +
+              pos * (rectHeight + paddingElements) +
+              rectHeight / 2 -
+              polySize)
           }
         >
-          <polygon points={`0, 0 0, ${polySize * 2} ${polySize}, ${polySize}`} />
+          <polygon
+            fill={isSelected ? '#d99e0b' : '#5c7080'}
+            points={`0, 0 0, ${polySize * 2} ${polySize}, ${polySize}`}
+          />
         </svg>
       );
     }

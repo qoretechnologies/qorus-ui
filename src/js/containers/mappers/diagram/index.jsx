@@ -5,6 +5,7 @@ import pure from 'recompose/pure';
 import mapProps from 'recompose/mapProps';
 import withProps from 'recompose/withProps';
 import withState from 'recompose/withState';
+import map from 'lodash/map';
 
 import Header from './header';
 import SelectableLabel from './selectable-label';
@@ -15,42 +16,21 @@ import modal from '../../../hocomponents/modal';
 import DetailModal from './modals/DetailModal';
 import Flex from '../../../components/Flex';
 
-const getRelations = (fieldSource: Object, inputs: Object): Array<Object> =>
-  Object.entries(fieldSource)
-    .map(
-      ([key, value]: [string, any]): any => {
-        let str = value.replace(/ /g, '');
-        str = value.replace(/\n/g, '');
-        str = value.replace(/\s+/g, '');
-
-        const regex = /^[.({]"name":+"([-.\w]+)"/;
-        const matching = str.match(regex);
-
-        if (matching) {
-          const match =
-            matching[1].indexOf('.') !== -1
-              ? matching[1].split('.')
-              : [matching[1]];
-
-          return { [key]: match[0] };
-        }
-
-        if (inputs && inputs[key]) {
-          const seq = /^\("sequence":+"(\w+)"/;
-          const con = /^\("constant":+"(\w+)"/;
-          const run = /^\("runtime":+"(\w+)"/;
-
-          if (!str.match(seq) && !str.match(con) && !str.match(run)) {
-            return { [key]: key };
-          }
-        }
-
-        return null;
+const getRelations = (fields: Object, inputs: Object): Array<Object> =>
+  map(
+    fields,
+    (outputData, outputName): any => {
+      if (typeof outputData === 'string') {
+        return { [outputName]: outputData };
+      } else if (outputData.name) {
+        return { [outputName]: outputData.name };
       }
-    )
-    .filter(item => item);
 
-function hasRelation (array, input, output) {
+      return null;
+    }
+  ).filter(item => item);
+
+function hasRelation(array, input, output) {
   return !!array.find(item => {
     const [[outputValue, inputValue]] = Object.entries(item);
     return inputValue === input && outputValue === output;
@@ -88,6 +68,7 @@ export const Diagramm = ({
   opts,
   tooltip,
   toggleTooltip,
+  fields,
 }: {
   id: string,
   svgWidth: number,
@@ -120,6 +101,7 @@ export const Diagramm = ({
   opts: Object,
   tooltip: ?Object,
   toggleTooltip: Function,
+  fields: any,
 }): React.Element<any> => (
   <Flex className="mapper-wrapper" scrollY>
     <Tooltip data={tooltip} />
@@ -142,7 +124,7 @@ export const Diagramm = ({
         {Object.entries(inputMap).map(([name, position]) => (
           <SelectableLabel
             key={`input_${name}`}
-            x={0}
+            x={1}
             y={
               inputOffsetY +
               (headerHeight +
@@ -153,16 +135,16 @@ export const Diagramm = ({
             height={rectHeight}
             textColor={rectTextColor}
             details={opts.input[name]}
-            background={
+            isSelected={
               selectedInput === name ||
               hasRelation(relations, name, selectedOutput)
-                ? rectSelectedBackgroundColor
-                : rectBackgroundColor
             }
             toggleTooltip={toggleTooltip}
             onInputSelected={handleInputSelected}
             onInputUnselected={handleInputUnselected}
             relations={relations}
+            onCodeClick={handleDetailSelection}
+            onInfoClick={handleDetailSelection}
             fieldType="input"
           >
             {name}
@@ -172,7 +154,7 @@ export const Diagramm = ({
         {Object.entries(outputMap).map(([name, position]) => (
           <SelectableLabel
             key={`output_${name}`}
-            x={svgWidth + offsetX - rectWidth * 2.5}
+            x={rectWidth + rectWidth / 2 + 1}
             y={
               outputOffsetY +
               (headerHeight +
@@ -182,16 +164,16 @@ export const Diagramm = ({
             width={rectWidth}
             height={rectHeight}
             textColor={rectTextColor}
-            details={opts.output[name]}
-            background={
+            details={{ ...opts.output[name], ...fields[name] }}
+            isSelected={
               selectedOutput === name ||
               hasRelation(relations, selectedInput, name)
-                ? rectSelectedBackgroundColor
-                : rectBackgroundColor
             }
             toggleTooltip={toggleTooltip}
             onInputSelected={handleOutputSelected}
             onInputUnselected={handleOutputUnselected}
+            onCodeClick={handleDetailSelection}
+            onInfoClick={handleDetailSelection}
             relations={relations}
             fieldType="output"
           >
@@ -199,99 +181,90 @@ export const Diagramm = ({
           </SelectableLabel>
         ))}
 
-        {Object.entries(outputMap).map(([name, position]) => (
-          <foreignObject
-            key={name}
-            x={svgWidth + offsetX - rectWidth * 1.5}
-            y={
-              outputOffsetY +
-              (headerHeight +
-                parseInt(position, 10) * (rectHeight + paddingElements))
-            }
-            width={rectWidth}
-            height={rectHeight}
-            style={{ overflow: 'hidden' }}
-          >
-            <FieldDetail
-              name={name}
-              onShowAll={handleDetailSelection}
-              fieldSource={mapper.field_source[name]}
+        {relations &&
+          relations.map((item, index) => (
+            <Connection
+              key={`input_${index}`}
+              item={item}
+              isSelected={Object.entries(item)[0].includes(
+                selectedInput || selectedOutput
+              )}
+              type="input-arrow"
+              {...{
+                rectWidth,
+                inputOffsetY,
+                outputOffsetY,
+                headerHeight,
+                rectHeight,
+                paddingElements,
+                svgWidth,
+                offsetX,
+                inputMap,
+                outputMap,
+              }}
             />
-          </foreignObject>
-        ))}
+          ))}
 
-        {relations.map((item, index) => (
-          <Connection
-            key={`input_${index}`}
-            item={item}
-            type="input-arrow"
-            {...{
-              rectWidth,
-              inputOffsetY,
-              outputOffsetY,
-              headerHeight,
-              rectHeight,
-              paddingElements,
-              svgWidth,
-              offsetX,
-              inputMap,
-              outputMap,
-            }}
-          />
-        ))}
+        {relations &&
+          relations.map((item, index) => (
+            <Connection
+              key={`output_${index}`}
+              item={item}
+              type="output-arrow"
+              isSelected={Object.entries(item)[0].includes(
+                selectedInput || selectedOutput
+              )}
+              {...{
+                rectWidth,
+                inputOffsetY,
+                outputOffsetY,
+                headerHeight,
+                rectHeight,
+                paddingElements,
+                svgWidth,
+                offsetX,
+                inputMap,
+                outputMap,
+              }}
+            />
+          ))}
 
-        {relations.map((item, index) => (
-          <Connection
-            key={`output_${index}`}
-            item={item}
-            type="output-arrow"
-            {...{
-              rectWidth,
-              inputOffsetY,
-              outputOffsetY,
-              headerHeight,
-              rectHeight,
-              paddingElements,
-              svgWidth,
-              offsetX,
-              inputMap,
-              outputMap,
-            }}
-          />
-        ))}
-
-        {relations.map((item, index) => (
-          <Connection
-            key={`line_${index}`}
-            item={item}
-            type="line"
-            {...{
-              rectWidth,
-              inputOffsetY,
-              outputOffsetY,
-              headerHeight,
-              rectHeight,
-              paddingElements,
-              svgWidth,
-              offsetX,
-              inputMap,
-              outputMap,
-              lineColor,
-            }}
-          />
-        ))}
+        {relations &&
+          relations.map((item, index) => (
+            <Connection
+              key={`line_${index}`}
+              item={item}
+              type="line"
+              isSelected={Object.entries(item)[0].includes(
+                selectedInput || selectedOutput
+              )}
+              {...{
+                rectWidth,
+                inputOffsetY,
+                outputOffsetY,
+                headerHeight,
+                rectHeight,
+                paddingElements,
+                svgWidth,
+                offsetX,
+                inputMap,
+                outputMap,
+                lineColor,
+              }}
+            />
+          ))}
       </svg>
     </div>
   </Flex>
 );
 
-const SVG_WIDTH = 720;
+const SVG_WIDTH = 626;
 const OFFSET_X = 90;
 const OFFSET_Y = 20;
 const HEADER_HEIGHT = 40;
 const PADDING_ELEMENTS = 5;
-const RECT_HEIGHT = 45;
-const RECT_WIDTH = 200;
+const RECT_HEIGHT = 65;
+const RECT_WIDTH = 250;
 
 const getFieldsMap = source =>
   Object.keys(source)
@@ -300,14 +273,15 @@ const getFieldsMap = source =>
 
 const getRelationsData = mapProps(props => ({
   ...props,
-  inputMap: props.mapper.opts.input
-    ? getFieldsMap(props.mapper.opts.input)
+  inputMap: props.mapper.options.input
+    ? getFieldsMap(props.mapper.options.input)
     : [],
-  outputMap: props.mapper.opts.output
-    ? getFieldsMap(props.mapper.opts.output)
+  outputMap: props.mapper.options.output
+    ? getFieldsMap(props.mapper.options.output)
     : [],
-  relations: getRelations(props.mapper.field_source, props.mapper.opts.input),
-  opts: props.mapper.opts,
+  relations: getRelations(props.mapper.fields),
+  opts: props.mapper.options,
+  fields: props.mapper.fields,
 }));
 
 const appendMaxElementCount = withProps(({ inputMap, outputMap }) => ({
@@ -360,8 +334,8 @@ const addOutputSelection = compose(
 
 const setDetail = compose(
   withProps(({ openModal, closeModal }) => ({
-    handleDetailSelection: detail => {
-      openModal(<DetailModal onClose={closeModal} detail={detail} />);
+    handleDetailSelection: (detail, tab) => {
+      openModal(<DetailModal onClose={closeModal} detail={detail} tab={tab} />);
     },
   }))
 );
