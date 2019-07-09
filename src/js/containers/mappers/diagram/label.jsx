@@ -72,11 +72,11 @@ const Label = ({
           position: 'relative',
           fontSize: '13px',
           lineHeight: `${height}px`,
-          border: isSelected ? '2px solid #d99e0b' : '2px solid #5c7080',
+          border: isSelected ? '2px solid #64a3bd' : '2px solid #5c7080',
           borderRadius: '3px',
           backgroundImage:
             isSelected &&
-            'linear-gradient(to right bottom, transparent, #d99e0b)',
+            'linear-gradient(to right bottom, transparent, #64a3bd)',
         }}
       >
         <Tooltip

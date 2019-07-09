@@ -9,7 +9,6 @@ import map from 'lodash/map';
 
 import Header from './header';
 import SelectableLabel from './selectable-label';
-import FieldDetail from './field-detail';
 import Tooltip from './tooltip';
 import Connection from './connection';
 import modal from '../../../hocomponents/modal';
@@ -23,14 +22,20 @@ const getRelations = (fields: Object, inputs: Object): Array<Object> =>
       if (typeof outputData === 'string') {
         return { [outputName]: outputData };
       } else if (outputData.name) {
-        return { [outputName]: outputData.name };
+        let name = outputData.name;
+
+        if (outputData.name.indexOf('.') !== -1) {
+          name = outputData.name.split('.')[0];
+        }
+
+        return { [outputName]: name };
       }
 
       return null;
     }
   ).filter(item => item);
 
-function hasRelation(array, input, output) {
+function hasRelation (array, input, output) {
   return !!array.find(item => {
     const [[outputValue, inputValue]] = Object.entries(item);
     return inputValue === input && outputValue === output;

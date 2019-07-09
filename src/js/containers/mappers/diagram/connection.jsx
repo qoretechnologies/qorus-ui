@@ -59,7 +59,7 @@ const DiagramConnection: Function = ({
               outputPosition * (rectHeight + paddingElements) +
               rectHeight / 2)
           }
-          stroke={isSelected ? '#d99e0b' : '#5c7080'}
+          stroke={isSelected ? '#64a3bd' : '#5c7080'}
         />
       );
     default: {
@@ -81,7 +81,7 @@ const DiagramConnection: Function = ({
           }
         >
           <polygon
-            fill={isSelected ? '#d99e0b' : '#5c7080'}
+            fill={isSelected ? '#64a3bd' : '#5c7080'}
             points={`0, 0 0, ${polySize * 2} ${polySize}, ${polySize}`}
           />
         </svg>
