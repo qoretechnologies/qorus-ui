@@ -67,7 +67,7 @@ const MapperInfo = ({
               object={{
                 type: mapper.type,
                 description: mapper.desc,
-                options: mapper.opts,
+                options: mapper.options,
               }}
             />
           </SimpleTab>
@@ -108,7 +108,7 @@ export default compose(
     }
   ),
   lifecycle({
-    componentWillMount () {
+    componentWillMount() {
       const { load, mapperId } = this.props;
 
       load({}, mapperId);
