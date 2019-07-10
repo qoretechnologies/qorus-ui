@@ -1,6 +1,5 @@
 stages:
   - build-develop
-  - build-prod
 
 build_package:
   stage: build-develop
