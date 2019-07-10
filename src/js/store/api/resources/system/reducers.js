@@ -67,10 +67,6 @@ const processMemoryChanged = {
     if (data.cluster_info) {
       events.forEach(event => {
         // For testing purposes, this sometimes fails
-        if (!data.cluster_info[event.node].node_priv) {
-          console.log(event);
-        }
-
         data.cluster_info[event.node].node_priv = event.node_priv;
         data.cluster_info[event.node].node_load_pct = event.node_load_pct;
         data.cluster_info[event.node].node_ram_in_use = event.node_ram_in_use;
