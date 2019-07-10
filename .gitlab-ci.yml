@@ -1,0 +1,15 @@
+stages:
+  - build
+
+build_package:
+  stage: build
+  image: alpine:latest
+  tags:
+    - docker-exec
+  before_script:
+    - apk add yarn
+  script:
+    - yarn build:dev
+  artifacts:
+    paths:
+      - dist/
