@@ -14,3 +14,5 @@ build_package:
   artifacts:
     paths:
       - dist/
+  only:
+   - develop
