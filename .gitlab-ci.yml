@@ -1,8 +1,8 @@
 stages:
-  - build-prod
+  - build
 
 build_package:
-  stage: build-prod
+  stage: build
   image: alpine:latest
   tags:
     - docker-exec
