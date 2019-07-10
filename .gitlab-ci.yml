@@ -1,0 +1,18 @@
+stages:
+  - build-prod
+
+build_package:
+  stage: build-prod
+  image: alpine:latest
+  tags:
+    - docker-exec
+  before_script:
+    - apk add yarn
+  script:
+    - yarn install
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
+  only:
+    - '4.0'
