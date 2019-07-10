@@ -9,6 +9,7 @@ build_package:
   before_script:
     - apk add yarn
   script:
+    - yarn install
     - yarn build:dev
   artifacts:
     paths:
