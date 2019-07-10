@@ -14,7 +14,7 @@ import isArray from 'lodash/isArray';
 import { formatAppender } from '../../../../helpers/logger';
 
 const addProcess = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -35,7 +35,7 @@ const addProcess = {
 };
 
 const removeProcess = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -55,7 +55,7 @@ const removeProcess = {
 };
 
 const processMemoryChanged = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -66,11 +66,6 @@ const processMemoryChanged = {
 
     if (data.cluster_info) {
       events.forEach(event => {
-        // For testing purposes, this sometimes fails
-        if (!data.cluster_info[event.node].node_priv) {
-          console.log(event);
-        }
-
         data.cluster_info[event.node].node_priv = event.node_priv;
         data.cluster_info[event.node].node_load_pct = event.node_load_pct;
         data.cluster_info[event.node].node_ram_in_use = event.node_ram_in_use;
@@ -95,7 +90,7 @@ const processMemoryChanged = {
 };
 
 const incrementItems = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -119,7 +114,7 @@ const incrementItems = {
 };
 
 const decrementItems = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -145,7 +140,7 @@ const decrementItems = {
 };
 
 const updateDone = {
-  next (
+  next(
     state: Object,
     {
       payload: { id },
@@ -163,7 +158,7 @@ const updateDone = {
 };
 
 const init = {
-  next (state: Object) {
+  next(state: Object) {
     const newState = { ...state };
 
     newState.isOnDashboard = true;
@@ -173,7 +168,7 @@ const init = {
 };
 
 const unsync = {
-  next (state: Object) {
+  next(state: Object) {
     const newState = { ...state };
 
     newState.isOnDashboard = false;
@@ -183,13 +178,13 @@ const unsync = {
 };
 
 const killProcess = {
-  next (state: Object) {
+  next(state: Object) {
     return state;
   },
 };
 
 const updateStats = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -206,7 +201,7 @@ const updateStats = {
 };
 
 const healthChanged = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -225,7 +220,7 @@ const healthChanged = {
 };
 
 const remoteHealthChanged = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -248,7 +243,7 @@ const remoteHealthChanged = {
 };
 
 const updateNodeInfo = {
-  next (
+  next(
     state: Object,
     {
       payload: { events },
@@ -290,7 +285,7 @@ const updateNodeInfo = {
 
 // Global Config
 const fetchGlobalConfig = {
-  next (
+  next(
     state: Object,
     {
       payload: { globalConfig },
@@ -309,7 +304,7 @@ const updateConfigItemWs = updateConfigItemWsCommon;
 // LOGGER
 const fetchLogger = loggerReducer;
 const fetchDefaultLogger = {
-  next (
+  next(
     state,
     {
       payload: { logger, appenders, intfc, empty },
@@ -364,7 +359,7 @@ const deleteLogger = deleteLoggerReducer;
 const addAppender = addAppenderReducer;
 const editAppender = editAppenderReducer;
 const addDefaultAppender = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -387,7 +382,7 @@ const addDefaultAppender = {
   },
 };
 const editDefaultAppender = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -419,7 +414,7 @@ const editDefaultAppender = {
 };
 const deleteAppender = deleteAppenderReducer;
 const deleteDefaultAppender = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -447,7 +442,7 @@ const deleteDefaultAppender = {
 };
 
 const addUpdateDefaultLogger = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -486,7 +481,7 @@ const addUpdateDefaultLogger = {
 
 // Deleting DEFAULT logger
 const deleteDefaultLogger = {
-  next (
+  next(
     state,
     {
       payload: { events },
