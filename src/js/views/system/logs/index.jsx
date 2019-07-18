@@ -19,52 +19,30 @@ import DefaultLogger from '../../../containers/DefaultLogger';
 type Props = {
   tabQuery: string,
   location: Object,
+  logs: Object,
 };
 
-const Log: Function = ({ tabQuery }: Props) => (
+const Log: Function = ({ tabQuery, logs }: Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb>Logs</Crumb>
-        <CrumbTabs
-          tabs={[
-            'System',
-            'Http',
-            'Audit',
-            'Alert',
-            'Monitor',
-            'Default Loggers',
-          ]}
-        />
+        <CrumbTabs tabs={[...logs.map(log => log.logger), 'Default Loggers']} />
       </Breadcrumbs>
     </Headbar>
 
     <SimpleTabs activeTab={tabQuery}>
-      <SimpleTab name="system">
-        <Box top fill scrollY>
-          <LogContainer resource="system" intfc="system" id="qorus-core" />
-        </Box>
-      </SimpleTab>
-      <SimpleTab name="http">
-        <Box top fill scrollY>
-          <LogContainer resource="http" intfc="system" id="HTTP" />
-        </Box>
-      </SimpleTab>
-      <SimpleTab name="audit">
-        <Box top fill scrollY>
-          <LogContainer resource="audit" intfc="system" id="AUDIT" />
-        </Box>
-      </SimpleTab>
-      <SimpleTab name="alert">
-        <Box top fill scrollY>
-          <LogContainer resource="alert" intfc="system" id="ALERT" />
-        </Box>
-      </SimpleTab>
-      <SimpleTab name="monitor">
-        <Box top fill scrollY>
-          <LogContainer resource="mon" intfc="system" id="MONITORING" />
-        </Box>
-      </SimpleTab>
+      {logs.map(log => (
+        <SimpleTab name={log.logger.toLowerCase()}>
+          <Box top fill scrollY>
+            <LogContainer
+              resource={log.uri_path}
+              intfc="system"
+              id={log.logger}
+            />
+          </Box>
+        </SimpleTab>
+      ))}
       <SimpleTab name="default loggers">
         <Box top fill scrollY>
           <DefaultLogger
@@ -101,6 +79,7 @@ const Log: Function = ({ tabQuery }: Props) => (
 export default compose(
   connect(
     state => ({
+      logs: state.api.system.data.loggerParams.configurable_systems,
       defaultLogger: state.api.system.data.defaultLoggers?.system,
     }),
     {
