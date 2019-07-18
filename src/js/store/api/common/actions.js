@@ -23,8 +23,8 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       const url =
         intfc === 'SYSTEM'
           ? `${
-            settings.REST_BASE_URL
-          }/system/config/${configItemName}?action=yaml`
+              settings.REST_BASE_URL
+            }/system/config/${configItemName}?action=yaml`
           : `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}/${stepId ||
               id}/config/${configItemName}?action=yaml`;
 
@@ -104,7 +104,10 @@ const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
       url = url || intfc;
 
       const logger: Object = await fetchWithNotifications(
-        async () => await get(`${settings.REST_BASE_URL}/${url}/${loggerPath}`),
+        async () =>
+          await get(
+            `${settings.REST_BASE_URL}/${url}/${loggerPath.toLowerCase()}`
+          ),
         null,
         null,
         dispatch
@@ -113,7 +116,9 @@ const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
       if (logger !== 'success') {
         const appenders: Object = await fetchWithNotifications(
           async () =>
-            await get(`${settings.REST_BASE_URL}/${url}/${appendersPath}`),
+            await get(
+              `${settings.REST_BASE_URL}/${url}/${appendersPath.toLowerCase()}`
+            ),
           null,
           null,
           dispatch
