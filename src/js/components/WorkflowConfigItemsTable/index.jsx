@@ -74,8 +74,12 @@ export default compose(
   modal(),
   withDispatch(),
   mapProps(({ globalConfig, globalItems, ...rest }) => ({
-    globalConfig: globalItems.filter(configItem => !isNull(configItem.value)),
-    globalItems: globalItems.filter(configItem => isNull(configItem.value)),
+    globalConfig: globalItems.filter(
+      configItem => !isNull(configItem.value) || configItem.is_set
+    ),
+    globalItems: globalItems.filter(
+      configItem => isNull(configItem.value) && !configItem.is_set
+    ),
     ...rest,
   })),
   mapProps(({ globalConfig, ...rest }) => ({
