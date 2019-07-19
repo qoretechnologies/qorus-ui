@@ -730,6 +730,7 @@ const handleEvent = (url, data, dispatch, state) => {
               id: interfaceId,
               interfaceName,
               name: info.name,
+              is_set: info.is_set,
             },
             dispatch
           );
