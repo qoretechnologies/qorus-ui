@@ -32,7 +32,6 @@ const LoggerContainer: Function = ({
 
 export default compose(
   connect((state, ownProps) => {
-    console.log(state, ownProps);
     const { isUsingDefaultLogger }: Object = state.api[ownProps.resource][
       ownProps.resource === 'system' ? 'logs' : 'data'
     ].find((res: Object): boolean => res.id === ownProps.id);
@@ -44,7 +43,7 @@ export default compose(
   withDispatch(),
   withState('loggerFetched', 'setLoggerFetched', false),
   lifecycle({
-    async componentDidMount () {
+    async componentDidMount() {
       const {
         id,
         resource,
@@ -58,7 +57,7 @@ export default compose(
         setLoggerFetched(() => true);
       }
     },
-    async componentWillReceiveProps (nextProps: LoggerContainerProps) {
+    async componentWillReceiveProps(nextProps: LoggerContainerProps) {
       if (this.props.id !== nextProps.id) {
         nextProps.setLoggerFetched(() => false);
       }

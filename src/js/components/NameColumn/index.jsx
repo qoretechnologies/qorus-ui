@@ -3,7 +3,12 @@ import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Td, Th } from '../new_table';
-import { Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
+import {
+  Popover,
+  PopoverInteractionKind,
+  Position,
+  Tooltip,
+} from '@blueprintjs/core';
 import { Link } from 'react-router';
 import DetailButton from '../detail_button';
 import Text from '../text';
@@ -52,6 +57,8 @@ const NameColumn: Function = ({
   hasAlerts,
   type,
   className,
+  minimalAlert,
+  alertTooltip,
 }: NameColumnProps): React.Element<any> => (
   <Td
     className={`name ${hasAlerts ? 'table-name-has-alerts' : ''} ${className}`}
@@ -99,13 +106,15 @@ const NameColumn: Function = ({
         )}
       </Flex>
       {hasAlerts && (
-        <ButtonGroup>
-          <Button
-            iconName="error"
-            title="This item has alerts, click to view"
-            btnStyle="danger"
-            onClick={onDetailClick}
-          />
+        <ButtonGroup minimal={minimalAlert}>
+          <Tooltip content={alertTooltip || 'View alerts'}>
+            <Button
+              iconName="error"
+              title="This item has alerts, click to view"
+              btnStyle="danger"
+              onClick={onDetailClick}
+            />
+          </Tooltip>
         </ButtonGroup>
       )}
     </Flex>

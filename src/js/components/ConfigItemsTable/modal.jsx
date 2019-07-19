@@ -56,9 +56,12 @@ export default class ConfigItemsModal extends Component {
     yamlData: null,
   };
 
-  async componentDidMount() {
+  async componentDidMount () {
     const { intrf, stepId, levelType, intrfId, item } = this.props;
-    if (item.level.startsWith(levelType) || item.level === 'default') {
+    if (
+      item.level &&
+      (item.level.startsWith(levelType) || item.level === 'default')
+    ) {
       const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
 
       const interfacePath: string = intrfId
@@ -195,7 +198,7 @@ export default class ConfigItemsModal extends Component {
     }
   };
 
-  render() {
+  render () {
     const { onClose, item } = this.props;
     const { override, error, yamlData, value } = this.state;
 
