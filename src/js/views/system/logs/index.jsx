@@ -92,6 +92,6 @@ export default compose(
     },
   }),
   showIfPassed(({ defaultLogger }) => defaultLogger, <Loader />),
-  withTabs('system'),
+  withTabs('audit'),
   titleManager('Logs')
 )(Log);

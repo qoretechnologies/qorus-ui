@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import compose from 'recompose/compose';
+import classnames from 'classnames';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import EnhancedTable from '../EnhancedTable';
 import { ActionColumnHeader, ActionColumn } from '../ActionColumn';
@@ -124,8 +125,19 @@ const ConfigItemsTable: Function = ({
             <Tbody {...props}>
               {collection.map((item: Object, index: number) => (
                 <React.Fragment>
-                  <Tr key={item.name} first={index === 0}>
-                    <NameColumn name={item.name} />
+                  <Tr
+                    key={item.name}
+                    first={index === 0}
+                    className={classnames({
+                      'row-alert': !item.value && !item.is_set,
+                    })}
+                  >
+                    <NameColumn
+                      name={item.name}
+                      hasAlerts={!item.value && !item.is_set}
+                      alertTooltip="This config item's value is not set on any level"
+                      minimalAlert
+                    />
                     <ActionColumn>
                       <ButtonGroup>
                         <Button
@@ -149,7 +161,11 @@ const ConfigItemsTable: Function = ({
                         <Button
                           icon="cross"
                           title="Remove this value"
-                          disabled={!item.level.startsWith(levelType)}
+                          disabled={
+                            item.level
+                              ? !item.level.startsWith(levelType || '')
+                              : true
+                          }
                           btnStyle="warning"
                           onClick={() => {
                             dispatchAction(

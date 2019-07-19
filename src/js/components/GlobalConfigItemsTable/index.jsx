@@ -97,7 +97,7 @@ export default compose(
           configItem.name || configItem.item
         )
       )
-      .filter(configItem => !isNull(configItem.value)),
+      .filter(configItem => !isNull(configItem.value) || configItem.is_set),
     globalItems: globalConfig
       .filter(configItem =>
         includes(
@@ -105,7 +105,7 @@ export default compose(
           configItem.name || configItem.item
         )
       )
-      .filter(configItem => isNull(configItem.value)),
+      .filter(configItem => isNull(configItem.value) && !configItem.is_set),
     ...rest,
   })),
   mapProps(({ globalConfig, ...rest }) => ({
