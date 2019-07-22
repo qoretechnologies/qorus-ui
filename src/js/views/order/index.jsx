@@ -250,6 +250,9 @@ export default class Order extends Component {
                 workflow: this.props.workflow,
                 dispatch: this.props.dispatch,
                 isTablet: this.props.isTablet,
+                intfc: 'workflows',
+                resource: `workflows/${this.props.workflow.id}`,
+                id: this.props.workflow.id,
               }}
             />
           </SimpleTab>
