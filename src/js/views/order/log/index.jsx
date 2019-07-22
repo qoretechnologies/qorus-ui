@@ -15,7 +15,12 @@ const LogView = ({
 
   return (
     <Box top fill>
-      <Log resource={`workflows/${workflow.id}`} location={location} />
+      <Log
+        intfc="workflows"
+        resource={`workflows/${workflow.id}`}
+        id={workflow.id}
+        location={location}
+      />
     </Box>
   );
 };
