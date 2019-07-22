@@ -35,7 +35,7 @@ const getRelations = (fields: Object, inputs: Object): Array<Object> =>
     }
   ).filter(item => item);
 
-function hasRelation (array, input, output) {
+function hasRelation(array, input, output) {
   return !!array.find(item => {
     const [[outputValue, inputValue]] = Object.entries(item);
     return inputValue === input && outputValue === output;
