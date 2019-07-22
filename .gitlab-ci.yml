@@ -38,6 +38,6 @@ upload_build:
     - find dist -name \*.gz | while read a; do n=`echo $a|sed s/\.gz$//`; if [ -f $n ]; then rm $n; fi; done
     - mkdir -p webapp
     - mv -f dist/* webapp
-    - cp -R ./webapp ./${WEBAPP}
+    - cp -R webapp ./${WEBAPP}/
     - zip -r qorus-webapp-${WEBAPP}.zip ${WEBAPP}
     - scp qorus-webapp-${WEBAPP}.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
