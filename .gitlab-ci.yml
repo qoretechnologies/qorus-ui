@@ -1,18 +1,46 @@
 stages:
   - build
+  - deploy
 
 build_package:
   stage: build
   image: alpine:latest
+  only:
+   - "4.0"
   tags:
     - docker-exec
+  artifacts:
+    paths:
+      - dist/
   before_script:
     - apk add yarn
   script:
     - yarn install
     - yarn build
-  artifacts:
-    paths:
-      - dist/
+
+upload_build:
+  stage: deploy
+  image: alpine:latest
   only:
-    - '4.0'
+   - "4.0"
+  tags:
+    - docker-exec
+  variables:
+    WEBAPP: "4.0"
+  dependencies:
+    - build_package
+  script:
+    - apk add zip openssh-client
+    - mkdir -p ~/.ssh
+    - echo "${DEPLOY_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+    - echo "${DEPLOY_PUBKEY}" > ~/.ssh/id_rsa.pub
+    - echo "${DEPLOY_PRIVKEY}" > ~/.ssh/id_rsa
+    - chmod 700 ~/.ssh
+    - chmod 600 ~/.ssh/id_rsa
+    - chmod 644 ~/.ssh/id_rsa.pub ~/.ssh/known_hosts
+
+    - find dist -name \*.gz | while read a; do n=`echo $a|sed s/\.gz$//`; if [ -f $n ]; then rm $n; fi; done
+    - mkdir -p ./${WEBAPP}/webapp
+    - mv -f dist/* ./${WEBAPP}/webapp/
+    - zip -r qorus-webapp-${WEBAPP}.zip ${WEBAPP}
+    - scp qorus-webapp-${WEBAPP}.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
