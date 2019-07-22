@@ -203,8 +203,6 @@ export default class ConfigItemsModal extends Component {
     const { onClose, item } = this.props;
     const { override, error, yamlData, value } = this.state;
 
-    console.log(item);
-
     return (
       <Modal hasFooter>
         <Modal.Header onClose={onClose} titleId="yamlEdit">
