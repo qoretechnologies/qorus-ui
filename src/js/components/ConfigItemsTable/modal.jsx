@@ -220,7 +220,7 @@ export default class ConfigItemsModal extends Component {
                       <ButtonGroup>
                         <Button
                           label="Set default value"
-                          disabled={override}
+                          disabled={!item.default_value}
                           onClick={this.handleDefaultClick}
                         />
                       </ButtonGroup>
