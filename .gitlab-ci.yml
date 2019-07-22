@@ -11,7 +11,7 @@ build_package:
     paths:
       - dist/
   before_script:
-    - apk add yarn
+    - apk add yarn python2
   script:
     - yarn install
     - yarn build:dev
