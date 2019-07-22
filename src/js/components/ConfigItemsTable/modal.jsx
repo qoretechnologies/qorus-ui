@@ -12,6 +12,7 @@ import {
   ButtonGroup as BtnGrp,
   Intent,
   Position,
+  Tooltip,
 } from '@blueprintjs/core';
 import DatePicker from '../datepicker';
 import Dropdown, { Item, Control as DControl } from '../../components/dropdown';
@@ -202,6 +203,8 @@ export default class ConfigItemsModal extends Component {
     const { onClose, item } = this.props;
     const { override, error, yamlData, value } = this.state;
 
+    console.log(item);
+
     return (
       <Modal hasFooter>
         <Modal.Header onClose={onClose} titleId="yamlEdit">
@@ -209,6 +212,7 @@ export default class ConfigItemsModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <Box top fill>
+            <Alert iconName="info-sign">{item.desc}</Alert>
             {!yamlData ? (
               <Loader />
             ) : (
@@ -218,11 +222,27 @@ export default class ConfigItemsModal extends Component {
                     {item.name}
                     <Pull right>
                       <ButtonGroup>
-                        <Button
-                          label="Set default value"
-                          disabled={override}
-                          onClick={this.handleDefaultClick}
-                        />
+                        <Tooltip
+                          content={
+                            item.type === 'hash' || item.type === 'list' ? (
+                              <Tree
+                                compact
+                                data={item.value}
+                                noControls
+                                expanded
+                                compact
+                              />
+                            ) : (
+                              <ContentByType inTable content={item.value} />
+                            )
+                          }
+                        >
+                          <Button
+                            label="Set default value"
+                            disabled={!item.default_value}
+                            onClick={this.handleDefaultClick}
+                          />
+                        </Tooltip>
                       </ButtonGroup>
                     </Pull>
                   </div>
