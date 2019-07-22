@@ -27,13 +27,17 @@ const Log: Function = ({ tabQuery, logs }: Props) => (
     <Headbar>
       <Breadcrumbs>
         <Crumb>Logs</Crumb>
-        <CrumbTabs tabs={[...logs.map(log => log.logger), 'Default Loggers']} />
+        <CrumbTabs
+          tabs={[...logs.map(log => log.name || log.logger), 'Default Loggers']}
+        />
       </Breadcrumbs>
     </Headbar>
 
     <SimpleTabs activeTab={tabQuery}>
       {logs.map(log => (
-        <SimpleTab name={log.logger.toLowerCase()}>
+        <SimpleTab
+          name={log.name ? log.name.toLowerCase() : log.logger.toLowerCase()}
+        >
           <Box top fill scrollY>
             <LogContainer
               resource={log.uri_path}
