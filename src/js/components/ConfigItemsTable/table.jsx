@@ -109,10 +109,6 @@ const ConfigItemsTable: Function = ({
             <Th className="text" iconName="info-sign" name="actual_value">
               Value
             </Th>
-
-            <Th className="text" name="default_value">
-              Default val.
-            </Th>
             <Th iconName="code" name="type" />
           </FixedRow>
         </Thead>
@@ -191,13 +187,6 @@ const ConfigItemsTable: Function = ({
                         <Tree compact data={item.value} />
                       ) : (
                         <ContentByType inTable content={item.value} />
-                      )}
-                    </Td>
-                    <Td className="text">
-                      {item.type === 'hash' || item.type === 'list' ? (
-                        <Tree compact data={item.default_value} />
-                      ) : (
-                        <ContentByType inTable content={item.default_value} />
                       )}
                     </Td>
                     <Td className="narrow">
