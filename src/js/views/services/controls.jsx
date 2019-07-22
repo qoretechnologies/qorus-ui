@@ -60,8 +60,8 @@ const ServiceControls: Function = ({
       big={big}
     />
     <Button
-      title={loaded ? 'Unload' : 'Load'}
-      iconName={loaded ? 'small-tick' : 'cross'}
+      title={loaded ? 'Loaded, click to unload' : 'Unloaded, click to load'}
+      iconName={loaded ? 'download' : 'upload'}
       intent={loaded ? Intent.PRIMARY : Intent.NONE}
       onClick={handleLoadClick}
       big={big}
