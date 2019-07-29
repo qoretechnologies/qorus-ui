@@ -33,8 +33,8 @@ const AlertsTableItem: Function = ({
       <InterfaceTag
         title={item.alert}
         link={`/system/alerts?tab=${item.alerttype.toLowerCase()}&paneId=${
-          item.type
-        }:${item.id}`}
+          item.alertid
+        }`}
         type="alert"
       />
     )}

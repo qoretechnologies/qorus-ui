@@ -86,8 +86,7 @@ export default compose(
       updateDone(alertid);
     },
     handleDetailClick: ({
-      type,
-      id,
+      alertid,
       openPane,
       closePane,
       isActive,
@@ -95,7 +94,7 @@ export default compose(
       if (isActive) {
         closePane();
       } else {
-        openPane(`${type}:${id}`);
+        openPane(alertid);
       }
     },
   }),
