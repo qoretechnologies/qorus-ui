@@ -15,6 +15,12 @@ import { connect } from 'react-redux';
 import includes from 'lodash/includes';
 import modal from '../../hocomponents/modal';
 import Table from './table';
+import reduce from 'lodash/reduce';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
+import withState from 'recompose/withState';
 
 type ConfigItemsContainerProps = {
   items: Object,
@@ -29,6 +35,54 @@ const intrfToLevelType = {
   services: 'service',
   jobs: 'job',
 };
+
+let ExpandableConfigWrapper = ({
+  intrf,
+  openModal,
+  closeModal,
+  intrfId,
+  stepId,
+  belongsTo,
+  configItems,
+  isGrouped,
+  saveValue,
+  setGrouped,
+}) => (
+  <ExpandableItem
+    title={belongsTo}
+    key={belongsTo}
+    label={
+      <ButtonGroup>
+        <Button
+          onClick={() => setGrouped(cur => !cur)}
+          icon={isGrouped ? 'ungroup-objects' : 'group-objects'}
+        >
+          {isGrouped ? 'Show un-grouped' : 'Show grouped'}
+        </Button>
+      </ButtonGroup>
+    }
+    show
+  >
+    {() => (
+      <Table
+        configItems={configItems}
+        belongsTo={belongsTo}
+        intrf={intrf}
+        levelType={intrfToLevelType[intrf]}
+        saveValue={saveValue}
+        openModal={openModal}
+        closeModal={closeModal}
+        stepId={stepId}
+        intrfId={intrfId}
+        isGrouped={isGrouped}
+      />
+    )}
+  </ExpandableItem>
+);
+
+ExpandableConfigWrapper = withState('isGrouped', 'setGrouped', false)(
+  ExpandableConfigWrapper
+);
 
 const ConfigItemsContainer: Function = ({
   items,
@@ -56,21 +110,16 @@ const ConfigItemsContainer: Function = ({
       {() => (
         <React.Fragment>
           {map(items, (configItems: Array<Object>, belongsTo: string) => (
-            <ExpandableItem title={belongsTo} key={belongsTo} show>
-              {() => (
-                <Table
-                  configItems={configItems}
-                  belongsTo={belongsTo}
-                  intrf={intrf}
-                  levelType={intrfToLevelType[intrf]}
-                  saveValue={saveValue}
-                  openModal={openModal}
-                  closeModal={closeModal}
-                  stepId={stepId}
-                  intrfId={intrfId}
-                />
-              )}
-            </ExpandableItem>
+            <ExpandableConfigWrapper
+              configItems={configItems}
+              belongsTo={belongsTo}
+              intrf={intrf}
+              saveValue={saveValue}
+              openModal={openModal}
+              closeModal={closeModal}
+              stepId={stepId}
+              intrfId={intrfId}
+            />
           ))}
         </React.Fragment>
       )}
