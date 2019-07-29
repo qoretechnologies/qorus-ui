@@ -106,7 +106,7 @@ const AlertsTable: Function = ({
                   key={alert.alertid}
                   openPane={openPane}
                   closePane={closePane}
-                  isActive={paneId === `${alert.type}:${alert.id}`}
+                  isActive={parseInt(paneId, 10) === alert.alertid}
                   {...alert}
                 />
               )

@@ -13,10 +13,8 @@ import AlertsTable from '../../../components/alerts_table';
 import PaneItem from '../../../components/pane_item';
 
 const alertSelector = (state, props) => {
-  const dt = props.paneId.split(':');
-
   return state.api.alerts.data.find(
-    a => a.type === dt[0] && (a.id === parseInt(dt[1], 10) || a.id === dt[1])
+    a => a.alertid === parseInt(props.paneId, 10)
   );
 };
 
