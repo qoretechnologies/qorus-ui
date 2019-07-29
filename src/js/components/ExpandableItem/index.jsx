@@ -6,6 +6,7 @@ import withHandlers from 'recompose/withHandlers';
 
 import { Icon } from '@blueprintjs/core';
 import lifecycle from 'recompose/lifecycle';
+import Pull from '../Pull';
 
 type Props = {
   children: any,
@@ -14,6 +15,7 @@ type Props = {
   setExpanded: Function,
   title?: string,
   show?: boolean,
+  label?: any,
 };
 
 const ExpandableItem: Function = ({
@@ -21,14 +23,22 @@ const ExpandableItem: Function = ({
   expanded,
   toggleExpand,
   title,
+  label,
 }: Props): React.Element<HTMLDivElement> => (
   <div className="expandable-item">
-    <div
-      className={`expandable-item_title ${expanded && 'expanded'}`}
-      onClick={toggleExpand}
-    >
-      <Icon iconName={expanded ? 'small-minus' : 'small-plus'} />{' '}
-      <h5>{title}</h5>
+    <div>
+      <div
+        className={`expandable-item_title ${expanded && 'expanded'}`}
+        onClick={toggleExpand}
+      >
+        <Icon iconName={expanded ? 'small-minus' : 'small-plus'} />{' '}
+        <h5>{title}</h5>
+      </div>
+      {label && (
+        <Pull right className="expandable-label">
+          {label}
+        </Pull>
+      )}
     </div>
     {expanded && (
       <div className="expandable-item_content">
@@ -46,7 +56,7 @@ export default compose(
     },
   }),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       if (this.props.show !== nextProps.show) {
         nextProps.setExpanded(() => nextProps.show);
       }
