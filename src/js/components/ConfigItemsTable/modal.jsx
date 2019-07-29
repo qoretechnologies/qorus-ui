@@ -133,12 +133,60 @@ export default class ConfigItemsModal extends Component {
     );
   };
 
+  renderAllowedItems: Function = () => {
+    const { item } = this.props;
+
+    if (item.type === 'hash' || item.type === '*hash') {
+      return (
+        <React.Fragment>
+          {item.allowed_values.map(value => (
+            <Tree data={value} compact noControls expanded />
+          ))}
+        </React.Fragment>
+      );
+    }
+
+    return (
+      <Dropdown>
+        <DControl icon="list" small>
+          Please select from predefined values
+        </DControl>
+        {item.allowed_values.map(value => (
+          <Item
+            title={value}
+            onClick={() => {
+              this.handleValueChange(value);
+            }}
+          />
+        ))}
+      </Dropdown>
+    );
+  };
+
   renderValueContent: Function = (): React.Element<any> => {
     const { item } = this.props;
     const { override } = this.state;
 
+    if (item.allowed_values) {
+      return (
+        <TextArea
+          className="pt-fill"
+          rows={getLineCount(this.state.value, null, 4)}
+          value={this.state.value}
+          disabled={this.state.override}
+          readOnly
+          style={{ marginTop: '5px' }}
+          title="This area can only be filled from predefined values"
+          onChange={(event: any) => {
+            this.handleObjectChange(event.target.value);
+          }}
+        />
+      );
+    }
+
     switch (item.type) {
       case 'bool':
+      case '*bool':
         return (
           <Dropdown>
             <DControl small>
@@ -159,6 +207,7 @@ export default class ConfigItemsModal extends Component {
           </Dropdown>
         );
       case 'date':
+      case '*date':
         return (
           <DatePicker
             disabled={override}
@@ -172,7 +221,9 @@ export default class ConfigItemsModal extends Component {
           />
         );
       case 'hash':
+      case '*hash':
       case 'list':
+      case '*list':
         return (
           <TextArea
             className="pt-fill"
@@ -209,22 +260,28 @@ export default class ConfigItemsModal extends Component {
           Editing '{item.name}' config item
         </Modal.Header>
         <Modal.Body>
-          <Box top fill>
+          <Box top fill scrollY>
             <Alert iconName="info-sign">{item.desc}</Alert>
+            {item.allowed_values && (
+              <Alert bsStyle="warning" iconName="warning-sign">
+                This config item can only be set using predefined values
+              </Alert>
+            )}
             {!yamlData ? (
               <Loader />
             ) : (
               <React.Fragment>
                 <div className="configItemsEditor">
                   <div className="header">
-                    {item.name}
+                    {item.allowed_values
+                      ? this.renderAllowedItems()
+                      : 'Set custom value or'}
                     <Pull right>
                       <ButtonGroup>
                         <Tooltip
                           content={
                             item.type === 'hash' || item.type === 'list' ? (
                               <Tree
-                                compact
                                 data={item.value}
                                 noControls
                                 expanded
