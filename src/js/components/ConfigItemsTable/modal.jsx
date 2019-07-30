@@ -284,7 +284,7 @@ export default class ConfigItemsModal extends Component {
                             item.type === 'hash' || item.type === 'list' ? (
                               <Tree
                                 data={item.default_value}
-                                noControls
+                                noButtons
                                 expanded
                                 compact
                               />
