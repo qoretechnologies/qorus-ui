@@ -22,6 +22,7 @@ const emptyTypeToString: Object = {
 const ContentByType: Function = ({
   content,
   inTable,
+  noControls,
 }: ContentByTypeProps): React.Element<any> => {
   const type: string = getType(content);
   const className: string = `content-by-type ${type}`;
@@ -29,7 +30,11 @@ const ContentByType: Function = ({
   if (type === 'string') {
     const isContentDate: boolean = isDate(content);
 
-    let newContent = inTable ? <Text text={`"${content}"`} /> : content;
+    let newContent = inTable ? (
+      <Text text={`"${content}"`} noControls={noControls} />
+    ) : (
+      content
+    );
     newContent = isContentDate ? <Date date={content} /> : newContent;
 
     return inTable ? (

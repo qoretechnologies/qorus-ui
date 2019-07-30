@@ -136,7 +136,7 @@ let ItemsTable: Function = ({
               </Th>
               <Th name="strictly_local">Local</Th>
               <Th name="level">Level</Th>
-              <Th name="config_group">Group</Th>
+              {!title && <Th name="config_group">Group</Th>}
               <Th iconName="code" name="type" />
             </FixedRow>
           </Thead>
@@ -217,7 +217,9 @@ let ItemsTable: Function = ({
                         <ContentByType content={item.strictly_local} />
                       </Td>
                       <Td className="medium">{item.level}</Td>
-                      <Td className="medium">{item.config_group}</Td>
+                      {!title && (
+                        <Td className="medium">{item.config_group}</Td>
+                      )}
                       <Td className="narrow">
                         <code>{item.type}</code>
                       </Td>
