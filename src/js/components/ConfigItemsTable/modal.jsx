@@ -57,7 +57,7 @@ export default class ConfigItemsModal extends Component {
     yamlData: null,
   };
 
-  async componentDidMount () {
+  async componentDidMount() {
     const { intrf, stepId, levelType, intrfId, item } = this.props;
     console.log(item.level);
 
@@ -251,7 +251,7 @@ export default class ConfigItemsModal extends Component {
     }
   };
 
-  render () {
+  render() {
     const { onClose, item } = this.props;
     const { override, error, yamlData, value } = this.state;
 
@@ -284,7 +284,7 @@ export default class ConfigItemsModal extends Component {
                             item.type === 'hash' || item.type === 'list' ? (
                               <Tree
                                 data={item.default_value}
-                                noControls
+                                noButtons
                                 expanded
                                 compact
                               />
