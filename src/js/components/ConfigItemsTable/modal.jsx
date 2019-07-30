@@ -59,29 +59,28 @@ export default class ConfigItemsModal extends Component {
 
   async componentDidMount () {
     const { intrf, stepId, levelType, intrfId, item } = this.props;
-    if (
-      item.level &&
-      (item.level.startsWith(levelType) || item.level === 'default')
-    ) {
-      const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
+    console.log(item.level);
 
-      const interfacePath: string = intrfId
-        ? `${intrf}/${intrfId}${stepPath}`
-        : 'system';
+    const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
 
-      const yamlData: Object = await get(
-        `${settings.REST_BASE_URL}/${interfacePath}/config/${
-          item.name
-        }?action=yaml`
-      );
+    const interfacePath: string = intrfId
+      ? `${intrf}/${intrfId}${stepPath}`
+      : 'system';
 
+    const yamlData: Object = await get(
+      `${settings.REST_BASE_URL}/${interfacePath}/config/${
+        item.name
+      }?action=yaml`
+    );
+
+    if (item.level && item.level.startsWith(levelType)) {
       this.setState({
         yamlData,
         value: yamlData.value,
       });
     } else {
       this.setState({
-        yamlData: true,
+        yamlData,
         value: '',
       });
     }
@@ -109,6 +108,8 @@ export default class ConfigItemsModal extends Component {
   };
 
   handleDefaultClick = () => {
+    console.log(this.state.yamlData);
+
     this.setState({
       value: this.state.yamlData.default_value,
     });
@@ -282,13 +283,17 @@ export default class ConfigItemsModal extends Component {
                           content={
                             item.type === 'hash' || item.type === 'list' ? (
                               <Tree
-                                data={item.value}
+                                data={item.default_value}
                                 noControls
                                 expanded
                                 compact
                               />
                             ) : (
-                              <ContentByType inTable content={item.value} />
+                              <ContentByType
+                                inTable
+                                noControls
+                                content={item.default_value}
+                              />
                             )
                           }
                         >

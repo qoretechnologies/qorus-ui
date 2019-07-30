@@ -81,11 +81,11 @@ export default class Dashboard extends Component {
       this.props.health.data.remote && this.props.health.data.remote.length > 5,
   };
 
-  componentWillMount () {
+  componentWillMount() {
     this.props.dispatch(actions.system.init());
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.dispatch(actions.system.unsync());
   }
 
@@ -119,7 +119,7 @@ export default class Dashboard extends Component {
   getModulesCount = () =>
     this.props.currentUser.data.storage.settings.dashboardModules.length;
 
-  render () {
+  render() {
     if (!this.props.health.sync) return <Loader />;
 
     const { system, health, isTablet } = this.props;
