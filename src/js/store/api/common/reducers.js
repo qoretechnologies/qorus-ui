@@ -7,7 +7,7 @@ import { formatAppender } from '../../../helpers/logger';
 import isArray from 'lodash/isArray';
 
 const updateConfigItemWsCommon = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -65,7 +65,7 @@ const updateConfigItemWsCommon = {
 };
 
 const processStartedReducer = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -92,7 +92,7 @@ const processStartedReducer = {
 };
 
 const processStoppedReducer = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -119,7 +119,7 @@ const processStoppedReducer = {
 };
 
 const basicDataUpdatedReducer = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -146,7 +146,7 @@ const basicDataUpdatedReducer = {
 };
 
 const loggerReducer = {
-  next (
+  next(
     state,
     {
       payload: { logger, appenders, id, empty },
@@ -180,6 +180,8 @@ const loggerReducer = {
       };
     }
 
+    console.log(id, state.logs);
+
     data = updateItemWithId(
       id,
       editedData,
@@ -195,7 +197,7 @@ const loggerReducer = {
 };
 
 const addUpdateLoggerReducer = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -258,7 +260,7 @@ const addUpdateLoggerReducer = {
 
 // Deleting CONCRETE logger
 const deleteLoggerReducer = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -302,7 +304,7 @@ const deleteLoggerReducer = {
 };
 
 const addAppenderReducer = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -342,7 +344,7 @@ const addAppenderReducer = {
 };
 
 const editAppenderReducer = {
-  next (
+  next(
     state,
     {
       payload: { events },
@@ -373,6 +375,8 @@ const editAppenderReducer = {
           return appender;
         });
 
+        console.log(newData);
+
         // Update the data
         newData = updateItemWithId(dt.id, { loggerData }, newData);
       });
@@ -389,7 +393,7 @@ const editAppenderReducer = {
 };
 
 const deleteAppenderReducer = {
-  next (
+  next(
     state,
     {
       payload: { events },

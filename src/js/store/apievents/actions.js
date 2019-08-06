@@ -51,6 +51,9 @@ const handleEvent = (url, data, dispatch, state) => {
         ? customComparator(item)
         : item[idKey] == id || item.name === id
     );
+  const loggerInterfaces: string[] = state.api.system.data.loggerParams.configurable_systems.map(
+    logData => logData.logger
+  );
 
   dt.forEach(async d => {
     const { info, eventstr, classstr, caller } = d;
@@ -1017,7 +1020,7 @@ const handleEvent = (url, data, dispatch, state) => {
         } else {
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if the interface we are updating is loaded
-          const intfc = getLoggerIntfcType(newInfo.interface);
+          const intfc = getLoggerIntfcType(loggerInterfaces, newInfo.interface);
           const isLoaded = newInfo.interfaceid
             ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
@@ -1063,7 +1066,10 @@ const handleEvent = (url, data, dispatch, state) => {
           if (isLoaded) {
             // If the interface is one of the system logs
             // set the interface to system
-            const intfc = getLoggerIntfcType(newInfo.interface);
+            const intfc = getLoggerIntfcType(
+              loggerInterfaces,
+              newInfo.interface
+            );
             // Delete the log
             pipeline(
               'LOGGER_ACTIONS',
@@ -1098,7 +1104,10 @@ const handleEvent = (url, data, dispatch, state) => {
               );
 
           if (isLoaded) {
-            const intfc: string = getLoggerIntfcType(newInfo.interface);
+            const intfc: string = getLoggerIntfcType(
+              loggerInterfaces,
+              newInfo.interface
+            );
             pipeline(
               'APPENDER_ACTIONS',
               interfaceActions[intfc].addAppender,
@@ -1132,7 +1141,10 @@ const handleEvent = (url, data, dispatch, state) => {
               );
 
           if (isLoaded) {
-            const intfc: string = getLoggerIntfcType(newInfo.interface);
+            const intfc: string = getLoggerIntfcType(
+              loggerInterfaces,
+              newInfo.interface
+            );
             pipeline(
               'APPENDER_ACTIONS',
               interfaceActions[intfc].editAppender,
@@ -1168,7 +1180,10 @@ const handleEvent = (url, data, dispatch, state) => {
 
           if (isLoaded) {
             // Get the interface
-            const intfc = getLoggerIntfcType(newInfo.interface);
+            const intfc = getLoggerIntfcType(
+              loggerInterfaces,
+              newInfo.interface
+            );
             // Send the action to the pipeline
             pipeline(
               'APPENDER_ACTIONS',

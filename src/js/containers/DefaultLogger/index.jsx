@@ -394,7 +394,7 @@ export default compose(
         async () =>
           post(
             `${settings.REST_BASE_URL}/${url ||
-              resource}/${id}/logger?cloneDefault=true`
+              resource}/${id.toLowerCase()}/logger?cloneDefault=true`
           ),
         `Duplicating logger...`,
         `Logger successfuly duplicated`,
