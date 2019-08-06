@@ -272,7 +272,10 @@ export default compose(
     }: LoggerContainerProps): Function => (): void => {
       fetchWithNotifications(
         async () =>
-          del(`${settings.REST_BASE_URL}/${url || resource}/${id}/logger`),
+          del(
+            `${settings.REST_BASE_URL}/${url ||
+              resource}/${id.toLowerCase()}/logger`
+          ),
         `Removing logger...`,
         `Logger successfuly removed`,
         dispatch
@@ -288,7 +291,7 @@ export default compose(
         async () =>
           del(
             `${settings.REST_BASE_URL}/${url ||
-              resource}/${id}/logger/appenders`,
+              resource}/${id.toLowerCase()}/logger/appenders`,
             {
               body: JSON.stringify({
                 id: appenderId,

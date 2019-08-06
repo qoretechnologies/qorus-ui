@@ -11,12 +11,9 @@ const formatAppender: Function = (appender: Object): Object => ({
   archivePattern: appender.params.archivePattern,
 });
 
-const getLoggerIntfcType: Function = (intfc: string): string =>
-  includes(
-    ['http', 'audit', 'monitoring', 'alert', 'qorus-core', 'qorus-master'],
-    intfc
-  )
-    ? 'system'
-    : intfc;
+const getLoggerIntfcType: Function = (
+  loggerList: string[],
+  intfc: string
+): string => (includes(loggerList, intfc) ? 'system' : intfc);
 
 export { formatAppender, getLoggerIntfcType };

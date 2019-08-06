@@ -358,7 +358,7 @@ export default compose(
 
         const method = data ? put : post;
         const appendersPath: string = id
-          ? `${id}/logger/appenders`
+          ? `${id.toLowerCase()}/logger/appenders`
           : 'logger/appenders';
         const fetchRes: Object = await fetchWithNotifications(
           async () =>
