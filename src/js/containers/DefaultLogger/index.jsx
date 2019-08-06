@@ -393,8 +393,9 @@ export default compose(
       fetchWithNotifications(
         async () =>
           post(
-            `${settings.REST_BASE_URL}/${url ||
-              resource}/${id.toLowerCase()}/logger?cloneDefault=true`
+            `${settings.REST_BASE_URL}/${url || resource}/${
+              typeof id === 'string' ? id.toLowerCase() : id
+            }/logger?cloneDefault=true`
           ),
         `Duplicating logger...`,
         `Logger successfuly duplicated`,
