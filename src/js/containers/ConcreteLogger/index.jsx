@@ -273,8 +273,9 @@ export default compose(
       fetchWithNotifications(
         async () =>
           del(
-            `${settings.REST_BASE_URL}/${url ||
-              resource}/${id.toLowerCase()}/logger`
+            `${settings.REST_BASE_URL}/${url || resource}/${
+              typeof id === 'string' ? id.toLowerCase() : id
+            }/logger`
           ),
         `Removing logger...`,
         `Logger successfuly removed`,
@@ -290,8 +291,9 @@ export default compose(
       fetchWithNotifications(
         async () =>
           del(
-            `${settings.REST_BASE_URL}/${url ||
-              resource}/${id.toLowerCase()}/logger/appenders`,
+            `${settings.REST_BASE_URL}/${url || resource}/${
+              typeof id === 'string' ? id.toLowerCase() : id
+            }/logger/appenders`,
             {
               body: JSON.stringify({
                 id: appenderId,
