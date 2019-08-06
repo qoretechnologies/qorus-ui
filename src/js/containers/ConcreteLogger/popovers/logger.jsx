@@ -160,7 +160,7 @@ export default compose(
             let loggerPath: string;
 
             if (id) {
-              loggerPath = `/${id}/logger`;
+              loggerPath = `/${id.toLowerCase()}/logger`;
             } else if (isDefault) {
               loggerPath = '?action=defaultLogger';
             } else {
