@@ -38,7 +38,7 @@ const connectCall: Function = (
   let timeout;
   let interval;
 
-  function heartbeat() {
+  function heartbeat () {
     clearTimeout(timeout);
 
     timeout = setTimeout(() => {
@@ -69,11 +69,11 @@ const connectCall: Function = (
   };
 
   ws.onmessage = ({ data }) => {
-    if (onMessage) onMessage(url, data);
-
     if (data === 'pong') {
       // Cancel the timeout and start a new one
       heartbeat();
+    } else {
+      if (onMessage) onMessage(url, data);
     }
   };
 
