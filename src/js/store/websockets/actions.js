@@ -4,10 +4,7 @@ import settings from '../../settings';
 
 const connections = {};
 
-const connected = createAction(
-  'WEBSOCKET_CONNECTED',
-  url => ({ url })
-);
+const connected = createAction('WEBSOCKET_CONNECTED', url => ({ url }));
 
 const disconnected = createAction(
   'WEBSOCKET_DISCONNECTED',
@@ -17,13 +14,10 @@ const disconnected = createAction(
   }
 );
 
-const paused = createAction(
-  'WEBSOCKET_PAUSED',
-  url => {
-    delete connections[url];
-    return { url };
-  }
-);
+const paused = createAction('WEBSOCKET_PAUSED', url => {
+  delete connections[url];
+  return { url };
+});
 
 const connectCall: Function = (
   url: string,
@@ -32,7 +26,7 @@ const connectCall: Function = (
   onMessage: Function,
   onError: Function,
   onClose: Function,
-  onPause: Function,
+  onPause: Function
 ): Object => {
   const token = localStorage.getItem('token');
 
@@ -41,18 +35,55 @@ const connectCall: Function = (
   );
 
   const ws = connections[url];
+  let timeout;
+  let interval;
+
+  function heartbeat() {
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      clearInterval(interval);
+
+      clearInterval(interval);
+      dispatch(disconnected(url, 1000));
+
+      if (onClose) {
+        onClose(url);
+      }
+
+      ws.close(1000, 'Unable to connect to server');
+    }, 5000);
+  }
 
   ws.onopen = () => {
     dispatch(connected(url));
 
     if (onOpen) onOpen(url);
+
+    heartbeat();
+    ws.send('ping');
+
+    interval = setInterval(() => {
+      ws.send('ping');
+    }, 3000);
   };
 
   ws.onmessage = ({ data }) => {
     if (onMessage) onMessage(url, data);
+
+    if (data === 'pong') {
+      // Cancel the timeout and start a new one
+      heartbeat();
+    }
   };
 
   ws.onclose = ({ code, reason }: { code: number, reason: string }) => {
+    // Cancel the timeout and interval
+    clearInterval(interval);
+    clearTimeout(timeout);
+    interval = null;
+    timeout = null;
+
     if (code !== 1000) {
       dispatch(disconnected(url, code));
 
@@ -91,17 +122,11 @@ const connect: Function = (
   onMessage: Function,
   onError: Function,
   onClose: Function,
-  onPause: Function,
+  onPause: Function
 ): Function => (dispatch: Function) => {
-  dispatch(connectAction(
-    url,
-    dispatch,
-    onOpen,
-    onMessage,
-    onError,
-    onClose,
-    onPause,
-  ));
+  dispatch(
+    connectAction(url, dispatch, onOpen, onMessage, onError, onClose, onPause)
+  );
 };
 
 const disconnectAction: Function = createAction(
@@ -109,11 +134,10 @@ const disconnectAction: Function = createAction(
   disconnectCall
 );
 
-const disconnect: Function = (url: string, pause: boolean): Function => (dispatch: Function) => {
+const disconnect: Function = (url: string, pause: boolean): Function => (
+  dispatch: Function
+) => {
   dispatch(disconnectAction(url, pause));
 };
 
-export {
-  connect,
-  disconnect,
-};
+export { connect, disconnect };
