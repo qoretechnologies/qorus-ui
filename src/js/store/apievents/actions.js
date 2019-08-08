@@ -1207,7 +1207,9 @@ const message = (url: string, data: Object) => (
   dispatch: Function,
   getState: Function
 ) => {
-  dispatch(messageAction(url, data, dispatch, getState()));
+  if (data !== 'pong') {
+    dispatch(messageAction(url, data, dispatch, getState()));
+  }
 };
 
 const disconnect = () => () => {

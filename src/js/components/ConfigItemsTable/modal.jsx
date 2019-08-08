@@ -59,7 +59,6 @@ export default class ConfigItemsModal extends Component {
 
   async componentDidMount() {
     const { intrf, stepId, levelType, intrfId, item } = this.props;
-    console.log(item.level);
 
     const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
 
@@ -108,8 +107,6 @@ export default class ConfigItemsModal extends Component {
   };
 
   handleDefaultClick = () => {
-    console.log(this.state.yamlData);
-
     this.setState({
       value: this.state.yamlData.default_value,
     });

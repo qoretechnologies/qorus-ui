@@ -31,10 +31,10 @@ export default compose(
     next: !next || next === '' || next === '/error' ? '/' : next,
   })),
   lifecycle({
-    componentDidMount () {
+    componentDidMount() {
       const { next } = this.props;
 
-      async function checkServer () {
+      async function checkServer() {
         const res = await fetchResponse(
           'GET',
           `${settings.REST_BASE_URL}/public/info`,
@@ -43,7 +43,7 @@ export default compose(
           false
         );
 
-        if (res.status !== 500) {
+        if (res.status === 200) {
           window.location.href =
             !next || next === '' || next === '/error' ? '/' : next;
         }

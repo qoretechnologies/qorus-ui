@@ -180,8 +180,6 @@ const loggerReducer = {
       };
     }
 
-    console.log(id, state.logs);
-
     data = updateItemWithId(
       id,
       editedData,
