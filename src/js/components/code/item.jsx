@@ -25,10 +25,16 @@ let Item: Function = ({
   const newItem = normalizeUnknownId(item);
 
   const handleClick: Function = (): void => {
-    onClick(newItem.name, newItem.body, type, newItem.id, newItem);
+    onClick(
+      `${newItem.name}${newItem.version}`,
+      newItem.body,
+      type,
+      newItem.id,
+      newItem
+    );
   };
 
-  const isSelected: boolean = selected === newItem.name;
+  const isSelected: boolean = selected === `${newItem.name}${newItem.version}`;
 
   return (
     <div
@@ -43,8 +49,8 @@ let Item: Function = ({
 
 Item = compose(
   lifecycle({
-    shouldComponentUpdate(nextProps) {
-      const name = this.props.item.name;
+    shouldComponentUpdate (nextProps) {
+      const name = `${this.props.item.name}${this.props.item.version}`;
 
       return nextProps.selected === name || this.props.selected === name;
     },
