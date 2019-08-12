@@ -40,6 +40,7 @@ import Modal from '../../../components/modal';
 import last from 'lodash/last';
 import withDispatch from '../../../hocomponents/withDispatch';
 import { success } from '../../../store/ui/bubbles/actions';
+import { Icon } from '@blueprintjs/core';
 
 type Props = {
   errors: Array<Object>,
@@ -112,8 +113,8 @@ const ErrorsTable: Function = ({
                 </Dropdown>
                 <ButtonGroup>
                   <Button
-                    text={expanded ? 'Collapse texts' : 'Expand texts'}
-                    title={expanded ? 'Collapse texts' : 'Expand texts'}
+                    text={expanded ? 'Hide descriptions' : 'Show descriptions'}
+                    title={expanded ? 'Hide descriptions' : 'Show descriptions'}
                     iconName={expanded ? 'collapse-all' : 'expand-all'}
                     btnStyle={expanded && 'primary'}
                     big
@@ -182,9 +183,7 @@ const ErrorsTable: Function = ({
                 Ind
               </Th>
             )}
-            <DescriptionColumnHeader name="info">Info</DescriptionColumnHeader>
-            <DescriptionColumnHeader name="description" />
-            {!compact && <DateColumnHeader />}
+            <DateColumnHeader />
           </FixedRow>
         </Thead>
         <DataOrEmptyTable
@@ -196,26 +195,39 @@ const ErrorsTable: Function = ({
             <Tbody {...props}>
               {collection.map(
                 (error: Object, index: number): React.Element<any> => (
-                  <Tr key={error.error_instanceid} first={index === 0}>
-                    <NameColumn name={error.error} />
-                    {!compact && <NameColumn name={error.step_name} />}
-                    <Td className="medium">{error.severity}</Td>
-                    <Td className="medium">
-                      <ContentByType content={error.business_error} />
-                    </Td>
-                    {!compact && <Td className="medium">{error.error_type}</Td>}
-                    {!compact && <Td className="medium">{error.retry}</Td>}
-                    {!compact && <Td className="narrow">{error.ind}</Td>}
-                    <DescriptionColumn expanded={expanded}>
-                      {error.info}
-                    </DescriptionColumn>
-
-                    <DescriptionColumn expanded={expanded}>
-                      {error.description}
-                    </DescriptionColumn>
-
-                    {!compact && <DateColumn>{error.created}</DateColumn>}
-                  </Tr>
+                  <>
+                    <Tr key={error.error_instanceid} first={index === 0}>
+                      <NameColumn name={error.error} />
+                      {!compact && <NameColumn name={error.step_name} />}
+                      <Td className="medium">{error.severity}</Td>
+                      <Td className="medium">
+                        <ContentByType content={error.business_error} />
+                      </Td>
+                      {!compact && (
+                        <Td className="medium">{error.error_type}</Td>
+                      )}
+                      {!compact && <Td className="medium">{error.retry}</Td>}
+                      {!compact && <Td className="narrow">{error.ind}</Td>}
+                      <DateColumn>{error.created}</DateColumn>
+                    </Tr>
+                    {expanded && (
+                      <>
+                        <Tr>
+                          <Td className="text" colspan={!compact ? 8 : 4}>
+                            <Icon iconName="info-sign" />{' '}
+                            <strong>Error description:</strong>{' '}
+                            {error.description || '-'}
+                          </Td>
+                        </Tr>
+                        <Tr>
+                          <Td className="text" colspan={!compact ? 8 : 4}>
+                            <Icon iconName="info-sign" /> <strong>Info:</strong>{' '}
+                            {error.info}
+                          </Td>
+                        </Tr>
+                      </>
+                    )}
+                  </>
                 )
               )}
             </Tbody>
