@@ -3,7 +3,8 @@
     color: $qore-cobalt;
     cursor: pointer;
 
-    h5 {
+    h4 {
+      font-size: 15px;
       display: inline-block;
       margin: 0;
     }
@@ -19,7 +20,7 @@
       color: inherit;
       background-color: lighten($qore-cobalt, 35);
 
-      h5 {
+      h4 {
         font-weight: 600;
       }
     }

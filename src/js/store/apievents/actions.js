@@ -24,9 +24,7 @@ import {
   getProcessObjectInterface,
 } from '../../helpers/system';
 import { INTERFACE_IDS } from '../../constants/interfaces';
-import { get } from '../api/utils';
-import settings from '../../settings';
-import { formatAppender, getLoggerIntfcType } from '../../helpers/logger';
+import { getLoggerIntfcType } from '../../helpers/logger';
 
 const interfaceActions: Object = {
   workflows,
@@ -51,7 +49,7 @@ const handleEvent = (url, data, dispatch, state) => {
         ? customComparator(item)
         : item[idKey] == id || item.name === id
     );
-  const loggerInterfaces: string[] = state.api.system.data.loggerParams.configurable_systems.map(
+  const loggerInterfaces: string[] = state.api.system?.data?.loggerParams?.configurable_systems?.map(
     logData => logData.logger
   );
 

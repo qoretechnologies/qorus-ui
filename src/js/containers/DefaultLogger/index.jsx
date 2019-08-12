@@ -26,7 +26,7 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../components/controls';
-import { Popover, Position } from '@blueprintjs/core';
+import { Popover, Position, Icon } from '@blueprintjs/core';
 import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
 import { fetchWithNotifications, del, post } from '../../store/api/utils';
@@ -70,7 +70,12 @@ const DefaultLoggerContainer: Function = ({
   <React.Fragment>
     {logger === 'empty' ? (
       <PaneItem
-        title={name}
+        title={
+          <>
+            <Icon iconName="info-sign" />
+            {name}
+          </>
+        }
         label={
           <React.Fragment>
             <Popover
@@ -134,7 +139,11 @@ const DefaultLoggerContainer: Function = ({
     ) : (
       <React.Fragment>
         <PaneItem
-          title={name}
+          title={
+            <>
+              <Icon iconName="info-sign" /> {name}
+            </>
+          }
           label={
             <React.Fragment>
               {!defaultOnly && (
@@ -233,8 +242,13 @@ const DefaultLoggerContainer: Function = ({
             </Tbody>
           </Table>
         </PaneItem>
+        <br />
         <PaneItem
-          title={`${name} Appenders`}
+          title={
+            <>
+              <Icon iconName="info-sign" /> Appenders
+            </>
+          }
           label={
             <Popover
               content={
