@@ -32,7 +32,7 @@ const ExpandableItem: Function = ({
         onClick={toggleExpand}
       >
         <Icon iconName={expanded ? 'small-minus' : 'small-plus'} />{' '}
-        <h5>{title}</h5>
+        <h4>{title}</h4>
       </div>
       {label && (
         <Pull right className="expandable-label">
