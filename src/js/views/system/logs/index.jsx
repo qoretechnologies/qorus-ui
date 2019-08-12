@@ -15,6 +15,7 @@ import actions from '../../../store/api/actions';
 import { connect } from 'react-redux';
 import Loader from '../../../components/loader';
 import DefaultLogger from '../../../containers/DefaultLogger';
+import ExpandableItem from '../../../components/ExpandableItem';
 
 type Props = {
   tabQuery: string,
@@ -47,33 +48,49 @@ const Log: Function = ({ tabQuery, logs }: Props) => (
           </Box>
         </SimpleTab>
       ))}
-      <SimpleTab name="default loggers">
+      <SimpleTab name="default loggers" show>
         <Box top fill scrollY>
-          <DefaultLogger
-            name="System default logger"
-            defaultOnly
-            resource="system"
-          />
-          <DefaultLogger
-            name="Workflows default logger"
-            defaultOnly
-            resource="workflows"
-          />
-          <DefaultLogger
-            name="Services default logger"
-            defaultOnly
-            resource="services"
-          />
-          <DefaultLogger
-            name="Jobs default logger"
-            defaultOnly
-            resource="jobs"
-          />
-          <DefaultLogger
-            name="Datasources default logger"
-            defaultOnly
-            resource="remotes"
-          />
+          <ExpandableItem title="System default logger">
+            {() => (
+              <DefaultLogger name="Logger data" defaultOnly resource="system" />
+            )}
+          </ExpandableItem>
+          <br />
+          <ExpandableItem title="Workflows default logger" show>
+            {() => (
+              <DefaultLogger
+                name="Logger data"
+                defaultOnly
+                resource="workflows"
+              />
+            )}
+          </ExpandableItem>
+          <br />
+          <ExpandableItem title="Services default logger" show>
+            {() => (
+              <DefaultLogger
+                name="Logger data"
+                defaultOnly
+                resource="services"
+              />
+            )}
+          </ExpandableItem>
+          <br />
+          <ExpandableItem title="Jobs default logger" show>
+            {() => (
+              <DefaultLogger name="Logger data" defaultOnly resource="jobs" />
+            )}
+          </ExpandableItem>
+          <br />
+          <ExpandableItem title="Datasources default logger" show>
+            {() => (
+              <DefaultLogger
+                name="Logger data"
+                defaultOnly
+                resource="remotes"
+              />
+            )}
+          </ExpandableItem>
         </Box>
       </SimpleTab>
     </SimpleTabs>
