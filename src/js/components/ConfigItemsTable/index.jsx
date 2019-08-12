@@ -80,7 +80,7 @@ let ExpandableConfigWrapper = ({
   </ExpandableItem>
 );
 
-ExpandableConfigWrapper = withState('isGrouped', 'setGrouped', false)(
+ExpandableConfigWrapper = withState('isGrouped', 'setGrouped', true)(
   ExpandableConfigWrapper
 );
 

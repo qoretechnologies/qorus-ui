@@ -126,7 +126,7 @@ export default class StepModal extends Component {
           <InfoTable object={step} omit={['class', 'functions']} />
         </Pane>
         {this.props.step.config && (
-          <Pane key="step-info" name="Config">
+          <Pane key="step-info" name="Config" scrollY>
             <ConfigItemsTable
               items={rebuildConfigHash(this.props.stepWithConfig)}
               intrf="workflows"
@@ -172,7 +172,7 @@ export default class StepModal extends Component {
           <InfoTable object={this.props.step} omit={['functions']} />
         </Pane>
         {this.props.step.config && (
-          <Pane key="step-info" name="Config">
+          <Pane key="step-config" name="Config" scrollY>
             <ConfigItemsTable
               items={{
                 ...rebuildConfigHash(this.props.workflow, true),

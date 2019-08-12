@@ -89,6 +89,7 @@ class Tabs extends React.Component {
             child =>
               child && (
                 <SimpleTab
+                  scrollY={child.props.scrollY}
                   key={child.props.name}
                   name={child.props.name.toLowerCase()}
                 >

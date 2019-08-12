@@ -28,6 +28,7 @@ import mapProps from 'recompose/mapProps';
 import reduce from 'lodash/reduce';
 import map from 'lodash/map';
 import PaneItem from '../pane_item';
+import { Icon } from '@blueprintjs/core';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -49,13 +50,16 @@ const ConfigItemsTable: Function = (
   <React.Fragment>
     {props.isGrouped ? (
       map(props.data, (configItemsData, groupName) => (
-        <PaneItem title={`Group: ${groupName}`}>
+        <>
+          <br />
           <ItemsTable
             {...props}
+            groupName={groupName}
             configItemsData={configItemsData}
             title={groupName}
           />
-        </PaneItem>
+          <br />
+        </>
       ))
     ) : (
       <ItemsTable {...props} configItemsData={props.configItems.data} />
@@ -78,6 +82,7 @@ let ItemsTable: Function = ({
   stepId,
   configItemsData,
   title,
+  groupName,
 }: ConfigItemsTableProps): React.Element<any> => (
   <React.Fragment>
     <EnhancedTable
@@ -102,7 +107,14 @@ let ItemsTable: Function = ({
           <Thead>
             <FixedRow className="toolbar-row">
               <Th>
-                <Pull>
+                {groupName && (
+                  <Pull>
+                    <h5 style={{ lineHeight: '30px' }}>
+                      <Icon iconName="group-objects" /> Group: {groupName}
+                    </h5>
+                  </Pull>
+                )}
+                <Pull right>
                   <ButtonGroup>
                     <Button
                       label="Show descriptions"
@@ -110,21 +122,20 @@ let ItemsTable: Function = ({
                       btnStyle={showDescription ? 'primary' : ''}
                       onClick={handleToggleDescription}
                     />
+
+                    <LoadMore
+                      canLoadMore={canLoadMore}
+                      onLoadMore={handleLoadMore}
+                      onLoadAll={handleLoadAll}
+                      currentCount={loadMoreCurrent}
+                      total={loadMoreTotal}
+                      limit={limit}
+                    />
+                    <Search
+                      onSearchUpdate={handleSearchChange}
+                      resource="configItems"
+                    />
                   </ButtonGroup>
-                </Pull>
-                <Pull right>
-                  <LoadMore
-                    canLoadMore={canLoadMore}
-                    onLoadMore={handleLoadMore}
-                    onLoadAll={handleLoadAll}
-                    currentCount={loadMoreCurrent}
-                    total={loadMoreTotal}
-                    limit={limit}
-                  />
-                  <Search
-                    onSearchUpdate={handleSearchChange}
-                    resource="configItems"
-                  />
                 </Pull>
               </Th>
             </FixedRow>
