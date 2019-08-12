@@ -5,9 +5,14 @@ type Props = {
   activeTab: string,
   children: any,
   name: string,
+  scrollY: boolean,
 };
 
-const SimpleTab: Function = ({ activeTab, children, name }: Props) =>
-  activeTab === name && <Flex height="100%">{children}</Flex>;
+const SimpleTab: Function = ({ activeTab, children, name, scrollY }: Props) =>
+  activeTab === name && (
+    <Flex scrollY={scrollY} height="100%">
+      {children}
+    </Flex>
+  );
 
 export default SimpleTab;
