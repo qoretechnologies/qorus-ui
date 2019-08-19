@@ -182,7 +182,7 @@ let ItemsTable: Function = ({
                               openModal(
                                 <ConfigItemsModal
                                   onClose={closeModal}
-                                  item={item}
+                                  item={{ ...item }}
                                   belongsTo={belongsTo}
                                   onSubmit={saveValue}
                                   intrf={intrf}

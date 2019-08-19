@@ -30,16 +30,20 @@ import {
   Control as Button,
 } from '../../components/controls';
 import Pull from '../Pull';
+import map from 'lodash/map';
+import pickBy from 'lodash/pickBy';
+import isNull from 'lodash/isNull';
+import Tabs, { Pane } from '../tabs';
 
 type Props = {
   onClose: Function,
   item: Object,
-  belongsTo: string,
   onSubmit: Function,
   levelType: string,
   intrf: string,
   intrfId: number,
   stepId: number,
+  isGlobal: Boolean,
 };
 
 export default class ConfigItemsModal extends Component {
@@ -47,41 +51,53 @@ export default class ConfigItemsModal extends Component {
 
   state: {
     value: any,
-    override: boolean,
+    item: Object,
     error: boolean,
     yamlData?: string,
+    type: string,
+    selectedConfigItem?: string,
+    useTemplate?: boolean,
   } = {
-    value: this.props.item.value,
-    override: this.props.item.override,
+    value: this.props.item?.value,
+    item: this.props.item,
     error: false,
     yamlData: null,
+    type:
+      this.props.item?.type === 'any'
+        ? this.props.item?.currentType || null
+        : this.props.item?.type,
+    useTemplate:
+      typeof this.props.item?.value === 'string' &&
+      this.props.item?.value?.startsWith('$'),
   };
 
-  async componentDidMount() {
-    const { intrf, stepId, levelType, intrfId, item } = this.props;
+  async componentDidMount () {
+    if (this.props.item) {
+      const { intrf, stepId, levelType, intrfId, item } = this.props;
 
-    const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
+      const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
 
-    const interfacePath: string = intrfId
-      ? `${intrf}/${intrfId}${stepPath}`
-      : 'system';
+      const interfacePath: string = intrfId
+        ? `${intrf}/${intrfId}${stepPath}`
+        : 'system';
 
-    const yamlData: Object = await get(
-      `${settings.REST_BASE_URL}/${interfacePath}/config/${
-        item.name
-      }?action=yaml`
-    );
+      const yamlData: Object = await get(
+        `${settings.REST_BASE_URL}/${interfacePath}/config/${
+          item.name
+        }?action=yaml`
+      );
 
-    if (item.level && item.level.startsWith(levelType)) {
-      this.setState({
-        yamlData,
-        value: yamlData.value,
-      });
-    } else {
-      this.setState({
-        yamlData,
-        value: '',
-      });
+      if (item.level && item.level.startsWith(levelType)) {
+        this.setState({
+          yamlData,
+          value: yamlData.value,
+        });
+      } else {
+        this.setState({
+          yamlData,
+          value: '',
+        });
+      }
     }
   }
 
@@ -117,12 +133,12 @@ export default class ConfigItemsModal extends Component {
 
     let newValue = value;
 
-    if (this.props.item.type === 'string' && value === '') {
+    if (this.state.type === 'string' && value === '') {
       newValue = jsyaml.safeDump(value);
     }
 
     this.props.onSubmit(
-      this.props.item,
+      this.state.item,
       newValue,
       () => {
         this.props.onClose();
@@ -134,7 +150,7 @@ export default class ConfigItemsModal extends Component {
   renderAllowedItems: Function = () => {
     const { item } = this.props;
 
-    if (item.type === 'hash' || item.type === '*hash') {
+    if (this.state.type === 'hash' || this.state.type === '*hash') {
       return (
         <React.Fragment>
           {item.allowed_values.map(value => (
@@ -161,9 +177,54 @@ export default class ConfigItemsModal extends Component {
     );
   };
 
+  renderTypeSelector: Function = () => {
+    return (
+      <Dropdown>
+        <DControl icon="list" small>
+          {this.state.type || 'Please select the type of this config item'}
+        </DControl>
+        <Item
+          title="Integer"
+          onClick={() => {
+            this.setState({ type: '*int', value: null });
+          }}
+        />
+        <Item
+          title="Float"
+          onClick={() => {
+            this.setState({ type: '*float', value: null });
+          }}
+        />
+        <Item
+          title="Hash"
+          onClick={() => {
+            this.setState({ type: '*hash', value: null });
+          }}
+        />
+        <Item
+          title="List"
+          onClick={() => {
+            this.setState({ type: '*list', value: null });
+          }}
+        />
+        <Item
+          title="Boolean"
+          onClick={() => {
+            this.setState({ type: 'bool', value: null });
+          }}
+        />
+        <Item
+          title="String"
+          onClick={() => {
+            this.setState({ type: '*string', value: null });
+          }}
+        />
+      </Dropdown>
+    );
+  };
+
   renderValueContent: Function = (): React.Element<any> => {
-    const { item } = this.props;
-    const { override } = this.state;
+    const { item } = this.state;
 
     if (item.allowed_values) {
       return (
@@ -171,7 +232,6 @@ export default class ConfigItemsModal extends Component {
           className="pt-fill"
           rows={getLineCount(this.state.value, null, 4)}
           value={this.state.value}
-          disabled={this.state.override}
           readOnly
           style={{ marginTop: '5px' }}
           title="This area can only be filled from predefined values"
@@ -182,145 +242,218 @@ export default class ConfigItemsModal extends Component {
       );
     }
 
-    switch (item.type) {
-      case 'bool':
-      case '*bool':
-        return (
-          <Dropdown>
-            <DControl small>
-              {this.state.value === 'true' ? 'True' : 'False'}
-            </DControl>
-            <Item
-              title="True"
-              onClick={() => {
-                this.handleValueChange('true');
+    if (this.state.type) {
+      switch (this.state.type) {
+        case 'bool':
+        case '*bool':
+          return (
+            <Dropdown>
+              <DControl small>
+                {this.state.value === 'true' ? 'True' : 'False'}
+              </DControl>
+              <Item
+                title="True"
+                onClick={() => {
+                  this.handleValueChange('true');
+                }}
+              />
+              <Item
+                title="False"
+                onClick={() => {
+                  this.handleValueChange('false');
+                }}
+              />
+            </Dropdown>
+          );
+        case 'date':
+        case '*date':
+          return (
+            <DatePicker
+              date={this.state.value}
+              onApplyDate={(newValue: any) => {
+                this.handleDateChange(newValue);
+              }}
+              className="pt-fill"
+              noButtons
+              small
+            />
+          );
+        case 'hash':
+        case '*hash':
+        case 'list':
+        case '*list':
+          return (
+            <TextArea
+              className="pt-fill"
+              rows={getLineCount(this.state.value, null, 4)}
+              value={this.state.value}
+              onChange={(event: any) => {
+                this.handleObjectChange(event.target.value);
               }}
             />
-            <Item
-              title="False"
-              onClick={() => {
-                this.handleValueChange('false');
+          );
+        default:
+          return (
+            <TextArea
+              className="pt-fill"
+              rows={getLineCount(this.state.value, null, 4)}
+              value={this.state.value}
+              onChange={(event: any) => {
+                this.handleObjectChange(event.target.value);
               }}
             />
-          </Dropdown>
-        );
-      case 'date':
-      case '*date':
-        return (
-          <DatePicker
-            disabled={override}
-            date={this.state.value}
-            onApplyDate={(newValue: any) => {
-              this.handleDateChange(newValue);
-            }}
-            className="pt-fill"
-            noButtons
-            small
-          />
-        );
-      case 'hash':
-      case '*hash':
-      case 'list':
-      case '*list':
-        return (
-          <TextArea
-            className="pt-fill"
-            rows={getLineCount(this.state.value, null, 4)}
-            value={this.state.value}
-            disabled={this.state.override}
-            onChange={(event: any) => {
-              this.handleObjectChange(event.target.value);
-            }}
-          />
-        );
-      default:
-        return (
-          <TextArea
-            className="pt-fill"
-            rows={getLineCount(this.state.value, null, 4)}
-            value={this.state.value}
-            disabled={this.state.override}
-            onChange={(event: any) => {
-              this.handleObjectChange(event.target.value);
-            }}
-          />
-        );
+          );
+      }
     }
+
+    return null;
   };
 
-  render() {
-    const { onClose, item } = this.props;
-    const { override, error, yamlData, value } = this.state;
+  render () {
+    const { onClose, isGlobal, globalConfig } = this.props;
+    const { error, yamlData, value, item, useTemplate } = this.state;
+    const globalConfigItems = pickBy(globalConfig, (data, name) =>
+      isNull(data.value)
+    );
 
     return (
       <Modal hasFooter>
         <Modal.Header onClose={onClose} titleId="yamlEdit">
-          Editing '{item.name}' config item
+          {!item
+            ? 'Assign new config item value'
+            : `Editing ${item.name} config item`}
         </Modal.Header>
         <Modal.Body>
           <Box top fill scrollY>
-            <Alert iconName="info-sign">{item.desc}</Alert>
-            {item.allowed_values && (
-              <Alert bsStyle="warning" iconName="warning-sign">
-                This config item can only be set using predefined values
-              </Alert>
+            {item?.desc && <Alert iconName="info-sign">{item.desc}</Alert>}
+            {isGlobal && (
+              <>
+                <Alert bsStyle="warning">
+                  Creating new global config value will affect all interfaces
+                  using this item.
+                </Alert>
+                <Dropdown>
+                  <DControl>{item?.name || 'Please select'}</DControl>
+                  {map(globalConfigItems, data => (
+                    <Item
+                      title={data.name}
+                      onClick={(event, name) =>
+                        this.setState({
+                          value: null,
+                          item: { ...data, name },
+                          type: data.type === 'any' ? null : data.type,
+                        })
+                      }
+                    />
+                  ))}
+                </Dropdown>
+                <br />
+              </>
             )}
-            {!yamlData ? (
-              <Loader />
-            ) : (
-              <React.Fragment>
-                <div className="configItemsEditor">
-                  <div className="header">
-                    {item.allowed_values
-                      ? this.renderAllowedItems()
-                      : 'Set custom value or'}
-                    <Pull right>
-                      <ButtonGroup>
-                        <Tooltip
-                          content={
-                            item.type === 'hash' || item.type === 'list' ? (
-                              <Tree
-                                data={item.default_value}
-                                noButtons
-                                expanded
-                                compact
-                              />
-                            ) : (
-                              <ContentByType
-                                inTable
-                                noControls
-                                content={item.default_value}
-                              />
-                            )
-                          }
-                        >
-                          <Button
-                            label="Set default value"
-                            disabled={!item.default_value}
-                            onClick={this.handleDefaultClick}
-                          />
-                        </Tooltip>
-                      </ButtonGroup>
-                    </Pull>
-                  </div>
-                  <div className="body">
-                    {error && (
-                      <Alert bsStyle="danger">
-                        The provided value is not in correct format
+
+            {!isGlobal && !yamlData && <Loader />}
+            {(!isGlobal && yamlData) || (isGlobal && item) ? (
+              <Tabs
+                active={useTemplate ? 'template' : 'custom'}
+                onChangeEnd={() => {
+                  this.setState({ value: null });
+                }}
+              >
+                <Pane name="custom">
+                  <React.Fragment>
+                    <div className="configItemsEditor">
+                      <div className="header">
+                        {item.allowed_values
+                          ? this.renderAllowedItems()
+                          : isGlobal
+                            ? 'Set item value'
+                            : 'Set custom value or'}
+                        {!isGlobal && (
+                          <Pull right>
+                            <ButtonGroup>
+                              <Tooltip
+                                content={
+                                  this.state.type === 'hash' ||
+                                  this.state.type === 'list' ? (
+                                      <Tree
+                                        data={item.default_value}
+                                        noButtons
+                                        expanded
+                                        compact
+                                      />
+                                    ) : (
+                                      <ContentByType
+                                        inTable
+                                        noControls
+                                        content={item.default_value}
+                                      />
+                                    )
+                                }
+                              >
+                                <Button
+                                  label="Set default value"
+                                  disabled={!item.default_value}
+                                  onClick={this.handleDefaultClick}
+                                />
+                              </Tooltip>
+                            </ButtonGroup>
+                          </Pull>
+                        )}
+                      </div>
+                      <div className="body">
+                        {item?.allowed_values && (
+                          <Alert bsStyle="warning" iconName="warning-sign">
+                            This config item can only be set using predefined
+                            values
+                          </Alert>
+                        )}
+                        {item.type === 'any' && (
+                          <>
+                            <Alert bsStyle="info">
+                              This config item can be set to any type
+                            </Alert>
+                            {this.renderTypeSelector()}
+                            <br />
+                            <br />
+                          </>
+                        )}
+                        {error && (
+                          <Alert bsStyle="danger">
+                            The provided value is not in correct format
+                          </Alert>
+                        )}
+                        {this.renderValueContent()}
+                      </div>
+                    </div>
+                  </React.Fragment>
+                </Pane>
+                <Pane name="template">
+                  <div className="configItemsEditor">
+                    <div className="header">Set custom template</div>
+                    <div className="body">
+                      <Alert bsStyle="info" iconName="info-sign">
+                        {'Template items are in the format: $<level>:<key>'}
                       </Alert>
-                    )}
-                    {this.renderValueContent()}
+                      <TextArea
+                        className="pt-fill"
+                        rows={getLineCount(this.state.value, null, 4)}
+                        value={this.state.value}
+                        onChange={(event: any) => {
+                          this.handleObjectChange(event.target.value);
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              </React.Fragment>
-            )}
+                </Pane>
+              </Tabs>
+            ) : null}
           </Box>
         </Modal.Body>
         <Modal.Footer>
           <div className="pull-right">
             <ButtonGroup>
               <Button label="Cancel" btnStyle="default" action={onClose} big />
-              {value === yamlData?.default_value ? (
+              {!isGlobal && value === yamlData?.default_value ? (
                 <Popover
                   position={Position.TOP}
                   content={
