@@ -732,6 +732,7 @@ const handleEvent = (url, data, dispatch, state) => {
               interfaceName,
               name: info.name,
               is_set: info.is_set,
+              currentType: info.currentType,
             },
             dispatch
           );
