@@ -51,6 +51,26 @@ type Props = {
 export default class ConfigItemsModal extends Component {
   props: Props = this.props;
 
+  getTemplateType = value => {
+    if (value && value.toString().startsWith('$')) {
+      const [type] = value.split(':');
+
+      return type.replace('$', '');
+    }
+
+    return null;
+  };
+
+  getTemplateKey = value => {
+    if (value && value.toString().startsWith('$')) {
+      const [_type, key] = value.split(':');
+
+      return key;
+    }
+
+    return null;
+  };
+
   state: {
     value: any,
     item: Object,
@@ -73,8 +93,8 @@ export default class ConfigItemsModal extends Component {
     useTemplate:
       typeof this.props.item?.value === 'string' &&
       this.props.item?.value?.startsWith('$'),
-    templateType: null,
-    templateKey: null,
+    templateType: this.getTemplateType(this.props.item?.value),
+    templateKey: this.getTemplateKey(this.props.item?.value),
   };
 
   async componentDidMount () {
@@ -297,6 +317,19 @@ export default class ConfigItemsModal extends Component {
               onChange={(event: any) => {
                 this.handleObjectChange(event.target.value);
               }}
+            />
+          );
+        case 'int':
+        case '*int':
+        case 'float':
+        case '*float':
+          return (
+            <InputGroup
+              type="number"
+              onChange={(event: any) => {
+                this.handleObjectChange(event.target.value);
+              }}
+              value={this.state.value}
             />
           );
         default:
