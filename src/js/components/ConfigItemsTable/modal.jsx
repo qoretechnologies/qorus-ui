@@ -321,6 +321,20 @@ export default class ConfigItemsModal extends Component {
           );
         case 'int':
         case '*int':
+          return (
+            <InputGroup
+              type="number"
+              onKeyDown={(event: KeyboardEvent) => {
+                if (event.key === '.' || event.key === ',' || event.key === '-') {
+                  event.preventDefault();
+                }
+              }}
+              onChange={(event: any) => {
+                this.handleObjectChange(event.target.value);
+              }}
+              value={this.state.value}
+            />
+          );
         case 'float':
         case '*float':
           return (
@@ -357,7 +371,7 @@ export default class ConfigItemsModal extends Component {
     );
 
     return (
-      <Modal hasFooter>
+      <Modal hasFooter onEnterPress={this.handleSaveClick}>
         <Modal.Header onClose={onClose} titleId="yamlEdit">
           {!item
             ? 'Assign new config item value'
