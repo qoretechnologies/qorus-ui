@@ -13,6 +13,8 @@ import {
   Intent,
   Position,
   Tooltip,
+  ControlGroup,
+  InputGroup,
 } from '@blueprintjs/core';
 import DatePicker from '../datepicker';
 import Dropdown, { Item, Control as DControl } from '../../components/dropdown';
@@ -57,6 +59,8 @@ export default class ConfigItemsModal extends Component {
     type: string,
     selectedConfigItem?: string,
     useTemplate?: boolean,
+    templateType?: string,
+    templateKey?: string,
   } = {
     value: this.props.item?.value,
     item: this.props.item,
@@ -69,6 +73,8 @@ export default class ConfigItemsModal extends Component {
     useTemplate:
       typeof this.props.item?.value === 'string' &&
       this.props.item?.value?.startsWith('$'),
+    templateType: null,
+    templateKey: null,
   };
 
   async componentDidMount () {
@@ -195,18 +201,7 @@ export default class ConfigItemsModal extends Component {
             this.setState({ type: '*float', value: null });
           }}
         />
-        <Item
-          title="Hash"
-          onClick={() => {
-            this.setState({ type: '*hash', value: null });
-          }}
-        />
-        <Item
-          title="List"
-          onClick={() => {
-            this.setState({ type: '*list', value: null });
-          }}
-        />
+
         <Item
           title="Boolean"
           onClick={() => {
@@ -217,6 +212,18 @@ export default class ConfigItemsModal extends Component {
           title="String"
           onClick={() => {
             this.setState({ type: '*string', value: null });
+          }}
+        />
+        <Item
+          title="Date"
+          onClick={() => {
+            this.setState({ type: '*date', value: null });
+          }}
+        />
+        <Item
+          title="Other"
+          onClick={() => {
+            this.setState({ type: 'Other', value: null });
           }}
         />
       </Dropdown>
@@ -432,16 +439,77 @@ export default class ConfigItemsModal extends Component {
                     <div className="header">Set custom template</div>
                     <div className="body">
                       <Alert bsStyle="info" iconName="info-sign">
-                        {'Template items are in the format: $<level>:<key>'}
+                        {'Template items are in the format: $<type>:<key>'}
                       </Alert>
-                      <TextArea
-                        className="pt-fill"
-                        rows={getLineCount(this.state.value, null, 4)}
-                        value={this.state.value}
-                        onChange={(event: any) => {
-                          this.handleObjectChange(event.target.value);
-                        }}
-                      />
+                      <ControlGroup className="pt-fill">
+                        <Dropdown className="pt-fixed">
+                          <DControl icon="dollar">
+                            {this.state.templateType || 'Please select'}
+                          </DControl>
+                          <Item
+                            title="config"
+                            onClick={() => {
+                              this.setState({ templateType: 'config' });
+                            }}
+                          />
+                          <Item
+                            title="local"
+                            onClick={() => {
+                              this.setState({ templateType: 'local' });
+                            }}
+                          />
+                          <Item
+                            title="dynamic"
+                            onClick={() => {
+                              this.setState({ templateType: 'dynamic' });
+                            }}
+                          />
+                          <Item
+                            title="keys"
+                            onClick={() => {
+                              this.setState({ templateType: 'keys' });
+                            }}
+                          />
+                          <Item
+                            title="sensitive"
+                            onClick={() => {
+                              this.setState({ templateType: 'sensitive' });
+                            }}
+                          />
+                          <Item
+                            title="sensitive-alias"
+                            onClick={() => {
+                              this.setState({
+                                templateType: 'sensitive-alias',
+                              });
+                            }}
+                          />
+                          <Item
+                            title="static"
+                            onClick={() => {
+                              this.setState({ templateType: 'static' });
+                            }}
+                          />
+                          <Item
+                            title="step"
+                            onClick={() => {
+                              this.setState({ templateType: 'step' });
+                            }}
+                          />
+                        </Dropdown>
+                        <Button text=":" big className="pt-fixed" />
+                        <InputGroup
+                          value={this.state.templateKey}
+                          onChange={(event: any) => {
+                            this.setState({
+                              templateKey: event.target.value,
+                              value: `$${this.state.templateType}:${
+                                event.target.value
+                              }`,
+                            });
+                          }}
+                        />
+                      </ControlGroup>
                     </div>
                   </div>
                 </Pane>
