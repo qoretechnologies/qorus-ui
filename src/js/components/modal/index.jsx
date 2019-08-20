@@ -31,7 +31,7 @@ export default class Modal extends Component {
     height: this.props.height || null,
   };
 
-  componentDidMount(): void {
+  componentDidMount (): void {
     if (this.props.onMount) {
       this.props.onMount();
     }
@@ -39,11 +39,29 @@ export default class Modal extends Component {
     if (this.state.height !== 'auto') {
       this.resizeBody();
     }
+
+    if (this.props.onEnterPress) {
+      window.addEventListener('keyup', this.handleEnterKeyUp);
+    }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     this.resizeBody();
   }
+
+  componentWillUnmount () {
+    if (this.props.onEnterPress) {
+      window.removeEventListener('keyup', this.handleEnterKeyUp);
+    }
+  }
+
+  handleEnterKeyUp = (event: KeyboardEvent) => {
+    console.log(event);
+
+    if (event.key === 'Enter') {
+      this.props.onEnterPress();
+    }
+  };
 
   _modal = null;
 
@@ -70,7 +88,7 @@ export default class Modal extends Component {
    *
    * @return {Header|null}
    */
-  getHeader(): React.Element<any> {
+  getHeader (): React.Element<any> {
     return (
       React.Children.toArray(this.props.children).filter(
         c => c.type === Header
@@ -130,7 +148,7 @@ export default class Modal extends Component {
    *
    * @return {ReactElement}
    */
-  render(): React.Element<any> {
+  render (): React.Element<any> {
     return (
       <div
         className={`pt-dialog-container ${
