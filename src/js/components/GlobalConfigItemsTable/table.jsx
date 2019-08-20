@@ -23,7 +23,7 @@ import withState from 'recompose/withState';
 import withHandlers from 'recompose/withHandlers';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
-import AddConfigItemModal from './addModal';
+import AddConfigItemModal from '../ConfigItemsTable/modal';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -81,6 +81,7 @@ const ConfigItemsTable: Function = ({
                     onClick={() => {
                       openModal(
                         <AddConfigItemModal
+                          isGlobal
                           onClose={closeModal}
                           onSubmit={saveValue}
                           globalConfig={globalItems}
@@ -133,14 +134,12 @@ const ConfigItemsTable: Function = ({
                           title="Edit this value"
                           onClick={() => {
                             openModal(
-                              <ConfigItemsModal
+                              <AddConfigItemModal
                                 onClose={closeModal}
                                 item={item}
-                                belongsTo={belongsTo}
                                 onSubmit={saveValue}
                                 intrf={intrf}
-                                intrfId={configItems.id}
-                                stepId={configItems.stepId}
+                                isGlobal
                               />
                             );
                           }}
