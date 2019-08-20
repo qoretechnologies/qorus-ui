@@ -106,7 +106,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
           if (isInterfaceLoaded(interfaceType, id)) {
             pipeline(
-              eventstr,
+              `${eventstr}_${interfaceType}`,
               interfaceActions[interfaceType].processStarted,
               { id, info },
               dispatch
@@ -129,7 +129,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
           if (isInterfaceLoaded(interfaceType, id)) {
             pipeline(
-              eventstr,
+              `${eventstr}_${interfaceType}`,
               interfaceActions[interfaceType].processStopped,
               { id, info },
               dispatch
