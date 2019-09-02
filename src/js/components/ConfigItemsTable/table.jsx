@@ -27,6 +27,7 @@ import withDispatch from '../../hocomponents/withDispatch';
 import mapProps from 'recompose/mapProps';
 import reduce from 'lodash/reduce';
 import map from 'lodash/map';
+import size from 'lodash/size';
 import PaneItem from '../pane_item';
 import { Icon } from '@blueprintjs/core';
 
@@ -48,7 +49,7 @@ const ConfigItemsTable: Function = (
   props: ConfigItemsTableProps
 ): React.Element<any> => (
   <React.Fragment>
-    {props.isGrouped ? (
+    {props.isGrouped && size(props.data) ? (
       map(props.data, (configItemsData, groupName) => (
         <>
           <br />
@@ -222,10 +223,10 @@ let ItemsTable: Function = ({
                         item.type === 'list' ||
                         item.type === '*hash' ||
                         item.type === '*list' ? (
-                            <Tree compact data={item.value} />
-                          ) : (
-                            <ContentByType inTable content={item.value} />
-                          )}
+                          <Tree compact data={item.value} />
+                        ) : (
+                          <ContentByType inTable content={item.value} />
+                        )}
                       </Td>
                       <Td className="narrow">
                         <ContentByType content={item.strictly_local} />
