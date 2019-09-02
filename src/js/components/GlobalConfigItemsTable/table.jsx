@@ -17,13 +17,11 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../components/controls';
-import ConfigItemsModal from './modal';
 import Tree from '../tree';
-import withState from 'recompose/withState';
-import withHandlers from 'recompose/withHandlers';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
 import AddConfigItemModal from '../ConfigItemsTable/modal';
+import size from 'lodash/size';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -75,6 +73,7 @@ const ConfigItemsTable: Function = ({
               <Pull>
                 <ButtonGroup>
                   <Button
+                    disabled={!size(globalItems)}
                     icon="add"
                     label="Add new"
                     title="Add new"
@@ -168,10 +167,10 @@ const ConfigItemsTable: Function = ({
                       item.type === 'list' ||
                       item.type === '*hash' ||
                       item.type === '*list' ? (
-                          <Tree compact data={item.value} />
-                        ) : (
-                          <ContentByType inTable content={item.value} />
-                        )}
+                        <Tree compact data={item.value} />
+                      ) : (
+                        <ContentByType inTable content={item.value} />
+                      )}
                     </Td>
                     <Td className="narrow">
                       <code>{item.type}</code>

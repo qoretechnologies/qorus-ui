@@ -108,22 +108,13 @@ export default class ConfigItemsModal extends Component {
         : 'system';
 
       const yamlData: Object = await get(
-        `${settings.REST_BASE_URL}/${interfacePath}/config/${
-          item.name
-        }?action=yaml`
+        `${settings.REST_BASE_URL}/${interfacePath}/config/${item.name}?action=yaml`
       );
 
-      if (item.level && item.level.startsWith(levelType)) {
-        this.setState({
-          yamlData,
-          value: yamlData.value,
-        });
-      } else {
-        this.setState({
-          yamlData,
-          value: '',
-        });
-      }
+      this.setState({
+        yamlData,
+        value: yamlData.value,
+      });
     }
   }
 
@@ -325,7 +316,11 @@ export default class ConfigItemsModal extends Component {
             <InputGroup
               type="number"
               onKeyDown={(event: KeyboardEvent) => {
-                if (event.key === '.' || event.key === ',' || event.key === '-') {
+                if (
+                  event.key === '.' ||
+                  event.key === ',' ||
+                  event.key === '-'
+                ) {
                   event.preventDefault();
                 }
               }}
@@ -371,7 +366,14 @@ export default class ConfigItemsModal extends Component {
     );
 
     return (
-      <Modal hasFooter onEnterPress={this.handleSaveClick}>
+      <Modal
+        hasFooter
+        onEnterPress={event => {
+          if (event.srcElement.tagName !== 'TEXTAREA') {
+            this.handleSaveClick();
+          }
+        }}
+      >
         <Modal.Header onClose={onClose} titleId="yamlEdit">
           {!item
             ? 'Assign new config item value'
@@ -383,25 +385,29 @@ export default class ConfigItemsModal extends Component {
             {isGlobal && (
               <>
                 <Alert bsStyle="warning">
-                  Creating new global config value will affect all interfaces
-                  using this item.
+                  {!item ? 'Creating new ' : 'Editing'} global config value will
+                  affect all interfaces using this item.
                 </Alert>
-                <Dropdown>
-                  <DControl>{item?.name || 'Please select'}</DControl>
-                  {map(globalConfigItems, data => (
-                    <Item
-                      title={data.name}
-                      onClick={(event, name) =>
-                        this.setState({
-                          value: null,
-                          item: { ...data, name },
-                          type: data.type === 'any' ? null : data.type,
-                        })
-                      }
-                    />
-                  ))}
-                </Dropdown>
-                <br />
+                {!item && (
+                  <>
+                    <Dropdown>
+                      <DControl>{item?.name || 'Please select'}</DControl>
+                      {map(globalConfigItems, data => (
+                        <Item
+                          title={data.name}
+                          onClick={(event, name) =>
+                            this.setState({
+                              value: null,
+                              item: { ...data, name },
+                              type: data.type === 'any' ? null : data.type,
+                            })
+                          }
+                        />
+                      ))}
+                    </Dropdown>
+                    <br />
+                  </>
+                )}
               </>
             )}
 
@@ -481,85 +487,85 @@ export default class ConfigItemsModal extends Component {
                     </div>
                   </React.Fragment>
                 </Pane>
-                <Pane name="template">
-                  <div className="configItemsEditor">
-                    <div className="header">Set custom template</div>
-                    <div className="body">
-                      <Alert bsStyle="info" iconName="info-sign">
-                        {'Template items are in the format: $<type>:<key>'}
-                      </Alert>
-                      <ControlGroup className="pt-fill">
-                        <Dropdown className="pt-fixed">
-                          <DControl icon="dollar">
-                            {this.state.templateType || 'Please select'}
-                          </DControl>
-                          <Item
-                            title="config"
-                            onClick={() => {
-                              this.setState({ templateType: 'config' });
-                            }}
-                          />
-                          <Item
-                            title="local"
-                            onClick={() => {
-                              this.setState({ templateType: 'local' });
-                            }}
-                          />
-                          <Item
-                            title="dynamic"
-                            onClick={() => {
-                              this.setState({ templateType: 'dynamic' });
-                            }}
-                          />
-                          <Item
-                            title="keys"
-                            onClick={() => {
-                              this.setState({ templateType: 'keys' });
-                            }}
-                          />
-                          <Item
-                            title="sensitive"
-                            onClick={() => {
-                              this.setState({ templateType: 'sensitive' });
-                            }}
-                          />
-                          <Item
-                            title="sensitive-alias"
-                            onClick={() => {
+                {!item?.allowed_values && (
+                  <Pane name="template">
+                    <div className="configItemsEditor">
+                      <div className="header">Set custom template</div>
+                      <div className="body">
+                        <Alert bsStyle="info" iconName="info-sign">
+                          {'Template items are in the format: $<type>:<key>'}
+                        </Alert>
+                        <ControlGroup className="pt-fill">
+                          <Dropdown className="pt-fixed">
+                            <DControl icon="dollar">
+                              {this.state.templateType || 'Please select'}
+                            </DControl>
+                            <Item
+                              title="config"
+                              onClick={() => {
+                                this.setState({ templateType: 'config' });
+                              }}
+                            />
+                            <Item
+                              title="local"
+                              onClick={() => {
+                                this.setState({ templateType: 'local' });
+                              }}
+                            />
+                            <Item
+                              title="dynamic"
+                              onClick={() => {
+                                this.setState({ templateType: 'dynamic' });
+                              }}
+                            />
+                            <Item
+                              title="keys"
+                              onClick={() => {
+                                this.setState({ templateType: 'keys' });
+                              }}
+                            />
+                            <Item
+                              title="sensitive"
+                              onClick={() => {
+                                this.setState({ templateType: 'sensitive' });
+                              }}
+                            />
+                            <Item
+                              title="sensitive-alias"
+                              onClick={() => {
+                                this.setState({
+                                  templateType: 'sensitive-alias',
+                                });
+                              }}
+                            />
+                            <Item
+                              title="static"
+                              onClick={() => {
+                                this.setState({ templateType: 'static' });
+                              }}
+                            />
+                            <Item
+                              title="step"
+                              onClick={() => {
+                                this.setState({ templateType: 'step' });
+                              }}
+                            />
+                          </Dropdown>
+                          <Button text=":" big className="pt-fixed" />
+                          <InputGroup
+                            value={this.state.templateKey}
+                            onChange={(event: any) => {
                               this.setState({
-                                templateType: 'sensitive-alias',
+                                templateKey: event.target.value,
+                                value: `$${this.state.templateType}:${event.target.value}`,
                               });
                             }}
                           />
-                          <Item
-                            title="static"
-                            onClick={() => {
-                              this.setState({ templateType: 'static' });
-                            }}
-                          />
-                          <Item
-                            title="step"
-                            onClick={() => {
-                              this.setState({ templateType: 'step' });
-                            }}
-                          />
-                        </Dropdown>
-                        <Button text=":" big className="pt-fixed" />
-                        <InputGroup
-                          value={this.state.templateKey}
-                          onChange={(event: any) => {
-                            this.setState({
-                              templateKey: event.target.value,
-                              value: `$${this.state.templateType}:${
-                                event.target.value
-                              }`,
-                            });
-                          }}
-                        />
-                      </ControlGroup>
+                        </ControlGroup>
+                      </div>
                     </div>
-                  </div>
-                </Pane>
+                  </Pane>
+                )}
               </Tabs>
             ) : null}
           </Box>

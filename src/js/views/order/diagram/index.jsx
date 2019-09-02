@@ -35,7 +35,7 @@ export default class DiagramView extends Component {
     );
   };
 
-  renderContent() {
+  renderContent () {
     const top: boolean = !this.props.isTablet;
 
     return [
@@ -83,7 +83,7 @@ export default class DiagramView extends Component {
     ];
   }
 
-  render() {
+  render () {
     const { workflow, isTablet } = this.props;
 
     if (!workflow) return <Loader />;

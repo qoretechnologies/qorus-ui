@@ -52,14 +52,16 @@ let ExpandableConfigWrapper = ({
     title={belongsTo}
     key={belongsTo}
     label={
-      <ButtonGroup>
-        <Button
-          onClick={() => setGrouped(cur => !cur)}
-          icon={isGrouped ? 'ungroup-objects' : 'group-objects'}
-        >
-          {isGrouped ? 'Show un-grouped' : 'Show grouped'}
-        </Button>
-      </ButtonGroup>
+      size(configItems.data) ? (
+        <ButtonGroup>
+          <Button
+            onClick={() => setGrouped(cur => !cur)}
+            icon={isGrouped ? 'ungroup-objects' : 'group-objects'}
+          >
+            {isGrouped ? 'Show un-grouped' : 'Show grouped'}
+          </Button>
+        </ButtonGroup>
+      ) : null
     }
     show
   >
