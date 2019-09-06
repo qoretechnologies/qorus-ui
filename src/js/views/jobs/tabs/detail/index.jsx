@@ -21,6 +21,7 @@ import withHandlers from 'recompose/withHandlers';
 import ProcessSummary from '../../../../components/ProcessSummary';
 import Box from '../../../../components/box';
 import Flex from '../../../../components/Flex';
+import ScheduleText from '../../../../components/ScheduleText';
 
 type Props = {
   model: Object,
@@ -55,15 +56,10 @@ const DetailTab = ({
           remote={model.remote}
           expiry={model.expiry_date}
         />
-        <JobControls
-          scheduleOnly
-          id={model.id}
-          schedText={model.sched_txt}
-          minute={model.minute}
-          hour={model.hour}
-          day={model.day}
-          month={model.month}
-          week={model.wday}
+      </PaneItem>
+      <PaneItem title="Schedule">
+        <ScheduleText
+          cron={`${model.minute} ${model.hour} ${model.day} ${model.month} ${model.wday}`}
         />
       </PaneItem>
       <PaneItem title="SLA">

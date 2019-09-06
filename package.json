@@ -12,6 +12,7 @@
     "bootstrap-sass": "^3.3.6",
     "chart.js": "^2.7.3",
     "classnames": "^2.2.5",
+    "cronstrue": "^1.83.0",
     "es6-promise": "^4.2.5",
     "eslint-plugin-cypress": "^2.2.1",
     "font-awesome": "^4.6.1",
