@@ -44,16 +44,16 @@ const WorkflowHeader: Function = ({
       <CrumbTabs
         tabs={[
           'Orders',
-          'Performance',
-          'Steps',
-          'Order Stats',
-          'Process',
           {
             title: 'Config',
             suffix: `(${countConfigItems({
               ...rebuildConfigHash(workflow, true),
             })})`,
           },
+          'Performance',
+          'Steps',
+          'Order Stats',
+          'Process',
           'Releases',
           {
             title: 'Value maps',

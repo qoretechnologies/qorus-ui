@@ -68,14 +68,14 @@ const JobPage = ({
         <CrumbTabs
           tabs={[
             'Instances',
-            'Process',
-            { title: 'Mappers', suffix: `(${size(job.mappers)})` },
-            { title: 'Value maps', suffix: `(${size(job.vmaps)})` },
-            'Releases',
             {
               title: 'Config',
               suffix: `(${countConfigItems(configItems)})`,
             },
+            'Process',
+            { title: 'Mappers', suffix: `(${size(job.mappers)})` },
+            { title: 'Value maps', suffix: `(${size(job.vmaps)})` },
+            'Releases',
             'Code',
             'Log',
             'Info',
@@ -133,24 +133,20 @@ export default compose(
       unsync: actions.jobs.unsync,
     }
   ),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      date: date || DATES.PREV_DAY,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      fetchParams: { lib_source: true, date: formatDate(date).format() },
-      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
-      date,
-      ...rest,
-    })
-  ),
+  mapProps(({ date, ...rest }: Props): Object => ({
+    date: date || DATES.PREV_DAY,
+    ...rest,
+  })),
+  mapProps(({ date, ...rest }: Props): Object => ({
+    fetchParams: { lib_source: true, date: formatDate(date).format() },
+    linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+    date,
+    ...rest,
+  })),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps (nextProps: Props) {
+    componentWillReceiveProps(nextProps: Props) {
       const { date, fetch, id }: Props = this.props;
 
       if (date !== nextProps.date || id !== nextProps.id) {
@@ -158,23 +154,21 @@ export default compose(
       }
     },
   }),
-  mapProps(
-    (props: Object): Object => ({
-      ...props,
-      lib: {
-        ...{
-          code: [
-            {
-              name: 'Job code',
-              body: props.job.code,
-            },
-          ],
-        },
-        ...props.job.lib,
+  mapProps((props: Object): Object => ({
+    ...props,
+    lib: {
+      ...{
+        code: [
+          {
+            name: 'Job code',
+            body: props.job.code,
+          },
+        ],
       },
-      configItems: rebuildConfigHash(props.job),
-    })
-  ),
+      ...props.job.lib,
+    },
+    configItems: rebuildConfigHash(props.job),
+  })),
   titleManager(({ job }): string => job.name),
   queryControl('search'),
   withTabs('instances'),

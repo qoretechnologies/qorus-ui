@@ -21,34 +21,27 @@ import ServiceTabs from '../tabs';
     load: actions.services.fetchLibSources,
   }
 )
-@mapProps(
-  ({ service, ...rest }: Object): Object => ({
-    methods: service.lib
-      ? service.class_based
-        ? service.methods.map(
-          (method: Object): Object => ({
-            ...method,
-            ...{ body: service.class_source.class_source },
-          })
-        )
-        : service.methods
-      : [],
-    service,
-    ...rest,
-  })
-)
-@mapProps(
-  ({ service, methods, ...rest }: Object): Object => ({
-    data: service.lib ? Object.assign(service.lib, { methods }) : {},
-    service,
-    methods,
-    ...rest,
-  })
-)
-@mapProps(
-  ({ data, service, ...rest }: Object): Object => ({
-    data: service.class_based
-      ? {
+@mapProps(({ service, ...rest }: Object): Object => ({
+  methods: service.lib
+    ? service.class_based
+      ? service.methods.map((method: Object): Object => ({
+          ...method,
+          ...{ body: service.class_source.class_source },
+        }))
+      : service.methods
+    : [],
+  service,
+  ...rest,
+}))
+@mapProps(({ service, methods, ...rest }: Object): Object => ({
+  data: service.lib ? Object.assign(service.lib, { methods }) : {},
+  service,
+  methods,
+  ...rest,
+}))
+@mapProps(({ data, service, ...rest }: Object): Object => ({
+  data: service.class_based
+    ? {
         ...{
           code: [
             {
@@ -59,11 +52,10 @@ import ServiceTabs from '../tabs';
         },
         ...data,
       }
-      : data,
-    service,
-    ...rest,
-  })
-)
+    : data,
+  service,
+  ...rest,
+}))
 @titleManager(({ service }): string => service.name, 'Services', 'prefix')
 export default class ServicesDetail extends Component {
   props: {
@@ -78,17 +70,17 @@ export default class ServicesDetail extends Component {
     data: Object,
   } = this.props;
 
-  componentWillMount () {
+  componentWillMount() {
     this.props.load(this.props.paneId);
   }
 
-  componentWillReceiveProps (nextProps: Object) {
+  componentWillReceiveProps(nextProps: Object) {
     if (this.props.paneId !== nextProps.paneId) {
       this.props.load(nextProps.paneId);
     }
   }
 
-  render () {
+  render() {
     const {
       service,
       paneTab,
@@ -116,6 +108,10 @@ export default class ServicesDetail extends Component {
         tabs={{
           tabs: [
             'Detail',
+            {
+              title: 'Config',
+              suffix: `(${configItemsCount})`,
+            },
             'Code',
             { title: 'Methods', suffix: `(${size(methods)})` },
             'Log',
@@ -130,10 +126,6 @@ export default class ServicesDetail extends Component {
             },
             'Auth labels',
             'Releases',
-            {
-              title: 'Config',
-              suffix: `(${configItemsCount})`,
-            },
             'Info',
           ],
           queryIdentifier: 'paneTab',
