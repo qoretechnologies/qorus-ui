@@ -63,6 +63,10 @@ const ServicesDetail: Function = ({
         <CrumbTabs
           tabs={[
             { title: 'Methods', suffix: `(${size(methods)})` },
+            {
+              title: 'Config',
+              suffix: `(${countConfigItems(configItems)})`,
+            },
             'Code',
             'Log',
             { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
@@ -71,10 +75,6 @@ const ServicesDetail: Function = ({
             'Resources',
             'Auth labels',
             'Releases',
-            {
-              title: 'Config',
-              suffix: `(${countConfigItems(configItems)})`,
-            },
             'Info',
           ]}
         />
@@ -122,50 +122,42 @@ export default compose(
       }
     },
   }),
-  mapProps(
-    ({ service, ...rest }: Object): Object => ({
-      methods: service.lib
-        ? service.class_based
-          ? service.methods.map(
-            (method: Object): Object => ({
-              ...method,
-              ...{ body: service.class_source.class_source },
-            })
-          )
-          : service.methods
-        : [],
-      service,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ service, methods, ...rest }: Object): Object => ({
-      data: service.lib ? Object.assign(service.lib, { methods }) : {},
-      service,
-      methods,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ data, service, ...rest }: Object): Object => ({
-      data: service.class_based
-        ? {
-          ...{
-            code: [
-              {
-                name: 'Service code',
-                body: service.class_source.class_source,
-              },
-            ],
-          },
-          ...data,
-        }
-        : data,
-      configItems: rebuildConfigHash(service),
-      service,
-      ...rest,
-    })
-  ),
+  mapProps(({ service, ...rest }: Object): Object => ({
+    methods: service.lib
+      ? service.class_based
+        ? service.methods.map((method: Object): Object => ({
+          ...method,
+          ...{ body: service.class_source.class_source },
+        }))
+        : service.methods
+      : [],
+    service,
+    ...rest,
+  })),
+  mapProps(({ service, methods, ...rest }: Object): Object => ({
+    data: service.lib ? Object.assign(service.lib, { methods }) : {},
+    service,
+    methods,
+    ...rest,
+  })),
+  mapProps(({ data, service, ...rest }: Object): Object => ({
+    data: service.class_based
+      ? {
+        ...{
+          code: [
+            {
+              name: 'Service code',
+              body: service.class_source.class_source,
+            },
+          ],
+        },
+        ...data,
+      }
+      : data,
+    configItems: rebuildConfigHash(service),
+    service,
+    ...rest,
+  })),
   titleManager(({ service }): string => service.name, 'Services', 'prefix'),
   withTabs('methods'),
   unsync()

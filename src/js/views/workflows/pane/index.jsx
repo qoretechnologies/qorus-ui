@@ -100,13 +100,13 @@ export default class WorkflowsDetail extends Component {
         tabs={{
           tabs: [
             'Detail',
-            'Steps',
-            'Order Stats',
-            'Process',
             {
               title: 'Config',
               suffix: `(${configItemsCount})`,
             },
+            'Steps',
+            'Order Stats',
+            'Process',
             'Releases',
             {
               title: 'Value maps',
