@@ -83,6 +83,7 @@ const ServiceRow: Function = ({
   normalizedName,
   remote,
   onExpiryChange,
+  isTablet,
   ...rest
 }: Props): React.Element<any> => (
   <Tr
@@ -132,14 +133,16 @@ const ServiceRow: Function = ({
     </ActionColumn>
     <DateColumn>{executed}</DateColumn>
     <DateColumn>{next}</DateColumn>
-    <DateColumn
-      editable
-      onDateChange={(date: string) => {
-        onExpiryChange(date, id, null);
-      }}
-    >
-      {expiry}
-    </DateColumn>
+    {!isTablet && (
+      <DateColumn
+        editable
+        onDateChange={(date: string) => {
+          onExpiryChange(date, id, null);
+        }}
+      >
+        {expiry}
+      </DateColumn>
+    )}
     <Td className="huge separated-cell">
       <InstancesBar
         states={[
@@ -202,5 +205,6 @@ export default compose(
     'isTablet',
     'remote',
     'first',
+    'isTablet',
   ])
 )(ServiceRow);
