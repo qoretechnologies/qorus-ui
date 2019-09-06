@@ -8,6 +8,9 @@ import withHandlers from 'recompose/withHandlers';
 import Modal from '../../../components/modal';
 import { Controls, Control } from '../../../components/controls';
 import actions from '../../../store/api/actions';
+import { ControlGroup, InputGroup } from '@blueprintjs/core';
+import cronstrue from 'cronstrue';
+import ScheduleText from '../../../components/ScheduleText';
 
 type Props = {
   id: number,
@@ -41,79 +44,73 @@ const Schedule: Function = ({
   day,
   month,
   week,
-}: Props): React.Element<any> => (
-  <Modal hasFooter>
-    <Modal.Header onClose={onClose} titleId="reschedule-modal">
-      Reschedule job
-    </Modal.Header>
-    <form onSubmit={handleFormSubmit}>
-      <Modal.Body>
-        <div className="row">
-          <div className="col-lg-2 col-lg-offset-1"> Minute </div>
-          <div className="col-lg-2"> Hour </div>
-          <div className="col-lg-2"> Day </div>
-          <div className="col-lg-2"> Month </div>
-          <div className="col-lg-2"> Week </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-2 col-lg-offset-1">
-            <input
-              type="text"
-              className="form-control"
-              id="minute"
-              value={minute}
-              onChange={handleMinuteChange}
-            />
+}: Props): React.Element<any> => {
+  const cron = `${minute} ${hour} ${day} ${month} ${week}`;
+
+  let isError = false;
+
+  try {
+    cronstrue.toString(cron);
+  } catch (e) {
+    isError = true;
+  }
+
+  return (
+    <Modal hasFooter>
+      <Modal.Header onClose={onClose} titleId="reschedule-modal">
+        Reschedule job
+      </Modal.Header>
+      <form onSubmit={handleFormSubmit}>
+        <Modal.Body>
+          <div>
+            <ControlGroup fill>
+              <InputGroup
+                value={minute}
+                placeholder={'Minute'}
+                onChange={handleMinuteChange}
+              />
+              <InputGroup
+                value={hour}
+                placeholder={'Hour'}
+                onChange={handleHourChange}
+              />
+              <InputGroup
+                value={day}
+                placeholder={'Day'}
+                onChange={handleDayChange}
+              />
+              <InputGroup
+                value={month}
+                placeholder={'Month'}
+                onChange={handleMonthChange}
+              />
+              <InputGroup
+                value={week}
+                placeholder={'Weekday'}
+                onChange={handleWeekChange}
+              />
+            </ControlGroup>
           </div>
-          <div className="col-lg-2">
-            <input
-              type="text"
-              className="form-control"
-              id="hour"
-              value={hour}
-              onChange={handleHourChange}
-            />
+          <ScheduleText cron={cron} />
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="pull-right">
+            <Controls noControls grouped>
+              <Control label="Cancel" big btnStyle="default" action={onClose} />
+              <Control
+                type="submit"
+                big
+                label="Save"
+                btnStyle="success"
+                disabled={isError}
+              />
+            </Controls>
           </div>
-          <div className="col-lg-2">
-            <input
-              type="text"
-              className="form-control"
-              id="day"
-              value={day}
-              onChange={handleDayChange}
-            />
-          </div>
-          <div className="col-lg-2">
-            <input
-              type="text"
-              className="form-control"
-              id="month"
-              value={month}
-              onChange={handleMonthChange}
-            />
-          </div>
-          <div className="col-lg-2">
-            <input
-              type="text"
-              className="form-control"
-              id="week"
-              value={week}
-              onChange={handleWeekChange}
-            />
-          </div>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <div className="pull-right">
-          <Controls noControls grouped>
-            <Control label="Cancel" big btnStyle="default" action={onClose} />
-            <Control type="submit" big label="Save" btnStyle="success" />
-          </Controls>
-        </div>
-      </Modal.Footer>
-    </form>
-  </Modal>
-);
+        </Modal.Footer>
+      </form>
+    </Modal>
+  );
+};
 
 export default compose(
   withState('minute', 'changeMinute', ({ minute }) => minute || ''),

@@ -78,7 +78,7 @@ const JobsTable: Function = ({
   <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
-        <Th colspan={7}>
+        <Th colspan={isTablet ? 6 : 7}>
           <Pull>
             <Selector
               selected={selected}
@@ -118,35 +118,38 @@ const JobsTable: Function = ({
         <Th name="next" iconName="calendar">
           Next run
         </Th>
-        <Th name="expiry_date" iconName="outdated">
-          Expiry Date
-        </Th>
+        {!isTablet && (
+          <Th name="expiry_date" iconName="outdated">
+            Expiry Date
+          </Th>
+        )}
         <Th className="separated-cell" iconName="grid">
           Instances
         </Th>
       </FixedRow>
     </Thead>
-    <DataOrEmptyTable condition={size(collection) === 0} cols={8}>
+    <DataOrEmptyTable
+      condition={size(collection) === 0}
+      cols={isTablet ? 7 : 8}
+    >
       {props => (
         <Tbody {...props}>
-          {collection.map(
-            (job: Object, index: number): React.Element<Row> => (
-              <Row
-                first={index === 0}
-                key={`job_${job.id}`}
-                isActive={job.id === parseInt(paneId, 10)}
-                openPane={openPane}
-                closePane={closePane}
-                date={date}
-                select={select}
-                updateDone={updateDone}
-                PROGRESS={job['IN-PROGRESS']}
-                isTablet={isTablet}
-                onExpiryChange={handleExpiryChange}
-                {...job}
-              />
-            )
-          )}
+          {collection.map((job: Object, index: number): React.Element<Row> => (
+            <Row
+              first={index === 0}
+              key={`job_${job.id}`}
+              isActive={job.id === parseInt(paneId, 10)}
+              openPane={openPane}
+              closePane={closePane}
+              date={date}
+              select={select}
+              updateDone={updateDone}
+              PROGRESS={job['IN-PROGRESS']}
+              isTablet={isTablet}
+              onExpiryChange={handleExpiryChange}
+              {...job}
+            />
+          ))}
         </Tbody>
       )}
     </DataOrEmptyTable>
