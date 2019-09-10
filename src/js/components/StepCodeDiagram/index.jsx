@@ -154,7 +154,7 @@ export default class StepsTab extends Component {
    * @return {Array<number>}
    * @see ROOT_STEP_ID
    */
-  getStepDeps(stepId) {
+  getStepDeps (stepId) {
     const initIds = Object.keys(this.props.workflow.steps).filter(
       id => this.props.workflow.steps[id].length <= 0
     );
@@ -184,7 +184,7 @@ export default class StepsTab extends Component {
    * @see getStepDeps
    * @see DIAGRAM_MIN_COLUMNS
    */
-  getRows() {
+  getRows () {
     const nodes = graph(this.getStepDeps());
 
     const cols =
@@ -230,7 +230,7 @@ export default class StepsTab extends Component {
    * @return {Array<StepArgs>}
    * @see getRows
    */
-  getFlattenRows() {
+  getFlattenRows () {
     return this.getRows().reduce(
       (flatten, row, rowIdx) =>
         flatten.concat(
@@ -249,7 +249,7 @@ export default class StepsTab extends Component {
    * @return {StepArgs}
    * @see getFlattenRows
    */
-  getStepArgs(stepId) {
+  getStepArgs (stepId) {
     return this.getFlattenRows().find(s => s.stepId === stepId) || null;
   }
 
@@ -264,7 +264,7 @@ export default class StepsTab extends Component {
    * @see getStepDeps
    * @see getStepArgs
    */
-  getFlattenDeps() {
+  getFlattenDeps () {
     return this.getFlattenRows().reduce(
       (flatten, step) =>
         flatten.concat(
@@ -296,15 +296,15 @@ export default class StepsTab extends Component {
    *   }
    * }}
    */
-  getStepInfo(stepId) {
+  getStepInfo (stepId) {
     const name = this.props.workflow.stepmap[stepId];
     const info =
       this.props.workflow.stepinfo.find(si => si.name === name) || null;
 
     return info && info.ind === 0
       ? Object.assign({}, info, {
-          subwfls: this.props.workflow.stepinfo.filter(si => si.name === name),
-        })
+        subwfls: this.props.workflow.stepinfo.filter(si => si.name === name),
+      })
       : info;
   }
 
@@ -318,7 +318,7 @@ export default class StepsTab extends Component {
    * @return {string}
    * @see ROOT_STEP_ID
    */
-  getStepName(stepId) {
+  getStepName (stepId) {
     return stepId === ROOT_STEP_ID
       ? this.props.workflow.name
       : this.props.workflow.stepmap[stepId];
@@ -333,7 +333,7 @@ export default class StepsTab extends Component {
    * @return {string}
    * @see getStepName
    */
-  getStepDomId(stepId) {
+  getStepDomId (stepId) {
     return this.getStepName(stepId).toLowerCase();
   }
 
@@ -369,7 +369,7 @@ export default class StepsTab extends Component {
    * @return {Array<string>}
    * @see getStepFullname
    */
-  getStepFullnames() {
+  getStepFullnames () {
     return [this.getStepFullname(0)].concat(
       Object.keys(this.props.workflow.steps).map(this.getStepFullname)
     );
@@ -381,7 +381,7 @@ export default class StepsTab extends Component {
    * @return {number}
    * @see getStepFullnames
    */
-  getMaxTextWidth() {
+  getMaxTextWidth () {
     return Math.max(...this.getStepFullnames().map(n => n.length));
   }
 
@@ -396,7 +396,7 @@ export default class StepsTab extends Component {
    * @see BOX_MIN_WIDTH
    * @see BOX_CHARACTER_WIDTH
    */
-  getBoxWidth() {
+  getBoxWidth () {
     return BOX_MIN_WIDTH;
   }
 
@@ -409,7 +409,7 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    * @see BOX_DIMENSION_RATIO
    */
-  getBoxHeight() {
+  getBoxHeight () {
     return this.getBoxWidth() / BOX_DIMENSION_RATIO;
   }
 
@@ -422,7 +422,7 @@ export default class StepsTab extends Component {
    * @see DIAGRAM_MIN_COLUMNS
    * @see getRows
    */
-  getDiagramColumns() {
+  getDiagramColumns () {
     return Math.max(DIAGRAM_MIN_COLUMNS, this.getRows()[0].length);
   }
 
@@ -432,7 +432,7 @@ export default class StepsTab extends Component {
    * @return {number}
    * @see getRows
    */
-  getDiagramRows() {
+  getDiagramRows () {
     return this.getRows().length;
   }
 
@@ -447,7 +447,7 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    * @see BOX_MARGIN
    */
-  getDiagramWidth() {
+  getDiagramWidth () {
     return (
       Math.ceil(this.getDiagramColumns() / 3) *
       (this.getBoxWidth() + BOX_MARGIN)
@@ -465,7 +465,7 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    * @see BOX_MARGIN
    */
-  getDiagramHeight() {
+  getDiagramHeight () {
     return (
       this.getDiagramRows() * (this.getBoxHeight() + BOX_MARGIN) + BOX_MARGIN
     );
@@ -482,7 +482,7 @@ export default class StepsTab extends Component {
    * @see getDiagramWidth
    * @see BOX_MARGIN
    */
-  getBoxHorizontalCenter(colIdx) {
+  getBoxHorizontalCenter (colIdx) {
     const hSpace = (this.getBoxWidth() + BOX_MARGIN) / 2;
 
     return colIdx * hSpace;
@@ -498,7 +498,7 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    * @see BOX_MARGIN
    */
-  getBoxVerticalCenter(rowIdx) {
+  getBoxVerticalCenter (rowIdx) {
     const vSpace = this.getBoxHeight() + BOX_MARGIN;
 
     return BOX_MARGIN / 2 + vSpace * rowIdx + vSpace / 2;
@@ -512,7 +512,7 @@ export default class StepsTab extends Component {
    * @see getBoxHorizontalCenter
    * @see getBoxWidth
    */
-  getBoxTopCoord(colIdx) {
+  getBoxTopCoord (colIdx) {
     const top = this.getBoxHorizontalCenter(colIdx) + 2;
 
     return top;
@@ -526,7 +526,7 @@ export default class StepsTab extends Component {
    * @see getBoxVerticalCenter
    * @see getBoxHeight
    */
-  getBoxLeftCoord(rowIdx) {
+  getBoxLeftCoord (rowIdx) {
     const left = this.getBoxVerticalCenter(rowIdx) - this.getBoxHeight() / 2;
 
     return left;
@@ -542,7 +542,7 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    * @see getBoxHeight
    */
-  getStartParams() {
+  getStartParams () {
     return {
       cx: this.getBoxWidth() / 2,
       cy: this.getBoxHeight() / 2,
@@ -563,7 +563,7 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    * @see BOX_ROUNDED_CORNER
    */
-  getDefaultParams() {
+  getDefaultParams () {
     return {
       rx: BOX_ROUNDED_CORNER,
       ry: BOX_ROUNDED_CORNER,
@@ -585,7 +585,7 @@ export default class StepsTab extends Component {
    * @see getBoxHorizontalCenter
    * @see getBoxVerticalCenter
    */
-  getTextParams(stepId) {
+  getTextParams (stepId) {
     return {
       x: this.getBoxWidth() / 2,
       y: this.getBoxHeight() / 2,
@@ -596,7 +596,7 @@ export default class StepsTab extends Component {
     };
   }
 
-  getIconParams(ord) {
+  getIconParams (ord) {
     return {
       x: this.getBoxWidth() - 20 - 22 * ord,
       y: 16,
@@ -612,7 +612,7 @@ export default class StepsTab extends Component {
    * @see getBoxTopCoord
    * @see getBoxLeftCoord
    */
-  getBoxTransform(colIdx, rowIdx, margin = 0) {
+  getBoxTransform (colIdx, rowIdx, margin = 0) {
     return (
       'translate(' +
       `${this.getBoxTopCoord(colIdx) + margin} ` +
@@ -668,7 +668,7 @@ export default class StepsTab extends Component {
    * @see getStepDomId
    * @see getStartParams
    */
-  renderStartMask(stepId) {
+  renderStartMask (stepId) {
     return (
       <mask id={this.getStepDomId(stepId)}>
         <ellipse {...this.getStartParams()} className="diagram__mask" />
@@ -690,7 +690,7 @@ export default class StepsTab extends Component {
    * @see getStartParams
    * @see getTextParams
    */
-  renderStartBox(stepId, colIdx, row, rowIdx) {
+  renderStartBox (stepId, colIdx, row, rowIdx) {
     const instances =
       this.props.order && this.props.order.StepInstances
         ? groupInstances(this.props.order.StepInstances)
@@ -700,6 +700,8 @@ export default class StepsTab extends Component {
     )
       ? 'error'
       : 'normal';
+
+    console.log('test');
 
     return (
       <g
@@ -728,7 +730,7 @@ export default class StepsTab extends Component {
    * @see getStepDomId
    * @see getDefaultParams
    */
-  renderDefaultMask(stepId) {
+  renderDefaultMask (stepId) {
     return (
       <mask id={this.getStepDomId(stepId)}>
         <rect {...this.getDefaultParams()} className="diagram__mask" />
@@ -755,7 +757,7 @@ export default class StepsTab extends Component {
    * @see getStepInfo
    * @see getTextParams
    */
-  renderDefaultBox(stepId, colIdx, row, rowIdx) {
+  renderDefaultBox (stepId, colIdx, row, rowIdx) {
     const onCodeClick = this.onBoxClick(stepId);
     const handleMouseOver = event => {
       event.persist();
@@ -878,7 +880,7 @@ export default class StepsTab extends Component {
                   alignItems: 'center',
                   clear: 'both',
                   textAlign: 'center',
-                  wordBreak: 'break-word'
+                  wordBreak: 'break-word',
                 }}
               >
                 {this.getStepFullname(stepId)}
@@ -902,7 +904,7 @@ export default class StepsTab extends Component {
    * @see renderDefaultMask
    * @see ROOT_STEP_ID
    */
-  renderMask(stepId) {
+  renderMask (stepId) {
     return stepId === ROOT_STEP_ID
       ? this.renderStartMask(stepId)
       : this.renderDefaultMask(stepId);
@@ -923,7 +925,7 @@ export default class StepsTab extends Component {
    * @see renderStartBox
    * @see ROOT_STEP_ID
    */
-  renderBox(stepId, colIdx, row, rowIdx) {
+  renderBox (stepId, colIdx, row, rowIdx) {
     return stepId === ROOT_STEP_ID
       ? this.renderStartBox(stepId, colIdx, row, rowIdx)
       : this.renderDefaultBox(stepId, colIdx, row, rowIdx);
@@ -945,7 +947,7 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    * @see BOX_MARGIN
    */
-  renderPath(start, end) {
+  renderPath (start, end) {
     const startX =
       this.getBoxHorizontalCenter(start.colIdx) + this.getBoxWidth() / 2 + 2;
     const startY = this.getBoxVerticalCenter(start.rowIdx) + 2;
@@ -977,7 +979,7 @@ export default class StepsTab extends Component {
    * @see getFlattenRows
    * @see renderMask
    */
-  renderMasks() {
+  renderMasks () {
     return createFragment(
       this.getFlattenRows().reduce(
         (fs, { stepId }) =>
@@ -996,20 +998,9 @@ export default class StepsTab extends Component {
    * @see getFlattenRows
    * @see renderBox
    */
-  renderBoxes() {
-    return createFragment(
-      this.getFlattenRows().reduce(
-        (fs, { stepId, colIdx, row, rowIdx }) =>
-          Object.assign(fs, {
-            [`b-${this.getStepDomId(stepId)}`]: this.renderBox(
-              stepId,
-              colIdx,
-              row,
-              rowIdx
-            ),
-          }),
-        {}
-      )
+  renderBoxes () {
+    return this.getFlattenRows().map(({ stepId, colIdx, row, rowIdx }) =>
+      this.renderBox(stepId, colIdx, row, rowIdx)
     );
   }
 
@@ -1020,7 +1011,7 @@ export default class StepsTab extends Component {
    * @see getFlattenDeps
    * @see renderPath
    */
-  renderPaths() {
+  renderPaths () {
     return createFragment(
       this.getFlattenDeps().reduce(
         (fs, { start, end }) =>
@@ -1062,7 +1053,7 @@ export default class StepsTab extends Component {
     </div>
   );
 
-  render() {
+  render () {
     const { selectedStep, diagramScale, panWidth, useDrag } = this.state;
     const { order, workflow, onSkipSubmit } = this.props;
     const nodes = graph(this.getStepDeps());
