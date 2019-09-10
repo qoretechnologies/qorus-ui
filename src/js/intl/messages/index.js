@@ -1,4 +1,5 @@
 import systemMessages from './system';
+import globalMessages from './global';
 
 const LANGS = {
   CZ: 'cs-CZ',
@@ -7,9 +8,10 @@ const LANGS = {
   DE: 'de-DE',
 };
 
-export default function(locale: string): Object {
+export default function (locale: string): Object {
   return {
     ...systemMessages[locale],
+    ...globalMessages[locale],
   };
 }
 

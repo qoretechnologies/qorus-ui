@@ -37,6 +37,7 @@ import { LANGS } from '../../intl/messages';
 import settings from '../../settings';
 import { HEALTH_KEYS } from '../../constants/dashboard';
 import Notifications from '../notifications';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 const flags: Object = {
   'cs-CZ': cz,
@@ -46,7 +47,7 @@ const flags: Object = {
 };
 
 const searchableViews = {
-  Workflows: 'workflows?',
+  'global.in-workflows': 'workflows?',
   Services: 'services?',
   Jobs: 'jobs?',
   Groups: 'groups?',
@@ -104,6 +105,7 @@ export type Props = {
 )
 @withModal()
 @withPane(Notifications, null, 'all', 'notifications', 'notificationsPane')
+@injectIntl
 export default class Topbar extends Component {
   props: Props = this.props;
 
@@ -111,7 +113,7 @@ export default class Topbar extends Component {
     quickSearchType: string,
     quickSearchValue: string,
   } = {
-    quickSearchType: 'Workflows',
+    quickSearchType: 'global.in-workflows',
     quickSearchValue: '',
   };
 
@@ -140,15 +142,13 @@ export default class Topbar extends Component {
       <Popover
         content={
           <Menu>
-            {sortedInterfaces.map(
-              (key: string): React.Element<MenuItem> => (
-                <MenuItem
-                  text={key}
-                  key={key}
-                  onClick={() => this.setState({ quickSearchType: key })}
-                />
-              )
-            )}
+            {sortedInterfaces.map((key: string): React.Element<MenuItem> => (
+              <MenuItem
+                text={key}
+                key={key}
+                onClick={() => this.setState({ quickSearchType: key })}
+              />
+            ))}
           </Menu>
         }
         popoverClassName="popover-dropdown"
@@ -156,14 +156,21 @@ export default class Topbar extends Component {
       >
         <Button
           className={Classes.MINIMAL}
-          text={`in ${this.state.quickSearchType}`}
+          text={this.props.intl.formatMessage(
+            { id: 'system.global-search-type' },
+            {
+              type: this.props.intl.formatMessage({
+                id: this.state.quickSearchType,
+              }),
+            }
+          )}
           rightIconName="caret-down"
         />
       </Popover>
     );
   };
 
-  render () {
+  render() {
     const {
       light,
       onThemeClick,
@@ -171,8 +178,12 @@ export default class Topbar extends Component {
       info,
       onMaximizeClick,
       sendWarning,
+      intl,
     } = this.props;
+
     const [countryCode] = this.props.locale.split('-');
+
+    console.log(this.props.intl);
 
     return (
       <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
@@ -189,7 +200,12 @@ export default class Topbar extends Component {
               <InputGroup
                 id="quickSearch"
                 lefticonName="search"
-                placeholder="Quick search"
+                placeholder={intl.formatMessage(
+                  {
+                    id: 'system.dashboard',
+                  },
+                  { test: 'Ahoj ' }
+                )}
                 rightElement={this.renderSearchMenu()}
                 value={this.state.quickSearchValue}
                 onChange={e =>
@@ -285,7 +301,7 @@ export default class Topbar extends Component {
             />
           </ButtonGroup>
           <NavbarDivider />
-          {/* <Popover
+          <Popover
             position={Position.BOTTOM_RIGHT}
             content={
               <Menu>
@@ -313,7 +329,7 @@ export default class Topbar extends Component {
                 <img src={flags[this.props.locale]} />
               </Button>
             </ButtonGroup>
-          </Popover> */}
+          </Popover>
           <ButtonGroup minimal>
             <Button
               iconName="maximize"
