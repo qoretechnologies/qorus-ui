@@ -12,6 +12,7 @@ import withHandlers from 'recompose/withHandlers';
 import mapProps from 'recompose/mapProps';
 import { transformMenu } from '../../helpers/system';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { injectIntl } from 'react-intl';
 
 type SidebarProps = {
   isTablet: boolean,
@@ -36,6 +37,7 @@ const Sidebar: Function = ({
   handleSectionToggle,
   menu,
   favoriteItems,
+  intl
 }: SidebarProps): React.Element<any> => (
   <div
     className={classnames('sidebar', isLight ? 'light' : 'dark', {
@@ -62,7 +64,7 @@ const Sidebar: Function = ({
             isCollapsed ? 'double-chevron-right' : 'double-chevron-left'
           }
         />{' '}
-        {!isCollapsed && 'Collapse'}
+        {!isCollapsed && intl.formatMessage({ id: 'global.collapse' })}
       </div>
     </div>
   </div>
@@ -89,5 +91,6 @@ export default compose(
     plugins,
     ...rest,
   })),
-  onlyUpdateForKeys(['menu', 'favoriteItems', 'plugins'])
+  onlyUpdateForKeys(['menu', 'favoriteItems', 'plugins']),
+  injectIntl
 )(Sidebar);

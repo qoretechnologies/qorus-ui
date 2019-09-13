@@ -15,6 +15,7 @@ import {
   getFormattedValue,
 } from '../../helpers/chart';
 import { NonIdealState } from '../../../../node_modules/@blueprintjs/core';
+import { injectIntl } from 'react-intl';
 
 @pure([
   'width',
@@ -29,6 +30,7 @@ import { NonIdealState } from '../../../../node_modules/@blueprintjs/core';
   'yMin',
   'empty',
 ])
+@injectIntl
 export default class ChartComponent extends Component {
   static defaultProps = {
     width: 400,
@@ -267,7 +269,10 @@ export default class ChartComponent extends Component {
         >
           {this.props.empty && this.props.type === 'doughnut' && (
             <div className="pie-chart-placeholder">
-              <NonIdealState title="No data" visual="warning-sign" />
+              <NonIdealState
+                title={this.props.intl.formatMessage({ id: 'global.no-data' })}
+                visual="warning-sign"
+              />
             </div>
           )}
           <canvas

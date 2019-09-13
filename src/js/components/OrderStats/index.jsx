@@ -11,13 +11,18 @@ import DispositionChart from '../disposition_chart';
 import NoDataIf from '../NoDataIf';
 import Box from '../box';
 import { MasonryLayout, MasonryPanel } from '../MasonryLayout';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   orderStats: Array<Object>,
   renderRows: boolean,
 };
 
-const StatsTab: Function = ({ orderStats, renderRows }: Props): any => (
+const StatsTab: Function = ({
+  orderStats,
+  renderRows,
+  intl,
+}: Props): React.Element<any> => (
   <NoDataIf condition={!orderStats} big>
     {() => (
       <MasonryLayout columns={renderRows ? 1 : 3}>
@@ -30,16 +35,18 @@ const StatsTab: Function = ({ orderStats, renderRows }: Props): any => (
                   <Table condensed striped>
                     <Thead>
                       <Tr>
-                        <Th className="name text">Disposition</Th>
-                        <Th>Count</Th>
-                        <Th>Percentage</Th>
+                        <Th className="name text">
+                          <FormattedMessage id='stats.disposition' />
+                        </Th>
+                        <Th><FormattedMessage id='stats.count' /></Th>
+                        <Th><FormattedMessage id='stats.percentage' /></Th>
                       </Tr>
                     </Thead>
                     <Tbody>
                       {l.map((data: any) => (
                         <Tr>
                           <Td className="name text">
-                            {ORDER_STATS_LEGEND[data.disposition]}
+                            <FormattedMessage id={ORDER_STATS_LEGEND[data.disposition]} />
                           </Td>
                           <Td>{data.count}</Td>
                           <Td>
@@ -68,4 +75,4 @@ const StatsTab: Function = ({ orderStats, renderRows }: Props): any => (
   </NoDataIf>
 );
 
-export default StatsTab;
+export default injectIntl(StatsTab);

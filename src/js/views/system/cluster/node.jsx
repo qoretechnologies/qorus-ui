@@ -27,6 +27,7 @@ import Search from '../../../containers/search';
 import { sortDefaults } from '../../../constants/sort';
 import { ActionColumnHeader } from '../../../components/ActionColumn';
 import withProcessKill from '../../../hocomponents/withProcessKill';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   node: string,
@@ -58,6 +59,7 @@ const ClusterNode: Function = ({
   closePane,
   paneId,
   handleKillClick,
+  intl,
 }: Props): React.Element<any> => (
   <ExpandableItem show title={node}>
     <EnhancedTable
@@ -84,13 +86,13 @@ const ClusterNode: Function = ({
               <Th>
                 <Pull>
                   <Tag className="pt-large pt-minimal">
-                    Hostname: {hostname}
+                    <FormattedMessage id='cluster.hostname' />: {hostname}
                   </Tag>{' '}
                   <Tag className="pt-large pt-minimal">
-                    Node memory: {calculateMemory(memory)}
+                    <FormattedMessage id='cluster.node-memory' />: {calculateMemory(memory)}
                   </Tag>{' '}
                   <Tag className="pt-large pt-minimal">
-                    # of processes: {processes.length}
+                    <FormattedMessage id='cluster.count-of-processes' />: {processes.length}
                   </Tag>
                 </Pull>
                 <Pull right>
@@ -111,25 +113,25 @@ const ClusterNode: Function = ({
             </FixedRow>
             <FixedRow sortData={sortData} onSortChange={onSortChange}>
               <Th className="text" name="node" iconName="database">
-                Node
+                <FormattedMessage id='cluster.node' />
               </Th>
               <NameColumnHeader
                 name="client_id"
-                title="Client ID"
+                title={intl.formatMessage({ id: 'cluster.client-id' })}
                 iconName="intersection"
               />
-              <ActionColumnHeader />
+              <ActionColumnHeader children={intl.formatMessage({ id: 'table.actions' })} />
               <Th className="text medium" name="type" iconName="application">
-                Type
+                <FormattedMessage id='table.type' />
               </Th>
               <Th className="medium" name="pid">
-                PID
+                <FormattedMessage id='cluster.pid' />
               </Th>
               <Th className="medium" name="priv" iconName="layers">
-                Memory
+                <FormattedMessage id='cluster.memory' />
               </Th>
               <Th className="text" name="status" iconName="info-sign">
-                Status
+                <FormattedMessage id='table.status' />
               </Th>
             </FixedRow>
           </Thead>
@@ -165,5 +167,6 @@ export default compose(
     })
   ),
   withProcessKill,
-  pure(['node', 'memory', 'processes'])
+  pure(['node', 'memory', 'processes']),
+  injectIntl
 )(ClusterNode);

@@ -32,6 +32,7 @@ import titleManager from '../../../hocomponents/TitleManager';
 import Pull from '../../../components/Pull';
 import { NameColumnHeader } from '../../../components/NameColumn';
 import Flex from '../../../components/Flex';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   load: Function,
@@ -56,6 +57,7 @@ const OptionsView: Function = ({
   sortData,
   onSortChange,
   collection,
+  intl,
 }: Props): React.Element<any> => (
   <Flex>
     <Headbar>
@@ -75,13 +77,13 @@ const OptionsView: Function = ({
         <Thead>
           <FixedRow {...{ sortData, onSortChange }}>
             <Th name="status" iconName="lock" />
-            <NameColumnHeader />
+            <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} />
             <Th iconName="application">Type</Th>
             <Th className="text" name="default">
-              Default value
+              <FormattedMessage id='table.default-value' />
             </Th>
             <Th className="text" name="value">
-              Current value
+              <FormattedMessage id='table.current-value' />
             </Th>
             <Th iconName="edit" />
           </FixedRow>
@@ -139,5 +141,6 @@ export default compose(
   sync('options'),
   sort('options', 'collection', sortDefaults.options),
   queryControl('search'),
-  titleManager('Options')
+  titleManager('Options'),
+  injectIntl
 )(OptionsView);

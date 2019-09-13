@@ -25,6 +25,7 @@ import { SelectColumnHeader } from '../../components/SelectColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
 import { IdColumnHeader } from '../../components/IdColumn';
 import Band from './toolbar/band';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   sortData: Object,
@@ -93,6 +94,7 @@ const WorkflowsTable: Function = ({
   loadMoreCurrent,
   loadMoreTotal,
   sortKeysObj,
+  intl,
 }: Props): React.Element<any> => (
   <Table striped hover condensed fixed>
     <Thead>
@@ -141,14 +143,14 @@ const WorkflowsTable: Function = ({
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <SelectColumnHeader />
         <IdColumnHeader />
-        <NameColumnHeader />
-        <ActionColumnHeader />
+        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} />
+        <ActionColumnHeader children={intl.formatMessage({ id: 'table.actions' })} />
         <Th name="autostart" iconName="automatic-updates">
-          Auto / Execs
+          <FormattedMessage id='table.auto-execs' />
         </Th>
         {deprecated && (
           <Th name="deprecated" iconName="flag">
-            Deprecated
+            <FormattedMessage id='table.deprecated' />
           </Th>
         )}
         <Th
@@ -156,16 +158,16 @@ const WorkflowsTable: Function = ({
           onClick={handleInstancesClick}
           iconName="layout-grid"
         >
-          Instances
+          <FormattedMessage id='table.instances' />
         </Th>
         <Th name="TOTAL" iconName="grid">
-          All
+          <FormattedMessage id='table.all' />
         </Th>
         <Th className="separated-cell" iconName="pie-chart">
-          Disposition (%)
+          <FormattedMessage id='table.disposition' /> (%)
         </Th>
         <Th className="normal" iconName="time">
-          SLA (%)
+          <FormattedMessage id='table.sla' /> (%)
         </Th>
       </FixedRow>
     </Thead>
@@ -245,5 +247,6 @@ export default compose(
     'totalInstances',
     'dateQuery',
     'band',
-  ])
+  ]),
+  injectIntl
 )(WorkflowsTable);

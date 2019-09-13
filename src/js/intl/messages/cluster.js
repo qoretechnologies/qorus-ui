@@ -1,0 +1,28 @@
+export default {
+  'en-US': {
+    'cluster.client-id': 'Client ID',
+    'cluster.cluster': 'Cluster',
+    'cluster.cluster-memory': 'Cluster memory',
+    'cluster.count-of-processes': '# of processes',
+    'cluster.hostname': 'Hostname',
+    'cluster.memory': 'Memory',
+    'cluster.node': 'Node',
+    'cluster.node-memory': 'Node memory',
+    'cluster.nodes': 'Nodes',
+    'cluster.pid': 'PID',
+    'cluster.processes': 'Processes',
+  },
+  'cs-CZ': {
+    'cluster.client-id': 'Klientské ID',
+    'cluster.cluster': 'Cluster',
+    'cluster.cluster-memory': 'Paměť clusteru',
+    'cluster.count-of-processes': 'Počet procesů',
+    'cluster.hostname': 'Hostname',
+    'cluster.memory': 'Paměť',
+    'cluster.node': 'Uzel',
+    'cluster.node-memory': 'Paměť uzlu',
+    'cluster.nodes': 'Uzlů',
+    'cluster.pid': 'PID',
+    'cluster.processes': 'Procesů',
+  },
+};

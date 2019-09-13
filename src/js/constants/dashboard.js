@@ -10,9 +10,9 @@ const HEALTH_KEYS = {
 };
 
 const DISPOSITIONS = {
-  A: 'Recovered automatically',
-  M: 'Recovered manually',
-  C: 'Completed w/o errors',
+  A: 'stats.disposition-auto',
+  M: 'stats.disposition-manual',
+  C: 'stats.disposition-no-err',
 };
 
 export { HEALTH_KEYS, DISPOSITIONS };

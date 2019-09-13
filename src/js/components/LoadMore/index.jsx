@@ -5,6 +5,7 @@ import { Controls, Control } from '../controls';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   canLoadMore: boolean,
@@ -22,18 +23,19 @@ const LoadMore: Function = ({
   onLoadAll,
   total,
   currentCount,
+  intl
 }: Props): React.Element<Toolbar> =>
   canLoadMore && (
     <Controls>
       <Control
-        text={`Show more (${currentCount} / ${total})`}
+        text={intl.formatMessage({ id: 'global.show-more' }) + ` (${currentCount} / ${total})`}
         iconName="chevron-down"
         onClick={onLoadMore}
         big
       />
       {onLoadAll && (
         <Control
-          text="Show all"
+          text={intl.formatMessage({ id: 'global.show-all' })}
           iconName="double-chevron-down"
           onClick={onLoadAll}
           big
@@ -56,5 +58,6 @@ export default compose(
       ...rest,
     })
   ),
-  onlyUpdateForKeys(['limit', 'canLoadMore', 'currentCount', 'total'])
+  onlyUpdateForKeys(['limit', 'canLoadMore', 'currentCount', 'total']),
+  injectIntl
 )(LoadMore);

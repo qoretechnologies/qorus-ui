@@ -183,8 +183,6 @@ export default class Topbar extends Component {
 
     const [countryCode] = this.props.locale.split('-');
 
-    console.log(this.props.intl);
-
     return (
       <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
         <NavbarGroup>

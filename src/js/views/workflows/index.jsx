@@ -9,6 +9,7 @@ import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
+import size from 'lodash/size';
 
 import withPane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
@@ -17,10 +18,6 @@ import selectable from '../../hocomponents/selectable';
 import unsync from '../../hocomponents/unsync';
 import withCSV from '../../hocomponents/csv';
 import Box from '../../components/box';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../components/controls';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import loadMore from '../../hocomponents/loadMore';
@@ -42,6 +39,7 @@ import { querySelector, resourceSelector } from '../../selectors';
 import withSort from '../../hocomponents/sort';
 import { sortDefaults } from '../../constants/sort';
 import titleManager from '../../hocomponents/TitleManager';
+import CsvControl from '../../components/CsvControl';
 import Search from '../../containers/search';
 import queryControl from '../../hocomponents/queryControl';
 import Headbar from '../../components/Headbar';
@@ -279,14 +277,7 @@ const Workflows: Function = ({
         <Crumb active> Workflows </Crumb>
       </Breadcrumbs>
       <div className="pull-right">
-        <ButtonGroup marginRight={3}>
-          <Button
-            text="Export CSV"
-            iconName="export"
-            onClick={onCSVClick}
-            big
-          />
-        </ButtonGroup>{' '}
+        <CsvControl onClick={onCSVClick} disabled={size(workflows) === 0} />
         <Search
           defaultValue={searchQuery}
           onSearchUpdate={changeSearchQuery}

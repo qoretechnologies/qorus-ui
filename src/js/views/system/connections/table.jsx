@@ -38,6 +38,7 @@ import LoadMore from '../../../components/LoadMore';
 import { NameColumnHeader } from '../../../components/NameColumn';
 import queryControl from '../../../hocomponents/queryControl';
 import viewBehindPermission from '../../../hocomponents/viewBehindPermission';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   location: Object,
@@ -88,6 +89,7 @@ const ConnectionTable: Function = ({
   canDelete,
   canAdd,
   canEdit,
+  intl,
 }: Props): React.Element<any> => (
   <Table fixed striped>
     <Thead>
@@ -115,21 +117,21 @@ const ConnectionTable: Function = ({
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <Th name="up" iconName="info-sign">
-          Status
+          <FormattedMessage id='table.status' />
         </Th>
-        <NameColumnHeader iconName="application" />
-        <Th iconName="build">Actions</Th>
+        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} iconName="application" />
+        <Th iconName="build"><FormattedMessage id='table.actions' /></Th>
         <Th className="text" name="url" iconName="link">
-          URL
+          <FormattedMessage id='table.url' />
         </Th>
         <Th className="text" name="desc" iconName="label">
-          Description
+          <FormattedMessage id='table.description' />
         </Th>
         <Th iconName="lock" name="locked">
-          Locked
+          <FormattedMessage id='table.locked' />
         </Th>
         <Th iconName="repeat" name="loopback">
-          Loopback
+          <FormattedMessage id='table.loopback' />
         </Th>
       </FixedRow>
     </Thead>
@@ -216,5 +218,6 @@ export default compose(
   titleManager(
     ({ remoteType }: Props): string => `${capitalize(remoteType)} connections`
   ),
-  pure(['location', 'remotes', 'paneId', 'sortData'])
+  pure(['location', 'remotes', 'paneId', 'sortData']),
+  injectIntl
 )(ConnectionTable);

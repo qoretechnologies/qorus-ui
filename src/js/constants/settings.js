@@ -6,13 +6,13 @@ const ACTIONS = keyMirror({
 });
 
 const Modules = {
-  'Global Order Stats': 'orderStats',
-  Interfaces: 'interfaces',
-  Connections: 'connections',
-  'Cluster Info': 'cluster',
-  'System Overview': 'overview',
-  'Remote connections': 'remotes',
-  'Node data': 'nodeData',
+  'settings.global-order-stats': 'orderStats',
+  'settings.interfaces': 'interfaces',
+  'settings.connections': 'connections',
+  'settings.cluster-info': 'cluster',
+  'settings.system-overview': 'overview',
+  'settings.remote-connections': 'remotes',
+  'settings.node-data': 'nodeData',
 };
 
 export { ACTIONS, Modules };
