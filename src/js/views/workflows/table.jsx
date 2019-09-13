@@ -143,8 +143,8 @@ const WorkflowsTable: Function = ({
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <SelectColumnHeader />
         <IdColumnHeader />
-        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} />
-        <ActionColumnHeader children={intl.formatMessage({ id: 'table.actions' })} />
+        <NameColumnHeader />
+        <ActionColumnHeader />
         <Th name="autostart" iconName="automatic-updates">
           <FormattedMessage id='table.auto-execs' />
         </Th>

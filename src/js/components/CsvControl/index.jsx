@@ -18,8 +18,8 @@ const CsvControl: Function = ({
   <Controls>
     <Control
       big
-      title={intl.formatMessage({ id: 'global.export-csv' })}
-      text={intl.formatMessage({ id: 'global.export-csv' })}
+      title={intl.formatMessage({ id: 'button.export-csv' })}
+      text={intl.formatMessage({ id: 'button.export-csv' })}
       iconName="export"
       disabled={disabled}
       onClick={onClick}

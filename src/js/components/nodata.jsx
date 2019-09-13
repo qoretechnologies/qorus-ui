@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
+import compose from 'recompose/compose';
 
 import Box from './box';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   title: string,
@@ -21,13 +23,23 @@ const NoDataContent: Function = ({
   </div>
 );
 
-const NoData: Function = ({ inBox, ...rest }: Props): React.Element<any> =>
+const NoData: Function = ({ inBox, intl, ...rest }: Props): React.Element<any> =>
   inBox ? (
     <Box {...rest}>
-      <NoDataContent {...rest} />
+      <NoDataContent
+        title={intl.formatMessage({ id: 'component.no-data' })}
+        content={intl.formatMessage({ id: 'component.there-are-no-data' })}
+        {...rest}
+      />
     </Box>
   ) : (
-    <NoDataContent {...rest} />
+    <NoDataContent
+      title={intl.formatMessage({ id: 'component.no-data' })}
+      content={intl.formatMessage({ id: 'component.there-are-no-data' })}
+      {...rest}
+    />
   );
 
-export default NoData;
+export default compose(
+  injectIntl
+)(NoData);

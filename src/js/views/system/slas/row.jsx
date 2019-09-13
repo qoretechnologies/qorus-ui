@@ -16,6 +16,7 @@ import { IdColumn } from '../../../components/IdColumn';
 import NameColumn from '../../../components/NameColumn';
 import { DescriptionColumn } from '../../../components/DescriptionColumn';
 import { ActionColumn } from '../../../components/ActionColumn';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   slaid: number,
@@ -38,6 +39,7 @@ const SLARow: Function = ({
   handleDeleteClick,
   perms,
   first,
+  intl,
 }: Props): React.Element<any> => (
   <Tr key={slaid} first={first}>
     <IdColumn>{slaid}</IdColumn>
@@ -49,6 +51,7 @@ const SLARow: Function = ({
     <ActionColumn>
       <Controls grouped>
         <Button
+          title={intl.formatMessage({ id: 'button.delete' })}
           disabled={!hasPermission(perms, ['DELETE-SLA', 'SLA-CONTROL'], 'or')}
           iconName="cross"
           btnStyle="danger"
@@ -61,6 +64,7 @@ const SLARow: Function = ({
 
 export default compose(
   withDispatch(),
+  injectIntl,
   withHandlers({
     handleDeleteClick: ({
       openModal,
@@ -68,6 +72,7 @@ export default compose(
       slaid,
       dispatchAction,
       name,
+      intl,
     }: Props): Function => (): void => {
       const handleConfirm: Function = (): void => {
         dispatchAction(actions.slas.remove, slaid);
@@ -76,7 +81,7 @@ export default compose(
 
       openModal(
         <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
-          Are you sure you want to remove the {name} SLA?
+          {intl.formatMessage({ id: 'dialog.are-you-sure-remove-sla' }, { name: name })}
         </ConfirmDialog>
       );
     },

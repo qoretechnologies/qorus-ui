@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Td, Th } from '../new_table';
 import Text from '../text';
+import { injectIntl } from 'react-intl';
 
 type DescriptionColumnProps = {
   children: any,
@@ -32,16 +33,18 @@ type DescriptionColumnHeaderProps = {
 };
 
 const DescriptionColumnHeader: Function = compose(
-  onlyUpdateForKeys(['children', 'sortData'])
+  onlyUpdateForKeys(['children', 'sortData']),
+  injectIntl
 )(
   ({
-    children: children = 'Description',
+    children,
     name: name = 'desc',
     icon: icon = 'label',
+    intl,
     ...rest
   }: DescriptionColumnHeaderProps): React.Element<any> => (
     <Th name={name} iconName={icon} className="text" {...rest}>
-      {children}
+      {children || intl.formatMessage({ id: 'table.description' })}
     </Th>
   )
 );

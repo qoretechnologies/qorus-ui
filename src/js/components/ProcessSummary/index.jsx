@@ -12,6 +12,7 @@ import {
   Control as Button,
 } from '../../components/controls';
 import moment from 'moment';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   model: Object,
@@ -29,13 +30,14 @@ const ProcessSummary: Function = ({
     jobid,
   },
   handleKillClick,
+  intl,
 }: Props): React.Element<PaneItem> => {
   if (enabled) {
     if (remote) {
       if (prcs) {
         return (
           <PaneItem
-            title="Process summary"
+            title={intl.formatMessage({ id: 'summary.process-summary' })}
             label={
               <ButtonGroup>
                 <Button
@@ -45,14 +47,15 @@ const ProcessSummary: Function = ({
                     handleKillClick(prcs.id);
                   }}
                 >
-                  Kill
+                  <FormattedMessage id='cluster.kill' />
                 </Button>
               </ButtonGroup>
             }
           >
-            <Tag> Node: {prcs.node}</Tag> <Tag> PID: {prcs.pid}</Tag>{' '}
-            <Tag> Status: {prcs.status}</Tag>{' '}
-            <Tag> Memory: {prcs.priv_str}</Tag>{' '}
+            <Tag> <FormattedMessage id='cluster.node' />: {prcs.node}</Tag>{' '}
+            <Tag> <FormattedMessage id='cluster.pid' />: {prcs.pid}</Tag>{' '}
+            <Tag> <FormattedMessage id='cluster.status' />: {prcs.status}</Tag>{' '}
+            <Tag> <FormattedMessage id='cluster.memory' />: {prcs.priv_str}</Tag>{' '}
           </PaneItem>
         );
       }
@@ -60,10 +63,12 @@ const ProcessSummary: Function = ({
       // Service not running
       if (autostart === false) {
         return (
-          <PaneItem title="Process summary">
-            <Alert title="Process not running" bsStyle="warning">
-              Autostart is disabled; to start the service automatically, set
-              autostart to true
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+            <Alert
+              title={intl.formatMessage({ id: 'summary.process-not-running' })}
+              bsStyle="warning"
+            >
+              <FormattedMessage id='summary.autostart-disabled' />
             </Alert>
           </PaneItem>
         );
@@ -72,10 +77,12 @@ const ProcessSummary: Function = ({
       // Workflow not running
       if (autostart === 0) {
         return (
-          <PaneItem title="Process summary">
-            <Alert title="Process not running" bsStyle="warning">
-              Autostart is zero; to start the workflow automatically, set a
-              positive autostart value
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+            <Alert
+              title={intl.formatMessage({ id: 'summary.process-not-running' })}
+              bsStyle="warning"
+            >
+              <FormattedMessage id='summary.autostart-zero' />
             </Alert>
           </PaneItem>
         );
@@ -84,9 +91,12 @@ const ProcessSummary: Function = ({
       // Job not active
       if (jobid && !active) {
         return (
-          <PaneItem title="Process summary">
-            <Alert title="Process not running" bsStyle="warning">
-              Job is not active
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+            <Alert
+              title={intl.formatMessage({ id: 'summary.process-not-running' })}
+              bsStyle="warning"
+            >
+              <FormattedMessage id='summary.job-not-active' />
             </Alert>
           </PaneItem>
         );
@@ -95,9 +105,12 @@ const ProcessSummary: Function = ({
       // Job expired
       if (jobid && moment(expiry).isBefore(moment())) {
         return (
-          <PaneItem title="Process summary">
-            <Alert title="Process not running" bsStyle="warning">
-              Job has expired
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+            <Alert
+              title={intl.formatMessage({ id: 'summary.process-not-running' })}
+              bsStyle="warning"
+            >
+              <FormattedMessage id='summary.job-expired' />
             </Alert>
           </PaneItem>
         );
@@ -105,25 +118,31 @@ const ProcessSummary: Function = ({
 
       // Autostart is non-existent or has positive value
       return (
-        <PaneItem title="Process summary">
-          <Alert title="Process not running" bsStyle="warning">
-            Check log for details
+        <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+          <Alert
+            title={intl.formatMessage({ id: 'summary.process-not-running' })}
+            bsStyle="warning"
+          >
+            <FormattedMessage id='summary.check-log-details' />
           </Alert>
         </PaneItem>
       );
     }
 
     return (
-      <PaneItem title="Process summary">
-        <NoData title="Running locally in qorus-core" />
+      <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+        <NoData title={intl.formatMessage({ id: 'summary.running-in-core' })} />
       </PaneItem>
     );
   }
 
   return (
-    <PaneItem title="Process summary">
-      <Alert title="Not running" bsStyle="danger">
-        Interface disabled
+    <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+      <Alert
+        title={intl.formatMessage({ id: 'summary.not-running' })}
+        bsStyle="danger"
+      >
+        <FormattedMessage id='summary.interface-disabled' />
       </Alert>
     </PaneItem>
   );
@@ -131,5 +150,6 @@ const ProcessSummary: Function = ({
 
 export default compose(
   withProcessKill,
-  onlyUpdateForKeys(['model'])
+  onlyUpdateForKeys(['model']),
+  injectIntl
 )(ProcessSummary);

@@ -77,7 +77,7 @@ const OptionsView: Function = ({
         <Thead>
           <FixedRow {...{ sortData, onSortChange }}>
             <Th name="status" iconName="lock" />
-            <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} />
+            <NameColumnHeader />
             <Th iconName="application">Type</Th>
             <Th className="text" name="default">
               <FormattedMessage id='table.default-value' />

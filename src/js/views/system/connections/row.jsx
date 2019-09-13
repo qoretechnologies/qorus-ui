@@ -22,6 +22,7 @@ import withDispatch from '../../../hocomponents/withDispatch';
 import NameColumn from '../../../components/NameColumn';
 import Tree from '../../../components/tree';
 import ContentByType from '../../../components/ContentByType';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   name: string,
@@ -78,6 +79,7 @@ const ConnectionRow: Function = ({
   handleToggleClick,
   handleResetClick,
   locked,
+  intl
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -90,7 +92,7 @@ const ConnectionRow: Function = ({
   >
     <Td className={classnames('normal')}>
       <Tag intent={up ? Intent.SUCCESS : Intent.DANGER} className="pt-minimal">
-        {up ? 'UP' : 'DOWN'}
+        {intl.formatMessage({ id: (up ? 'table.up' : 'table.down') })}
       </Tag>
     </Td>
     <NameColumn
@@ -102,26 +104,34 @@ const ConnectionRow: Function = ({
     <Td className="big">
       <ButtonGroup>
         <Button
-          title={enabled ? 'Disable' : 'Enable'}
+          title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
           iconName="power"
           onClick={handleToggleClick}
           btnStyle={enabled ? 'success' : 'danger'}
           disabled={locked}
         />
         {remoteType === 'datasources' && (
-          <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
+          <Button
+            title={intl.formatMessage({ id: 'button.reset' })}
+            iconName="refresh"
+            onClick={handleResetClick}
+          />
         )}
-        <Button title="Ping" iconName="exchange" onClick={handlePingClick} />
+        <Button
+          title={intl.formatMessage({ id: 'button.ping' })}
+          iconName="exchange"
+          onClick={handlePingClick}
+        />
       </ButtonGroup>
       <ButtonGroup>
         <Button
           iconName="edit"
-          title="Edit"
+          title={intl.formatMessage({ id: 'button.edit' })}
           disabled={!(!locked && canEdit)}
           onClick={handleDetailClick}
         />
         <Button
-          title="Delete"
+          title={intl.formatMessage({ id: 'button.delete' })}
           disabled={!(!locked && canDelete)}
           iconName="cross"
           intent={Intent.DANGER}
@@ -232,5 +242,6 @@ export default compose(
     'desc',
     'safe_url',
     'url',
-  ])
+  ]),
+  injectIntl
 )(ConnectionRow);

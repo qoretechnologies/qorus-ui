@@ -30,6 +30,7 @@ import map from 'lodash/map';
 import size from 'lodash/size';
 import PaneItem from '../pane_item';
 import { Icon } from '@blueprintjs/core';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -84,6 +85,7 @@ let ItemsTable: Function = ({
   configItemsData,
   title,
   groupName,
+  intl,
 }: ConfigItemsTableProps): React.Element<any> => (
   <React.Fragment>
     <EnhancedTable
@@ -111,14 +113,15 @@ let ItemsTable: Function = ({
                 {groupName && (
                   <Pull>
                     <h5 style={{ lineHeight: '30px' }}>
-                      <Icon iconName="group-objects" /> Group: {groupName}
+                      <Icon iconName="group-objects" />{' '}
+                      <FormattedMessage id='table.group' />: {groupName}
                     </h5>
                   </Pull>
                 )}
                 <Pull right>
                   <ButtonGroup>
                     <Button
-                      label="Show descriptions"
+                      label={intl.formatMessage({ id: 'button.show-descriptions' })}
                       iconName="align-left"
                       btnStyle={showDescription ? 'primary' : ''}
                       onClick={handleToggleDescription}
@@ -142,13 +145,13 @@ let ItemsTable: Function = ({
             </FixedRow>
             <FixedRow {...{ sortData, onSortChange }}>
               <NameColumnHeader />
-              <ActionColumnHeader icon="edit">{''}</ActionColumnHeader>
+              <ActionColumnHeader icon="edit" />
               <Th className="text" iconName="info-sign" name="actual_value">
-                Value
+                <FormattedMessage id='table.value' />
               </Th>
-              <Th name="strictly_local">Local</Th>
-              <Th name="level">Level</Th>
-              {!title && <Th name="config_group">Group</Th>}
+              <Th name="strictly_local"><FormattedMessage id='table.local' /></Th>
+              <Th name="level"><FormattedMessage id='table.level' /></Th>
+              {!title && <Th name="config_group"><FormattedMessage id='table.group' /></Th>}
               <Th iconName="code" name="type" />
             </FixedRow>
           </Thead>
@@ -171,14 +174,14 @@ let ItemsTable: Function = ({
                       <NameColumn
                         name={item.name}
                         hasAlerts={!item.value && !item.is_set}
-                        alertTooltip="This config item's value is not set on any level"
+                        alertTooltip={intl.formatMessage({ id: 'table.cfg-item-val-no-level-set' })}
                         minimalAlert
                       />
                       <ActionColumn>
                         <ButtonGroup>
                           <Button
                             icon="edit"
-                            title="Edit this value"
+                            title={intl.formatMessage({ id: 'button.edit-this-value' })}
                             onClick={() => {
                               openModal(
                                 <ConfigItemsModal
@@ -196,7 +199,7 @@ let ItemsTable: Function = ({
                           />
                           <Button
                             icon="cross"
-                            title="Remove this value"
+                            title={intl.formatMessage({ id: 'button.remove-this-value' })}
                             disabled={
                               item.level
                                 ? !item.level.startsWith(levelType || '')
@@ -219,14 +222,17 @@ let ItemsTable: Function = ({
                         className={`text ${item.level === 'workflow' ||
                           item.level === 'global'}`}
                       >
-                        {item.type === 'hash' ||
-                        item.type === 'list' ||
-                        item.type === '*hash' ||
-                        item.type === '*list' ? (
-                          <Tree compact data={item.value} />
-                        ) : (
-                          <ContentByType inTable content={item.value} />
-                        )}
+                        {
+                          item.type === 'hash' ||
+                          item.type === 'list' ||
+                          item.type === '*hash' ||
+                          item.type === '*list'
+                            ? (
+                              <Tree compact data={item.value} />
+                            ) : (
+                              <ContentByType inTable content={item.value} />
+                            )
+                        }
                       </Td>
                       <Td className="narrow">
                         <ContentByType content={item.strictly_local} />
@@ -263,7 +269,8 @@ ItemsTable = compose(
     handleToggleDescription: ({ toggleDescription }) => () => {
       toggleDescription(value => !value);
     },
-  })
+  }),
+  injectIntl
 )(ItemsTable);
 
 export default compose(

@@ -1,0 +1,26 @@
+export default {
+  'en-US': {
+    'summary.autostart-disabled': 'Autostart is disabled; to start the service automatically, set autostart to true',
+    'summary.autostart-zero': 'Autostart is zero; to start the workflow automatically, set a positive autostart value',
+    'summary.check-log-details': 'Check log for details',
+    'summary.interface-disabled': 'Interface disabled',
+    'summary.job-expired': 'Job has expired',
+    'summary.job-not-active': 'Job is not active',
+    'summary.not-running': 'Not running',
+    'summary.process-not-running': 'Process not running',
+    'summary.process-summary': 'Process summary',
+    'summary.running-in-core': 'Running locally in qorus-core',
+  },
+  'cs-CZ': {
+    'summary.autostart-disabled': 'Automatický start není povolený; pro automatické zapnutí nastavte hodnotu autostart na True',
+    'summary.autostart-zero': 'Automatický start je nastaven na hodnotu 0; pro automatické zapnutí nastavte hodnotu autostart větší než 0',
+    'summary.check-log-details': 'Podívejte se do záznamu pro více detailů',
+    'summary.interface-disabled': 'Jednotka není povolena',
+    'summary.job-expired': 'Čas úkolu vypršel',
+    'summary.job-not-active': 'Úkol není aktivován',
+    'summary.not-running': 'Neběží',
+    'summary.process-not-running': 'Process neběží',
+    'summary.process-summary': 'Přehled procesu',
+    'summary.running-in-core': 'Běží lokálně v qorus-core',
+  },
+};

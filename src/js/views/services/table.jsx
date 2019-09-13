@@ -100,15 +100,15 @@ const ServicesTable: Function = ({
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <SelectColumnHeader />
         <IdColumnHeader />
-        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} />
-        <ActionColumnHeader children={intl.formatMessage({ id: 'table.actions' })} />
+        <NameColumnHeader />
+        <ActionColumnHeader />
         <Th name="type" iconName="info-sign">
           <FormattedMessage id='table.type' />
         </Th>
         <Th name="threads" iconName="multi-select">
           <FormattedMessage id='table.threads' />
         </Th>
-        <DescriptionColumnHeader children={intl.formatMessage({ id: 'table.description' })} />
+        <DescriptionColumnHeader />
       </FixedRow>
     </Thead>
     <DataOrEmptyTable condition={size(collection) === 0} cols={7}>

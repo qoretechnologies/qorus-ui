@@ -112,8 +112,8 @@ const JobsTable: Function = ({
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <SelectColumnHeader />
         <IdColumnHeader />
-        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} />
-        <ActionColumnHeader children={intl.formatMessage({ id: 'table.actions' })} />
+        <NameColumnHeader />
+        <ActionColumnHeader />
         <Th name="last_executed" iconName="calendar">
           <FormattedMessage id='table.last-run' />
         </Th>

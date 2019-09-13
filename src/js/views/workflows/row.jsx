@@ -25,6 +25,7 @@ import {
 } from '../../helpers/workflows';
 import { SelectColumn } from '../../components/SelectColumn';
 import { IdColumn } from '../../components/IdColumn';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   isActive?: boolean,
@@ -87,6 +88,7 @@ const TableRow: Function = ({
   totalOrderStats,
   slaStats,
   totalSlaStats,
+  intl,
   ...rest
 }: Props): React.Element<any> => (
   <Tr
@@ -107,7 +109,7 @@ const TableRow: Function = ({
         <Box top>
           <PaneItem title={rest.normalizedName}>{rest.description}</PaneItem>
           {rest.TOTAL > 0 && (
-            <PaneItem title="Instances">
+            <PaneItem title={intl.formatMessage({ id: 'table.instances' })}>
               <InstancesChart width={400} states={states} instances={rest} />
             </PaneItem>
           )}
@@ -251,5 +253,6 @@ export default compose(
     'orderStats',
     'band',
     ...ORDER_STATES_ARRAY,
-  ])
+  ]),
+  injectIntl
 )(TableRow);

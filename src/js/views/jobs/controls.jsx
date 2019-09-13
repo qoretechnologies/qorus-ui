@@ -15,6 +15,7 @@ import actions from '../../store/api/actions';
 import RescheduleModal from './modals/reschedule';
 import SetExpiryModal from './modals/expiry';
 import withDispatch from '../../hocomponents/withDispatch';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   handleEnableClick: Function,
@@ -61,12 +62,13 @@ const JobControls: Function = ({
   remote,
   expiry,
   compact,
+  intl,
 }: Props): React.Element<any> =>
   scheduleOnly ? (
     <div>
       <span>{schedText}</span>{' '}
       <Button
-        text="Reschedule"
+        text={intl.formatMessage({ id: 'button.reschedule' })}
         big={big}
         iconName="time"
         onClick={handleScheduleClick}
@@ -76,21 +78,21 @@ const JobControls: Function = ({
     <React.Fragment>
       <ButtonGroup>
         <Button
-          title={enabled ? 'Disable' : 'Enable'}
+          title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
           iconName="power"
           intent={enabled ? Intent.SUCCESS : Intent.DANGER}
           onClick={handleEnableClick}
           big={big}
         />
         <Button
-          title={active ? 'Deactivate' : 'Activate'}
+          title={intl.formatMessage({ id: (active ? 'button.deactivate' : 'button.activate') })}
           iconName={active ? 'offline' : 'offline'}
           intent={active ? Intent.PRIMARY : Intent.NONE}
           onClick={handleActivateClick}
           big={big}
         />
         <Button
-          title={remote ? 'Set as not remote' : 'Set as remote'}
+          title={intl.formatMessage({ id: (remote ? 'button.set-not-remote' : 'button.set-remote') })}
           iconName="globe"
           intent={remote ? Intent.PRIMARY : Intent.NONE}
           onClick={handleRemoteClick}
@@ -98,7 +100,7 @@ const JobControls: Function = ({
         />
         {!compact && (
           <Button
-            title="Set expiry"
+            title={intl.formatMessage({ id: 'button.set-expiry' })}
             iconName="outdated"
             btnStyle={expiry && 'info'}
             onClick={handleExpiryClick}
@@ -108,21 +110,21 @@ const JobControls: Function = ({
       </ButtonGroup>
       <ButtonGroup>
         <Button
-          title="Run"
+          title={intl.formatMessage({ id: 'button.run' })}
           iconName="play"
           onClick={handleRunClick}
           big={big}
         />
         {!compact && (
           <Button
-            title="Reset"
+            title={intl.formatMessage({ id: 'button.reset' })}
             iconName="refresh"
             big={big}
             onClick={handleResetClick}
           />
         )}
         <Button
-          title="Reschedule"
+          title={intl.formatMessage({ id: 'button.reschedule' })}
           iconName="time"
           onClick={handleScheduleClick}
           big={big}
@@ -225,5 +227,6 @@ export default compose(
     'month',
     'week',
     'expiry',
-  ])
+  ]),
+  injectIntl
 )(JobControls);

@@ -270,7 +270,7 @@ export default class ChartComponent extends Component {
           {this.props.empty && this.props.type === 'doughnut' && (
             <div className="pie-chart-placeholder">
               <NonIdealState
-                title={this.props.intl.formatMessage({ id: 'global.no-data' })}
+                title={this.props.intl.formatMessage({ id: 'component.no-data' })}
                 visual="warning-sign"
               />
             </div>

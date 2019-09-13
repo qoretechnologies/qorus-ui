@@ -1,9 +1,14 @@
+import buttonMessages from './button';
 import clusterMessages from './cluster';
+import componentMessages from './component';
 import dashboardMessages from './dashboard';
+import datetimeMessages from './datetime';
+import dialogMessages from './dialog';
 import dropdownMessages from './dropdown';
 import globalMessages from './global';
 import settingsMessages from './settings';
 import statsMessages from './stats';
+import summaryMessages from './summary';
 import systemMessages from './system';
 import tableMessages from './table';
 import treeMessages from './tree';
@@ -18,12 +23,17 @@ const LANGS = {
 
 export default function (locale: string): Object {
   return {
+    ...buttonMessages[locale],
     ...clusterMessages[locale],
+    ...componentMessages[locale],
     ...dashboardMessages[locale],
+    ...datetimeMessages[locale],
+    ...dialogMessages[locale],
     ...dropdownMessages[locale],
     ...globalMessages[locale],
     ...settingsMessages[locale],
     ...statsMessages[locale],
+    ...summaryMessages[locale],
     ...systemMessages[locale],
     ...tableMessages[locale],
     ...treeMessages[locale],

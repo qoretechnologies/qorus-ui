@@ -83,8 +83,8 @@ const GroupsTable: Function = ({
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <SelectColumnHeader />
         <IdColumnHeader />
-        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} />
-        <ActionColumnHeader children={intl.formatMessage({ id: 'table.actions' })} />
+        <NameColumnHeader />
+        <ActionColumnHeader />
         <Th
           name="workflows_count"
           title={intl.formatMessage({ id: 'table.workflows' })}
@@ -127,7 +127,10 @@ const GroupsTable: Function = ({
         >
           {intl.formatMessage({ id: 'table.mappers' + (isTablet ? '-mini' : '') })}
         </Th>
-        <DescriptionColumnHeader name="description" children={intl.formatMessage({ id: 'table.description' })} />
+        <DescriptionColumnHeader
+          name="description"
+          children={intl.formatMessage({ id: 'table.description' })}
+        />
       </FixedRow>
     </Thead>
     <DataOrEmptyTable condition={size(collection) === 0} cols={11}>

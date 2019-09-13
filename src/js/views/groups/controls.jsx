@@ -11,6 +11,7 @@ import {
 } from '../../components/controls';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   enabled: boolean,
@@ -24,10 +25,11 @@ const GroupsControls: Function = ({
   enabled,
   handleEnableClick,
   big,
+  intl,
 }: Props): React.Element<any> => (
   <ButtonGroup>
     <Button
-      title={enabled ? 'Disable' : 'Enable'}
+      title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
       iconName="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
@@ -47,5 +49,6 @@ export default compose(
       dispatchAction(actions.groups.groupAction, name, !enabled);
     },
   }),
-  pure(['enabled'])
+  pure(['enabled']),
+  injectIntl
 )(GroupsControls);

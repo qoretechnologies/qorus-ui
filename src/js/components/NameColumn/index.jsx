@@ -15,6 +15,7 @@ import Text from '../text';
 import { Controls as ButtonGroup, Control as Button } from '../controls';
 import InterfaceTag from '../InterfaceTag';
 import Flex from '../Flex';
+import { injectIntl } from 'react-intl';
 
 type NameColumnProps = {
   popoverContent?: React.Element<any>,
@@ -59,6 +60,7 @@ const NameColumn: Function = ({
   className,
   minimalAlert,
   alertTooltip,
+  intl,
 }: NameColumnProps): React.Element<any> => (
   <Td
     className={`name ${hasAlerts ? 'table-name-has-alerts' : ''} ${className}`}
@@ -107,10 +109,10 @@ const NameColumn: Function = ({
       </Flex>
       {hasAlerts && (
         <ButtonGroup minimal={minimalAlert}>
-          <Tooltip content={alertTooltip || 'View alerts'}>
+          <Tooltip content={alertTooltip || intl.formatMessage({ id: 'button.view-alerts' })}>
             <Button
               iconName="error"
-              title="This item has alerts, click to view"
+              title={intl.formatMessage({ id: 'button.item-has-alerts' })}
               btnStyle="danger"
               onClick={onDetailClick}
             />
@@ -129,12 +131,18 @@ type NameColumnHeaderProps = {
 
 const NameColumnHeader: Function = ({
   name: name = 'name',
-  title: title = 'Name',
+  title,
   icon: icon = 'application',
+  intl,
   ...rest
 }: NameColumnHeaderProps): React.Element<any> => (
-  <Th className="name" name={name} iconName={icon} {...rest}>
-    {title}
+  <Th
+    className="name"
+    name={name}
+    iconName={icon}
+    {...rest}
+  >
+    {title || intl.formatMessage({ id: 'table.name' })}
   </Th>
 );
 
@@ -146,7 +154,9 @@ export default compose(
     'isActive',
     'hasAlerts',
     'className',
-  ])
+  ]),
+  injectIntl
 )(NameColumn);
 
-export { NameColumnHeader };
+const NCH = injectIntl(NameColumnHeader);
+export { NCH as NameColumnHeader };

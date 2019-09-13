@@ -120,7 +120,7 @@ const ClusterNode: Function = ({
                 title={intl.formatMessage({ id: 'cluster.client-id' })}
                 iconName="intersection"
               />
-              <ActionColumnHeader children={intl.formatMessage({ id: 'table.actions' })} />
+              <ActionColumnHeader />
               <Th className="text medium" name="type" iconName="application">
                 <FormattedMessage id='table.type' />
               </Th>

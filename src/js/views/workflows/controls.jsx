@@ -7,6 +7,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
 import { Controls, Control } from '../../components/controls';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   id: number,
@@ -26,10 +27,11 @@ const WorkflowControls: Function = ({
   handleResetClick,
   handleRemoteClick,
   big,
+  intl,
 }: Props): React.Element<any> => (
   <Controls marginRight={big ? 3 : 0}>
     <Control
-      title={enabled ? 'Disable' : 'Enable'}
+      title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
       iconName="power"
       btnStyle={enabled ? 'success' : 'danger'}
       onClick={handleToggleEnabledClick}
@@ -37,12 +39,12 @@ const WorkflowControls: Function = ({
     />
     <Control
       big={big}
-      title="Reset"
+      title={intl.formatMessage({ id: 'button.reset' })}
       iconName="refresh"
       onClick={handleResetClick}
     />
     <Control
-      title={remote ? 'Set as not remote' : 'Set as remote'}
+      title={intl.formatMessage({ id: (remote ? 'button.set-not-remote' : 'button.set-remote') })}
       iconName="globe"
       btnStyle={remote ? 'info' : 'default'}
       onClick={handleRemoteClick}
@@ -72,5 +74,6 @@ export default compose(
       dispatchAction(actions.workflows.setRemote, id, !remote);
     },
   }),
-  pure(['enabled', 'remote'])
+  pure(['enabled', 'remote']),
+  injectIntl
 )(WorkflowControls);

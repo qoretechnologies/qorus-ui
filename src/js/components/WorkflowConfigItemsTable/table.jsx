@@ -22,6 +22,7 @@ import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
 import AddConfigItemModal from '../ConfigItemsTable/modal';
 import size from 'lodash/size';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -49,6 +50,7 @@ const WorkflowConfigItemsTable: Function = ({
   dispatchAction,
   globalItems,
   intrfId,
+  intl,
 }: ConfigItemsTableProps): React.Element<any> => (
   <EnhancedTable
     collection={configItems.data}
@@ -77,8 +79,8 @@ const WorkflowConfigItemsTable: Function = ({
                   <Button
                     disabled={!size(globalItems)}
                     icon="add"
-                    label="Add new"
-                    title="Add new"
+                    label={intl.formatMessage({ id: 'button.add-new' })}
+                    title={intl.formatMessage({ id: 'button.add-new' })}
                     onClick={() => {
                       openModal(
                         <AddConfigItemModal
@@ -110,9 +112,9 @@ const WorkflowConfigItemsTable: Function = ({
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
             <NameColumnHeader />
-            <ActionColumnHeader>{''}</ActionColumnHeader>
+            <ActionColumnHeader />
             <Th className="text" iconName="info-sign" name="value">
-              Value
+              <FormattedMessage id='table.value' />
             </Th>
             <Th iconName="code" name="type" />
           </FixedRow>
@@ -132,7 +134,7 @@ const WorkflowConfigItemsTable: Function = ({
                       <ButtonGroup>
                         <Button
                           icon="edit"
-                          title="Edit this value"
+                          title={intl.formatMessage({ id: 'button.edit-this-value' })}
                           onClick={() => {
                             openModal(
                               <AddConfigItemModal
@@ -149,7 +151,7 @@ const WorkflowConfigItemsTable: Function = ({
                         />
                         <Button
                           icon="cross"
-                          title="Remove this value"
+                          title={intl.formatMessage({ id: 'button.remove-this-value' })}
                           btnStyle="danger"
                           onClick={() => {
                             dispatchAction(
@@ -167,14 +169,17 @@ const WorkflowConfigItemsTable: Function = ({
                       className={`text ${item.level === 'workflow' ||
                         item.level === 'global'}`}
                     >
-                      {item.type === 'hash' ||
-                      item.type === 'list' ||
-                      item.type === '*hash' ||
-                      item.type === '*list' ? (
-                        <Tree compact data={item.value} />
-                      ) : (
-                        <ContentByType inTable content={item.value} />
-                      )}
+                      {
+                        item.type === 'hash' ||
+                        item.type === 'list' ||
+                        item.type === '*hash' ||
+                        item.type === '*list'
+                          ? (
+                            <Tree compact data={item.value} />
+                          ) : (
+                            <ContentByType inTable content={item.value} />
+                          )
+                      }
                     </Td>
                     <Td className="narrow">
                       <code>{item.type}</code>
@@ -192,5 +197,6 @@ const WorkflowConfigItemsTable: Function = ({
 
 export default compose(
   withDispatch(),
-  onlyUpdateForKeys(['configItems', 'showDescription', 'globalConfig'])
+  onlyUpdateForKeys(['configItems', 'showDescription', 'globalConfig']),
+  injectIntl
 )(WorkflowConfigItemsTable);

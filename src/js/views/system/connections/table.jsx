@@ -100,7 +100,7 @@ const ConnectionTable: Function = ({
               disabled={!canAdd}
               onClick={handleAddClick}
               iconName="add"
-              text="Add new"
+              text={intl.formatMessage({ id: 'button.add-new' })}
             />
           </Pull>
           <Pull right>

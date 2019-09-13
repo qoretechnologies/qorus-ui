@@ -3,6 +3,7 @@ import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Td, Th } from '../new_table';
+import { injectIntl } from 'react-intl';
 
 type ActionColumnProps = {
   children: any,
@@ -19,21 +20,23 @@ const ActionColumn: Function = compose(onlyUpdateForKeys(['children']))(
 );
 
 type ActionColumnHeaderProps = {
-  children: any,
+  children?: any,
   name: string,
   icon: string,
 };
 
 const ActionColumnHeader: Function = compose(
-  onlyUpdateForKeys(['children', 'sortData'])
+  onlyUpdateForKeys(['children', 'sortData']),
+  injectIntl
 )(
   ({
-    children: children = 'Actions',
+    children,
     icon: icon = 'wrench',
+    intl,
     ...rest
   }: ActionColumnHeaderProps): React.Element<any> => (
     <Th iconName={icon} {...rest}>
-      {children}
+      {children || intl.formatMessage({ id: 'table.actions' })}
     </Th>
   )
 );
