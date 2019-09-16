@@ -96,7 +96,7 @@ export default class WorkflowsDetail extends Component {
         width={width || 600}
         onClose={this.handleClose}
         onResize={onResize}
-        title={`Workflow ${workflow.id}`}
+        title={workflow.name}
         tabs={{
           tabs: [
             'Detail',
