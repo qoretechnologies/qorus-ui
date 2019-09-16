@@ -78,17 +78,15 @@ class CrumbTabs extends React.Component {
       let tabsWidth: number = 0;
       let collapsed: boolean = false;
 
-      this.props.tabs.forEach(
-        (tab: any): void => {
-          const strLen: number = tab.title.length;
-          if (strLen * 10.5 + tabsWidth < spaceWidth) {
-            tabsLen = tabsLen + 1;
-            tabsWidth = tabsWidth + strLen * 10.5;
-          } else {
-            collapsed = true;
-          }
+      this.props.tabs.forEach((tab: any): void => {
+        const strLen: number = tab.title.length;
+        if (strLen * 10.5 + tabsWidth < spaceWidth) {
+          tabsLen = tabsLen + 1;
+          tabsWidth = tabsWidth + strLen * 10.5;
+        } else {
+          collapsed = true;
         }
-      );
+      });
 
       this.setState(() => ({
         showTabs: true,
@@ -97,7 +95,7 @@ class CrumbTabs extends React.Component {
     }
   };
 
-  render () {
+  render() {
     const {
       tabs,
       handleTabChange,
@@ -124,19 +122,17 @@ class CrumbTabs extends React.Component {
     return (
       <Pull className="breadcrumb-tabs" handleRef={this.handleRef}>
         {showTabs && [
-          newTabs.map(
-            (tab: Object): React.Element<CrumbTab> => (
-              <CrumbTab
-                key={tab.title}
-                active={tab.tabId.toLowerCase() === tabQuery}
-                title={tab.title}
-                tabId={tab.tabId}
-                onClick={handleTabChange}
-                local={local}
-                queryIdentifier={queryIdentifier}
-              />
-            )
-          ),
+          newTabs.map((tab: Object): React.Element<CrumbTab> => (
+            <CrumbTab
+              key={tab.title}
+              active={tab.tabId.toLowerCase() === tabQuery}
+              title={tab.title}
+              tabId={tab.tabId}
+              onClick={handleTabChange}
+              local={local}
+              queryIdentifier={queryIdentifier}
+            />
+          )),
           leftoverTabs.length !== 0 && (
             <Popover
               position={Position.BOTTOM}
@@ -150,27 +146,26 @@ class CrumbTabs extends React.Component {
                       (tab: Object): boolean =>
                         tab.tabId.toLowerCase() !== tabQuery
                     )
-                    .map(
-                      (tab: Object): React.Element<MenuItem> =>
-                        local ? (
-                          <MenuItem
-                            key={tab.title}
-                            text={tab.title}
-                            onClick={() =>
-                              handleTabChange(tab.tabId.toLowerCase())
-                            }
-                          />
-                        ) : (
-                          <Link
-                            to={buildPageLinkWithQueries(
-                              queryIdentifier,
-                              tab.tabId
-                            )}
-                            className="non-decorated-link"
-                          >
-                            <MenuItem key={tab.title} text={tab.title} />
-                          </Link>
-                        )
+                    .map((tab: Object): React.Element<MenuItem> =>
+                      local ? (
+                        <MenuItem
+                          key={tab.title}
+                          text={tab.title}
+                          onClick={() =>
+                            handleTabChange(tab.tabId.toLowerCase())
+                          }
+                        />
+                      ) : (
+                        <Link
+                          to={buildPageLinkWithQueries(
+                            queryIdentifier,
+                            tab.tabId
+                          )}
+                          className="non-decorated-link"
+                        >
+                          <MenuItem key={tab.title} text={tab.title} />
+                        </Link>
+                      )
                     )}
                 </Menu>
               }
@@ -189,26 +184,21 @@ class CrumbTabs extends React.Component {
 }
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      windowWidth: state.ui.settings.width,
-    })
-  ),
-  mapProps(
-    ({ tabs, width, windowWidth, ...rest }: Props): Props => ({
-      tabs: tabs.map(
-        (tab: any): Object =>
-          isString(tab)
-            ? { title: tab, tabId: tab }
-            : {
-              title: `${tab.title}${tab.suffix ? ` ${tab.suffix}` : ''}`,
-              tabId: tab.title,
-            }
-      ),
-      width: width || windowWidth,
-      ...rest,
-    })
-  ),
+  connect((state: Object): Object => ({
+    windowWidth: state.ui.settings.width,
+  })),
+  mapProps(({ tabs, width, windowWidth, ...rest }: Props): Props => ({
+    tabs: tabs.map((tab: any): Object =>
+      isString(tab)
+        ? { title: tab, tabId: tab }
+        : {
+            title: `${tab.title}${tab.suffix ? ` ${tab.suffix}` : ''}`,
+            tabId: tab.title,
+          }
+    ),
+    width: width || windowWidth,
+    ...rest,
+  })),
   withTabs(
     ({ defaultTab, tabs }) => defaultTab || tabs[0].tabId.toLowerCase(),
     ({ queryIdentifier }) => queryIdentifier || 'tab',

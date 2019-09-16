@@ -7,7 +7,7 @@ import { formatAppender } from '../../../helpers/logger';
 import isArray from 'lodash/isArray';
 
 const updateConfigItemWsCommon = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -35,10 +35,13 @@ const updateConfigItemWsCommon = {
             step.config[dt.name].level = dt.level;
             step.config[dt.name].is_set = dt.is_set;
             step.config[dt.name].currentType = dt.currentType;
+            step.config[dt.name].isTemplatedString = dt.isTemplatedString;
           } else {
             config[dt.name].value = dt.value;
             config[dt.name].level = dt.level;
             config[dt.name].currentType = dt.currentType;
+            config[dt.name].is_set = dt.is_set;
+            config[dt.name].isTemplatedString = dt.isTemplatedString;
           }
 
           newData = updateItemWithId(dt.id, { _updated: true }, newData);
@@ -65,7 +68,7 @@ const updateConfigItemWsCommon = {
 };
 
 const processStartedReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -92,7 +95,7 @@ const processStartedReducer = {
 };
 
 const processStoppedReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -119,7 +122,7 @@ const processStoppedReducer = {
 };
 
 const basicDataUpdatedReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -146,7 +149,7 @@ const basicDataUpdatedReducer = {
 };
 
 const loggerReducer = {
-  next(
+  next (
     state,
     {
       payload: { logger, appenders, id, empty },
@@ -195,7 +198,7 @@ const loggerReducer = {
 };
 
 const addUpdateLoggerReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -258,7 +261,7 @@ const addUpdateLoggerReducer = {
 
 // Deleting CONCRETE logger
 const deleteLoggerReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -302,7 +305,7 @@ const deleteLoggerReducer = {
 };
 
 const addAppenderReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -342,7 +345,7 @@ const addAppenderReducer = {
 };
 
 const editAppenderReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
@@ -391,7 +394,7 @@ const editAppenderReducer = {
 };
 
 const deleteAppenderReducer = {
-  next(
+  next (
     state,
     {
       payload: { events },
