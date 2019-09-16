@@ -241,7 +241,7 @@ let ItemsTable: Function = ({
                     </Tr>
                     {showDescription && (
                       <Tr>
-                        <Td className="text" colspan={7}>
+                        <Td className="text" colspan={groupName ? 6 : 7}>
                           {item.desc}
                         </Td>
                       </Tr>
