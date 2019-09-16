@@ -19,6 +19,7 @@ import Headbar from '../Headbar';
 import Pull from '../Pull';
 import { Breadcrumbs, Crumb } from '../breadcrumbs';
 import modal from '../../hocomponents/modal';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -90,6 +91,7 @@ const DIAGRAM_MIN_COLUMNS = 1;
  */
 @onlyUpdateForKeys(['workflow', 'order'])
 @modal()
+@injectIntl
 export default class StepsTab extends Component {
   props: {
     workflow: Object,
@@ -701,8 +703,6 @@ export default class StepsTab extends Component {
       ? 'error'
       : 'normal';
 
-    console.log('test');
-
     return (
       <g
         className={`diagram__box status-${css}-diagram`}
@@ -867,7 +867,7 @@ export default class StepsTab extends Component {
                 <Pull right>
                   <ButtonGroup>
                     <Button
-                      title="Show step code"
+                      title={this.props.intl.formatMessage({ id: 'button.show-step-code' })}
                       icon="code"
                       onClick={onCodeClick}
                     />
@@ -1079,30 +1079,30 @@ export default class StepsTab extends Component {
                   style={{ lineHeight: '30px', paddingRight: 5 }}
                   className="text-muted"
                 >
-                  Drag to move around
+                  <FormattedMessage id='button.drag-to-move-around' />
                 </span>
               )}
               <Button
-                title={useDrag ? 'Use scrollbars' : 'Use drag to move'}
+                title={this.props.intl.formatMessage({ id: (useDrag ? 'button.use-scrollbars' : 'button.use-drag-to-move') })}
                 iconName="hand"
                 onClick={this.handleMoveChange}
                 btnStyle={useDrag && 'primary'}
                 big
               />
               <Button
-                title="Zoom in"
+                title={this.props.intl.formatMessage({ id: 'button.zoom-in' })}
                 iconName="zoom-in"
                 onClick={this.handleZoomIn}
                 big
               />
               <Button
-                title="Zoom out"
+                title={this.props.intl.formatMessage({ id: 'button.zoom-out' })}
                 iconName="zoom-out"
                 onClick={this.handleZoomOut}
                 big
               />
               <Button
-                title="Reset zoom"
+                title={this.props.intl.formatMessage({ id: 'button.reset-zoom' })}
                 iconName="zoom-to-fit"
                 onClick={this.handleZoomReset}
                 big

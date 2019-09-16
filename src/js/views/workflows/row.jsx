@@ -25,7 +25,7 @@ import {
 } from '../../helpers/workflows';
 import { SelectColumn } from '../../components/SelectColumn';
 import { IdColumn } from '../../components/IdColumn';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   isActive?: boolean,

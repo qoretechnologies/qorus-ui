@@ -29,13 +29,14 @@ import Pull from '../../../components/Pull';
 import LoadMore from '../../../components/LoadMore';
 import Search from '../../../containers/search';
 import NoDataIf from '../../../components/NoDataIf';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   order: Object,
   steps: Object,
 };
 
-const StepsTable: Function = ({ steps }: Props): React.Element<Table> => (
+const StepsTable: Function = ({ steps, intl }: Props): React.Element<Table> => (
   <NoDataIf condition={size(steps) === 0} big inBox>
     {() => (
       <Box top fill scrollY>
@@ -98,31 +99,31 @@ const StepsTable: Function = ({ steps }: Props): React.Element<Table> => (
                       <FixedRow {...{ sortData, onSortChange }}>
                         <NameColumnHeader name="stepname" />
                         <Th iconName="info-sign" name="stepstatus">
-                          Status
+                          <FormattedMessage id='table.status' />
                         </Th>
                         <Th iconName="info-sign" name="custom_status">
-                          Custom Status
+                          <FormattedMessage id='table.custom-status' />
                         </Th>
                         <IdColumnHeader name="subworkflow_instanceid">
-                          SubWF IID
+                          <FormattedMessage id='table.subwf-iid' />
                         </IdColumnHeader>
                         <Th iconName="error" name="error_type">
-                          Error Type
+                          <FormattedMessage id='table.error-type' />
                         </Th>
                         <Th iconName="info-sign" name="ind">
-                          Ind
+                          <FormattedMessage id='table.ind' />
                         </Th>
                         <Th iconName="refresh" name="retries">
-                          Retries
+                          <FormattedMessage id='table.retries' />
                         </Th>
                         <Th iconName="exclude-row" name="skip">
-                          Skip
+                          <FormattedMessage id='table.skip' />
                         </Th>
                         <DateColumnHeader name="started">
-                          Started
+                          <FormattedMessage id='table.started' />
                         </DateColumnHeader>
                         <DateColumnHeader name="completed">
-                          Completed
+                          <FormattedMessage id='table.completed' />
                         </DateColumnHeader>
                       </FixedRow>
                     </Thead>
@@ -180,5 +181,6 @@ export default compose(
       steps: steps && steps.length ? groupInstances(steps) : {},
       ...rest,
     })
-  )
+  ),
+  injectIntl
 )(StepsTable);

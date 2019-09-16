@@ -13,6 +13,7 @@ import Dropdown, {
 import { Controls as ButtonGroup } from '../../../../../components/controls';
 import showIfPassed from '../../../../../hocomponents/show-if-passed';
 import withDispatch from '../../../../../hocomponents/withDispatch';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   unselectAll: Function,
@@ -34,32 +35,33 @@ const ToolbarActions: Function = ({
   handleUnblockClick,
   handleCancelClick,
   handleUncancelClick,
+  intl,
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
     <Dropdown id="hidden">
       <DropdownControl iconName="cog">With selected</DropdownControl>
       <DropdownItem
-        title="Retry"
+        title={intl.formatMessage({ id: 'order.retry' })}
         iconName="refresh"
         action={handleRetryClick}
       />
       <DropdownItem
-        title="Block"
+        title={intl.formatMessage({ id: 'order.block' })}
         iconName="minus-circle"
         action={handleBlockClick}
       />
       <DropdownItem
-        title="Unblock"
+        title={intl.formatMessage({ id: 'order.unblock' })}
         iconName="check-circle"
         action={handleUnblockClick}
       />
       <DropdownItem
-        title="Cancel"
+        title={intl.formatMessage({ id: 'order.cancel' })}
         iconName="times-circle"
         action={handleCancelClick}
       />
       <DropdownItem
-        title="Uncancel"
+        title={intl.formatMessage({ id: 'order.uncancel' })}
         iconName="refresh"
         action={handleUncancelClick}
       />
@@ -107,5 +109,6 @@ export default compose(
       handleBatchAction('uncancel');
     },
   }),
-  pure(['selectedIds'])
+  pure(['selectedIds']),
+  injectIntl
 )(ToolbarActions);

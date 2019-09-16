@@ -1,22 +1,26 @@
 /* @flow */
 import React from 'react';
+import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import size from 'lodash/size';
 
 import PaneItem from '../pane_item';
 import NoDataIf from '../NoDataIf';
 import AlertsTableItem from './item';
+import { injectIntl } from 'react-intl';
 
 const AlertsTab = ({
   alerts,
   noTag,
-  title: title = 'Alerts',
+  title,
+  intl,
 }: {
   alerts: Array<Object>,
   noTag: boolean,
   title: string,
+  intl: any,
 }) => (
-  <PaneItem title={title}>
+  <PaneItem title={title || intl.formatMessage({ id: 'component.alerts' })}>
     <NoDataIf condition={size(alerts) === 0}>
       {() => (
         <div className="alerts-table">
@@ -29,4 +33,7 @@ const AlertsTab = ({
   </PaneItem>
 );
 
-export default pure(['alerts'])(AlertsTab);
+export default compose(
+  pure(['alerts']),
+  injectIntl
+)(AlertsTab);

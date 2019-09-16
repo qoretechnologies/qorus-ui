@@ -8,8 +8,10 @@ import { getControlChar } from '../../helpers/document';
 import Icon from '../../components/icon';
 import Flex from '../Flex';
 import Pull from '../Pull';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 @pure(['messages', 'height'])
+@injectIntl
 export default class LogComponent extends Component {
   props: {
     messages: Array<string>,
@@ -64,17 +66,21 @@ export default class LogComponent extends Component {
           <Pull>
             <ButtonGroup>
               <Button
-                text="Autoscroll"
+                text={this.props.intl.formatMessage({ id: 'button.autoscroll' })}
                 iconName={this.state.autoScroll ? 'selection' : 'circle'}
                 intent={this.state.autoScroll ? Intent.PRIMARY : Intent.NONE}
                 onClick={this.setAutoScroll}
               />
-              <Button text="Clear" iconName="cross" onClick={onClearClick} />
+              <Button
+                text={this.props.intl.formatMessage({ id: 'button.clear' })}
+                iconName="cross"
+                onClick={onClearClick}
+              />
             </ButtonGroup>
           </Pull>
           <Pull right>
-            <Icon iconName="info-circle" /> Use{' '}
-            <strong>"{getControlChar()} + f"</strong> to search the log
+            <Icon iconName="info-circle" /><FormattedMessage id='component.use' />{' '}
+            <strong>"{getControlChar()} + f"</strong>{' '}<FormattedMessage id='component.to-search-log' />
           </Pull>
         </Toolbar>
         <Flex className="log-area" scrollY>

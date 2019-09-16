@@ -13,7 +13,7 @@ const Groups: Function = ({
   children: any,
 }): React.Element<any> | any =>
   React.Children.count(children) !== 0 && (
-    <PaneItem title={intl.formatMessage({ id: 'global.groups' })}>{children}</PaneItem>
+    <PaneItem title={intl.formatMessage({ id: 'component.groups' })}>{children}</PaneItem>
   );
 
 export default compose(

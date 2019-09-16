@@ -21,10 +21,6 @@ import { sortDefaults } from '../../../constants/sort';
 import LoadMore from '../../../components/LoadMore';
 import Search from '../../../containers/search';
 import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
-import {
-  DescriptionColumnHeader,
-  DescriptionColumn,
-} from '../../../components/DescriptionColumn';
 import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
 import Dropdown, { Item, Control } from '../../../components/dropdown';
 import ContentByType from '../../../components/ContentByType';
@@ -36,11 +32,11 @@ import {
   Control as Button,
 } from '../../../components/controls';
 import modal from '../../../hocomponents/modal';
-import Modal from '../../../components/modal';
 import last from 'lodash/last';
 import withDispatch from '../../../hocomponents/withDispatch';
 import { success } from '../../../store/ui/bubbles/actions';
 import { Icon } from '@blueprintjs/core';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   errors: Array<Object>,
@@ -62,6 +58,7 @@ const ErrorsTable: Function = ({
   handleExpandClick,
   tableId: tableId = 'orderErrors',
   handleCopyClick,
+  intl,
 }: Props): React.Element<Table> => (
   <EnhancedTable
     collection={errors}
@@ -113,8 +110,8 @@ const ErrorsTable: Function = ({
                 </Dropdown>
                 <ButtonGroup>
                   <Button
-                    text={expanded ? 'Hide descriptions' : 'Show descriptions'}
-                    title={expanded ? 'Hide descriptions' : 'Show descriptions'}
+                    text={intl.formatMessage({ id: (expanded ? 'button.hide-descriptions' : 'button.show-descriptions') })}
+                    title={intl.formatMessage({ id: (expanded ? 'button.hide-descriptions' : 'button.show-descriptions') })}
                     iconName={expanded ? 'collapse-all' : 'expand-all'}
                     btnStyle={expanded && 'primary'}
                     big
@@ -127,8 +124,8 @@ const ErrorsTable: Function = ({
                 <ButtonGroup>
                   <Button
                     disabled={size(collection) === 0}
-                    text="Copy last error"
-                    title="Copy last error"
+                    text={intl.formatMessage({ id: 'button.copy-last-error' })}
+                    title={intl.formatMessage({ id: 'button.copy-last-error' })}
                     iconName="clipboard"
                     big
                     onClick={handleCopyClick}
@@ -155,32 +152,35 @@ const ErrorsTable: Function = ({
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
             <NameColumnHeader
-              title="Error code"
+              title={intl.formatMessage({ id: 'table.error-code' })}
               name="error"
               iconName="error"
             />
             {!compact && (
-              <NameColumnHeader title="Step Name" name="step_name" />
+              <NameColumnHeader
+                title={intl.formatMessage({ id: 'table.step-name' })}
+                name="step_name"
+              />
             )}
             <Th iconName="info-sign" name="severity">
-              Severity
+              <FormattedMessage id='table.severity' />
             </Th>
             <Th iconName="error" name="business_error">
-              Bus.Err.
+              <FormattedMessage id='table.bus-err' />
             </Th>
             {!compact && (
               <Th iconName="error" name="error_type">
-                Error Type
+                <FormattedMessage id='table.error-type' />
               </Th>
             )}
             {!compact && (
               <Th iconName="refresh" name="retry">
-                Retry
+                <FormattedMessage id='table.retry' />
               </Th>
             )}
             {!compact && (
               <Th iconName="info-sign" name="ind">
-                Ind
+                <FormattedMessage id='table.ind' />
               </Th>
             )}
             <DateColumnHeader />
@@ -267,5 +267,6 @@ export default compose(
       dispatchAction(success, 'Successfuly copied to clipboard', 'clipboard');
     },
   }),
-  pure(['errors', 'expanded'])
+  pure(['errors', 'expanded']),
+  injectIntl
 )(ErrorsTable);

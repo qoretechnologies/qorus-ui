@@ -5,6 +5,7 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Td, Th } from '../new_table';
 import DateComponent from '../date';
 import DatePicker from '../datepicker';
+import { injectIntl } from 'react-intl';
 
 type DateColumnProps = {
   children: any,
@@ -46,16 +47,18 @@ type DateColumnHeaderProps = {
 };
 
 const DateColumnHeader: Function = compose(
-  onlyUpdateForKeys(['children', 'sortData'])
+  onlyUpdateForKeys(['children', 'sortData']),
+  injectIntl
 )(
   ({
-    children: children = 'Created',
+    children,
     name: name = 'created',
     icon: icon = 'calendar',
+    intl,
     ...rest
   }: DateColumnHeaderProps): React.Element<any> => (
     <Th iconName={icon} name={name} {...rest}>
-      {children}
+      {children || intl.formatMessage({ id: 'table.created' })}
     </Th>
   )
 );

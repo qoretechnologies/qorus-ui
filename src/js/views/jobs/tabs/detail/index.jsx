@@ -22,6 +22,7 @@ import ProcessSummary from '../../../../components/ProcessSummary';
 import Box from '../../../../components/box';
 import Flex from '../../../../components/Flex';
 import ScheduleText from '../../../../components/ScheduleText';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   model: Object,
@@ -39,11 +40,12 @@ const DetailTab = ({
   handleRemoveSLAChange,
   perms,
   slas,
+  intl,
 }: Props) => (
   <Box top fill>
     <InfoHeader model={model} />
     <Flex scrollY>
-      <PaneItem title="Controls">
+      <PaneItem title={intl.formatMessage({ id: 'component.controls' })}>
         <JobControls
           enabled={model.enabled}
           active={model.active}
@@ -57,12 +59,12 @@ const DetailTab = ({
           expiry={model.expiry_date}
         />
       </PaneItem>
-      <PaneItem title="Schedule">
+      <PaneItem title={intl.formatMessage({ id: 'component.schedule' })}>
         <ScheduleText
           cron={`${model.minute} ${model.hour} ${model.day} ${model.month} ${model.wday}`}
         />
       </PaneItem>
-      <PaneItem title="SLA">
+      <PaneItem title={intl.formatMessage({ id: 'component.sla' })}>
         <SLAControl
           model={model}
           setSla={handleSetSLAChange}
@@ -123,5 +125,6 @@ export default compose(
     },
   }),
   sync('meta'),
-  pure(['model', 'isTablet'])
+  pure(['model', 'isTablet']),
+  injectIntl
 )(DetailTab);

@@ -11,6 +11,7 @@ import { Menu, Popover, Position, InputGroup } from '@blueprintjs/core';
 import { Controls as ButtonGroup, Control as Button } from '../controls';
 
 import { includes, remove, xor } from 'lodash';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   children?: Array<React.Element<any>>,
@@ -32,6 +33,7 @@ type Props = {
 };
 
 @pure(['children', 'show', 'selected', 'disabled', 'className'])
+@injectIntl
 export default class Dropdown extends Component {
   static defaultProps = {
     selectedIcon: 'selection',
@@ -245,7 +247,7 @@ export default class Dropdown extends Component {
                 />
               )
             }
-            placeholder="Filter..."
+            placeholder={this.props.intl.formatMessage({ id: 'dropdown.filter' }) + '...'}
           />
         </div>,
         <Menu key="dropdown-menu" className="popover-dropdown">

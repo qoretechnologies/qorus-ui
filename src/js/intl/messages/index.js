@@ -6,6 +6,8 @@ import datetimeMessages from './datetime';
 import dialogMessages from './dialog';
 import dropdownMessages from './dropdown';
 import globalMessages from './global';
+import loggerMessages from './logger';
+import orderMessages from './order';
 import settingsMessages from './settings';
 import statsMessages from './stats';
 import summaryMessages from './summary';
@@ -31,6 +33,8 @@ export default function (locale: string): Object {
     ...dialogMessages[locale],
     ...dropdownMessages[locale],
     ...globalMessages[locale],
+    ...loggerMessages[locale],
+    ...orderMessages[locale],
     ...settingsMessages[locale],
     ...statsMessages[locale],
     ...summaryMessages[locale],

@@ -13,8 +13,10 @@ import {
 } from '@blueprintjs/core';
 
 import Dropdown, { Item, Control } from '../dropdown';
+import { injectIntl } from 'react-intl';
 
 @pureRender
+@injectIntl
 export default class Search extends Component {
   props: {
     onSearchUpdate: Function,
@@ -151,7 +153,7 @@ export default class Search extends Component {
             onChange={this.handleInputChange}
             value={this.state.query}
             autoComplete="off"
-            placeholder="Search..."
+            placeholder={this.props.intl.formatMessage({ id: 'component.search' })}
             rightElement={
               this.state.query && (
                 <Button

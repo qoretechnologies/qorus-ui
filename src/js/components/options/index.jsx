@@ -205,7 +205,7 @@ export default class Options extends Component {
    */
   render() {
     return (
-      <PaneItem title={this.props.intl.formatMessage({ id: 'global.options' })}>
+      <PaneItem title={this.props.intl.formatMessage({ id: 'component.options' })}>
         {!this.getModelOptions().length && <NoData />}
         {!!this.getModelOptions().length && (
           <Table
