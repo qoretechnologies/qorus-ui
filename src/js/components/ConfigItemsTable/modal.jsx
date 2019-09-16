@@ -164,9 +164,7 @@ export default class ConfigItemsModal extends Component {
     );
   };
 
-  renderAllowedItems: Function = () => {
-    const { item } = this.props;
-
+  renderAllowedItems: Function = item => {
     if (this.state.type === 'hash' || this.state.type === '*hash') {
       return (
         <React.Fragment>
@@ -267,7 +265,11 @@ export default class ConfigItemsModal extends Component {
           return (
             <Dropdown>
               <DControl small>
-                {this.state.value === 'true' ? 'True' : 'False'}
+                {this.state.value === 'true'
+                  ? 'True'
+                  : this.state.value === 'false'
+                    ? 'False'
+                    : 'Please select'}
               </DControl>
               <Item
                 title="True"
@@ -424,7 +426,7 @@ export default class ConfigItemsModal extends Component {
                     <div className="configItemsEditor">
                       <div className="header">
                         {item.allowed_values
-                          ? this.renderAllowedItems()
+                          ? this.renderAllowedItems(item)
                           : isGlobal
                             ? 'Set item value'
                             : 'Set custom value or'}
