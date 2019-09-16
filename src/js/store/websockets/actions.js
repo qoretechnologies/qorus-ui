@@ -52,7 +52,7 @@ const connectCall: Function = (
       }
 
       ws.close(1000, 'Unable to connect to server');
-    }, 5000);
+    }, 60000);
   }
 
   ws.onopen = () => {

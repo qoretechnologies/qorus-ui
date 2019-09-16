@@ -701,8 +701,6 @@ export default class StepsTab extends Component {
       ? 'error'
       : 'normal';
 
-    console.log('test');
-
     return (
       <g
         className={`diagram__box status-${css}-diagram`}
