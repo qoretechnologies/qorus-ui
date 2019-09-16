@@ -20,11 +20,11 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
         JOBS: 'jobs',
       };
 
+      const value = newValue || 'null';
+
       const url =
         intfc === 'SYSTEM'
-          ? `${
-              settings.REST_BASE_URL
-            }/system/config/${configItemName}?action=yaml`
+          ? `${settings.REST_BASE_URL}/system/config/${configItemName}?action=yaml`
           : `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}/${stepId ||
               id}/config/${configItemName}?action=yaml`;
 
@@ -32,7 +32,7 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
         async (): Promise<*> => {
           const res = await put(url, {
             body: JSON.stringify({
-              value: newValue,
+              value,
             }),
           });
 

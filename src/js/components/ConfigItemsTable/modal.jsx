@@ -58,7 +58,7 @@ export default class ConfigItemsModal extends Component {
       return type.replace('$', '');
     }
 
-    return null;
+    return 'config';
   };
 
   getTemplateKey = value => {
@@ -500,7 +500,7 @@ export default class ConfigItemsModal extends Component {
                         <ControlGroup className="pt-fill">
                           <Dropdown className="pt-fixed">
                             <DControl icon="dollar">
-                              {this.state.templateType || 'Please select'}
+                              {this.state.templateType}
                             </DControl>
                             <Item
                               title="config"
@@ -573,46 +573,56 @@ export default class ConfigItemsModal extends Component {
           </Box>
         </Modal.Body>
         <Modal.Footer>
-          <div className="pull-right">
-            <ButtonGroup>
-              <Button label="Cancel" btnStyle="default" action={onClose} big />
-              {!isGlobal && value === yamlData?.default_value ? (
-                <Popover
-                  position={Position.TOP}
-                  content={
-                    <Box fill top style={{ width: '300px' }}>
-                      <p>
-                        The value submitted is same as default value, but will
-                        not change when default value is changed in the future.
-                      </p>
-                      <BtnGrp>
-                        <Btn
-                          className="pt-fill"
-                          text="Submit anyway"
-                          intent={Intent.SUCCESS}
-                          onClick={this.handleSaveClick}
-                        />
-                      </BtnGrp>
-                    </Box>
-                  }
-                >
-                  <Btn
-                    text="Save"
-                    iconName="warning-sign"
-                    intent={Intent.WARNING}
-                  />
-                </Popover>
-              ) : (
+          {(!isGlobal && yamlData) || (isGlobal && item) ? (
+            <div className="pull-right">
+              <ButtonGroup>
                 <Button
-                  label="Save"
-                  btnStyle="success"
-                  disabled={error}
-                  action={this.handleSaveClick}
+                  label="Cancel"
+                  btnStyle="default"
+                  action={onClose}
                   big
                 />
-              )}
-            </ButtonGroup>
-          </div>
+                {!isGlobal && value === yamlData?.default_value ? (
+                  <Popover
+                    position={Position.TOP}
+                    content={
+                      <Box fill top style={{ width: '300px' }}>
+                        <p>
+                          The value submitted is same as default value, but will
+                          not change when default value is changed in the
+                          future.
+                        </p>
+                        <BtnGrp>
+                          <Btn
+                            className="pt-fill"
+                            text="Submit anyway"
+                            intent={Intent.SUCCESS}
+                            onClick={this.handleSaveClick}
+                          />
+                        </BtnGrp>
+                      </Box>
+                    }
+                  >
+                    <Btn
+                      text="Save"
+                      iconName="warning-sign"
+                      intent={Intent.WARNING}
+                    />
+                  </Popover>
+                ) : (
+                  <Button
+                    label="Save"
+                    btnStyle="success"
+                    disabled={
+                      error || (!item.type.startsWith('*') && !this.state.value)
+                    }
+                    action={this.handleSaveClick}
+                    big
+                  />
+                )}
+              </ButtonGroup>
+            </div>
+          ) : null}
         </Modal.Footer>
       </Modal>
     );
