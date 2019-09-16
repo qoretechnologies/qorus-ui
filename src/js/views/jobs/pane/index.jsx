@@ -40,7 +40,7 @@ const Detail = ({
     width={width || 600}
     onResize={onResize}
     onClose={onClose}
-    title={`Job ${model.id}`}
+    title={model.name}
     tabs={{
       tabs: [
         'Detail',
@@ -71,12 +71,12 @@ const Detail = ({
 );
 
 const fetchLibSourceOnMountAndOnChange = lifecycle({
-  async componentWillMount() {
+  async componentWillMount () {
     const { model, fetchLibSources } = this.props;
     await fetchLibSources(model);
   },
 
-  async componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps (nextProps) {
     const { model } = this.props;
     const { model: nextModel, fetchLibSources } = nextProps;
 
