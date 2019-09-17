@@ -58,7 +58,7 @@ export default class ConfigItemsModal extends Component {
       return type.replace('$', '');
     }
 
-    return null;
+    return 'config';
   };
 
   getTemplateKey = value => {
@@ -110,6 +110,8 @@ export default class ConfigItemsModal extends Component {
       const yamlData: Object = await get(
         `${settings.REST_BASE_URL}/${interfacePath}/config/${item.name}?action=yaml`
       );
+
+      console.log(yamlData);
 
       this.setState({
         yamlData,
@@ -164,9 +166,7 @@ export default class ConfigItemsModal extends Component {
     );
   };
 
-  renderAllowedItems: Function = () => {
-    const { item } = this.props;
-
+  renderAllowedItems: Function = item => {
     if (this.state.type === 'hash' || this.state.type === '*hash') {
       return (
         <React.Fragment>
@@ -182,14 +182,16 @@ export default class ConfigItemsModal extends Component {
         <DControl icon="list" small>
           Please select from predefined values
         </DControl>
-        {item.allowed_values.map(value => (
-          <Item
-            title={value}
-            onClick={() => {
-              this.handleValueChange(value);
-            }}
-          />
-        ))}
+        {item.allowed_values
+          .filter(item => item)
+          .map(value => (
+            <Item
+              title={value}
+              onClick={() => {
+                this.handleValueChange(value);
+              }}
+            />
+          ))}
       </Dropdown>
     );
   };
@@ -267,7 +269,11 @@ export default class ConfigItemsModal extends Component {
           return (
             <Dropdown>
               <DControl small>
-                {this.state.value === 'true' ? 'True' : 'False'}
+                {this.state.value === 'true'
+                  ? 'True'
+                  : this.state.value === 'false'
+                    ? 'False'
+                    : 'Please select'}
               </DControl>
               <Item
                 title="True"
@@ -395,13 +401,26 @@ export default class ConfigItemsModal extends Component {
                       {map(globalConfigItems, data => (
                         <Item
                           title={data.name}
-                          onClick={(event, name) =>
+                          onClick={async (event, name) => {
+                            const { intrf, intrfId } = this.props;
+
+                            const interfacePath: string = intrfId
+                              ? `${intrf}/${intrfId}`
+                              : 'system';
+
+                            const yamlData: Object = await get(
+                              `${settings.REST_BASE_URL}/${interfacePath}/config/${name}?action=yaml`
+                            );
+
+                            console.log(yamlData);
+
                             this.setState({
                               value: null,
                               item: { ...data, name },
                               type: data.type === 'any' ? null : data.type,
-                            })
-                          }
+                              yamlData,
+                            });
+                          }}
                         />
                       ))}
                     </Dropdown>
@@ -411,8 +430,8 @@ export default class ConfigItemsModal extends Component {
               </>
             )}
 
-            {!isGlobal && !yamlData && <Loader />}
-            {(!isGlobal && yamlData) || (isGlobal && item) ? (
+            {!yamlData && <Loader />}
+            {yamlData ? (
               <Tabs
                 active={useTemplate ? 'template' : 'custom'}
                 onChangeEnd={() => {
@@ -423,8 +442,8 @@ export default class ConfigItemsModal extends Component {
                   <React.Fragment>
                     <div className="configItemsEditor">
                       <div className="header">
-                        {item.allowed_values
-                          ? this.renderAllowedItems()
+                        {yamlData.allowed_values
+                          ? this.renderAllowedItems(yamlData)
                           : isGlobal
                             ? 'Set item value'
                             : 'Set custom value or'}
@@ -498,7 +517,7 @@ export default class ConfigItemsModal extends Component {
                         <ControlGroup className="pt-fill">
                           <Dropdown className="pt-fixed">
                             <DControl icon="dollar">
-                              {this.state.templateType || 'Please select'}
+                              {this.state.templateType}
                             </DControl>
                             <Item
                               title="config"
@@ -571,46 +590,56 @@ export default class ConfigItemsModal extends Component {
           </Box>
         </Modal.Body>
         <Modal.Footer>
-          <div className="pull-right">
-            <ButtonGroup>
-              <Button label="Cancel" btnStyle="default" action={onClose} big />
-              {!isGlobal && value === yamlData?.default_value ? (
-                <Popover
-                  position={Position.TOP}
-                  content={
-                    <Box fill top style={{ width: '300px' }}>
-                      <p>
-                        The value submitted is same as default value, but will
-                        not change when default value is changed in the future.
-                      </p>
-                      <BtnGrp>
-                        <Btn
-                          className="pt-fill"
-                          text="Submit anyway"
-                          intent={Intent.SUCCESS}
-                          onClick={this.handleSaveClick}
-                        />
-                      </BtnGrp>
-                    </Box>
-                  }
-                >
-                  <Btn
-                    text="Save"
-                    iconName="warning-sign"
-                    intent={Intent.WARNING}
-                  />
-                </Popover>
-              ) : (
+          {yamlData ? (
+            <div className="pull-right">
+              <ButtonGroup>
                 <Button
-                  label="Save"
-                  btnStyle="success"
-                  disabled={error}
-                  action={this.handleSaveClick}
+                  label="Cancel"
+                  btnStyle="default"
+                  action={onClose}
                   big
                 />
-              )}
-            </ButtonGroup>
-          </div>
+                {!isGlobal && value === yamlData?.default_value ? (
+                  <Popover
+                    position={Position.TOP}
+                    content={
+                      <Box fill top style={{ width: '300px' }}>
+                        <p>
+                          The value submitted is same as default value, but will
+                          not change when default value is changed in the
+                          future.
+                        </p>
+                        <BtnGrp>
+                          <Btn
+                            className="pt-fill"
+                            text="Submit anyway"
+                            intent={Intent.SUCCESS}
+                            onClick={this.handleSaveClick}
+                          />
+                        </BtnGrp>
+                      </Box>
+                    }
+                  >
+                    <Btn
+                      text="Save"
+                      iconName="warning-sign"
+                      intent={Intent.WARNING}
+                    />
+                  </Popover>
+                ) : (
+                  <Button
+                    label="Save"
+                    btnStyle="success"
+                    disabled={
+                      error || (!item.type.startsWith('*') && !this.state.value)
+                    }
+                    action={this.handleSaveClick}
+                    big
+                  />
+                )}
+              </ButtonGroup>
+            </div>
+          ) : null}
         </Modal.Footer>
       </Modal>
     );

@@ -114,14 +114,16 @@ let ItemsTable: Function = ({
                   <Pull>
                     <h5 style={{ lineHeight: '30px' }}>
                       <Icon iconName="group-objects" />{' '}
-                      <FormattedMessage id='table.group' />: {groupName}
+                      <FormattedMessage id="table.group" />: {groupName}
                     </h5>
                   </Pull>
                 )}
                 <Pull right>
                   <ButtonGroup>
                     <Button
-                      label={intl.formatMessage({ id: 'button.show-descriptions' })}
+                      label={intl.formatMessage({
+                        id: 'button.show-descriptions',
+                      })}
                       iconName="align-left"
                       btnStyle={showDescription ? 'primary' : ''}
                       onClick={handleToggleDescription}
@@ -147,11 +149,19 @@ let ItemsTable: Function = ({
               <NameColumnHeader />
               <ActionColumnHeader icon="edit" />
               <Th className="text" iconName="info-sign" name="actual_value">
-                <FormattedMessage id='table.value' />
+                <FormattedMessage id="table.value" />
               </Th>
-              <Th name="strictly_local"><FormattedMessage id='table.local' /></Th>
-              <Th name="level"><FormattedMessage id='table.level' /></Th>
-              {!title && <Th name="config_group"><FormattedMessage id='table.group' /></Th>}
+              <Th name="strictly_local">
+                <FormattedMessage id="table.local" />
+              </Th>
+              <Th name="level">
+                <FormattedMessage id="table.level" />
+              </Th>
+              {!title && (
+                <Th name="config_group">
+                  <FormattedMessage id="table.group" />
+                </Th>
+              )}
               <Th iconName="code" name="type" />
             </FixedRow>
           </Thead>
@@ -174,14 +184,18 @@ let ItemsTable: Function = ({
                       <NameColumn
                         name={item.name}
                         hasAlerts={!item.value && !item.is_set}
-                        alertTooltip={intl.formatMessage({ id: 'table.cfg-item-val-no-level-set' })}
+                        alertTooltip={intl.formatMessage({
+                          id: 'table.cfg-item-val-no-level-set',
+                        })}
                         minimalAlert
                       />
                       <ActionColumn>
                         <ButtonGroup>
                           <Button
                             icon="edit"
-                            title={intl.formatMessage({ id: 'button.edit-this-value' })}
+                            title={intl.formatMessage({
+                              id: 'button.edit-this-value',
+                            })}
                             onClick={() => {
                               openModal(
                                 <ConfigItemsModal
@@ -199,7 +213,9 @@ let ItemsTable: Function = ({
                           />
                           <Button
                             icon="cross"
-                            title={intl.formatMessage({ id: 'button.remove-this-value' })}
+                            title={intl.formatMessage({
+                              id: 'button.remove-this-value',
+                            })}
                             disabled={
                               item.level
                                 ? !item.level.startsWith(levelType || '')
@@ -222,17 +238,15 @@ let ItemsTable: Function = ({
                         className={`text ${item.level === 'workflow' ||
                           item.level === 'global'}`}
                       >
-                        {
-                          item.type === 'hash' ||
+                        {!item.isTemplatedString &&
+                        (item.type === 'hash' ||
                           item.type === 'list' ||
                           item.type === '*hash' ||
-                          item.type === '*list'
-                            ? (
-                              <Tree compact data={item.value} />
-                            ) : (
-                              <ContentByType inTable content={item.value} />
-                            )
-                        }
+                          item.type === '*list') ? (
+                          <Tree compact data={item.value} />
+                        ) : (
+                          <ContentByType inTable content={item.value} />
+                        )}
                       </Td>
                       <Td className="narrow">
                         <ContentByType content={item.strictly_local} />
@@ -247,7 +261,7 @@ let ItemsTable: Function = ({
                     </Tr>
                     {showDescription && (
                       <Tr>
-                        <Td className="text" colspan={7}>
+                        <Td className="text" colspan={groupName ? 6 : 7}>
                           {item.desc}
                         </Td>
                       </Tr>
