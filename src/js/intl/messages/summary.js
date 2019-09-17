@@ -23,4 +23,16 @@ export default {
     'summary.process-summary': 'Přehled procesu',
     'summary.running-in-core': 'Běží lokálně v qorus-core',
   },
+  'ja-JP': {
+    'summary.autostart-disabled': '自動起動は無効です。サービスを自動的に開始するには、autostartをtrueに設定します',
+    'summary.autostart-zero': '自動開始はゼロです。ワークフローを自動的に開始するには、正の自動開始値を設定します',
+    'summary.check-log-details': '詳細についてはログを確認してください',
+    'summary.interface-disabled': '無効なインターフェイス',
+    'summary.job-expired': 'ジョブの有効期限が切れました',
+    'summary.job-not-active': 'ジョブはアクティブではありません',
+    'summary.not-running': '走っていない',
+    'summary.process-not-running': 'プロセスが実行されていません',
+    'summary.process-summary': 'プロセス概要',
+    'summary.running-in-core': 'qorus-coreでローカルに実行',
+  },
 };

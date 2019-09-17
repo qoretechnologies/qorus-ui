@@ -21,4 +21,15 @@ export default {
     'tree.tree-view': 'Stromový pohled',
     'tree.update-data': 'Upravit data',
   },
+  'ja-JP': {
+    'tree.collapse-all': 'すべて折りたたむ',
+    'tree.copy-view': 'ビューをコピー',
+    'tree.edit-mode': '編集モード',
+    'tree.expand-all': 'すべて展開',
+    'tree.loading-data': 'データのロード...',
+    'tree.posting-new-staticdata': '新しい静的データを投稿すると、元のコンテンツが置き換えられ、ビジネス処理にとって致命的になる可能性があります。',
+    'tree.show-types': 'タイプを表示',
+    'tree.tree-view': 'ツリー表示',
+    'tree.update-data': 'データを更新する',
+  },
 };

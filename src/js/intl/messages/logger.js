@@ -21,4 +21,15 @@ export default {
     'logger.name': 'Název',
     'logger.rotation-count': 'Počet rotací',
   },
+  'ja-JP': {
+    'logger.additivity': '加算性',
+    'logger.appender-type': 'アペンダータイプ',
+    'logger.archive-pattern': 'アーカイブパターン',
+    'logger.encoding': 'エンコーディング',
+    'logger.filename': 'ファイル名',
+    'logger.layout-pattern': 'レイアウトパターン',
+    'logger.level': 'レベル',
+    'logger.name': '名前',
+    'logger.rotation-count': '回転数',
+  },
 };

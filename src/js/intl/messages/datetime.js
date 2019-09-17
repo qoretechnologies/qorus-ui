@@ -21,4 +21,15 @@ export default {
     'datetime.today': 'Dnes',
     'datetime.week': 'Týden',
   },
+  'ja-JP': {
+    'datetime.24h': '24時間',
+    'datetime.30-days': '30日間',
+    'datetime.all': 'すべて',
+    'datetime.apply': '適用する',
+    'datetime.now': 'いま',
+    'datetime.reset': 'リセットする',
+    'datetime.this-month': '今月',
+    'datetime.today': '今日',
+    'datetime.week': '週間',
+  },
 };
