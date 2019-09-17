@@ -69,7 +69,7 @@ export default {
     Jobs: 'Úkoly',
     Log: 'Záznam',
     Mappers: 'Mappery',
-    Methods: 'Funkce',
+    Methods: 'Metody',
     Monitoring: 'Monitorování',
     'More...': 'Více...',
     Ongoing: 'Trvající',

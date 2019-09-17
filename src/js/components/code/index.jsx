@@ -14,7 +14,7 @@ import DependenciesList from './dependencies';
 import InfoTable from '../info_table';
 import Alert from '../alert';
 import Flex from '../Flex';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 type Props = {
   data: Object,
@@ -30,6 +30,7 @@ const Code: Function = ({
   handleItemClick,
   selected,
   location,
+  intl,
 }: Props): React.Element<any> => (
   <Flex className="code" flexFlow="row">
     <Flex className="code-list" scrollY>
@@ -37,7 +38,7 @@ const Code: Function = ({
         (name: string, index: number): React.Element<any> => (
           <Section
             key={name}
-            name={name}
+            name={intl.formatMessage({ id: name })}
             items={data[name]}
             onItemClick={handleItemClick}
             selected={selected}
@@ -153,5 +154,6 @@ export default compose(
       }
     },
   }),
-  pure(['data', 'selected'])
+  pure(['data', 'selected']),
+  injectIntl
 )(Code);

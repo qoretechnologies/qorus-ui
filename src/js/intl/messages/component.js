@@ -1,5 +1,12 @@
 export default {
   'en-US': {
+    classes: 'classes',
+    code: 'code',
+    constants: 'constants',
+    functions: 'functions',
+    methods: 'methods',
+    'Step code': 'Step code',
+    'WF Functions': 'WF Functions',
     'component.alerts': 'Alerts',
     'component.appenders': 'Appenders',
     'component.controls': 'Controls',
@@ -25,6 +32,13 @@ export default {
     'component.use': 'Use',
   },
   'cs-CZ': {
+    classes: 'třídy',
+    code: 'kód',
+    constants: 'konstanty',
+    functions: 'funkce',
+    methods: 'metody',
+    'Step code': 'Kód kroků',
+    'WF Functions': 'Funkce PP',
     'component.alerts': 'Poplachy',
     'component.appenders': 'Appendery',
     'component.controls': 'Ovládání',
