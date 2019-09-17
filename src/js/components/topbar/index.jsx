@@ -23,10 +23,9 @@ import {
 import { Controls, Control } from '../../components/controls';
 import map from 'lodash/map';
 
-import de from '../../../img/country_flags/de.png';
-import gb from '../../../img/country_flags/gb.png';
-import cz from '../../../img/country_flags/cz.png';
+import cz from '../../../img/country_flags/cz.jpg';
 import en from '../../../img/country_flags/us.png';
+import jp from '../../../img/country_flags/jp.png';
 
 import withModal from '../../hocomponents/modal';
 import withPane from '../../hocomponents/pane';
@@ -37,13 +36,12 @@ import { LANGS } from '../../intl/messages';
 import settings from '../../settings';
 import { HEALTH_KEYS } from '../../constants/dashboard';
 import Notifications from '../notifications';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 const flags: Object = {
   'cs-CZ': cz,
-  'en-GB': gb,
   'en-US': en,
-  'de-DE': de,
+  'ja-JP': jp,
 };
 
 const searchableViews = {
@@ -170,7 +168,7 @@ export default class Topbar extends Component {
     );
   };
 
-  render() {
+  render () {
     const {
       light,
       onThemeClick,
@@ -198,12 +196,9 @@ export default class Topbar extends Component {
               <InputGroup
                 id="quickSearch"
                 lefticonName="search"
-                placeholder={intl.formatMessage(
-                  {
-                    id: 'system.dashboard',
-                  },
-                  { test: 'Ahoj ' }
-                )}
+                placeholder={intl.formatMessage({
+                  id: 'system.global-search',
+                })}
                 rightElement={this.renderSearchMenu()}
                 value={this.state.quickSearchValue}
                 onChange={e =>
@@ -310,7 +305,12 @@ export default class Topbar extends Component {
                       <MenuItem
                         key={lang}
                         text={lang}
-                        label={<img src={flags[loc]} />}
+                        label={
+                          <img
+                            src={flags[loc]}
+                            style={{ width: 16, height: 12 }}
+                          />
+                        }
                         onClick={() => this.props.storeLocale(loc)}
                       />
                     )
@@ -324,7 +324,10 @@ export default class Topbar extends Component {
           >
             <ButtonGroup minimal>
               <Button>
-                <img src={flags[this.props.locale]} />
+                <img
+                  src={flags[this.props.locale]}
+                  style={{ width: 16, height: 12 }}
+                />
               </Button>
             </ButtonGroup>
           </Popover>

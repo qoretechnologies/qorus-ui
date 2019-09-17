@@ -56,7 +56,7 @@ export default {
     'global.vmaps': 'Vmapy',
     'global.warning': 'Varování!',
     'global.with-alerts': 'S poplachy',
-    'global.workflows': 'Pracovní postupy :D',
+    'global.workflows': 'Pracovní postupy',
     'global.in-workflows': 'Pracovnich postupech',
   },
 };

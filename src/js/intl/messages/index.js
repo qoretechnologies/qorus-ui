@@ -19,12 +19,11 @@ import userMessages from './user';
 
 const LANGS = {
   CZ: 'cs-CZ',
-  GB: 'en-GB',
   EN: 'en-US',
-  DE: 'de-DE',
+  JP: 'ja-JP',
 };
 
-export default function(locale: string): Object {
+export default function (locale: string): Object {
   return {
     ...buttonMessages[locale],
     ...clusterMessages[locale],
