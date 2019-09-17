@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import { injectIntl } from 'react-intl';
 
 const Header = ({
   headerHeight,
@@ -8,6 +9,7 @@ const Header = ({
   offsetX,
   offsetY,
   textColor,
+  intl,
 }: {
   headerHeight: number,
   rectWidth: number,
@@ -15,10 +17,10 @@ const Header = ({
   offsetX: number,
   offsetY: number,
   textColor: string,
-}) => (
+}): React.Element<any> => (
   <g x="0" y="0" height={headerHeight} width={svgWidth}>
     <text x={rectWidth / 2} y={offsetY} fill={textColor} textAnchor="middle">
-      Input
+      {intl.formatMessage({ id: 'component.input' })}
     </text>
     <text
       x={rectWidth + rectWidth}
@@ -26,9 +28,9 @@ const Header = ({
       fill={textColor}
       textAnchor="middle"
     >
-      Output
+      {intl.formatMessage({ id: 'component.output' })}
     </text>
   </g>
 );
 
-export default Header;
+export default injectIntl(Header);

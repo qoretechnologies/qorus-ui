@@ -34,6 +34,7 @@ import {
   Control as Button,
 } from '../../../components/controls';
 import ResourceFileModal from './modals/resourceFile';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 type Props = {
   resources: Object,
@@ -49,6 +50,7 @@ const ResourceTable: Function = ({
   openModal,
   closeModal,
   id,
+  intl,
 }: Props): React.Element<any> => (
   <Tabs active="resources">
     <Pane name="Resources" suffix={size(resources)}>
@@ -94,10 +96,10 @@ const ResourceTable: Function = ({
                 <NameColumnHeader />
                 <DescriptionColumnHeader />
                 <Th className="text" iconName="info-sign" name="type">
-                  Type
+                  <FormattedMessage id="table.type" />
                 </Th>
                 <Th className="text" iconName="info-sign">
-                  Info
+                  <FormattedMessage id="table.info" />
                 </Th>
               </FixedRow>
             </Thead>
@@ -170,9 +172,11 @@ const ResourceTable: Function = ({
               <FixedRow {...{ sortData, onSortChange }}>
                 <NameColumnHeader />
                 <Th className="narrow" name="type">
-                  Type
+                  <FormattedMessage id="table.type" />
                 </Th>
-                <Th>Content</Th>
+                <Th>
+                  <FormattedMessage id="table.content" />
+                </Th>
               </FixedRow>
             </Thead>
             <DataOrEmptyTable
@@ -192,7 +196,9 @@ const ResourceTable: Function = ({
                         <Td className="medium">
                           <ButtonGroup>
                             <Button
-                              text="View contents"
+                              text={intl.formatMessage({
+                                id: 'button.view-contents',
+                              })}
                               onClick={() => {
                                 openModal(
                                   <ResourceFileModal
@@ -220,5 +226,6 @@ const ResourceTable: Function = ({
 
 export default compose(
   modal(),
-  pure(['resources', 'resourceFiles'])
+  pure(['resources', 'resourceFiles']),
+  injectIntl
 )(ResourceTable);

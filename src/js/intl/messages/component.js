@@ -4,6 +4,7 @@ export default {
     'component.appenders': 'Appenders',
     'component.controls': 'Controls',
     'component.groups': 'Groups',
+    'component.input': 'Input',
     'component.instances': 'Instances',
     'component.interface-using-def-logger':
       'This interface is using default logger.',
@@ -14,6 +15,8 @@ export default {
     'component.no-logger-defined-for-res-2':
       'or concrete loggers for this interface',
     'component.options': 'Options',
+    'component.output': 'Output',
+    'component.please-select-item': 'Please select an item from the list.',
     'component.schedule': 'Schedule',
     'component.search': 'Search...',
     'component.sla': 'SLA',
@@ -26,6 +29,7 @@ export default {
     'component.appenders': 'Appendery',
     'component.controls': 'Ovládání',
     'component.groups': 'Skupiny',
+    'component.input': 'Vstup',
     'component.instances': 'Instance',
     'component.interface-using-def-logger':
       'Tato jednotka používá základní logger.',
@@ -36,6 +40,8 @@ export default {
     'component.no-logger-defined-for-res-2':
       'nebo specifického loggeru pro tuto jednotku',
     'component.options': 'Nastavení',
+    'component.output': 'Výstup',
+    'component.please-select-item': 'Prosím, vyberte položku ze seznamu.',
     'component.schedule': 'Plán',
     'component.search': 'Hledat...',
     'component.sla': 'SLA',

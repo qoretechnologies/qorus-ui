@@ -29,6 +29,7 @@ type Props = {
   local: boolean,
 };
 
+@injectIntl
 class CrumbTabs extends React.Component {
   props: Props = this.props;
 
@@ -172,7 +173,9 @@ class CrumbTabs extends React.Component {
               }
             >
               <CrumbTab
-                title={leftoverTabSelected ? capitalize(tabQuery) : 'More...'}
+                title={this.props.intl.formatMessage({
+                  id: leftoverTabSelected ? capitalize(tabQuery) : 'More...',
+                })}
                 active={leftoverTabSelected}
                 compact
               />

@@ -9,6 +9,7 @@ import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
 import { get } from '../../../../store/api/utils';
 import settings from '../../../../settings';
+import { FormattedMessage } from 'react-intl';
 
 type ResourceFileModalProps = {
   onClose: Function,
@@ -23,7 +24,7 @@ const ResourceFileModal: Function = ({
 }: ResourceFileModalProps): React.Element<any> => (
   <Modal width="80vw">
     <Modal.Header titleId="resourceFile" onClose={onClose}>
-      {name} contents
+      <FormattedMessage id="dialog.contents" />: {name}
     </Modal.Header>
     <Modal.Body>
       <Box top fill>
@@ -36,7 +37,7 @@ const ResourceFileModal: Function = ({
 export default compose(
   withState('contents', 'setContents', null),
   lifecycle({
-    async componentDidMount () {
+    async componentDidMount() {
       const { id, name, setContents } = this.props;
       const contents = await get(
         `${settings.REST_BASE_URL}/services/${id}/resource_files/${name}`

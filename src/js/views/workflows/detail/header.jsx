@@ -19,6 +19,7 @@ import withHandlers from 'recompose/withHandlers';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import { countArrayItemsInObject, countConfigItems } from '../../../utils';
 import showIfPassed from '../../../hocomponents/show-if-passed';
+import { FormattedMessage } from 'react-intl';
 
 type Props = {
   setAutostart: Function,
@@ -39,7 +40,10 @@ const WorkflowHeader: Function = ({
 }: Props): React.Element<any> => (
   <Headbar>
     <Breadcrumbs>
-      <Crumb link="/workflows"> Workflows </Crumb>
+      <Crumb link="/workflows">
+        {' '}
+        <FormattedMessage id="Workflows" />{' '}
+      </Crumb>
       <Crumb>{workflow.normalizedName}</Crumb>
       <CrumbTabs
         tabs={[
