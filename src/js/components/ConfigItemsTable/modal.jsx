@@ -111,6 +111,8 @@ export default class ConfigItemsModal extends Component {
         `${settings.REST_BASE_URL}/${interfacePath}/config/${item.name}?action=yaml`
       );
 
+      console.log(yamlData);
+
       this.setState({
         yamlData,
         value: yamlData.value,
@@ -180,14 +182,16 @@ export default class ConfigItemsModal extends Component {
         <DControl icon="list" small>
           Please select from predefined values
         </DControl>
-        {item.allowed_values.map(value => (
-          <Item
-            title={value}
-            onClick={() => {
-              this.handleValueChange(value);
-            }}
-          />
-        ))}
+        {item.allowed_values
+          .filter(item => item)
+          .map(value => (
+            <Item
+              title={value}
+              onClick={() => {
+                this.handleValueChange(value);
+              }}
+            />
+          ))}
       </Dropdown>
     );
   };
@@ -397,13 +401,26 @@ export default class ConfigItemsModal extends Component {
                       {map(globalConfigItems, data => (
                         <Item
                           title={data.name}
-                          onClick={(event, name) =>
+                          onClick={async (event, name) => {
+                            const { intrf, intrfId } = this.props;
+
+                            const interfacePath: string = intrfId
+                              ? `${intrf}/${intrfId}`
+                              : 'system';
+
+                            const yamlData: Object = await get(
+                              `${settings.REST_BASE_URL}/${interfacePath}/config/${name}?action=yaml`
+                            );
+
+                            console.log(yamlData);
+
                             this.setState({
                               value: null,
                               item: { ...data, name },
                               type: data.type === 'any' ? null : data.type,
-                            })
-                          }
+                              yamlData,
+                            });
+                          }}
                         />
                       ))}
                     </Dropdown>
@@ -413,8 +430,8 @@ export default class ConfigItemsModal extends Component {
               </>
             )}
 
-            {!isGlobal && !yamlData && <Loader />}
-            {(!isGlobal && yamlData) || (isGlobal && item) ? (
+            {!yamlData && <Loader />}
+            {yamlData ? (
               <Tabs
                 active={useTemplate ? 'template' : 'custom'}
                 onChangeEnd={() => {
@@ -425,8 +442,8 @@ export default class ConfigItemsModal extends Component {
                   <React.Fragment>
                     <div className="configItemsEditor">
                       <div className="header">
-                        {item.allowed_values
-                          ? this.renderAllowedItems(item)
+                        {yamlData.allowed_values
+                          ? this.renderAllowedItems(yamlData)
                           : isGlobal
                             ? 'Set item value'
                             : 'Set custom value or'}
@@ -573,7 +590,7 @@ export default class ConfigItemsModal extends Component {
           </Box>
         </Modal.Body>
         <Modal.Footer>
-          {(!isGlobal && yamlData) || (isGlobal && item) ? (
+          {yamlData ? (
             <div className="pull-right">
               <ButtonGroup>
                 <Button
