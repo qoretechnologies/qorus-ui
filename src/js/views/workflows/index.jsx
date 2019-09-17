@@ -45,6 +45,7 @@ import queryControl from '../../hocomponents/queryControl';
 import Headbar from '../../components/Headbar';
 import Flex from '../../components/Flex';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
+import { FormattedMessage } from 'react-intl';
 
 const filterSearch: Function = (search: string): Function => (
   workflows: Array<Object>
@@ -60,17 +61,17 @@ const filterLastVersion: Function = (latest: string): Function => (
 ): Array<Object> =>
   latest && latest !== ''
     ? workflows.filter(w => {
-      for (const workflow of workflows) {
-        if (
-          w.name === workflow.name &&
+        for (const workflow of workflows) {
+          if (
+            w.name === workflow.name &&
             parseFloat(w.version) < parseFloat(workflow.version)
-        ) {
-          return false;
+          ) {
+            return false;
+          }
         }
-      }
 
-      return true;
-    })
+        return true;
+      })
     : workflows;
 
 const filterDeprecated: Function = (deprecated: string): Function => (
@@ -86,28 +87,22 @@ const systemOptionsSelector: Function = (state: Object): Array<Object> =>
 const groupStatuses: Function = (isTablet: boolean): Function => (
   workflows: Array<Object>
 ): Array<Object> =>
-  workflows.map(
-    (workflow: Object): Object => {
-      const newWf: Object = { ...workflow };
-      const obj = isTablet ? ORDER_GROUPS_COMPACT : ORDER_GROUPS;
+  workflows.map((workflow: Object): Object => {
+    const newWf: Object = { ...workflow };
+    const obj = isTablet ? ORDER_GROUPS_COMPACT : ORDER_GROUPS;
 
-      Object.keys(obj).forEach(
-        (group: string): void => {
-          newWf[`GROUPED_${group}`] = obj[group].reduce(
-            (cnt, cur) => cnt + workflow[cur],
-            0
-          );
-          newWf[`GROUPED_${group}_STATES`] = obj[group]
-            .map(
-              orderGrp => ORDER_STATES.find(grp => grp.name === orderGrp).title
-            )
-            .join(',');
-        }
+    Object.keys(obj).forEach((group: string): void => {
+      newWf[`GROUPED_${group}`] = obj[group].reduce(
+        (cnt, cur) => cnt + workflow[cur],
+        0
       );
+      newWf[`GROUPED_${group}_STATES`] = obj[group]
+        .map(orderGrp => ORDER_STATES.find(grp => grp.name === orderGrp).title)
+        .join(',');
+    });
 
-      return newWf;
-    }
-  );
+    return newWf;
+  });
 
 const countInstances: Function = (isTablet: boolean): Function => (
   workflows: Array<Object>
@@ -118,11 +113,9 @@ const countInstances: Function = (isTablet: boolean): Function => (
 
     if (!count[grp]) count[grp] = 0;
 
-    workflows.forEach(
-      (workflow: Object): void => {
-        count[grp] += workflow[grp];
-      }
-    );
+    workflows.forEach((workflow: Object): void => {
+      count[grp] += workflow[grp];
+    });
 
     if (addPrefix) count.total += count[grp];
 
@@ -135,11 +128,9 @@ const countInstances: Function = (isTablet: boolean): Function => (
     Object.keys(ORDER_GROUPS).forEach(group => addCount(group, true));
   }
 
-  ORDER_STATES.forEach(
-    (state: Object): void => {
-      addCount(state.name);
-    }
-  );
+  ORDER_STATES.forEach((state: Object): void => {
+    addCount(state.name);
+  });
 
   count.total = formatCount(count.total);
 
@@ -274,7 +265,10 @@ const Workflows: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb active> Workflows </Crumb>
+        <Crumb active>
+          {' '}
+          <FormattedMessage id="Workflows" />{' '}
+        </Crumb>
       </Breadcrumbs>
       <div className="pull-right">
         <CsvControl onClick={onCSVClick} disabled={size(workflows) === 0} />
@@ -328,22 +322,18 @@ export default compose(
       unselectAll: actions.workflows.unselectAll,
     }
   ),
-  mapProps(
-    ({ date, isTablet, user, ...rest }: Props): Object => ({
-      isTablet: isTablet || user.data.storage.sidebarOpen,
-      date: date || DATES.PREV_DAY,
-      user,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ date, deprecated, ...rest }: Props): Object => ({
-      fetchParams: { deprecated, date: formatDate(date).format() },
-      date,
-      deprecated,
-      ...rest,
-    })
-  ),
+  mapProps(({ date, isTablet, user, ...rest }: Props): Object => ({
+    isTablet: isTablet || user.data.storage.sidebarOpen,
+    date: date || DATES.PREV_DAY,
+    user,
+    ...rest,
+  })),
+  mapProps(({ date, deprecated, ...rest }: Props): Object => ({
+    fetchParams: { deprecated, date: formatDate(date).format() },
+    date,
+    deprecated,
+    ...rest,
+  })),
   patch('load', ['fetchParams']),
   sync('meta'),
   withInfoBar('workflows'),
@@ -367,7 +357,7 @@ export default compose(
     },
   }),
   lifecycle({
-    componentWillReceiveProps (nextProps: Props) {
+    componentWillReceiveProps(nextProps: Props) {
       const { deprecated, date, unselectAll, fetch } = this.props;
 
       if (deprecated !== nextProps.deprecated || date !== nextProps.date) {

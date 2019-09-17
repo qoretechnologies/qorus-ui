@@ -34,6 +34,7 @@ import CsvControl from '../../components/CsvControl';
 import Search from '../../containers/search';
 import Flex from '../../components/Flex';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
+import { FormattedMessage } from 'react-intl';
 
 type Props = {
   jobs: Array<Object>,
@@ -92,7 +93,9 @@ const JobsView: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb active>Jobs</Crumb>
+        <Crumb active>
+          <FormattedMessage id="Jobs" />
+        </Crumb>
       </Breadcrumbs>
       <Pull right>
         <CsvControl onClick={onCSVClick} disabled={size(jobs) === 0} />
@@ -171,25 +174,21 @@ export default compose(
   ),
   withSort('jobs', 'jobs', sortDefaults.jobs),
   loadMore('jobs', 'jobs', true, 50),
-  mapProps(
-    ({ date, isTablet, user, ...rest }: Props): Object => ({
-      isTablet: isTablet || user.data.storage.sidebarOpen,
-      date: date || DATES.PREV_DAY,
-      user,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      fetchParams: { date: formatDate(date).format() },
-      date,
-      ...rest,
-    })
-  ),
+  mapProps(({ date, isTablet, user, ...rest }: Props): Object => ({
+    isTablet: isTablet || user.data.storage.sidebarOpen,
+    date: date || DATES.PREV_DAY,
+    user,
+    ...rest,
+  })),
+  mapProps(({ date, ...rest }: Props): Object => ({
+    fetchParams: { date: formatDate(date).format() },
+    date,
+    ...rest,
+  })),
   patch('load', ['fetchParams']),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps (nextProps: Props) {
+    componentWillReceiveProps(nextProps: Props) {
       const { date, selectNone, fetch }: Props = this.props;
 
       if (date !== nextProps.date) {

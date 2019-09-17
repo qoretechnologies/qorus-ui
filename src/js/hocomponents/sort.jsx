@@ -8,6 +8,9 @@ import { sortTable } from '../helpers/table';
 import { functionOrStringExp } from '../helpers/functions';
 import { sortKeys } from '../constants/sort';
 
+import reduce from 'lodash/reduce';
+import { injectIntl } from 'react-intl';
+
 type Props = {
   changeSort: Function,
   initSort: Function,
@@ -20,6 +23,7 @@ export default (
   collectionProp: string,
   defaultSortData: ?Object | Function
 ) => (Component: ReactClass<*>) => {
+  @injectIntl
   class WrappedComponent extends React.Component {
     props: Props = this.props;
 
@@ -94,7 +98,17 @@ export default (
       let sortData = this.props.sortData || fallbackSortData;
       let collection = this.props[collectionPropSelected];
       const newProps = { ...this.props, sortData: sortData };
-      const sortKeysObj = sortKeys[tableSelected] || {};
+      let sortKeysObj = sortKeys[tableSelected] || {};
+      sortKeysObj = reduce(
+        sortKeysObj,
+        (newSortKeys, column, key) => {
+          return {
+            ...newSortKeys,
+            [this.props.intl.formatMessage({ id: column })]: column,
+          };
+        },
+        {}
+      );
 
       if (sortData && collection) {
         collection = sortTable(this.props[collectionPropSelected], sortData);

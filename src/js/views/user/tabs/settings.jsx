@@ -37,13 +37,13 @@ const UserSettings: Function = ({
   handleNotificationsBrowserChange,
   dashboardModules,
   handleDashboardModulesChange,
-  intl
+  intl,
 }: Props) => (
   <Box fill top scrollY>
     <PaneItem title={intl.formatMessage({ id: 'settings.live-notifs' })}>
       <Toolbar mb>
         <Alert bsStyle="info" iconName="notifications">
-          <FormattedMessage id='settings.when-enabled' />
+          <FormattedMessage id="settings.when-enabled" />
         </Alert>
       </Toolbar>
       <Checkbox
@@ -77,9 +77,9 @@ const UserSettings: Function = ({
         checked={treeDefaultExpanded}
       />
     </PaneItem>
-    <PaneItem title={intl.formatMessage({ id: 'global.dashboard' })} id="dashboard">
+    <PaneItem title={intl.formatMessage({ id: 'Dashboard' })} id="dashboard">
       <Alert bsStyle="info" iconName="notifications">
-        <FormattedMessage id='settings.below-you-can-select' />
+        <FormattedMessage id="settings.below-you-can-select" />
       </Alert>
       {map(Modules, (dModule, name) => (
         <Checkbox
@@ -104,13 +104,11 @@ export default compose(
       storeSettings: actions.currentUser.storeSettings,
     }
   ),
-  mapProps(
-    ({ notificationsEnabled, ...rest }: Props): Props => ({
-      soundCheckboxDisabled: !notificationsEnabled,
-      notificationsEnabled,
-      ...rest,
-    })
-  ),
+  mapProps(({ notificationsEnabled, ...rest }: Props): Props => ({
+    soundCheckboxDisabled: !notificationsEnabled,
+    notificationsEnabled,
+    ...rest,
+  })),
   withHandlers({
     handleNotificationsCheckboxChange: ({
       storeSettings,

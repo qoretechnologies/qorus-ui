@@ -13,6 +13,7 @@ import statsMessages from './stats';
 import summaryMessages from './summary';
 import systemMessages from './system';
 import tableMessages from './table';
+import tabsMessages from './tabs';
 import treeMessages from './tree';
 import userMessages from './user';
 
@@ -23,7 +24,7 @@ const LANGS = {
   DE: 'de-DE',
 };
 
-export default function (locale: string): Object {
+export default function(locale: string): Object {
   return {
     ...buttonMessages[locale],
     ...clusterMessages[locale],
@@ -40,6 +41,7 @@ export default function (locale: string): Object {
     ...summaryMessages[locale],
     ...systemMessages[locale],
     ...tableMessages[locale],
+    ...tabsMessages[locale],
     ...treeMessages[locale],
     ...userMessages[locale],
   };

@@ -30,6 +30,7 @@ import queryControl from '../../hocomponents/queryControl';
 import Flex from '../../components/Flex';
 import Controls from './controls';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
+import { FormattedMessage } from 'react-intl';
 
 type Props = {
   sortData: Object,
@@ -76,7 +77,9 @@ const GroupsView: Function = ({
     <Flex>
       <Headbar>
         <Breadcrumbs>
-          <Crumb link="/groups">Groups</Crumb>
+          <Crumb link="/groups">
+            <FormattedMessage id="Groups" />
+          </Crumb>
           <Crumb active>
             {group.name} ({group.id})
           </Crumb>
@@ -91,7 +94,9 @@ const GroupsView: Function = ({
     <Flex>
       <Headbar>
         <Breadcrumbs>
-          <Crumb active>Groups</Crumb>
+          <Crumb active>
+            <FormattedMessage id="Groups" />
+          </Crumb>
         </Breadcrumbs>
         <Pull right>
           <CsvControl onClick={onCSVClick} disabled={size(groups) === 0} />
@@ -126,19 +131,17 @@ const filterGroups: Function = (search: string) => (
 ): Array<Object> => findBy(['name', 'description'], search, groups);
 
 const transformGroups: Function = (groups: Array<Object>): Array<Object> =>
-  groups.map(
-    (group: Object): Object => ({
-      ...group,
-      ...{
-        workflows_count: group.workflows.length,
-        jobs_count: group.jobs.length,
-        services_count: group.services.length,
-        vmaps_count: group.vmaps.length,
-        roles_count: group.roles.length,
-        mappers_count: group.mappers.length,
-      },
-    })
-  );
+  groups.map((group: Object): Object => ({
+    ...group,
+    ...{
+      workflows_count: group.workflows.length,
+      jobs_count: group.jobs.length,
+      services_count: group.services.length,
+      vmaps_count: group.vmaps.length,
+      roles_count: group.roles.length,
+      mappers_count: group.mappers.length,
+    },
+  }));
 
 const groupsSelector: Function = createSelector(
   [resourceSelector('groups'), querySelector('search')],
