@@ -35,13 +35,13 @@ const updateConfigItemWsCommon = {
             step.config[dt.name].level = dt.level;
             step.config[dt.name].is_set = dt.is_set;
             step.config[dt.name].currentType = dt.currentType;
-            step.config[dt.name].isTemplatedString = dt.isTemplatedString;
+            step.config[dt.name].is_templated_string = dt.is_templated_string;
           } else {
             config[dt.name].value = dt.value;
             config[dt.name].level = dt.level;
             config[dt.name].currentType = dt.currentType;
             config[dt.name].is_set = dt.is_set;
-            config[dt.name].isTemplatedString = dt.isTemplatedString;
+            config[dt.name].is_templated_string = dt.is_templated_string;
           }
 
           newData = updateItemWithId(dt.id, { _updated: true }, newData);
