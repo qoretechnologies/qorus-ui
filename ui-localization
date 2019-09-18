@@ -1,0 +1,54 @@
+#!/usr/bin/env qore
+
+%new-style
+%strict-args
+%require-types
+%enable-all-warnings
+
+%requires CsvUtil
+
+const Skip = "ru-RU";
+
+class MyLineIterator inherits FileLineIterator {
+    constructor(string path, *string encoding, *string eol, bool trim_flag = True) : FileLineIterator(path, encoding, eol, trim_flag) {
+    }
+
+    string getValue() {
+        string line = FileLineIterator::getValue();
+        # replace double quotes with a single escaped quote
+        return replace(line, "\"\"", "\\\"");
+    }
+}
+
+# map: file -> lang -> label -> string
+hash<string, hash<string, hash<string, *string>>> lmap;
+
+AbstractCsvIterator i(new MyLineIterator(shift ARGV), {"header_names": True, "header_lines": 1});
+while (i.next()) {
+    hash<auto> row = i.getValue();
+    string file = remove row.file;
+    string label = remove row.label;
+    map lmap{file}{$1.key}{label} = $1.value, row.pairIterator(), $1.value.val();
+}
+
+# output files
+foreach string file in (keys lmap) {
+    printf("writing %s: ", file);
+
+    File f();
+    f.open2(file, O_CREAT | O_TRUNC | O_WRONLY);
+
+    # write header
+    f.print("export default {\n");
+
+    foreach string lang in (keys lmap{file}) {
+        f.printf("  '%s': {\n", lang);
+
+        map f.printf("    '%s': '%s',\n", $1.key, $1.value), lmap{file}{lang}.pairIterator(), $1.value.val();
+
+        f.printf("  },\n");
+    }
+    f.printf("};\n");
+
+    printf("done\n");
+}

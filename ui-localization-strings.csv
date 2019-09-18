@@ -1,0 +1,455 @@
+file,label,en-US,cs-CZ,ru-RU,ja-JP
+button.js,button.activate,Activate,Aktivovat,Активировать,アクティベート
+button.js,button.add-new,Add new,Přidat,Добавить,新しく追加する
+button.js,button.add-new-default-logger,Add new default logger,Přidat nový výchozí logger,Добавить новый по умолчанию регистратор,新しいデフォルトのロガーを追加
+button.js,button.add-option,Add option,Přidat hodnotu nastavení,Добавить опцию,オプションを追加
+button.js,button.autoscroll,Autoscroll,Automaticky posouvat,Автопрокрутка,自動スクロール
+button.js,button.cancel,Cancel,Zrušit,Отмена,キャンセル
+button.js,button.clear,Clear,Vyčistit,Очистить,クリア
+button.js,button.clone-logger,Clone logger,Naklonovat logger,Клонировать регистратор,ロガーのクローン
+button.js,button.close,Close,Zavřít,Закрыть,閉じる
+button.js,button.confirm,Confirm,Potvrdit,Подтвердить,確認する
+button.js,button.copy-last-error,Copy last error,Zkopírovat poslední chybu,Скопировать последнюю ошибку,最後のエラーをコピー
+button.js,button.deactivate,Deactivate,Deaktivovat,Деактивировать,無効化
+button.js,button.decrement-autostart,Decrement autostart,Snížít hodnotu automatického startu,Уменьшить значение автозапуска,自動開始を減らす
+button.js,button.delete,Delete,Smazat,Удалить,削除する
+button.js,button.disable,Disable,Zakázat,Отключить,無効にする
+button.js,button.disable-autostart,Disable autostart,Zakázat automatický start,Отключить автозапуск,自動起動を無効にする
+button.js,button.drag-to-move-around,Drag to move around,Táhněte pro pohyb,Перетащите для перемещения,ドラッグして移動します
+button.js,button.edit,Edit,Upravit,Настроить,編集
+button.js,button.edit-this-value,Edit this value,Upravit tuto hodnotu,Настроить это значение,この値を編集
+button.js,button.enable,Enable,Povolit,Включить,有効にする
+button.js,button.enable-autostart,Enable autostart,Povolit automatický start,Включить автозапуск,自動起動を有効にする
+button.js,button.export-csv,Export CSV,Exportovat CSV,Экспорт CSV,CSVをエクスポート
+button.js,button.hide-descriptions,Hide descriptions,Schovat popisy,Скрыть описания,説明を非表示
+button.js,button.increment-autostart,Increment autostart,Zvýšit hodnotu automatického startu,Увеличить значение автозапуска,自動開始をインクリメント
+button.js,button.item-has-alerts,"This item has alerts, click to view",Tato položka má poplachy. Klikněte pro zobrazení.,"Этот элемент имеет предупреждения, нажмите для просмотра",このアイテムにはアラートがあります。クリックして表示
+button.js,button.loaded-click,"Loaded, click to unload","Načteno, klikněte pro odnačtení","Загружено, нажмите для отмены",ロード済み、クリックしてアンロード
+button.js,button.opens-side-pane,Opens side pane with detailed item view,Otevře postranní náhled s detaily,Открывает боковую панель с деталями,詳細なアイテムビューでサイドペインを開きます
+button.js,button.ping,Ping,Poslat ping,Отправить пинг,ping
+button.js,button.remove-appender,Remove appender,Odebrat appender,Удалить вывод регистратора,アペンダーを削除
+button.js,button.remove-this-value,Remove this value,Odebrat tuto hodnotu,Удалить это значение,この値を削除
+button.js,button.reschedule,Reschedule,Přeplánovat,Перепланировать,再スケジュール
+button.js,button.reset,Reset,Resetovat,Сброс,リセットする
+button.js,button.reset-zoom,Reset zoom,Resetovat zoom,Сбросить масштаб,ズームをリセット
+button.js,button.run,Run,Spustit,Запустить,走る
+button.js,button.set-expiry,Set expiry,Nastavit vypršení,Установить срок действия,有効期限を設定
+button.js,button.set-not-remote,Set as not remote,Nastavit jako lokální,Отметить как локальный,非リモートとして設定
+button.js,button.set-remote,Set as remote,Nastavit jako vzdálený,Отметить как удаленный,リモートとして設定
+button.js,button.show-descriptions,Show descriptions,Ukázat popisy,Показать описания,説明を表示
+button.js,button.show-grouped,Show grouped,Ukázat sloučené podle skupin,Показать сгруппированные,グループ化して表示
+button.js,button.show-step-code,Show step code,Ukázat kód kroku,Показать код шага,ステップコードを表示
+button.js,button.show-un-grouped,Show un-grouped,Ukázat nesloučené podle skupin,Показать без группировки,グループ化されていないものを表示
+button.js,button.submit,Submit,Uložit,Отправить,提出する
+button.js,button.unloaded-click,"Unloaded, click to load","Nenačteno, klikněte pro načtení","Не загружено, нажмите для загрузки",アンロード、クリックしてロード
+button.js,button.update,Update,Uložit,Обновить,更新
+button.js,button.use-scrollbars,Use scrollbars,Používat posuvníky,Использовать полосы прокрутки,スクロールバーを使用する
+button.js,button.use-drag-to-move,Use drag to move,Používat hýbaní pomocí tažení,Использовать перетаскивание,ドラッグして移動する
+button.js,button.view-alerts,View alerts,Zobrazit poplachy,Показать предупреждения,アラートを表示
+button.js,button.view-contents,View contents,Zobrazit obsah,Показать содержание,内容を見る
+button.js,button.zoom-in,Zoom in,Přiblížit,,ズームイン
+button.js,button.zoom-out,Zoom out,Oddálit,,ズームアウトする
+cluster.js,cluster.client-id,Client ID,Klientské ID,,クライアントID
+cluster.js,cluster.cluster,Cluster,Cluster,,集まる
+cluster.js,cluster.cluster-memory,Cluster memory,Paměť clusteru,,クラスターメモリ
+cluster.js,cluster.count-of-processes,# of processes,Počet procesů,,プロセス数
+cluster.js,cluster.hostname,Hostname,Hostname,,ホスト名
+cluster.js,cluster.kill,Kill,Ukončit,,殺します
+cluster.js,cluster.memory,Memory,Paměť,,記憶
+cluster.js,cluster.node,Node,Uzel,,ノード
+cluster.js,cluster.node-memory,Node memory,Paměť uzlu,,ノードメモリ
+cluster.js,cluster.nodes,Nodes,Uzlů,,ノード
+cluster.js,cluster.pid,PID,PID,,PID
+cluster.js,cluster.processes,Processes,Procesů,,プロセス
+cluster.js,cluster.status,Status,Stav,,状態
+component.js,classes,classes,třídy,,クラス
+component.js,code,code,kód,,コード
+component.js,constants,constants,konstanty,,定数
+component.js,functions,functions,funkce,,機能
+component.js,methods,methods,metody,,方法
+component.js,Step code,Step code,Kód kroků,,ステップコード
+component.js,WF Functions,WF Functions,Funkce PP,,WF関数
+component.js,component.alerts,Alerts,Poplachy,,アラート
+component.js,component.appenders,Appenders,Appendery,,アペンダー
+component.js,component.controls,Controls,Ovládání,,コントロール
+component.js,component.groups,Groups,Skupiny,,グループ
+component.js,component.input,Input,Vstup,,入力
+component.js,component.instances,Instances,Instance,,インスタンス
+component.js,component.interface-using-def-logger,This interface is using default logger.,Tato jednotka používá základní logger.,,このインターフェースはデフォルトのロガーを使用しています。
+component.js,component.logger,Logger,Logger,,ロガー
+component.js,component.no-data,No data,Žádná data,,データなし
+component.js,component.no-logger-defined-for-res,There is no logger defined for {resource}. Use the buttons above to create a default logger,"Pro jednotku ""{resource}"" není definován žádný logger. Použijte tlačítka nahoře pro vytvoření základního loggeru",,{resource}に対してロガーが定義されていません。上のボタンを使用して、デフォルトのロガーを作成します
+component.js,component.no-logger-defined-for-res-2,or concrete loggers for this interface,nebo specifického loggeru pro tuto jednotku,,またはこのインターフェイスの具体的なロガー
+component.js,component.options,Options,Nastavení,,オプション
+component.js,component.output,Output,Výstup,,出力
+component.js,component.please-select-item,Please select an item from the list.,"Prosím, vyberte položku ze seznamu.",,リストからアイテムを選択してください。
+component.js,component.schedule,Schedule,Plán,,スケジュール
+component.js,component.search,Search...,Hledat...,,調べる...
+component.js,component.sla,SLA,SLA,,SLA
+component.js,component.there-are-no-data,There is no data to be displayed.,Chybějí data k zobrazení.,,表示するデータはありません。
+component.js,component.to-search-log,to search the log,k prohledání záznamu,,ログを検索する
+component.js,component.use,Use,Použijte,,つかいます
+dashboard.js,dashboard.cluster,Cluster,Cluster,,集まる
+dashboard.js,dashboard.cpu-cores,CPU cores,CPU jader,,CPUコア
+dashboard.js,dashboard.cpu-load,CPU load,Zátěž CPU,,CPU負荷
+dashboard.js,dashboard.datasource,Datasource,Zdroje dat,,情報元
+dashboard.js,dashboard.health,Health,Zdraví,,健康
+dashboard.js,dashboard.instance,Instance,Instance,,インスタンス
+dashboard.js,dashboard.interfaces,Interfaces,Jednotky,,インターフェース
+dashboard.js,dashboard.key,Key,Klíč,,キー
+dashboard.js,dashboard.memory,Memory,Paměť,,記憶
+dashboard.js,dashboard.node-cpu-load,Node CPU load,Zátěž CPU uzlů,,ノードのCPU負荷
+dashboard.js,dashboard.node-memory-progression,Node Memory Progression,Využití paměti uzlů,,ノードメモリの進行
+dashboard.js,dashboard.node-process-count-history,Node Process Count History,Počet procesů na uzlech,,ノードプロセス数の履歴
+dashboard.js,dashboard.nodes,Node(s),Uzly,,ノード
+dashboard.js,dashboard.ongoing-alerts,Ongoing alerts,Trvající poplachy,,継続的なアラート
+dashboard.js,dashboard.processes,Processes,Procesy,,プロセス
+dashboard.js,dashboard.processes-lc,processes,procesy,,プロセス
+dashboard.js,dashboard.processes-gt-4,Processes,Procesů,,プロセス
+dashboard.js,dashboard.processes-gt-4-lc,processes,procesů,,プロセス
+dashboard.js,dashboard.ram-used-by-qorus,RAM used by Qorus,RAM užívaná Qorusem,,Qorusが使用するRAM
+dashboard.js,dashboard.remote-instances,Remote Instances,Vzdálené instance,,リモートインスタンス
+dashboard.js,dashboard.running-processes,Running processes,Běžící procesy,,実行中のプロセス
+dashboard.js,dashboard.system-overview,System Overview,Přehled systému,,システム概要
+dashboard.js,dashboard.total-node-ram,Total node RAM,Celá RAM uzlu,,合計ノードRAM
+dashboard.js,dashboard.total-ram,total RAM,RAM celkem,,総RAM
+dashboard.js,dashboard.total-ram-used,Total RAM used,Kompletní použitá RAM,,使用される合計RAM
+dashboard.js,dashboard.transient-alerts,Transient alerts,Proběhlé poplachy,,一時的なアラート
+datetime.js,datetime.24h,24H,24h,,24時間
+datetime.js,datetime.30-days,30 days,30 dní,,30日間
+datetime.js,datetime.all,All,Vše,,すべて
+datetime.js,datetime.apply,Apply,Použít,,適用する
+datetime.js,datetime.now,Now,Teď,,いま
+datetime.js,datetime.reset,Reset,Resetovat,,リセットする
+datetime.js,datetime.this-month,This month,Tento měsíc,,今月
+datetime.js,datetime.today,Today,Dnes,,今日
+datetime.js,datetime.week,Week,Týden,,週間
+dialog.js,dialog.contents,Contents of,Obsah souboru,,の内容
+dialog.js,dialog.are-you-sure-remove-sla,Are you sure you want to remove the {name} SLA?,"Jste si jistí, že chcete odstranit SLA {name}?",,{name} SLAを削除してもよろしいですか？
+dialog.js,dialog.please-confirm-action,Please confirm your action,Prosím potvrďte svou volbu,,アクションを確認してください
+dropdown.js,1 hour band,1 hour band,Období 1h,,1時間帯
+dropdown.js,4 hour band,4 hour band,Období 4h,,4時間帯
+dropdown.js,24 hour band,24 hour band,Období 24h,,24時間帯
+dropdown.js,active,Active,Aktivní,,アクティブ
+dropdown.js,active_calls,Active Calls,Aktivní volání,,アクティブコール
+dropdown.js,author,Author,Autor,,著者
+dropdown.js,autostart,Autostart,Automatický start,,自動スタート
+dropdown.js,class_based,Class Based,Založené na třídách,,クラスベース
+dropdown.js,config,Config,Konfigurace,,構成
+dropdown.js,created,Created,Vytvořeno,,作成した
+dropdown.js,db_active,DB Active,DB aktivní,,DBアクティブ
+dropdown.js,deprecated,Deprecated,Zastaralé,,非推奨
+dropdown.js,desc,Description,Popis,,説明
+dropdown.js,description,Description,Popis,,説明
+dropdown.js,enabled,Enabled,Povoleno,,有効化
+dropdown.js,exec_count,Exec Count,Počet spuštění,,実行カウント
+dropdown.js,expiry_date,Expiry Date,Čas vypršení,,有効期限
+dropdown.js,host,Host,Hostitel,,ホスト
+dropdown.js,id,ID,ID,,ID
+dropdown.js,loaded,Loaded,Nahráno,,ロード済み
+dropdown.js,manual_autostart,Manual Autostart,Manuální automatický start,,手動自動起動
+dropdown.js,modified,Modified,Změněno,,修正済み
+dropdown.js,name,Name,Název,,名前
+dropdown.js,open,Open,Otevřeno,,開いた
+dropdown.js,remote,Remote,Vzdálené,,リモート
+dropdown.js,sla_threshold,SLA Threshold,Hranice SLA,,SLAしきい値
+dropdown.js,status,Status,Stav,,状態
+dropdown.js,threads,Threads,Vlákna,,スレッド
+dropdown.js,type,Type,Typ,,タイプ
+dropdown.js,version,Version,Verze,,版
+dropdown.js,waiting_threads,Waiting Threads,Čekající vlákna,,待機スレッド
+dropdown.js,dropdown.ascending,Ascending,Vzestupně,,上昇
+dropdown.js,dropdown.date,Date,Datum,,日付
+dropdown.js,dropdown.deprecated,Deprecated,Zastaralé,,非推奨
+dropdown.js,dropdown.descending,Descending,Sestupně,,降順
+dropdown.js,dropdown.filter,Filter,Filtrovat,,フィルタ
+dropdown.js,dropdown.latest,Latest,Nejnovější,,最新
+dropdown.js,dropdown.name,Name,Název,,名前
+dropdown.js,dropdown.please-select,Please select,Prosím vyberte,,選んでください
+dropdown.js,dropdown.running,Running,Běžící,,ランニング
+dropdown.js,dropdown.sort-by,Sort by,Seřadit podle,,並び替え
+dropdown.js,dropdown.sort-direction,Sort direction,Směr řazení,,並べ替え方向
+global.js,global.collapse,Collapse,Skrýt,,崩壊
+global.js,global.connections,Connections,Připojení,,接続
+global.js,global.copy-table,Copy table,Zkopírujte si tabulku,,テーブルをコピー
+global.js,global.dashboard,Dashboard,Uživatelská konzole,,ダッシュボード
+global.js,global.enabled,Enabled,Zapnuto,,有効化
+global.js,global.group,Group,Skupina,,グループ
+global.js,global.groups,Groups,Skupiny,,グループ
+global.js,global.help,Help,Nápověda,,助けて
+global.js,global.instances,Instances,Instance,,インスタンス
+global.js,global.jobs,Jobs,Úkoly,,仕事
+global.js,global.mappers,Mappers,Mappery,,マッパー
+global.js,global.options,Options,Nastavení,,オプション
+global.js,global.permissions,Permissions,Povolení,,許可
+global.js,global.report-bug,Report Bug,Nahlásit chybu,,バグを報告
+global.js,global.roles,Roles,Role,,役割
+global.js,global.schema,Schema,Schéma,,スキーマ
+global.js,global.services,Services,Služby,,サービス
+global.js,global.settings,Settings,Nastavení,,設定
+global.js,global.show-all,Show all,Zobrazit všechno,,すべて表示する
+global.js,global.show-more,Show more,Zobrazit víc,,もっと見せる
+global.js,global.total,total,celkem,,合計
+global.js,global.user-connection,User,Uživatelské připojení,,ユーザー
+global.js,global.version,Version,Verze,,版
+global.js,global.vmaps,Vmaps,Vmapy,,Vmap
+global.js,global.warning,Warning!,Varování!,,警告！
+global.js,global.with-alerts,With alerts,S poplachy,,アラートあり
+global.js,global.workflows,Workflows,Pracovní postupy :D,,ワークフロー
+global.js,global.in-workflows,Workflows,Pracovnich postupech,,ワークフロー
+logger.js,logger.additivity,Additivity,Aditivita,,加算性
+logger.js,logger.appender-type,Appender type,Typ appenderu,,アペンダータイプ
+logger.js,logger.archive-pattern,Archive pattern,Vzorec pro archivování,,アーカイブパターン
+logger.js,logger.encoding,Encoding,Kódování,,エンコーディング
+logger.js,logger.filename,Filename,Název souboru,,ファイル名
+logger.js,logger.layout-pattern,Layout Pattern,Vzorec rozložení,,レイアウトパターン
+logger.js,logger.level,Level,Úroveň,,レベル
+logger.js,logger.name,Name,Název,,名前
+logger.js,logger.rotation-count,Rotation count,Počet rotací,,回転数
+order.js,order.async-waiting,Async-Waiting,Čeká na asynch. krok,,非同期待機
+order.js,order.block,Block,Zablokovat,,ブロック
+order.js,order.blocked,Blocked,Zablokováno,,ブロックされました
+order.js,order.blocking,Blocking,Blokuje se,,ブロッキング
+order.js,order.cancel,Cancel,Zrušit,,キャンセル
+order.js,order.canceled,Canceled,Zrušeno,,キャンセル
+order.js,order.canceling,Canceling,Ruší se,,キャンセル中
+order.js,order.complete,Complete,Hotovo,,コンプリート
+order.js,order.dynamic,Dynamic,Dynamická,,動的
+order.js,order.error,Error,Chyba,,エラー
+order.js,order.error-blocked,Error / Blocked,Chyba / Zablokováno,,エラー/ブロック
+order.js,order.event-waiting,Event-Waiting,Čeká na událost,,イベント待機
+order.js,order.hierarchy,Hierarchy,Hierarchie,,階層
+order.js,order.in-progress,In-Progress,Probíhá,,進行中
+order.js,order.info,Info,Info,,情報
+order.js,order.incomplete,Incomplete,Nekompletní,,不完全な
+order.js,order.keys,Keys,Klíče,,キー
+order.js,order.order-err-instances,Order Error Instances,Instance objednávek v chybném stavu,,エラーインスタンスの注文
+order.js,order.ready,Ready,Připraveno,,準備完了
+order.js,order.ready-scheduled,Ready / Scheduled,Připraveno / Naplánováno,,準備完了/予定
+order.js,order.retry,Retry,Opakování,,リトライ
+order.js,order.retrying,Retrying,Opakuje se,,再試行中
+order.js,order.run-wait,Run / Wait,Běží / Čeká,,実行/待機
+order.js,order.schedule,Schedule,Naplánovat,,スケジュール
+order.js,order.scheduled,Scheduled,Naplánováno,,予定
+order.js,order.sensitive,Sensitive,Sensitivní,,敏感
+order.js,order.static,Static,Statická,,静的
+order.js,order.step-specific,Step specific,Specifická pro krok,,ステップ固有
+order.js,order.to-retry,Retry,Opakovat,,リトライ
+order.js,order.unblock,Unblock,Odblokovat,,ブロック解除
+order.js,order.unblocking,Unblocking,Odblokovává se,,ブロック解除
+order.js,order.uncancel,Uncancel,Zrušit zrušení,,キャンセルしない
+order.js,order.uncanceling,Uncanceling,Ruší se zrušení,,キャンセルしない
+order.js,order.waiting,Waiting,Čeká,,待っています
+settings.js,settings.always-show-data-types,Always show data types,Vždy zobrazovat datové typy,,常にデータ型を表示
+settings.js,settings.below-you-can-select,Below you can select which panels are displayed on the dashboard.,"Níže si můžete vybrat, které panely budou zobrazené na konzoli.",,以下で、ダッシュボードに表示するパネルを選択できます。
+settings.js,settings.browser-notifs,Browser Notifications,Notifikace prohlížeče,,ブラウザ通知
+settings.js,settings.cluster-info,Cluster Info,Info o clusteru,,クラスター情報
+settings.js,settings.connections,Connections,Připojení,,接続
+settings.js,settings.enable-browser-notifs,Enable browser notifications,Povolit notifikace prohlížeče,,ブラウザ通知を有効にする
+settings.js,settings.enable-sound,Enable sound,Povolit zvuky,,サウンドを有効にする
+settings.js,settings.enabled,Enabled,Zapnuto,,有効化
+settings.js,settings.expanded-by-def,Expanded by default,Rozšířené ve výchozím stavu,,デフォルトで展開
+settings.js,settings.global-order-stats,Global Order Stats,Celkové statistiky objednávek,,グローバル注文統計
+settings.js,settings.interfaces,Interfaces,Jednotky,,インターフェース
+settings.js,settings.live-notifs,Live Notifications,Živé notifikace,,ライブ通知
+settings.js,settings.node-data,Node data,Data uzlů,,ノードデータ
+settings.js,settings.remote-connections,Remote connections,Vzdálené připojení,,リモート接続
+settings.js,settings.system-overview,System Overview,Přehled systému,,システム概要
+settings.js,settings.tree-rendering,Tree rendering,Zobrazování stromů,,ツリーレンダリング
+settings.js,settings.when-enabled,"When enabled, real time alert notifications display in the bottom-right corner of the screen.","Když jsou zapnuté, okamžité notifikace o poplaších se zobrazují v pravém dolním rohu obrazovky.",,有効にすると、リアルタイムのアラート通知が画面の右下隅に表示されます。
+stats.js,stats.and,and,a,,そして
+stats.js,stats.automatic-recovery-info,Automatic recovery info,Informace o automatickém zotavení,,自動復旧情報
+stats.js,stats.count,Count,Počet,,カウント
+stats.js,stats.disposition,Disposition,Rozdělení,,配置
+stats.js,stats.disposition-auto,Recovered automatically,Zotaveno automaticky,,自動的に回復
+stats.js,stats.disposition-manual,Recovered manually,Zotaveno manuálně,,手動で回復しました
+stats.js,stats.disposition-no-err,Completed w/o errors,Dokončeno bez chyb,,エラーなしで完了
+stats.js,stats.estimated-savings-1,Estimated savings due to automatic order recovery for,Odhadované úspory díky automatickému zotavení pro,,の自動注文回復による推定節約
+stats.js,stats.estimated-savings-2,orders @,objednávek při nákladech,,ご注文 @
+stats.js,stats.estimated-savings-3,/ order =,/ obj. =,,/注文=
+stats.js,stats.estimated-savings-4,Estimated savings are calculated based on the following system options:,Odhadované úspory jsou spočítané na základě následujících systémových nastavení:,,推定節約量は、次のシステムオプションに基づいて計算されます。
+stats.js,stats.estimated-savings-5,Each of these options must be set for individual production environments based on the real costs of manual error handling of workflow orders that get an ERROR status.,"Každá z těch vlastností musí být nastavená pro konkrétní produkční prostředí v závislosti na skutečných nákladech manuálního spravení problémů v pracovních postupech, které mají ERROR status.",,これらの各オプションは、ERRORステータスを取得するワークフローオーダーの手動エラー処理の実際のコストに基づいて、個々の運用環境に設定する必要があります。
+stats.js,stats.estimated-savings-6,Estimated savings are calculated by multiplying,Odhadované úspory jsou spočítané vynásobením hodnoty,,推定節約量は、
+stats.js,stats.estimated-savings-7,by the number of automatically-recovered workflow orders for the given time period and displayed in the currency provided by,počtem automaticky zachráněných objednávek pracovních postupů za daný časový úsek a jsou zobrazené v měně nastavené vlastností,,指定された期間に自動的に回復されたワークフロー注文の数で、提供された通貨で表示されます
+stats.js,stats.estimated-savings-8,and do not include the costs related to orders with an ERROR status requiring manual intervention. An accurate estimated savings amount can only be provided by ensuring that the,"a neobsahují náklady související s objednávkami, které jsou v ERROR stavu a vyžadují manuální intervenci. Přesný odhad úspor může být dodán zajištěním, že vlastnost",,手動での介入が必要なERRORステータスの注文に関連するコストは含めません。正確な推定節約額は、
+stats.js,stats.estimated-savings-9,system option reflects real costs.,reflektuje skutečné náklady.,,システムオプションは実際のコストを反映しています。
+stats.js,stats.estimated-savings-10,The purpose of this information is to show the value of Qorus Integration Engine(R)’s automatic recovery of technical errors in orchestrated tasks or workflows in terms of real money saved by avoiding manual error handling.,Účel této informace je ukázat hodnotu automatického zotavení z technických chyb v řízených úkolech a pracovních postupech v reálných penězích ušetřených vyhnutím se nutnosti manuální intervence.,,この情報の目的は、Qorus Integration Engine（R）の調整されたタスクまたはワークフローの技術的エラーの自動回復の価値を、手動のエラー処理を回避することで節約できる実際のお金の観点から示すことです。
+stats.js,stats.estimated-savings-11,"Should you not wish for this information to be displayed in the Qorus Integration Engine(R) UI, please set the","Pokud si nepřejete tyto informace zobrazovat, nastavte prosím hodnotu",,この情報をQorus Integration Engine（R）UIに表示したくない場合は、
+stats.js,stats.estimated-savings-12,option to 0.,na 0.,,0のオプション。
+stats.js,stats.global-order-stats,Global order stats,Celkové statistiky objednávek,,グローバル注文統計
+stats.js,stats.in-sla,In SLA,V rámci SLA,,SLAで
+stats.js,stats.out-of-sla,Out of SLA,Mimo SLA,,SLAから
+stats.js,stats.percentage,Percentage,Procentuálně,,割合
+stats.js,stats.sla-stats,SLA Stats,Statistiky SLA,,SLA統計
+stats.js,stats.workflow-disposition,Workflow Disposition,Rozdělení pracovních postupů :D,,ワークフローの処分
+summary.js,summary.autostart-disabled,"Autostart is disabled; to start the service automatically, set autostart to true",Automatický start není povolený; pro automatické zapnutí nastavte hodnotu autostart na True,,自動起動は無効です。サービスを自動的に開始するには、autostartをtrueに設定します
+summary.js,summary.autostart-zero,"Autostart is zero; to start the workflow automatically, set a positive autostart value",Automatický start je nastaven na hodnotu 0; pro automatické zapnutí nastavte hodnotu autostart větší než 0,,自動開始はゼロです。ワークフローを自動的に開始するには、正の自動開始値を設定します
+summary.js,summary.check-log-details,Check log for details,Podívejte se do záznamu pro více detailů,,詳細についてはログを確認してください
+summary.js,summary.interface-disabled,Interface disabled,Jednotka není povolena,,無効なインターフェイス
+summary.js,summary.job-expired,Job has expired,Čas úkolu vypršel,,ジョブの有効期限が切れました
+summary.js,summary.job-not-active,Job is not active,Úkol není aktivován,,ジョブはアクティブではありません
+summary.js,summary.not-running,Not running,Neběží,,走っていない
+summary.js,summary.process-not-running,Process not running,Process neběží,,プロセスが実行されていません
+summary.js,summary.process-summary,Process summary,Přehled procesu,,プロセス概要
+summary.js,summary.running-in-core,Running locally in qorus-core,Běží lokálně v qorus-core,,qorus-coreでローカルに実行
+system.js,system.alerts,Alerts,Upozornění,,アラート
+system.js,system.cache,Cache,Cache,,キャッシュ
+system.js,system.cluster,Cluster,Cluster,,集まる
+system.js,system.connections,Connections,Připojení,,接続
+system.js,system.dashboard,Dashboard,Nastenka,,ダッシュボード
+system.js,system.global-search,Search,Hledat,,
+system.js,system.global-search-type,in {type},v {type},,{type}で
+system.js,system.http-services,HTTP Services,HTTP Služby,,HTTPサービス
+system.js,system.more,More,Více,,もっと
+system.js,system.options,Options,Možnosti,,オプション
+system.js,system.order-stats,Order Stats,Statistiky objednávek,,注文統計
+system.js,system.properties,Properties,Vlastnosti,,物性
+system.js,system.releases,Releases,Verze,,リリース
+system.js,system.slas,SLAs,SLA,,SLA
+system.js,system.valuemaps,Valuemaps,Valuemaps,,バリューマップ
+table.js,table.actions,Actions,Akce,,行動
+table.js,table.all,All,Všechno,,すべて
+table.js,table.author,Author,Autor,,著者
+table.js,table.auto-execs,Auto / Execs,Auto / Spuštění,,自動/実行者
+table.js,table.bus-err,Bus.Err.,Bus.Chyb.,,Bus.Err。
+table.js,table.business-error,Business error,Business chyba,,ビジネスエラー
+table.js,table.cfg-item-val-no-level-set,This config item,Hodnota této konfigurační položky není nastavena na žádné úrovni.,,この構成アイテム
+table.js,table.code,Code,Kód,,コード
+table.js,table.completed,Completed,Skončilo,,完了しました
+table.js,table.content,Content,Obsah,,コンテンツ
+table.js,table.created,Created,Vytvořeno,,作成した
+table.js,table.current-value,Current value,Současná hodnota,,現在の価値
+table.js,table.custom,Custom,Zvláštní hodnota,,カスタム
+table.js,table.custom-status,Custom status,Vlastní stav,,カスタムステータス
+table.js,table.default-value,Default value,Základní hodnota,,デフォルト値
+table.js,table.deprecated,Deprecated,Zastaralé,,非推奨
+table.js,table.description,Description,Popis,,説明
+table.js,table.disposition,Disposition,Rozdělení,,配置
+table.js,table.down,DOWN,OFFLINE,,ダウン
+table.js,table.err,Err.,Chyb.,,エラー
+table.js,table.error,Error,Chyba,,エラー
+table.js,table.error-code,Error Code,Kód chyby,,エラーコード
+table.js,table.error-description,Error Description,Popis chyby,,エラーの説明
+table.js,table.error-type,Error Type,Typ chyby,,エラータイプ
+table.js,table.errors,Errors,Chyby,,エラー
+table.js,table.errors-count,Errors count,Počet chyb,,エラー数
+table.js,table.event,Event,Událost,,イベント
+table.js,table.event-id,Event ID,ID události,,イベントID
+table.js,table.expiry-date,Expiry Date,Datum expirace,,有効期限
+table.js,table.group,Group,Skupina,,グループ
+table.js,table.hierarchy-level,Hierarchy level,Úroveň v hierarchii,,階層レベル
+table.js,table.id,ID,ID,,ID
+table.js,table.ind,Ind,Ind,,インド
+table.js,table.info,Info,Info,,情報
+table.js,table.instance-id,Instance ID,ID instance,,インスタンスID
+table.js,table.instances,Instances,Instance,,インスタンス
+table.js,table.is-subworkflow,Is subworkflow,Je sub-pracovní postup,,サブワークフローです
+table.js,table.is-synchronous,Is synchronous,Je synchronní,,同期的
+table.js,table.jobs,Jobs,Úkoly,,仕事
+table.js,table.jobs-mini,J,Ú,,J
+table.js,table.key,Key,Klíč,,キー
+table.js,table.last-run,Last run,Poslední běh,,最後の実行
+table.js,table.level,Level,Úroveň,,レベル
+table.js,table.local,Local,Lokální,,地元
+table.js,table.lock,Lock,Zámek,,ロック
+table.js,table.locked,Locked,Zamknuto,,ロック済み
+table.js,table.loopback,Loopback,Loopback,,ループバック
+table.js,table.mappers,Mappers,Mappery,,マッパー
+table.js,table.mappers-mini,M,M,,M
+table.js,table.mapsize,Mapsize,Velikost mapy,,マップサイズ
+table.js,table.modified,Modified,Upraveno,,修正済み
+table.js,table.name,Name,Název,,名前
+table.js,table.next-run,Next run,Příští běh,,次の実行
+table.js,table.notes,Notes,Poznámky,,ノート
+table.js,table.parent-id,Parent ID,ID rodiče,,親ID
+table.js,table.priority,Priority,Priorita,,優先
+table.js,table.producer,Producer,Od,,プロデューサー
+table.js,table.reason,Reason,Důvod,,理由
+table.js,table.retries,Retries,Opakování,,再試行
+table.js,table.retry,Retry,Opakování,,リトライ
+table.js,table.roles,Roles,Role,,役割
+table.js,table.roles-mini,R,R,,R
+table.js,table.scheduled,Scheduled,Naplánováno,,予定
+table.js,table.services,Services,Služby,,サービス
+table.js,table.services-mini,S,S,,S
+table.js,table.severity,Severity,Závažnost,,重大度
+table.js,table.skip,Skip,Přeskočit,,スキップ
+table.js,table.sla,SLA,SLA,,SLA
+table.js,table.source,Source,Zdroj,,ソース
+table.js,table.started,Started,Začalo,,開始しました
+table.js,table.status,Status,Stav,,状態
+table.js,table.step-name,Step Name,Název kroku,,ステップ名
+table.js,table.subwf-iid,SubWF IID,IID Sub-PP,,SubWF IID
+table.js,table.threads,Threads,Vlákna,,スレッド
+table.js,table.throws,Throws,Hází výjimky,,投げる
+table.js,table.type,Type,Typ,,タイプ
+table.js,table.units,Units,Jednotky,,単位
+table.js,table.up,UP,ONLINE,,アップ
+table.js,table.url,URL,URL,,URL
+table.js,table.value,Value,Hodnota,,値
+table.js,table.vmaps,Vmaps,Vmapy,,値マップ
+table.js,table.vmaps-mini,V,V,,V
+table.js,table.warns,Warns.,Upoz.,,警告します。
+table.js,table.warnings,Warnings,Upozornění,,警告
+table.js,table.who,Who,Kdo,,誰
+table.js,table.workflow,Workflow,Pracovní postup,,ワークフロー
+table.js,table.workflows,Workflows,Pracovní postupy :),,ワークフロー
+table.js,table.workflows-mini,W,PP,,W
+tabs.js,Alert,Alert,Poplach,,警戒
+tabs.js,Authlabels,Authlabels,Autorizační značky,,認証ラベル
+tabs.js,ClassInfo,Class Info,Info o třídě,,クラス情報
+tabs.js,Code,Code,Kód,,コード
+tabs.js,Connections,Connections,Připojení,,接続
+tabs.js,Config,Config,Konfigurace,,構成
+tabs.js,Dashboard,Dashboard,Uživatelská konzole,,ダッシュボード
+tabs.js,Datasources,Datasources,Zdrojedat,,データソース
+tabs.js,DefaultLoggers,Default Loggers,Základní loggery,,デフォルトのロガー
+tabs.js,Detail,Detail,Detaily,,詳細
+tabs.js,Diagram,Diagram,Diagram,,図
+tabs.js,Errors,Errors,Chyby,,エラー
+tabs.js,Events,Events,Události,,イベント
+tabs.js,Global,Global,Globální,,グローバル
+tabs.js,Groups,Groups,Skupiny,,グループ
+tabs.js,Http,HTTP,HTTP,,HTTP
+tabs.js,Info,Info,Info,,情報
+tabs.js,Instances,Instances,Instance,,インスタンス
+tabs.js,Jobs,Jobs,Úkoly,,仕事
+tabs.js,Log,Log,Záznam,,ログ
+tabs.js,Mappers,Mappers,Mappery,,マッパー
+tabs.js,Methods,Methods,Metody,,方法
+tabs.js,Monitoring,Monitoring,Monitorování,,モニタリング
+tabs.js,More...,More...,Více...,,もっと...
+tabs.js,Ongoing,Ongoing,Trvající,,継続中
+tabs.js,OrderStats,Order Stats,Statistiky objednávek,,注文統計
+tabs.js,Orders,Orders,Objednávky,,ご注文
+tabs.js,Overview,Overview,Přehled,,概要
+tabs.js,Performance,Performance,Výkon,,性能
+tabs.js,Permissions,Permissions,Povolení,,許可
+tabs.js,Process,Process,Proces,,処理する
+tabs.js,Releases,Releases,Verze,,リリース
+tabs.js,Resourcefiles,Resource files,Soubory zdrojů,,リソースファイル
+tabs.js,Resources,Resources,Zdroje,,資源
+tabs.js,Roles,Roles,Role,,役割
+tabs.js,Services,Services,Služby,,サービス
+tabs.js,Settings,Settings,Nastavení,,設定
+tabs.js,Sources,Sources,Zdroje,,ソース
+tabs.js,StepInfo,StepInfo,Info o kroku,,ステップ情報
+tabs.js,Steps,Steps,Kroky,,手順
+tabs.js,Transient,Transient,Proběhlé,,一時的
+tabs.js,User,User,Uživatel,,ユーザー
+tabs.js,Users,Users,Uživatelé,,ユーザー
+tabs.js,Valuemaps,Valuemaps,Mapy hodnot,,バリューマップ
+tabs.js,Workflow,Workflow,Pracovní postup,,ワークフロー
+tabs.js,Workflows,Workflows,Pracovní postupy,,ワークフロー
+tree.js,tree.collapse-all,Collapse all,Skrýt všechno,,すべて折りたたむ
+tree.js,tree.copy-view,Copy view,Textový pohled,,ビューをコピー
+tree.js,tree.edit-mode,Edit mode,Editační mód,,編集モード
+tree.js,tree.expand-all,Expand all,Rozšířit všechno,,すべて展開
+tree.js,tree.loading-data,Loading data...,Načítání dat...,,データのロード...
+tree.js,tree.posting-new-staticdata,Posting new staticdata replaces original content and it can be fatal for business processing.,Poslání nových dat přepíše původní obsah a může být fatální pro business processing.,,新しい静的データを投稿すると、元のコンテンツが置き換えられ、ビジネス処理にとって致命的になる可能性があります。
+tree.js,tree.show-types,Show types,Ukazovat typy,,タイプを表示
+tree.js,tree.tree-view,Tree view,Stromový pohled,,ツリー表示
+tree.js,tree.update-data,Update data,Upravit data,,データを更新する
+user.js,user.clear-storage,Clear storage,Vyčistit úložiště,,ストレージをクリア
+user.js,user.member-of-def-grp,Member of DEFAULT group with no restrictions; all interfaces are accessible,Člen skupiny DEFAULT bez omezení; všechny jednotky jsou přístupné,,制限のないDEFAULTグループのメンバー。すべてのインターフェースにアクセス可能
+user.js,user.storage-data,Storage data,Data v úložišti,,ストレージデータ
