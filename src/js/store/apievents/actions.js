@@ -733,7 +733,7 @@ const handleEvent = (url, data, dispatch, state) => {
               name: info.name,
               is_set: info.is_set,
               currentType: info.currentType,
-              isTemplatedString: info.isTemplatedString,
+              is_templated_string: info.is_templated_string,
             },
             dispatch
           );

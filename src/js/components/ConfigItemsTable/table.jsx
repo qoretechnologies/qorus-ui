@@ -219,15 +219,15 @@ let ItemsTable: Function = ({
                         className={`text ${item.level === 'workflow' ||
                           item.level === 'global'}`}
                       >
-                        {!item.isTemplatedString &&
+                        {!item.is_templated_string &&
                         (item.type === 'hash' ||
                           item.type === 'list' ||
                           item.type === '*hash' ||
                           item.type === '*list') ? (
-                            <Tree compact data={item.value} />
-                          ) : (
-                            <ContentByType inTable content={item.value} />
-                          )}
+                          <Tree compact data={item.value} />
+                        ) : (
+                          <ContentByType inTable content={item.value} />
+                        )}
                       </Td>
                       <Td className="narrow">
                         <ContentByType content={item.strictly_local} />
