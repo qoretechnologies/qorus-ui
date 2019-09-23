@@ -174,29 +174,29 @@ dropdown.js,dropdown.sort-direction,Sort direction,Směr řazení,,並べ替え�
 global.js,Alerts,Alerts,Poplachy,,アラート
 global.js,Cache,Cache,Cache,,キャッシュ
 global.js,Cluster,Cluster,Cluster,,集まる
-global.js,Config Items,Config Items,Konfigurační položky,,
+global.js,Config Items,Config Items,Konfigurační položky,,構成アイテム
 global.js,Connections,Connections,Připojení,,接続
 global.js,Dashboard,Dashboard,Uživatelská konzole,,ダッシュボード
 global.js,Errors,Errors,Chyby,,エラー
-global.js,Extensions,Extensions,Rozšíření,,
+global.js,Extensions,Extensions,Rozšíření,,拡張機能
 global.js,Global,Global,Globální,,グローバル
 global.js,Groups,Groups,Skupiny,,グループ
 global.js,HTTP Services,HTTP Services,HTTP Služby,,HTTPサービス
 global.js,Info,Info,Info,,情報
 global.js,Jobs,Jobs,Úkoly,,仕事
-global.js,Library,Library,Knihovna,,
-global.js,Logs,Logs,Záznamy,,
+global.js,Library,Library,Knihovna,,コードライブラリ
+global.js,Logs,Logs,Záznamy,,記録
 global.js,More,More,Více,,もっと
-global.js,OCMD,OCMD,Příkazová řádka,,
+global.js,OCMD,OCMD,Příkazová řádka,,コマンドライン
 global.js,Options,Options,Nastavení,,オプション
 global.js,Order Stats,Order Stats,Statistiky objednávek,,注文統計
 global.js,Properties,Properties,Vlastnosti,,物性
-global.js,RBAC,RBAC,Nastavení přístupů a rolí,,
+global.js,RBAC,RBAC,Nastavení přístupů a rolí,,役割ベースのアクセス制御
 global.js,Releases,Releases,Verze,,リリース
-global.js,Search,Search,Hledání,,
+global.js,Search,Search,Hledání,,調べる
 global.js,Services,Services,Služby,,サービス
 global.js,SLAs,SLAs,SLA,,SLA
-global.js,System,System,Systém,,
+global.js,System,System,Systém,,システム
 global.js,Valuemaps,Valuemaps,Mapy hodnot,,バリューマップ
 global.js,Workflows,Workflows,Pracovní postupy,,ワークフロー
 global.js,global.collapse,Collapse,Skrýt,,崩壊
@@ -213,7 +213,7 @@ global.js,global.show-more,Show more,Zobrazit víc,,もっと見せる
 global.js,global.total,total,celkem,,合計
 global.js,global.user-connection,User,Uživatelské připojení,,ユーザー
 global.js,global.version,Version,Verze,,版
-global.js,global.vmaps,Vmaps,Vmapy,,Vmap
+global.js,global.vmaps,Vmaps,Vmapy,,値マップ
 global.js,global.warning,Warning!,Varování!,,警告！
 global.js,global.in-workflows,Workflows,Pracovnich postupech,,ワークフロー
 logger.js,logger.additivity,Additivity,Aditivita,,加算性
