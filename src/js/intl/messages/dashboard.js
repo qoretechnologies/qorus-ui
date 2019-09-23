@@ -26,6 +26,7 @@ export default {
     'dashboard.total-ram': 'total RAM',
     'dashboard.total-ram-used': 'Total RAM used',
     'dashboard.transient-alerts': 'Transient alerts',
+    'dashboard.with-alerts': 'With alerts',
   },
   'cs-CZ': {
     'dashboard.cluster': 'Cluster',
@@ -54,6 +55,7 @@ export default {
     'dashboard.total-ram': 'RAM celkem',
     'dashboard.total-ram-used': 'Kompletní použitá RAM',
     'dashboard.transient-alerts': 'Proběhlé poplachy',
+    'dashboard.with-alerts': 'S poplachy',
   },
   'ja-JP': {
     'dashboard.cluster': '集まる',
@@ -82,5 +84,6 @@ export default {
     'dashboard.total-ram': '総RAM',
     'dashboard.total-ram-used': '使用される合計RAM',
     'dashboard.transient-alerts': '一時的なアラート',
+    'dashboard.with-alerts': 'アラートあり',
   },
 };

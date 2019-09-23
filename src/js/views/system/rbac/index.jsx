@@ -17,6 +17,7 @@ import queryControl from '../../../hocomponents/queryControl';
 import { connect } from 'react-redux';
 import Flex from '../../../components/Flex';
 import viewBehindPermission from '../../../hocomponents/viewBehindPermission';
+import { FormattedMessage } from 'react-intl';
 
 type Props = {
   tabQuery: string,
@@ -40,7 +41,9 @@ const RBAC: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb>RBAC</Crumb>
+        <Crumb>
+          <FormattedMessage id="RBAC" />
+        </Crumb>
         <CrumbTabs
           tabs={[
             { title: 'Users', suffix: `(${users.length})` },
@@ -75,13 +78,11 @@ const RBAC: Function = ({
 
 export default compose(
   viewBehindPermission(['USER-CONTROL']),
-  connect(
-    (state: Object): Object => ({
-      users: state.api.users.data,
-      roles: state.api.roles.data,
-      perms: state.api.perms.data,
-    })
-  ),
+  connect((state: Object): Object => ({
+    users: state.api.users.data,
+    roles: state.api.roles.data,
+    perms: state.api.perms.data,
+  })),
   withTabs('users'),
   queryControl('search'),
   titleManager('RBAC')

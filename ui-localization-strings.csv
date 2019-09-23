@@ -36,6 +36,7 @@ button.js,button.run,Run,Spustit,Запустить,走る
 button.js,button.set-expiry,Set expiry,Nastavit vypršení,Установить срок действия,有効期限を設定
 button.js,button.set-not-remote,Set as not remote,Nastavit jako lokální,Отметить как локальный,非リモートとして設定
 button.js,button.set-remote,Set as remote,Nastavit jako vzdálený,Отметить как удаленный,リモートとして設定
+button.js,button.settings,Settings,Nastavení,,設定
 button.js,button.show-descriptions,Show descriptions,Ukázat popisy,Показать описания,説明を表示
 button.js,button.show-grouped,Show grouped,Ukázat sloučené podle skupin,Показать сгруппированные,グループ化して表示
 button.js,button.show-step-code,Show step code,Ukázat kód kroku,Показать код шага,ステップコードを表示
@@ -115,6 +116,7 @@ dashboard.js,dashboard.total-node-ram,Total node RAM,Celá RAM uzlu,,合計ノ�
 dashboard.js,dashboard.total-ram,total RAM,RAM celkem,,総RAM
 dashboard.js,dashboard.total-ram-used,Total RAM used,Kompletní použitá RAM,,使用される合計RAM
 dashboard.js,dashboard.transient-alerts,Transient alerts,Proběhlé poplachy,,一時的なアラート
+dashboard.js,dashboard.with-alerts,With alerts,S poplachy,,アラートあり
 datetime.js,datetime.24h,24H,24h,,24時間
 datetime.js,datetime.30-days,30 days,30 dní,,30日間
 datetime.js,datetime.all,All,Vše,,すべて
@@ -169,24 +171,43 @@ dropdown.js,dropdown.please-select,Please select,Prosím vyberte,,選んでく�
 dropdown.js,dropdown.running,Running,Běžící,,ランニング
 dropdown.js,dropdown.sort-by,Sort by,Seřadit podle,,並び替え
 dropdown.js,dropdown.sort-direction,Sort direction,Směr řazení,,並べ替え方向
+global.js,Alerts,Alerts,Poplachy,,アラート
+global.js,Cache,Cache,Cache,,キャッシュ
+global.js,Cluster,Cluster,Cluster,,集まる
+global.js,Config Items,Config Items,Konfigurační položky,,
+global.js,Connections,Connections,Připojení,,接続
+global.js,Dashboard,Dashboard,Uživatelská konzole,,ダッシュボード
+global.js,Errors,Errors,Chyby,,エラー
+global.js,Extensions,Extensions,Rozšíření,,
+global.js,Global,Global,Globální,,グローバル
+global.js,Groups,Groups,Skupiny,,グループ
+global.js,HTTP Services,HTTP Services,HTTP Služby,,HTTPサービス
+global.js,Info,Info,Info,,情報
+global.js,Jobs,Jobs,Úkoly,,仕事
+global.js,Library,Library,Knihovna,,
+global.js,Logs,Logs,Záznamy,,
+global.js,More,More,Více,,もっと
+global.js,OCMD,OCMD,Příkazová řádka,,
+global.js,Options,Options,Nastavení,,オプション
+global.js,Order Stats,Order Stats,Statistiky objednávek,,注文統計
+global.js,Properties,Properties,Vlastnosti,,物性
+global.js,RBAC,RBAC,Nastavení přístupů a rolí,,
+global.js,Releases,Releases,Verze,,リリース
+global.js,Search,Search,Hledání,,
+global.js,Services,Services,Služby,,サービス
+global.js,SLAs,SLAs,SLA,,SLA
+global.js,System,System,Systém,,
+global.js,Valuemaps,Valuemaps,Mapy hodnot,,バリューマップ
+global.js,Workflows,Workflows,Pracovní postupy,,ワークフロー
 global.js,global.collapse,Collapse,Skrýt,,崩壊
-global.js,global.connections,Connections,Připojení,,接続
 global.js,global.copy-table,Copy table,Zkopírujte si tabulku,,テーブルをコピー
-global.js,global.dashboard,Dashboard,Uživatelská konzole,,ダッシュボード
 global.js,global.enabled,Enabled,Zapnuto,,有効化
-global.js,global.group,Group,Skupina,,グループ
-global.js,global.groups,Groups,Skupiny,,グループ
 global.js,global.help,Help,Nápověda,,助けて
 global.js,global.instances,Instances,Instance,,インスタンス
-global.js,global.jobs,Jobs,Úkoly,,仕事
 global.js,global.mappers,Mappers,Mappery,,マッパー
-global.js,global.options,Options,Nastavení,,オプション
 global.js,global.permissions,Permissions,Povolení,,許可
 global.js,global.report-bug,Report Bug,Nahlásit chybu,,バグを報告
-global.js,global.roles,Roles,Role,,役割
 global.js,global.schema,Schema,Schéma,,スキーマ
-global.js,global.services,Services,Služby,,サービス
-global.js,global.settings,Settings,Nastavení,,設定
 global.js,global.show-all,Show all,Zobrazit všechno,,すべて表示する
 global.js,global.show-more,Show more,Zobrazit víc,,もっと見せる
 global.js,global.total,total,celkem,,合計
@@ -194,8 +215,6 @@ global.js,global.user-connection,User,Uživatelské připojení,,ユーザー
 global.js,global.version,Version,Verze,,版
 global.js,global.vmaps,Vmaps,Vmapy,,Vmap
 global.js,global.warning,Warning!,Varování!,,警告！
-global.js,global.with-alerts,With alerts,S poplachy,,アラートあり
-global.js,global.workflows,Workflows,Pracovní postupy :D,,ワークフロー
 global.js,global.in-workflows,Workflows,Pracovnich postupech,,ワークフロー
 logger.js,logger.additivity,Additivity,Aditivita,,加算性
 logger.js,logger.appender-type,Appender type,Typ appenderu,,アペンダータイプ
@@ -292,21 +311,8 @@ summary.js,summary.not-running,Not running,Neběží,,走っていない
 summary.js,summary.process-not-running,Process not running,Process neběží,,プロセスが実行されていません
 summary.js,summary.process-summary,Process summary,Přehled procesu,,プロセス概要
 summary.js,summary.running-in-core,Running locally in qorus-core,Běží lokálně v qorus-core,,qorus-coreでローカルに実行
-system.js,system.alerts,Alerts,Upozornění,,アラート
-system.js,system.cache,Cache,Cache,,キャッシュ
-system.js,system.cluster,Cluster,Cluster,,集まる
-system.js,system.connections,Connections,Připojení,,接続
-system.js,system.dashboard,Dashboard,Nastenka,,ダッシュボード
 system.js,system.global-search,Search,Hledat,,
 system.js,system.global-search-type,in {type},v {type},,{type}で
-system.js,system.http-services,HTTP Services,HTTP Služby,,HTTPサービス
-system.js,system.more,More,Více,,もっと
-system.js,system.options,Options,Možnosti,,オプション
-system.js,system.order-stats,Order Stats,Statistiky objednávek,,注文統計
-system.js,system.properties,Properties,Vlastnosti,,物性
-system.js,system.releases,Releases,Verze,,リリース
-system.js,system.slas,SLAs,SLA,,SLA
-system.js,system.valuemaps,Valuemaps,Valuemaps,,バリューマップ
 table.js,table.actions,Actions,Akce,,行動
 table.js,table.all,All,Všechno,,すべて
 table.js,table.author,Author,Autor,,著者
@@ -399,21 +405,14 @@ tabs.js,Alert,Alert,Poplach,,警戒
 tabs.js,Authlabels,Authlabels,Autorizační značky,,認証ラベル
 tabs.js,ClassInfo,Class Info,Info o třídě,,クラス情報
 tabs.js,Code,Code,Kód,,コード
-tabs.js,Connections,Connections,Připojení,,接続
 tabs.js,Config,Config,Konfigurace,,構成
-tabs.js,Dashboard,Dashboard,Uživatelská konzole,,ダッシュボード
-tabs.js,Datasources,Datasources,Zdrojedat,,データソース
+tabs.js,Datasources,Datasources,Zdroje dat,,データソース
 tabs.js,DefaultLoggers,Default Loggers,Základní loggery,,デフォルトのロガー
 tabs.js,Detail,Detail,Detaily,,詳細
 tabs.js,Diagram,Diagram,Diagram,,図
-tabs.js,Errors,Errors,Chyby,,エラー
 tabs.js,Events,Events,Události,,イベント
-tabs.js,Global,Global,Globální,,グローバル
-tabs.js,Groups,Groups,Skupiny,,グループ
 tabs.js,Http,HTTP,HTTP,,HTTP
-tabs.js,Info,Info,Info,,情報
 tabs.js,Instances,Instances,Instance,,インスタンス
-tabs.js,Jobs,Jobs,Úkoly,,仕事
 tabs.js,Log,Log,Záznam,,ログ
 tabs.js,Mappers,Mappers,Mappery,,マッパー
 tabs.js,Methods,Methods,Metody,,方法
@@ -426,11 +425,9 @@ tabs.js,Overview,Overview,Přehled,,概要
 tabs.js,Performance,Performance,Výkon,,性能
 tabs.js,Permissions,Permissions,Povolení,,許可
 tabs.js,Process,Process,Proces,,処理する
-tabs.js,Releases,Releases,Verze,,リリース
 tabs.js,Resourcefiles,Resource files,Soubory zdrojů,,リソースファイル
 tabs.js,Resources,Resources,Zdroje,,資源
 tabs.js,Roles,Roles,Role,,役割
-tabs.js,Services,Services,Služby,,サービス
 tabs.js,Settings,Settings,Nastavení,,設定
 tabs.js,Sources,Sources,Zdroje,,ソース
 tabs.js,StepInfo,StepInfo,Info o kroku,,ステップ情報
@@ -438,9 +435,7 @@ tabs.js,Steps,Steps,Kroky,,手順
 tabs.js,Transient,Transient,Proběhlé,,一時的
 tabs.js,User,User,Uživatel,,ユーザー
 tabs.js,Users,Users,Uživatelé,,ユーザー
-tabs.js,Valuemaps,Valuemaps,Mapy hodnot,,バリューマップ
 tabs.js,Workflow,Workflow,Pracovní postup,,ワークフロー
-tabs.js,Workflows,Workflows,Pracovní postupy,,ワークフロー
 tree.js,tree.collapse-all,Collapse all,Skrýt všechno,,すべて折りたたむ
 tree.js,tree.copy-view,Copy view,Textový pohled,,ビューをコピー
 tree.js,tree.edit-mode,Edit mode,Editační mód,,編集モード

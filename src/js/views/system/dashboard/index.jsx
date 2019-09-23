@@ -230,7 +230,7 @@ export default class Dashboard extends Component {
           <Pull right>
             <ButtonGroup>
               <Button
-                text={this.props.intl.formatMessage({ id: 'global.settings' })}
+                text={this.props.intl.formatMessage({ id: 'button.settings' })}
                 icon="cog"
                 onClick={() => {
                   browserHistory.push('/user?tab=settings#dashboard');
@@ -290,7 +290,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/workflows')}
                       >
                         {' '}
-                        <FormattedMessage id="global.workflows" />{' '}
+                        <FormattedMessage id="Workflows" />{' '}
                       </div>
                       <div
                         className="dashboard-data-top"
@@ -319,7 +319,7 @@ export default class Dashboard extends Component {
                         </div>
                         <div className="db-data-label">
                           {' '}
-                          <FormattedMessage id="global.with-alerts" />{' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
                         </div>
                       </div>
                     </div>
@@ -329,7 +329,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/services')}
                       >
                         {' '}
-                        <FormattedMessage id="global.services" />{' '}
+                        <FormattedMessage id="Services" />{' '}
                       </div>
                       <div
                         className="dashboard-data-top"
@@ -358,7 +358,7 @@ export default class Dashboard extends Component {
                         </div>
                         <div className="db-data-label">
                           {' '}
-                          <FormattedMessage id="global.with-alerts" />{' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
                         </div>
                       </div>
                     </div>
@@ -368,7 +368,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/jobs')}
                       >
                         {' '}
-                        <FormattedMessage id="global.jobs" />{' '}
+                        <FormattedMessage id="Jobs" />{' '}
                       </div>
                       <div
                         className="dashboard-data-top"
@@ -395,7 +395,7 @@ export default class Dashboard extends Component {
                         </div>
                         <div className="db-data-label">
                           {' '}
-                          <FormattedMessage id="global.with-alerts" />{' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
                         </div>
                       </div>
                     </div>
@@ -408,7 +408,7 @@ export default class Dashboard extends Component {
                 <DashboardModule>
                   <PaneItem
                     title={this.props.intl.formatMessage({
-                      id: 'global.connections',
+                      id: 'Connections',
                     })}
                   >
                     <div className="dashboard-data-module has-link">
@@ -449,7 +449,7 @@ export default class Dashboard extends Component {
                         </div>
                         <div className="db-data-label">
                           {' '}
-                          <FormattedMessage id="global.with-alerts" />{' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
                         </div>
                       </div>
                     </div>
@@ -487,7 +487,7 @@ export default class Dashboard extends Component {
                         </div>
                         <div className="db-data-label">
                           {' '}
-                          <FormattedMessage id="global.with-alerts" />{' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
                         </div>
                       </div>
                     </div>
@@ -529,7 +529,7 @@ export default class Dashboard extends Component {
                         </div>
                         <div className="db-data-label">
                           {' '}
-                          <FormattedMessage id="global.with-alerts" />{' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
                         </div>
                       </div>
                     </div>

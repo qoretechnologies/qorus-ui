@@ -15,6 +15,7 @@ import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
 import classnames from 'classnames';
 import showIfPassed from '../../hocomponents/show-if-passed';
+import { injectIntl } from 'react-intl';
 
 type SidebarItemProps = {
   itemData: Object,
@@ -62,10 +63,14 @@ let SidebarItem: Function = ({
   handleMouseLeave,
   handleFavoriteClick,
   handleUnfavoriteClick,
+  intl,
 }: SidebarItemProps): React.Element<any> =>
   itemData.link ? (
     <Link to={itemData.link} className="sidebarLink">
-      <SidebarItemTooltip isCollapsed={isCollapsed} tooltip={itemData.name}>
+      <SidebarItemTooltip
+        isCollapsed={isCollapsed}
+        tooltip={intl.formatMessage({ id: itemData.name })}
+      >
         <div
           className={classnames('sidebarItem', {
             sidebarSubItem: subItem,
@@ -75,7 +80,8 @@ let SidebarItem: Function = ({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <Icon iconName={itemData.icon} /> {!isCollapsed && itemData.name}
+          <Icon iconName={itemData.icon} />{' '}
+          {!isCollapsed && intl.formatMessage({ id: itemData.name })}
           {(isHovered || itemData.isFavorite) && !isCollapsed && (
             <ButtonGroup className="pt-minimal sidebarFavorite">
               {itemData.isFavorite ? (
@@ -101,7 +107,10 @@ let SidebarItem: Function = ({
       </SidebarItemTooltip>
     </Link>
   ) : (
-    <SidebarItemTooltip isCollapsed={isCollapsed} tooltip={itemData.name}>
+    <SidebarItemTooltip
+      isCollapsed={isCollapsed}
+      tooltip={intl.formatMessage({ id: itemData.name })}
+    >
       <div
         className={classnames('sidebarItem', {
           sidebarSubItem: subItem,
@@ -110,7 +119,8 @@ let SidebarItem: Function = ({
         })}
         onClick={onExpandClick}
       >
-        <Icon iconName={itemData.icon} /> {!isCollapsed && itemData.name}
+        <Icon iconName={itemData.icon} />{' '}
+        {!isCollapsed && intl.formatMessage({ id: itemData.name })}
         {onExpandClick && (
           <Icon
             iconName={isExpanded ? 'caret-up' : 'caret-down'}
@@ -160,7 +170,8 @@ SidebarItem = compose(
       itemData,
       ...rest,
     })
-  )
+  ),
+  injectIntl
 )(SidebarItem);
 
 const SidebarItemWrapper: Function = ({
@@ -196,7 +207,7 @@ const SidebarItemWrapper: Function = ({
 
 export default compose(
   lifecycle({
-    componentDidMount () {
+    componentDidMount() {
       const { itemData, location, onSectionToggle } = this.props;
 
       if (
