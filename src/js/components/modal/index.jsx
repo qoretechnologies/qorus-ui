@@ -31,7 +31,7 @@ export default class Modal extends Component {
     height: this.props.height || null,
   };
 
-  componentDidMount(): void {
+  componentDidMount (): void {
     if (this.props.onMount) {
       this.props.onMount();
     }
@@ -45,11 +45,11 @@ export default class Modal extends Component {
     }
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     this.resizeBody();
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     if (this.props.onEnterPress) {
       window.removeEventListener('keyup', this.handleEnterKeyUp);
     }
@@ -86,7 +86,7 @@ export default class Modal extends Component {
    *
    * @return {Header|null}
    */
-  getHeader(): React.Element<any> {
+  getHeader (): React.Element<any> {
     return (
       React.Children.toArray(this.props.children).filter(
         c => c.type === Header
@@ -109,6 +109,10 @@ export default class Modal extends Component {
    */
   refModal: Function = (el: Object): void => {
     this._modal = el;
+
+    if (this._modal) {
+      this._modal.focus();
+    }
   };
 
   calculateHeight: Function = (): ?number => {
@@ -146,7 +150,7 @@ export default class Modal extends Component {
    *
    * @return {ReactElement}
    */
-  render(): React.Element<any> {
+  render (): React.Element<any> {
     return (
       <div
         className={`pt-dialog-container ${
