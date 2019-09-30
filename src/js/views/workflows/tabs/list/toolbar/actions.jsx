@@ -2,6 +2,7 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
+import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import pure from 'recompose/onlyUpdateForKeys';
 
@@ -34,6 +35,7 @@ const ToolbarActions: Function = ({
   handleUnblockClick,
   handleCancelClick,
   handleUncancelClick,
+  selectedIds,
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
     <Dropdown id="hidden">
@@ -69,6 +71,11 @@ const ToolbarActions: Function = ({
 
 export default compose(
   showIfPassed(({ show }) => show),
+  mapProps(({ selectedIds, ...rest }) => ({
+    selectedIds,
+    idsLength: selectedIds.length,
+    ...rest,
+  })),
   connect(
     null,
     {
@@ -107,5 +114,5 @@ export default compose(
       handleBatchAction('uncancel');
     },
   }),
-  pure(['selectedIds'])
+  pure(['idsLength'])
 )(ToolbarActions);
