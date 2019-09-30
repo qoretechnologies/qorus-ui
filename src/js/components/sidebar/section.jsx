@@ -26,17 +26,21 @@ const SidebarSection: Function = ({
   favoriteItems,
 }: SidebarSectionProps): React.Element<any> => (
   <div className="sidebarSection">
-    {map(sectionData, (itemData: Object, key: number) => (
-      <SidebarItem
-        itemData={itemData}
-        key={key}
-        isCollapsed={isCollapsed}
-        location={location}
-        expandedSection={expandedSection}
-        onSectionToggle={onSectionToggle}
-        favoriteItems={favoriteItems}
-      />
-    ))}
+    {map(
+      sectionData,
+      (itemData: Object, key: number) =>
+        console.log(itemData) || (
+          <SidebarItem
+            itemData={itemData}
+            key={key}
+            isCollapsed={isCollapsed}
+            location={location}
+            expandedSection={expandedSection}
+            onSectionToggle={onSectionToggle}
+            favoriteItems={favoriteItems}
+          />
+        )
+    )}
   </div>
 );
 
