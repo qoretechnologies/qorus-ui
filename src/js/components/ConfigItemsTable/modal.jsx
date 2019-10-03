@@ -97,7 +97,7 @@ export default class ConfigItemsModal extends Component {
     templateKey: this.getTemplateKey(this.props.item?.value),
   };
 
-  async componentDidMount () {
+  async componentDidMount() {
     if (this.props.item) {
       const { intrf, stepId, levelType, intrfId, item } = this.props;
 
@@ -110,8 +110,6 @@ export default class ConfigItemsModal extends Component {
       const yamlData: Object = await get(
         `${settings.REST_BASE_URL}/${interfacePath}/config/${item.name}?action=yaml`
       );
-
-      console.log(yamlData);
 
       this.setState({
         yamlData,
@@ -272,8 +270,8 @@ export default class ConfigItemsModal extends Component {
                 {this.state.value === 'true'
                   ? 'True'
                   : this.state.value === 'false'
-                    ? 'False'
-                    : 'Please select'}
+                  ? 'False'
+                  : 'Please select'}
               </DControl>
               <Item
                 title="True"
@@ -364,7 +362,7 @@ export default class ConfigItemsModal extends Component {
     return null;
   };
 
-  render () {
+  render() {
     const { onClose, isGlobal, globalConfig } = this.props;
     const { error, yamlData, value, item, useTemplate } = this.state;
     const globalConfigItems = pickBy(globalConfig, (data, name) =>
@@ -412,8 +410,6 @@ export default class ConfigItemsModal extends Component {
                               `${settings.REST_BASE_URL}/${interfacePath}/config/${name}?action=yaml`
                             );
 
-                            console.log(yamlData);
-
                             this.setState({
                               value: null,
                               item: { ...data, name },
@@ -445,8 +441,8 @@ export default class ConfigItemsModal extends Component {
                         {yamlData.allowed_values
                           ? this.renderAllowedItems(yamlData)
                           : isGlobal
-                            ? 'Set item value'
-                            : 'Set custom value or'}
+                          ? 'Set item value'
+                          : 'Set custom value or'}
                         {!isGlobal && (
                           <Pull right>
                             <ButtonGroup>
@@ -454,19 +450,19 @@ export default class ConfigItemsModal extends Component {
                                 content={
                                   this.state.type === 'hash' ||
                                   this.state.type === 'list' ? (
-                                      <Tree
-                                        data={item.default_value}
-                                        noButtons
-                                        expanded
-                                        compact
-                                      />
-                                    ) : (
-                                      <ContentByType
-                                        inTable
-                                        noControls
-                                        content={item.default_value}
-                                      />
-                                    )
+                                    <Tree
+                                      data={item.default_value}
+                                      noButtons
+                                      expanded
+                                      compact
+                                    />
+                                  ) : (
+                                    <ContentByType
+                                      inTable
+                                      noControls
+                                      content={item.default_value}
+                                    />
+                                  )
                                 }
                               >
                                 <Button

@@ -27,7 +27,7 @@ let Item: Function = ({
   const handleClick: Function = (): void => {
     onClick(
       `${newItem.name}${newItem.version}`,
-      newItem.body,
+      newItem.body || newItem.code,
       type,
       newItem.id,
       newItem
@@ -63,7 +63,7 @@ const CodeItem: Function = ({
   selected,
   type,
 }: Props): React.Element<any> => {
-  if (item.body || (!item.functions && !item.class)) {
+  if (item.code || item.body || (!item.functions && !item.class)) {
     return (
       <Item type={type} item={item} onClick={onClick} selected={selected} />
     );
@@ -89,6 +89,14 @@ const CodeItem: Function = ({
           type="Class"
           key={`$class_${item.name}`}
           item={item.class}
+          onClick={onClick}
+          selected={selected}
+        />
+      ) : item.code ? (
+        <Item
+          type="Code"
+          key={`$code_${item.name}`}
+          item={item}
           onClick={onClick}
           selected={selected}
         />

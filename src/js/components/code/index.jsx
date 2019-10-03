@@ -137,7 +137,7 @@ export default compose(
           if (item) {
             return {
               name: selected.name,
-              code: item.body,
+              code: item.body || item.code,
               item,
               type: selected.type,
               loading: false,
