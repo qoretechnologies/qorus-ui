@@ -39,6 +39,7 @@ type WorkflowDetailTabsProps = {
 const WorkflowDetailTabs: Function = ({
   workflow,
   activeTab,
+  lib,
   systemOptions,
   band,
   isPane,
@@ -69,7 +70,7 @@ const WorkflowDetailTabs: Function = ({
     )}
     <SimpleTab name="code">
       <Box top fill>
-        <Code data={workflow.lib} location={location} />
+        <Code data={lib} location={location} />
       </Box>
     </SimpleTab>
     <SimpleTab name="steps">

@@ -1,6 +1,7 @@
 /* @flow */
 import React, { Component } from 'react';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import size from 'lodash/size';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -38,6 +39,20 @@ const selector = createSelector(
   'Workflows',
   'prefix'
 )
+@mapProps((props: Object): Object => ({
+  ...props,
+  lib: {
+    ...{
+      code: [
+        {
+          name: 'Workflow code',
+          body: props.workflow.code,
+        },
+      ],
+    },
+    ...props.workflow.lib,
+  },
+}))
 export default class WorkflowsDetail extends Component {
   props: {
     systemOptions: Array<Object>,
@@ -80,6 +95,7 @@ export default class WorkflowsDetail extends Component {
       width,
       onResize,
       location,
+      lib,
     } = this.props;
     const loaded: boolean = workflow && 'lib' in workflow;
 
@@ -129,6 +145,7 @@ export default class WorkflowsDetail extends Component {
           systemOptions={systemOptions}
           activeTab={paneTab}
           band={band}
+          lib={lib}
           isPane
           location={location}
         />

@@ -50,6 +50,7 @@ const Workflow: Function = ({
   tabQuery,
   searchQuery,
   changeSearchQuery,
+  lib,
 }: Props): React.Element<any> => (
   <Flex>
     <Header
@@ -66,6 +67,7 @@ const Workflow: Function = ({
       date={date}
       linkDate={linkDate}
       activeTab={tabQuery}
+      lib={lib}
     />
   </Flex>
 );
@@ -101,25 +103,35 @@ export default compose(
       unselectAll: actions.orders.unselectAll,
     }
   ),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      date: date || DATES.PREV_DAY,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      fetchParams: { lib_source: true, date: formatDate(date).format() },
-      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
-      date,
-      ...rest,
-    })
-  ),
+  mapProps(({ date, ...rest }: Props): Object => ({
+    date: date || DATES.PREV_DAY,
+    ...rest,
+  })),
+  mapProps(({ date, ...rest }: Props): Object => ({
+    fetchParams: { lib_source: true, date: formatDate(date).format() },
+    linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+    date,
+    ...rest,
+  })),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   showIfPassed(({ workflow }) => workflow, <Loader />),
+  mapProps((props: Object): Object => ({
+    ...props,
+    lib: {
+      ...{
+        code: [
+          {
+            name: 'Workflow code',
+            body: props.workflow.code,
+          },
+        ],
+      },
+      ...props.workflow.lib,
+    },
+  })),
   lifecycle({
-    componentWillReceiveProps (nextProps: Props) {
+    componentWillReceiveProps(nextProps: Props) {
       const { date, unselectAll, fetch, id }: Props = this.props;
 
       if (date !== nextProps.date || id !== nextProps.id) {
