@@ -39,20 +39,29 @@ const selector = createSelector(
   'Workflows',
   'prefix'
 )
-@mapProps((props: Object): Object => ({
-  ...props,
-  lib: {
-    ...{
-      code: [
-        {
-          name: 'Workflow code',
-          body: props.workflow.code,
+@mapProps((props: Object): Object =>
+  props.workflow.code
+    ? {
+      ...props,
+      lib: {
+        ...{
+          code: [
+            {
+              name: 'Workflow code',
+              body: props.workflow.code,
+            },
+          ],
         },
-      ],
-    },
-    ...props.workflow.lib,
-  },
-}))
+        ...props.workflow.lib,
+      },
+    }
+    : {
+      ...props,
+      lib: {
+        ...props.workflow.lib,
+      },
+    }
+)
 export default class WorkflowsDetail extends Component {
   props: {
     systemOptions: Array<Object>,

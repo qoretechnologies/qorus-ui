@@ -116,22 +116,31 @@ export default compose(
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   showIfPassed(({ workflow }) => workflow, <Loader />),
-  mapProps((props: Object): Object => ({
-    ...props,
-    lib: {
-      ...{
-        code: [
-          {
-            name: 'Workflow code',
-            body: props.workflow.code,
+  mapProps((props: Object): Object =>
+    props.workflow.code
+      ? {
+        ...props,
+        lib: {
+          ...{
+            code: [
+              {
+                name: 'Workflow code',
+                body: props.workflow.code,
+              },
+            ],
           },
-        ],
-      },
-      ...props.workflow.lib,
-    },
-  })),
+          ...props.workflow.lib,
+        },
+      }
+      : {
+        ...props,
+        lib: {
+          ...props.workflow.lib,
+        },
+      }
+  ),
   lifecycle({
-    componentWillReceiveProps(nextProps: Props) {
+    componentWillReceiveProps (nextProps: Props) {
       const { date, unselectAll, fetch, id }: Props = this.props;
 
       if (date !== nextProps.date || id !== nextProps.id) {

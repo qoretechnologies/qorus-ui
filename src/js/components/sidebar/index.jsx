@@ -36,38 +36,37 @@ const Sidebar: Function = ({
   handleSectionToggle,
   menu,
   favoriteItems,
-}: SidebarProps): React.Element<any> =>
-  console.log(menu) || (
-    <div
-      className={classnames('sidebar', isLight ? 'light' : 'dark', {
-        expanded: !isCollapsed,
-      })}
-    >
-      <Scroll horizontal={false} className="sidebarScroll">
-        {map(menu, (menuData: Array<Object>, menuKey: string) => (
-          <SidebarSection
-            location={location}
-            sectionData={menuData}
-            key={menuKey}
-            isCollapsed={isCollapsed}
-            expandedSection={expandedSection}
-            onSectionToggle={handleSectionToggle}
-            favoriteItems={favoriteItems}
-          />
-        ))}
-      </Scroll>
-      <div className="sidebarSection" id="menuCollapse">
-        <div className="sidebarItem" onClick={toggleMenu}>
-          <Icon
-            iconName={
-              isCollapsed ? 'double-chevron-right' : 'double-chevron-left'
-            }
-          />{' '}
-          {!isCollapsed && 'Collapse'}
-        </div>
+}: SidebarProps): React.Element<any> => (
+  <div
+    className={classnames('sidebar', isLight ? 'light' : 'dark', {
+      expanded: !isCollapsed,
+    })}
+  >
+    <Scroll horizontal={false} className="sidebarScroll">
+      {map(menu, (menuData: Array<Object>, menuKey: string) => (
+        <SidebarSection
+          location={location}
+          sectionData={menuData}
+          key={menuKey}
+          isCollapsed={isCollapsed}
+          expandedSection={expandedSection}
+          onSectionToggle={handleSectionToggle}
+          favoriteItems={favoriteItems}
+        />
+      ))}
+    </Scroll>
+    <div className="sidebarSection" id="menuCollapse">
+      <div className="sidebarItem" onClick={toggleMenu}>
+        <Icon
+          iconName={
+            isCollapsed ? 'double-chevron-right' : 'double-chevron-left'
+          }
+        />{' '}
+        {!isCollapsed && 'Collapse'}
       </div>
     </div>
-  );
+  </div>
+);
 
 export default compose(
   withState('expandedSection', 'toggleSectionExpand', null),
