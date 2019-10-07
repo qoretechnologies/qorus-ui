@@ -36,6 +36,7 @@ import map from 'lodash/map';
 import pickBy from 'lodash/pickBy';
 import isNull from 'lodash/isNull';
 import Tabs, { Pane } from '../tabs';
+import ReactMarkdown from 'react-markdown';
 
 type Props = {
   onClose: Function,
@@ -385,7 +386,11 @@ export default class ConfigItemsModal extends Component {
         </Modal.Header>
         <Modal.Body>
           <Box top fill scrollY>
-            {item?.desc && <Alert iconName="info-sign">{item.desc}</Alert>}
+            {item?.desc && (
+              <Alert iconName="info-sign">
+                <ReactMarkdown>{item.desc}</ReactMarkdown>
+              </Alert>
+            )}
             {isGlobal && (
               <>
                 <Alert bsStyle="warning">

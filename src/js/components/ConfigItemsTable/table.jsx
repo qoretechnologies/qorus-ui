@@ -224,10 +224,10 @@ let ItemsTable: Function = ({
                           item.type === 'list' ||
                           item.type === '*hash' ||
                           item.type === '*list') ? (
-                          <Tree compact data={item.value} />
-                        ) : (
-                          <ContentByType inTable content={item.value} />
-                        )}
+                            <Tree compact data={item.value} />
+                          ) : (
+                            <ContentByType inTable content={item.value} />
+                          )}
                       </Td>
                       <Td className="narrow">
                         <ContentByType content={item.strictly_local} />
@@ -243,7 +243,7 @@ let ItemsTable: Function = ({
                     {showDescription && (
                       <Tr>
                         <Td className="text" colspan={groupName ? 6 : 7}>
-                          {item.desc}
+                          <ContentByType inTable content={item.desc} />
                         </Td>
                       </Tr>
                     )}
