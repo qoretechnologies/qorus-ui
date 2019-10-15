@@ -30,7 +30,7 @@ export default class OrderHeader extends Component {
     prevQueryQuery: string,
   } = this.props;
 
-  render () {
+  render() {
     const { prevQueryQuery, targetQuery, workflow, data } = this.props;
 
     const target = targetQuery
@@ -72,18 +72,21 @@ export default class OrderHeader extends Component {
           <CrumbTabs
             tabs={[
               'Overview',
-              { title: 'Steps', suffix: `(${size(data.StepInstances)})` },
-              'Data',
-              { title: 'Errors', suffix: `(${size(data.ErrorInstances)})` },
-              { title: 'Hierarchy', suffix: `(${size(data.HierarchyInfo)})` },
-              { title: 'Audit', suffix: `(${size(data.AuditEvents)})` },
               {
                 title: 'Config',
                 suffix: `(${countConfigItems({
                   ...rebuildConfigHash(this.props.workflow, true),
                 })})`,
               },
-              'Mappers',
+              { title: 'Steps', suffix: `(${size(data.StepInstances)})` },
+              'Data',
+              { title: 'Errors', suffix: `(${size(data.ErrorInstances)})` },
+              { title: 'Hierarchy', suffix: `(${size(data.HierarchyInfo)})` },
+              { title: 'Audit', suffix: `(${size(data.AuditEvents)})` },
+              {
+                title: 'Mappers',
+                suffix: `(${size(this.props.workflow.mappers)})`,
+              },
               'Info',
               { title: 'Notes', suffix: `(${size(data.notes)})` },
               'Log',
