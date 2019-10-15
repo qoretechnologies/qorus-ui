@@ -31,7 +31,7 @@ const ContentByType: Function = ({
     const isContentDate: boolean = isDate(content);
 
     let newContent = inTable ? (
-      <Text text={`"${content}"`} noControls={noControls} />
+      <Text text={content} noControls={noControls} />
     ) : (
       content
     );
