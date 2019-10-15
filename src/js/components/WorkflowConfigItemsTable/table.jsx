@@ -49,146 +49,127 @@ const WorkflowConfigItemsTable: Function = ({
   dispatchAction,
   globalItems,
   intrfId,
-}: ConfigItemsTableProps): React.Element<any> => (
-  <EnhancedTable
-    collection={configItems.data}
-    searchBy={['name', 'default_value', 'value', 'type', 'mandatory', 'desc']}
-    tableId={belongsTo}
-    sortDefault={sortDefaults.configItems}
-  >
-    {({
-      collection,
-      canLoadMore,
-      handleLoadMore,
-      handleLoadAll,
-      loadMoreTotal,
-      loadMoreCurrent,
-      limit,
-      sortData,
-      onSortChange,
-      handleSearchChange,
-    }: EnhancedTableProps) => (
-      <Table striped condensed fixed hover>
-        <Thead>
-          <FixedRow className="toolbar-row">
-            <Th>
-              <Pull>
-                <ButtonGroup>
-                  <Button
-                    disabled={!size(globalItems)}
-                    icon="add"
-                    label="Add new"
-                    title="Add new"
-                    onClick={() => {
-                      openModal(
-                        <AddConfigItemModal
-                          onClose={closeModal}
-                          onSubmit={saveValue}
-                          globalConfig={globalItems}
-                          isGlobal
-                        />
-                      );
-                    }}
+}: ConfigItemsTableProps): React.Element<any> =>
+  configItems && configItems.length ? (
+    <EnhancedTable
+      collection={configItems.data}
+      searchBy={['name', 'default_value', 'value', 'type', 'mandatory', 'desc']}
+      tableId={belongsTo}
+      sortDefault={sortDefaults.configItems}
+    >
+      {({
+        collection,
+        canLoadMore,
+        handleLoadMore,
+        handleLoadAll,
+        loadMoreTotal,
+        loadMoreCurrent,
+        limit,
+        sortData,
+        onSortChange,
+        handleSearchChange,
+      }: EnhancedTableProps) => (
+        <Table striped condensed fixed hover>
+          <Thead>
+            <FixedRow className="toolbar-row">
+              <Th>
+                <Pull right>
+                  <LoadMore
+                    canLoadMore={canLoadMore}
+                    onLoadMore={handleLoadMore}
+                    onLoadAll={handleLoadAll}
+                    currentCount={loadMoreCurrent}
+                    total={loadMoreTotal}
+                    limit={limit}
                   />
-                </ButtonGroup>
-              </Pull>
-              <Pull right>
-                <LoadMore
-                  canLoadMore={canLoadMore}
-                  onLoadMore={handleLoadMore}
-                  onLoadAll={handleLoadAll}
-                  currentCount={loadMoreCurrent}
-                  total={loadMoreTotal}
-                  limit={limit}
-                />
-                <Search
-                  onSearchUpdate={handleSearchChange}
-                  resource="configItems"
-                />
-              </Pull>
-            </Th>
-          </FixedRow>
-          <FixedRow {...{ sortData, onSortChange }}>
-            <NameColumnHeader />
-            <ActionColumnHeader>{''}</ActionColumnHeader>
-            <Th className="text" iconName="info-sign" name="value">
-              Value
-            </Th>
-            <Th iconName="code" name="type" />
-          </FixedRow>
-        </Thead>
-        <DataOrEmptyTable
-          condition={!collection || collection.length === 0}
-          cols={4}
-          small
-        >
-          {props => (
-            <Tbody {...props}>
-              {collection.map((item: Object, index: number) => (
-                <React.Fragment>
-                  <Tr key={item.name} first={index === 0}>
-                    <NameColumn name={item.name} />
-                    <ActionColumn>
-                      <ButtonGroup>
-                        <Button
-                          icon="edit"
-                          title="Edit this value"
-                          onClick={() => {
-                            openModal(
-                              <AddConfigItemModal
-                                onClose={closeModal}
-                                item={item}
-                                belongsTo={belongsTo}
-                                onSubmit={saveValue}
-                                intrf={intrf}
-                                intrfId={intrfId}
-                                isGlobal
-                              />
-                            );
-                          }}
-                        />
-                        <Button
-                          icon="cross"
-                          title="Remove this value"
-                          btnStyle="danger"
-                          onClick={() => {
-                            dispatchAction(
-                              actions.workflows.deleteConfigItem,
-                              intrfId,
-                              null,
-                              item.name,
-                              null
-                            );
-                          }}
-                        />
-                      </ButtonGroup>
-                    </ActionColumn>
-                    <Td
-                      className={`text ${item.level === 'workflow' ||
-                        item.level === 'global'}`}
-                    >
-                      {item.type === 'hash' ||
-                      item.type === 'list' ||
-                      item.type === '*hash' ||
-                      item.type === '*list' ? (
-                        <Tree compact data={item.value} />
-                      ) : (
-                        <ContentByType inTable content={item.value} />
-                      )}
-                    </Td>
-                    <Td className="narrow">
-                      <code>{item.type}</code>
-                    </Td>
-                  </Tr>
-                </React.Fragment>
-              ))}
-            </Tbody>
-          )}
-        </DataOrEmptyTable>
-      </Table>
-    )}
-  </EnhancedTable>
-);
+                  <Search
+                    onSearchUpdate={handleSearchChange}
+                    resource="configItems"
+                  />
+                </Pull>
+              </Th>
+            </FixedRow>
+            <FixedRow {...{ sortData, onSortChange }}>
+              <NameColumnHeader />
+              <ActionColumnHeader>{''}</ActionColumnHeader>
+              <Th className="text" iconName="info-sign" name="value">
+                Value
+              </Th>
+              <Th iconName="code" name="type" />
+            </FixedRow>
+          </Thead>
+          <DataOrEmptyTable
+            condition={!collection || collection.length === 0}
+            cols={4}
+            small
+          >
+            {props => (
+              <Tbody {...props}>
+                {collection.map((item: Object, index: number) => (
+                  <React.Fragment>
+                    <Tr key={item.name} first={index === 0}>
+                      <NameColumn name={item.name} />
+                      <ActionColumn>
+                        <ButtonGroup>
+                          <Button
+                            icon="edit"
+                            title="Edit this value"
+                            onClick={() => {
+                              openModal(
+                                <AddConfigItemModal
+                                  onClose={closeModal}
+                                  item={item}
+                                  belongsTo={belongsTo}
+                                  onSubmit={saveValue}
+                                  intrf={intrf}
+                                  intrfId={intrfId}
+                                  isGlobal
+                                />
+                              );
+                            }}
+                          />
+                          <Button
+                            icon="cross"
+                            title="Remove this value"
+                            btnStyle="danger"
+                            onClick={() => {
+                              dispatchAction(
+                                actions.workflows.deleteConfigItem,
+                                intrfId,
+                                null,
+                                item.name,
+                                null
+                              );
+                            }}
+                          />
+                        </ButtonGroup>
+                      </ActionColumn>
+                      <Td
+                        className={`text ${item.level === 'workflow' ||
+                          item.level === 'global'}`}
+                      >
+                        {item.type === 'hash' ||
+                        item.type === 'list' ||
+                        item.type === '*hash' ||
+                        item.type === '*list' ? (
+                            <Tree compact data={item.value} />
+                          ) : (
+                            <ContentByType inTable content={item.value} />
+                          )}
+                      </Td>
+                      <Td className="narrow">
+                        <code>{item.type}</code>
+                      </Td>
+                    </Tr>
+                  </React.Fragment>
+                ))}
+              </Tbody>
+            )}
+          </DataOrEmptyTable>
+        </Table>
+      )}
+    </EnhancedTable>
+  ) : null;
 
 export default compose(
   withDispatch(),

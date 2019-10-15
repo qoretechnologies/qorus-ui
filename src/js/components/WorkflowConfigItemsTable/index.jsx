@@ -14,6 +14,10 @@ import NoDataIf from '../NoDataIf';
 import mapProps from 'recompose/mapProps';
 import modal from '../../hocomponents/modal';
 import Table from './table';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 
 type GlobalConfigItemsContainerProps = {
   items: Object,
@@ -50,7 +54,31 @@ const WorkflowConfigItemsContainer: Function = ({
       {() => (
         <React.Fragment>
           {map(items, (configItems: Array<Object>, belongsTo: string) => (
-            <ExpandableItem title={belongsTo} key={belongsTo} show>
+            <ExpandableItem
+              title={`${belongsTo} (${size(configItems.data)})`}
+              key={belongsTo}
+              label={
+                <ButtonGroup>
+                  <Button
+                    disabled={!size(globalItems)}
+                    icon="add"
+                    label="Add new"
+                    title="Add new"
+                    onClick={() => {
+                      openModal(
+                        <AddConfigItemModal
+                          onClose={closeModal}
+                          onSubmit={saveValue}
+                          globalConfig={globalItems}
+                          isGlobal
+                        />
+                      );
+                    }}
+                  />
+                </ButtonGroup>
+              }
+              show={size(configItems.data) !== 0}
+            >
               {() => (
                 <Table
                   globalItems={globalItems}
