@@ -111,7 +111,7 @@ export default class Topbar extends Component {
     quickSearchType: string,
     quickSearchValue: string,
   } = {
-    quickSearchType: 'Workflows',
+    quickSearchType: 'Orders by value',
     quickSearchValue: '',
   };
 
@@ -140,15 +140,13 @@ export default class Topbar extends Component {
       <Popover
         content={
           <Menu>
-            {sortedInterfaces.map(
-              (key: string): React.Element<MenuItem> => (
-                <MenuItem
-                  text={key}
-                  key={key}
-                  onClick={() => this.setState({ quickSearchType: key })}
-                />
-              )
-            )}
+            {sortedInterfaces.map((key: string): React.Element<MenuItem> => (
+              <MenuItem
+                text={key}
+                key={key}
+                onClick={() => this.setState({ quickSearchType: key })}
+              />
+            ))}
           </Menu>
         }
         popoverClassName="popover-dropdown"
