@@ -16,7 +16,11 @@ import { connect } from 'react-redux';
 import includes from 'lodash/includes';
 import modal from '../../hocomponents/modal';
 import Table from './table';
-
+import AddConfigItemModal from '../ConfigItemsTable/modal';
+import {
+  Controls as ButtonGroup,
+  Control as Button,
+} from '../../components/controls';
 type GlobalConfigItemsContainerProps = {
   items: Object,
   dispatchAction: Function,
@@ -63,7 +67,31 @@ const GlobalConfigItemsContainer: Function = ({
                 closeModal={closeModal}
               />
             ) : (
-              <ExpandableItem title={belongsTo} key={belongsTo} show>
+              <ExpandableItem
+                title={`${belongsTo} (${size(configItems.data)})`}
+                key={belongsTo}
+                label={
+                  <ButtonGroup>
+                    <Button
+                      disabled={!size(globalItems)}
+                      icon="add"
+                      label="Add new"
+                      title="Add new"
+                      onClick={() => {
+                        openModal(
+                          <AddConfigItemModal
+                            isGlobal
+                            onClose={closeModal}
+                            onSubmit={saveValue}
+                            globalConfig={globalItems}
+                          />
+                        );
+                      }}
+                    />
+                  </ButtonGroup>
+                }
+                show={size(configItems.data) !== 0}
+              >
                 {() => (
                   <Table
                     globalItems={globalItems}
