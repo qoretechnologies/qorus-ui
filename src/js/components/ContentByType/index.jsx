@@ -8,6 +8,7 @@ import Text from '../../components/text';
 import Date from '../../components/date';
 import Flex from '../Flex';
 import { isDate } from '../../helpers/date';
+import ReactMarkdown from 'react-markdown';
 
 type ContentByTypeProps = {
   content: any,
@@ -31,7 +32,7 @@ const ContentByType: Function = ({
     const isContentDate: boolean = isDate(content);
 
     let newContent = inTable ? (
-      <Text text={`"${content}"`} noControls={noControls} />
+      <Text text={content} noControls={noControls} />
     ) : (
       content
     );
@@ -42,7 +43,9 @@ const ContentByType: Function = ({
         {newContent}
       </Flex>
     ) : (
-      <div className={className}>{newContent}</div>
+      <div className={className}>
+        <ReactMarkdown>{newContent}</ReactMarkdown>
+      </div>
     );
   }
 

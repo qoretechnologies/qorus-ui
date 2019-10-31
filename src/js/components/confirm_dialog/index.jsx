@@ -21,7 +21,12 @@ const ConfirmDialog: Function = ({
   children,
   intl,
 }: Props): React.Element<any> => (
-  <Modal hasFooter>
+  <Modal
+    hasFooter
+    onEnterPress={() => {
+      onConfirm();
+    }}
+  >
     <Modal.Header titleId="confirmdialog" onClose={onClose}>
       <FormattedMessage id='dialog.please-confirm-action' />
     </Modal.Header>

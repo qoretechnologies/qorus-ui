@@ -100,7 +100,33 @@ export default class StepModal extends Component {
    */
   renderBody () {
     const { step } = this.props;
-    const { class: classData } = step;
+    const { class: classData, code } = step;
+
+    if (code) {
+      return (
+        <Tabs className="step-info" active="code" noContainer>
+          <Pane name="Code">
+            <InfoHeader model={step} />
+            <SourceCode lineOffset={0} language={step.language}>
+              {code}
+            </SourceCode>
+          </Pane>
+          <Pane name="Step Info">
+            <InfoTable object={step} omit={['class', 'functions']} />
+          </Pane>
+          {this.props.step.config && (
+            <Pane key="step-info" name="Config" scrollY>
+              <ConfigItemsTable
+                items={rebuildConfigHash(this.props.stepWithConfig)}
+                intrf="workflows"
+                intrfId={this.props.workflow.id}
+                stepId={this.props.step.stepid}
+              />
+            </Pane>
+          )}
+        </Tabs>
+      );
+    }
 
     return classData ? (
       <Tabs className="step-info" active="code" noContainer>

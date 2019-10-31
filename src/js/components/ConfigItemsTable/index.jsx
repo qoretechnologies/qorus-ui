@@ -51,7 +51,7 @@ let ExpandableConfigWrapper = ({
   intl,
 }) => (
   <ExpandableItem
-    title={belongsTo}
+    title={`${belongsTo} (${size(configItems.data)})`}
     key={belongsTo}
     label={
       size(configItems.data) ? (
@@ -111,7 +111,7 @@ const ConfigItemsContainer: Function = ({
   };
 
   return (
-    <NoDataIf condition={size(items) === 0} big>
+    <NoDataIf condition={size(items) === 0}>
       {() => (
         <React.Fragment>
           {map(items, (configItems: Array<Object>, belongsTo: string) => (

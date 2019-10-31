@@ -133,11 +133,9 @@ export default class ConnectionsPane extends Component {
       if (val && val !== '' && attr === 'opts') {
         data[optsKey] = JSON.parse(data[optsKey]);
 
-        Object.keys(data[optsKey]).forEach(
-          (key: string): void => {
-            proceed = typeof data[optsKey][key] === 'object' ? false : proceed;
-          }
-        );
+        Object.keys(data[optsKey]).forEach((key: string): void => {
+          proceed = typeof data[optsKey][key] === 'object' ? false : proceed;
+        });
       }
 
       if (!proceed) {
@@ -158,7 +156,7 @@ export default class ConnectionsPane extends Component {
 
   render () {
     const { deps, alerts, locked } = this.props.remote;
-    const { paneTab, paneId } = this.props;
+    const { paneTab, paneId, remoteType } = this.props;
     const { isPassLoaded } = this.state;
 
     const canEdit = !locked && this.props.canEdit;
@@ -170,7 +168,7 @@ export default class ConnectionsPane extends Component {
         onResize={this.props.onResize}
         title={`${this.props.remote.name} detail`}
         tabs={{
-          tabs: ['Detail', 'Log'],
+          tabs: remoteType === 'datasources' ? ['Detail', 'Log'] : ['Detail'],
           queryIdentifier: 'paneTab',
         }}
       >
@@ -248,16 +246,18 @@ export default class ConnectionsPane extends Component {
               </PaneItem>
             </Box>
           </SimpleTab>
-          <SimpleTab name="log">
-            <Box top fill scrollY>
-              <LogContainer
-                id={paneId}
-                intfc="remotes"
-                url="remote/datasources"
-                resource={`qdsp/${paneId}`}
-              />
-            </Box>
-          </SimpleTab>
+          {remoteType === 'datasources' && (
+            <SimpleTab name="log">
+              <Box top fill scrollY>
+                <LogContainer
+                  id={paneId}
+                  intfc="remotes"
+                  url="remote/datasources"
+                  resource={`qdsp/${paneId}`}
+                />
+              </Box>
+            </SimpleTab>
+          )}
         </SimpleTabs>
       </Pane>
     );
