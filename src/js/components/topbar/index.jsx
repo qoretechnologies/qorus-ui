@@ -111,7 +111,7 @@ export default class Topbar extends Component {
     quickSearchType: string,
     quickSearchValue: string,
   } = {
-    quickSearchType: 'global.in-workflows',
+    quickSearchType: 'Orders by value',
     quickSearchValue: '',
   };
 

@@ -238,7 +238,7 @@ let ItemsTable: Function = ({
                         className={`text ${item.level === 'workflow' ||
                           item.level === 'global'}`}
                       >
-                        {!item.isTemplatedString &&
+                        {!item.is_templated_string &&
                         (item.type === 'hash' ||
                           item.type === 'list' ||
                           item.type === '*hash' ||
@@ -262,7 +262,7 @@ let ItemsTable: Function = ({
                     {showDescription && (
                       <Tr>
                         <Td className="text" colspan={groupName ? 6 : 7}>
-                          {item.desc}
+                          <ContentByType inTable content={item.desc} />
                         </Td>
                       </Tr>
                     )}

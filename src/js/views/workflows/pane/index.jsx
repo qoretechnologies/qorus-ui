@@ -1,6 +1,7 @@
 /* @flow */
 import React, { Component } from 'react';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import size from 'lodash/size';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -37,6 +38,29 @@ const selector = createSelector(
   (props: Object): string => props.workflow.normalizedName,
   'Workflows',
   'prefix'
+)
+@mapProps((props: Object): Object =>
+  props.workflow.code
+    ? {
+      ...props,
+      lib: {
+        ...{
+          code: [
+            {
+              name: 'Workflow code',
+              body: props.workflow.code,
+            },
+          ],
+        },
+        ...props.workflow.lib,
+      },
+    }
+    : {
+      ...props,
+      lib: {
+        ...props.workflow.lib,
+      },
+    }
 )
 export default class WorkflowsDetail extends Component {
   props: {
@@ -80,6 +104,7 @@ export default class WorkflowsDetail extends Component {
       width,
       onResize,
       location,
+      lib,
     } = this.props;
     const loaded: boolean = workflow && 'lib' in workflow;
 
@@ -105,11 +130,11 @@ export default class WorkflowsDetail extends Component {
               suffix: `(${configItemsCount})`,
             },
             'Steps',
-            'Order Stats',
+            'OrderStats',
             'Process',
             'Releases',
             {
-              title: 'Value maps',
+              title: 'Valuemaps',
               suffix: `(${size(workflow.vmaps)})`,
             },
             {
@@ -129,6 +154,7 @@ export default class WorkflowsDetail extends Component {
           systemOptions={systemOptions}
           activeTab={paneTab}
           band={band}
+          lib={lib}
           isPane
           location={location}
         />
