@@ -15,6 +15,7 @@ import titleManager from '../../../hocomponents/TitleManager';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
 import Flex from '../../../components/Flex';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   nodes: Object,
@@ -32,19 +33,22 @@ const ClusterView: Function = ({
   openPane,
   closePane,
   paneId,
+  intl,
 }: Props): React.Element<any> => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb active> Cluster </Crumb>
+        <Crumb active><FormattedMessage id='cluster.cluster' /></Crumb>
       </Breadcrumbs>
       <Pull right>
-        <Tag className="pt-large">Nodes: {Object.keys(nodes).length}</Tag>{' '}
         <Tag className="pt-large">
-          Processes: {Object.keys(processes).length}
+          <FormattedMessage id='cluster.nodes' />: {Object.keys(nodes).length}
         </Tag>{' '}
         <Tag className="pt-large">
-          Cluster memory: {calculateMemory(nodesMemory)}
+          <FormattedMessage id='cluster.processes' />: {Object.keys(processes).length}
+        </Tag>{' '}
+        <Tag className="pt-large">
+          <FormattedMessage id='cluster.cluster-memory' />: {calculateMemory(nodesMemory)}
         </Tag>
       </Pull>
     </Headbar>
@@ -95,5 +99,6 @@ export default compose(
     })
   ),
   withPane(ClusterPane, ['processes']),
-  titleManager('Cluster')
+  titleManager('Cluster'),
+  injectIntl
 )(ClusterView);

@@ -12,11 +12,13 @@ import ProcessSummary from '../../../components/ProcessSummary';
 import InfoHeader from '../../../components/InfoHeader';
 import Flex from '../../../components/Flex';
 import Box from '../../../components/box';
+import { injectIntl } from 'react-intl';
 
 @connect(
   () => ({}),
   actions.services
 )
+@injectIntl
 export default class DetailTab extends Component {
   props: {
     service: Object,
@@ -39,7 +41,9 @@ export default class DetailTab extends Component {
       <Box top fill>
         <InfoHeader model={service} />
         <Flex scrollY>
-          <PaneItem title="Controls">
+          <PaneItem
+            title={this.props.intl.formatMessage({ id: 'component.controls' })}
+          >
             <ServicesControls
               status={service.status}
               enabled={service.enabled}

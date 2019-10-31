@@ -4,11 +4,13 @@ import React, { Component } from 'react';
 import { pureRender } from '../utils';
 import Toolbar from '../toolbar';
 import { Controls as ButtonGroup, Control as Button } from '../controls';
+import { injectIntl } from 'react-intl';
 
 /**
  * Drop-down component with a button to add options.
  */
 @pureRender
+@injectIntl
 export default class SystemOptions extends Component {
   props: {
     options: Array<Object>,
@@ -85,13 +87,13 @@ export default class SystemOptions extends Component {
             type="submit"
             btnStyle="primary"
             iconName="plus"
-            text="Submit"
+            text={this.props.intl.formatMessage({ id: 'button.submit' })}
           />
           <Button
             type="button"
             onClick={this.cancel}
             iconName="cross"
-            text="Cancel"
+            text={this.props.intl.formatMessage({ id: 'button.cancel' })}
           />
         </ButtonGroup>
       </form>
@@ -110,7 +112,7 @@ export default class SystemOptions extends Component {
           btnStyle="primary"
           onClick={this.start}
           disabled={!this.props.options.length}
-          text="Add option"
+          text={this.props.intl.formatMessage({ id: 'button.add-option' })}
           iconName="plus"
           big
         />

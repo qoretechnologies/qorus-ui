@@ -16,6 +16,7 @@ import Dropdown, {
 import Input from './input';
 import Picker from './picker';
 import Calendar from './calendar';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   date: ?string,
@@ -33,6 +34,7 @@ type Props = {
 };
 
 @pure(['date', 'futureOnly', 'className', 'disabled'])
+@injectIntl
 export default class DatePicker extends Component {
   props: Props = this.props;
 
@@ -209,19 +211,37 @@ export default class DatePicker extends Component {
     return (
       <Controls grouped noControls>
         <Control
-          label="All"
+          label={this.props.intl.formatMessage({ id: 'datetime.all' })}
           btnStyle="default"
           big
           action={this.handleAllClick}
         />
         <Dropdown id="date-selection">
           <DropdownControl btnStyle="default" />
-          <DropdownItem title="Now" action={this.handleNowClick} />
-          <DropdownItem title="Today" action={this.handleTodayClick} />
-          <DropdownItem title="24H" action={this.handle24hClick} />
-          <DropdownItem title="Week" action={this.handleWeekClick} />
-          <DropdownItem title="This month" action={this.handleMonthClick} />
-          <DropdownItem title="30 days" action={this.handleThirtyClick} />
+          <DropdownItem
+            title={this.props.intl.formatMessage({ id: 'datetime.now' })}
+            action={this.handleNowClick}
+          />
+          <DropdownItem
+            title={this.props.intl.formatMessage({ id: 'datetime.today' })}
+            action={this.handleTodayClick}
+          />
+          <DropdownItem
+            title={this.props.intl.formatMessage({ id: 'datetime.24h' })}
+            action={this.handle24hClick}
+          />
+          <DropdownItem
+            title={this.props.intl.formatMessage({ id: 'datetime.week' })}
+            action={this.handleWeekClick}
+          />
+          <DropdownItem
+            title={this.props.intl.formatMessage({ id: 'datetime.this-month' })}
+            action={this.handleMonthClick}
+          />
+          <DropdownItem
+            title={this.props.intl.formatMessage({ id: 'datetime.30-days' })}
+            action={this.handleThirtyClick}
+          />
         </Dropdown>
       </Controls>
     );
@@ -287,7 +307,7 @@ export default class DatePicker extends Component {
 
         {!futureOnly && !noButtons && (
           <Button
-            text="All"
+            text={this.props.intl.formatMessage({ id: 'datetime.all' })}
             onClick={this.handleAllClick}
             big={!small}
             disabled={disabled}
@@ -296,12 +316,30 @@ export default class DatePicker extends Component {
         {!futureOnly && !noButtons && (
           <Dropdown disabled={disabled}>
             <DropdownControl small={small} />
-            <DropdownItem title="Now" onClick={this.handleNowClick} />
-            <DropdownItem title="Today" onClick={this.handleTodayClick} />
-            <DropdownItem title="24h" onClick={this.handle24hClick} />
-            <DropdownItem title="Week" onClick={this.handleWeekClick} />
-            <DropdownItem title="This month" onClick={this.handleMonthClick} />
-            <DropdownItem title="30 days" onClick={this.handleThirtyClick} />
+            <DropdownItem
+              title={this.props.intl.formatMessage({ id: 'datetime.now' })}
+              onClick={this.handleNowClick}
+            />
+            <DropdownItem
+              title={this.props.intl.formatMessage({ id: 'datetime.today' })}
+              onClick={this.handleTodayClick}
+            />
+            <DropdownItem
+              title={this.props.intl.formatMessage({ id: 'datetime.24h' })}
+              onClick={this.handle24hClick}
+            />
+            <DropdownItem
+              title={this.props.intl.formatMessage({ id: 'datetime.week' })}
+              onClick={this.handleWeekClick}
+            />
+            <DropdownItem
+              title={this.props.intl.formatMessage({ id: 'datetime.this-month' })}
+              onClick={this.handleMonthClick}
+            />
+            <DropdownItem
+              title={this.props.intl.formatMessage({ id: 'datetime.30-days' })}
+              onClick={this.handleThirtyClick}
+            />
           </Dropdown>
         )}
         {this.renderDatepicker()}

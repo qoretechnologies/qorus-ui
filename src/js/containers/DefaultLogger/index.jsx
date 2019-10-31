@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import size from 'lodash/size';
 
-import Flex from '../../components/Flex';
 import withDispatch from '../../hocomponents/withDispatch';
 import PaneItem from '../../components/pane_item';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
@@ -32,6 +31,7 @@ import withHandlers from 'recompose/withHandlers';
 import { fetchWithNotifications, del, post } from '../../store/api/utils';
 import settings from '../../settings';
 import Alert from '../../components/alert';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type LoggerContainerProps = {
   logger: Object,
@@ -63,17 +63,18 @@ const DefaultLoggerContainer: Function = ({
   id,
   handleLoggerDeleteClick,
   handleLoggerDuplicateClick,
-  name: name = 'Logger',
+  name,
   defaultOnly,
   url,
+  intl,
 }: LoggerContainerProps): React.Element<any> => (
   <React.Fragment>
     {logger === 'empty' ? (
       <PaneItem
         title={
           <>
-            <Icon iconName="info-sign" />
-            {name}
+            <Icon iconName="info-sign" />{' '}
+            {name || intl.formatMessage({ id: 'component.logger' })}
           </>
         }
         label={
@@ -91,7 +92,7 @@ const DefaultLoggerContainer: Function = ({
             >
               <ButtonGroup>
                 <Button
-                  text="Add new default logger"
+                  text={intl.formatMessage({ id: 'button.add-new-default-logger' })}
                   icon="add"
                   stopPropagation
                   onClick={() => {
@@ -116,7 +117,7 @@ const DefaultLoggerContainer: Function = ({
               >
                 <ButtonGroup>
                   <Button
-                    text="Add new logger"
+                    text={intl.formatMessage({ id: 'button.add-new' })}
                     icon="add"
                     stopPropagation
                     onClick={() => {
@@ -131,9 +132,8 @@ const DefaultLoggerContainer: Function = ({
         }
       >
         <Alert bsStyle="danger">
-          There is no logger defined for {resource}. Use the buttons above to
-          create a default logger{' '}
-          {!defaultOnly && 'or concrete loggers for this interface'}.
+          {intl.formatMessage({ id: 'component.no-logger-defined-for-res' }, { resource: resource })}{' '}
+          {!defaultOnly && intl.formatMessage({ id: 'component.no-logger-defined-for-res-2' })}.
         </Alert>
       </PaneItem>
     ) : (
@@ -141,7 +141,8 @@ const DefaultLoggerContainer: Function = ({
         <PaneItem
           title={
             <>
-              <Icon iconName="info-sign" /> {name}
+              <Icon iconName="info-sign" />{' '}
+              {name || intl.formatMessage({ id: 'component.logger' })}
             </>
           }
           label={
@@ -162,7 +163,7 @@ const DefaultLoggerContainer: Function = ({
                   >
                     <ButtonGroup>
                       <Button
-                        text="Add new logger"
+                        text={intl.formatMessage({ id: 'button.add-new' })}
                         icon="add"
                         stopPropagation
                         onClick={() => {
@@ -174,7 +175,7 @@ const DefaultLoggerContainer: Function = ({
                   </Popover>
                   <ButtonGroup>
                     <Button
-                      text="Clone logger"
+                      text={intl.formatMessage({ id: 'button.clone-logger' })}
                       icon="duplicate"
                       stopPropagation
                       onClick={handleLoggerDuplicateClick}
@@ -197,7 +198,7 @@ const DefaultLoggerContainer: Function = ({
               >
                 <ButtonGroup>
                   <Button
-                    text="Edit logger"
+                    text={intl.formatMessage({ id: 'button.edit' })}
                     icon="edit"
                     stopPropagation
                     onClick={() => {
@@ -209,7 +210,7 @@ const DefaultLoggerContainer: Function = ({
               </Popover>
               <ButtonGroup>
                 <Button
-                  text="Delete logger"
+                  text={intl.formatMessage({ id: 'button.delete' })}
                   btnStyle="danger"
                   icon="remove"
                   onClick={handleLoggerDeleteClick}
@@ -220,15 +221,15 @@ const DefaultLoggerContainer: Function = ({
         >
           {!defaultOnly && (
             <Alert bsStyle="warning">
-              This interface is using default logger.
+              <FormattedMessage id='component.interface-using-def-logger' />
             </Alert>
           )}
           <Table fixed striped>
             <Thead>
               <FixedRow>
                 <NameColumnHeader />
-                <Th icon="info-sign">Level</Th>
-                <Th icon="info-sign">Additivity</Th>
+                <Th icon="info-sign"><FormattedMessage id='logger.level' /></Th>
+                <Th icon="info-sign"><FormattedMessage id='logger.additivity' /></Th>
               </FixedRow>
             </Thead>
             <Tbody>
@@ -246,7 +247,8 @@ const DefaultLoggerContainer: Function = ({
         <PaneItem
           title={
             <>
-              <Icon iconName="info-sign" /> Appenders
+              <Icon iconName="info-sign" />{' '}
+              <FormattedMessage id='component.appenders' />
             </>
           }
           label={
@@ -263,7 +265,7 @@ const DefaultLoggerContainer: Function = ({
               isOpen={isAppenderPopoverOpen}
             >
               <Button
-                text="Add appender"
+                text={intl.formatMessage({ id: 'button.add-new' })}
                 icon="add"
                 stopPropagation
                 onClick={() => toggleAppenderPopover(() => true)}
@@ -276,19 +278,25 @@ const DefaultLoggerContainer: Function = ({
               <FixedRow>
                 <NameColumnHeader />
                 <Th className="text" icon="info-sign">
-                  Type
+                  <FormattedMessage id='table.type' />
                 </Th>
                 <Th className="text" icon="info-sign">
-                  Filename
+                  <FormattedMessage id='logger.filename' />
                 </Th>
                 <Th className="text" icon="info-sign">
-                  Encoding
+                  <FormattedMessage id='logger.encoding' />
                 </Th>
                 <Th className="text" icon="info-sign">
-                  Layout Pattern
+                  <FormattedMessage id='logger.layout-pattern' />
                 </Th>
-                <Th icon="refresh" title="Rotation count" />
-                <Th icon="remove" title="Remove appender" />
+                <Th
+                  icon="refresh"
+                  title={intl.formatMessage({ id: 'logger.rotation-count' })}
+                />
+                <Th
+                  icon="wrench"
+                  title={intl.formatMessage({ id: 'table.actions' })}
+                />
               </FixedRow>
             </Thead>
             <DataOrEmptyTable condition={size(appenders) === 0} cols={7} small>
@@ -331,7 +339,7 @@ const DefaultLoggerContainer: Function = ({
                               isOpen={isEditAppenderPopoverOpen}
                             >
                               <Button
-                                title="Edit appender"
+                                title={intl.formatMessage({ id: 'button.edit' })}
                                 icon="edit"
                                 stopPropagation
                                 onClick={() =>
@@ -340,7 +348,7 @@ const DefaultLoggerContainer: Function = ({
                               />
                             </Popover>
                             <Button
-                              title="Remove appender"
+                              title={intl.formatMessage({ id: 'button.remove-appender' })}
                               btnStyle="danger"
                               icon="remove"
                               onClick={() =>
@@ -448,5 +456,6 @@ export default compose(
     'isLoggerEditPopoverOpen',
     'isAppenderPopoverOpen',
     'isEditAppenderPopoverOpen',
-  ])
+  ]),
+  injectIntl
 )(DefaultLoggerContainer);

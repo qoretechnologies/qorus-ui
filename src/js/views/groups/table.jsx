@@ -8,7 +8,6 @@ import size from 'lodash/size';
 import actions from '../../store/api/actions';
 import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
 import Row from './row';
-import Icon from '../../components/icon';
 import Selectors from './toolbar/selectors';
 import Actions from './toolbar/actions';
 import Pull from '../../components/Pull';
@@ -21,6 +20,7 @@ import { NameColumnHeader } from '../../components/NameColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
 import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
 import { INTERFACE_ICONS } from '../../constants/interfaces';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   sortData: Object,
@@ -54,6 +54,7 @@ const GroupsTable: Function = ({
   handleLoadAll,
   loadMoreCurrent,
   loadMoreTotal,
+  intl,
 }: Props): React.Element<any> => (
   <Table fixed hover condensed striped>
     <Thead>
@@ -86,39 +87,50 @@ const GroupsTable: Function = ({
         <ActionColumnHeader />
         <Th
           name="workflows_count"
-          title="Workflows"
+          title={intl.formatMessage({ id: 'table.workflows' })}
           iconName={INTERFACE_ICONS.workflows}
         >
-          {isTablet ? 'W' : 'Workflows'}
+          {intl.formatMessage({ id: 'table.workflows' + (isTablet ? '-mini' : '') })}
         </Th>
         <Th
           name="services_count"
-          title="Services"
+          title={intl.formatMessage({ id: 'table.services' })}
           iconName={INTERFACE_ICONS.services}
         >
-          {isTablet ? 'S' : 'Services'}
+          {intl.formatMessage({ id: 'table.services' + (isTablet ? '-mini' : '') })}
         </Th>
-        <Th name="jobs_count" title="Jobs" iconName={INTERFACE_ICONS.jobs}>
-          {isTablet ? 'J' : 'Jobs'}
+        <Th
+          name="jobs_count"
+          title={intl.formatMessage({ id: 'table.jobs' })}
+          iconName={INTERFACE_ICONS.jobs}
+        >
+          {intl.formatMessage({ id: 'table.jobs' + (isTablet ? '-mini' : '') })}
         </Th>
         <Th
           name="vmaps_count"
-          title="Vmaps"
+          title={intl.formatMessage({ id: 'table.vmaps' })}
           iconName={INTERFACE_ICONS.valuemaps}
         >
-          {isTablet ? 'V' : 'Vmaps'}
+          {intl.formatMessage({ id: 'table.vmaps' + (isTablet ? '-mini' : '') })}
         </Th>
-        <Th name="roles_count" title="Roles" iconName={INTERFACE_ICONS.roles}>
-          {isTablet ? 'R' : 'Roles'}
+        <Th
+          name="roles_count"
+          title={intl.formatMessage({ id: 'table.roles' })}
+          iconName={INTERFACE_ICONS.roles}
+        >
+          {intl.formatMessage({ id: 'table.roles' + (isTablet ? '-mini' : '') })}
         </Th>
         <Th
           name="mappers_count"
-          title="Mappers"
+          title={intl.formatMessage({ id: 'table.mappers' })}
           iconName={INTERFACE_ICONS.mappers}
         >
-          {isTablet ? 'M' : 'Mappers'}
+          {intl.formatMessage({ id: 'table.mappers' + (isTablet ? '-mini' : '') })}
         </Th>
-        <DescriptionColumnHeader name="description" />
+        <DescriptionColumnHeader
+          name="description"
+          children={intl.formatMessage({ id: 'table.description' })}
+        />
       </FixedRow>
     </Thead>
     <DataOrEmptyTable condition={size(collection) === 0} cols={11}>
@@ -151,5 +163,6 @@ export default compose(
     }
   ),
   titleManager('Groups'),
-  pure(['collection', 'sortData'])
+  pure(['collection', 'sortData']),
+  injectIntl
 )(GroupsTable);

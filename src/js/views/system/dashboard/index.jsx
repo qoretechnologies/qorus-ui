@@ -17,10 +17,8 @@ import {
 import ChartComponent from '../../../components/chart';
 import { prepareHistory, formatChartTime } from '../../../helpers/chart';
 import withModal from '../../../hocomponents/modal';
-import StatsModal from './statsModal';
 import SLAModal from './modals/sla';
 import GlobalModal from './modals/global';
-import { DISPOSITIONS } from '../../../constants/dashboard';
 import titleManager from '../../../hocomponents/TitleManager';
 import { COLORS } from '../../../constants/ui';
 import MultiDispositionChart from '../../../components/MultiDispositionChart';
@@ -34,6 +32,7 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../../components/controls';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 const viewSelector = createSelector(
   [
@@ -66,6 +65,7 @@ type Props = {
 @connect(viewSelector)
 @withModal()
 @titleManager('Dashboard')
+@injectIntl
 export default class Dashboard extends Component {
   props: Props = this.props;
 
@@ -136,13 +136,11 @@ export default class Dashboard extends Component {
     const currentNodeData = system.cluster_info[this.state.nodeTab];
     const history = prepareHistory(currentNodeData.mem_history);
     const procHistory = prepareHistory(currentNodeData.process_history);
-    const flattenedHistory = history.map(
-      (hist: Object): number =>
-        parseFloat(calculateMemory(hist.node_priv, null, false), 10)
+    const flattenedHistory = history.map((hist: Object): number =>
+      parseFloat(calculateMemory(hist.node_priv, null, false), 10)
     );
-    const flattenedInUseHistory = history.map(
-      (hist: Object): number =>
-        parseFloat(calculateMemory(hist.node_ram_in_use, null, false), 10)
+    const flattenedInUseHistory = history.map((hist: Object): number =>
+      parseFloat(calculateMemory(hist.node_ram_in_use, null, false), 10)
     );
     const historyMax = Math.max(...flattenedHistory);
     const inUseHistoryMax = Math.max(...flattenedInUseHistory);
@@ -157,7 +155,7 @@ export default class Dashboard extends Component {
       backgroundColor: COLORS.danger,
       borderColor: COLORS.danger,
       fill: false,
-      label: 'Total node RAM',
+      label: this.props.intl.formatMessage({ id: 'dashboard.total-node-ram' }),
       pointRadius: 0,
       borderWidth: 1,
     };
@@ -170,10 +168,12 @@ export default class Dashboard extends Component {
     }
 
     const nodeChart = {
-      data: history.map(
-        (hist: Object): number => calculateMemory(hist.node_priv, null, false)
+      data: history.map((hist: Object): number =>
+        calculateMemory(hist.node_priv, null, false)
       ),
-      label: 'RAM used by Qorus',
+      label: this.props.intl.formatMessage({
+        id: 'dashboard.ram-used-by-qorus',
+      }),
       backgroundColor: COLORS.cobalt,
       borderColor: COLORS.cobalt,
       fill: false,
@@ -183,11 +183,10 @@ export default class Dashboard extends Component {
     };
 
     const nodeInUseChart = {
-      data: history.map(
-        (hist: Object): number =>
-          calculateMemory(hist.node_ram_in_use, null, false)
+      data: history.map((hist: Object): number =>
+        calculateMemory(hist.node_ram_in_use, null, false)
       ),
-      label: 'Total RAM used',
+      label: this.props.intl.formatMessage({ id: 'dashboard.total-ram-used' }),
       backgroundColor: COLORS.gray,
       borderColor: COLORS.gray,
       fill: false,
@@ -198,7 +197,9 @@ export default class Dashboard extends Component {
 
     const nodeProcChart = {
       data: procHistory.map((hist: Object): number => hist.count),
-      label: 'Running processes',
+      label: this.props.intl.formatMessage({
+        id: 'dashboard.running-processes',
+      }),
       backgroundColor: COLORS.cobalt,
       borderColor: COLORS.cobalt,
       fill: false,
@@ -209,7 +210,7 @@ export default class Dashboard extends Component {
 
     const nodeCPUChart = {
       data: history.map((hist: Object): number => round(hist.node_load_pct, 2)),
-      label: 'CPU load',
+      label: this.props.intl.formatMessage({ id: 'dashboard.cpu-load' }),
       backgroundColor: COLORS.cobalt,
       borderColor: COLORS.cobalt,
       fill: false,
@@ -222,12 +223,14 @@ export default class Dashboard extends Component {
       <Flex>
         <Headbar>
           <Breadcrumbs>
-            <Crumb active>Dashboard</Crumb>
+            <Crumb active>
+              <FormattedMessage id="Dashboard" />
+            </Crumb>
           </Breadcrumbs>
           <Pull right>
             <ButtonGroup>
               <Button
-                text="Settings"
+                text={this.props.intl.formatMessage({ id: 'button.settings' })}
                 icon="cog"
                 onClick={() => {
                   browserHistory.push('/user?tab=settings#dashboard');
@@ -244,7 +247,9 @@ export default class Dashboard extends Component {
               <MasonryPanel>
                 <DashboardModule>
                   <MultiDispositionChart
-                    title="Global order stats"
+                    title={this.props.intl.formatMessage({
+                      id: 'stats.global-order-stats',
+                    })}
                     orderStats={system.order_stats}
                     onDispositionChartClick={band => {
                       this.props.openModal(
@@ -260,7 +265,9 @@ export default class Dashboard extends Component {
                         <SLAModal
                           onClose={this.props.closeModal}
                           in_sla
-                          text="In SLA"
+                          text={this.props.intl.formatMessage({
+                            id: 'stats.in-sla',
+                          })}
                           band={band}
                         />
                       );
@@ -272,14 +279,18 @@ export default class Dashboard extends Component {
             {this.hasModule('interfaces') && (
               <MasonryPanel>
                 <DashboardModule>
-                  <PaneItem title="Interfaces">
+                  <PaneItem
+                    title={this.props.intl.formatMessage({
+                      id: 'dashboard.interfaces',
+                    })}
+                  >
                     <div className="dashboard-data-module has-link">
                       <div
                         className="dashboard-data-title"
                         onClick={() => this.handleModuleClick('/workflows')}
                       >
                         {' '}
-                        Workflows{' '}
+                        <FormattedMessage id="Workflows" />{' '}
                       </div>
                       <div
                         className="dashboard-data-top"
@@ -288,7 +299,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.workflow_total}
                         </div>
-                        <div className="db-data-label"> total </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="global.total" />{' '}
+                        </div>
                       </div>
                       <div
                         className={`dashboard-data-bottom ${
@@ -303,7 +317,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.workflow_alerts}
                         </div>
-                        <div className="db-data-label"> with alerts </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
+                        </div>
                       </div>
                     </div>
                     <div className="dashboard-data-module has-link">
@@ -312,7 +329,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/services')}
                       >
                         {' '}
-                        Services{' '}
+                        <FormattedMessage id="Services" />{' '}
                       </div>
                       <div
                         className="dashboard-data-top"
@@ -321,7 +338,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.service_total}
                         </div>
-                        <div className="db-data-label"> total </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="global.total" />{' '}
+                        </div>
                       </div>
                       <div
                         className={`dashboard-data-bottom ${
@@ -336,7 +356,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.service_alerts}
                         </div>
-                        <div className="db-data-label"> with alerts </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
+                        </div>
                       </div>
                     </div>
                     <div className="dashboard-data-module has-link">
@@ -345,7 +368,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/jobs')}
                       >
                         {' '}
-                        Jobs{' '}
+                        <FormattedMessage id="Jobs" />{' '}
                       </div>
                       <div
                         className="dashboard-data-top"
@@ -354,7 +377,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.job_total}
                         </div>
-                        <div className="db-data-label"> total </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="global.total" />{' '}
+                        </div>
                       </div>
                       <div
                         className={`dashboard-data-bottom ${
@@ -367,7 +393,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.job_alerts}
                         </div>
-                        <div className="db-data-label"> with alerts </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
+                        </div>
                       </div>
                     </div>
                   </PaneItem>
@@ -377,7 +406,11 @@ export default class Dashboard extends Component {
             {this.hasModule('connections') && (
               <MasonryPanel>
                 <DashboardModule>
-                  <PaneItem title="Connections">
+                  <PaneItem
+                    title={this.props.intl.formatMessage({
+                      id: 'Connections',
+                    })}
+                  >
                     <div className="dashboard-data-module has-link">
                       <div
                         className="dashboard-data-title"
@@ -396,7 +429,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.remote_total}
                         </div>
-                        <div className="db-data-label"> total </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="global.total" />{' '}
+                        </div>
                       </div>
                       <div
                         className={`dashboard-data-bottom ${
@@ -411,7 +447,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.remote_alerts}
                         </div>
-                        <div className="db-data-label"> with alerts </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
+                        </div>
                       </div>
                     </div>
                     <div className="dashboard-data-module has-link">
@@ -419,7 +458,7 @@ export default class Dashboard extends Component {
                         className="dashboard-data-title"
                         onClick={() => this.handleModuleClick('/remote')}
                       >
-                        Datasource
+                        <FormattedMessage id="dashboard.datasource" />
                       </div>
                       <div
                         className="dashboard-data-top"
@@ -428,7 +467,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.datasource_total}
                         </div>
-                        <div className="db-data-label"> total </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="global.total" />{' '}
+                        </div>
                       </div>
                       <div
                         className={`dashboard-data-bottom ${
@@ -443,7 +485,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.datasource_alerts}
                         </div>
-                        <div className="db-data-label"> with alerts </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
+                        </div>
                       </div>
                     </div>
                     <div className="dashboard-data-module has-link">
@@ -453,7 +498,7 @@ export default class Dashboard extends Component {
                           this.handleModuleClick('/remote?tab=user')
                         }
                       >
-                        User
+                        <FormattedMessage id="global.user-connection" />
                       </div>
                       <div
                         className="dashboard-data-top"
@@ -464,7 +509,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.user_total}
                         </div>
-                        <div className="db-data-label"> total </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="global.total" />{' '}
+                        </div>
                       </div>
                       <div
                         className={`dashboard-data-bottom ${
@@ -479,7 +527,10 @@ export default class Dashboard extends Component {
                         <div className="db-data-content">
                           {system.user_alerts}
                         </div>
-                        <div className="db-data-label"> with alerts </div>
+                        <div className="db-data-label">
+                          {' '}
+                          <FormattedMessage id="dashboard.with-alerts" />{' '}
+                        </div>
                       </div>
                     </div>
                   </PaneItem>
@@ -489,25 +540,35 @@ export default class Dashboard extends Component {
             {this.hasModule('cluster') && (
               <MasonryPanel>
                 <DashboardModule>
-                  <PaneItem title="Cluster">
+                  <PaneItem
+                    title={this.props.intl.formatMessage({
+                      id: 'dashboard.cluster',
+                    })}
+                  >
                     <div className="module-wrapper">
                       <div className="dashboard-module-small">
                         <div className="top">
                           {calculateMemory(clusterMemory)}
                         </div>
-                        <div className="bottom">Memory</div>
+                        <div className="bottom">
+                          <FormattedMessage id="dashboard.memory" />
+                        </div>
                       </div>
                       <div className="dashboard-module-small">
                         <div className="top">
                           {Object.keys(system.cluster_info).length}
                         </div>
-                        <div className="bottom">Node(s)</div>
+                        <div className="bottom">
+                          <FormattedMessage id="dashboard.nodes" />
+                        </div>
                       </div>
                       <div className="dashboard-module-small">
                         <div className="top">
                           {Object.keys(system.processes).length}
                         </div>
-                        <div className="bottom">Processes</div>
+                        <div className="bottom">
+                          <FormattedMessage id="dashboard.processes" />
+                        </div>
                       </div>
                     </div>
                     {Object.keys(system.cluster_info).map((node: string) => {
@@ -547,21 +608,29 @@ export default class Dashboard extends Component {
                           <div className="bottom">
                             <div className="module">
                               <div className="top">{memory}</div>
-                              <div className="bottom">RAM used by Qorus</div>
+                              <div className="bottom">
+                                <FormattedMessage id="dashboard.ram-used-by-qorus" />
+                              </div>
                             </div>
                             <div className="module">
                               <div className="top">{processes}</div>
-                              <div className="bottom">Processes</div>
+                              <div className="bottom">
+                                <FormattedMessage id="dashboard.processes" />
+                              </div>
                             </div>
                           </div>
                           <div className="bottom">
                             <div className="module">
                               <div className="top">{memoryInUse}</div>
-                              <div className="bottom">Total RAM used</div>
+                              <div className="bottom">
+                                <FormattedMessage id="dashboard.total-ram-used" />
+                              </div>
                             </div>
                             <div className="module">
                               <div className="top">{round(loadPct, 2)}%</div>
-                              <div className="bottom">CPU load</div>
+                              <div className="bottom">
+                                <FormattedMessage id="dashboard.cpu-load" />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -574,11 +643,17 @@ export default class Dashboard extends Component {
             {this.hasModule('overview') && (
               <MasonryPanel>
                 <DashboardModule>
-                  <PaneItem title="System Overview">
+                  <PaneItem
+                    title={this.props.intl.formatMessage({
+                      id: 'dashboard.system-overview',
+                    })}
+                  >
                     <div className="dashboard-module-overview">
                       <div className="module overview-module">
                         <div>{health.data['instance-key']}</div>
-                        <div>instance</div>
+                        <div>
+                          <FormattedMessage id="dashboard.instance" />
+                        </div>
                       </div>
                       <div
                         className={`module overview-module ${statusHealth(
@@ -586,7 +661,9 @@ export default class Dashboard extends Component {
                         )}`}
                       >
                         <div>{health.data.health}</div>
-                        <div>health</div>
+                        <div>
+                          <FormattedMessage id="dashboard.health" />
+                        </div>
                       </div>
                     </div>
                     <div className="dashboard-module-overview">
@@ -599,7 +676,9 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/system/alerts')}
                       >
                         <div>{system['alert-summary'].ongoing}</div>
-                        <div>ongoing alerts</div>
+                        <div>
+                          <FormattedMessage id="dashboard.ongoing-alerts" />
+                        </div>
                       </div>
                       <div
                         className={`module overview-module ${
@@ -612,7 +691,9 @@ export default class Dashboard extends Component {
                         }
                       >
                         <div>{system['alert-summary'].transient}</div>
-                        <div>transient alerts</div>
+                        <div>
+                          <FormattedMessage id="dashboard.transient-alerts" />
+                        </div>
                       </div>
                     </div>
                   </PaneItem>
@@ -622,7 +703,11 @@ export default class Dashboard extends Component {
             {this.hasModule('remotes') && remotes.length ? (
               <MasonryPanel>
                 <DashboardModule>
-                  <PaneItem title="Remote Instances">
+                  <PaneItem
+                    title={this.props.intl.formatMessage({
+                      id: 'dashboard.remote-instances',
+                    })}
+                  >
                     {remotes.map((remote: Object) => (
                       <div
                         className="dashboard-module-wide has-link"
@@ -650,7 +735,9 @@ export default class Dashboard extends Component {
                             }}
                           >
                             <div className="top">{remote['instance-key']}</div>
-                            <div className="bottom">key</div>
+                            <div className="bottom">
+                              <FormattedMessage id="dashboard.key" />
+                            </div>
                           </div>
                           <div
                             className="module"
@@ -659,7 +746,9 @@ export default class Dashboard extends Component {
                             }}
                           >
                             <div className="top">{remote.health}</div>
-                            <div className="bottom">health</div>
+                            <div className="bottom">
+                              <FormattedMessage id="dashboard.health" />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -669,7 +758,7 @@ export default class Dashboard extends Component {
                         className="dashboard-data-loadmore"
                         onClick={this.handleLoadMoreRemotesClick}
                       >
-                        Show all
+                        <FormattedMessage id="global.show-all" />
                       </div>
                     )}
                     {!canLoadMoreRemotes && remotes.length > 5 ? (
@@ -688,7 +777,9 @@ export default class Dashboard extends Component {
               <MasonryPanel>
                 <DashboardModule>
                   <PaneItem
-                    title="Node Memory Progression"
+                    title={this.props.intl.formatMessage({
+                      id: 'dashboard.node-memory-progression',
+                    })}
                     label={
                       <Nodes
                         nodeTab={this.state.nodeTab}
@@ -698,9 +789,15 @@ export default class Dashboard extends Component {
                     }
                   >
                     <ChartComponent
-                      title={`${this.state.nodeTab} (${calculateMemory(
-                        currentNodeData.node_ram
-                      )} total RAM)`}
+                      title={
+                        `${this.state.nodeTab} (${calculateMemory(
+                          currentNodeData.node_ram
+                        )} ` +
+                        this.props.intl.formatMessage({
+                          id: 'dashboard.total-ram',
+                        }) +
+                        ')'
+                      }
                       width="100%"
                       height={115}
                       isNotTime
@@ -708,9 +805,8 @@ export default class Dashboard extends Component {
                       unit=" GiB"
                       yMax={yMax}
                       empty={currentNodeData.mem_history.length === 0}
-                      labels={history.map(
-                        (hist: Object): string =>
-                          formatChartTime(hist.timestamp)
+                      labels={history.map((hist: Object): string =>
+                        formatChartTime(hist.timestamp)
                       )}
                       datasets={
                         memoryLimitChart
@@ -719,37 +815,54 @@ export default class Dashboard extends Component {
                       }
                     />
                   </PaneItem>
-                  <PaneItem title="Node CPU load">
+                  <PaneItem
+                    title={this.props.intl.formatMessage({
+                      id: 'dashboard.node-cpu-load',
+                    })}
+                  >
                     <ChartComponent
-                      title={`${this.state.nodeTab} (${
-                        currentNodeData.node_cpu_count
-                      } CPUs)`}
+                      title={
+                        `${this.state.nodeTab} (${currentNodeData.node_cpu_count} ` +
+                        this.props.intl.formatMessage({
+                          id: 'dashboard.cpu-cores',
+                        }) +
+                        ')'
+                      }
                       width="100%"
                       height={115}
                       isNotTime
                       unit="%"
                       empty={currentNodeData.mem_history.length === 0}
-                      labels={procHistory.map(
-                        (hist: Object): string =>
-                          formatChartTime(hist.timestamp)
+                      labels={procHistory.map((hist: Object): string =>
+                        formatChartTime(hist.timestamp)
                       )}
                       datasets={[nodeCPUChart]}
                     />
                   </PaneItem>
-                  <PaneItem title="Node Process Count History">
+                  <PaneItem
+                    title={this.props.intl.formatMessage({
+                      id: 'dashboard.node-process-count-history',
+                    })}
+                  >
                     <ChartComponent
-                      title={`${this.state.nodeTab} (${
-                        currentNodeData.process_count
-                      } processes)`}
+                      title={
+                        `${this.state.nodeTab} (${currentNodeData.process_count} ` +
+                        this.props.intl.formatMessage({
+                          id:
+                            currentNodeData.process_count > 4
+                              ? 'dashboard.processes-gt-4-lc'
+                              : 'dashboard.processes-lc',
+                        }) +
+                        ')'
+                      }
                       width="100%"
                       height={115}
                       isNotTime
                       unit=" "
                       stepSize={20}
                       empty={procHistory.length === 0}
-                      labels={procHistory.map(
-                        (hist: Object): string =>
-                          formatChartTime(hist.timestamp)
+                      labels={procHistory.map((hist: Object): string =>
+                        formatChartTime(hist.timestamp)
                       )}
                       datasets={[nodeProcChart]}
                     />

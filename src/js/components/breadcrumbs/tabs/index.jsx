@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import ResizeObserver from 'resize-observer-polyfill';
 import { Link } from 'react-router';
 import { buildPageLinkWithQueries } from '../../../helpers/router';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   tabs: Array<any>,
@@ -28,6 +29,7 @@ type Props = {
   local: boolean,
 };
 
+@injectIntl
 class CrumbTabs extends React.Component {
   props: Props = this.props;
 
@@ -171,7 +173,9 @@ class CrumbTabs extends React.Component {
               }
             >
               <CrumbTab
-                title={leftoverTabSelected ? capitalize(tabQuery) : 'More...'}
+                title={this.props.intl.formatMessage({
+                  id: leftoverTabSelected ? capitalize(tabQuery) : 'More...',
+                })}
                 active={leftoverTabSelected}
                 compact
               />
@@ -184,15 +188,18 @@ class CrumbTabs extends React.Component {
 }
 
 export default compose(
+  injectIntl,
   connect((state: Object): Object => ({
     windowWidth: state.ui.settings.width,
   })),
-  mapProps(({ tabs, width, windowWidth, ...rest }: Props): Props => ({
+  mapProps(({ tabs, width, windowWidth, intl, ...rest }: Props): Props => ({
     tabs: tabs.map((tab: any): Object =>
       isString(tab)
-        ? { title: tab, tabId: tab }
+        ? { title: intl.formatMessage({ id: tab }), tabId: tab }
         : {
-            title: `${tab.title}${tab.suffix ? ` ${tab.suffix}` : ''}`,
+            title: `${intl.formatMessage({ id: tab.title })}${
+              tab.suffix ? ` ${tab.suffix}` : ''
+            }`,
             tabId: tab.title,
           }
     ),

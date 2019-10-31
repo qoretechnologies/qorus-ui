@@ -21,6 +21,7 @@ import { resourceSelector } from '../../../selectors';
 import { CONN_MAP } from '../../../constants/remotes';
 import mapProps from 'recompose/mapProps';
 import Flex from '../../../components/Flex';
+import { FormattedMessage } from 'react-intl';
 
 type Props = {
   tabQuery?: string,
@@ -47,7 +48,10 @@ const Connections: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb> Connections </Crumb>
+        <Crumb>
+          {' '}
+          <FormattedMessage id="Connections" />{' '}
+        </Crumb>
         <CrumbTabs
           tabs={[
             { title: 'Datasources', suffix: `(${datasources.length})` },
@@ -116,23 +120,21 @@ export default compose(
   ),
   patch('load', ['query']),
   sync('meta'),
-  mapProps(
-    ({ remotes, ...rest }: Props): Props => ({
-      datasources: remotes.filter(
-        (remote: Object): boolean =>
-          remote.conntype.toLowerCase() === CONN_MAP.datasources.toLowerCase()
-      ),
-      users: remotes.filter(
-        (remote: Object): boolean =>
-          remote.conntype.toLowerCase() === CONN_MAP.user.toLowerCase()
-      ),
-      qorus: remotes.filter(
-        (remote: Object): boolean =>
-          remote.conntype.toLowerCase() === CONN_MAP.qorus.toLowerCase()
-      ),
-      remotes,
-      ...rest,
-    })
-  ),
+  mapProps(({ remotes, ...rest }: Props): Props => ({
+    datasources: remotes.filter(
+      (remote: Object): boolean =>
+        remote.conntype.toLowerCase() === CONN_MAP.datasources.toLowerCase()
+    ),
+    users: remotes.filter(
+      (remote: Object): boolean =>
+        remote.conntype.toLowerCase() === CONN_MAP.user.toLowerCase()
+    ),
+    qorus: remotes.filter(
+      (remote: Object): boolean =>
+        remote.conntype.toLowerCase() === CONN_MAP.qorus.toLowerCase()
+    ),
+    remotes,
+    ...rest,
+  })),
   queryControl('search')
 )(Connections);

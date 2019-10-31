@@ -8,6 +8,7 @@ import EditableCell from '../table/editable_cell';
 import { pureRender } from '../utils';
 import PaneItem from '../pane_item';
 import NoData from '../nodata';
+import { injectIntl } from 'react-intl';
 
 /**
  * Editable key-value table component.
@@ -22,6 +23,7 @@ import NoData from '../nodata';
  * experience and prevent unwanted flickering.
  */
 @pureRender
+@injectIntl
 export default class Options extends Component {
   props: {
     model: Object,
@@ -203,7 +205,7 @@ export default class Options extends Component {
    */
   render() {
     return (
-      <PaneItem title="Options">
+      <PaneItem title={this.props.intl.formatMessage({ id: 'component.options' })}>
         {!this.getModelOptions().length && <NoData />}
         {!!this.getModelOptions().length && (
           <Table

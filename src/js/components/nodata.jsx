@@ -1,27 +1,35 @@
 // @flow
 import React from 'react';
+import compose from 'recompose/compose';
 
 import Box from './box';
+import { injectIntl } from 'react-intl';
 
 type Props = {
-  title: string,
+  title?: string,
   big?: boolean,
-  content: string,
+  content?: string,
   inBox?: boolean,
 };
 
-const NoDataContent: Function = ({
-  title: title = 'No data',
+const NDC: Function = ({
+  title,
   big,
-  content: content = 'There are no data to be displayed',
+  content,
+  intl,
 }: Props): React.Element<any> => (
   <div className={`no-data-element ${big ? '' : 'no-data-small'}`}>
-    <h5>{title}</h5>
-    {big && <div>{content}</div>}
+    <h5>{title || intl.formatMessage({ id: 'component.no-data' })}</h5>
+    {big &&
+      <div>
+        {content || intl.formatMessage({ id: 'component.there-are-no-data' })}
+      </div>
+    }
   </div>
 );
+const NoDataContent = injectIntl(NDC);
 
-const NoData: Function = ({ inBox, ...rest }: Props): React.Element<any> =>
+const NoData: Function = ({ inBox, intl, ...rest }: Props): React.Element<any> =>
   inBox ? (
     <Box {...rest}>
       <NoDataContent {...rest} />
@@ -30,4 +38,6 @@ const NoData: Function = ({ inBox, ...rest }: Props): React.Element<any> =>
     <NoDataContent {...rest} />
   );
 
-export default NoData;
+export default compose(
+  injectIntl
+)(NoData);

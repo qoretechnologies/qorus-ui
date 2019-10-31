@@ -5,8 +5,10 @@ import { Control } from '../controls';
 import Modal from '../modal';
 import { generateCSV } from '../../helpers/table';
 import modal from '../../hocomponents/modal';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 @modal()
+@injectIntl
 class CsvExport extends React.Component {
   props: {
     collection: Array<Object>,
@@ -22,7 +24,7 @@ class CsvExport extends React.Component {
     this._modal = (
       <Modal onMount={this.selectCSVContent}>
         <Modal.Header onClose={closeModal} titleId="csv-modal">
-          Copy table
+          <FormattedMessage id='global.copy-table' />
           <small> (Press ⌘ + c)</small>
         </Modal.Header>
         <Modal.Body>

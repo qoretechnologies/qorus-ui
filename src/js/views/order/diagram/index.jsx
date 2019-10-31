@@ -14,9 +14,11 @@ import withDispatch from '../../../hocomponents/withDispatch';
 import Flex from '../../../components/Flex';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { MasonryLayout, MasonryPanel } from '../../../components/MasonryLayout';
+import { injectIntl } from 'react-intl';
 
 @withDispatch()
 @onlyUpdateForKeys(['order', 'workflow', 'isTablet'])
+@injectIntl
 export default class DiagramView extends Component {
   props: {
     order: Object,
@@ -60,7 +62,9 @@ export default class DiagramView extends Component {
       </MasonryPanel>,
       <MasonryPanel>
         <Box top={top} key="hierarchy">
-          <PaneItem title="Hierarchy">
+          <PaneItem
+            title={this.props.intl.formatMessage({ id: 'order.hierarchy' })}
+          >
             <Hierarchy
               order={this.props.order}
               compact
@@ -71,7 +75,9 @@ export default class DiagramView extends Component {
       </MasonryPanel>,
       <MasonryPanel>
         <Box top={top} key="errors">
-          <PaneItem title="Order Error Instances">
+          <PaneItem
+            title={this.props.intl.formatMessage({ id: 'order.order-err-instances' })}
+          >
             <Errors
               order={this.props.order}
               tableId="compactOrderErrors"

@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import debounce from 'lodash/debounce';
 import pure from 'recompose/onlyUpdateForKeys';
-import { IntlProvider, addLocaleData } from 'react-intl';
+import { IntlProvider, addLocaleData, FormattedMessage } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import cs from 'react-intl/locale-data/cs';
-import de from 'react-intl/locale-data/de';
+import ja from 'react-intl/locale-data/ja';
 import mapProps from 'recompose/mapProps';
 
 import Topbar from '../components/topbar';
@@ -24,7 +24,7 @@ import Flex from '../components/Flex';
 import { success, warning } from '../store/ui/bubbles/actions';
 import FullPageLoading from '../components/FullPageLoading';
 
-addLocaleData([...en, ...cs, ...de]);
+addLocaleData([...en, ...cs, ...ja]);
 const systemSelector = state => state.api.system;
 const currentUserSelector = state => state.api.currentUser;
 const menuSelector = state => state.ui.menu;
@@ -70,13 +70,11 @@ const optionsSelector = state => state.api.systemOptions;
     sendWarning: warning,
   }
 )
-@mapProps(
-  ({ currentUser, ...rest }): Object => ({
-    sidebarOpen: currentUser.sync && currentUser.data.storage.sidebarOpen,
-    currentUser,
-    ...rest,
-  })
-)
+@mapProps(({ currentUser, ...rest }): Object => ({
+  sidebarOpen: currentUser.sync && currentUser.data.storage.sidebarOpen,
+  currentUser,
+  ...rest,
+}))
 export default class Root extends Component {
   props: {
     children: any,
@@ -108,7 +106,7 @@ export default class Root extends Component {
 
   _modal = null;
 
-  getChildContext() {
+  getChildContext () {
     return {
       openModal: (...args) => this._modal.open(...args),
       closeModal: (...args) => this._modal.close(...args),
@@ -117,7 +115,7 @@ export default class Root extends Component {
     };
   }
 
-  async componentDidMount() {
+  async componentDidMount () {
     await this.fetchGlobalData();
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
@@ -212,7 +210,7 @@ export default class Root extends Component {
     storeTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  render() {
+  render () {
     const {
       currentUser,
       info,
@@ -238,52 +236,54 @@ export default class Root extends Component {
     const locale = currentUser.data.storage.locale
       ? currentUser.data.storage.locale
       : navigator.locale
-      ? navigator.locale
-      : 'en-US';
+        ? navigator.locale
+        : 'en-US';
 
     const { favoriteMenuItems = [] } = currentUser.data.storage;
     const isLightTheme = currentUser.data.storage.theme === 'light';
 
     return (
-      <div className={`root ${isMaximized && 'maximized'}`}>
-        {!isMaximized && (
-          <Topbar
-            onMaximizeClick={maximize}
-            info={info}
-            health={health}
-            locale={locale}
-            isTablet={isTablet}
-            light={isLightTheme}
-            onThemeClick={this.onThemeChange}
-            user={currentUser.data}
-            location={location}
-            sendWarning={this.props.sendWarning}
-          />
-        )}
-        <div className="root__center">
+      <IntlProvider messages={messages(locale)} locale={locale}>
+        <div className={`root ${isMaximized && 'maximized'}`}>
           {!isMaximized && (
-            <Sidebar
-              isLight={isLightTheme}
-              isCollapsed={!this.props.sidebarOpen}
-              toggleMenu={this.toggleMenu}
+            <Topbar
+              onMaximizeClick={maximize}
+              info={info}
+              health={health}
+              locale={locale}
               isTablet={isTablet}
-              location={this.props.location}
-              menu={menu.data}
-              favoriteItems={favoriteMenuItems}
-              plugins={info.plugins}
+              light={isLightTheme}
+              onThemeClick={this.onThemeChange}
+              user={currentUser.data}
+              location={location}
+              sendWarning={this.props.sendWarning}
             />
           )}
-          <Flex className="section" scrollX>
-            <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
-          </Flex>
+          <div className="root__center">
+            {!isMaximized && (
+              <Sidebar
+                isLight={isLightTheme}
+                isCollapsed={!this.props.sidebarOpen}
+                toggleMenu={this.toggleMenu}
+                isTablet={isTablet}
+                location={this.props.location}
+                menu={menu.data}
+                favoriteItems={favoriteMenuItems}
+                plugins={info.plugins}
+              />
+            )}
+            <Flex className="section" scrollX>
+              <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
+            </Flex>
+          </div>
+          {!isMaximized && (
+            <Footer path={this.props.location.pathname} info={info.data} />
+          )}
+          <ModalManager ref={this.refModal} />
+          <Notifications />
+          <Bubbles />
         </div>
-        {!isMaximized && (
-          <Footer path={this.props.location.pathname} info={info.data} />
-        )}
-        <ModalManager ref={this.refModal} />
-        <Notifications />
-        <Bubbles />
-      </div>
+      </IntlProvider>
     );
   }
 }

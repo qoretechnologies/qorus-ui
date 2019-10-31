@@ -21,6 +21,7 @@ import {
   Control as Button,
 } from '../../components/controls';
 import withState from 'recompose/withState';
+import { injectIntl } from 'react-intl';
 
 type ConfigItemsContainerProps = {
   items: Object,
@@ -47,6 +48,7 @@ let ExpandableConfigWrapper = ({
   isGrouped,
   saveValue,
   setGrouped,
+  intl,
 }) => (
   <ExpandableItem
     title={`${belongsTo} (${size(configItems.data)})`}
@@ -58,7 +60,7 @@ let ExpandableConfigWrapper = ({
             onClick={() => setGrouped(cur => !cur)}
             icon={isGrouped ? 'ungroup-objects' : 'group-objects'}
           >
-            {isGrouped ? 'Show un-grouped' : 'Show grouped'}
+            {intl.formatMessage({ id: (isGrouped ? 'button.show-un-grouped' : 'button.show-grouped') })}
           </Button>
         </ButtonGroup>
       ) : null
@@ -82,9 +84,10 @@ let ExpandableConfigWrapper = ({
   </ExpandableItem>
 );
 
-ExpandableConfigWrapper = withState('isGrouped', 'setGrouped', true)(
-  ExpandableConfigWrapper
-);
+ExpandableConfigWrapper = compose(
+  withState('isGrouped', 'setGrouped', true),
+  injectIntl
+)(ExpandableConfigWrapper);
 
 const ConfigItemsContainer: Function = ({
   items,

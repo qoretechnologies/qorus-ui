@@ -130,11 +130,11 @@ export default class WorkflowsDetail extends Component {
               suffix: `(${configItemsCount})`,
             },
             'Steps',
-            'Order Stats',
+            'OrderStats',
             'Process',
             'Releases',
             {
-              title: 'Value maps',
+              title: 'Valuemaps',
               suffix: `(${size(workflow.vmaps)})`,
             },
             {

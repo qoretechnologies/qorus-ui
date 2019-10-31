@@ -23,6 +23,7 @@ import Search from '../../../containers/search';
 import { NameColumnHeader } from '../../../components/NameColumn';
 import { DateColumnHeader } from '../../../components/DateColumn';
 import { IdColumnHeader } from '../../../components/IdColumn';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   hierarchy: Object,
@@ -43,6 +44,7 @@ type Props = {
 const HierarchyTable: Function = ({
   hierarchy,
   compact,
+  intl,
 }: Props): React.Element<any> => (
   <EnhancedTable
     collection={hierarchy}
@@ -94,49 +96,53 @@ const HierarchyTable: Function = ({
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
             <IdColumnHeader />
-            <NameColumnHeader title="Workflow" />
+            <NameColumnHeader title={intl.formatMessage({ id: 'table.workflow' })} />
             <Th iconName="info-sign" name="workflowstatus">
-              Status
+              <FormattedMessage id='table.status' />
             </Th>
-            <Th
-              iconName="diagram-tree"
-              name="hierarchy_level"
-              title="Hierarchy level"
-            />
+            <Th iconName="diagram-tree" name="hierarchy_level">
+              <FormattedMessage id='table.hierarchy-level' />
+            </Th>
             <Th iconName="warning-sign" name="priority">
-              Priority
+              <FormattedMessage id='table.priority' />
             </Th>
-            <Th iconName="error" name="business_error" title="Business error" />
+            <Th iconName="error" name="business_error">
+              <FormattedMessage id='table.business-error' />
+            </Th>
             {!compact && (
-              <Th iconName="issue" name="error_count" title="Errors count" />
-            )}
-            {!compact && (
-              <Th iconName="warning-sign" name="warning_count">
-                Warnings
+              <Th iconName="issue" name="error_count">
+                <FormattedMessage id='table.errors-count' />
               </Th>
             )}
             {!compact && (
-              <Th
-                iconName="exchange"
-                name="subworkflow"
-                title="Is subworkflow"
-              />
+              <Th iconName="warning-sign" name="warning_count">
+                <FormattedMessage id='table.warnings' />
+              </Th>
             )}
             {!compact && (
-              <Th
-                iconName="refresh"
-                name="synchronous"
-                title="Is synchronous"
-              />
+              <Th iconName="exchange" name="subworkflow">
+                <FormattedMessage id='table.is-subworkflow' />
+              </Th>
             )}
             {!compact && (
-              <DateColumnHeader name="scheduled">Scheduled</DateColumnHeader>
+              <Th iconName="refresh" name="synchronous">
+                <FormattedMessage id='table.is-synchronous' />
+              </Th>
             )}
             {!compact && (
-              <DateColumnHeader name="started">Started</DateColumnHeader>
+              <DateColumnHeader name="scheduled">
+                <FormattedMessage id='table.scheduled' />
+              </DateColumnHeader>
             )}
             {!compact && (
-              <DateColumnHeader name="completed">Completed</DateColumnHeader>
+              <DateColumnHeader name="started">
+                <FormattedMessage id='table.started' />
+              </DateColumnHeader>
+            )}
+            {!compact && (
+              <DateColumnHeader name="completed">
+                <FormattedMessage id='table.completed' />
+              </DateColumnHeader>
             )}
           </FixedRow>
         </Thead>
@@ -179,5 +185,6 @@ export default compose(
       ...rest,
     })
   ),
-  pure(['hierarchy', 'isTablet'])
+  pure(['hierarchy', 'isTablet']),
+  injectIntl
 )(HierarchyTable);

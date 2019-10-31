@@ -4,8 +4,10 @@ import ReactDOM from 'react-dom';
 import { Controls, Control } from '../controls';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Intent, InputGroup, ControlGroup } from '@blueprintjs/core';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 @pure(['minutes', 'hours', 'children', 'futureOnly'])
+@injectIntl
 export default class Picker extends Component {
   props: {
     minutes: string | number,
@@ -44,12 +46,12 @@ export default class Picker extends Component {
     return (
       <Controls>
         <Control
-          label="24h"
+          label={this.props.intl.formatMessage({ id: 'datetime.24h' })}
           btnStyle="default"
           action={this.props.on24hClick}
         />
         <Control
-          label="All"
+          label={this.props.intl.formatMessage({ id: 'datetime.all' })}
           btnStyle="default"
           action={this.props.onAllClick}
         />
@@ -82,7 +84,7 @@ export default class Picker extends Component {
           />
           <Control
             iconName="undo"
-            title="Reset"
+            title={this.props.intl.formatMessage({ id: 'datetime.reset' })}
             action={this.props.onResetClick}
           />
         </ControlGroup>
@@ -95,7 +97,7 @@ export default class Picker extends Component {
               onClick={this.props.onApplyClick}
               iconName="small-tick"
             >
-              Apply
+              <FormattedMessage id='datetime.apply' />
             </Control>
           </Controls>
         </div>

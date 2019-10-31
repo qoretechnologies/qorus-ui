@@ -16,6 +16,7 @@ import {
 import { connect } from 'react-redux';
 import { fetchWithNotifications, post, put } from '../../../store/api/utils';
 import settings from '../../../settings';
+import { injectIntl } from 'react-intl';
 
 type NewLoggerPopoverProps = {
   error?: string,
@@ -52,10 +53,14 @@ const NewLoggerPopover: Function = ({
   dispatch,
   isAdding,
   data,
+  intl,
 }: NewLoggerPopoverProps): React.Element<any> => (
   <Box fill top style={{ minWidth: '350px' }}>
     {error && <Alert bsStyle="danger">{error}</Alert>}
-    <FormGroup label="Name " labelFor="logger-name">
+    <FormGroup
+      label={intl.formatMessage({ id: 'logger.name' })}
+      labelFor="logger-name"
+    >
       <InputGroup
         name="logger-name"
         id="logger-name"
@@ -63,9 +68,12 @@ const NewLoggerPopover: Function = ({
         onChange={handleNameChange}
       />
     </FormGroup>
-    <FormGroup label="Level " requiredLabel>
+    <FormGroup
+      label={intl.formatMessage({ id: 'logger.level' }) + ' '}
+      requiredLabel
+    >
       <Dropdown>
-        <Control>{level || 'Please select'}</Control>
+        <Control>{level || intl.formatMessage({ id: 'dropdown.please-select' })}</Control>
         {Object.keys(loggerLevels).map((loggerLevel: string) => (
           <Item
             key={loggerLevel}
@@ -75,7 +83,7 @@ const NewLoggerPopover: Function = ({
         ))}
       </Dropdown>
     </FormGroup>
-    <FormGroup label="Additivity">
+    <FormGroup label={intl.formatMessage({ id: 'logger.additivity' })}>
       <Checkbox
         checked={additivity ? 'CHECKED' : 'UNCHECKED'}
         action={handleAdditivityChange}
@@ -83,7 +91,7 @@ const NewLoggerPopover: Function = ({
     </FormGroup>
     <ButtonGroup className="pt-fill">
       <Button
-        text="Cancel"
+        text={intl.formatMessage({ id: 'button.cancel' })}
         icon="cross"
         onClick={onCancel}
         disabled={isAdding}
@@ -91,7 +99,7 @@ const NewLoggerPopover: Function = ({
       <Button
         disabled={isAdding}
         btnStyle="success"
-        text={data ? 'Update' : 'Submit'}
+        text={intl.formatMessage({ id: (data ? 'button.update' : 'button.submit') })}
         icon="small-tick"
         onClick={handleSubmit}
       />
@@ -184,5 +192,6 @@ export default compose(
       }
     },
   }),
-  onlyUpdateForKeys(['name', 'level', 'isAdding', 'additivity', 'error'])
+  onlyUpdateForKeys(['name', 'level', 'isAdding', 'additivity', 'error']),
+  injectIntl
 )(NewLoggerPopover);

@@ -4,6 +4,7 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Td, Th } from '../new_table';
 import Text from '../text';
+import { injectIntl } from 'react-intl';
 
 type AuthorColumnProps = {
   children: any,
@@ -28,16 +29,18 @@ type AuthorColumnHeaderProps = {
 };
 
 const AuthorColumnHeader: Function = compose(
-  onlyUpdateForKeys(['children', 'sortData'])
+  onlyUpdateForKeys(['children', 'sortData']),
+  injectIntl
 )(
   ({
-    children: children = 'Author',
+    children,
     name: name = 'author',
     icon: icon = 'person',
+    intl,
     ...rest
   }: AuthorColumnHeaderProps): React.Element<any> => (
     <Th iconName={icon} name={name} className="text" {...rest}>
-      {children}
+      {children || intl.formatMessage({ id: 'table.author' })}
     </Th>
   )
 );

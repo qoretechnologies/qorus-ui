@@ -21,6 +21,7 @@ import withDispatch from '../../../hocomponents/withDispatch';
 import ContentByType from '../../../components/ContentByType';
 import { DateColumn, DateColumnHeader } from '../../../components/DateColumn';
 import { IdColumnHeader, IdColumn } from '../../../components/IdColumn';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   setPriority: Function,
@@ -56,28 +57,29 @@ const DiagramInfoTable: Function = ({
   scheduled,
   handleSchedule,
   synchronous,
+  intl,
 }: Props): React.Element<any> => (
-  <PaneItem title="Info">
+  <PaneItem title={intl.formatMessage({ id: 'order.info' })}>
     <Table bordered condensed className="text-table">
       <Tbody>
         <Tr>
-          <IdColumnHeader>Instance ID</IdColumnHeader>
+          <IdColumnHeader><FormattedMessage id='table.instance-id' /></IdColumnHeader>
           <IdColumn>{id}</IdColumn>
-          <Th iconName="info-sign"> Status </Th>
+          <Th iconName="info-sign"><FormattedMessage id='table.status' /></Th>
           <Td>
             <span className={`label status-${label}`}>{workflowstatus}</span>
           </Td>
         </Tr>
         <Tr>
-          <DateColumnHeader>Started</DateColumnHeader>
+          <DateColumnHeader><FormattedMessage id='table.started' /></DateColumnHeader>
           <DateColumn>{started}</DateColumn>
-          <Th iconName="info-sign"> Custom </Th>
+          <Th iconName="info-sign"><FormattedMessage id='table.custom' /></Th>
           <Td>{customStatus}</Td>
         </Tr>
         <Tr>
-          <DateColumnHeader>Modified</DateColumnHeader>
+          <DateColumnHeader><FormattedMessage id='table.modified' /></DateColumnHeader>
           <DateColumn>{modified}</DateColumn>
-          <Th iconName="warning-sign"> Priority </Th>
+          <Th iconName="warning-sign"><FormattedMessage id='table.priority' /></Th>
           <EditableCell
             value={priority}
             type="number"
@@ -87,9 +89,9 @@ const DiagramInfoTable: Function = ({
           />
         </Tr>
         <Tr>
-          <DateColumnHeader>Completed</DateColumnHeader>
+          <DateColumnHeader><FormattedMessage id='table.completed' /></DateColumnHeader>
           <DateColumn>{completed}</DateColumn>
-          <Th iconName="arrow-up"> Parent ID </Th>
+          <Th iconName="arrow-up"><FormattedMessage id='table.parent-id' /></Th>
           <Td>{parentId}</Td>
         </Tr>
         <Tr>
@@ -136,5 +138,6 @@ export default compose(
       ...rest,
     })
   ),
-  pure(['scheduled', 'priority', 'workflowstatus'])
+  pure(['scheduled', 'priority', 'workflowstatus']),
+  injectIntl
 )(DiagramInfoTable);

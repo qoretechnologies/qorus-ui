@@ -16,6 +16,7 @@ import ContentByType from '../ContentByType';
 import { getType } from '../../helpers/functions';
 import { getLineCount } from '../../helpers/system';
 import connect from 'react-redux/lib/connect/connect';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 const qorusTypeMapper = {
   array: 'list',
@@ -30,6 +31,7 @@ const qorusTypeMapper = {
 @connect(state => ({
   settings: state.api.currentUser.data.storage.settings,
 }))
+@injectIntl
 export default class Tree extends Component {
   props: {
     data: Object | Array<any>,
@@ -240,7 +242,7 @@ export default class Tree extends Component {
         return JSON.parse(this.props.customEditData);
       }
 
-      return 'Loading data...';
+      return this.props.intl.formatMessage({ id: 'tree.loading-data' });
     }
 
     return JSON.stringify(data, null, 20);
@@ -278,14 +280,14 @@ export default class Tree extends Component {
                 {this.isDeep() && [
                   <Button
                     iconName="expand-all"
-                    text={!compact && 'Expand all'}
+                    text={!compact && this.props.intl.formatMessage({ id: 'tree.expand-all' })}
                     onClick={this.handleExpandClick}
                     key="expand-button"
                   />,
                   allExpanded || size(items) > 0 ? (
                     <Button
                       iconName="collapse-all"
-                      text={!compact && 'Collapse all'}
+                      text={!compact && this.props.intl.formatMessage({ id: 'tree.collapse-all' })}
                       onClick={this.handleCollapseClick}
                       key="collapse-button"
                     />
@@ -294,7 +296,7 @@ export default class Tree extends Component {
                 {!this.props.noControls && (
                   <Button
                     iconName="code"
-                    text={!compact && 'Show types'}
+                    text={!compact && this.props.intl.formatMessage({ id: 'tree.show-types' })}
                     btnStyle={showTypes && 'primary'}
                     onClick={this.handleTypesClick}
                   />
@@ -305,20 +307,20 @@ export default class Tree extends Component {
               <Pull right>
                 <ButtonGroup>
                   <Button
-                    text={!compact && 'Tree view'}
+                    text={!compact && this.props.intl.formatMessage({ id: 'tree.tree-view' })}
                     btnStyle={mode === 'normal' && 'primary'}
                     onClick={this.handleTreeClick}
                     iconName="diagram-tree"
                   />
                   <Button
-                    text={!compact && 'Copy view'}
+                    text={!compact && this.props.intl.formatMessage({ id: 'tree.copy-view' })}
                     btnStyle={mode === 'copy' && 'primary'}
                     onClick={this.handleCopyClick}
                     iconName="clipboard"
                   />
                   {withEdit && (
                     <Button
-                      text={!compact && 'Edit mode'}
+                      text={!compact && this.props.intl.formatMessage({ id: 'tree.edit-mode' })}
                       btnStyle={mode === 'edit' && 'primary'}
                       onClick={this.handleEditClick}
                       iconName="edit"
@@ -355,13 +357,12 @@ export default class Tree extends Component {
               rows={lineCount > 20 ? 20 : lineCount}
               cols="50"
             />
-            <Alert bsStyle="warning" title="Warning!">
-              Posting new staticdata replaces original content and it can be
-              fatal for business processing.
+            <Alert bsStyle="warning" title={this.props.intl.formatMessage({ id: 'global.warning' })}>
+              <FormattedMessage id='tree.posting-new-staticdata' />
             </Alert>
             <ButtonGroup>
               <Button
-                text="Update data"
+                text={this.props.intl.formatMessage({ id: 'tree.update-data' })}
                 intent={Intent.PRIMARY}
                 onClick={this.handleUpdateClick}
               />

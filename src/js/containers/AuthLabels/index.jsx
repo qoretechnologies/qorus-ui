@@ -28,6 +28,7 @@ import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import Dropdown, { Control, Item } from '../../components/dropdown';
 import withDispatch from '../../hocomponents/withDispatch';
+import { FormattedMessage } from 'react-intl';
 
 type AuthLabelsContainerProps = {
   service: Object,
@@ -105,7 +106,7 @@ const AuthLabelsContainer: Function = ({
             <FixedRow {...{ sortData, onSortChange }}>
               <NameColumnHeader />
               <DescriptionColumnHeader name="value">
-                Value
+                <FormattedMessage id="table.value" />
               </DescriptionColumnHeader>
             </FixedRow>
           </Thead>
@@ -144,12 +145,12 @@ export default compose(
   ),
   withDispatch(),
   lifecycle({
-    componentDidMount () {
+    componentDidMount() {
       if (!this.props.service.authLabels) {
         this.props.fetch(this.props.service.id);
       }
     },
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps(nextProps) {
       if (this.props.service.id !== nextProps.service.id) {
         this.props.fetch(nextProps.service.id);
       }

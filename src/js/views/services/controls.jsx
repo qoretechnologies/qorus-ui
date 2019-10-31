@@ -12,6 +12,7 @@ import {
 } from '../../components/controls';
 import actions from '../../store/api/actions';
 import withDispatch from '../../hocomponents/withDispatch';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   handleEnableClick: Function,
@@ -43,32 +44,37 @@ const ServiceControls: Function = ({
   type,
   remote,
   big,
+  intl,
 }: Props): React.Element<any> => (
   <ButtonGroup>
     <Button
-      title={enabled ? 'Disable' : 'Enable'}
+      title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
       iconName="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
       big={big}
     />
     <Button
-      title={autostart ? 'Disable autostart' : 'Enable autostart'}
+      title={intl.formatMessage({ id: (autostart ? 'button.disable-autostart' : 'button.enable-autostart') })}
       iconName={autostart ? 'pause' : 'play'}
       intent={autostart ? Intent.PRIMARY : Intent.NONE}
       onClick={handleAutostartClick}
       big={big}
     />
     <Button
-      title={loaded ? 'Loaded, click to unload' : 'Unloaded, click to load'}
+      title={intl.formatMessage({ id: (loaded ? 'button.loaded-click' : 'button.unloaded-click') })}
       iconName={loaded ? 'download' : 'upload'}
       intent={loaded ? Intent.PRIMARY : Intent.NONE}
       onClick={handleLoadClick}
       big={big}
     />
-    <Button title="Reset" iconName="refresh" onClick={handleResetClick} />
     <Button
-      title={remote ? 'Set as not remote' : 'Set as remote'}
+      title={intl.formatMessage({ id: 'button.reset' })}
+      iconName="refresh"
+      onClick={handleResetClick}
+    />
+    <Button
+      title={intl.formatMessage({ id: (remote ? 'button.set-not-remote' : 'button.set-remote') })}
       iconName="globe"
       intent={remote ? Intent.PRIMARY : Intent.NONE}
       onClick={handleRemoteClick}
@@ -134,5 +140,6 @@ export default compose(
       dispatchAction(actions.services.serviceAction, 'reset', id, null);
     },
   }),
-  pure(['enabled', 'loaded', 'autostart', 'remote'])
+  pure(['enabled', 'loaded', 'autostart', 'remote']),
+  injectIntl
 )(ServiceControls);

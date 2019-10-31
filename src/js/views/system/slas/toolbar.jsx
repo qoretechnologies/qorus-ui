@@ -16,6 +16,7 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../../components/controls';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   searchQuery?: string,
@@ -32,6 +33,7 @@ const SLAToolbar: Function = ({
   changeSearchQuery,
   handleAddClick,
   perms,
+  intl,
 }: Props): React.Element<any> => (
   <Headbar>
     <Breadcrumbs>
@@ -42,7 +44,7 @@ const SLAToolbar: Function = ({
         <Button
           disabled={!hasPermission(perms, ['CREATE-SLA', 'SLA-CONTROL'], 'or')}
           iconName="plus"
-          text="Add new"
+          text={intl.formatMessage({ id: 'button.add-new' })}
           onClick={handleAddClick}
           big
         />
@@ -67,5 +69,6 @@ export default compose(
       openModal(<SLAModal onClose={closeModal} />);
     },
   }),
-  pure(['searchQuery'])
+  pure(['searchQuery']),
+  injectIntl
 )(SLAToolbar);

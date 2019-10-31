@@ -31,6 +31,7 @@ import Flex from '../../../components/Flex';
 import Box from '../../../components/box';
 import { Table, Thead, Th, Tbody, Tr, Td } from '../../../components/new_table';
 import { ActionColumnHeader } from '../../../components/ActionColumn';
+import { injectIntl } from 'react-intl';
 
 @connect(
   null,
@@ -39,6 +40,7 @@ import { ActionColumnHeader } from '../../../components/ActionColumn';
   }
 )
 @withDispatch()
+@injectIntl
 export default class DetailTab extends Component {
   props: {
     workflow: Object,
@@ -226,7 +228,7 @@ export default class DetailTab extends Component {
           )}
           <AlertsTab alerts={workflow.alerts} />
           <ProcessSummary model={workflow} />
-          <PaneItem title="Instances">
+          <PaneItem title={this.props.intl.formatMessage({ id: 'global.instances' })}>
             <NoDataIf condition={workflow.TOTAL === 0}>
               {() => (
                 <InstancesChart

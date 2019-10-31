@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { fetchWithNotifications, post, put } from '../../../store/api/utils';
 import settings from '../../../settings';
 import Dropdown, { Item, Control } from '../../../components/dropdown';
+import { injectIntl } from 'react-intl';
 
 type NewAppenderPopoverProps = {
   error?: string,
@@ -60,10 +61,14 @@ const NewAppenderPopover: Function = ({
   isAdding,
   appendersTypes,
   appendersFields,
+  intl,
 }: NewAppenderPopoverProps): React.Element<any> => (
   <Box fill top style={{ minWidth: '350px' }}>
     {error && <Alert bsStyle="danger">{error}</Alert>}
-    <FormGroup label="Name " labelFor="appender-name">
+    <FormGroup
+      label={intl.formatMessage({ id: 'logger.name' })}
+      labelFor="appender-name"
+    >
       <InputGroup
         name="appender-name"
         id="appender-name"
@@ -72,9 +77,12 @@ const NewAppenderPopover: Function = ({
       />
     </FormGroup>
 
-    <FormGroup label="Appender type " requiredLabel>
+    <FormGroup
+      label={intl.formatMessage({ id: 'logger.appender-type' }) + ' '}
+      requiredLabel
+    >
       <Dropdown>
-        <Control>{appenderType || 'Please select'}</Control>
+        <Control>{appenderType || intl.formatMessage({ id: 'dropdown.please-select' })}</Control>
         {appendersTypes.map((appType: string) => (
           <Item
             key={appType}
@@ -86,7 +94,10 @@ const NewAppenderPopover: Function = ({
     </FormGroup>
 
     {includes(appendersFields['layoutPattern'], appenderType) && (
-      <FormGroup label="Layout pattern" labelFor="appender-layout">
+      <FormGroup
+        label={intl.formatMessage({ id: 'logger.layout-pattern' })}
+        labelFor="appender-layout"
+      >
         <InputGroup
           name="appender-layout"
           id="appender-layout"
@@ -97,7 +108,11 @@ const NewAppenderPopover: Function = ({
     )}
 
     {includes(appendersFields['filename'], appenderType) && (
-      <FormGroup label="Filename " labelFor="appender-filename" requiredLabel>
+      <FormGroup
+        label={intl.formatMessage({ id: 'logger.filename' }) + ' '}
+        labelFor="appender-filename"
+        requiredLabel
+      >
         <InputGroup
           name="appender-filename"
           id="appender-filename"
@@ -108,7 +123,10 @@ const NewAppenderPopover: Function = ({
     )}
 
     {includes(appendersFields['encoding'], appenderType) && (
-      <FormGroup label="Encoding" labelFor="appender-encoding">
+      <FormGroup
+        label={intl.formatMessage({ id: 'logger.encoding' })}
+        labelFor="appender-encoding"
+      >
         <InputGroup
           name="appender-encoding"
           id="appender-encoding"
@@ -119,7 +137,10 @@ const NewAppenderPopover: Function = ({
     )}
 
     {includes(appendersFields['rotationCount'], appenderType) && (
-      <FormGroup label="Rotation count" labelFor="appender-rotation">
+      <FormGroup
+        label={intl.formatMessage({ id: 'logger.rotation-count' })}
+        labelFor="appender-rotation"
+      >
         <InputGroup
           name="appender-rotation"
           id="appender-rotation"
@@ -130,7 +151,10 @@ const NewAppenderPopover: Function = ({
     )}
 
     {includes(appendersFields['archivePattern'], appenderType) && (
-      <FormGroup label="Archive pattern" labelFor="appender-archive">
+      <FormGroup
+        label={intl.formatMessage({ id: 'logger.archive-pattern' })}
+        labelFor="appender-archive"
+      >
         <InputGroup
           name="appender-archive"
           id="appender-archive"
@@ -142,7 +166,7 @@ const NewAppenderPopover: Function = ({
 
     <ButtonGroup className="pt-fill">
       <Button
-        text="Cancel"
+        text={intl.formatMessage({ id: 'button.cancel' })}
         icon="cross"
         onClick={onCancel}
         disabled={isAdding}
@@ -150,7 +174,7 @@ const NewAppenderPopover: Function = ({
       <Button
         disabled={isAdding}
         btnStyle="success"
-        text="Submit"
+        text={intl.formatMessage({ id: 'button.submit' })}
         icon="small-tick"
         onClick={handleSubmit}
       />
@@ -402,5 +426,6 @@ export default compose(
     'error',
     'rotationCount',
     'archivePattern',
-  ])
+  ]),
+  injectIntl
 )(NewAppenderPopover);

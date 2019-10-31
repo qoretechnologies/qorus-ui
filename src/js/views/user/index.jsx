@@ -20,6 +20,7 @@ import withTabs from '../../hocomponents/withTabs';
 import UserSettings from './tabs/settings';
 import Flex from '../../components/Flex';
 import { INTERFACE_IDS } from '../../constants/interfaces';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 const interfaces: Array<string> = [
   'roles',
@@ -36,6 +37,7 @@ const UserView: Function = ({
   userData,
   clearStorage,
   tabQuery,
+  intl
 }: {
   userData: Object,
   clearStorage: Function,
@@ -53,7 +55,7 @@ const UserView: Function = ({
         <Button
           intent={Intent.DANGER}
           iconName="cross"
-          text="Clear storage"
+          text={intl.formatMessage({ id: 'user.clear-storage' })}
           onClick={clearStorage}
         />
       </Pull>
@@ -63,7 +65,7 @@ const UserView: Function = ({
       <SimpleTab name="overview">
         <Box fill top scrollY>
           {interfaces.map((intrf: string) => (
-            <PaneItem title={capitalize(intrf)}>
+            <PaneItem title={intl.formatMessage({ id: 'global.' + intrf })}>
               {userData[intrf].length ? (
                 userData[intrf]
                   .map((datum: string | Object) => {
@@ -83,15 +85,14 @@ const UserView: Function = ({
               ) : userData.has_default ? (
                 <Alert bsStyle="warning" iconName="info-sign">
                   {' '}
-                  Member of DEFAULT group with no restrictions; all interfaces
-                  are accessible
+                  <FormattedMessage id='user.member-of-def-grp' />
                 </Alert>
               ) : (
                 <NoData />
               )}
             </PaneItem>
           ))}
-          <PaneItem title="Storage data">
+          <PaneItem title={intl.formatMessage({ id: 'user.storage-data' })}>
             <Tree data={userData.storage} />
           </PaneItem>
         </Box>
@@ -114,5 +115,6 @@ export default compose(
     }
   ),
   withTabs('overview'),
-  onlyUpdateForKeys(['userData', 'storage', 'tabQuery'])
+  onlyUpdateForKeys(['userData', 'storage', 'tabQuery']),
+  injectIntl
 )(UserView);

@@ -12,6 +12,7 @@ import Alert from '../../../components/alert';
 import Box from '../../../components/box';
 import { Modules } from '../../../constants/settings';
 import { map } from 'lodash';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   storage: Object,
@@ -36,53 +37,53 @@ const UserSettings: Function = ({
   handleNotificationsBrowserChange,
   dashboardModules,
   handleDashboardModulesChange,
+  intl,
 }: Props) => (
   <Box fill top scrollY>
-    <PaneItem title="Live Notifications">
+    <PaneItem title={intl.formatMessage({ id: 'settings.live-notifs' })}>
       <Toolbar mb>
         <Alert bsStyle="info" iconName="notifications">
-          When enabled, real time alert notifications display in the
-          bottom-right corner of the screen
+          <FormattedMessage id="settings.when-enabled" />
         </Alert>
       </Toolbar>
       <Checkbox
-        label="Enabled"
+        label={intl.formatMessage({ id: 'settings.enabled' })}
         onChange={handleNotificationsCheckboxChange}
         checked={notificationsEnabled}
       />
       <Checkbox
-        label="Enable sound"
+        label={intl.formatMessage({ id: 'settings.enable-sound' })}
         onChange={handleNotificationsSoundCheckboxChange}
         checked={notificationsSound}
         disabled={soundCheckboxDisabled}
       />
-      <PaneItem title="Browser Notifications">
+      <PaneItem title={intl.formatMessage({ id: 'settings.browser-notifs' })}>
         <Checkbox
-          label="Enable browser notifications"
+          label={intl.formatMessage({ id: 'settings.enable-browser-notifs' })}
           onChange={handleNotificationsBrowserChange}
           checked={notificationsBrowser}
         />
       </PaneItem>
     </PaneItem>
-    <PaneItem title="Tree rendering">
+    <PaneItem title={intl.formatMessage({ id: 'settings.tree-rendering' })}>
       <Checkbox
-        label="Always show data types"
+        label={intl.formatMessage({ id: 'settings.always-show-data-types' })}
         onChange={handleTreeDataTypesCheckboxChange}
         checked={treeDefaultDataTypes}
       />
       <Checkbox
-        label="Expanded by default"
+        label={intl.formatMessage({ id: 'settings.expanded-by-def' })}
         onChange={handleTreeExpandCheckboxChange}
         checked={treeDefaultExpanded}
       />
     </PaneItem>
-    <PaneItem title="Dashboard" id="dashboard">
+    <PaneItem title={intl.formatMessage({ id: 'Dashboard' })} id="dashboard">
       <Alert bsStyle="info" iconName="notifications">
-        Below you can select which panels are displayed on the dashboard
+        <FormattedMessage id="settings.below-you-can-select" />
       </Alert>
       {map(Modules, (dModule, name) => (
         <Checkbox
-          label={name}
+          label={intl.formatMessage({ id: name })}
           checked={dashboardModules.includes(dModule)}
           onChange={() => {
             handleDashboardModulesChange(
@@ -103,13 +104,11 @@ export default compose(
       storeSettings: actions.currentUser.storeSettings,
     }
   ),
-  mapProps(
-    ({ notificationsEnabled, ...rest }: Props): Props => ({
-      soundCheckboxDisabled: !notificationsEnabled,
-      notificationsEnabled,
-      ...rest,
-    })
-  ),
+  mapProps(({ notificationsEnabled, ...rest }: Props): Props => ({
+    soundCheckboxDisabled: !notificationsEnabled,
+    notificationsEnabled,
+    ...rest,
+  })),
   withHandlers({
     handleNotificationsCheckboxChange: ({
       storeSettings,
@@ -178,5 +177,6 @@ export default compose(
 
       storeSettings('dashboardModules', newDashboardModules);
     },
-  })
+  }),
+  injectIntl
 )(UserSettings);

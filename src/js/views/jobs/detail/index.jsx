@@ -32,6 +32,7 @@ import unsync from '../../../hocomponents/unsync';
 import Flex from '../../../components/Flex';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import { countConfigItems } from '../../../utils';
+import { FormattedMessage } from 'react-intl';
 
 type Props = {
   job: Object,
@@ -63,7 +64,10 @@ const JobPage = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb link="/jobs"> Jobs </Crumb>
+        <Crumb link="/jobs">
+          {' '}
+          <FormattedMessage id="Jobs" />{' '}
+        </Crumb>
         <Crumb>{normalizeName(job)}</Crumb>
         <CrumbTabs
           tabs={[
@@ -146,7 +150,7 @@ export default compose(
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps (nextProps: Props) {
+    componentWillReceiveProps(nextProps: Props) {
       const { date, fetch, id }: Props = this.props;
 
       if (date !== nextProps.date || id !== nextProps.id) {

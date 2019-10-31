@@ -18,6 +18,7 @@ import { NameColumnHeader } from '../../components/NameColumn';
 import { AuthorColumnHeader } from '../../components/AuthorColumn';
 import { DateColumnHeader } from '../../components/DateColumn';
 import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
+import { FormattedMessage } from 'react-intl';
 
 const ValueMapsTable = ({
   vmaps,
@@ -79,22 +80,24 @@ const ValueMapsTable = ({
             <NameColumnHeader />
             {!compact && <Th iconName="download">Dump</Th>}
             <Th className="narrow" name="mapsize" iconName="info-sign">
-              Mapsize
+              <FormattedMessage id='table.mapsize' />
             </Th>
             <Th
               classname="narrow"
               name="throws_exception"
               iconName="warning-sign"
             >
-              Throws
+              <FormattedMessage id='table.throws' />
             </Th>
             <Th className="narrow" name="valuetype" iconName="code">
-              Type
+              <FormattedMessage id='table.type' />
             </Th>
             {!compact && <AuthorColumnHeader />}
             {!compact && <DateColumnHeader />}
             {!compact && (
-              <DateColumnHeader name="modified">Modified</DateColumnHeader>
+              <DateColumnHeader name="modified">
+                <FormattedMessage id='table.modified' />
+              </DateColumnHeader>
             )}
             {!compact && <DescriptionColumnHeader name="description" />}
           </FixedRow>

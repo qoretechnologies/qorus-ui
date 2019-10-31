@@ -7,6 +7,7 @@ import { Controls as ButtonGroup, Control as Button } from '../controls';
 import Dropdown, { Item, Control } from '../dropdown';
 import withHandlers from 'recompose/withHandlers';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   handleSortChange: Function,
@@ -19,6 +20,7 @@ const SortingDropdown: Function = ({
   sortData: { sortBy, sortByKey },
   handleSortChange,
   sortKeys,
+  intl,
 }: Props): React.Element<ButtonGroup> => (
   <ButtonGroup>
     <Button
@@ -28,17 +30,14 @@ const SortingDropdown: Function = ({
       onClick={(e: any) => handleSortChange(e, sortBy)}
     />
     <Dropdown key={`${sortBy}_${sortByKey.direction}`}>
-      <Control>{upperFirst(sortBy.replace(/_/g, ' '))}</Control>
-      {map(
-        sortKeys,
-        (column: string, name: string): React.Element<Item> => (
-          <Item
-            title={name}
-            key={column}
-            onClick={e => handleSortChange(e, column)}
-          />
-        )
-      )}
+      <Control>{intl.formatMessage({ id: sortBy })}</Control>
+      {map(sortKeys, (column: string, name: string): React.Element<Item> => (
+        <Item
+          title={name}
+          key={column}
+          onClick={e => handleSortChange(e, column)}
+        />
+      ))}
     </Dropdown>
   </ButtonGroup>
 );
@@ -52,5 +51,6 @@ export default compose(
       onSortChange({ sortBy });
     },
   }),
-  onlyUpdateForKeys(['sortData', 'sortKeys'])
+  onlyUpdateForKeys(['sortData', 'sortKeys']),
+  injectIntl
 )(SortingDropdown);

@@ -24,6 +24,7 @@ import withHandlers from 'recompose/withHandlers';
 import moment from 'moment';
 import { DATE_FORMATS } from '../../constants/dates';
 import withDispatch from '../../hocomponents/withDispatch';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   sortData: Object,
@@ -74,6 +75,7 @@ const JobsTable: Function = ({
   dateQuery,
   changeDateQuery,
   handleExpiryChange,
+  intl,
 }: Props): React.Element<any> => (
   <Table striped hover condensed fixed>
     <Thead>
@@ -113,18 +115,18 @@ const JobsTable: Function = ({
         <NameColumnHeader />
         <ActionColumnHeader />
         <Th name="last_executed" iconName="calendar">
-          Last run
+          <FormattedMessage id='table.last-run' />
         </Th>
         <Th name="next" iconName="calendar">
-          Next run
+          <FormattedMessage id='table.next-run' />
         </Th>
         {!isTablet && (
           <Th name="expiry_date" iconName="outdated">
-            Expiry Date
+            <FormattedMessage id='table.expiry-date' />
           </Th>
         )}
         <Th className="separated-cell" iconName="grid">
-          Instances
+          <FormattedMessage id='table.instances' />
         </Th>
       </FixedRow>
     </Thead>
@@ -189,5 +191,6 @@ export default compose(
     'selected',
     'selectedIds',
     'canLoadMore',
-  ])
+  ]),
+  injectIntl
 )(JobsTable);

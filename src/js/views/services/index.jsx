@@ -32,6 +32,7 @@ import Flex from '../../components/Flex';
 import lifecycle from 'recompose/lifecycle';
 import showIfPassed from '../../hocomponents/show-if-passed';
 import Loader from '../../components/loader';
+import { FormattedMessage } from 'react-intl';
 
 type Props = {
   sortData: Object,
@@ -80,7 +81,9 @@ const Services: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb active>Services</Crumb>
+        <Crumb active>
+          <FormattedMessage id="Services" />
+        </Crumb>
       </Breadcrumbs>
       <Pull right>
         <CsvControl onClick={onCSVClick} disabled={size(services) === 0} />

@@ -8,6 +8,7 @@ import {
   Control as Button,
 } from '../../components/controls';
 import mapProps from 'recompose/mapProps';
+import { injectIntl } from 'react-intl';
 
 type Props = {
   autostart: number,
@@ -27,10 +28,11 @@ const AutoStart = ({
   handleIncrementClick,
   handleDecrementClick,
   big,
+  intl,
 }: Props): React.Element<any> => (
   <ButtonGroup marginRight={big ? 3 : 0}>
     <Button
-      title="Decrement autostart"
+      title={intl.formatMessage({ id: 'button.decrement-autostart' })}
       iconName="small-minus"
       onClick={handleDecrementClick}
       big={big}
@@ -42,7 +44,7 @@ const AutoStart = ({
     />
     <Button
       big={big}
-      title="Increment autostart"
+      title={intl.formatMessage({ id: 'button.increment-autostart' })}
       iconName="small-plus"
       onClick={handleIncrementClick}
     />
@@ -90,5 +92,6 @@ export default compose(
       }
     },
   }),
-  pure(['autostart', 'execCount'])
+  pure(['autostart', 'execCount']),
+  injectIntl
 )(AutoStart);

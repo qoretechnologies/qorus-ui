@@ -18,6 +18,7 @@ import { NameColumnHeader } from '../../../components/NameColumn';
 import { DescriptionColumnHeader } from '../../../components/DescriptionColumn';
 import { ActionColumnHeader } from '../../../components/ActionColumn';
 import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   collection: Array<Object>,
@@ -35,15 +36,18 @@ const SLATable: Function = ({
   openModal,
   closeModal,
   perms,
+  intl,
 }: Props): React.Element<any> => (
   <Table striped condensed fixed>
     <Thead>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <IdColumnHeader name="slaid" />
         <NameColumnHeader />
-        <DescriptionColumnHeader name="description" />
+        <DescriptionColumnHeader
+          name="description"
+        />
         <Th className="text" name="type" iconName="time">
-          Units
+          <FormattedMessage id='table.units' />
         </Th>
         <ActionColumnHeader />
       </FixedRow>
@@ -71,5 +75,6 @@ const SLATable: Function = ({
 
 export default compose(
   withModal(),
-  pure(['sortData', 'collection'])
+  pure(['sortData', 'collection']),
+  injectIntl
 )(SLATable);

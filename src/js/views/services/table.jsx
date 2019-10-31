@@ -19,6 +19,7 @@ import { IdColumnHeader } from '../../components/IdColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
 import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
 import SortingDropdown from '../../components/SortingDropdown';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   sortData: Object,
@@ -58,6 +59,7 @@ const ServicesTable: Function = ({
   loadMoreTotal,
   limit,
   sortKeys,
+  intl,
 }: Props): React.Element<any> => (
   <Table
     fixed
@@ -101,10 +103,10 @@ const ServicesTable: Function = ({
         <NameColumnHeader />
         <ActionColumnHeader />
         <Th name="type" iconName="info-sign">
-          Type
+          <FormattedMessage id='table.type' />
         </Th>
         <Th name="threads" iconName="multi-select">
-          Threads
+          <FormattedMessage id='table.threads' />
         </Th>
         <DescriptionColumnHeader />
       </FixedRow>
@@ -140,5 +142,6 @@ export default compose(
       select: actions.services.select,
     }
   ),
-  pure(['collection', 'sortData', 'paneId'])
+  pure(['collection', 'sortData', 'paneId']),
+  injectIntl
 )(ServicesTable);

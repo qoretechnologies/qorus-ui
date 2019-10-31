@@ -53,7 +53,8 @@ const SLAControl: Function = ({
         ) : (
           <p>{slavalue || 'None'}</p>
         )}
-        {slavalue &&
+        {
+          slavalue &&
           slavalue !== 'None' && (
             <Button
               iconName="cross"
@@ -61,7 +62,8 @@ const SLAControl: Function = ({
               onClick={handleRemoveClick}
               className="pt-small"
             />
-          )}
+          )
+        }
       </ControlGroup>
     );
   }

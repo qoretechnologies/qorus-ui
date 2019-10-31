@@ -14,6 +14,7 @@ import DependenciesList from './dependencies';
 import InfoTable from '../info_table';
 import Alert from '../alert';
 import Flex from '../Flex';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 type Props = {
   data: Object,
@@ -29,6 +30,7 @@ const Code: Function = ({
   handleItemClick,
   selected,
   location,
+  intl,
 }: Props): React.Element<any> => (
   <Flex className="code" flexFlow="row">
     <Flex className="code-list" scrollY>
@@ -36,7 +38,7 @@ const Code: Function = ({
         (name: string, index: number): React.Element<any> => (
           <Section
             key={name}
-            name={name}
+            name={intl.formatMessage({ id: name })}
             items={data[name]}
             onItemClick={handleItemClick}
             selected={selected}
@@ -49,46 +51,49 @@ const Code: Function = ({
         <Flex>
           {selected.type &&
           (selected.type !== 'code' && selected.type !== 'methods') ? (
-              <Tabs active="code">
-                <Pane name="Code">
-                  <CodeTab selected={selected} />
-                </Pane>
-                <Pane name="Info">
-                  <InfoTable
-                    object={{
-                      author: selected.item.author,
-                      source:
+            <Tabs active="code">
+              <Pane name="Code">
+                <CodeTab selected={selected} />
+              </Pane>
+              <Pane name="Info">
+                <InfoTable
+                  object={{
+                    author: selected.item.author,
+                    source:
                       selected.item.source &&
                       `${selected.item.source}:${selected.item.offset || ''}`,
-                      description: selected.item.description,
-                      tags:
+                    description: selected.item.description,
+                    tags:
                       selected.item.tags &&
                       Object.keys(selected.item.tags).length,
-                    }}
+                  }}
+                />
+              </Pane>
+              <Pane name="Releases">
+                <ReleasesTab
+                  component={selected.item.name}
+                  location={location}
+                  compact
+                />
+              </Pane>
+              {selected.item.requires && selected.item.requires.length > 0 ? (
+                <Pane name="Dependencies">
+                  <DependenciesList
+                    classes={data.classes}
+                    dependenciesList={selected.item.requires}
                   />
                 </Pane>
-                <Pane name="Releases">
-                  <ReleasesTab
-                    component={selected.item.name}
-                    location={location}
-                    compact
-                  />
-                </Pane>
-                {selected.item.requires && selected.item.requires.length > 0 ? (
-                  <Pane name="Dependencies">
-                    <DependenciesList
-                      classes={data.classes}
-                      dependenciesList={selected.item.requires}
-                    />
-                  </Pane>
-                ) : null}
-              </Tabs>
-            ) : (
-              <CodeTab selected={selected} />
-            )}
+              ) : null}
+            </Tabs>
+          ) : (
+            <CodeTab selected={selected} />
+          )}
         </Flex>
       ) : (
-        <Alert bsStyle="info"> Please select an item from the list </Alert>
+        <Alert bsStyle="info">
+          {' '}
+          <FormattedMessage id="component.please-select-item" />{' '}
+        </Alert>
       )}
     </Flex>
   </Flex>
@@ -125,7 +130,7 @@ export default compose(
     },
   }),
   lifecycle({
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps(nextProps) {
       if (this.props.data !== nextProps.data) {
         this.props.setSelected(selected => {
           if (!selected || !nextProps.data[selected.type]) return null;
@@ -149,5 +154,6 @@ export default compose(
       }
     },
   }),
-  pure(['data', 'selected'])
+  pure(['data', 'selected']),
+  injectIntl
 )(Code);

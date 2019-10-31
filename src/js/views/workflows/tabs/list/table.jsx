@@ -34,6 +34,7 @@ import { IdColumnHeader } from '../../../../components/IdColumn';
 import { ActionColumnHeader } from '../../../../components/ActionColumn';
 import { DateColumnHeader } from '../../../../components/DateColumn';
 import { getInstancesCountByFilters } from '../../../../helpers/interfaces';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   sortData: Object,
@@ -81,6 +82,7 @@ const WorkflowTable: Function = ({
   limit,
   children,
   filterQuery,
+  intl,
 }: Props): React.Element<any> => (
   <Table striped condensed fixed hover>
     <Thead>
@@ -146,32 +148,35 @@ const WorkflowTable: Function = ({
         <SelectColumnHeader />
         <IdColumnHeader />
         {!isTablet && searchPage && (
-          <NameColumnHeader title="Workflow" iconName="exchange" />
+          <NameColumnHeader
+            title={intl.formatMessage({ id: 'table.workflow' })}
+            iconName="exchange"
+          />
         )}
         {!isTablet && <ActionColumnHeader />}
         <Th name="operator_lock" iconName="lock">
-          Lock
+          <FormattedMessage id='table.lock' />
         </Th>
         <Th iconName="info-sign" name="workflowstatus">
-          Status
+          <FormattedMessage id='table.status' />
         </Th>
         <Th name="business_error" iconName="error">
-          Err.
+          <FormattedMessage id='table.err' />
         </Th>
         <Th name="error_count" iconName="error">
-          Errors
+          <FormattedMessage id='table.errors' />
         </Th>
         <Th name="warning_count" iconName="warning-sign">
-          Warns.
+          <FormattedMessage id='table.warns' />
         </Th>
         <Th name="note_count" iconName="annotation">
-          Notes
+          <FormattedMessage id='table.notes' />
         </Th>
         <DateColumnHeader name="started" onClick={handleHeaderClick}>
-          Started
+          <FormattedMessage id='table.started' />
         </DateColumnHeader>
         <DateColumnHeader name="completed" onClick={handleHeaderClick}>
-          Completed
+          <FormattedMessage id='table.completed' />
         </DateColumnHeader>
       </FixedRow>
     </Thead>
@@ -224,5 +229,6 @@ export default compose(
     'selected',
     'selectedIds',
     'canLoadMore',
-  ])
+  ]),
+  injectIntl
 )(WorkflowTable);

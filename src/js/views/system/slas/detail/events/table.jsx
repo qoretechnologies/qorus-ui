@@ -19,6 +19,7 @@ import Autocomponent from '../../../../../components/autocomponent';
 import Icon from '../../../../../components/icon';
 import Date from '../../../../../components/date';
 import actions from '../../../../../store/api/actions';
+import { FormattedMessage } from 'react-intl';
 
 type Props = {
   collection: Array<Object>,
@@ -46,61 +47,59 @@ const SLAEventsTable: Function = ({
     <Thead>
       <FixedRow {...{ sortData, onSortChange }}>
         <Th className="narrow" name="sla_eventid" onClick={handleHeaderClick}>
-          ID
+          <FormattedMessage id="table.id" />
         </Th>
         <Th className="text" name="err" onClick={handleHeaderClick}>
-          Error
+          <FormattedMessage id="table.error" />
         </Th>
         <Th className="text" name="errdesc" onClick={handleHeaderClick}>
-          Error description
+          <FormattedMessage id="table.error-description" />
         </Th>
         <Th className="text" name="producer" onClick={handleHeaderClick}>
-          Producer
+          <FormattedMessage id="table.producer" />
         </Th>
         <Th className="big" name="created" onClick={handleHeaderClick}>
-          Created
+          <FormattedMessage id="table.created" />
         </Th>
         <Th className="tiny" name="success" onClick={handleHeaderClick}>
           <Icon iconName="check" />
         </Th>
         <Th className="text" name="value" onClick={handleHeaderClick}>
-          Value
+          <FormattedMessage id="table.value" />
         </Th>
       </FixedRow>
     </Thead>
     <Tbody>
-      {collection.map(
-        (event: Object, idx: number): React.Element<any> => {
-          const producerSplit = event.producer.split(' ');
-          const producerType = producerSplit[0] === 'job' ? 'job' : 'services';
-          const producerId = producerSplit[producerSplit.length - 1];
-          const producerResourceId = producerSplit[3]
-            .replace('(', '')
-            .replace(')', '');
-          const producerUrl =
-            producerType === 'job'
-              ? `/job/${producerResourceId}/results?job=${producerId}`
-              : `/services?paneId=${producerResourceId}`;
+      {collection.map((event: Object, idx: number): React.Element<any> => {
+        const producerSplit = event.producer.split(' ');
+        const producerType = producerSplit[0] === 'job' ? 'job' : 'services';
+        const producerId = producerSplit[producerSplit.length - 1];
+        const producerResourceId = producerSplit[3]
+          .replace('(', '')
+          .replace(')', '');
+        const producerUrl =
+          producerType === 'job'
+            ? `/job/${producerResourceId}/results?job=${producerId}`
+            : `/services?paneId=${producerResourceId}`;
 
-          return (
-            <Tr key={event.sla_eventid} first={idx === 0}>
-              <Td className="narrow">{event.sla_eventid}</Td>
-              <Td className="text">{event.err}</Td>
-              <Td className="text">{event.errdesc}</Td>
-              <Td className="text">
-                <Link to={producerUrl}>{event.producer}</Link>
-              </Td>
-              <Td className="big">
-                <Date date={event.created} />
-              </Td>
-              <Td className="tiny">
-                <Autocomponent>{event.success}</Autocomponent>
-              </Td>
-              <Td className="text">{event.value}</Td>
-            </Tr>
-          );
-        }
-      )}
+        return (
+          <Tr key={event.sla_eventid} first={idx === 0}>
+            <Td className="narrow">{event.sla_eventid}</Td>
+            <Td className="text">{event.err}</Td>
+            <Td className="text">{event.errdesc}</Td>
+            <Td className="text">
+              <Link to={producerUrl}>{event.producer}</Link>
+            </Td>
+            <Td className="big">
+              <Date date={event.created} />
+            </Td>
+            <Td className="tiny">
+              <Autocomponent>{event.success}</Autocomponent>
+            </Td>
+            <Td className="text">{event.value}</Td>
+          </Tr>
+        );
+      })}
     </Tbody>
   </Table>
 );

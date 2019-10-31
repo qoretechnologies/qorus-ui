@@ -10,6 +10,7 @@ import actions from '../../../store/api/actions';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
 import SearchBar from './search';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   sort: string,
@@ -27,18 +28,49 @@ const ReleasesToolbar: Function = ({
   handleSortChange,
   handleSortDirChange,
   compact,
+  intl,
 }: Props): React.Element<any> => (
   <Toolbar marginBottom>
     <div className="pull-left clear">
       <Dropdown id="release-sort">
-        <Control> Sort by: {sort}</Control>
-        <Item title="Name" action={handleSortChange} />
-        <Item title="Date" action={handleSortChange} />
+        <Control><FormattedMessage id='dropdown.sort-by' />:{' '}
+          {
+            sort === 'Name'
+              ? intl.formatMessage({ id: 'dropdown.name' })
+              : (sort === 'Date'
+                ? intl.formatMessage({ id: 'dropdown.date' })
+                : sort
+              )
+          }
+        </Control>
+        <Item
+          title={intl.formatMessage({ id: 'dropdown.name' })}
+          action={handleSortChange}
+        />
+        <Item
+          title={intl.formatMessage({ id: 'dropdown.date' })}
+          action={handleSortChange}
+        />
       </Dropdown>{' '}
       <Dropdown id="release-sortDir">
-        <Control> Sort direction: {sortDir}</Control>
-        <Item title="Descending" action={handleSortDirChange} />
-        <Item title="Ascending" action={handleSortDirChange} />
+        <Control><FormattedMessage id='dropdown.sort-direction' />:{' '}
+          {
+            sortDir === 'Descending'
+              ? intl.formatMessage({ id: 'dropdown.descending' })
+              : (sortDir === 'Ascending'
+                ? intl.formatMessage({ id: 'dropdown.ascending' })
+                : sortDir
+              )
+          }
+        </Control>
+        <Item
+          title={intl.formatMessage({ id: 'dropdown.descending' })}
+          action={handleSortDirChange}
+        />
+        <Item
+          title={intl.formatMessage({ id: 'dropdown.ascending' })}
+          action={handleSortDirChange}
+        />
       </Dropdown>
     </div>
     {!compact && <SearchBar />}
@@ -67,5 +99,6 @@ export default compose(
       changeSortDir(value);
     },
   }),
-  pure(['sort', 'sortDir'])
+  pure(['sort', 'sortDir']),
+  injectIntl
 )(ReleasesToolbar);

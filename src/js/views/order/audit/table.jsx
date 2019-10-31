@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 
 import {
@@ -29,12 +30,13 @@ import {
   AuthorColumnHeader,
   AuthorColumn,
 } from '../../../components/AuthorColumn';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   audits: Array<Object>,
 };
 
-const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
+const AuditTable: Function = ({ audits, intl }: Props): React.Element<Table> => (
   <EnhancedTable
     collection={audits}
     tableId="orderErrors"
@@ -80,19 +82,28 @@ const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
             </Th>
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
-            <IdColumnHeader name="audit_eventid">Event ID</IdColumnHeader>
-            <NameColumnHeader name="event" title="Event" />
+            <IdColumnHeader name="audit_eventid">
+              <FormattedMessage id='table.event-id' />
+            </IdColumnHeader>
+            <NameColumnHeader
+              name="event"
+              title={intl.formatMessage({ id: 'table.event' })}
+            />
             <Th name="audit_event_code" iconName="info-sign">
-              Code
+              <FormattedMessage id='table.code' />
             </Th>
             <DescriptionColumnHeader name="source">
-              Source
+              <FormattedMessage id='table.source' />
             </DescriptionColumnHeader>
             <DescriptionColumnHeader name="reason">
-              Reason
+              <FormattedMessage id='table.reason' />
             </DescriptionColumnHeader>
-            <DescriptionColumnHeader name="info1">Info</DescriptionColumnHeader>
-            <AuthorColumnHeader name="who">Who</AuthorColumnHeader>
+            <DescriptionColumnHeader name="info1">
+              <FormattedMessage id='table.info' />
+            </DescriptionColumnHeader>
+            <AuthorColumnHeader name="who">
+              <FormattedMessage id='table.who' />
+            </AuthorColumnHeader>
             <DateColumnHeader />
           </FixedRow>
         </Thead>
@@ -121,4 +132,7 @@ const AuditTable: Function = ({ audits }: Props): React.Element<Table> => (
   </EnhancedTable>
 );
 
-export default pure(['audits'])(AuditTable);
+export default compose(
+  pure(['audits']),
+  injectIntl
+)(AuditTable);

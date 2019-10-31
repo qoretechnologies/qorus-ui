@@ -23,6 +23,7 @@ import type { EnhancedTableProps } from '../../components/EnhancedTable';
 import { IdColumn, IdColumnHeader } from '../../components/IdColumn';
 import NameColumn, { NameColumnHeader } from '../../components/NameColumn';
 import { normalizeName } from '../../components/utils';
+import { FormattedMessage } from 'react-intl';
 
 const MappersTable = ({
   mappers,
@@ -71,7 +72,7 @@ const MappersTable = ({
             <IdColumnHeader name="mapperid" />
             <NameColumnHeader />
             <Th className="text" name="type" iconName="info-sign">
-              Type
+              <FormattedMessage id='table.type' />
             </Th>
           </FixedRow>
         </Thead>
@@ -99,4 +100,6 @@ const MappersTable = ({
   </EnhancedTable>
 );
 
-export default compose(pure(['mappers']))(MappersTable);
+export default compose(
+  pure(['mappers'])
+)(MappersTable);

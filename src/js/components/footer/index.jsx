@@ -8,8 +8,7 @@ import { HELP_DATA } from '../../constants/help';
 import Modal from '../modal';
 import PaneItem from '../pane_item';
 import Box from '../box';
-import Pull from '../Pull';
-import { Tag } from '@blueprintjs/core';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 type Props = {
   info: Object,
@@ -44,7 +43,7 @@ const HelpModal: Function = ({
   </Modal>
 );
 
-const Footer: Function = ({ info, path, openModal, closeModal }: Props) => {
+const Footer: Function = ({ info, path, openModal, closeModal, intl }: Props) => {
   const helpItem = Object.keys(HELP_DATA).find(
     (res: string): boolean => path.startsWith(res)
   );
@@ -66,12 +65,12 @@ const Footer: Function = ({ info, path, openModal, closeModal }: Props) => {
       <p className="text-right text-muted">
         {'Qorus Integration Engine '}
         {info['omq-schema'] && (
-          <small>{`(Schema: ${info['omq-schema']})`}</small>
+          <small>{'(' + intl.formatMessage({ id: 'global.schema' }) + `: ${info['omq-schema']})`}</small>
         )}
         {info['omq-schema'] && ' '}
         {info['omq-version'] && (
           <small>
-            {'(Version: '}
+            {'(' + intl.formatMessage({ id: 'global.version' }) + ': '}
             {info['omq-version']}
             {info['omq-build'] && `.${info['omq-build']}`}
             {')'}
@@ -83,7 +82,7 @@ const Footer: Function = ({ info, path, openModal, closeModal }: Props) => {
           <span>
             {' | '}
             <a onClick={handleHelpClick} href="#">
-              Help
+              <FormattedMessage id='global.help' />
             </a>
           </span>
         )}
@@ -93,7 +92,7 @@ const Footer: Function = ({ info, path, openModal, closeModal }: Props) => {
             'http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new'
           }
         >
-          Report Bug
+          <FormattedMessage id='global.report-bug' />
         </a>
       </p>
     </footer>
@@ -102,5 +101,6 @@ const Footer: Function = ({ info, path, openModal, closeModal }: Props) => {
 
 export default compose(
   withModal(),
-  pure(['info', 'location'])
+  pure(['info', 'location']),
+  injectIntl
 )(Footer);
