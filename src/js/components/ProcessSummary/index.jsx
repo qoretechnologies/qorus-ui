@@ -51,7 +51,7 @@ const ProcessSummary: Function = ({
             }
           >
             <Tag> Node: {prcs.node}</Tag> <Tag> PID: {prcs.pid}</Tag>{' '}
-            <Tag> Status: {prcs.status}</Tag>{' '}
+            <Tag> Status: {prcs.status_string}</Tag>{' '}
             <Tag> Memory: {prcs.priv_str}</Tag>{' '}
           </PaneItem>
         );
