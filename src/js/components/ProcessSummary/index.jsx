@@ -47,15 +47,27 @@ const ProcessSummary: Function = ({
                     handleKillClick(prcs.id);
                   }}
                 >
-                  <FormattedMessage id='cluster.kill' />
+                  <FormattedMessage id="cluster.kill" />
                 </Button>
               </ButtonGroup>
             }
           >
-            <Tag> <FormattedMessage id='cluster.node' />: {prcs.node}</Tag>{' '}
-            <Tag> <FormattedMessage id='cluster.pid' />: {prcs.pid}</Tag>{' '}
-            <Tag> <FormattedMessage id='cluster.status' />: {prcs.status}</Tag>{' '}
-            <Tag> <FormattedMessage id='cluster.memory' />: {prcs.priv_str}</Tag>{' '}
+            <Tag>
+              {' '}
+              <FormattedMessage id="cluster.node" />: {prcs.node}
+            </Tag>{' '}
+            <Tag>
+              {' '}
+              <FormattedMessage id="cluster.pid" />: {prcs.pid}
+            </Tag>{' '}
+            <Tag>
+              {' '}
+              <FormattedMessage id="cluster.status" />: {prcs.status_string}
+            </Tag>{' '}
+            <Tag>
+              {' '}
+              <FormattedMessage id="cluster.memory" />: {prcs.priv_str}
+            </Tag>{' '}
           </PaneItem>
         );
       }
@@ -63,12 +75,14 @@ const ProcessSummary: Function = ({
       // Service not running
       if (autostart === false) {
         return (
-          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+          <PaneItem
+            title={intl.formatMessage({ id: 'summary.process-summary' })}
+          >
             <Alert
               title={intl.formatMessage({ id: 'summary.process-not-running' })}
               bsStyle="warning"
             >
-              <FormattedMessage id='summary.autostart-disabled' />
+              <FormattedMessage id="summary.autostart-disabled" />
             </Alert>
           </PaneItem>
         );
@@ -77,12 +91,14 @@ const ProcessSummary: Function = ({
       // Workflow not running
       if (autostart === 0) {
         return (
-          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+          <PaneItem
+            title={intl.formatMessage({ id: 'summary.process-summary' })}
+          >
             <Alert
               title={intl.formatMessage({ id: 'summary.process-not-running' })}
               bsStyle="warning"
             >
-              <FormattedMessage id='summary.autostart-zero' />
+              <FormattedMessage id="summary.autostart-zero" />
             </Alert>
           </PaneItem>
         );
@@ -91,12 +107,14 @@ const ProcessSummary: Function = ({
       // Job not active
       if (jobid && !active) {
         return (
-          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+          <PaneItem
+            title={intl.formatMessage({ id: 'summary.process-summary' })}
+          >
             <Alert
               title={intl.formatMessage({ id: 'summary.process-not-running' })}
               bsStyle="warning"
             >
-              <FormattedMessage id='summary.job-not-active' />
+              <FormattedMessage id="summary.job-not-active" />
             </Alert>
           </PaneItem>
         );
@@ -105,12 +123,14 @@ const ProcessSummary: Function = ({
       // Job expired
       if (jobid && moment(expiry).isBefore(moment())) {
         return (
-          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
+          <PaneItem
+            title={intl.formatMessage({ id: 'summary.process-summary' })}
+          >
             <Alert
               title={intl.formatMessage({ id: 'summary.process-not-running' })}
               bsStyle="warning"
             >
-              <FormattedMessage id='summary.job-expired' />
+              <FormattedMessage id="summary.job-expired" />
             </Alert>
           </PaneItem>
         );
@@ -123,7 +143,7 @@ const ProcessSummary: Function = ({
             title={intl.formatMessage({ id: 'summary.process-not-running' })}
             bsStyle="warning"
           >
-            <FormattedMessage id='summary.check-log-details' />
+            <FormattedMessage id="summary.check-log-details" />
           </Alert>
         </PaneItem>
       );
@@ -142,7 +162,7 @@ const ProcessSummary: Function = ({
         title={intl.formatMessage({ id: 'summary.not-running' })}
         bsStyle="danger"
       >
-        <FormattedMessage id='summary.interface-disabled' />
+        <FormattedMessage id="summary.interface-disabled" />
       </Alert>
     </PaneItem>
   );
