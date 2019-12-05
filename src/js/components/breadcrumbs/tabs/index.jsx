@@ -79,9 +79,10 @@ class CrumbTabs extends React.Component {
       const spaceWidth: number = parentWidth - childrenWidth;
       let tabsWidth: number = 0;
       let collapsed: boolean = false;
+      const characterLength = this.props.language === 'ja-JP' ? 1.5 : 1;
 
       this.props.tabs.forEach((tab: any): void => {
-        const strLen: number = tab.title.length;
+        const strLen: number = tab.title.length * characterLength;
         if (strLen * 10.5 + tabsWidth < spaceWidth) {
           tabsLen = tabsLen + 1;
           tabsWidth = tabsWidth + strLen * 10.5;
@@ -97,7 +98,7 @@ class CrumbTabs extends React.Component {
     }
   };
 
-  render() {
+  render () {
     const {
       tabs,
       handleTabChange,
@@ -191,17 +192,18 @@ export default compose(
   injectIntl,
   connect((state: Object): Object => ({
     windowWidth: state.ui.settings.width,
+    language: state.api.currentUser.data.storage.locale,
   })),
   mapProps(({ tabs, width, windowWidth, intl, ...rest }: Props): Props => ({
     tabs: tabs.map((tab: any): Object =>
       isString(tab)
         ? { title: intl.formatMessage({ id: tab }), tabId: tab }
         : {
-            title: `${intl.formatMessage({ id: tab.title })}${
-              tab.suffix ? ` ${tab.suffix}` : ''
-            }`,
-            tabId: tab.title,
-          }
+          title: `${intl.formatMessage({ id: tab.title })}${
+            tab.suffix ? ` ${tab.suffix}` : ''
+          }`,
+          tabId: tab.title,
+        }
     ),
     width: width || windowWidth,
     ...rest,
