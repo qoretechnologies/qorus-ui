@@ -71,9 +71,9 @@ const ServicesDetail: Function = ({
             'Log',
             { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
             { title: 'Mappers', suffix: `(${size(service.mappers)})` },
-            { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
+            { title: 'Valuemaps', suffix: `(${size(service.vmaps)})` },
             'Resources',
-            'Auth labels',
+            'Authlabels',
             'Releases',
             'Info',
           ]}
@@ -103,14 +103,11 @@ const ServicesDetail: Function = ({
 );
 
 export default compose(
-  connect(
-    selector,
-    {
-      load: actions.services.fetchLibSources,
-      fetch: actions.services.fetchLibSources,
-      unsync: actions.services.unsync,
-    }
-  ),
+  connect(selector, {
+    load: actions.services.fetchLibSources,
+    fetch: actions.services.fetchLibSources,
+    unsync: actions.services.unsync,
+  }),
   patchFuncArgs('load', ['id']),
   sync('meta'),
   lifecycle({

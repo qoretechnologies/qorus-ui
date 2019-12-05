@@ -60,7 +60,7 @@ const WorkflowHeader: Function = ({
           'Process',
           'Releases',
           {
-            title: 'Value maps',
+            title: 'Valuemaps',
             suffix: `(${size(workflow.vmaps)})`,
           },
           {
