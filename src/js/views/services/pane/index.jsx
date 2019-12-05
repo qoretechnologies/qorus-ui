@@ -117,14 +117,14 @@ export default class ServicesDetail extends Component {
             'Log',
             { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
             { title: 'Mappers', suffix: `(${size(service.mappers)})` },
-            { title: 'Value maps', suffix: `(${size(service.vmaps)})` },
+            { title: 'Valuemaps', suffix: `(${size(service.vmaps)})` },
             {
               title: 'Resources',
               suffix: `(${size(service.resources)} / ${size(
                 service.resource_files
               )})`,
             },
-            'Auth labels',
+            'Authlabels',
             'Releases',
             'Info',
           ],

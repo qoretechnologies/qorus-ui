@@ -50,7 +50,7 @@ const Detail = ({
         },
         'Process',
         { title: 'Mappers', suffix: `(${size(model.mappers)})` },
-        { title: 'Value maps', suffix: `(${size(model.vmaps)})` },
+        { title: 'Valuemaps', suffix: `(${size(model.vmaps)})` },
         'Releases',
         'Code',
         'Log',
@@ -71,12 +71,12 @@ const Detail = ({
 );
 
 const fetchLibSourceOnMountAndOnChange = lifecycle({
-  async componentWillMount () {
+  async componentWillMount() {
     const { model, fetchLibSources } = this.props;
     await fetchLibSources(model);
   },
 
-  async componentWillReceiveProps (nextProps) {
+  async componentWillReceiveProps(nextProps) {
     const { model } = this.props;
     const { model: nextModel, fetchLibSources } = nextProps;
 

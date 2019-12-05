@@ -79,7 +79,7 @@ class CrumbTabs extends React.Component {
       const spaceWidth: number = parentWidth - childrenWidth;
       let tabsWidth: number = 0;
       let collapsed: boolean = false;
-      const characterLength = this.props.language === 'ja-JP' ? 1.5 : 1;
+      const characterLength = this.props.language === 'ja-JP' ? 1.8 : 1;
 
       this.props.tabs.forEach((tab: any): void => {
         const strLen: number = tab.title.length * characterLength;
@@ -98,7 +98,7 @@ class CrumbTabs extends React.Component {
     }
   };
 
-  render () {
+  render() {
     const {
       tabs,
       handleTabChange,
@@ -199,11 +199,11 @@ export default compose(
       isString(tab)
         ? { title: intl.formatMessage({ id: tab }), tabId: tab }
         : {
-          title: `${intl.formatMessage({ id: tab.title })}${
-            tab.suffix ? ` ${tab.suffix}` : ''
-          }`,
-          tabId: tab.title,
-        }
+            title: `${intl.formatMessage({ id: tab.title })}${
+              tab.suffix ? ` ${tab.suffix}` : ''
+            }`,
+            tabId: tab.title,
+          }
     ),
     width: width || windowWidth,
     ...rest,

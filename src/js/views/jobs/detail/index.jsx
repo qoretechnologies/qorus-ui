@@ -78,7 +78,7 @@ const JobPage = ({
             },
             'Process',
             { title: 'Mappers', suffix: `(${size(job.mappers)})` },
-            { title: 'Value maps', suffix: `(${size(job.vmaps)})` },
+            { title: 'Valuemaps', suffix: `(${size(job.vmaps)})` },
             'Releases',
             'Code',
             'Log',
@@ -129,14 +129,11 @@ const selector: Object = createSelector(
 );
 
 export default compose(
-  connect(
-    selector,
-    {
-      load: actions.jobs.fetch,
-      fetch: actions.jobs.fetch,
-      unsync: actions.jobs.unsync,
-    }
-  ),
+  connect(selector, {
+    load: actions.jobs.fetch,
+    fetch: actions.jobs.fetch,
+    unsync: actions.jobs.unsync,
+  }),
   mapProps(({ date, ...rest }: Props): Object => ({
     date: date || DATES.PREV_DAY,
     ...rest,
