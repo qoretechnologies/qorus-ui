@@ -45,7 +45,7 @@ export default {
     'component.interface-using-def-logger': 'Tato jednotka používá základní logger.',
     'component.logger': 'Logger',
     'component.no-data': 'Žádná data',
-    'component.no-logger-defined-for-res': 'Pro jednotku \"{resource}\" není definován žádný logger. Použijte tlačítka nahoře pro vytvoření základního loggeru',
+    'component.no-logger-defined-for-res': 'Pro jednotku "{resource}" není definován žádný logger. Použijte tlačítka nahoře pro vytvoření základního loggeru',
     'component.no-logger-defined-for-res-2': 'nebo specifického loggeru pro tuto jednotku',
     'component.options': 'Nastavení',
     'component.output': 'Výstup',

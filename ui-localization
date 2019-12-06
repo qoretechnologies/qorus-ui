@@ -9,21 +9,10 @@
 
 const Skip = "ru-RU";
 
-class MyLineIterator inherits FileLineIterator {
-    constructor(string path, *string encoding, *string eol, bool trim_flag = True) : FileLineIterator(path, encoding, eol, trim_flag) {
-    }
-
-    string getValue() {
-        string line = FileLineIterator::getValue();
-        # replace double quotes with a single escaped quote
-        return replace(line, "\"\"", "\\\"");
-    }
-}
-
 # map: file -> lang -> label -> string
 hash<string, hash<string, hash<string, *string>>> lmap;
 
-AbstractCsvIterator i(new MyLineIterator(shift ARGV), {"header_names": True, "header_lines": 1});
+AbstractCsvIterator i(new FileLineIterator(shift ARGV), {"header_names": True, "header_lines": 1});
 while (i.next()) {
     hash<auto> row = i.getValue();
     string file = remove row.file;

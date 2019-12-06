@@ -311,13 +311,13 @@ summary.js,summary.not-running,Not running,Neběží,,走っていない
 summary.js,summary.process-not-running,Process not running,Process neběží,,プロセスが実行されていません
 summary.js,summary.process-summary,Process summary,Přehled procesu,,プロセス概要
 summary.js,summary.running-in-core,Running locally in qorus-core,Běží lokálně v qorus-core,,qorus-coreでローカルに実行
-system.js,system.global-search,Search,Hledat,,
+system.js,system.global-search,Search,Hledat,,サーチ
 system.js,system.global-search-type,in {type},v {type},,{type}で
 table.js,table.actions,Actions,Akce,,行動
 table.js,table.all,All,Všechno,,すべて
 table.js,table.author,Author,Autor,,著者
 table.js,table.auto-execs,Auto / Execs,Auto / Spuštění,,自動/実行者
-table.js,table.bus-err,Bus.Err.,Bus.Chyb.,,Bus.Err。
+table.js,table.bus-err,Bus.Err.,Bus.Chyb.,,ビジネスエラー
 table.js,table.business-error,Business error,Business chyba,,ビジネスエラー
 table.js,table.cfg-item-val-no-level-set,This config item,Hodnota této konfigurační položky není nastavena na žádné úrovni.,,この構成アイテム
 table.js,table.code,Code,Kód,,コード
@@ -380,12 +380,12 @@ table.js,table.services,Services,Služby,,サービス
 table.js,table.services-mini,S,S,,S
 table.js,table.severity,Severity,Závažnost,,重大度
 table.js,table.skip,Skip,Přeskočit,,スキップ
-table.js,table.sla,SLA,SLA,,SLA
+table.js,table.sla,SLA,SLA,,サービスレベル契約
 table.js,table.source,Source,Zdroj,,ソース
 table.js,table.started,Started,Začalo,,開始しました
 table.js,table.status,Status,Stav,,状態
 table.js,table.step-name,Step Name,Název kroku,,ステップ名
-table.js,table.subwf-iid,SubWF IID,IID Sub-PP,,SubWF IID
+table.js,table.subwf-iid,SubWF IID,IID Sub-PP,,サブワークフローID
 table.js,table.threads,Threads,Vlákna,,スレッド
 table.js,table.throws,Throws,Hází výjimky,,投げる
 table.js,table.type,Type,Typ,,タイプ
@@ -448,3 +448,8 @@ tree.js,tree.update-data,Update data,Upravit data,,データを更新する
 user.js,user.clear-storage,Clear storage,Vyčistit úložiště,,ストレージをクリア
 user.js,user.member-of-def-grp,Member of DEFAULT group with no restrictions; all interfaces are accessible,Člen skupiny DEFAULT bez omezení; všechny jednotky jsou přístupné,,制限のないDEFAULTグループのメンバー。すべてのインターフェースにアクセス可能
 user.js,user.storage-data,Storage data,Data v úložišti,,ストレージデータ
+tabs.js,Audit,Audit,Audit,,監査
+tabs.js,Data,Data,Data,,データ
+tabs.js,Notes,Notes,Poznámky,,注釈
+tabs.js,Valuemaps,Valuemaps,Mapy hodnot,,値マップ
+tabs.js,Hierarchy,Hierarchy level,Hierarchie,,階層

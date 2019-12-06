@@ -8,6 +8,7 @@ export default {
     'system.global-search-type': 'v {type}',
   },
   'ja-JP': {
+    'system.global-search': 'サーチ',
     'system.global-search-type': '{type}で',
   },
 };
