@@ -11,6 +11,7 @@ type Props = {
   hasAlerts: boolean,
   expanded?: boolean,
   caseSensitiveTree: boolean,
+  noMarkdown?: boolean,
 };
 
 const Text: Function = ({
@@ -19,9 +20,14 @@ const Text: Function = ({
   expanded,
   caseSensitiveTree,
   noControls,
+  noMarkdown,
 }: Props): React.Element<any> =>
   text && typeof text === 'object' ? (
-    <Tree data={text} noControls={noControls} caseSensitive={caseSensitiveTree} />
+    <Tree
+      data={text}
+      noControls={noControls}
+      caseSensitive={caseSensitiveTree}
+    />
   ) : (
     <Flex flexFlow="row" title={text}>
       <div
@@ -29,7 +35,7 @@ const Text: Function = ({
           'text-component-expanded'} ${hasAlerts && 'has-alerts'}`}
         title={text}
       >
-        <ContentByType content={text} />
+        <ContentByType content={text} noMarkdown={noMarkdown} />
       </div>
     </Flex>
   );

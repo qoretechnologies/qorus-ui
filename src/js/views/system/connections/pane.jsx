@@ -199,6 +199,7 @@ export default class ConnectionsPane extends Component {
                           val.attr !== 'options' &&
                           val.attr !== 'opts' ? (
                               <EditableCell
+                                noMarkdown={val.attr === 'url'}
                                 className="text"
                                 value={val.value}
                                 onSave={this.handleEditSave(val.attr)}
@@ -212,7 +213,10 @@ export default class ConnectionsPane extends Component {
                                     canEdit={canEdit}
                                   />
                                 ) : (
-                                  <ContentByType content={val.value} />
+                                  <ContentByType
+                                    content={val.value}
+                                    noMarkdown={val.attr === 'url'}
+                                  />
                                 )}
                               </Td>
                             )}
