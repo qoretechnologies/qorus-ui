@@ -13,6 +13,7 @@ import ReactMarkdown from 'react-markdown';
 type ContentByTypeProps = {
   content: any,
   inTable?: boolean,
+  noMarkdown?: Boolean,
 };
 
 const emptyTypeToString: Object = {
@@ -24,6 +25,7 @@ const ContentByType: Function = ({
   content,
   inTable,
   noControls,
+  noMarkdown,
 }: ContentByTypeProps): React.Element<any> => {
   const type: string = getType(content);
   const className: string = `content-by-type ${type}`;
@@ -38,13 +40,19 @@ const ContentByType: Function = ({
     );
     newContent = isContentDate ? <Date date={content} /> : newContent;
 
+    console.log(noMarkdown);
+
     return inTable ? (
       <Flex className={className} title={content}>
         {newContent}
       </Flex>
     ) : (
       <div className={className}>
-        <ReactMarkdown>{newContent}</ReactMarkdown>
+        {noMarkdown ? (
+          <>{newContent}</>
+        ) : (
+          <ReactMarkdown>{newContent}</ReactMarkdown>
+        )}
       </div>
     );
   }

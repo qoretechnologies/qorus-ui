@@ -31,6 +31,7 @@ export default class EditableCell extends Component {
     max: number,
     showControl: boolean,
     className: string,
+    noMarkdown?: Boolean,
   } = this.props;
 
   static defaultProps = {
@@ -186,7 +187,7 @@ export default class EditableCell extends Component {
 
     if (
       (this.props.type === 'number' &&
-        (this.props.min && this.state.value < this.props.min)) ||
+        this.props.min && this.state.value < this.props.min) ||
       (this.props.max && this.state.value > this.props.max)
     ) {
       this.setState({
@@ -276,7 +277,7 @@ export default class EditableCell extends Component {
           </form>
         ) : (
           <React.Fragment>
-            <Text text={this.state.value} />
+            <Text text={this.state.value} noMarkdown={this.props.noMarkdown} />
             <Control
               title="Edit"
               iconName="edit"
