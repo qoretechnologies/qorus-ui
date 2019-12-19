@@ -9,6 +9,7 @@ import { IntlProvider, addLocaleData, FormattedMessage } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import cs from 'react-intl/locale-data/cs';
 import ja from 'react-intl/locale-data/ja';
+import ko from 'react-intl/locale-data/ko';
 import mapProps from 'recompose/mapProps';
 
 import Topbar from '../components/topbar';
@@ -24,7 +25,7 @@ import Flex from '../components/Flex';
 import { success, warning } from '../store/ui/bubbles/actions';
 import FullPageLoading from '../components/FullPageLoading';
 
-addLocaleData([...en, ...cs, ...ja]);
+addLocaleData([...en, ...cs, ...ja, ...ko]);
 const systemSelector = state => state.api.system;
 const currentUserSelector = state => state.api.currentUser;
 const menuSelector = state => state.ui.menu;
@@ -106,7 +107,7 @@ export default class Root extends Component {
 
   _modal = null;
 
-  getChildContext () {
+  getChildContext() {
     return {
       openModal: (...args) => this._modal.open(...args),
       closeModal: (...args) => this._modal.close(...args),
@@ -115,7 +116,7 @@ export default class Root extends Component {
     };
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     await this.fetchGlobalData();
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
@@ -210,7 +211,7 @@ export default class Root extends Component {
     storeTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  render () {
+  render() {
     const {
       currentUser,
       info,
@@ -236,11 +237,13 @@ export default class Root extends Component {
     const locale = currentUser.data.storage.locale
       ? currentUser.data.storage.locale
       : navigator.locale
-        ? navigator.locale
-        : 'en-US';
+      ? navigator.locale
+      : 'en-US';
 
     const { favoriteMenuItems = [] } = currentUser.data.storage;
     const isLightTheme = currentUser.data.storage.theme === 'light';
+
+    console.log(locale);
 
     return (
       <IntlProvider messages={messages(locale)} locale={locale}>
