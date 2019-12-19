@@ -32,4 +32,15 @@ export default {
     'datetime.today': '今日',
     'datetime.week': '週間',
   },
+  'ko-KR': {
+    'datetime.24h': '24 시간',
+    'datetime.30-days': '30 일',
+    'datetime.all': '모든',
+    'datetime.apply': '대다',
+    'datetime.now': '지금',
+    'datetime.reset': '다시 놓기',
+    'datetime.this-month': '이번 달',
+    'datetime.today': '오늘',
+    'datetime.week': '주',
+  },
 };

@@ -35,4 +35,16 @@ export default {
     'summary.process-summary': 'プロセス概要',
     'summary.running-in-core': 'qorus-coreでローカルに実行',
   },
+  'ko-KR': {
+    'summary.autostart-disabled': '자동 시작이 비활성화됩니다. 서비스를 자동으로 시작하려면 자동 시작을 true로 설정하십시오.',
+    'summary.autostart-zero': '자동 시작은 0입니다. 워크 플로우를 자동으로 시작하려면 양의 자동 시작 값을 설정하십시오.',
+    'summary.check-log-details': '자세한 내용은 로그 확인',
+    'summary.interface-disabled': '인터페이스 비활성화',
+    'summary.job-expired': '작업이 만료되었습니다',
+    'summary.job-not-active': '작업이 활성화되지 않았습니다',
+    'summary.not-running': '실행 중이 아님',
+    'summary.process-not-running': '프로세스가 실행되고 있지 않습니다',
+    'summary.process-summary': '프로세스 요약',
+    'summary.running-in-core': '코러스 코어에서 로컬로 실행',
+  },
 };

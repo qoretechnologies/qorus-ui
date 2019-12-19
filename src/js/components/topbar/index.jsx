@@ -26,6 +26,7 @@ import map from 'lodash/map';
 import cz from '../../../img/country_flags/cz.jpg';
 import en from '../../../img/country_flags/us.png';
 import jp from '../../../img/country_flags/jp.png';
+import kr from '../../../img/country_flags/kr.png';
 
 import withModal from '../../hocomponents/modal';
 import withPane from '../../hocomponents/pane';
@@ -42,6 +43,7 @@ const flags: Object = {
   'cs-CZ': cz,
   'en-US': en,
   'ja-JP': jp,
+  'ko-KR': kr,
 };
 
 const searchableViews = {

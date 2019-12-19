@@ -21,6 +21,7 @@ const LANGS = {
   CZ: 'cs-CZ',
   EN: 'en-US',
   JP: 'ja-JP',
+  KR: 'ko-KR',
 };
 
 export default function (locale: string): Object {

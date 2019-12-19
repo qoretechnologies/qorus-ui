@@ -14,4 +14,9 @@ export default {
     'user.member-of-def-grp': '制限のないDEFAULTグループのメンバー。すべてのインターフェースにアクセス可能',
     'user.storage-data': 'ストレージデータ',
   },
+  'ko-KR': {
+    'user.clear-storage': '저장 공간을 비우기',
+    'user.member-of-def-grp': '제한이없는 DEFAULT 그룹의 구성원 모든 인터페이스에 접근 가능',
+    'user.storage-data': '저장 데이터',
+  },
 };
