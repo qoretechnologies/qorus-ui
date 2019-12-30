@@ -876,6 +876,19 @@ const handleEvent = (url, data, dispatch, state) => {
           );
         }
         break;
+      case 'CONNECTION_DEBUG_DATA_CHANGE':
+        if (state.api.remotes.sync) {
+          pipeline(
+            eventstr,
+            remotes.debugChange,
+            {
+              name: info.name,
+              debug_data: info.debug_data,
+            },
+            dispatch
+          );
+        }
+        break;
       case 'CONNECTION_ENABLED_CHANGE':
         if (
           isInterfaceLoaded(

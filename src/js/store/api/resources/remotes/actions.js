@@ -32,6 +32,10 @@ const connectionChange = createAction('REMOTES_CONNECTIONCHANGE', events => ({
   events,
 }));
 
+const debugChange = createAction('REMOTES_DEBUGCHANGE', events => ({
+  events,
+}));
+
 const enabledChange = createAction('REMOTES_ENABLEDCHANGE', events => ({
   events,
 }));
@@ -83,9 +87,7 @@ const fetchPass: Function = createAction(
     const safeUrl = await fetchWithNotifications(
       async () =>
         get(
-          `${
-            settings.REST_BASE_URL
-          }/remote/${remoteType}/${name}/url?with_password=true`
+          `${settings.REST_BASE_URL}/remote/${remoteType}/${name}/url?with_password=true`
         ),
       null,
       null,
@@ -201,6 +203,29 @@ const toggleConnection: Function = createAction(
   }
 );
 
+const toggleDebug: Function = createAction(
+  'REMOTES_TOGGLEDEBUG',
+  (
+    name: string,
+    value: boolean,
+    remoteType: string,
+    dispatch: Function
+  ): void => {
+    fetchWithNotifications(
+      async () =>
+        await fetchJson(
+          'PUT',
+          `${settings.REST_BASE_URL}/remote/${remoteType}/${name}?action=${
+            value ? 'enableDebugData' : 'disableDebugData'
+          }`
+        ),
+      `${value ? 'Enabling' : 'Disabling'} debug data for ${name}...`,
+      `Successfuly ${value ? 'enabled' : 'disabled'} debug data`,
+      dispatch
+    );
+  }
+);
+
 const resetConnection: Function = createAction(
   'REMOTES_RESETCONNECTION',
   (remoteType: string, name: string, dispatch: Function): void => {
@@ -227,6 +252,7 @@ const deleteAppender = deleteAppenderAction('remotes', 'remote/datasources');
 export {
   pingRemote,
   connectionChange,
+  debugChange,
   enabledChange,
   updateDone,
   addAlert,
@@ -235,6 +261,7 @@ export {
   deleteConnection,
   toggleConnection,
   resetConnection,
+  toggleDebug,
   fetchPass,
   addConnection,
   updateConnection,
