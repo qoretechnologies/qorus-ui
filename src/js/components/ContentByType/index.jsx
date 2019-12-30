@@ -40,8 +40,6 @@ const ContentByType: Function = ({
     );
     newContent = isContentDate ? <Date date={content} /> : newContent;
 
-    console.log(noMarkdown);
-
     return inTable ? (
       <Flex className={className} title={content}>
         {newContent}

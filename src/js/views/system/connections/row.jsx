@@ -79,7 +79,9 @@ const ConnectionRow: Function = ({
   handleToggleClick,
   handleResetClick,
   locked,
-  intl
+  intl,
+  handleDebugClick,
+  debug_data,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -92,7 +94,7 @@ const ConnectionRow: Function = ({
   >
     <Td className={classnames('normal')}>
       <Tag intent={up ? Intent.SUCCESS : Intent.DANGER} className="pt-minimal">
-        {intl.formatMessage({ id: (up ? 'table.up' : 'table.down') })}
+        {intl.formatMessage({ id: up ? 'table.up' : 'table.down' })}
       </Tag>
     </Td>
     <NameColumn
@@ -104,7 +106,9 @@ const ConnectionRow: Function = ({
     <Td className="big">
       <ButtonGroup>
         <Button
-          title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
+          title={intl.formatMessage({
+            id: enabled ? 'button.disable' : 'button.enable',
+          })}
           iconName="power"
           onClick={handleToggleClick}
           btnStyle={enabled ? 'success' : 'danger'}
@@ -115,6 +119,14 @@ const ConnectionRow: Function = ({
             title={intl.formatMessage({ id: 'button.reset' })}
             iconName="refresh"
             onClick={handleResetClick}
+          />
+        )}
+        {(remoteType === 'qorus' || remoteType === 'user') && (
+          <Button
+            title={intl.formatMessage({ id: 'button.toggleDebug' })}
+            iconName="code"
+            btnStyle={debug_data ? 'success' : 'none'}
+            onClick={handleDebugClick}
           />
         )}
         <Button
@@ -158,12 +170,9 @@ const ConnectionRow: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      updateDone: actions.remotes.updateDone,
-    }
-  ),
+  connect(null, {
+    updateDone: actions.remotes.updateDone,
+  }),
   withDispatch(),
   withModal(),
   withHandlers({
@@ -230,6 +239,19 @@ export default compose(
       remoteType,
     }: Props): Function => (): void => {
       dispatchAction(actions.remotes.resetConnection, remoteType, name);
+    },
+    handleDebugClick: ({
+      dispatchAction,
+      name,
+      debug_data,
+      remoteType,
+    }: Props): Function => (): void => {
+      dispatchAction(
+        actions.remotes.toggleDebug,
+        name,
+        !debug_data,
+        remoteType
+      );
     },
   }),
   pure([

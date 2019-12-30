@@ -19,57 +19,61 @@ const initialState = {
 };
 
 const pingRemote = {
-  next (state: Object = initialState): Object {
+  next(state: Object = initialState): Object {
     return state;
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const toggleConnection = {
-  next (state: Object = initialState): Object {
+  next(state: Object = initialState): Object {
     return state;
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
+const toggleDebug = {
+  next(state: Object = initialState): Object {
+    return state;
+  },
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const resetConnection = {
-  next (state: Object = initialState): Object {
+  next(state: Object = initialState): Object {
     return state;
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const deleteConnection = {
-  next (state: Object = initialState): Object {
+  next(state: Object = initialState): Object {
     return state;
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const manageConnection = {
-  next (state: Object = initialState): Object {
+  next(state: Object = initialState): Object {
     return state;
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const connectionChange = {
-  next (
-    state: Object = initialState,
-    {
-      payload: { events },
-    }
-  ): Object {
+  next(state: Object = initialState, { payload: { events } }): Object {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
@@ -92,18 +96,42 @@ const connectionChange = {
 
     return state;
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
+    return state;
+  },
+};
+
+const debugChange = {
+  next(state: Object = initialState, { payload: { events } }): Object {
+    if (state.sync) {
+      const data = [...state.data];
+      const updatedData = setUpdatedToNull(data);
+      let newData = updatedData;
+
+      events.forEach((dt: Object) => {
+        const exists = state.data.find(conn => conn.name === dt.name);
+
+        if (exists) {
+          newData = updateItemWithName(
+            dt.name,
+            { debug_data: dt.debug_data, _updated: true },
+            newData
+          );
+        }
+      });
+
+      return { ...state, ...{ data: newData } };
+    }
+
+    return state;
+  },
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const enabledChange = {
-  next (
-    state: Object = initialState,
-    {
-      payload: { events },
-    }
-  ): Object {
+  next(state: Object = initialState, { payload: { events } }): Object {
     if (state.sync) {
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
@@ -122,18 +150,13 @@ const enabledChange = {
 
     return state;
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const updateDone = {
-  next (
-    state,
-    {
-      payload: { name },
-    }
-  ) {
+  next(state, { payload: { name } }) {
     if (state.sync) {
       const data = state.data.slice();
       const connection = data.find(d => d.name === name);
@@ -147,18 +170,13 @@ const updateDone = {
 
     return state;
   },
-  throw (state) {
+  throw(state) {
     return state;
   },
 };
 
 const fetchPass = {
-  next (
-    state,
-    {
-      payload: { safeUrl, name, remoteType },
-    }
-  ) {
+  next(state, { payload: { safeUrl, name, remoteType } }) {
     if (state.sync) {
       const data = [...state.data];
       const connection = data.find(
@@ -174,18 +192,13 @@ const fetchPass = {
 
     return state;
   },
-  throw (state) {
+  throw(state) {
     return state;
   },
 };
 
 const addAlert = {
-  next (
-    state = initialState,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
       let newData = stateData;
@@ -214,7 +227,7 @@ const addAlert = {
 
     return state;
   },
-  throw (state = initialState, action) {
+  throw(state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -224,12 +237,7 @@ const addAlert = {
 };
 
 const clearAlert = {
-  next (
-    state = initialState,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state = initialState, { payload: { events } }) {
     if (state.sync) {
       const stateData = [...state.data];
       let newData = stateData;
@@ -261,7 +269,7 @@ const clearAlert = {
 
     return state;
   },
-  throw (state = initialState, action) {
+  throw(state = initialState, action) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -271,12 +279,7 @@ const clearAlert = {
 };
 
 const updateConnection = {
-  next (
-    state: Object = initialState,
-    {
-      payload: { models },
-    }: Object
-  ): Object {
+  next(state: Object = initialState, { payload: { models } }: Object): Object {
     let newData = [...state.data];
 
     models.forEach(dt => {
@@ -292,18 +295,13 @@ const updateConnection = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const addConnection = {
-  next (
-    state: Object = initialState,
-    {
-      payload: { events },
-    }: Object
-  ): Object {
+  next(state: Object = initialState, { payload: { events } }: Object): Object {
     let newData = [...state.data];
 
     events.forEach(dt => {
@@ -312,18 +310,13 @@ const addConnection = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const removeConnectionWs = {
-  next (
-    state: Object = initialState,
-    {
-      payload: { events },
-    }: Object
-  ): Object {
+  next(state: Object = initialState, { payload: { events } }: Object): Object {
     const data = [...state.data];
 
     events.forEach(dt => {
@@ -349,6 +342,7 @@ const deleteAppender = deleteAppenderReducer;
 export {
   pingRemote as PINGREMOTE,
   connectionChange as CONNECTIONCHANGE,
+  debugChange as DEBUGCHANGE,
   enabledChange as ENABLEDCHANGE,
   updateDone as UPDATEDONE,
   addAlert as ADDALERT,
@@ -357,6 +351,7 @@ export {
   deleteConnection as DELETECONNECTION,
   removeConnectionWs as REMOVECONNECTIONWS,
   toggleConnection as TOGGLECONNECTION,
+  toggleDebug as TOGGLEDEBUG,
   resetConnection as RESETCONNECTION,
   updateConnection as UPDATECONNECTION,
   addConnection as ADDCONNECTION,
