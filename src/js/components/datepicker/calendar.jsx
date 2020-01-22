@@ -142,11 +142,11 @@ export default class Calendar extends Component {
         <thead>
           <tr>
             <th className="month" onClick={this.prevMonth}>
-              <Icon iconName="chevron-left" />
+              <Icon icon="chevron-left" />
             </th>
             <th colSpan="5">{this.renderYearAndMonth()}</th>
             <th className="month" onClick={this.nextMonth}>
-              <Icon iconName="chevron-right" />
+              <Icon icon="chevron-right" />
             </th>
           </tr>
           <tr>

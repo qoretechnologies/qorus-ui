@@ -51,7 +51,7 @@ export default class Ping extends Component {
     if (!this.state.data) {
       return (
         <Box top>
-          <Spinner className="pt-small" />
+          <Spinner className="bp3-small" />
         </Box>
       );
     }

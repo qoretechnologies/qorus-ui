@@ -20,7 +20,7 @@ export const NotificationsContainer = ({ collection }: Props) => {
   return (
     <div
       className="
-        pt-toast-container pt-overlay pt-overlay-open pt-toast-container-bottom pt-toast-container-right
+        bp3-toast-container bp3-overlay bp3-overlay-open bp3-toast-container-bottom bp3-toast-container-right
       "
     >
       <span>

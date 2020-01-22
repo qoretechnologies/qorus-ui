@@ -23,8 +23,8 @@ const DashboardSection: Function = ({
   title,
 }: Props): React.Element<any> => (
   <div className="subtitle" title={title} onClick={link ? handleClick : null}>
-    {icon && <Icon iconName={icon} />} {children}{' '}
-    {link && <Icon iconName="angle-right" />}
+    {icon && <Icon icon={icon} />} {children}{' '}
+    {link && <Icon icon="angle-right" />}
   </div>
 );
 

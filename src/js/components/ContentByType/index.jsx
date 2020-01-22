@@ -67,7 +67,7 @@ const ContentByType: Function = ({
     return (
       <div className={className}>
         <Icon
-          iconName={content ? 'small-tick' : 'cross'}
+          icon={content ? 'small-tick' : 'cross'}
           intent={content ? Intent.SUCCESS : Intent.DANGER}
         />
       </div>

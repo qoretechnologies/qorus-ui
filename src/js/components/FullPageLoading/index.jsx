@@ -6,16 +6,16 @@ import Loader from '../loader';
 
 const FullPageLoading: Function = (): React.Element<any> => (
   <div className="root">
-    <Navbar className="pt-fixed-top pt-dark topbar">
+    <Navbar className="bp3-fixed-top bp3-dark topbar">
       <Flex flexFlow="row" height="100%">
         <Flex
-          className="pt-skeleton"
+          className="bp3-skeleton"
           flex="5 1 auto"
           style={{ margin: '10px 5px' }}
         />
         <Flex flex="25 1 auto" />
         <Flex
-          className="pt-skeleton"
+          className="bp3-skeleton"
           flex="6 1 auto"
           style={{ margin: '10px 5px' }}
         />
@@ -23,22 +23,22 @@ const FullPageLoading: Function = (): React.Element<any> => (
           <NavbarDivider />
         </NavbarGroup>
         <Flex
-          className="pt-skeleton"
+          className="bp3-skeleton"
           flex="1 1 auto"
           style={{ margin: '10px 5px' }}
         />
         <Flex
-          className="pt-skeleton"
+          className="bp3-skeleton"
           flex="1 1 auto"
           style={{ margin: '10px 5px' }}
         />
         <Flex
-          className="pt-skeleton"
+          className="bp3-skeleton"
           flex="1 1 auto"
           style={{ margin: '10px 5px' }}
         />
         <Flex
-          className="pt-skeleton"
+          className="bp3-skeleton"
           flex="1 1 auto"
           style={{ margin: '10px 5px' }}
         />
@@ -46,48 +46,48 @@ const FullPageLoading: Function = (): React.Element<any> => (
           <NavbarDivider />
         </NavbarGroup>
         <Flex
-          className="pt-skeleton"
+          className="bp3-skeleton"
           flex="1 1 auto"
           style={{ margin: '10px 5px' }}
         />
       </Flex>
     </Navbar>
     <div className="root__center">
-      <div className="pt-dark">
-        <div className="pt-menu sidebar">
+      <div className="bp3-dark">
+        <div className="bp3-menu sidebar">
           <Flex height="100%">
             <Flex
-              className="pt-skeleton"
+              className="bp3-skeleton"
               flex="1 1 auto"
               style={{ margin: '5px' }}
             />
             <Flex
-              className="pt-skeleton"
+              className="bp3-skeleton"
               flex="1 1 auto"
               style={{ margin: '5px' }}
             />
             <Flex
-              className="pt-skeleton"
+              className="bp3-skeleton"
               flex="1 1 auto"
               style={{ margin: '5px' }}
             />
             <Flex
-              className="pt-skeleton"
+              className="bp3-skeleton"
               flex="1 1 auto"
               style={{ margin: '5px' }}
             />
             <Flex
-              className="pt-skeleton"
+              className="bp3-skeleton"
               flex="1 1 auto"
               style={{ margin: '5px' }}
             />
             <Flex
-              className="pt-skeleton"
+              className="bp3-skeleton"
               flex="1 1 auto"
               style={{ margin: '5px' }}
             />
             <Flex
-              className="pt-skeleton"
+              className="bp3-skeleton"
               flex="1 1 auto"
               style={{ margin: '5px' }}
             />

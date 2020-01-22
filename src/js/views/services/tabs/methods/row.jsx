@@ -53,8 +53,8 @@ const MethodsRow: Function = ({
     <NameColumn name={method.name} />
     <ActionColumn>
       <Controls>
-        <Button iconName="play" onClick={handleRunClick} />
-        <Button iconName="code" onClick={handleCodeClick} />
+        <Button icon="play" onClick={handleRunClick} />
+        <Button icon="code" onClick={handleCodeClick} />
       </Controls>
     </ActionColumn>
     <Td className="narrow">

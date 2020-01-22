@@ -77,21 +77,21 @@ const AlertsTable: Function = ({
           </FixedRow>
         )}
         <FixedRow sortData={sortData} onSortChange={onSortChange}>
-          <Th iconName="numbered-list" name="alertid">
+          <Th icon="numbered-list" name="alertid">
             ID
           </Th>
           <NameColumnHeader
             name="name"
             title="Object name"
-            iconName="intersection"
+            icon="intersection"
           />
-          <Th className="text" name="type" iconName="application">
+          <Th className="text" name="type" icon="application">
             Interface
           </Th>
-          <Th className="text" name="alert" iconName="warning-sign">
+          <Th className="text" name="alert" icon="warning-sign">
             Alert
           </Th>
-          <Th name="when" iconName="time">
+          <Th name="when" icon="time">
             When
           </Th>
         </FixedRow>

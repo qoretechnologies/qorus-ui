@@ -25,7 +25,6 @@ $blue3: $qore-cobalt;
 $blue4: lighten($qore-cobalt, 10);
 $blue5: lighten($qore-cobalt, 20);
 
-$icon-font-path: '~@blueprintjs/core/resources/icons';
 @import '~@blueprintjs/core/src/blueprint.scss';
 @import '../../node_modules/prismjs/themes/prism-okaidia';
 @import '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
@@ -145,20 +144,20 @@ h5 {
   font-size: 14px;
 }
 
-.pt-button,
-.pt-input,
-.pt-button[class*='pt-icon-']:before {
+.bp3-button,
+.bp3-input,
+.bp3-button[class*='bp3-icon-']:before {
   font-size: 12px;
 }
 
-.pt-dark .pt-menu-item.pt-intent-primary,
-.pt-dark .pt-menu-item.pt-intent-primary .pt-menu-item-label,
-.pt-dark .pt-menu-item.pt-intent-primary:after,
-.pt-dark .pt-menu-item.pt-intent-primary:before {
+.bp3-dark .bp3-menu-item.bp3-intent-primary,
+.bp3-dark .bp3-menu-item.bp3-intent-primary .bp3-menu-item-label,
+.bp3-dark .bp3-menu-item.bp3-intent-primary:after,
+.bp3-dark .bp3-menu-item.bp3-intent-primary:before {
   color: #fff !important;
 }
 
-.pt-toast {
+.bp3-toast {
   font-size: 14px;
 }
 
@@ -223,7 +222,7 @@ pre.line-numbers {
   text-overflow: ellipsis;
 }
 
-.pt-menu.sidebar {
+.bp3-menu.sidebar {
   border-radius: 0;
   height: 100%;
   margin-bottom: 30px;
@@ -292,11 +291,11 @@ pre {
   cursor: pointer;
 }
 
-.pt-progress-bar.progress-bar-auto .pt-progress-meter {
+.bp3-progress-bar.progress-bar-auto .bp3-progress-meter {
   background-color: $qore-purple;
 }
 
-.pt-input-group {
+.bp3-input-group {
   border-radius: inherit;
 }
 
@@ -316,30 +315,30 @@ p.header-detail {
   color: #555;
 }
 
-.pt-tabs {
-  &:not(.pt-vertical) {
-    .pt-tab-panel {
+.bp3-tabs {
+  &:not(.bp3-vertical) {
+    .bp3-tab-panel {
       margin-top: 10px !important;
     }
 
-    .pt-tab-list {
+    .bp3-tab-list {
       box-shadow: inset 0 -3px 0 darken(#fff, 3);
       line-height: 25px;
     }
   }
 
   &:not(.boxed-tabs) {
-    .pt-tab-list {
+    .bp3-tab-list {
       display: inline-flex;
     }
   }
 }
 
-.pt-callout.pt-intent-purple {
+.bp3-callout.bp3-intent-purple {
   padding-right: 33px;
   background-color: lighten($qore-purple, 53);
 
-  &[class*='pt-icon-']:before {
+  &[class*='bp3-icon-']:before {
     color: $qore-purple;
   }
 }
@@ -349,38 +348,38 @@ p.header-detail {
   padding-right: 10px !important;
 }
 
-.pt-navbar {
+.bp3-navbar {
   padding: 0 10px;
 }
 
-span.pt-icon-standard {
+span.bp3-icon {
   font-size: 12px;
   vertical-align: baseline;
 }
 
-.pt-button-group,
-.pt-control-group {
+.bp3-button-group,
+.bp3-control-group {
   &:not(:last-child) {
     margin-right: 3px;
   }
 }
 
-.pt-control-group .qorus-dropdown:not(:last-child),
-.pt-button-group .qorus-dropdown:not(:last-child) {
+.bp3-control-group .qorus-dropdown:not(:last-child),
+.bp3-button-group .qorus-dropdown:not(:last-child) {
   margin-right: -1px;
 }
 
-.qorus-dropdown:first-child .pt-popover-target:first-child button {
+.qorus-dropdown:first-child .bp3-popover-target:first-child button {
   border-top-left-radius: 3px !important;
   border-bottom-left-radius: 3px !important;
 }
 
-.qorus-dropdown:last-child .pt-popover-target:last-child button {
+.qorus-dropdown:last-child .bp3-popover-target:last-child button {
   border-top-right-radius: 3px !important;
   border-bottom-right-radius: 3px !important;
 }
 
-.pt-input {
+.bp3-input {
   vertical-align: baseline !important;
 }
 
@@ -406,17 +405,17 @@ span.pt-icon-standard {
   transition: opacity 8000ms ease-in;
 }
 
-.pt-navbar.pt-dark,
-.pt-dark .pt-menu {
+.bp3-navbar.bp3-dark,
+.bp3-dark .bp3-menu {
   background-color: #383c44;
 }
 
-.pt-callout:not(:last-child) {
+.bp3-callout:not(:last-child) {
   margin-bottom: 10px;
 }
 
-.pt-popover.pt-dark .pt-popover-arrow-border,
-.pt-popover.pt-dark .pt-popover-arrow-fill {
+.bp3-popover.bp3-dark .bp3-popover-arrow-border,
+.bp3-popover.bp3-dark .bp3-popover-arrow-fill {
   fill: #383c44;
 }
 
@@ -442,4 +441,36 @@ span.pt-icon-standard {
 .non-decorated-link {
   color: inherit !important;
   text-decoration: inherit !important;
+}
+
+// This is needed for popover contents
+// to properly render with tooltips
+// otherwise the popover content is rendered
+// inline
+.bp3-menu .bp3-popover-target {
+  display: block;
+}
+.bp3-select-popover .bp3-popover-content {
+  padding: 5px;
+}
+// Add line-height to bp3 controls
+.bp3-radio,
+.bp3-switch {
+  line-height: 30px;
+}
+// Add full width to the select popover
+.select-popover {
+  width: 100%;
+}
+
+.bp3-popover-content {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.select-field,
+.select-field div,
+.select-field button {
+  width: 100%;
 }

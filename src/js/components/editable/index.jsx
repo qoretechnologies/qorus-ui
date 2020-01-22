@@ -102,13 +102,13 @@ export default class Editable extends Component {
               type="submit"
               big
               btnStyle="success"
-              iconName="save"
+              icon="save"
             />
             <Button
               type="button"
               big
               btnStyle="default"
-              iconName="times"
+              icon="times"
               action={this.handleCancelClick}
             />
           </div>

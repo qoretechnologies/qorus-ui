@@ -15,8 +15,9 @@
     .sidebarItem {
       text-align: left;
 
-      span.pt-icon-standard {
+      span.bp3-icon {
         margin-right: 10px;
+        vertical-align: text-bottom;
       }
 
       .submenuExpand {
@@ -106,7 +107,7 @@
       color: inherit;
       width: 100%;
 
-      .pt-popover-target {
+      .bp3-popover-target {
         width: 100%;
       }
 
@@ -118,7 +119,7 @@
     .sidebarItem {
       position: relative;
 
-      span.pt-icon-standard:not(.sidebarFavorite) {
+      span.bp3-icon:not(.sidebarFavorite) {
         display: inline-block;
         font-size: 16px;
       }

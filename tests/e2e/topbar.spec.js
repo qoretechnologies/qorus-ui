@@ -6,11 +6,11 @@ context('Topbar', () => {
   it('Tests look and functions', () => {
     // Theme toggling
     cy.get('#themeToggle').click();
-    cy.get('.topbar').should('not.have.class', 'pt-dark');
+    cy.get('.topbar').should('not.have.class', 'bp3-dark');
     cy.reload();
-    cy.get('.topbar').should('not.have.class', 'pt-dark');
+    cy.get('.topbar').should('not.have.class', 'bp3-dark');
     cy.get('#themeToggle').click();
-    cy.get('.topbar').should('have.class', 'pt-dark');
+    cy.get('.topbar').should('have.class', 'bp3-dark');
 
     // Notifications
     cy.get('#notificationsToggle').click();

@@ -248,7 +248,7 @@ export default class ConfigItemsModal extends Component {
     if (item.allowed_values) {
       return (
         <TextArea
-          className="pt-fill"
+          className="bp3-fill"
           rows={getLineCount(this.state.value, null, 4)}
           value={this.state.value}
           readOnly
@@ -296,7 +296,7 @@ export default class ConfigItemsModal extends Component {
               onApplyDate={(newValue: any) => {
                 this.handleDateChange(newValue);
               }}
-              className="pt-fill"
+              className="bp3-fill"
               noButtons
               small
             />
@@ -307,7 +307,7 @@ export default class ConfigItemsModal extends Component {
         case '*list':
           return (
             <TextArea
-              className="pt-fill"
+              className="bp3-fill"
               rows={getLineCount(this.state.value, null, 4)}
               value={this.state.value}
               onChange={(event: any) => {
@@ -349,7 +349,7 @@ export default class ConfigItemsModal extends Component {
         default:
           return (
             <TextArea
-              className="pt-fill"
+              className="bp3-fill"
               rows={getLineCount(this.state.value, null, 4)}
               value={this.state.value}
               onChange={(event: any) => {
@@ -387,7 +387,7 @@ export default class ConfigItemsModal extends Component {
         <Modal.Body>
           <Box top fill scrollY>
             {item?.desc && (
-              <Alert iconName="info-sign">
+              <Alert icon="info-sign">
                 <ReactMarkdown>{item.desc}</ReactMarkdown>
               </Alert>
             )}
@@ -482,7 +482,7 @@ export default class ConfigItemsModal extends Component {
                       </div>
                       <div className="body">
                         {item?.allowed_values && (
-                          <Alert bsStyle="warning" iconName="warning-sign">
+                          <Alert bsStyle="warning" icon="warning-sign">
                             This config item can only be set using predefined
                             values
                           </Alert>
@@ -512,11 +512,11 @@ export default class ConfigItemsModal extends Component {
                     <div className="configItemsEditor">
                       <div className="header">Set custom template</div>
                       <div className="body">
-                        <Alert bsStyle="info" iconName="info-sign">
+                        <Alert bsStyle="info" icon="info-sign">
                           {'Template items are in the format: $<type>:<key>'}
                         </Alert>
-                        <ControlGroup className="pt-fill">
-                          <Dropdown className="pt-fixed">
+                        <ControlGroup className="bp3-fill">
+                          <Dropdown className="bp3-fixed">
                             <DControl icon="dollar">
                               {this.state.templateType}
                             </DControl>
@@ -571,7 +571,7 @@ export default class ConfigItemsModal extends Component {
                               }}
                             />
                           </Dropdown>
-                          <Button text=":" big className="pt-fixed" />
+                          <Button text=":" big className="bp3-fixed" />
                           <InputGroup
                             value={this.state.templateKey}
                             onChange={(event: any) => {
@@ -612,7 +612,7 @@ export default class ConfigItemsModal extends Component {
                         </p>
                         <BtnGrp>
                           <Btn
-                            className="pt-fill"
+                            className="bp3-fill"
                             text="Submit anyway"
                             intent={Intent.SUCCESS}
                             onClick={this.handleSaveClick}
@@ -623,7 +623,7 @@ export default class ConfigItemsModal extends Component {
                   >
                     <Btn
                       text="Save"
-                      iconName="warning-sign"
+                      icon="warning-sign"
                       intent={Intent.WARNING}
                     />
                   </Popover>

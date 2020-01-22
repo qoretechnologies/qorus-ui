@@ -114,18 +114,18 @@ const JobsTable: Function = ({
         <IdColumnHeader />
         <NameColumnHeader />
         <ActionColumnHeader />
-        <Th name="last_executed" iconName="calendar">
+        <Th name="last_executed" icon="calendar">
           <FormattedMessage id='table.last-run' />
         </Th>
-        <Th name="next" iconName="calendar">
+        <Th name="next" icon="calendar">
           <FormattedMessage id='table.next-run' />
         </Th>
         {!isTablet && (
-          <Th name="expiry_date" iconName="outdated">
+          <Th name="expiry_date" icon="outdated">
             <FormattedMessage id='table.expiry-date' />
           </Th>
         )}
-        <Th className="separated-cell" iconName="grid">
+        <Th className="separated-cell" icon="grid">
           <FormattedMessage id='table.instances' />
         </Th>
       </FixedRow>

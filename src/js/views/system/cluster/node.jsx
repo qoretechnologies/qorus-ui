@@ -85,13 +85,13 @@ const ClusterNode: Function = ({
             <FixedRow className="toolbar-row">
               <Th>
                 <Pull>
-                  <Tag className="pt-large pt-minimal">
+                  <Tag className="bp3-large bp3-minimal">
                     <FormattedMessage id='cluster.hostname' />: {hostname}
                   </Tag>{' '}
-                  <Tag className="pt-large pt-minimal">
+                  <Tag className="bp3-large bp3-minimal">
                     <FormattedMessage id='cluster.node-memory' />: {calculateMemory(memory)}
                   </Tag>{' '}
-                  <Tag className="pt-large pt-minimal">
+                  <Tag className="bp3-large bp3-minimal">
                     <FormattedMessage id='cluster.count-of-processes' />: {processes.length}
                   </Tag>
                 </Pull>
@@ -112,25 +112,25 @@ const ClusterNode: Function = ({
               </Th>
             </FixedRow>
             <FixedRow sortData={sortData} onSortChange={onSortChange}>
-              <Th className="text" name="node" iconName="database">
+              <Th className="text" name="node" icon="database">
                 <FormattedMessage id='cluster.node' />
               </Th>
               <NameColumnHeader
                 name="client_id"
                 title={intl.formatMessage({ id: 'cluster.client-id' })}
-                iconName="intersection"
+                icon="intersection"
               />
               <ActionColumnHeader />
-              <Th className="text medium" name="type" iconName="application">
+              <Th className="text medium" name="type" icon="application">
                 <FormattedMessage id='table.type' />
               </Th>
               <Th className="medium" name="pid">
                 <FormattedMessage id='cluster.pid' />
               </Th>
-              <Th className="medium" name="priv" iconName="layers">
+              <Th className="medium" name="priv" icon="layers">
                 <FormattedMessage id='cluster.memory' />
               </Th>
-              <Th className="text" name="status" iconName="info-sign">
+              <Th className="text" name="status" icon="info-sign">
                 <FormattedMessage id='table.status' />
               </Th>
             </FixedRow>

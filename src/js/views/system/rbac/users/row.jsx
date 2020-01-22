@@ -36,18 +36,18 @@ const UsersRow: Function = ({
       <ButtonGroup>
         <Button
           disabled={!canEdit}
-          iconName="edit"
+          icon="edit"
           onClick={handleEditClick}
           title="Edit user"
-          className="pt-small"
+          className="bp3-small"
         />
         <Button
           disabled={!canDelete}
-          iconName="cross"
+          icon="cross"
           intent={Intent.DANGER}
           onClick={handleDeleteClick}
           title="Remove user"
-          className="pt-small"
+          className="bp3-small"
         />
       </ButtonGroup>
     </ActionColumn>

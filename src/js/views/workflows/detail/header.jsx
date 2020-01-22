@@ -79,7 +79,7 @@ const WorkflowHeader: Function = ({
         <ButtonGroup>
           <Button
             big
-            iconName="error"
+            icon="error"
             btnStyle="danger"
             onClick={handleAlertClick}
             title="This workflow has alerts raised against it which may prevent it from working properly"

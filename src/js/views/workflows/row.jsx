@@ -131,7 +131,7 @@ const TableRow: Function = ({
     </Td>
     {showDeprecated && (
       <Td className="medium">
-        <Icon iconName={deprecated ? 'small-tick' : 'cross'} />
+        <Icon icon={deprecated ? 'small-tick' : 'cross'} />
       </Td>
     )}
     <Td className="huge separated-cell">

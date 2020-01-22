@@ -35,7 +35,7 @@ const OrderLock: Function = ({
       disabled={lock && lock !== username}
       big={big}
       btnStyle={lock ? 'info' : undefined}
-      iconName={lock ? 'lock' : 'unlock'}
+      icon={lock ? 'lock' : 'unlock'}
       text={lock || ''}
       onClick={handleLockClick}
     />

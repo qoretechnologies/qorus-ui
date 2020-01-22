@@ -20,7 +20,7 @@ const InfobarItem: Function = ({
   <span className="infobar-item">
     {(icon || iconName) && (
       <Icon
-        iconName={icon || iconName}
+        icon={icon || iconName}
         className={style ? `text-${style}` : ''}
       />
     )}{' '}

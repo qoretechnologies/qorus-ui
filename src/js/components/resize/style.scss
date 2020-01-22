@@ -8,7 +8,7 @@ $resize-handle-width: 10px;
   position: absolute;
 
   &.bottom.right {
-    .pt-icon-standard.pt-icon-drag-handle-vertical {
+    .bp3-icon.bp3-icon-drag-handle-vertical {
       transform: rotateZ(45deg);
       top: -2px;
       left: -2px;
@@ -16,22 +16,22 @@ $resize-handle-width: 10px;
   }
 
   &.bottom.left {
-    .pt-icon-standard.pt-icon-drag-handle-vertical {
+    .bp3-icon.bp3-icon-drag-handle-vertical {
       transform: rotateZ(-45deg);
       top: -2px;
       left: 2px;
     }
   }
 
-  .pt-icon-standard {
+  .bp3-icon {
     font-size: 10px;
     color: darken($bgcolor, 32);
     position: absolute;
-    &.pt-icon-drag-handle-vertical {
+    &.bp3-icon-drag-handle-vertical {
       top: 50%;
       transform: translateY(-50%);
     }
-    &.pt-icon-drag-handle-horizontal {
+    &.bp3-icon-drag-handle-horizontal {
       left: 50%;
       transform: translateX(-50%);
     }

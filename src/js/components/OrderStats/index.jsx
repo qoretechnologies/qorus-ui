@@ -54,7 +54,7 @@ const StatsTab: Function = ({
                             <ProgressBar
                               intent={orderStatsPctColorDisp(data.disposition)}
                               value={Math.round(data.pct) / 100}
-                              className={`pt-no-animation ${
+                              className={`bp3-no-animation ${
                                 data.disposition === 'A'
                                   ? 'progress-bar-auto'
                                   : ''

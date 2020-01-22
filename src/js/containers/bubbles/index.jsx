@@ -11,7 +11,7 @@ export const Bubbles = ({ bubbleList }: { bubbleList: Array<*> }) => {
   return (
     <div
       className="
-        pt-toast-container pt-overlay pt-overlay-open pt-toast-container-top
+        bp3-toast-container bp3-overlay bp3-overlay-open bp3-toast-container-top
       "
     >
       <span>

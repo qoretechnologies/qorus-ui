@@ -34,7 +34,7 @@ const ToolbarActions: Function = ({
   handleResetClick,
 }: Props): ?React.Element<any> => (
   <Dropdown>
-    <Control iconName="cog">With selected</Control>
+    <Control icon="cog">With selected</Control>
     <Item title="Enable" onClick={handleEnableClick} />
     <Item title="Disable" onClick={handleDisableClick} />
     <Item title="Load" onClick={handleLoadClick} />

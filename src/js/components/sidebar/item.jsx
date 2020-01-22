@@ -80,10 +80,10 @@ let SidebarItem: Function = ({
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <Icon iconName={itemData.icon} />{' '}
+          <Icon icon={itemData.icon} />{' '}
           {!isCollapsed && intl.formatMessage({ id: itemData.name })}
           {(isHovered || itemData.isFavorite) && !isCollapsed && (
-            <ButtonGroup className="pt-minimal sidebarFavorite">
+            <ButtonGroup className="bp3-minimal sidebarFavorite">
               {itemData.isFavorite ? (
                 <Tooltip content="Remove from favorites">
                   <Button
@@ -119,11 +119,11 @@ let SidebarItem: Function = ({
         })}
         onClick={onExpandClick}
       >
-        <Icon iconName={itemData.icon} />{' '}
+        <Icon icon={itemData.icon} />{' '}
         {!isCollapsed && intl.formatMessage({ id: itemData.name })}
         {onExpandClick && (
           <Icon
-            iconName={isExpanded ? 'caret-up' : 'caret-down'}
+            icon={isExpanded ? 'caret-up' : 'caret-down'}
             className="submenuExpand"
           />
         )}

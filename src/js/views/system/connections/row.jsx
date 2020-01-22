@@ -93,7 +93,7 @@ const ConnectionRow: Function = ({
     handleHighlightEnd={handleHighlightEnd}
   >
     <Td className={classnames('normal')}>
-      <Tag intent={up ? Intent.SUCCESS : Intent.DANGER} className="pt-minimal">
+      <Tag intent={up ? Intent.SUCCESS : Intent.DANGER} className="bp3-minimal">
         {intl.formatMessage({ id: up ? 'table.up' : 'table.down' })}
       </Tag>
     </Td>
@@ -109,7 +109,7 @@ const ConnectionRow: Function = ({
           title={intl.formatMessage({
             id: enabled ? 'button.disable' : 'button.enable',
           })}
-          iconName="power"
+          icon="power"
           onClick={handleToggleClick}
           btnStyle={enabled ? 'success' : 'danger'}
           disabled={locked}
@@ -117,27 +117,27 @@ const ConnectionRow: Function = ({
         {remoteType === 'datasources' && (
           <Button
             title={intl.formatMessage({ id: 'button.reset' })}
-            iconName="refresh"
+            icon="refresh"
             onClick={handleResetClick}
           />
         )}
         {(remoteType === 'qorus' || remoteType === 'user') && (
           <Button
             title={intl.formatMessage({ id: 'button.toggleDebug' })}
-            iconName="code"
+            icon="code"
             btnStyle={debug_data ? 'success' : 'none'}
             onClick={handleDebugClick}
           />
         )}
         <Button
           title={intl.formatMessage({ id: 'button.ping' })}
-          iconName="exchange"
+          icon="exchange"
           onClick={handlePingClick}
         />
       </ButtonGroup>
       <ButtonGroup>
         <Button
-          iconName="edit"
+          icon="edit"
           title={intl.formatMessage({ id: 'button.edit' })}
           disabled={!(!locked && canEdit)}
           onClick={handleDetailClick}
@@ -145,7 +145,7 @@ const ConnectionRow: Function = ({
         <Button
           title={intl.formatMessage({ id: 'button.delete' })}
           disabled={!(!locked && canDelete)}
-          iconName="cross"
+          icon="cross"
           intent={Intent.DANGER}
           onClick={handleDeleteClick}
         />
@@ -165,7 +165,7 @@ const ConnectionRow: Function = ({
     <Td className="medium">
       <ContentByType content={locked} />
     </Td>
-    <Td className="medium">{loopback && <Icon iconName="small-tick" />}</Td>
+    <Td className="medium">{loopback && <Icon icon="small-tick" />}</Td>
   </Tr>
 );
 

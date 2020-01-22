@@ -31,7 +31,7 @@ const ExpandableItem: Function = ({
         className={`expandable-item_title ${expanded && 'expanded'}`}
         onClick={toggleExpand}
       >
-        <Icon iconName={expanded ? 'small-minus' : 'small-plus'} />{' '}
+        <Icon icon={expanded ? 'small-minus' : 'small-plus'} />{' '}
         <h4>{title}</h4>
       </div>
       {label && (

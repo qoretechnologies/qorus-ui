@@ -38,6 +38,7 @@ th {
       font-size: 10px;
       margin-right: 2px;
       line-height: 25px;
+      vertical-align: middle !important;
     }
 
     vertical-align: middle;
@@ -66,7 +67,7 @@ th {
   }
 
   padding: 0 3px;
-  line-height: 25px;
+  line-height: 30px;
 
   &.tiny {
     width: 34px;

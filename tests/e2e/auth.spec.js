@@ -16,7 +16,7 @@ context('Authorization', () => {
     cy.get('#username').type('admin');
     cy.get('#password').type('test');
     cy.get('#submit').click();
-    cy.get('.pt-callout').should('have.text', 'invalid user or password');
+    cy.get('.bp3-callout').should('have.text', 'invalid user or password');
   });
 
   it('logs in successfuly', () => {

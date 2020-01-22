@@ -161,7 +161,7 @@ export default class extends Component {
                   type="text"
                   id="domain"
                   value={this.state.domain}
-                  className="pt-input pt-fill"
+                  className="bp3-input bp3-fill"
                   onChange={this.handleDomainChange}
                   autoComplete="off"
                   placeholder="...or specify new domain"
@@ -194,7 +194,7 @@ export default class extends Component {
                   type="text"
                   id="key"
                   value={this.state.key}
-                  className="pt-input pt-fill"
+                  className="bp3-input bp3-fill"
                   onChange={this.handleKeyChange}
                   autoComplete="off"
                   placeholder="...or specify new key"
@@ -207,7 +207,7 @@ export default class extends Component {
                     ref="value"
                     id="value"
                     defaultValue={data ? JSON.stringify(data.value) : ''}
-                    className="pt-input pt-fill"
+                    className="bp3-input bp3-fill"
                   />
                 </div>
               </div>

@@ -68,6 +68,7 @@ const initialState: Object = {
             icon: 'vertical-bar-chart-asc',
             link: '/system/orderStats',
           },
+          // { name: 'Providers', icon: 'settings', link: '/system/providers' },
           { name: 'Options', icon: 'settings', link: '/system/options' },
           { name: 'Properties', icon: 'properties', link: '/system/props' },
           { name: 'Cache', icon: 'database', link: '/system/sqlcache' },

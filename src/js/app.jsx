@@ -6,17 +6,11 @@ import Routes from './routes';
 import { hot } from 'react-hot-loader/root';
 
 require('normalize.css/normalize.css');
-require('@blueprintjs/core/dist/blueprint.css');
+require('@blueprintjs/core/lib/css/blueprint.css');
 require('../fonts/Roboto.ttf');
 require('../fonts/Roboto-Regular.ttf');
 require('../fonts/NeoLight.ttf');
 require('../favicon.ico');
-require('@blueprintjs/core/resources/icons/icons-16.eot');
-require('@blueprintjs/core/resources/icons/icons-16.ttf');
-require('@blueprintjs/core/resources/icons/icons-16.woff');
-require('@blueprintjs/core/resources/icons/icons-20.eot');
-require('@blueprintjs/core/resources/icons/icons-20.ttf');
-require('@blueprintjs/core/resources/icons/icons-20.woff');
 require('bootstrap-sass/assets/stylesheets/_bootstrap.scss');
 require('../css/app.scss');
 

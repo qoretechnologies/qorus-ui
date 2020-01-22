@@ -28,7 +28,7 @@ const DateColumn: Function = compose(onlyUpdateForKeys(['children']))(
           small
           onApplyDate={onDateChange}
           futureOnly
-          className="pt-fill"
+          className="bp3-fill"
           icon="outdated"
         />
       ) : children ? (
@@ -57,7 +57,7 @@ const DateColumnHeader: Function = compose(
     intl,
     ...rest
   }: DateColumnHeaderProps): React.Element<any> => (
-    <Th iconName={icon} name={name} {...rest}>
+    <Th icon={icon} name={name} {...rest}>
       {children || intl.formatMessage({ id: 'table.created' })}
     </Th>
   )

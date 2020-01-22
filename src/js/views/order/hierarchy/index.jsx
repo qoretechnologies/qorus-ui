@@ -97,35 +97,35 @@ const HierarchyTable: Function = ({
           <FixedRow {...{ sortData, onSortChange }}>
             <IdColumnHeader />
             <NameColumnHeader title={intl.formatMessage({ id: 'table.workflow' })} />
-            <Th iconName="info-sign" name="workflowstatus">
+            <Th icon="info-sign" name="workflowstatus">
               <FormattedMessage id='table.status' />
             </Th>
-            <Th iconName="diagram-tree" name="hierarchy_level">
+            <Th icon="diagram-tree" name="hierarchy_level">
               <FormattedMessage id='table.hierarchy-level' />
             </Th>
-            <Th iconName="warning-sign" name="priority">
+            <Th icon="warning-sign" name="priority">
               <FormattedMessage id='table.priority' />
             </Th>
-            <Th iconName="error" name="business_error">
+            <Th icon="error" name="business_error">
               <FormattedMessage id='table.business-error' />
             </Th>
             {!compact && (
-              <Th iconName="issue" name="error_count">
+              <Th icon="issue" name="error_count">
                 <FormattedMessage id='table.errors-count' />
               </Th>
             )}
             {!compact && (
-              <Th iconName="warning-sign" name="warning_count">
+              <Th icon="warning-sign" name="warning_count">
                 <FormattedMessage id='table.warnings' />
               </Th>
             )}
             {!compact && (
-              <Th iconName="exchange" name="subworkflow">
+              <Th icon="exchange" name="subworkflow">
                 <FormattedMessage id='table.is-subworkflow' />
               </Th>
             )}
             {!compact && (
-              <Th iconName="refresh" name="synchronous">
+              <Th icon="refresh" name="synchronous">
                 <FormattedMessage id='table.is-synchronous' />
               </Th>
             )}

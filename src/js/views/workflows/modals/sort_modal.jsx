@@ -22,7 +22,7 @@ const SortModal: Function = ({
       Sort workflow instances
     </Modal.Header>
     <Modal.Body>
-      <Controls className="pt-vertical">
+      <Controls className="bp3-vertical">
         {ORDER_STATES.map(
           (state: Object): any => (
             <Control

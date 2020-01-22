@@ -19,7 +19,7 @@ const ChartBandDropdown: Function = ({
   intl,
 }: ChartBandDropdownProps): React.Element<any> => (
   <Dropdown>
-    <Control small iconName="time">
+    <Control small icon="time">
       {intl.formatMessage({ id: chartTab })}
     </Control>
     {bands.map(chartTab => (

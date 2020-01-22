@@ -199,7 +199,7 @@ export default class SearchToolbar extends Component {
                   : this.state.filter.split(',')
               }
             >
-              <Control iconName="filter-list" />
+              <Control icon="filter-list" />
               <Item title="All" />
               {ORDER_STATES.map((o, k) => (
                 <Item key={k} title={o.title} />
@@ -209,7 +209,7 @@ export default class SearchToolbar extends Component {
           <ButtonGroup>
             <Button
               text="Clear"
-              iconName="cross"
+              icon="cross"
               onClick={this.handleClearClick}
               big
             />

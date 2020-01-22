@@ -386,7 +386,7 @@ export default class Handle extends Component {
         aria-hidden="true"
       >
         <Icon
-          iconName={`drag-handle-${left || right ? 'vertical' : 'horizontal'}`}
+          icon={`drag-handle-${left || right ? 'vertical' : 'horizontal'}`}
         />
         {this.props.children}
       </div>

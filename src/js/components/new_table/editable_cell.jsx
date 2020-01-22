@@ -252,7 +252,7 @@ export default class EditableCell extends Component {
       >
         {this.canEdit() ? (
           <form onSubmit={this.commit} className="editable-form">
-            <ControlGroup className="pt-fill">
+            <ControlGroup className="bp3-fill">
               <input
                 key="input"
                 name="newValue"
@@ -263,15 +263,15 @@ export default class EditableCell extends Component {
                 ref={this.refEditField}
                 min={this.props.min}
                 max={this.props.max}
-                className={`pt-input pt-small ${
+                className={`bp3-input bp3-small ${
                   this.state.error ? 'form-error' : ''
                 }`}
               />
               <Control
-                className="pt-fixed"
+                className="bp3-fixed"
                 btnStyle="success"
                 type="submit"
-                iconName="small-tick"
+                icon="small-tick"
               />
             </ControlGroup>
           </form>
@@ -280,7 +280,7 @@ export default class EditableCell extends Component {
             <Text text={this.state.value} noMarkdown={this.props.noMarkdown} />
             <Control
               title="Edit"
-              iconName="edit"
+              icon="edit"
               className="editable-button"
               onClick={this.start}
             />

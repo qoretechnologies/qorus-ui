@@ -182,7 +182,7 @@ export default class Topbar extends Component {
     const [countryCode] = this.props.locale.split('-');
 
     return (
-      <Navbar className={`pt-fixed-top ${light ? '' : 'pt-dark'} topbar`}>
+      <Navbar className={`bp3-fixed-top ${light ? '' : 'bp3-dark'} topbar`}>
         <NavbarGroup>
           <NavbarHeading>
             <img src={light ? logo : whiteLogo} className="qore-small-logo" />
@@ -217,19 +217,19 @@ export default class Topbar extends Component {
                 <MenuDivider title={this.props.user.name} />
                 <MenuItem
                   text="My profile"
-                  iconName="info-sign"
+                  icon="info-sign"
                   onClick={() => browserHistory.push('/user')}
                 />
                 <MenuItem
                   text="Logout"
-                  iconName="log-out"
+                  icon="log-out"
                   onClick={() => browserHistory.push('/logout')}
                 />
               </Menu>
             }
           >
             <ButtonGroup minimal>
-              <Button iconName="user" />
+              <Button icon="user" />
             </ButtonGroup>
           </Popover>
           {settings.IS_HTTP && (
@@ -239,7 +239,7 @@ export default class Topbar extends Component {
                 content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
                 position={Position.LEFT}
               >
-                <Button iconName="warning-sign" intent={Intent.DANGER} />
+                <Button icon="warning-sign" intent={Intent.DANGER} />
               </Tooltip>
             </ButtonGroup>
           )}
@@ -259,7 +259,7 @@ export default class Topbar extends Component {
                 </Menu>
               }
             >
-              <Button iconName="build" intent={HEALTH_KEYS[data.health]} />
+              <Button icon="build" intent={HEALTH_KEYS[data.health]} />
             </Popover>
           </ButtonGroup>
           {data.remote && data.remote.length !== 0 && (
@@ -279,13 +279,13 @@ export default class Topbar extends Component {
                   </Menu>
                 }
               >
-                <Button iconName="share" />
+                <Button icon="share" />
               </Popover>
             </ButtonGroup>
           )}
           <ButtonGroup minimal>
             <Button
-              iconName="notifications"
+              icon="notifications"
               intent={
                 this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY
               }
@@ -333,7 +333,7 @@ export default class Topbar extends Component {
           </Popover>
           <ButtonGroup minimal>
             <Button
-              iconName="maximize"
+              icon="maximize"
               onClick={() => {
                 sendWarning(
                   'Full screen mode activated. Press [ESC] to leave.',
@@ -346,7 +346,7 @@ export default class Topbar extends Component {
           </ButtonGroup>
           <ButtonGroup minimal>
             <Button
-              iconName={light ? 'moon' : 'flash'}
+              icon={light ? 'moon' : 'flash'}
               onClick={onThemeClick}
               id="themeToggle"
             />

@@ -65,7 +65,7 @@ const DiagramInfoTable: Function = ({
         <Tr>
           <IdColumnHeader><FormattedMessage id='table.instance-id' /></IdColumnHeader>
           <IdColumn>{id}</IdColumn>
-          <Th iconName="info-sign"><FormattedMessage id='table.status' /></Th>
+          <Th icon="info-sign"><FormattedMessage id='table.status' /></Th>
           <Td>
             <span className={`label status-${label}`}>{workflowstatus}</span>
           </Td>
@@ -73,13 +73,13 @@ const DiagramInfoTable: Function = ({
         <Tr>
           <DateColumnHeader><FormattedMessage id='table.started' /></DateColumnHeader>
           <DateColumn>{started}</DateColumn>
-          <Th iconName="info-sign"><FormattedMessage id='table.custom' /></Th>
+          <Th icon="info-sign"><FormattedMessage id='table.custom' /></Th>
           <Td>{customStatus}</Td>
         </Tr>
         <Tr>
           <DateColumnHeader><FormattedMessage id='table.modified' /></DateColumnHeader>
           <DateColumn>{modified}</DateColumn>
-          <Th iconName="warning-sign"><FormattedMessage id='table.priority' /></Th>
+          <Th icon="warning-sign"><FormattedMessage id='table.priority' /></Th>
           <EditableCell
             value={priority}
             type="number"
@@ -91,7 +91,7 @@ const DiagramInfoTable: Function = ({
         <Tr>
           <DateColumnHeader><FormattedMessage id='table.completed' /></DateColumnHeader>
           <DateColumn>{completed}</DateColumn>
-          <Th iconName="arrow-up"><FormattedMessage id='table.parent-id' /></Th>
+          <Th icon="arrow-up"><FormattedMessage id='table.parent-id' /></Th>
           <Td>{parentId}</Td>
         </Tr>
         <Tr>
@@ -103,7 +103,7 @@ const DiagramInfoTable: Function = ({
           ) : (
             <DateColumn>{scheduled}</DateColumn>
           )}
-          <Th iconName="refresh"> Synchronous </Th>
+          <Th icon="refresh"> Synchronous </Th>
           <Td>
             <ContentByType content={synchronous !== 0} />
           </Td>

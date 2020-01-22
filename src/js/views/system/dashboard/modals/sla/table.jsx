@@ -63,7 +63,7 @@ const GlobalModalTable: Function = ({
               <ProgressBar
                 intent={Intent.SUCCESS}
                 value={orderStatsPct(workflow.inSla, totalStats) / 100}
-                className="pt-no-animation"
+                className="bp3-no-animation"
               />
             </Td>
             <Td>
@@ -73,7 +73,7 @@ const GlobalModalTable: Function = ({
               <ProgressBar
                 intent={Intent.DANGER}
                 value={orderStatsPct(workflow.outOfSla, totalStats) / 100}
-                className="pt-no-animation"
+                className="bp3-no-animation"
               />
             </Td>
           </Tr>

@@ -30,7 +30,7 @@ const GroupsControls: Function = ({
   <ButtonGroup>
     <Button
       title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
-      iconName="power"
+      icon="power"
       intent={enabled ? Intent.SUCCESS : Intent.DANGER}
       onClick={handleEnableClick}
       big={big}

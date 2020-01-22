@@ -48,7 +48,7 @@ const AddClientModal: Function = ({
                 id="client-id"
                 onChange={handleClientIdChange}
                 value={clientId}
-                className="pt-fill"
+                className="bp3-fill"
               />
             </FormGroup>
             <FormGroup
@@ -62,7 +62,7 @@ const AddClientModal: Function = ({
                 id="client-secret"
                 onChange={handleClientSecretChange}
                 value={clientSecret}
-                className="pt-fill"
+                className="bp3-fill"
               />
             </FormGroup>
             <FormGroup label="Client Permissions " inline>

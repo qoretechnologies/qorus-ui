@@ -855,10 +855,10 @@ export default class StepsTab extends Component {
                   <Tag title="Type & Status">
                     {stepInfo.arraytype !== 'NONE' && (
                       <React.Fragment>
-                        [{arrayStep.length}] <Icon iconName="dot" />
+                        [{arrayStep.length}] <Icon icon="dot" />
                       </React.Fragment>
                     )}
-                    {type} <Icon iconName="dot" />{' '}
+                    {type} <Icon icon="dot" />{' '}
                     {instances && instances[name]
                       ? instances[name].status
                       : 'NONE'}
@@ -1084,26 +1084,26 @@ export default class StepsTab extends Component {
               )}
               <Button
                 title={this.props.intl.formatMessage({ id: (useDrag ? 'button.use-scrollbars' : 'button.use-drag-to-move') })}
-                iconName="hand"
+                icon="hand"
                 onClick={this.handleMoveChange}
                 btnStyle={useDrag && 'primary'}
                 big
               />
               <Button
                 title={this.props.intl.formatMessage({ id: 'button.zoom-in' })}
-                iconName="zoom-in"
+                icon="zoom-in"
                 onClick={this.handleZoomIn}
                 big
               />
               <Button
                 title={this.props.intl.formatMessage({ id: 'button.zoom-out' })}
-                iconName="zoom-out"
+                icon="zoom-out"
                 onClick={this.handleZoomOut}
                 big
               />
               <Button
                 title={this.props.intl.formatMessage({ id: 'button.reset-zoom' })}
-                iconName="zoom-to-fit"
+                icon="zoom-to-fit"
                 onClick={this.handleZoomReset}
                 big
               />

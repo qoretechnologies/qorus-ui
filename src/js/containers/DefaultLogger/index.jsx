@@ -73,7 +73,7 @@ const DefaultLoggerContainer: Function = ({
       <PaneItem
         title={
           <>
-            <Icon iconName="info-sign" />{' '}
+            <Icon icon="info-sign" />{' '}
             {name || intl.formatMessage({ id: 'component.logger' })}
           </>
         }
@@ -141,7 +141,7 @@ const DefaultLoggerContainer: Function = ({
         <PaneItem
           title={
             <>
-              <Icon iconName="info-sign" />{' '}
+              <Icon icon="info-sign" />{' '}
               {name || intl.formatMessage({ id: 'component.logger' })}
             </>
           }
@@ -247,7 +247,7 @@ const DefaultLoggerContainer: Function = ({
         <PaneItem
           title={
             <>
-              <Icon iconName="info-sign" />{' '}
+              <Icon icon="info-sign" />{' '}
               <FormattedMessage id='component.appenders' />
             </>
           }

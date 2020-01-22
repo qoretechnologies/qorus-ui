@@ -19,7 +19,7 @@ const Alert: Function = ({
 }): React.Element<any> => (
   <Callout
     intent={getIntentFromBsStyle(bsStyle)}
-    iconName={iconName}
+    icon={iconName}
     title={title}
     className={className}
   >

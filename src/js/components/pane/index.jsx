@@ -31,7 +31,7 @@ const Pane: Function = ({
 }: Props) => (
   <Flex className="pane right" style={{ width }}>
     <Headbar>
-      <Breadcrumbs iconName="list-detail-view">
+      <Breadcrumbs icon="list-detail-view">
         {title && <Crumb active>{title}</Crumb>}
         {tabs && (
           <CrumbTabs
@@ -45,7 +45,7 @@ const Pane: Function = ({
         <Controls>
           <Control
             text={intl.formatMessage({ id: 'button.close' })}
-            iconName="cross"
+            icon="cross"
             onClick={onClose}
             big
           />

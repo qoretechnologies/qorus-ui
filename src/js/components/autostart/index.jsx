@@ -33,7 +33,7 @@ const AutoStart = ({
   <ButtonGroup marginRight={big ? 3 : 0}>
     <Button
       title={intl.formatMessage({ id: 'button.decrement-autostart' })}
-      iconName="small-minus"
+      icon="small-minus"
       onClick={handleDecrementClick}
       big={big}
     />
@@ -45,7 +45,7 @@ const AutoStart = ({
     <Button
       big={big}
       title={intl.formatMessage({ id: 'button.increment-autostart' })}
-      iconName="small-plus"
+      icon="small-plus"
       onClick={handleIncrementClick}
     />
   </ButtonGroup>

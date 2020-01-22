@@ -19,7 +19,7 @@ let AlertColumn: Function = ({
   <Td className="tiny">
     {hasAlerts && (
       <ButtonGroup>
-        <Button iconName="error" btnStyle="danger" onClick={onClick} />
+        <Button icon="error" btnStyle="danger" onClick={onClick} />
       </ButtonGroup>
     )}
   </Td>
@@ -29,7 +29,7 @@ const AlertColumnHeader: Function = ({
   ...props
 }: AlertColumnProps): React.Element<any> => (
   <Th className="tiny" {...props}>
-    <Icon iconName="error" />
+    <Icon icon="error" />
   </Th>
 );
 

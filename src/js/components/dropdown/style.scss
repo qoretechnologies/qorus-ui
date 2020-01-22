@@ -1,6 +1,6 @@
 .qorus-dropdown {
-  .pt-popover-target,
-  .pt-tether-target {
+  .bp3-popover-target,
+  .bp3-tether-target {
     float: none !important;
   }
 }
@@ -42,19 +42,14 @@
   }
 }
 
-.popover-dropdown {
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.pt-button-group .qorus-dropdown .pt-button-group button:first-child {
+.bp3-button-group .qorus-dropdown .bp3-button-group button:first-child {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.pt-button-group
+.bp3-button-group
   .qorus-dropdown:not(:last-child)
-  .pt-button-group
+  .bp3-button-group
   button:first-child {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;

@@ -14,6 +14,7 @@ import Headbar from '../../../components/Headbar';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import pane from '../../../hocomponents/pane';
 import GlobalConfigDetail from './pane';
+import AutoField from '../../../components/Field/auto';
 
 type ConfigItemsViewProps = {};
 
@@ -27,6 +28,10 @@ const ConfigItemsView: Function = ({
       </Breadcrumbs>
     </Headbar>
     <Box top fill noPadding>
+      <AutoField
+        requestFieldData={field => (field === 'type' ? 'auto' : true)}
+        {...{ 'type-depends-on': 'type' }}
+      />
       <GlobalConfigItemsTable
         isGlobal
         globalItems={arrayCollectionToObject(configItems)}

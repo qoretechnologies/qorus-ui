@@ -48,9 +48,9 @@ export default class Manager extends Component {
    */
   componentWillUpdate(nextProps: Object, nextState: Object): void {
     if (nextState.modal) {
-      document.body.classList.add('pt-overlay-open');
+      document.body.classList.add('bp3-overlay-open');
     } else {
-      document.body.classList.remove('pt-overlay-open');
+      document.body.classList.remove('bp3-overlay-open');
     }
 
     if (nextState.modal && !this._globalKeyUp) {
@@ -71,7 +71,7 @@ export default class Manager extends Component {
       this._globalKeyUp = null;
     }
 
-    document.body.classList.remove('pt-overlay-open');
+    document.body.classList.remove('bp3-overlay-open');
 
     this._modals = null;
   }
@@ -191,9 +191,9 @@ export default class Manager extends Component {
     if (!this.state.modal) return null;
 
     return (
-      <div className="pt-portal">
+      <div className="bp3-portal">
         <div
-          className="pt-overlay pt-overlay-open pt-overlay-scroll-container"
+          className="bp3-overlay bp3-overlay-open bp3-overlay-scroll-container"
           ref={this.refRoot}
           style={{
             zIndex: '25 !important',
@@ -202,7 +202,7 @@ export default class Manager extends Component {
         >
           {this.state.modal}
         </div>
-        {this.state.modal && <div className="pt-overlay-backdrop" />}
+        {this.state.modal && <div className="bp3-overlay-backdrop" />}
       </div>
     );
   }

@@ -150,26 +150,26 @@ const WorkflowTable: Function = ({
         {!isTablet && searchPage && (
           <NameColumnHeader
             title={intl.formatMessage({ id: 'table.workflow' })}
-            iconName="exchange"
+            icon="exchange"
           />
         )}
         {!isTablet && <ActionColumnHeader />}
-        <Th name="operator_lock" iconName="lock">
+        <Th name="operator_lock" icon="lock">
           <FormattedMessage id='table.lock' />
         </Th>
-        <Th iconName="info-sign" name="workflowstatus">
+        <Th icon="info-sign" name="workflowstatus">
           <FormattedMessage id='table.status' />
         </Th>
-        <Th name="business_error" iconName="error">
+        <Th name="business_error" icon="error">
           <FormattedMessage id='table.err' />
         </Th>
-        <Th name="error_count" iconName="error">
+        <Th name="error_count" icon="error">
           <FormattedMessage id='table.errors' />
         </Th>
-        <Th name="warning_count" iconName="warning-sign">
+        <Th name="warning_count" icon="warning-sign">
           <FormattedMessage id='table.warns' />
         </Th>
-        <Th name="note_count" iconName="annotation">
+        <Th name="note_count" icon="annotation">
           <FormattedMessage id='table.notes' />
         </Th>
         <DateColumnHeader name="started" onClick={handleHeaderClick}>

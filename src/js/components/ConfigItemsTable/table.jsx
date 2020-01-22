@@ -113,7 +113,7 @@ let ItemsTable: Function = ({
                 {groupName && (
                   <Pull>
                     <h5 style={{ lineHeight: '30px' }}>
-                      <Icon iconName="group-objects" />{' '}
+                      <Icon icon="group-objects" />{' '}
                       <FormattedMessage id="table.group" />: {groupName}
                     </h5>
                   </Pull>
@@ -124,7 +124,7 @@ let ItemsTable: Function = ({
                       label={intl.formatMessage({
                         id: 'button.show-descriptions',
                       })}
-                      iconName="align-left"
+                      icon="align-left"
                       btnStyle={showDescription ? 'primary' : ''}
                       onClick={handleToggleDescription}
                     />
@@ -148,7 +148,7 @@ let ItemsTable: Function = ({
             <FixedRow {...{ sortData, onSortChange }}>
               <NameColumnHeader />
               <ActionColumnHeader icon="edit" />
-              <Th className="text" iconName="info-sign" name="actual_value">
+              <Th className="text" icon="info-sign" name="actual_value">
                 <FormattedMessage id="table.value" />
               </Th>
               <Th name="strictly_local">
@@ -162,7 +162,7 @@ let ItemsTable: Function = ({
                   <FormattedMessage id="table.group" />
                 </Th>
               )}
-              <Th iconName="code" name="type" />
+              <Th icon="code" name="type" />
             </FixedRow>
           </Thead>
           <DataOrEmptyTable

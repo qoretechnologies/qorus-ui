@@ -99,7 +99,7 @@ export default class ModalRun extends Component {
         .querySelectorAll('.method-form')[0]
         .getBoundingClientRect();
       const { height: bodyHeight } = document
-        .querySelectorAll('.pt-dialog-body')[0]
+        .querySelectorAll('.bp3-dialog-body')[0]
         .getBoundingClientRect();
       const difference = bodyHeight - formHeight;
 
@@ -171,7 +171,7 @@ export default class ModalRun extends Component {
                     <textarea
                       id="args"
                       name="args"
-                      className="pt-input pt-fill"
+                      className="bp3-input bp3-fill"
                       rows="5"
                       ref={this.requestRef}
                       defaultValue={request || ''}
@@ -198,11 +198,11 @@ export default class ModalRun extends Component {
                   }
                 >
                   <textarea
-                    className={`pt-input pt-fill ${
+                    className={`bp3-input bp3-fill ${
                       error
-                        ? 'pt-intent-danger'
+                        ? 'bp3-intent-danger'
                         : response
-                        ? 'pt-intent-success'
+                        ? 'bp3-intent-success'
                         : ''
                     }`}
                     placeholder="Response"
@@ -227,7 +227,7 @@ export default class ModalRun extends Component {
         </Modal.Body>
         <Modal.Footer>
           <ButtonGroup>
-            <Button onClick={this.handleCancel} iconName="cross" big>
+            <Button onClick={this.handleCancel} icon="cross" big>
               Cancel
             </Button>
             <Button
@@ -235,7 +235,7 @@ export default class ModalRun extends Component {
               btnStyle="success"
               big
               onClick={this.handleCommit}
-              iconName="small-tick"
+              icon="small-tick"
             >
               Call
             </Button>

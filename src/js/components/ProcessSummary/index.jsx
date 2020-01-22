@@ -42,7 +42,7 @@ const ProcessSummary: Function = ({
               <ButtonGroup>
                 <Button
                   btnStyle="danger"
-                  iconName="cross"
+                  icon="cross"
                   onClick={() => {
                     handleKillClick(prcs.id);
                   }}

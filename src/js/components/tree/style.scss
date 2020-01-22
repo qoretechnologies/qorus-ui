@@ -91,7 +91,7 @@ $leftMargin: 0px;
       }
 
       .tree-key {
-        span:not(.data-control):not(.pt-icon-standard).level-#{$i}:before {
+        span:not(.data-control):not(.bp3-icon).level-#{$i}:before {
           border-top: 2px solid darken($bgcolor, $i * 5);
         }
       }
@@ -112,7 +112,7 @@ $leftMargin: 0px;
     }
 
     .tree-key {
-      span:not(.data-control):not(.pt-icon-standard):before {
+      span:not(.data-control):not(.bp3-icon):before {
         content: '';
         display: table;
         position: absolute;

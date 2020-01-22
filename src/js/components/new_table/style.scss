@@ -59,42 +59,6 @@ td.editable {
   }
 }
 
-div.sort,
-th.sort {
-  &:after {
-    font-family: Icons16;
-    margin-left: 0.4em;
-    color: $qore-cobalt;
-  }
-
-  &.sort-asc:after {
-    content: '\E696';
-    margin-top: 0.3em;
-  }
-
-  &.sort-desc:after {
-    content: '\E697';
-  }
-}
-
-div.history-sort,
-th.history-sort {
-  &:after {
-    font-family: Icons16;
-    margin-left: 0.4em;
-    opacity: 0.4;
-    color: $qore-cobalt;
-  }
-
-  &.history-sort-asc:after {
-    content: '\E696';
-    margin-top: 0.3em;
-  }
-
-  &.history-sort-desc:after {
-    content: '\E697';
-  }
-}
 
 div.has-sort:hover,
 th.has-sort:hover {

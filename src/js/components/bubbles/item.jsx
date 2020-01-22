@@ -34,8 +34,8 @@ const Bubble = ({
   notificationsSound: boolean,
 }): React.Element<any> => (
   <div
-    className={classnames('pt-toast', 'pt-overlay-content', {
-      [`pt-intent-${type}`]: type !== 'info',
+    className={classnames('bp3-toast', 'bp3-overlay-content', {
+      [`bp3-intent-${type}`]: type !== 'info',
       ['toast-stacked']: stack > 1,
       ['notification-toast']: notification,
       ['info-toast']: !notification,
@@ -50,11 +50,11 @@ const Bubble = ({
     {stack > 1 && (
       <div className="toast-notification-count">{stack > 9 ? '9+' : stack}</div>
     )}
-    <Icon iconName={iconByType[type]} />
-    <span className="pt-toast-message">{children}</span>
-    <ButtonGroup className="pt-minimal">
+    <Icon icon={iconByType[type]} />
+    <span className="bp3-toast-message">{children}</span>
+    <ButtonGroup className="bp3-minimal">
       {onViewClick && <Button text="View" onClick={onViewClick} />}
-      <Button iconName="cross" onClick={onClick} />
+      <Button icon="cross" onClick={onClick} />
     </ButtonGroup>
   </div>
 );

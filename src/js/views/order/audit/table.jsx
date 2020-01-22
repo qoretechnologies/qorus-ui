@@ -89,7 +89,7 @@ const AuditTable: Function = ({ audits, intl }: Props): React.Element<Table> => 
               name="event"
               title={intl.formatMessage({ id: 'table.event' })}
             />
-            <Th name="audit_event_code" iconName="info-sign">
+            <Th name="audit_event_code" icon="info-sign">
               <FormattedMessage id='table.code' />
             </Th>
             <DescriptionColumnHeader name="source">

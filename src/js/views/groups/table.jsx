@@ -88,42 +88,42 @@ const GroupsTable: Function = ({
         <Th
           name="workflows_count"
           title={intl.formatMessage({ id: 'table.workflows' })}
-          iconName={INTERFACE_ICONS.workflows}
+          icon={INTERFACE_ICONS.workflows}
         >
           {intl.formatMessage({ id: 'table.workflows' + (isTablet ? '-mini' : '') })}
         </Th>
         <Th
           name="services_count"
           title={intl.formatMessage({ id: 'table.services' })}
-          iconName={INTERFACE_ICONS.services}
+          icon={INTERFACE_ICONS.services}
         >
           {intl.formatMessage({ id: 'table.services' + (isTablet ? '-mini' : '') })}
         </Th>
         <Th
           name="jobs_count"
           title={intl.formatMessage({ id: 'table.jobs' })}
-          iconName={INTERFACE_ICONS.jobs}
+          icon={INTERFACE_ICONS.jobs}
         >
           {intl.formatMessage({ id: 'table.jobs' + (isTablet ? '-mini' : '') })}
         </Th>
         <Th
           name="vmaps_count"
           title={intl.formatMessage({ id: 'table.vmaps' })}
-          iconName={INTERFACE_ICONS.valuemaps}
+          icon={INTERFACE_ICONS.valuemaps}
         >
           {intl.formatMessage({ id: 'table.vmaps' + (isTablet ? '-mini' : '') })}
         </Th>
         <Th
           name="roles_count"
           title={intl.formatMessage({ id: 'table.roles' })}
-          iconName={INTERFACE_ICONS.roles}
+          icon={INTERFACE_ICONS.roles}
         >
           {intl.formatMessage({ id: 'table.roles' + (isTablet ? '-mini' : '') })}
         </Th>
         <Th
           name="mappers_count"
           title={intl.formatMessage({ id: 'table.mappers' })}
-          iconName={INTERFACE_ICONS.mappers}
+          icon={INTERFACE_ICONS.mappers}
         >
           {intl.formatMessage({ id: 'table.mappers' + (isTablet ? '-mini' : '') })}
         </Th>

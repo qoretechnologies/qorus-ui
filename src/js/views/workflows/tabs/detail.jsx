@@ -119,8 +119,8 @@ export default class DetailTab extends Component {
               <Thead>
                 <Tr>
                   <ActionColumnHeader />
-                  <Th iconName="automatic-updates">Auto/Execs</Th>
-                  <Th iconName="time">SLA Threshold</Th>
+                  <Th icon="automatic-updates">Auto/Execs</Th>
+                  <Th icon="time">SLA Threshold</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -148,9 +148,9 @@ export default class DetailTab extends Component {
                             type="text"
                             value={`${this.state.slaThreshold}`}
                             onChange={this.handleThresholdChange}
-                            className="pt-small"
+                            className="bp3-small"
                           />
-                          <Control iconName="floppy-disk" type="submit" />
+                          <Control icon="floppy-disk" type="submit" />
                         </ControlGroup>
                       </form>
                     </ButtonGroup>
@@ -164,7 +164,7 @@ export default class DetailTab extends Component {
               title="Order Stats - Disposition (%)"
               label={
                 <Dropdown>
-                  <DControl small iconName="time">
+                  <DControl small icon="time">
                     {dispositionBand}
                   </DControl>
                   <Item
@@ -201,7 +201,7 @@ export default class DetailTab extends Component {
               title="Order Stats - SLA (%)"
               label={
                 <Dropdown>
-                  <DControl small iconName="time">
+                  <DControl small icon="time">
                     {slaBand}
                   </DControl>
                   <Item title="1 hour band" action={this.handleSlaBandChange} />

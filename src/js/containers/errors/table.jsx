@@ -65,7 +65,7 @@ const ErrorsTable: Function = ({
                 <ButtonGroup>
                   <Button
                     text="Add error"
-                    iconName="plus"
+                    icon="plus"
                     onClick={onCreateClick}
                     big
                   />
@@ -93,20 +93,20 @@ const ErrorsTable: Function = ({
             <NameColumnHeader name="error" />
             <ActionColumnHeader />
             {!compact && <DescriptionColumnHeader name="description" />}
-            <Th name="severity" iconName="warning-sign">
+            <Th name="severity" icon="warning-sign">
               Severity
             </Th>
-            <Th name="status" iconName="info-sign">
+            <Th name="status" icon="info-sign">
               Status
             </Th>
-            <Th name="retry_delay_secs" iconName="time">
+            <Th name="retry_delay_secs" icon="time">
               Delay
             </Th>
-            <Th name="business_flag" iconName="flag">
+            <Th name="business_flag" icon="flag">
               Bus. Flag
             </Th>
             {type === 'workflow' && (
-              <Th name="manually_updated" iconName="edit">
+              <Th name="manually_updated" icon="edit">
                 Updated
               </Th>
             )}

@@ -32,7 +32,7 @@ const WorkflowControls: Function = ({
   <Controls marginRight={big ? 3 : 0}>
     <Control
       title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
-      iconName="power"
+      icon="power"
       btnStyle={enabled ? 'success' : 'danger'}
       onClick={handleToggleEnabledClick}
       big={big}
@@ -40,12 +40,12 @@ const WorkflowControls: Function = ({
     <Control
       big={big}
       title={intl.formatMessage({ id: 'button.reset' })}
-      iconName="refresh"
+      icon="refresh"
       onClick={handleResetClick}
     />
     <Control
       title={intl.formatMessage({ id: (remote ? 'button.set-not-remote' : 'button.set-remote') })}
-      iconName="globe"
+      icon="globe"
       btnStyle={remote ? 'info' : 'default'}
       onClick={handleRemoteClick}
       big={big}

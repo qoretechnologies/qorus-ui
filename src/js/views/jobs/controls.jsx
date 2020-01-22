@@ -70,7 +70,7 @@ const JobControls: Function = ({
       <Button
         text={intl.formatMessage({ id: 'button.reschedule' })}
         big={big}
-        iconName="time"
+        icon="time"
         onClick={handleScheduleClick}
       />
     </div>
@@ -79,21 +79,21 @@ const JobControls: Function = ({
       <ButtonGroup>
         <Button
           title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
-          iconName="power"
+          icon="power"
           intent={enabled ? Intent.SUCCESS : Intent.DANGER}
           onClick={handleEnableClick}
           big={big}
         />
         <Button
           title={intl.formatMessage({ id: (active ? 'button.deactivate' : 'button.activate') })}
-          iconName={active ? 'offline' : 'offline'}
+          icon={active ? 'offline' : 'offline'}
           intent={active ? Intent.PRIMARY : Intent.NONE}
           onClick={handleActivateClick}
           big={big}
         />
         <Button
           title={intl.formatMessage({ id: (remote ? 'button.set-not-remote' : 'button.set-remote') })}
-          iconName="globe"
+          icon="globe"
           intent={remote ? Intent.PRIMARY : Intent.NONE}
           onClick={handleRemoteClick}
           big={big}
@@ -101,7 +101,7 @@ const JobControls: Function = ({
         {!compact && (
           <Button
             title={intl.formatMessage({ id: 'button.set-expiry' })}
-            iconName="outdated"
+            icon="outdated"
             btnStyle={expiry && 'info'}
             onClick={handleExpiryClick}
             big={big}
@@ -111,21 +111,21 @@ const JobControls: Function = ({
       <ButtonGroup>
         <Button
           title={intl.formatMessage({ id: 'button.run' })}
-          iconName="play"
+          icon="play"
           onClick={handleRunClick}
           big={big}
         />
         {!compact && (
           <Button
             title={intl.formatMessage({ id: 'button.reset' })}
-            iconName="refresh"
+            icon="refresh"
             big={big}
             onClick={handleResetClick}
           />
         )}
         <Button
           title={intl.formatMessage({ id: 'button.reschedule' })}
-          iconName="time"
+          icon="time"
           onClick={handleScheduleClick}
           big={big}
         />

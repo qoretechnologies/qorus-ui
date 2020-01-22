@@ -62,7 +62,7 @@ const Login: Function = ({
             className="authorize-header"
           >
             <span>
-              <Icon iconName="log-in" />
+              <Icon icon="log-in" />
               Log in to {info['instance-key']}
             </span>
             <span style={{ color: '#aaa' }}>{info['omq-version']}</span>
@@ -111,7 +111,7 @@ const Login: Function = ({
             </FormGroup>
           </Flex>
           <Flex flex="0 1 auto" className="authorize-footer">
-            <ButtonGroup className="pt-fill">
+            <ButtonGroup className="bp3-fill">
               <Button
                 id="submit"
                 text="Log in"

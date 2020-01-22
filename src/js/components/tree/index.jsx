@@ -180,7 +180,7 @@ export default class Tree extends Component {
             onClick={handleClick}
           >
             {isObject && (
-              <Icon iconName={isExpandable ? 'small-minus' : 'small-plus'} />
+              <Icon icon={isExpandable ? 'small-minus' : 'small-plus'} />
             )}{' '}
             <span
               className={classNames({
@@ -200,7 +200,7 @@ export default class Tree extends Component {
                 onClick={handleEditClick}
                 className={classNames(
                   { [`level-${level}`]: true },
-                  'pt-minimal'
+                  'bp3-minimal'
                 )}
                 icon="edit"
               />
@@ -279,14 +279,14 @@ export default class Tree extends Component {
               <ButtonGroup>
                 {this.isDeep() && [
                   <Button
-                    iconName="expand-all"
+                    icon="expand-all"
                     text={!compact && this.props.intl.formatMessage({ id: 'tree.expand-all' })}
                     onClick={this.handleExpandClick}
                     key="expand-button"
                   />,
                   allExpanded || size(items) > 0 ? (
                     <Button
-                      iconName="collapse-all"
+                      icon="collapse-all"
                       text={!compact && this.props.intl.formatMessage({ id: 'tree.collapse-all' })}
                       onClick={this.handleCollapseClick}
                       key="collapse-button"
@@ -295,7 +295,7 @@ export default class Tree extends Component {
                 ]}
                 {!this.props.noControls && (
                   <Button
-                    iconName="code"
+                    icon="code"
                     text={!compact && this.props.intl.formatMessage({ id: 'tree.show-types' })}
                     btnStyle={showTypes && 'primary'}
                     onClick={this.handleTypesClick}
@@ -310,20 +310,20 @@ export default class Tree extends Component {
                     text={!compact && this.props.intl.formatMessage({ id: 'tree.tree-view' })}
                     btnStyle={mode === 'normal' && 'primary'}
                     onClick={this.handleTreeClick}
-                    iconName="diagram-tree"
+                    icon="diagram-tree"
                   />
                   <Button
                     text={!compact && this.props.intl.formatMessage({ id: 'tree.copy-view' })}
                     btnStyle={mode === 'copy' && 'primary'}
                     onClick={this.handleCopyClick}
-                    iconName="clipboard"
+                    icon="clipboard"
                   />
                   {withEdit && (
                     <Button
                       text={!compact && this.props.intl.formatMessage({ id: 'tree.edit-mode' })}
                       btnStyle={mode === 'edit' && 'primary'}
                       onClick={this.handleEditClick}
-                      iconName="edit"
+                      icon="edit"
                     />
                   )}
                 </ButtonGroup>
@@ -339,7 +339,7 @@ export default class Tree extends Component {
         {this.state.mode === 'copy' && (
           <textarea
             id="tree-content"
-            className="pt-input pt-fill"
+            className="bp3-input bp3-fill"
             defaultValue={textData}
             rows={lineCount > 20 ? 20 : lineCount}
             cols="50"
@@ -352,7 +352,7 @@ export default class Tree extends Component {
               key={this.props.customEditData}
               ref="editedData"
               id="tree-content"
-              className="pt-input pt-fill"
+              className="bp3-input bp3-fill"
               defaultValue={this.renderEdit(this.props.data)}
               rows={lineCount > 20 ? 20 : lineCount}
               cols="50"

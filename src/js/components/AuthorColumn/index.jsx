@@ -39,7 +39,7 @@ const AuthorColumnHeader: Function = compose(
     intl,
     ...rest
   }: AuthorColumnHeaderProps): React.Element<any> => (
-    <Th iconName={icon} name={name} className="text" {...rest}>
+    <Th icon={icon} name={name} className="text" {...rest}>
       {children || intl.formatMessage({ id: 'table.author' })}
     </Th>
   )

@@ -31,7 +31,7 @@ const CollapsedCrumb: Function = ({ links }: Props): React.Element<any> => (
         </Menu>
       }
     >
-      <span className="pt-breadcrumbs-collapsed" />
+      <span className="bp3-breadcrumbs-collapsed" />
     </Popover>
   </li>
 );

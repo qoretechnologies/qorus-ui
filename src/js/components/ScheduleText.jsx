@@ -23,7 +23,7 @@ const ScheduleText: Function = ({
   }
   return (
     <Alert
-      iconName={isError ? 'warning-sign' : 'info-sign'}
+      icon={isError ? 'warning-sign' : 'info-sign'}
       bsStyle={isError ? 'danger' : 'primary'}
     >
       {message}

@@ -94,10 +94,10 @@ const WorkflowConfigItemsTable: Function = ({
             <FixedRow {...{ sortData, onSortChange }}>
               <NameColumnHeader />
               <ActionColumnHeader>{''}</ActionColumnHeader>
-              <Th className="text" iconName="info-sign" name="value">
+              <Th className="text" icon="info-sign" name="value">
                 Value
               </Th>
-              <Th iconName="code" name="type" />
+              <Th icon="code" name="type" />
             </FixedRow>
           </Thead>
           <DataOrEmptyTable

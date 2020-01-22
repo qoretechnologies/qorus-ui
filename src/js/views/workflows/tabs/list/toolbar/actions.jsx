@@ -41,30 +41,30 @@ const ToolbarActions: Function = ({
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
     <Dropdown id="hidden">
-      <DropdownControl iconName="cog">With selected</DropdownControl>
+      <DropdownControl icon="cog">With selected</DropdownControl>
       <DropdownItem
         title={intl.formatMessage({ id: 'order.retry' })}
-        iconName="refresh"
+        icon="refresh"
         action={handleRetryClick}
       />
       <DropdownItem
         title={intl.formatMessage({ id: 'order.block' })}
-        iconName="minus-circle"
+        icon="minus-circle"
         action={handleBlockClick}
       />
       <DropdownItem
         title={intl.formatMessage({ id: 'order.unblock' })}
-        iconName="check-circle"
+        icon="check-circle"
         action={handleUnblockClick}
       />
       <DropdownItem
         title={intl.formatMessage({ id: 'order.cancel' })}
-        iconName="times-circle"
+        icon="times-circle"
         action={handleCancelClick}
       />
       <DropdownItem
         title={intl.formatMessage({ id: 'order.uncancel' })}
-        iconName="refresh"
+        icon="refresh"
         action={handleUncancelClick}
       />
     </Dropdown>

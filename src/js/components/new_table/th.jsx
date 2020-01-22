@@ -56,9 +56,21 @@ const Th: Function = ({
       onClick={handleClick}
       title={title}
     >
-      {icon && <Icon iconName={icon} className="header-icon" />}
+      {icon && <Icon icon={icon} iconSize={10} className="header-icon" />}
       {icon && ' '}
       <span>{children}</span>
+      {(direction && direction > 0) && (
+        <Icon icon="caret-down" iconSize={10} />
+      )}
+      {(direction && direction < 0) && (
+        <Icon icon="caret-up" iconSize={10} />
+      )}
+      {(historyDirection && historyDirection > 0) && (
+        <Icon icon="caret-down" iconSize={10} />
+      )}
+      {(historyDirection && historyDirection < 0) && (
+        <Icon icon="caret-up" iconSize={10} />
+      )}
     </div>
   ) : (
     <th
@@ -78,9 +90,21 @@ const Th: Function = ({
       title={title}
       colSpan={colspan}
     >
-      {icon && <Icon iconName={icon} className="header-icon" />}
+      {icon && <Icon iconSize={10} icon={icon} className="header-icon" />}
       {icon && ' '}
       {children}
+      {(direction && direction > 0) && (
+        <Icon icon="caret-down" iconSize={10} />
+      )}
+      {(direction && direction < 0) && (
+        <Icon icon="caret-up" iconSize={10} />
+      )}
+      {(historyDirection && historyDirection > 0) && (
+        <Icon icon="caret-down" iconSize={10} />
+      )}
+      {(historyDirection && historyDirection < 0) && (
+        <Icon icon="caret-up" iconSize={10} />
+      )}
     </th>
   );
 

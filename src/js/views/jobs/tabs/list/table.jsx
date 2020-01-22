@@ -123,7 +123,7 @@ const ResultTable = ({
       </FixedRow>
       <FixedRow onSortChange={onSortChange} sortData={sortData}>
         <NameColumnHeader title="Instance ID" name="job_instanceid" />
-        <Th name="jobstatus" iconName="info-sign">
+        <Th name="jobstatus" icon="info-sign">
           Status
         </Th>
         <DateColumnHeader name="started">Started</DateColumnHeader>

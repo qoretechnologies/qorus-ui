@@ -25,7 +25,7 @@ const CheckboxElement: Function = ({
     indeterminate={checked === 'HALFCHECKED'}
     checked={checked === 'CHECKED'}
     onChange={handleClick}
-    className="checkbox-wrapper"
+    className="checkbox-wrapper bp3-align-right"
     intent={intent}
   />
 );

@@ -59,7 +59,7 @@ const OptionRow: Function = ({
       {status === 'locked' && (
         <Icon
           title="This option is locked and cannot be changed while Qorus is running"
-          iconName="lock"
+          icon="lock"
         />
       )}
     </Td>
@@ -67,21 +67,21 @@ const OptionRow: Function = ({
     <Td className="big">
       <Tag
         title={workflow ? 'Affecting Workflows' : ''}
-        className="pt-minimal pt-round"
+        className="bp3-minimal bp3-round"
         intent={workflow ? Intent.PRIMARY : Intent.NONE}
       >
         W
       </Tag>{' '}
       <Tag
         title={service ? 'Affecting Services' : ''}
-        className="pt-minimal pt-round"
+        className="bp3-minimal bp3-round"
         intent={service ? Intent.PRIMARY : Intent.NONE}
       >
         S
       </Tag>{' '}
       <Tag
         title={job ? 'Affecting Jobs' : ''}
-        className="pt-minimal pt-round"
+        className="bp3-minimal bp3-round"
         intent={job ? Intent.PRIMARY : Intent.NONE}
       >
         J
@@ -98,9 +98,9 @@ const OptionRow: Function = ({
         <ButtonGroup>
           <Button
             title="Edit this option"
-            iconName="edit"
+            icon="edit"
             onClick={handleEditClick}
-            className="pt-small"
+            className="bp3-small"
           />
         </ButtonGroup>
       )}
