@@ -41,7 +41,7 @@ let Item: Function = ({
       onClick={handleClick}
       className={classNames('code-item', { selected: isSelected })}
     >
-      {newItem.type && <Tag className="pt-minimal">{newItem.type}</Tag>}
+      {newItem.type && <Tag className="bp3-minimal">{newItem.type}</Tag>}
       <p>{normalizeName(newItem)}</p>
     </div>
   );

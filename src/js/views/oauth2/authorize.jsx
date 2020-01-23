@@ -57,11 +57,11 @@ const AuthenticateView: Function = ({
         >
           <span>
             {hasDenied && [
-              <Icon iconName="disable" />,
+              <Icon icon="disable" />,
               <span>Authorization denied</span>,
             ]}
             {!hasDenied && [
-              <Icon iconName="confirm" />,
+              <Icon icon="confirm" />,
               <span>Authorization required</span>,
             ]}
           </span>
@@ -91,7 +91,7 @@ const AuthenticateView: Function = ({
         </Flex>
         <Flex flex="0 1 auto" className="authorize-footer">
           {hasDenied && (
-            <ButtonGroup className="pt-fill">
+            <ButtonGroup className="bp3-fill">
               <Button
                 btnStyle="primary"
                 big
@@ -102,7 +102,7 @@ const AuthenticateView: Function = ({
             </ButtonGroup>
           )}
           {!hasDenied && (
-            <ButtonGroup className="pt-fill">
+            <ButtonGroup className="bp3-fill">
               <Button
                 btnStyle="danger"
                 big

@@ -91,7 +91,7 @@ class ValueMapsRow extends Component {
         {!compact && (
           <Td className="narrow">
             <ButtonGroup>
-              <Button iconName="download" onClick={this.handleDumpClick} />
+              <Button icon="download" onClick={this.handleDumpClick} />
               {data.dump && (
                 <a
                   ref="download"

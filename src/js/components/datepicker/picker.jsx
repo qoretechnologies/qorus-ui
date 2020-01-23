@@ -63,8 +63,8 @@ export default class Picker extends Component {
     return (
       <div className="datepicker" ref="datepicker">
         {this.props.children}
-        <ControlGroup fill className="pt-small">
-          <Control iconName="time" />
+        <ControlGroup fill className="bp3-small">
+          <Control icon="time" />
           <InputGroup
             type="number"
             name="hours"
@@ -83,7 +83,7 @@ export default class Picker extends Component {
             onChange={this.props.onMinutesChange}
           />
           <Control
-            iconName="undo"
+            icon="undo"
             title={this.props.intl.formatMessage({ id: 'datetime.reset' })}
             action={this.props.onResetClick}
           />
@@ -95,7 +95,7 @@ export default class Picker extends Component {
               className="pull-right"
               intent={Intent.SUCCESS}
               onClick={this.props.onApplyClick}
-              iconName="small-tick"
+              icon="small-tick"
             >
               <FormattedMessage id='datetime.apply' />
             </Control>

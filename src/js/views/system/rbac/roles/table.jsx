@@ -58,7 +58,7 @@ const RolesTable: Function = ({
                 <Button
                   disabled={!rest.canCreate}
                   text="Add role"
-                  iconName="plus"
+                  icon="plus"
                   onClick={onAddRoleClick}
                   big
                 />
@@ -78,7 +78,7 @@ const RolesTable: Function = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <NameColumnHeader name="role" />
             <ActionColumnHeader />
-            <Th className="text" name="provider" iconName="database">
+            <Th className="text" name="provider" icon="database">
               Provider
             </Th>
             <DescriptionColumnHeader />

@@ -111,7 +111,7 @@ const NameColumn: Function = ({
         <ButtonGroup minimal={minimalAlert}>
           <Tooltip content={alertTooltip || intl.formatMessage({ id: 'button.view-alerts' })}>
             <Button
-              iconName="error"
+              icon="error"
               title={intl.formatMessage({ id: 'button.item-has-alerts' })}
               btnStyle="danger"
               onClick={onDetailClick}
@@ -139,7 +139,7 @@ const NameColumnHeader: Function = ({
   <Th
     className="name"
     name={name}
-    iconName={icon}
+    icon={icon}
     {...rest}
   >
     {title || intl.formatMessage({ id: 'table.name' })}

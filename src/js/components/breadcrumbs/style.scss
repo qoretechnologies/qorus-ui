@@ -1,5 +1,5 @@
-.pt-breadcrumbs {
-  span:not(.pt-popover-target),
+.bp3-breadcrumbs {
+  span:not(.bp3-popover-target),
   li:after,
   a,
   div {
@@ -11,8 +11,9 @@
 
 .breadcrumb-tabs {
   overflow: hidden;
+  margin-left: 15px;
 
-  .pt-popover-target:not(:first-child) {
+  .bp3-popover-target:not(:first-child) {
     .breadcrumb-tab {
       border-top-left-radius: 0px;
       border-bottom-left-radius: 0px;
@@ -72,6 +73,6 @@
   }
 }
 
-.pt-breadcrumb-current {
+.bp3-breadcrumb-current {
   font-weight: 600;
 }

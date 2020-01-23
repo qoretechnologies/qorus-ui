@@ -42,7 +42,7 @@ const UserSettings: Function = ({
   <Box fill top scrollY>
     <PaneItem title={intl.formatMessage({ id: 'settings.live-notifs' })}>
       <Toolbar mb>
-        <Alert bsStyle="info" iconName="notifications">
+        <Alert bsStyle="info" icon="notifications">
           <FormattedMessage id="settings.when-enabled" />
         </Alert>
       </Toolbar>
@@ -78,7 +78,7 @@ const UserSettings: Function = ({
       />
     </PaneItem>
     <PaneItem title={intl.formatMessage({ id: 'Dashboard' })} id="dashboard">
-      <Alert bsStyle="info" iconName="notifications">
+      <Alert bsStyle="info" icon="notifications">
         <FormattedMessage id="settings.below-you-can-select" />
       </Alert>
       {map(Modules, (dModule, name) => (

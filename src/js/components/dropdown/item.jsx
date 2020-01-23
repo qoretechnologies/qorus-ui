@@ -95,11 +95,11 @@ export default class Item extends Component {
       <MenuItem
         shouldDismissPopover={!multi}
         text={title}
-        iconName={icon}
+        icon={icon}
         onClick={this.handleClick}
         intent={intent}
         disabled={disabled}
-        label={selected && <Icon iconName="small-tick" />}
+        label={selected && <Icon icon="small-tick" />}
       />
     );
   }

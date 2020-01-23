@@ -254,6 +254,7 @@ class AppInfo extends React.Component {
               <Route path="cluster" component={System.Cluster} />
               <Route path="orderStats" component={System.OrderStats} />
               <Route path="config-items" component={System.ConfigItems} />
+              {/* <Route path="providers" component={System.Providers} /> */}
             </Route>
             <Route path="workflow/:id" component={Workflow} />
             <Route path="order/:id/:date" component={Order} />

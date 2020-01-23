@@ -67,19 +67,19 @@ export default class LogComponent extends Component {
             <ButtonGroup>
               <Button
                 text={this.props.intl.formatMessage({ id: 'button.autoscroll' })}
-                iconName={this.state.autoScroll ? 'selection' : 'circle'}
+                icon={this.state.autoScroll ? 'selection' : 'circle'}
                 intent={this.state.autoScroll ? Intent.PRIMARY : Intent.NONE}
                 onClick={this.setAutoScroll}
               />
               <Button
                 text={this.props.intl.formatMessage({ id: 'button.clear' })}
-                iconName="cross"
+                icon="cross"
                 onClick={onClearClick}
               />
             </ButtonGroup>
           </Pull>
           <Pull right>
-            <Icon iconName="info-circle" /><FormattedMessage id='component.use' />{' '}
+            <Icon icon="info-circle" /><FormattedMessage id='component.use' />{' '}
             <strong>"{getControlChar()} + f"</strong>{' '}<FormattedMessage id='component.to-search-log' />
           </Pull>
         </Toolbar>

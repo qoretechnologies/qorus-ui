@@ -46,7 +46,7 @@ const SLATable: Function = ({
         <DescriptionColumnHeader
           name="description"
         />
-        <Th className="text" name="type" iconName="time">
+        <Th className="text" name="type" icon="time">
           <FormattedMessage id='table.units' />
         </Th>
         <ActionColumnHeader />

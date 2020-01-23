@@ -22,7 +22,7 @@ const DetailButton: Function = ({
     title={intl.formatMessage({ id: 'button.opens-side-pane' })}
     intent={active ? Intent.PRIMARY : Intent.NONE}
     onClick={handleClick}
-    iconName="list-detail-view"
+    icon="list-detail-view"
   />
 );
 

@@ -43,7 +43,7 @@ const SLAToolbar: Function = ({
       <ButtonGroup marginRight={3}>
         <Button
           disabled={!hasPermission(perms, ['CREATE-SLA', 'SLA-CONTROL'], 'or')}
-          iconName="plus"
+          icon="plus"
           text={intl.formatMessage({ id: 'button.add-new' })}
           onClick={handleAddClick}
           big

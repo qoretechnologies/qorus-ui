@@ -18,7 +18,7 @@ const BandDropdown: Function = ({
   intl,
 }: BandDropdownProps): React.Element<any> => (
   <Dropdown>
-    <Control iconName="time">{intl.formatMessage({ id: band })}</Control>
+    <Control icon="time">{intl.formatMessage({ id: band })}</Control>
     {bands.map(band => (
       <Item
         title={intl.formatMessage({ id: band })}

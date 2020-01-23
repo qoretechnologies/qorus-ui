@@ -62,7 +62,7 @@ const SLAEventsTable: Function = ({
           <FormattedMessage id="table.created" />
         </Th>
         <Th className="tiny" name="success" onClick={handleHeaderClick}>
-          <Icon iconName="check" />
+          <Icon icon="check" />
         </Th>
         <Th className="text" name="value" onClick={handleHeaderClick}>
           <FormattedMessage id="table.value" />

@@ -41,7 +41,7 @@ const DispositionChart: Function = ({
   <div key={stats.label}>
     {autoRecoveriesCount > 0 && recoveryAmount !== 0 &&
       (
-        <Callout iconName="dollar" className="pt-intent-purple">
+        <Callout icon="dollar" className="bp3-intent-purple">
           <FormattedMessage id='stats.estimated-savings-1' />{' '}
           <strong>{autoRecoveriesCount}</strong>{' '}
           <FormattedMessage id='stats.estimated-savings-2' />{' '}
@@ -66,7 +66,7 @@ const DispositionChart: Function = ({
               content={
                 <div style={{ width: '500px' }}>
                   <Callout
-                    iconName="info-sign"
+                    icon="info-sign"
                     title={intl.formatMessage({ id: 'stats.automatic-recovery-info' })}
                     intent={Intent.PRIMARY}
                   >
@@ -101,7 +101,7 @@ const DispositionChart: Function = ({
                 </div>
               }
             >
-              <Icon iconName="help" />
+              <Icon icon="help" />
             </Popover>
           </div>
         </Callout>

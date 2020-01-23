@@ -35,24 +35,24 @@ const ToolbarFilters: Function = ({
           ? Intent.PRIMARY
           : Intent.NONE
       }
-      iconName="filter-list"
+      icon="filter-list"
     >
       {' '}
       <FormattedMessage id='dropdown.filter' />
     </Control>
     <Item
       title={intl.formatMessage({ id: 'dropdown.running' })}
-      iconName={runningQuery ? 'selection' : 'circle'}
+      icon={runningQuery ? 'selection' : 'circle'}
       onClick={changeRunningQuery}
     />
     <Item
       title={intl.formatMessage({ id: 'dropdown.latest' })}
-      iconName={latestQuery ? 'selection' : 'circle'}
+      icon={latestQuery ? 'selection' : 'circle'}
       onClick={changeLatestQuery}
     />
     <Item
       title={intl.formatMessage({ id: 'dropdown.deprecated' })}
-      iconName={deprecatedQuery ? 'selection' : 'circle'}
+      icon={deprecatedQuery ? 'selection' : 'circle'}
       onClick={changeDeprecatedQuery}
     />
   </Dropdown>

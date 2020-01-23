@@ -268,7 +268,7 @@ export default class EditableCell extends Component {
               className={classNames({ hide: !this.props.showControl })}
               key="button"
               type="submit"
-              iconName="plus"
+              icon="plus"
               btnStyle="primary"
             />
           </form>

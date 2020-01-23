@@ -145,28 +145,28 @@ const WorkflowsTable: Function = ({
         <IdColumnHeader />
         <NameColumnHeader />
         <ActionColumnHeader />
-        <Th name="autostart" iconName="automatic-updates">
+        <Th name="autostart" icon="automatic-updates">
           <FormattedMessage id='table.auto-execs' />
         </Th>
         {deprecated && (
-          <Th name="deprecated" iconName="flag">
+          <Th name="deprecated" icon="flag">
             <FormattedMessage id='table.deprecated' />
           </Th>
         )}
         <Th
           className="separated-cell"
           onClick={handleInstancesClick}
-          iconName="layout-grid"
+          icon="layout-grid"
         >
           <FormattedMessage id='table.instances' />
         </Th>
-        <Th name="TOTAL" iconName="grid">
+        <Th name="TOTAL" icon="grid">
           <FormattedMessage id='table.all' />
         </Th>
-        <Th className="separated-cell" iconName="pie-chart">
+        <Th className="separated-cell" icon="pie-chart">
           <FormattedMessage id='table.disposition' /> (%)
         </Th>
-        <Th className="normal" iconName="time">
+        <Th className="normal" icon="time">
           <FormattedMessage id='table.sla' /> (%)
         </Th>
       </FixedRow>

@@ -37,11 +37,11 @@ const Control = ({
   return children || newIcon || !noCaret ? (
     <ButtonGroup>
       <Button
-        className={classNames(small ? 'pt-small' : '')}
+        small
         type="button"
         text={children}
         intent={intent}
-        iconName={newIconName}
+        icon={newIconName}
         rightIconName={!noCaret ? rightIconName : null}
         onClick={onClick}
         disabled={disabled}

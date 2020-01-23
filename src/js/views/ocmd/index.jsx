@@ -238,7 +238,7 @@ export default class OCMDView extends Component {
                 <form onSubmit={this.handleFormSubmit}>
                   <ButtonGroup>
                     <Dropdown show={this.state.showDropdown}>
-                      <Control iconName="list">Command list</Control>
+                      <Control icon="list">Command list</Control>
                       {size(this.state.filtered) !== 0 ||
                       this.state.value === ''
                         ? this.renderCommands()

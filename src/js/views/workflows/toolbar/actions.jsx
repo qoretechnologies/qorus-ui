@@ -67,7 +67,7 @@ const ToolbarActions: Function = ({
 
   return (
     <Dropdown>
-      <Control iconName="cog">With selected</Control>
+      <Control icon="cog">With selected</Control>
       <Item title="Start" onClick={handleStartClick} />
       <Item title="Enable" onClick={handleEnableClick} />
       <Item title="Disable" onClick={handleDisableClick} />

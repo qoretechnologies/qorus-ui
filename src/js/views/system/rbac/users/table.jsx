@@ -75,7 +75,7 @@ const UsersTable: Function = ({
                   <Button
                     disabled={!canAdd}
                     text="Add user"
-                    iconName="plus"
+                    icon="plus"
                     onClick={onAddUserClick}
                     big
                   />
@@ -83,7 +83,7 @@ const UsersTable: Function = ({
                 {rbacExternal && (
                   <ButtonGroup>
                     <Button
-                      className="pt-minimal"
+                      className="bp3-minimal"
                       icon="warning-sign"
                       btnStyle="warning"
                       title={`External RBAC providers are: ${rbacExternal}`}
@@ -109,10 +109,10 @@ const UsersTable: Function = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <NameColumnHeader />
             <ActionColumnHeader />
-            <Th className="text big" name="username" iconName="user">
+            <Th className="text big" name="username" icon="user">
               Username
             </Th>
-            <Th className="text" iconName="contrast">
+            <Th className="text" icon="contrast">
               Roles
             </Th>
           </FixedRow>

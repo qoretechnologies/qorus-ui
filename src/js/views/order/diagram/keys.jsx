@@ -22,7 +22,7 @@ const DiagramKeysTable: Function = ({
           <Thead>
             <Tr>
               <NameColumnHeader title={intl.formatMessage({ id: 'table.key' })} />
-              <Th iconName="info-sign"> <FormattedMessage id='table.value' /> </Th>
+              <Th icon="info-sign"> <FormattedMessage id='table.value' /> </Th>
             </Tr>
           </Thead>
           <Tbody>

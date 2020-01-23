@@ -116,13 +116,13 @@ export default class Modal extends Component {
   };
 
   calculateHeight: Function = (): ?number => {
-    const header: Object = document.querySelectorAll('.pt-dialog-header')[0];
+    const header: Object = document.querySelectorAll('.bp3-dialog-header')[0];
 
     if (header) {
       const headerHeight: number = header.offsetHeight;
       if (this.props.hasFooter) {
         const footerHeight: number =
-          document.querySelectorAll('.pt-dialog-footer')[0].offsetHeight + 15;
+          document.querySelectorAll('.bp3-dialog-footer')[0].offsetHeight + 15;
 
         return this.state.height
           ? this.state.height - (headerHeight + footerHeight)
@@ -136,7 +136,7 @@ export default class Modal extends Component {
   };
 
   resizeBody: Function = (): void => {
-    const body = document.querySelectorAll('.pt-dialog-body')[0];
+    const body = document.querySelectorAll('.bp3-dialog-body')[0];
 
     if (body) {
       const height = this.calculateHeight();
@@ -153,7 +153,7 @@ export default class Modal extends Component {
   render (): React.Element<any> {
     return (
       <div
-        className={`pt-dialog-container ${
+        className={`bp3-dialog-container ${
           this.props.hasFooter ? 'has-footer' : ''
         }`}
         ref={this.refModal}
@@ -164,7 +164,7 @@ export default class Modal extends Component {
       >
         <Draggable handle=".handle">
           <div
-            className="pt-dialog"
+            className="bp3-dialog"
             role="document"
             style={{
               width: this.props.width,

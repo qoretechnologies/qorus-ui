@@ -41,13 +41,13 @@ const ClusterView: Function = ({
         <Crumb active><FormattedMessage id='cluster.cluster' /></Crumb>
       </Breadcrumbs>
       <Pull right>
-        <Tag className="pt-large">
+        <Tag className="bp3-large">
           <FormattedMessage id='cluster.nodes' />: {Object.keys(nodes).length}
         </Tag>{' '}
-        <Tag className="pt-large">
+        <Tag className="bp3-large">
           <FormattedMessage id='cluster.processes' />: {Object.keys(processes).length}
         </Tag>{' '}
-        <Tag className="pt-large">
+        <Tag className="bp3-large">
           <FormattedMessage id='cluster.cluster-memory' />: {calculateMemory(nodesMemory)}
         </Tag>
       </Pull>

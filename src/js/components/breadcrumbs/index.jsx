@@ -22,11 +22,11 @@ const Breadcrumbs: Function = ({
   icon,
   collapsed: collapsed = false,
 }: Props): React.Element<any> => (
-  <ul className={`pt-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
+  <ul className={`bp3-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
     {!collapsed && (
       <li onClick={onClick}>
         {icon ? (
-          <Icon className="pt-breadcrumb" iconName={icon} />
+          <Icon className="bp3-breadcrumb" icon={icon} />
         ) : (
           <img src={qoreLogo} style={{ width: '15px' }} />
         )}

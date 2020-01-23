@@ -41,7 +41,7 @@ const SQLCacheRow: Function = ({
             btnStyle="danger"
             text="Clear"
             onClick={handleClick}
-            className="pt-small"
+            className="bp3-small"
           />
         </ButtonGroup>
       </ActionColumn>

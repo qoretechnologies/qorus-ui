@@ -102,10 +102,10 @@ const ServicesTable: Function = ({
         <IdColumnHeader />
         <NameColumnHeader />
         <ActionColumnHeader />
-        <Th name="type" iconName="info-sign">
+        <Th name="type" icon="info-sign">
           <FormattedMessage id='table.type' />
         </Th>
-        <Th name="threads" iconName="multi-select">
+        <Th name="threads" icon="multi-select">
           <FormattedMessage id='table.threads' />
         </Th>
         <DescriptionColumnHeader />

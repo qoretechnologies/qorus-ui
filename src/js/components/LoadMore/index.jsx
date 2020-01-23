@@ -29,14 +29,14 @@ const LoadMore: Function = ({
     <Controls>
       <Control
         text={intl.formatMessage({ id: 'global.show-more' }) + ` (${currentCount} / ${total})`}
-        iconName="chevron-down"
+        icon="chevron-down"
         onClick={onLoadMore}
         big
       />
       {onLoadAll && (
         <Control
           text={intl.formatMessage({ id: 'global.show-all' })}
-          iconName="double-chevron-down"
+          icon="double-chevron-down"
           onClick={onLoadAll}
           big
         />

@@ -62,7 +62,7 @@ const PermsTable: Function = ({
               <Pull>
                 <Button
                   disabled={!canAdd}
-                  iconName="plus"
+                  icon="plus"
                   text="Add permission"
                   onClick={onAddPermClick}
                   big
@@ -86,7 +86,7 @@ const PermsTable: Function = ({
             <Th
               className="text normal"
               name="permission_type"
-              iconName="info-sign"
+              icon="info-sign"
             >
               Type
             </Th>

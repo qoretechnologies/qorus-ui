@@ -57,10 +57,10 @@ const SLAControl: Function = ({
           slavalue &&
           slavalue !== 'None' && (
             <Button
-              iconName="cross"
+              icon="cross"
               intent={Intent.DANGER}
               onClick={handleRemoveClick}
-              className="pt-small"
+              className="bp3-small"
             />
           )
         }

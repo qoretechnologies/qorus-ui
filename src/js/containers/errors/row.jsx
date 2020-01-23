@@ -40,13 +40,13 @@ const ErrorsRow: Function = ({
         <Controls grouped>
           <Button
             onClick={handleEditClick}
-            iconName="edit"
+            icon="edit"
             title="Edit error"
           />
           <Button
             onClick={handleDeleteClick}
             btnStyle="danger"
-            iconName="cross"
+            icon="cross"
             title="Remove error"
           />
         </Controls>

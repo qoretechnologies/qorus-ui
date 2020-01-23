@@ -24,7 +24,7 @@ const SortingDropdown: Function = ({
 }: Props): React.Element<ButtonGroup> => (
   <ButtonGroup>
     <Button
-      iconName={
+      icon={
         sortByKey.direction < 0 ? 'sort-alphabetical-desc' : 'sort-alphabetical'
       }
       onClick={(e: any) => handleSortChange(e, sortBy)}

@@ -23,6 +23,7 @@ import actions from '../../store/api/actions';
 import AddConfigItemModal from '../ConfigItemsTable/modal';
 import size from 'lodash/size';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import { Value } from '../ConfigItemsTable/table';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -120,10 +121,10 @@ const ConfigItemsTable: Function = ({
               <FixedRow {...{ sortData, onSortChange }}>
                 <NameColumnHeader />
                 <ActionColumnHeader>{''}</ActionColumnHeader>
-                <Th className="text" iconName="info-sign" name="value">
+                <Th className="text" icon="info-sign" name="value">
                   Value
                 </Th>
-                <Th iconName="code" name="type" />
+                <Th icon="code" name="type" />
               </FixedRow>
             </Thead>
             <DataOrEmptyTable
@@ -174,14 +175,7 @@ const ConfigItemsTable: Function = ({
                           className={`text ${item.level === 'workflow' ||
                             item.level === 'global'}`}
                         >
-                          {item.type === 'hash' ||
-                          item.type === 'list' ||
-                          item.type === '*hash' ||
-                          item.type === '*list' ? (
-                              <Tree compact data={item.value} />
-                            ) : (
-                              <ContentByType inTable content={item.value} />
-                            )}
+                          <Value item={item} />
                         </Td>
                         <Td className="narrow">
                           <code>{item.type}</code>

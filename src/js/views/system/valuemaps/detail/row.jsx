@@ -47,13 +47,13 @@ const RowDetail: Function = ({
       <ActionColumn>
         <ButtonGroup>
           <Button
-            iconName="power"
+            icon="power"
             btnStyle={enabled ? 'success' : 'danger'}
             onClick={handleEnableClick}
             title={enabled ? 'Disable' : 'Enable'}
           />
           <Button
-            iconName="cross"
+            icon="cross"
             btnStyle="danger"
             onClick={handleRemoveClick}
             title="Remove value"

@@ -76,16 +76,16 @@ const OptionsView: Function = ({
       <Table fixed condensed striped>
         <Thead>
           <FixedRow {...{ sortData, onSortChange }}>
-            <Th name="status" iconName="lock" />
+            <Th name="status" icon="lock" />
             <NameColumnHeader />
-            <Th iconName="application">Type</Th>
+            <Th icon="application">Type</Th>
             <Th className="text" name="default">
               <FormattedMessage id='table.default-value' />
             </Th>
             <Th className="text" name="value">
               <FormattedMessage id='table.current-value' />
             </Th>
-            <Th iconName="edit" />
+            <Th icon="edit" />
           </FixedRow>
         </Thead>
         <DataOrEmptyTable

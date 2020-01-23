@@ -53,6 +53,7 @@ const Control: Function = ({
   intent,
   isTablet,
   loading,
+  big,
 }: Props): React.Element<any> => (
   <Button
     id={id}
@@ -60,9 +61,10 @@ const Control: Function = ({
     title={isTablet ? text : title}
     onClick={handleClick}
     disabled={disabled}
+    small
     type={type}
     style={css}
-    iconName={iconName}
+    icon={iconName}
     text={isTablet ? (iconName ? undefined : text) : text}
     intent={intent}
     loading={loading}
@@ -70,11 +72,9 @@ const Control: Function = ({
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      isTablet: state.ui.settings.tablet,
-    })
-  ),
+  connect((state: Object): Object => ({
+    isTablet: state.ui.settings.tablet,
+  })),
   mapProps(
     ({
       className,
@@ -89,7 +89,7 @@ export default compose(
       ...rest
     }: Props): Props => ({
       className: classNames(className, {
-        'pt-small': !big,
+        'bp3-small': !big,
       }),
       big,
       iconName: icon || iconName,

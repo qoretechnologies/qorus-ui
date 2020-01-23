@@ -9,5 +9,5 @@ import Flex from '../Flex';
  * @return {!ReactElement}
  */
 export default function Body(props: { children: any }) {
-  return <Flex className="pt-dialog-body">{props.children}</Flex>;
+  return <Flex className="bp3-dialog-body">{props.children}</Flex>;
 }

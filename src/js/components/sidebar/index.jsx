@@ -60,7 +60,7 @@ const Sidebar: Function = ({
     <div className="sidebarSection" id="menuCollapse">
       <div className="sidebarItem" onClick={toggleMenu}>
         <Icon
-          iconName={
+          icon={
             isCollapsed ? 'double-chevron-right' : 'double-chevron-left'
           }
         />{' '}

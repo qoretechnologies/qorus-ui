@@ -43,7 +43,7 @@ const DescriptionColumnHeader: Function = compose(
     intl,
     ...rest
   }: DescriptionColumnHeaderProps): React.Element<any> => (
-    <Th name={name} iconName={icon} className="text" {...rest}>
+    <Th name={name} icon={icon} className="text" {...rest}>
       {children || intl.formatMessage({ id: 'table.description' })}
     </Th>
   )

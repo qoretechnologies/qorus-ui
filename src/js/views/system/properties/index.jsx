@@ -156,7 +156,7 @@ export default class PropertiesView extends Component {
                   )
                 }
                 text="Add property"
-                iconName="add"
+                icon="add"
                 onClick={this.handleAddClick}
                 big
               />

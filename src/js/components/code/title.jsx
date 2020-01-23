@@ -14,7 +14,7 @@ const CodeAreaTitle: Function = ({
     {item.author && (
       <p className="header-detail">
         {' '}
-        by <Icon iconName="user" /> {item.author}
+        by <Icon icon="user" /> {item.author}
       </p>
     )}
     <p className="small">{item.description}</p>

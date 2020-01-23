@@ -54,7 +54,7 @@ const UserView: Function = ({
       <Pull right>
         <Button
           intent={Intent.DANGER}
-          iconName="cross"
+          icon="cross"
           text={intl.formatMessage({ id: 'user.clear-storage' })}
           onClick={clearStorage}
         />
@@ -83,7 +83,7 @@ const UserView: Function = ({
                     )
                   )
               ) : userData.has_default ? (
-                <Alert bsStyle="warning" iconName="info-sign">
+                <Alert bsStyle="warning" icon="info-sign">
                   {' '}
                   <FormattedMessage id='user.member-of-def-grp' />
                 </Alert>

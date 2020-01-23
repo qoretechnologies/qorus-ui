@@ -39,7 +39,7 @@ const SelectColumnHeader: Function = compose(
     icon: icon = 'small-tick',
     ...rest
   }: SelectColumnHeaderProps): React.Element<any> => (
-    <Th name={name} iconName={icon} {...rest} />
+    <Th name={name} icon={icon} {...rest} />
   )
 );
 

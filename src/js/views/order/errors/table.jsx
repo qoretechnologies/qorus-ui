@@ -100,7 +100,7 @@ const ErrorsTable: Function = ({
                   submitOnBlur
                   onSubmit={onFilterChange}
                 >
-                  <Control iconName="filter" />
+                  <Control icon="filter" />
                   <Item title="ALL" />
                   <Item title="FATAL" />
                   <Item title="MAJOR" />
@@ -112,7 +112,7 @@ const ErrorsTable: Function = ({
                   <Button
                     text={intl.formatMessage({ id: (expanded ? 'button.hide-descriptions' : 'button.show-descriptions') })}
                     title={intl.formatMessage({ id: (expanded ? 'button.hide-descriptions' : 'button.show-descriptions') })}
-                    iconName={expanded ? 'collapse-all' : 'expand-all'}
+                    icon={expanded ? 'collapse-all' : 'expand-all'}
                     btnStyle={expanded && 'primary'}
                     big
                     disabled={size(collection) === 0}
@@ -126,7 +126,7 @@ const ErrorsTable: Function = ({
                     disabled={size(collection) === 0}
                     text={intl.formatMessage({ id: 'button.copy-last-error' })}
                     title={intl.formatMessage({ id: 'button.copy-last-error' })}
-                    iconName="clipboard"
+                    icon="clipboard"
                     big
                     onClick={handleCopyClick}
                   />
@@ -154,7 +154,7 @@ const ErrorsTable: Function = ({
             <NameColumnHeader
               title={intl.formatMessage({ id: 'table.error-code' })}
               name="error"
-              iconName="error"
+              icon="error"
             />
             {!compact && (
               <NameColumnHeader
@@ -162,24 +162,24 @@ const ErrorsTable: Function = ({
                 name="step_name"
               />
             )}
-            <Th iconName="info-sign" name="severity">
+            <Th icon="info-sign" name="severity">
               <FormattedMessage id='table.severity' />
             </Th>
-            <Th iconName="error" name="business_error">
+            <Th icon="error" name="business_error">
               <FormattedMessage id='table.bus-err' />
             </Th>
             {!compact && (
-              <Th iconName="error" name="error_type">
+              <Th icon="error" name="error_type">
                 <FormattedMessage id='table.error-type' />
               </Th>
             )}
             {!compact && (
-              <Th iconName="refresh" name="retry">
+              <Th icon="refresh" name="retry">
                 <FormattedMessage id='table.retry' />
               </Th>
             )}
             {!compact && (
-              <Th iconName="info-sign" name="ind">
+              <Th icon="info-sign" name="ind">
                 <FormattedMessage id='table.ind' />
               </Th>
             )}
@@ -214,14 +214,14 @@ const ErrorsTable: Function = ({
                       <>
                         <Tr>
                           <Td className="text" colspan={!compact ? 8 : 4}>
-                            <Icon iconName="info-sign" />{' '}
+                            <Icon icon="info-sign" />{' '}
                             <strong>Error description:</strong>{' '}
                             {error.description || '-'}
                           </Td>
                         </Tr>
                         <Tr>
                           <Td className="text" colspan={!compact ? 8 : 4}>
-                            <Icon iconName="info-sign" /> <strong>Info:</strong>{' '}
+                            <Icon icon="info-sign" /> <strong>Info:</strong>{' '}
                             {error.info}
                           </Td>
                         </Tr>

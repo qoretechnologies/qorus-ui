@@ -118,7 +118,7 @@ const Property: Function = ({
                         ) && (
                           <Button
                             text="Add property"
-                            iconName="add"
+                            icon="add"
                             onClick={handlePropAddClick}
                             big
                           />
@@ -130,7 +130,7 @@ const Property: Function = ({
                         ) && (
                           <Button
                             text="Remove group"
-                            iconName="cross"
+                            icon="cross"
                             onClick={handlePropDeleteClick}
                             btnStyle="danger"
                             big
@@ -156,11 +156,11 @@ const Property: Function = ({
                 </Th>
               </FixedRow>
               <FixedRow {...{ sortData, onSortChange }}>
-                <NameColumnHeader iconName="application" />
-                <Th className="text" name="prop" iconName="property">
+                <NameColumnHeader icon="application" />
+                <Th className="text" name="prop" icon="property">
                   Property data
                 </Th>
-                <Th iconName="build">Actions</Th>
+                <Th icon="build">Actions</Th>
               </FixedRow>
             </Thead>
             <Tbody>
@@ -179,7 +179,7 @@ const Property: Function = ({
                           'or'
                         ) && (
                           <Button
-                            iconName="edit"
+                            icon="edit"
                             onClick={handleEditClick(datum.name, datum.prop)}
                           />
                         )}
@@ -189,7 +189,7 @@ const Property: Function = ({
                           'or'
                         ) && (
                           <Button
-                            iconName="cross"
+                            icon="cross"
                             onClick={handleKeyDeleteClick(datum.name)}
                             btnStyle="danger"
                           />

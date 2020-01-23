@@ -99,7 +99,7 @@ const ConnectionTable: Function = ({
             <Button
               disabled={!canAdd}
               onClick={handleAddClick}
-              iconName="add"
+              icon="add"
               text={intl.formatMessage({ id: 'button.add-new' })}
             />
           </Pull>
@@ -116,21 +116,21 @@ const ConnectionTable: Function = ({
         </Th>
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th name="up" iconName="info-sign">
+        <Th name="up" icon="info-sign">
           <FormattedMessage id='table.status' />
         </Th>
-        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} iconName="application" />
-        <Th iconName="build"><FormattedMessage id='table.actions' /></Th>
-        <Th className="text" name="url" iconName="link">
+        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} icon="application" />
+        <Th icon="build"><FormattedMessage id='table.actions' /></Th>
+        <Th className="text" name="url" icon="link">
           <FormattedMessage id='table.url' />
         </Th>
-        <Th className="text" name="desc" iconName="label">
+        <Th className="text" name="desc" icon="label">
           <FormattedMessage id='table.description' />
         </Th>
-        <Th iconName="lock" name="locked">
+        <Th icon="lock" name="locked">
           <FormattedMessage id='table.locked' />
         </Th>
-        <Th iconName="repeat" name="loopback">
+        <Th icon="repeat" name="loopback">
           <FormattedMessage id='table.loopback' />
         </Th>
       </FixedRow>

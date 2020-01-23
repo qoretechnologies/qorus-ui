@@ -71,7 +71,7 @@ const MappersTable = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <IdColumnHeader name="mapperid" />
             <NameColumnHeader />
-            <Th className="text" name="type" iconName="info-sign">
+            <Th className="text" name="type" icon="info-sign">
               <FormattedMessage id='table.type' />
             </Th>
           </FixedRow>

@@ -33,12 +33,12 @@ const Option: Function = ({
         <div className="pull-right">
           <Controls grouped>
             <Button
-              iconName="edit"
+              icon="edit"
               btnStyle="warning"
               onClick={handleEditClick}
             />
             <Button
-              iconName="cross"
+              icon="cross"
               btnStyle="danger"
               onClick={handleDeleteClick}
             />
@@ -137,7 +137,7 @@ export default class ConnectionOptions extends Component {
           </div>
         )}
         {this.props.canEdit && (
-          <ControlGroup className="pt-fill">
+          <ControlGroup className="bp3-fill">
             <InputGroup
               placeholder="Key..."
               type="text"
@@ -153,9 +153,9 @@ export default class ConnectionOptions extends Component {
             <Controls>
               <Button
                 btnStyle="success"
-                iconName="small-tick"
+                icon="small-tick"
                 big
-                className="pt-fixed"
+                className="bp3-fixed"
                 onClick={this.handleOptionSave}
               />
             </Controls>

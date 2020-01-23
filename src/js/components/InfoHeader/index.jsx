@@ -15,7 +15,7 @@ const InfoHeader: Function = ({ model }: Props): React.Element<any> => (
     label={
       model.author ? (
         <h5>
-          <Icon iconName="person" /> {model.author}
+          <Icon icon="person" /> {model.author}
         </h5>
       ) : null
     }

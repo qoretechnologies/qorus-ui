@@ -86,13 +86,13 @@ export default class SystemOptions extends Component {
           <Button
             type="submit"
             btnStyle="primary"
-            iconName="plus"
+            icon="plus"
             text={this.props.intl.formatMessage({ id: 'button.submit' })}
           />
           <Button
             type="button"
             onClick={this.cancel}
-            iconName="cross"
+            icon="cross"
             text={this.props.intl.formatMessage({ id: 'button.cancel' })}
           />
         </ButtonGroup>
@@ -113,7 +113,7 @@ export default class SystemOptions extends Component {
           onClick={this.start}
           disabled={!this.props.options.length}
           text={this.props.intl.formatMessage({ id: 'button.add-option' })}
-          iconName="plus"
+          icon="plus"
           big
         />
       </ButtonGroup>

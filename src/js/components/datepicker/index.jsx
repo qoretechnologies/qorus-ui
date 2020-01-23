@@ -49,11 +49,11 @@ export default class DatePicker extends Component {
     showDatepicker: boolean,
   };
 
-  componentWillMount (): void {
+  componentWillMount(): void {
     this.setupDate(this.props);
   }
 
-  componentWillReceiveProps (nextProps: Props): void {
+  componentWillReceiveProps(nextProps: Props): void {
     if (this.props.date !== nextProps.date) {
       this.setupDate(nextProps);
     }
@@ -201,11 +201,11 @@ export default class DatePicker extends Component {
     }
   };
 
-  renderDatepicker (): ?React.Element<any> {
+  renderDatepicker(): ?React.Element<any> {
     if (!this.state.showDatepicker) return null;
   }
 
-  renderControls (): ?React.Element<Controls> {
+  renderControls(): ?React.Element<Controls> {
     if (this.props.futureOnly || this.props.noButtons) return null;
 
     return (
@@ -247,7 +247,7 @@ export default class DatePicker extends Component {
     );
   }
 
-  render (): React.Element<any> {
+  render(): React.Element<any> {
     const {
       futureOnly,
       noButtons,
@@ -258,9 +258,12 @@ export default class DatePicker extends Component {
     } = this.props;
 
     return (
-      <ControlGroup className={`vab ${className}`}>
+      <ControlGroup
+        className={`vab ${className}`}
+        style={{ verticalAlign: 'top' }}
+      >
         <Button
-          iconName={icon || 'timeline-events'}
+          icon={icon || 'timeline-events'}
           big={!small}
           onClick={this.showDatepicker}
           disabled={disabled}
@@ -300,7 +303,7 @@ export default class DatePicker extends Component {
             placeholder={this.props.placeholder}
             id={this.props.id}
             name={this.props.name}
-            className={small && 'datepicker-input-small pt-small'}
+            className={small && 'datepicker-input-small bp3-small'}
             disabled={disabled}
           />
         </Popover>
@@ -333,7 +336,9 @@ export default class DatePicker extends Component {
               onClick={this.handleWeekClick}
             />
             <DropdownItem
-              title={this.props.intl.formatMessage({ id: 'datetime.this-month' })}
+              title={this.props.intl.formatMessage({
+                id: 'datetime.this-month',
+              })}
               onClick={this.handleMonthClick}
             />
             <DropdownItem

@@ -97,7 +97,7 @@ export default class NotesView extends Component {
           {this.state.error && (
             <Callout
               intent={Intent.DANGER}
-              iconName="warning-sign"
+              icon="warning-sign"
               title="Note too short"
             >
               Please type at least 3 characters
@@ -105,7 +105,7 @@ export default class NotesView extends Component {
           )}
           <form onSubmit={this.handleFormSubmit}>
             <textarea
-              className="pt-input pt-fill"
+              className="bp3-input bp3-fill"
               placeholder="Type note... (CTRL/CMD+Enter to submit)"
               rows="2"
               onChange={this.handleTextareaChange}
@@ -117,7 +117,7 @@ export default class NotesView extends Component {
                 <Button
                   type="submit"
                   text="Add note"
-                  iconName="add"
+                  icon="add"
                   intent={Intent.PRIMARY}
                   big
                 />

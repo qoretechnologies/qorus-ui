@@ -53,7 +53,7 @@ const SLARow: Function = ({
         <Button
           title={intl.formatMessage({ id: 'button.delete' })}
           disabled={!hasPermission(perms, ['DELETE-SLA', 'SLA-CONTROL'], 'or')}
-          iconName="cross"
+          icon="cross"
           btnStyle="danger"
           onClick={handleDeleteClick}
         />

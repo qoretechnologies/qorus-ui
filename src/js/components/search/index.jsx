@@ -142,7 +142,7 @@ export default class Search extends Component {
         <ControlGroup>
           {searches && searches.length !== 0 ? (
             <Dropdown>
-              <Control iconName="history" noCaret />
+              <Control icon="history" noCaret />
               {this.renderHistoryItems()}
             </Dropdown>
           ) : null}
@@ -159,13 +159,13 @@ export default class Search extends Component {
                 <Button
                   className={Classes.MINIMAL}
                   type="button"
-                  iconName="cross"
+                  icon="cross"
                   onClick={this.handleClearClick}
                 />
               )
             }
           />
-          <Button type="submit" iconName="search" />
+          <Button type="submit" icon="search" />
         </ControlGroup>
       </form>
     );

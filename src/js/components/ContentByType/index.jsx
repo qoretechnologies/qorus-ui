@@ -30,6 +30,17 @@ const ContentByType: Function = ({
   const type: string = getType(content);
   const className: string = `content-by-type ${type}`;
 
+  if (type === 'boolean') {
+    return (
+      <div className={className}>
+        <Icon
+          icon={content ? 'small-tick' : 'cross'}
+          intent={content ? Intent.SUCCESS : Intent.DANGER}
+        />
+      </div>
+    );
+  }
+
   if (type === 'string') {
     const isContentDate: boolean = isDate(content);
 
@@ -61,17 +72,6 @@ const ContentByType: Function = ({
 
   if (type === 'object' || type === 'array') {
     return <div className={className}>{emptyTypeToString[type]}</div>;
-  }
-
-  if (type === 'boolean') {
-    return (
-      <div className={className}>
-        <Icon
-          iconName={content ? 'small-tick' : 'cross'}
-          intent={content ? Intent.SUCCESS : Intent.DANGER}
-        />
-      </div>
-    );
   }
 
   return <div className={className}>-</div>;

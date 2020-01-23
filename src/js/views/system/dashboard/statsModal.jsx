@@ -77,7 +77,7 @@ const StatsModal: Function = ({
                     <ProgressBar
                       intent={orderStatsPctColorDisp(disposition)}
                       value={Math.round(pct) / 100}
-                      className={`pt-no-animation ${
+                      className={`bp3-no-animation ${
                         disposition === 'A' ? 'progress-bar-auto' : ''
                       }`}
                     />

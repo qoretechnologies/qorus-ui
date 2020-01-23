@@ -31,12 +31,12 @@ const ResultDetail = ({
   const renderResult: Function = () => [
     <Headbar key="job-detail-header">
       <Pull>
-        <Breadcrumbs iconName="list-detail-view">
+        <Breadcrumbs icon="list-detail-view">
           <Crumb active>{result.job_instanceid}</Crumb>
         </Breadcrumbs>
       </Pull>
       <Pull right>
-        <Control text="Close" iconName="cross" big onClick={handleCloseClick} />
+        <Control text="Close" icon="cross" big onClick={handleCloseClick} />
       </Pull>
     </Headbar>,
     <Box fill top key="job-detail-content">

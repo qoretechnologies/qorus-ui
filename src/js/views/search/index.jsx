@@ -48,13 +48,13 @@ const Search: Function = ({
         <ButtonGroup>
           <Button
             text="Save search"
-            iconName="floppy-disk"
+            icon="floppy-disk"
             onClick={onSaveClick}
             big
           />
           <Button
             text="Show saved searches"
-            iconName="history"
+            icon="history"
             onClick={onHistoryClick}
             big
           />

@@ -70,7 +70,7 @@ const SQLCacheTable: Function = ({
                   <Pull>
                     <Button
                       text="Clear datasource"
-                      iconName="trash"
+                      icon="trash"
                       onClick={handleClick}
                       btnStyle="danger"
                       big
@@ -94,10 +94,10 @@ const SQLCacheTable: Function = ({
                 <FixedRow {...{ onSortChange, sortData }}>
                   <NameColumnHeader />
                   <ActionColumnHeader />
-                  <Th name="count" iconName="info-sign">
+                  <Th name="count" icon="info-sign">
                     Count
                   </Th>
-                  <Th iconName="time" name="created">
+                  <Th icon="time" name="created">
                     Created
                   </Th>
                 </FixedRow>

@@ -81,7 +81,7 @@ const NewLoggerPopover: Function = ({
         action={handleAdditivityChange}
       />
     </FormGroup>
-    <ButtonGroup className="pt-fill">
+    <ButtonGroup className="bp3-fill">
       <Button
         text="Cancel"
         icon="cross"

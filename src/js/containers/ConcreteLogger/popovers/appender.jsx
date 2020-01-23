@@ -140,7 +140,7 @@ const NewAppenderPopover: Function = ({
       </FormGroup>
     )}
 
-    <ButtonGroup className="pt-fill">
+    <ButtonGroup className="bp3-fill">
       <Button
         text="Cancel"
         icon="cross"

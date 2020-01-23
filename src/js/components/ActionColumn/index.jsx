@@ -35,7 +35,7 @@ const ActionColumnHeader: Function = compose(
     intl,
     ...rest
   }: ActionColumnHeaderProps): React.Element<any> => (
-    <Th iconName={icon} {...rest}>
+    <Th icon={icon} {...rest}>
       {children || intl.formatMessage({ id: 'table.actions' })}
     </Th>
   )

@@ -127,7 +127,7 @@ export default class StepDetailTable extends Component {
               <Tr>
                 <NameColumnHeader />
                 <NameColumn name={data.stepname} />
-                <Th iconName="info-sign">Status</Th>
+                <Th icon="info-sign">Status</Th>
                 <Td>
                   <span
                     className={`label status-${data.stepstatus.toLowerCase()}`}
@@ -137,20 +137,20 @@ export default class StepDetailTable extends Component {
                 </Td>
               </Tr>
               <Tr>
-                <Th iconName="info-sign">Type</Th>
+                <Th icon="info-sign">Type</Th>
                 <Td>{data.steptype}</Td>
-                <Th iconName="info-sign">Version</Th>
+                <Th icon="info-sign">Version</Th>
                 <Td>{data.stepversion}</Td>
               </Tr>
               <Tr>
                 <IdColumnHeader />
                 <IdColumn>{data.stepid}</IdColumn>
-                <Th iconName="exclude-row">Skipped</Th>
+                <Th icon="exclude-row">Skipped</Th>
                 <Td>
                   <ContentByType content={data.skip} />{' '}
                   {canSkip(data) && (
                     <ButtonGroup>
-                      <Button iconName="edit" action={this.handleSkipClick} />
+                      <Button icon="edit" action={this.handleSkipClick} />
                     </ButtonGroup>
                   )}
                 </Td>
@@ -159,13 +159,13 @@ export default class StepDetailTable extends Component {
                 <DateColumnHeader>Started</DateColumnHeader>
                 <DateColumn>{data.started}</DateColumn>
 
-                <Th iconName={INTERFACE_ICONS.workflow}>SubWF</Th>
+                <Th icon={INTERFACE_ICONS.workflow}>SubWF</Th>
                 <Td>{data.subworkflow_instanceid}</Td>
               </Tr>
               <Tr>
                 <DateColumnHeader>Completed</DateColumnHeader>
                 <DateColumn>{data.completed}</DateColumn>
-                <Th iconName="info-sign">Ind</Th>
+                <Th icon="info-sign">Ind</Th>
                 <Td>{data.ind}</Td>
               </Tr>
             </Tbody>

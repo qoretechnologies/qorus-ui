@@ -21,7 +21,7 @@
     color: $qore-danger;
   }
 
-  > .pt-icon-standard {
+  > .bp3-icon {
     color: $qore-cobalt;
     vertical-align: middle;
     line-height: 24px;
@@ -30,10 +30,11 @@
     flex: 0 1 auto;
     font-size: 10px;
     margin-right: 3px;
+    margin-top: 6px;
     width: 13px;
   }
 
-  &.has-alerts > .pt-icon-standard {
+  &.has-alerts > .bp3-icon {
     color: $qore-danger;
   }
 }

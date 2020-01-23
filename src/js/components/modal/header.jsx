@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import { Icon, Button } from '@blueprintjs/core';
 
 type Props = {
   titleId: string,
@@ -20,20 +21,21 @@ type Props = {
  * }} props
  * @return {!ReactElement}
  */
-export default function Header(props: Props) {
+export default function Header (props: Props) {
   return (
-    <div className="pt-dialog-header handle">
-      <span className="pt-icon-large pt-icon-inbox" />
+    <div className="bp3-dialog-header handle">
+      <Icon icon='inbox' />
       {props.children && (
-        <h5 className="pt-dialog-header-title" id={props.titleId}>
+        <h5 className="bp3-dialog-header-title" id={props.titleId}>
           {props.children}
         </h5>
       )}
 
       {props.onClose && (
-        <button
-          aria-label="Close"
-          className="pt-dialog-close-button pt-icon-small-cross"
+        <Button
+          minimal
+          icon='cross'
+          className='pull-right'
           onClick={props.onClose}
         />
       )}

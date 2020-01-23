@@ -20,7 +20,7 @@ const CsvControl: Function = ({
       big
       title={intl.formatMessage({ id: 'button.export-csv' })}
       text={intl.formatMessage({ id: 'button.export-csv' })}
-      iconName="export"
+      icon="export"
       disabled={disabled}
       onClick={onClick}
     />

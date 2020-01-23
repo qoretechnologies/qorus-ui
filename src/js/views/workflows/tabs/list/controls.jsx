@@ -52,7 +52,7 @@ const ActionButton: Function = ({
     <Button
       disabled={disabled}
       title={name}
-      iconName={icon}
+      icon={icon}
       onClick={handleClick}
       btnStyle={intent}
       big={!compact}
