@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import compose from 'recompose/compose';
 import classnames from 'classnames';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
@@ -31,6 +31,11 @@ import size from 'lodash/size';
 import PaneItem from '../pane_item';
 import { Icon } from '@blueprintjs/core';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import { getTypeFromValue, maybeParseYaml } from '../Field/validations';
+import isUndefined from 'lodash/isUndefined';
+import isNull from 'lodash/isNull';
+import isObject from 'lodash/isObject';
+import isArray from 'lodash/isArray';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -68,6 +73,75 @@ const ConfigItemsTable: Function = (
     )}
   </React.Fragment>
 );
+
+export const getItemType = (type, value) => {
+  if (type === 'any' || type === 'auto') {
+    return getTypeFromValue(maybeParseYaml(value));
+  }
+
+  return type.replace('*', '');
+};
+
+export const Value = ({ item }) => {
+  const [showValue, setShowValue] = useState(!item.sensitive);
+  const [hideTimer, setHideTimer] = useState(null);
+
+  useEffect(() => {
+    setShowValue(!item.sensitive);
+  }, [item.sensitive]);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(hideTimer);
+    };
+  }, [hideTimer]);
+
+  if (!showValue) {
+    return (
+      <div
+        onClick={() => {
+          setHideTimer(() => {
+            return setTimeout(() => {
+              setShowValue(false);
+            }, 30000);
+          });
+          setShowValue(true);
+        }}
+        style={{
+          position: 'absolute',
+          width: '70%',
+          top: '5px',
+          bottom: '5px',
+          left: '5px',
+          backgroundColor: '#000',
+          cursor: 'pointer',
+          color: '#fff',
+          textAlign: 'center',
+          verticalAlign: 'middle',
+        }}
+      >
+        {' '}
+              Click to reveal{' '}
+      </div>
+    );
+  }
+
+  if (isUndefined(item.value)) {
+    return <span> - </span>;
+  }
+  if (isNull(item.value)) {
+    return <span> null </span>;
+  }
+  if (item.isTemplatedString) {
+    return <ContentByType inTable content={item.value} />;
+  }
+
+  if (isObject(item.value) || isArray(item.value)) {
+    return <Tree compact data={item.value} />;
+  }
+
+  return <ContentByType inTable content={item.value} />;
+};
 
 let ItemsTable: Function = ({
   configItems,
@@ -238,15 +312,7 @@ let ItemsTable: Function = ({
                         className={`text ${item.level === 'workflow' ||
                           item.level === 'global'}`}
                       >
-                        {!item.is_templated_string &&
-                        (item.type === 'hash' ||
-                          item.type === 'list' ||
-                          item.type === '*hash' ||
-                          item.type === '*list') ? (
-                          <Tree compact data={item.value} />
-                        ) : (
-                          <ContentByType inTable content={item.value} />
-                        )}
+                        <Value item={item} />
                       </Td>
                       <Td className="narrow">
                         <ContentByType content={item.strictly_local} />

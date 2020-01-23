@@ -99,9 +99,10 @@ export const validateField: (
       return valid;
     }
     case 'int':
-    case 'float':
     case 'number':
-      return !isNaN(value) && isNumber(value);
+      return !isNaN(value) && getTypeFromValue(parseInt(value, 10)) === 'int';
+    case 'float':
+      return getTypeFromValue(parseFloat(value, 10)) === 'float'
     case 'select-array':
     case 'array':
     case 'file-tree':
@@ -200,7 +201,7 @@ export const maybeParseYaml: (yaml: any) => any = yaml => {
     return null;
   }
 
-  if (parsedData) {
+  if (!isNull(parsedData) && !isUndefined(parsedData)) {
     return parsedData;
   }
 
@@ -234,6 +235,15 @@ export const getTypeFromValue = (value: any) => {
   if (isBoolean(value)) {
     return 'bool';
   }
+
+  if (Number(value) === value && value % 1 === 0) {
+    return 'int';
+  }
+
+  if (Number(value) === value && value % 1 !== 0) {
+    return 'float';
+  }
+
   if (new Date(value).toString() !== 'Invalid Date') {
     return 'date';
   }
@@ -242,9 +252,6 @@ export const getTypeFromValue = (value: any) => {
   }
   if (isArray(value)) {
     return 'list';
-  }
-  if (isNumber(value)) {
-    return 'int';
   }
   if (isString(value)) {
     return 'string';

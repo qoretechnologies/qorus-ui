@@ -18,6 +18,7 @@ import {
   Controls as ButtonGroup,
   Control as Button,
 } from '../../components/controls';
+import AddConfigItemModal from '../ConfigItemsTable/modal';
 
 type GlobalConfigItemsContainerProps = {
   items: Object,

@@ -37,6 +37,9 @@ import pickBy from 'lodash/pickBy';
 import isNull from 'lodash/isNull';
 import Tabs, { Pane } from '../tabs';
 import ReactMarkdown from 'react-markdown';
+import AutoField from '../Field/auto';
+import { validateField, maybeParseYaml } from '../Field/validations';
+import { getItemType } from './table';
 
 type Props = {
   onClose: Function,
@@ -87,6 +90,7 @@ export default class ConfigItemsModal extends Component {
     item: this.props.item,
     error: false,
     yamlData: null,
+    currentType: this.props.item?.type,
     type:
       this.props.item?.type === 'any'
         ? this.props.item?.currentType || null
@@ -98,7 +102,7 @@ export default class ConfigItemsModal extends Component {
     templateKey: this.getTemplateKey(this.props.item?.value),
   };
 
-  async componentDidMount() {
+  async componentDidMount () {
     if (this.props.item) {
       const { intrf, stepId, levelType, intrfId, item } = this.props;
 
@@ -130,14 +134,19 @@ export default class ConfigItemsModal extends Component {
     this.setState({ value: newValue });
   };
 
-  handleObjectChange: Function = (value): void => {
-    this.setState({ value, error: false });
+  handleObjectChange: Function = (value, type, canBeNull): void => {
+    this.setState({ value,
+      yamlData: {
+        ...this.state.yamlData,
+        value,
+      },
+      currentType: type,
+      error: false });
 
-    try {
-      jsyaml.safeDump(value);
-    } catch (e) {
-      this.setState({ error: true });
-    }
+    // Validate the value
+    const isValid = validateField(type, value, null, canBeNull);
+
+    this.setState({ error: !isValid });
   };
 
   handleDefaultClick = () => {
@@ -147,17 +156,15 @@ export default class ConfigItemsModal extends Component {
   };
 
   handleSaveClick: Function = (): void => {
-    const value: any = this.state.value;
+    let { value, currentType } = this.state;
 
-    let newValue = value;
-
-    if (this.state.type === 'string' && value === '') {
-      newValue = jsyaml.safeDump(value);
+    if (currentType !== 'hash' && currentType !== 'list') {
+      value = jsyaml.safeDump(value);
     }
 
     this.props.onSubmit(
       this.state.item,
-      newValue,
+      value,
       () => {
         this.props.onClose();
       },
@@ -185,59 +192,12 @@ export default class ConfigItemsModal extends Component {
           .filter(item => item)
           .map(value => (
             <Item
-              title={value}
-              onClick={() => {
-                this.handleValueChange(value);
+              title={jsyaml.safeLoad(value)}
+              onClick={(event, title) => {
+                this.handleObjectChange(title, item.type.replace('*', ''), item.type.startsWith('*'));
               }}
             />
           ))}
-      </Dropdown>
-    );
-  };
-
-  renderTypeSelector: Function = () => {
-    return (
-      <Dropdown>
-        <DControl icon="list" small>
-          {this.state.type || 'Please select the type of this config item'}
-        </DControl>
-        <Item
-          title="Integer"
-          onClick={() => {
-            this.setState({ type: '*int', value: null });
-          }}
-        />
-        <Item
-          title="Float"
-          onClick={() => {
-            this.setState({ type: '*float', value: null });
-          }}
-        />
-
-        <Item
-          title="Boolean"
-          onClick={() => {
-            this.setState({ type: 'bool', value: null });
-          }}
-        />
-        <Item
-          title="String"
-          onClick={() => {
-            this.setState({ type: '*string', value: null });
-          }}
-        />
-        <Item
-          title="Date"
-          onClick={() => {
-            this.setState({ type: '*date', value: null });
-          }}
-        />
-        <Item
-          title="Other"
-          onClick={() => {
-            this.setState({ type: 'Other', value: null });
-          }}
-        />
       </Dropdown>
     );
   };
@@ -255,115 +215,31 @@ export default class ConfigItemsModal extends Component {
           style={{ marginTop: '5px' }}
           title="This area can only be filled from predefined values"
           onChange={(event: any) => {
-            this.handleObjectChange(event.target.value);
+            this.handleObjectChange(event.target.value, item.type.replace('*', ''), item.type.startsWith('*'));
           }}
         />
       );
     }
 
-    if (this.state.type) {
-      switch (this.state.type) {
-        case 'bool':
-        case '*bool':
-          return (
-            <Dropdown>
-              <DControl small>
-                {this.state.value === 'true'
-                  ? 'True'
-                  : this.state.value === 'false'
-                  ? 'False'
-                  : 'Please select'}
-              </DControl>
-              <Item
-                title="True"
-                onClick={() => {
-                  this.handleValueChange('true');
-                }}
-              />
-              <Item
-                title="False"
-                onClick={() => {
-                  this.handleValueChange('false');
-                }}
-              />
-            </Dropdown>
-          );
-        case 'date':
-        case '*date':
-          return (
-            <DatePicker
-              date={this.state.value}
-              onApplyDate={(newValue: any) => {
-                this.handleDateChange(newValue);
-              }}
-              className="bp3-fill"
-              noButtons
-              small
-            />
-          );
-        case 'hash':
-        case '*hash':
-        case 'list':
-        case '*list':
-          return (
-            <TextArea
-              className="bp3-fill"
-              rows={getLineCount(this.state.value, null, 4)}
-              value={this.state.value}
-              onChange={(event: any) => {
-                this.handleObjectChange(event.target.value);
-              }}
-            />
-          );
-        case 'int':
-        case '*int':
-          return (
-            <InputGroup
-              type="number"
-              onKeyDown={(event: KeyboardEvent) => {
-                if (
-                  event.key === '.' ||
-                  event.key === ',' ||
-                  event.key === '-'
-                ) {
-                  event.preventDefault();
-                }
-              }}
-              onChange={(event: any) => {
-                this.handleObjectChange(event.target.value);
-              }}
-              value={this.state.value}
-            />
-          );
-        case 'float':
-        case '*float':
-          return (
-            <InputGroup
-              type="number"
-              onChange={(event: any) => {
-                this.handleObjectChange(event.target.value);
-              }}
-              value={this.state.value}
-            />
-          );
-        default:
-          return (
-            <TextArea
-              className="bp3-fill"
-              rows={getLineCount(this.state.value, null, 4)}
-              value={this.state.value}
-              onChange={(event: any) => {
-                this.handleObjectChange(event.target.value);
-              }}
-            />
-          );
-      }
-    }
-
-    return null;
+    return (
+      <AutoField
+        name="configItem"
+        {...{ 'type-depends-on': true }}
+        value={this.state.value}
+        t={(s) => s}
+        type="auto"
+        disabled={!!item.allowed_values}
+        requestFieldData={field =>
+          field === 'can_be_undefined' ? item.type.startsWith('*') : item.type.replace('*', '')
+        }
+        onChange={(name, value, type, canBeNull) => {
+          this.handleObjectChange(value, type, canBeNull);
+        }}
+      />
+    )
   };
 
-  render() {
+  render () {
     const { onClose, isGlobal, globalConfig } = this.props;
     const { error, yamlData, value, item, useTemplate } = this.state;
     const globalConfigItems = pickBy(globalConfig, (data, name) =>
@@ -446,8 +322,8 @@ export default class ConfigItemsModal extends Component {
                         {yamlData.allowed_values
                           ? this.renderAllowedItems(yamlData)
                           : isGlobal
-                          ? 'Set item value'
-                          : 'Set custom value or'}
+                            ? 'Set item value'
+                            : 'Set custom value or'}
                         {!isGlobal && (
                           <Pull right>
                             <ButtonGroup>
@@ -455,19 +331,19 @@ export default class ConfigItemsModal extends Component {
                                 content={
                                   this.state.type === 'hash' ||
                                   this.state.type === 'list' ? (
-                                    <Tree
-                                      data={item.default_value}
-                                      noButtons
-                                      expanded
-                                      compact
-                                    />
-                                  ) : (
-                                    <ContentByType
-                                      inTable
-                                      noControls
-                                      content={item.default_value}
-                                    />
-                                  )
+                                      <Tree
+                                        data={item.default_value}
+                                        noButtons
+                                        expanded
+                                        compact
+                                      />
+                                    ) : (
+                                      <ContentByType
+                                        inTable
+                                        noControls
+                                        content={item.default_value}
+                                      />
+                                    )
                                 }
                               >
                                 <Button
@@ -486,16 +362,6 @@ export default class ConfigItemsModal extends Component {
                             This config item can only be set using predefined
                             values
                           </Alert>
-                        )}
-                        {item.type === 'any' && (
-                          <>
-                            <Alert bsStyle="info">
-                              This config item can be set to any type
-                            </Alert>
-                            {this.renderTypeSelector()}
-                            <br />
-                            <br />
-                          </>
                         )}
                         {error && (
                           <Alert bsStyle="danger">
@@ -632,7 +498,7 @@ export default class ConfigItemsModal extends Component {
                     label="Save"
                     btnStyle="success"
                     disabled={
-                      error || (!item.type.startsWith('*') && !this.state.value)
+                      error
                     }
                     action={this.handleSaveClick}
                     big

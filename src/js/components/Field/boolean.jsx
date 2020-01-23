@@ -1,7 +1,7 @@
 import React, { FunctionComponent, FormEvent } from 'react';
 import { Switch } from '@blueprintjs/core';
 import useMount from 'react-use/lib/useMount';
-import { getValueOrDefaultValue } from './validations';
+import { getValueOrDefaultValue, maybeParseYaml } from './validations';
 import { isUndefined } from 'util';
 
 const BooleanField: FunctionComponent = ({
@@ -14,7 +14,7 @@ const BooleanField: FunctionComponent = ({
     // Set the default value
     onChange(
       name,
-      getValueOrDefaultValue(value, default_value || false, false)
+      getValueOrDefaultValue(maybeParseYaml(value), maybeParseYaml(default_value || false), false)
     );
   });
 
@@ -26,10 +26,6 @@ const BooleanField: FunctionComponent = ({
       onChange(name, !value);
     }
   };
-
-  if (isUndefined(value)) {
-    return null;
-  }
 
   return (
     <Switch checked={value || false} large onChange={handleEnabledChange} />

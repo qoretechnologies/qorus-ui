@@ -52,8 +52,6 @@ const ProvidersView = ({}) => {
       []
     );
 
-  console.log(record, flattenFields(record));
-
   return (
     <Flex>
       <Headbar>

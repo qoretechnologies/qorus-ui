@@ -13,6 +13,7 @@ import {
   getValueOrDefaultValue,
 } from './validations';
 import { isBoolean, isNull, isUndefined } from 'util';
+import { injectIntl } from 'react-intl';
 
 const AutoField = ({
   name,
@@ -22,6 +23,7 @@ const AutoField = ({
   defaultType,
   requestFieldData,
   type,
+  intl: { formatMessage },
   ...rest
 }) => {
   const [currentType, setType] = useState(null);
@@ -41,7 +43,7 @@ const AutoField = ({
     setType(defType);
     // If the value is null and can be null, set the null flag
     if (
-      isNull(getValueOrDefaultValue(value, default_value, canBeNull())) &&
+      (value === 'null' || isNull(getValueOrDefaultValue(value, default_value, canBeNull()))) &&
       canBeNull()
     ) {
       setIsSetToNull(true);
@@ -201,7 +203,7 @@ const AutoField = ({
           />
         );
       default:
-        return <Callout>'AutoFieldSelectType'</Callout>;
+        return <Callout>{formatMessage({ id: 'field.autoSelectType' })}</Callout>;
     }
   };
 
@@ -244,7 +246,7 @@ const AutoField = ({
             icon={isSetToNull && 'cross'}
             onClick={handleNullToggle}
           >
-            {isSetToNull ? 'Unset null' : 'Set as null'}
+            {isSetToNull ? formatMessage({ id: 'field.unsetNull' }) : formatMessage({ id: 'field.setAsNull' })}
           </Button>
         )}
       </ControlGroup>
@@ -252,4 +254,4 @@ const AutoField = ({
   );
 };
 
-export default AutoField;
+export default injectIntl(AutoField);
