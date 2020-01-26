@@ -7,22 +7,18 @@ import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Link } from 'react-router';
 import { Intent, Tag, Icon } from '@blueprintjs/core';
-
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../../components/controls';
 import { Tr, Td } from '../../../components/new_table';
 import Text from '../../../components/text';
 import actions from '../../../store/api/actions';
-import withModal from '../../../hocomponents/modal';
+
 import PingModal from './modals/ping';
-import ConfirmDialog from '../../../components/confirm_dialog';
+
 import withDispatch from '../../../hocomponents/withDispatch';
 import NameColumn from '../../../components/NameColumn';
 import Tree from '../../../components/tree';
 import ContentByType from '../../../components/ContentByType';
 import { injectIntl } from 'react-intl';
+import RemoteControls from './controls';
 
 type Props = {
   name: string,
@@ -82,6 +78,11 @@ const ConnectionRow: Function = ({
   intl,
   handleDebugClick,
   debug_data,
+  openModal,
+  closeModal,
+  openPane,
+  closePane,
+  dispatchAction,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -104,52 +105,19 @@ const ConnectionRow: Function = ({
       hasAlerts={hasAlerts}
     />
     <Td className="big">
-      <ButtonGroup>
-        <Button
-          title={intl.formatMessage({
-            id: enabled ? 'button.disable' : 'button.enable',
-          })}
-          icon="power"
-          onClick={handleToggleClick}
-          btnStyle={enabled ? 'success' : 'danger'}
-          disabled={locked}
-        />
-        {remoteType === 'datasources' && (
-          <Button
-            title={intl.formatMessage({ id: 'button.reset' })}
-            icon="refresh"
-            onClick={handleResetClick}
-          />
-        )}
-        {(remoteType === 'qorus' || remoteType === 'user') && (
-          <Button
-            title={intl.formatMessage({ id: 'button.toggleDebug' })}
-            icon="code"
-            btnStyle={debug_data ? 'success' : 'none'}
-            onClick={handleDebugClick}
-          />
-        )}
-        <Button
-          title={intl.formatMessage({ id: 'button.ping' })}
-          icon="exchange"
-          onClick={handlePingClick}
-        />
-      </ButtonGroup>
-      <ButtonGroup>
-        <Button
-          icon="edit"
-          title={intl.formatMessage({ id: 'button.edit' })}
-          disabled={!(!locked && canEdit)}
-          onClick={handleDetailClick}
-        />
-        <Button
-          title={intl.formatMessage({ id: 'button.delete' })}
-          disabled={!(!locked && canDelete)}
-          icon="cross"
-          intent={Intent.DANGER}
-          onClick={handleDeleteClick}
-        />
-      </ButtonGroup>
+      <RemoteControls
+        enabled={enabled}
+        locked={locked}
+        canDelete={canDelete}
+        canEdit={canEdit}
+        remoteType={remoteType}
+        debug_data={debug_data}
+        isActive={isActive}
+        openPane={openPane}
+        closePane={closePane}
+        dispatchAction={dispatchAction}
+        name={name}
+      />
     </Td>
     <Td className="text">
       <p title={safeUrl || url}>
@@ -174,7 +142,6 @@ export default compose(
     updateDone: actions.remotes.updateDone,
   }),
   withDispatch(),
-  withModal(),
   withHandlers({
     handleHighlightEnd: ({ name, updateDone }: Props): Function => (): void => {
       updateDone(name);
@@ -184,74 +151,12 @@ export default compose(
       openPane,
       isActive,
       closePane,
-    }: Props): Function => (): void => {
+    }): Function => (): void => {
       if (isActive) {
         closePane();
       } else {
         openPane(name);
       }
-    },
-    handlePingClick: ({
-      name,
-      remoteType,
-      openModal,
-      closeModal,
-    }: Props): Function => (): void => {
-      openModal(
-        <PingModal name={name} onClose={closeModal} type={remoteType} />
-      );
-    },
-    handleToggleClick: ({
-      name,
-      enabled,
-      remoteType,
-      dispatchAction,
-    }: Props): Function => (): void => {
-      dispatchAction(
-        actions.remotes.toggleConnection,
-        name,
-        !enabled,
-        remoteType
-      );
-    },
-    handleDeleteClick: ({
-      dispatchAction,
-      name,
-      remoteType,
-      openModal,
-      closeModal,
-    }: Props): Function => (): void => {
-      const handleConfirm: Function = (): void => {
-        dispatchAction(actions.remotes.deleteConnection, remoteType, name);
-        closeModal();
-      };
-
-      openModal(
-        <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
-          Are you sure you want to delete the {remoteType}{' '}
-          <strong>{name}</strong> ?
-        </ConfirmDialog>
-      );
-    },
-    handleResetClick: ({
-      dispatchAction,
-      name,
-      remoteType,
-    }: Props): Function => (): void => {
-      dispatchAction(actions.remotes.resetConnection, remoteType, name);
-    },
-    handleDebugClick: ({
-      dispatchAction,
-      name,
-      debug_data,
-      remoteType,
-    }: Props): Function => (): void => {
-      dispatchAction(
-        actions.remotes.toggleDebug,
-        name,
-        !debug_data,
-        remoteType
-      );
     },
   }),
   pure([

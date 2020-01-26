@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { upperFirst, includes, lowerCase } from 'lodash';
+import RemoteControls from './controls';
 
 import Pane from '../../../components/pane';
 import {
@@ -77,7 +78,7 @@ export default class ConnectionsPane extends Component {
     options: null,
   };
 
-  componentDidMount () {
+  componentDidMount() {
     if (!settings.IS_HTTP) {
       this.props.dispatchAction(
         actions.remotes.fetchPass,
@@ -87,7 +88,7 @@ export default class ConnectionsPane extends Component {
     }
   }
 
-  componentWillReceiveProps (nextProps: Object) {
+  componentWillReceiveProps(nextProps: Object) {
     if (this.props.paneId !== nextProps.paneId && !settings.IS_HTTP) {
       nextProps.dispatchAction(
         actions.remotes.fetchPass,
@@ -154,12 +155,13 @@ export default class ConnectionsPane extends Component {
     }
   };
 
-  render () {
+  render() {
     const { deps, alerts, locked } = this.props.remote;
-    const { paneTab, paneId, remoteType } = this.props;
+    const { paneTab, paneId, remoteType, dispatchAction } = this.props;
     const { isPassLoaded } = this.state;
 
     const canEdit = !locked && this.props.canEdit;
+    const canDelete = this.props.canDelete;
 
     return (
       <Pane
@@ -175,7 +177,19 @@ export default class ConnectionsPane extends Component {
         <SimpleTabs activeTab={paneTab}>
           <SimpleTab name="detail">
             <Box top fill scrollY>
-              <PaneItem title="Overview">
+              <PaneItem
+                title="Overview"
+                label={
+                  <RemoteControls
+                    {...this.props.remote}
+                    remoteType={remoteType}
+                    dispatchAction={dispatchAction}
+                    canEdit={canEdit}
+                    canDelete={canDelete}
+                    isPane
+                  />
+                }
+              >
                 {this.state.error && (
                   <Alert bsStyle="danger">{this.state.error}</Alert>
                 )}
@@ -198,28 +212,28 @@ export default class ConnectionsPane extends Component {
                           canEdit &&
                           val.attr !== 'options' &&
                           val.attr !== 'opts' ? (
-                              <EditableCell
-                                noMarkdown={val.attr === 'url'}
-                                className="text"
-                                value={val.value}
-                                onSave={this.handleEditSave(val.attr)}
-                              />
-                            ) : (
-                              <Td className="text">
-                                {val.attr === 'options' || val.attr === 'opts' ? (
-                                  <Options
-                                    data={val.value}
-                                    onSave={this.handleEditSave(val.attr)}
-                                    canEdit={canEdit}
-                                  />
-                                ) : (
-                                  <ContentByType
-                                    content={val.value}
-                                    noMarkdown={val.attr === 'url'}
-                                  />
-                                )}
-                              </Td>
-                            )}
+                            <EditableCell
+                              noMarkdown={val.attr === 'url'}
+                              className="text"
+                              value={val.value}
+                              onSave={this.handleEditSave(val.attr)}
+                            />
+                          ) : (
+                            <Td className="text">
+                              {val.attr === 'options' || val.attr === 'opts' ? (
+                                <Options
+                                  data={val.value}
+                                  onSave={this.handleEditSave(val.attr)}
+                                  canEdit={canEdit}
+                                />
+                              ) : (
+                                <ContentByType
+                                  content={val.value}
+                                  noMarkdown={val.attr === 'url'}
+                                />
+                              )}
+                            </Td>
+                          )}
                         </Tr>
                       )
                     )}

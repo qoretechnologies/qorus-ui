@@ -38,66 +38,63 @@ const ClusterView: Function = ({
   <Flex>
     <Headbar>
       <Breadcrumbs>
-        <Crumb active><FormattedMessage id='cluster.cluster' /></Crumb>
+        <Crumb active>
+          <FormattedMessage id="cluster.cluster" />
+        </Crumb>
       </Breadcrumbs>
       <Pull right>
         <Tag className="bp3-large">
-          <FormattedMessage id='cluster.nodes' />: {Object.keys(nodes).length}
+          <FormattedMessage id="cluster.nodes" />: {Object.keys(nodes).length}
         </Tag>{' '}
         <Tag className="bp3-large">
-          <FormattedMessage id='cluster.processes' />: {Object.keys(processes).length}
+          <FormattedMessage id="cluster.processes" />:{' '}
+          {Object.keys(processes).length}
         </Tag>{' '}
         <Tag className="bp3-large">
-          <FormattedMessage id='cluster.cluster-memory' />: {calculateMemory(nodesMemory)}
+          <FormattedMessage id="cluster.cluster-memory" />:{' '}
+          {calculateMemory(nodesMemory)}
         </Tag>
       </Pull>
     </Headbar>
     <Box top fill scrollY>
-      {Object.keys(nodes).map(
-        (node: string): any => {
-          const list: Array<Object> = Object.keys(processes).reduce(
-            (cur, process: string) => {
-              const obj = { ...processes[process], id: process };
+      {Object.keys(nodes).map((node: string): any => {
+        const list: Array<Object> = Object.keys(processes)
+          .reduce((cur, process: string) => {
+            const obj = { ...processes[process], id: process };
 
-              return [...cur, obj];
-            },
-            []
-          );
+            return [...cur, obj];
+          }, [])
+          .filter(proc => proc.node === node);
 
-          return (
-            <Node
-              openPane={openPane}
-              closePane={closePane}
-              paneId={paneId}
-              key={node}
-              node={node}
-              processes={list}
-              memory={nodes[node].node_priv}
-            />
-          );
-        }
-      )}
+        return (
+          <Node
+            openPane={openPane}
+            closePane={closePane}
+            paneId={paneId}
+            key={node}
+            node={node}
+            processes={list}
+            memory={nodes[node].node_priv}
+          />
+        );
+      })}
     </Box>
   </Flex>
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      nodes: state.api.system.data.cluster_info,
-      processes: state.api.system.data.processes,
-    })
-  ),
-  mapProps(
-    ({ nodes, ...rest }: Props): Props => ({
-      nodesMemory: Object.keys(nodes).reduce(
-        (cur, node): number => cur + nodes[node].node_priv,
-        0
-      ),
-      nodes,
-      ...rest,
-    })
-  ),
+  connect((state: Object): Object => ({
+    nodes: state.api.system.data.cluster_info,
+    processes: state.api.system.data.processes,
+  })),
+  mapProps(({ nodes, ...rest }: Props): Props => ({
+    nodesMemory: Object.keys(nodes).reduce(
+      (cur, node): number => cur + nodes[node].node_priv,
+      0
+    ),
+    nodes,
+    ...rest,
+  })),
   withPane(ClusterPane, ['processes']),
   titleManager('Cluster'),
   injectIntl

@@ -204,7 +204,7 @@ table.table--data {
   td {
     p,
     span {
-      white-space: nowrap;
+      white-space: pre-line;
       text-overflow: ellipsis;
       overflow: hidden;
       margin-bottom: 0;

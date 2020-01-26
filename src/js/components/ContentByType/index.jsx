@@ -56,12 +56,8 @@ const ContentByType: Function = ({
         {newContent}
       </Flex>
     ) : (
-      <div className={className}>
-        {noMarkdown ? (
-          <>{newContent}</>
-        ) : (
-          <ReactMarkdown>{newContent}</ReactMarkdown>
-        )}
+      <div className={className} title={newContent}>
+        {noMarkdown ? newContent : <ReactMarkdown>{newContent}</ReactMarkdown>}
       </div>
     );
   }

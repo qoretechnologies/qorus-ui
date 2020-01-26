@@ -7,7 +7,9 @@
     "@babel/plugin-proposal-export-namespace-from",
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import",
-    "react-hot-loader/babel"
+    "react-hot-loader/babel",
+    "babel-plugin-styled-components",
+    "babel-plugin-syntax-jsx"
   ],
   "ignore": ["/node_modules/"],
   "retainLines": true

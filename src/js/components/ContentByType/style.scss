@@ -1,6 +1,11 @@
 .content-by-type {
+  width: 100%;
   display: inline-block;
   line-height: 1;
+
+  p {
+    line-height: 1.2;
+  }
 
   &.string {
     word-break: break-all;

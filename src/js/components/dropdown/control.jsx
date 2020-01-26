@@ -42,7 +42,7 @@ const Control = ({
         text={children}
         intent={intent}
         icon={newIconName}
-        rightIconName={!noCaret ? rightIconName : null}
+        rightIcon={!noCaret ? rightIconName : null}
         onClick={onClick}
         disabled={disabled}
       />
