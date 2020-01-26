@@ -81,11 +81,11 @@ export default class Dashboard extends Component {
       this.props.health.data.remote && this.props.health.data.remote.length > 5,
   };
 
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(actions.system.init());
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.props.dispatch(actions.system.unsync());
   }
 
@@ -119,7 +119,7 @@ export default class Dashboard extends Component {
   getModulesCount = () =>
     this.props.currentUser.data.storage.settings.dashboardModules.length;
 
-  render() {
+  render () {
     if (!this.props.health.sync) return <Loader />;
 
     const { system, health, isTablet } = this.props;
@@ -784,11 +784,12 @@ export default class Dashboard extends Component {
                       <Nodes
                         nodeTab={this.state.nodeTab}
                         nodes={Object.keys(system.cluster_info)}
-                        onTabChange={this.handleNodeTabChange}
+                        onNodeTabChange={this.handleNodeTabChange}
                       />
                     }
                   >
                     <ChartComponent
+                      id={this.state.nodeTab}
                       title={
                         `${this.state.nodeTab} (${calculateMemory(
                           currentNodeData.node_ram
@@ -821,6 +822,7 @@ export default class Dashboard extends Component {
                     })}
                   >
                     <ChartComponent
+                      id={this.state.nodeTab}
                       title={
                         `${this.state.nodeTab} (${currentNodeData.node_cpu_count} ` +
                         this.props.intl.formatMessage({
@@ -845,6 +847,7 @@ export default class Dashboard extends Component {
                     })}
                   >
                     <ChartComponent
+                      id={this.state.nodeTab}
                       title={
                         `${this.state.nodeTab} (${currentNodeData.process_count} ` +
                         this.props.intl.formatMessage({

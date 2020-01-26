@@ -17,19 +17,6 @@ import {
 import { NonIdealState } from '../../../../node_modules/@blueprintjs/core';
 import { injectIntl } from 'react-intl';
 
-@pure([
-  'width',
-  'height',
-  'labels',
-  'datasets',
-  'xAxisLabel',
-  'yAxisLabel',
-  'unit',
-  'stepSize',
-  'yMax',
-  'yMin',
-  'empty',
-])
 @injectIntl
 export default class ChartComponent extends Component {
   static defaultProps = {
@@ -74,9 +61,18 @@ export default class ChartComponent extends Component {
   }
 
   componentWillReceiveProps (nextProps: Object) {
-    if (this.props.labels !== nextProps.labels && this.state.chart.data) {
+    if (this.props.id !== nextProps.id) {
+      this.renderChart(nextProps);
+    } else if (
+      (this.props.stepSize !== nextProps.stepSize ||
+        this.props.labels !== nextProps.labels) &&
+      this.state.chart.data
+    ) {
       const chart = this.state.chart;
-      const { stepSize, unit } = this.getOptionsData(nextProps.datasets);
+      const { stepSize, unit } = this.getOptionsData(
+        nextProps.datasets,
+        nextProps
+      );
       const datasets =
         nextProps.type === 'line' || nextProps.type === 'bar'
           ? scaleData(nextProps.datasets, nextProps.isNotTime)
@@ -99,10 +95,10 @@ export default class ChartComponent extends Component {
     }
   }
 
-  getOptionsData (data: Array<Object>): Object {
-    const unit: string = this.props.unit || getUnit(getMaxValue(data));
+  getOptionsData (data: Array<Object>, props = this.props): Object {
+    const unit: string = props.unit || getUnit(getMaxValue(data));
     const stepSize: number =
-      this.props.stepSize || getStepSize(data, this.props.isNotTime);
+      props.stepSize || getStepSize(data, props.isNotTime);
 
     return {
       unit,
@@ -110,9 +106,9 @@ export default class ChartComponent extends Component {
     };
   }
 
-  getOptions (data: Array<Object>) {
-    const { stepSize, unit } = this.getOptionsData(data);
-    const { yMin, yMax } = this.props;
+  getOptions (props) {
+    const { stepSize, unit } = this.getOptionsData(props.datasets);
+    const { yMin, yMax } = props;
     const min = yMin ? yMin - yMin / 10 : 0;
     const max = yMax ? yMax + yMax / 10 : null;
 
@@ -125,7 +121,7 @@ export default class ChartComponent extends Component {
       maintainAspectRatio: false,
     };
 
-    switch (this.props.type) {
+    switch (props.type) {
       case 'line':
       case 'bar':
       default:
@@ -156,16 +152,16 @@ export default class ChartComponent extends Component {
                     fontSize: 10,
                   },
                 scaleLabel: {
-                  display: !!this.props.yAxisLabel,
-                  labelString: this.props.yAxisLabel,
+                  display: !!props.yAxisLabel,
+                  labelString: props.yAxisLabel,
                 },
               },
             ],
             xAxes: [
               {
                 scaleLabel: {
-                  display: !!this.props.xAxisLabel,
-                  labelString: this.props.xAxisLabel,
+                  display: !!props.xAxisLabel,
+                  labelString: props.xAxisLabel,
                 },
                 ticks: {
                   fontSize: 10,
@@ -186,11 +182,8 @@ export default class ChartComponent extends Component {
 
   renderChart: Function = (props: Object): void => {
     const el: Object = ReactDOM.findDOMNode(this.refs.chart);
-    const options: Object = this.getOptions(props.datasets);
-    const datasets: Array<Object> = scaleData(
-      props.datasets,
-      this.props.isNotTime
-    );
+    const options: Object = this.getOptions(props);
+    const datasets: Array<Object> = scaleData(props.datasets, props.isNotTime);
     const chart: Object = new Chart(el, {
       type: props.type,
       data: {
@@ -270,7 +263,9 @@ export default class ChartComponent extends Component {
           {this.props.empty && this.props.type === 'doughnut' && (
             <div className="pie-chart-placeholder">
               <NonIdealState
-                title={this.props.intl.formatMessage({ id: 'component.no-data' })}
+                title={this.props.intl.formatMessage({
+                  id: 'component.no-data',
+                })}
                 visual="warning-sign"
               />
             </div>

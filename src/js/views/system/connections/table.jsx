@@ -117,43 +117,46 @@ const ConnectionTable: Function = ({
       </FixedRow>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <Th name="up" icon="info-sign">
-          <FormattedMessage id='table.status' />
+          <FormattedMessage id="table.status" />
         </Th>
-        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} icon="application" />
-        <Th icon="build"><FormattedMessage id='table.actions' /></Th>
+        <NameColumnHeader
+          title={intl.formatMessage({ id: 'table.name' })}
+          icon="application"
+        />
+        <Th icon="build">
+          <FormattedMessage id="table.actions" />
+        </Th>
         <Th className="text" name="url" icon="link">
-          <FormattedMessage id='table.url' />
+          <FormattedMessage id="table.url" />
         </Th>
         <Th className="text" name="desc" icon="label">
-          <FormattedMessage id='table.description' />
+          <FormattedMessage id="table.description" />
         </Th>
         <Th icon="lock" name="locked">
-          <FormattedMessage id='table.locked' />
+          <FormattedMessage id="table.locked" />
         </Th>
         <Th icon="repeat" name="loopback">
-          <FormattedMessage id='table.loopback' />
+          <FormattedMessage id="table.loopback" />
         </Th>
       </FixedRow>
     </Thead>
     <DataOrEmptyTable condition={!remotes || size(remotes) === 0} cols={7}>
       {props => (
         <Tbody {...props}>
-          {remotes.map(
-            (remote: Object, index: number): React.Element<any> => (
-              <ConnectionRow
-                first={index === 0}
-                key={remote.name}
-                isActive={remote.name === paneId}
-                hasAlerts={remote.alerts.length > 0}
-                openPane={openPane}
-                closePane={closePane}
-                remoteType={type}
-                canDelete={canDelete}
-                canEdit={canEdit}
-                {...remote}
-              />
-            )
-          )}
+          {remotes.map((remote: Object, index: number): React.Element<any> => (
+            <ConnectionRow
+              first={index === 0}
+              key={remote.name}
+              isActive={remote.name === paneId}
+              hasAlerts={remote.alerts.length > 0}
+              openPane={openPane}
+              closePane={closePane}
+              remoteType={type}
+              canDelete={canDelete}
+              canEdit={canEdit}
+              {...remote}
+            />
+          ))}
         </Tbody>
       )}
     </DataOrEmptyTable>
@@ -176,35 +179,38 @@ export default compose(
   ),
   withRouter,
   queryControl('search'),
-  mapProps(
-    ({ type, perms, remotes, searchQuery, ...rest }: Props): Props => ({
-      remotes: findBy(
-        [
-          'name',
-          'url',
-          'desc',
-          'options',
-          'type',
-          'status',
-          'user',
-          'db',
-          'pass',
-        ],
-        searchQuery,
-        remotes
-      ),
-      remoteType: type,
-      canDelete: hasPermission(perms, DELETE_PERMS_MAP[type], 'or'),
-      canAdd: hasPermission(perms, ADD_PERMS_MAP[type], 'or'),
-      canEdit: hasPermission(perms, EDIT_PERMS_MAP[type], 'or'),
-      perms,
-      type,
-      ...rest,
-    })
-  ),
+  mapProps(({ type, perms, remotes, searchQuery, ...rest }: Props): Props => ({
+    remotes: findBy(
+      [
+        'name',
+        'url',
+        'desc',
+        'options',
+        'type',
+        'status',
+        'user',
+        'db',
+        'pass',
+      ],
+      searchQuery,
+      remotes
+    ),
+    remoteType: type,
+    canDelete: hasPermission(perms, DELETE_PERMS_MAP[type], 'or'),
+    canAdd: hasPermission(perms, ADD_PERMS_MAP[type], 'or'),
+    canEdit: hasPermission(perms, EDIT_PERMS_MAP[type], 'or'),
+    perms,
+    type,
+    ...rest,
+  })),
   withSort(({ type }: Props): string => type, 'remotes', sortDefaults.remote),
   withLoadMore('remotes', null, true, 50),
-  withPane(ConnectionPane, ['remoteType', 'canEdit'], 'detail', 'connections'),
+  withPane(
+    ConnectionPane,
+    ['remoteType', 'canEdit', 'canDelete'],
+    'detail',
+    'connections'
+  ),
   withModal(),
   withHandlers({
     handleAddClick: ({

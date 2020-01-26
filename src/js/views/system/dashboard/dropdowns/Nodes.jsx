@@ -20,9 +20,13 @@ const NodesDropdown: Function = ({
   <Dropdown position={Position.LEFT}>
     <Control small>{nodeTab}</Control>
     {map(nodes, (nodeName: string) => (
-      <Item key={nodeName} title={nodeName} action={onNodeTabChange} />
+      <Item
+        key={nodeName}
+        title={nodeName}
+        action={(event, tab) => onNodeTabChange(event, tab)}
+      />
     ))}
   </Dropdown>
 );
 
-export default compose(onlyUpdateForKeys(['nodeTab', 'system']))(NodesDropdown);
+export default compose(onlyUpdateForKeys(['nodeTab']))(NodesDropdown);

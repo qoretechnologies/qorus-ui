@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import MapperDiagram from './diagram/index';
+import MapperCreator from './new_diagram/index';
 import actions from '../../store/api/actions';
 import Loader from '../../components/loader';
 import Alert from '../../components/alert';
@@ -21,11 +22,71 @@ import Flex from '../../components/Flex';
 import withTabs from '../../hocomponents/withTabs';
 import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
+import jsyaml from 'js-yaml';
+import modal from '../../hocomponents/modal';
+import DetailModal from './diagram/modals/DetailModal';
+
+export const providers = {
+  type: {
+    name: 'type',
+    url: 'dataprovider/types',
+    suffix: '',
+    recordSuffix: '/type',
+    type: 'type',
+  },
+  connection: {
+    name: 'connection',
+    url: 'remote/user',
+    filter: 'has_provider',
+    namekey: 'name',
+    desckey: 'desc',
+    suffix: '/provider',
+    recordSuffix: '/record',
+    requiresRecord: true,
+    type: 'connection',
+  },
+  remote: {
+    name: 'remote',
+    url: 'remote/qorus',
+    filter: 'has_provider',
+    namekey: 'name',
+    desckey: 'desc',
+    suffix: '/provider',
+    recordSuffix: '/record',
+    requiresRecord: true,
+    type: 'remote',
+  },
+  datasource: {
+    name: 'datasource',
+    url: 'remote/datasources',
+    filter: 'has_provider',
+    namekey: 'name',
+    desckey: 'desc',
+    suffix: '/provider',
+    recordSuffix: '/record',
+    requiresRecord: true,
+    type: 'datasource',
+  },
+};
+
+const getProviderUrl = (options, fieldType) => {
+  // Get the mapper options data
+  const { type, name, path = '', subtype } = jsyaml.safeLoad(
+    options[`mapper-${fieldType}`]
+  );
+  // Get the rules for the given provider
+  const { url, suffix, recordSuffix } = providers[type];
+  // Build the URL based on the provider type
+  return `${url}/${name}${suffix}${path}${
+    recordSuffix && !subtype ? recordSuffix : ''
+  }`;
+};
 
 const MapperInfo = ({
   mapper,
   location,
   tabQuery,
+  onInfoClick,
 }: {
   mapper: Object,
   onBackClick: Function,
@@ -58,7 +119,14 @@ const MapperInfo = ({
                   {mapper.error}
                 </Alert>
               )}
-              <MapperDiagram mapper={mapper} />
+              <MapperCreator
+                inputs={mapper.options.input}
+                outputs={mapper.options.output}
+                relations={mapper.fields}
+                inputUrl={getProviderUrl(mapper.option_source, 'input')}
+                outputUrl={getProviderUrl(mapper.option_source, 'output')}
+                onInfoClick={name => onInfoClick(mapper.fields[name])}
+              />
             </Flex>
           </SimpleTab>
           <SimpleTab name="info">
@@ -101,12 +169,10 @@ const mapperInfoSelector = createSelector(
 export default compose(
   hasInterfaceAccess('mappers', 'Mappers'),
   pure,
-  connect(
-    mapperInfoSelector,
-    {
-      load: actions.mappers.fetch,
-    }
-  ),
+  connect(mapperInfoSelector, {
+    load: actions.mappers.fetch,
+  }),
+  modal(),
   lifecycle({
     componentWillMount() {
       const { load, mapperId } = this.props;
@@ -119,6 +185,9 @@ export default compose(
       ev.preventDefault();
 
       history.go(-1);
+    },
+    onInfoClick: ({ openModal, closeModal }) => data => {
+      openModal(<DetailModal detail={data} onClose={closeModal} />);
     },
   }),
   withTabs('diagram')
