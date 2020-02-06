@@ -32,4 +32,15 @@ export default {
     'tree.tree-view': 'ツリー表示',
     'tree.update-data': 'データを更新する',
   },
+  'ko-KR': {
+    'tree.collapse-all': '모든 축소',
+    'tree.copy-view': '뷰 복사',
+    'tree.edit-mode': '편집 모드',
+    'tree.expand-all': '모두 확장',
+    'tree.loading-data': '데이터로드 중 ...',
+    'tree.posting-new-staticdata': '새 정적 데이터를 게시하면 원본 콘텐츠가 대체되므로 비즈니스 처리에 치명적일 수 있습니다.',
+    'tree.show-types': '유형 표시',
+    'tree.tree-view': '트 리뷰',
+    'tree.update-data': '데이터 업데이트',
+  },
 };

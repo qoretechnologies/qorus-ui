@@ -32,4 +32,15 @@ export default {
     'logger.name': '名前',
     'logger.rotation-count': '回転数',
   },
+  'ko-KR': {
+    'logger.additivity': '중독성',
+    'logger.appender-type': '발신자 유형',
+    'logger.archive-pattern': '보관 패턴',
+    'logger.encoding': '부호화',
+    'logger.filename': '파일 이름',
+    'logger.layout-pattern': '레이아웃 패턴',
+    'logger.level': '수평',
+    'logger.name': '이름',
+    'logger.rotation-count': '회전 수',
+  },
 };

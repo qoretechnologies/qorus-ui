@@ -14,4 +14,9 @@ export default {
     'dialog.are-you-sure-remove-sla': '{name} SLAを削除してもよろしいですか？',
     'dialog.please-confirm-action': 'アクションを確認してください',
   },
+  'ko-KR': {
+    'dialog.contents': '내용',
+    'dialog.are-you-sure-remove-sla': '{name} SLA를 제거 하시겠습니까?',
+    'dialog.please-confirm-action': '행동을 확인하십시오',
+  },
 };
