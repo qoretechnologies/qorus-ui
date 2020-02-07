@@ -43,7 +43,7 @@ const MapperOutput: FC<IMapperOutputProps> = ({
       level={level}
       childrenCount={lastChildIndex}
       style={{
-        backgroundColor: hasRelation ? '#c9f5d4' : '#fff',
+        backgroundColor: hasRelation ? '#7fba2785' : '#fff',
       }}
     >
       <h4>{name}</h4>

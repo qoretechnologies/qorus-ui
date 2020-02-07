@@ -74,6 +74,11 @@ const getProviderUrl = (options, fieldType) => {
   const { type, name, path = '', subtype } = jsyaml.safeLoad(
     options[`mapper-${fieldType}`]
   );
+  // Check if the type is factory
+  if (type === 'factory') {
+    // Return just the type
+    return type;
+  }
   // Get the rules for the given provider
   const { url, suffix, recordSuffix } = providers[type];
   // Build the URL based on the provider type

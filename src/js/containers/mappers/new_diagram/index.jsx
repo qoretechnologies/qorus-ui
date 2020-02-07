@@ -385,11 +385,13 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                 ))
               : null}
             {size(flattenedInputs) === 0 ? (
-              <StyledInfoMessage>{'MapperNoInputFields'}</StyledInfoMessage>
+              <StyledInfoMessage>
+                {'This mapper has no input fields'}
+              </StyledInfoMessage>
             ) : null}
           </StyledFieldsWrapper>
           <StyledConnectionsWrapper>
-            {size(relations) ? (
+            {size(relations) && size(flattenedInputs) ? (
               <svg
                 height={
                   Math.max(flattenedInputs.length, flattenedOutputs.length) *
@@ -489,12 +491,12 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                   <MapperOutput
                     key={output.path}
                     name={output.name}
-                    hasRelation={!!relations[output.name]}
+                    hasRelation={!!relations[output.path]}
                     {...output}
                     field={output}
                     id={index + 1}
                     onManageClick={() => {
-                      !!relations[output.name] && onInfoClick(output.name);
+                      !!relations[output.path] && onInfoClick(output.path);
                     }}
                     accepts={output.type.types_accepted}
                     lastChildIndex={
@@ -504,7 +506,9 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                 ))
               : null}
             {size(flattenedOutputs) === 0 ? (
-              <StyledInfoMessage>{'MapperNoOutputFields'}</StyledInfoMessage>
+              <StyledInfoMessage>
+                {'This mapper has no output fields'}
+              </StyledInfoMessage>
             ) : null}
           </StyledFieldsWrapper>
         </StyledMapperWrapper>
