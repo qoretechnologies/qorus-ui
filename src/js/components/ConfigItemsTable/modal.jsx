@@ -102,7 +102,7 @@ export default class ConfigItemsModal extends Component {
     templateKey: this.getTemplateKey(this.props.item?.value),
   };
 
-  async componentDidMount () {
+  async componentDidMount() {
     if (this.props.item) {
       const { intrf, stepId, levelType, intrfId, item } = this.props;
 
@@ -135,13 +135,15 @@ export default class ConfigItemsModal extends Component {
   };
 
   handleObjectChange: Function = (value, type, canBeNull): void => {
-    this.setState({ value,
+    this.setState({
+      value,
       yamlData: {
         ...this.state.yamlData,
         value,
       },
       currentType: type,
-      error: false });
+      error: false,
+    });
 
     // Validate the value
     const isValid = validateField(type, value, null, canBeNull);
@@ -194,7 +196,11 @@ export default class ConfigItemsModal extends Component {
             <Item
               title={jsyaml.safeLoad(value)}
               onClick={(event, title) => {
-                this.handleObjectChange(title, item.type.replace('*', ''), item.type.startsWith('*'));
+                this.handleObjectChange(
+                  title,
+                  item.type.replace('*', ''),
+                  item.type.startsWith('*')
+                );
               }}
             />
           ))}
@@ -215,7 +221,11 @@ export default class ConfigItemsModal extends Component {
           style={{ marginTop: '5px' }}
           title="This area can only be filled from predefined values"
           onChange={(event: any) => {
-            this.handleObjectChange(event.target.value, item.type.replace('*', ''), item.type.startsWith('*'));
+            this.handleObjectChange(
+              event.target.value,
+              item.type.replace('*', ''),
+              item.type.startsWith('*')
+            );
           }}
         />
       );
@@ -226,20 +236,22 @@ export default class ConfigItemsModal extends Component {
         name="configItem"
         {...{ 'type-depends-on': true }}
         value={this.state.value}
-        t={(s) => s}
+        t={s => s}
         type="auto"
         disabled={!!item.allowed_values}
         requestFieldData={field =>
-          field === 'can_be_undefined' ? item.type.startsWith('*') : item.type.replace('*', '')
+          field === 'can_be_undefined'
+            ? item.type.startsWith('*')
+            : item.type.replace('*', '')
         }
         onChange={(name, value, type, canBeNull) => {
           this.handleObjectChange(value, type, canBeNull);
         }}
       />
-    )
+    );
   };
 
-  render () {
+  render() {
     const { onClose, isGlobal, globalConfig } = this.props;
     const { error, yamlData, value, item, useTemplate } = this.state;
     const globalConfigItems = pickBy(globalConfig, (data, name) =>
@@ -322,8 +334,8 @@ export default class ConfigItemsModal extends Component {
                         {yamlData.allowed_values
                           ? this.renderAllowedItems(yamlData)
                           : isGlobal
-                            ? 'Set item value'
-                            : 'Set custom value or'}
+                          ? 'Set item value'
+                          : 'Set custom value or'}
                         {!isGlobal && (
                           <Pull right>
                             <ButtonGroup>
@@ -331,19 +343,19 @@ export default class ConfigItemsModal extends Component {
                                 content={
                                   this.state.type === 'hash' ||
                                   this.state.type === 'list' ? (
-                                      <Tree
-                                        data={item.default_value}
-                                        noButtons
-                                        expanded
-                                        compact
-                                      />
-                                    ) : (
-                                      <ContentByType
-                                        inTable
-                                        noControls
-                                        content={item.default_value}
-                                      />
-                                    )
+                                    <Tree
+                                      data={item.default_value}
+                                      noButtons
+                                      expanded
+                                      compact
+                                    />
+                                  ) : (
+                                    <ContentByType
+                                      inTable
+                                      noControls
+                                      content={item.default_value}
+                                    />
+                                  )
                                 }
                               >
                                 <Button
@@ -436,6 +448,12 @@ export default class ConfigItemsModal extends Component {
                                 this.setState({ templateType: 'step' });
                               }}
                             />
+                            <Item
+                              title="parse-value"
+                              onClick={() => {
+                                this.setState({ templateType: 'parse-value' });
+                              }}
+                            />
                           </Dropdown>
                           <Button text=":" big className="bp3-fixed" />
                           <InputGroup
@@ -497,9 +515,7 @@ export default class ConfigItemsModal extends Component {
                   <Button
                     label="Save"
                     btnStyle="success"
-                    disabled={
-                      error
-                    }
+                    disabled={error}
                     action={this.handleSaveClick}
                     big
                   />
