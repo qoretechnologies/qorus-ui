@@ -6,7 +6,7 @@ build_package:
   stage: build-4.1
   image: alpine:latest
   only:
-   - 4.1
+   - "4.1"
   tags:
     - docker-exec
   artifacts:
@@ -22,11 +22,11 @@ upload_build:
   stage: deploy
   image: alpine:latest
   only:
-   - 4.1
+   - "4.1"
   tags:
     - docker-exec
   variables:
-    WEBAPP: 4.1
+    WEBAPP: "4.1"
   dependencies:
     - build_package
   script:
