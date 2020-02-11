@@ -15,7 +15,11 @@ const InfoTable: Function = ({
   object,
   ...rest
 }: InfoTableProps): React.Element<any> => (
-  <Tree data={omit ? lodashOmit(object, omit) : object} {...rest} />
+  <Tree
+    data={omit ? lodashOmit(object, omit) : object}
+    {...rest}
+    contentInline
+  />
 );
 
 export default compose(onlyUpdateForKeys(['object', 'omit']))(InfoTable);

@@ -51,6 +51,7 @@ export default class Tree extends Component {
     expanded: boolean,
     compact: boolean,
     caseSensitive: boolean,
+    contentInline: boolean,
   } = this.props;
 
   state = {
@@ -60,7 +61,7 @@ export default class Tree extends Component {
     showTypes: this.props.settings.treeDefaultDataTypes || false,
   };
 
-  componentWillReceiveProps (nextProps: Object) {
+  componentWillReceiveProps(nextProps: Object) {
     if (nextProps.forceEdit) {
       this.setState({
         mode: 'edit',
@@ -68,7 +69,7 @@ export default class Tree extends Component {
     }
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     if (this.state.mode === 'copy' && document.getElementById('tree-content')) {
       document.getElementById('tree-content').select();
     }
@@ -110,7 +111,7 @@ export default class Tree extends Component {
     this.setState({ items: {}, allExpanded: false });
   };
 
-  renderTree (data, top, k, topKey, level = 1) {
+  renderTree(data, top, k, topKey, level = 1) {
     return Object.keys(data).map((key, index) => {
       const wrapperClass = classNames({
         'tree-component': true,
@@ -208,20 +209,25 @@ export default class Tree extends Component {
           )}{' '}
           {isExpandable && isObject
             ? this.renderTree(
-              data[key],
-              false,
-              stateKey,
-              top ? key : null,
-              level + 1
-            )
+                data[key],
+                false,
+                stateKey,
+                top ? key : null,
+                level + 1
+              )
             : null}
-          {!isObject && <ContentByType content={data[key]} />}
+          {!isObject && (
+            <ContentByType
+              content={data[key]}
+              inline={this.props.contentInline}
+            />
+          )}
         </div>
       );
     });
   }
 
-  renderText (data, tabs = '') {
+  renderText(data, tabs = '') {
     let text = '';
 
     Object.keys(data).forEach(key => {
@@ -236,7 +242,7 @@ export default class Tree extends Component {
     return text;
   }
 
-  renderEdit (data) {
+  renderEdit(data) {
     if (this.props.customEdit) {
       if (this.props.customEditData) {
         return JSON.parse(this.props.customEditData);
@@ -260,7 +266,7 @@ export default class Tree extends Component {
       (key: string): boolean => typeof this.props.data[key] === 'object'
     );
 
-  render () {
+  render() {
     const { data, withEdit, compact, noButtons } = this.props;
     const { mode, showTypes, allExpanded, items } = this.state;
 
@@ -280,14 +286,22 @@ export default class Tree extends Component {
                 {this.isDeep() && [
                   <Button
                     icon="expand-all"
-                    text={!compact && this.props.intl.formatMessage({ id: 'tree.expand-all' })}
+                    text={
+                      !compact &&
+                      this.props.intl.formatMessage({ id: 'tree.expand-all' })
+                    }
                     onClick={this.handleExpandClick}
                     key="expand-button"
                   />,
                   allExpanded || size(items) > 0 ? (
                     <Button
                       icon="collapse-all"
-                      text={!compact && this.props.intl.formatMessage({ id: 'tree.collapse-all' })}
+                      text={
+                        !compact &&
+                        this.props.intl.formatMessage({
+                          id: 'tree.collapse-all',
+                        })
+                      }
                       onClick={this.handleCollapseClick}
                       key="collapse-button"
                     />
@@ -296,7 +310,10 @@ export default class Tree extends Component {
                 {!this.props.noControls && (
                   <Button
                     icon="code"
-                    text={!compact && this.props.intl.formatMessage({ id: 'tree.show-types' })}
+                    text={
+                      !compact &&
+                      this.props.intl.formatMessage({ id: 'tree.show-types' })
+                    }
                     btnStyle={showTypes && 'primary'}
                     onClick={this.handleTypesClick}
                   />
@@ -307,20 +324,29 @@ export default class Tree extends Component {
               <Pull right>
                 <ButtonGroup>
                   <Button
-                    text={!compact && this.props.intl.formatMessage({ id: 'tree.tree-view' })}
+                    text={
+                      !compact &&
+                      this.props.intl.formatMessage({ id: 'tree.tree-view' })
+                    }
                     btnStyle={mode === 'normal' && 'primary'}
                     onClick={this.handleTreeClick}
                     icon="diagram-tree"
                   />
                   <Button
-                    text={!compact && this.props.intl.formatMessage({ id: 'tree.copy-view' })}
+                    text={
+                      !compact &&
+                      this.props.intl.formatMessage({ id: 'tree.copy-view' })
+                    }
                     btnStyle={mode === 'copy' && 'primary'}
                     onClick={this.handleCopyClick}
                     icon="clipboard"
                   />
                   {withEdit && (
                     <Button
-                      text={!compact && this.props.intl.formatMessage({ id: 'tree.edit-mode' })}
+                      text={
+                        !compact &&
+                        this.props.intl.formatMessage({ id: 'tree.edit-mode' })
+                      }
                       btnStyle={mode === 'edit' && 'primary'}
                       onClick={this.handleEditClick}
                       icon="edit"
@@ -357,8 +383,11 @@ export default class Tree extends Component {
               rows={lineCount > 20 ? 20 : lineCount}
               cols="50"
             />
-            <Alert bsStyle="warning" title={this.props.intl.formatMessage({ id: 'global.warning' })}>
-              <FormattedMessage id='tree.posting-new-staticdata' />
+            <Alert
+              bsStyle="warning"
+              title={this.props.intl.formatMessage({ id: 'global.warning' })}
+            >
+              <FormattedMessage id="tree.posting-new-staticdata" />
             </Alert>
             <ButtonGroup>
               <Button

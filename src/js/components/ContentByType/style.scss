@@ -1,5 +1,7 @@
 .content-by-type {
-  width: 100%;
+  &:not(.inline) {
+    width: 100%;
+  }
   display: inline-block;
   line-height: 1;
 

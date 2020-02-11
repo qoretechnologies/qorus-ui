@@ -26,9 +26,10 @@ const ContentByType: Function = ({
   inTable,
   noControls,
   noMarkdown,
+  inline,
 }: ContentByTypeProps): React.Element<any> => {
   const type: string = getType(content);
-  const className: string = `content-by-type ${type}`;
+  const className: string = `content-by-type ${type} ${inline ? 'inline' : ''}`;
 
   if (type === 'boolean') {
     return (
