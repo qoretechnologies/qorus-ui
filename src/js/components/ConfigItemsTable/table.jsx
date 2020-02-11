@@ -121,7 +121,7 @@ export const Value = ({ item }) => {
         }}
       >
         {' '}
-              Click to reveal{' '}
+        Click to reveal{' '}
       </div>
     );
   }

@@ -228,6 +228,7 @@ table.table--data {
       > th,
       > td {
         text-align: center; /* [2] */
+        position: relative;
 
         &.name {
           /* [2] */
