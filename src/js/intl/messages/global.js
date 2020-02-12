@@ -45,6 +45,9 @@ export default {
     'global.vmaps': 'Vmaps',
     'global.warning': 'Warning!',
     'global.in-workflows': 'Workflows',
+    'field.autoSelectType': 'Please select type',
+    'field.setAsNull': 'Set as null',
+    'field.unsetNull': 'Unset null',
   },
   'cs-CZ': {
     'Alerts': 'Poplachy',
@@ -92,6 +95,9 @@ export default {
     'global.vmaps': 'Vmapy',
     'global.warning': 'Varování!',
     'global.in-workflows': 'Pracovnich postupech',
+    'field.autoSelectType': 'Prosím vyberte typ pole',
+    'field.setAsNull': 'Nastavit na null',
+    'field.unsetNull': 'Zrušit nastavení null',
   },
   'ja-JP': {
     'Alerts': 'アラート',
@@ -139,6 +145,9 @@ export default {
     'global.vmaps': '値マップ',
     'global.warning': '警告！',
     'global.in-workflows': 'ワークフロー',
+    'field.autoSelectType': 'タイプを選択してください',
+    'field.setAsNull': 'nullに設定',
+    'field.unsetNull': 'nullを設定解除',
   },
   'ko-KR': {
     'Alerts': '알림',
@@ -186,5 +195,8 @@ export default {
     'global.vmaps': 'Vmaps',
     'global.warning': '경고!',
     'global.in-workflows': '워크 플로우',
+    'field.autoSelectType': '유형을 선택하십시오',
+    'field.setAsNull': 'null로 설정',
+    'field.unsetNull': '설정되지 않은 null',
   },
 };
