@@ -6,7 +6,7 @@ import capitalize from 'lodash/capitalize';
 
 import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';
 import Box from '../../components/box';
-import { Button, Intent, Tag } from '@blueprintjs/core';
+import { Button, Intent, Tag, ButtonGroup } from '@blueprintjs/core';
 import actions from '../../store/api/actions';
 import Headbar from '../../components/Headbar';
 import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
@@ -21,6 +21,10 @@ import UserSettings from './tabs/settings';
 import Flex from '../../components/Flex';
 import { INTERFACE_IDS } from '../../constants/interfaces';
 import { injectIntl, FormattedMessage } from 'react-intl';
+import withHandlers from 'recompose/withHandlers';
+import modal from '../../hocomponents/modal';
+import withDispatch from '../../hocomponents/withDispatch';
+import ResetModal from '../../views/system/rbac/users/modal';
 
 const interfaces: Array<string> = [
   'roles',
@@ -37,7 +41,8 @@ const UserView: Function = ({
   userData,
   clearStorage,
   tabQuery,
-  intl
+  intl,
+  onPasswordResetClick,
 }: {
   userData: Object,
   clearStorage: Function,
@@ -52,12 +57,19 @@ const UserView: Function = ({
         <CrumbTabs tabs={['Overview', 'Settings']} />
       </Breadcrumbs>
       <Pull right>
-        <Button
-          intent={Intent.DANGER}
-          icon="cross"
-          text={intl.formatMessage({ id: 'user.clear-storage' })}
-          onClick={clearStorage}
-        />
+        <ButtonGroup>
+          <Button
+            icon="lock"
+            text={intl.formatMessage({ id: 'user.reset-password' })}
+            onClick={onPasswordResetClick}
+          />
+          <Button
+            intent={Intent.DANGER}
+            icon="cross"
+            text={intl.formatMessage({ id: 'user.clear-storage' })}
+            onClick={clearStorage}
+          />
+        </ButtonGroup>
       </Pull>
     </Headbar>
 
@@ -75,17 +87,15 @@ const UserView: Function = ({
 
                     return normalizeName(datum, INTERFACE_IDS[intrf]);
                   })
-                  .map(
-                    (datum: string): React.Element<Tag> => (
-                      <span>
-                        <Tag className="tag-with-margin">{datum}</Tag>{' '}
-                      </span>
-                    )
-                  )
+                  .map((datum: string): React.Element<Tag> => (
+                    <span>
+                      <Tag className="tag-with-margin">{datum}</Tag>{' '}
+                    </span>
+                  ))
               ) : userData.has_default ? (
                 <Alert bsStyle="warning" icon="info-sign">
                   {' '}
-                  <FormattedMessage id='user.member-of-def-grp' />
+                  <FormattedMessage id="user.member-of-def-grp" />
                 </Alert>
               ) : (
                 <NoData />
@@ -114,6 +124,31 @@ export default compose(
       clearStorage: actions.currentUser.clearStorage,
     }
   ),
+  withDispatch(),
+  modal(),
+  withHandlers({
+    onPasswordResetClick: ({
+      openModal,
+      closeModal,
+      userData,
+      optimisticDispatch,
+    }) => () => {
+      const handleSave = async pass => {
+        await optimisticDispatch(
+          actions.users.update,
+          undefined,
+          userData.username,
+          pass,
+          undefined
+        );
+
+        closeModal();
+      };
+      openModal(
+        <ResetModal passOnly onSave={handleSave} onClose={closeModal} />
+      );
+    },
+  }),
   withTabs('overview'),
   onlyUpdateForKeys(['userData', 'storage', 'tabQuery']),
   injectIntl

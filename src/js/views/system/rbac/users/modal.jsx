@@ -17,21 +17,15 @@ import actions from '../../../../store/api/actions';
 
 const rolesSelector: Function = (state: Object): Object => state.api.roles;
 
-const viewSelector: Function = createSelector(
-  [rolesSelector],
-  roles => ({
-    roles,
-    rolesModel: roles.data,
-  })
-);
+const viewSelector: Function = createSelector([rolesSelector], roles => ({
+  roles,
+  rolesModel: roles.data,
+}));
 
 @compose(
-  connect(
-    viewSelector,
-    {
-      load: actions.roles.fetch,
-    }
-  ),
+  connect(viewSelector, {
+    load: actions.roles.fetch,
+  }),
   sync('roles')
 )
 export default class AddUserModal extends Component {
@@ -60,14 +54,24 @@ export default class AddUserModal extends Component {
   };
 
   handleSaveClick: Function = (): void => {
-    const { name, username } = this.refs;
+    const { name, username, password, passwordConf } = this.refs;
 
-    if (name.value === '' || username.value === '') {
+    if (!this.props.passOnly && (name.value === '' || username.value === '')) {
       this.setState({
         error: 'Please fill all fields marked with *',
       });
+    } else if (password.value !== passwordConf.value) {
+      this.setState({
+        error: 'Passwords do not match!',
+      });
     } else {
-      this.props.onSave(name.value, username.value, this.state.roles);
+      const pass = password.value === '' ? undefined : password.value;
+
+      if (this.props.passOnly) {
+        this.props.onSave(pass);
+      } else {
+        this.props.onSave(name.value, username.value, pass, this.state.roles);
+      }
     }
   };
 
@@ -104,7 +108,7 @@ export default class AddUserModal extends Component {
   handleFormSubmit: Function = (event: EventHandler): void => {
     event.preventDefault();
 
-    if (this.props.model) {
+    if (this.props.model || this.props.passOnly) {
       this.handleSaveClick();
     } else {
       this.handleCreateClick();
@@ -114,12 +118,12 @@ export default class AddUserModal extends Component {
   renderRoles: Function = (): ?Array<React.Element<DropItem>> =>
     this.props.rolesModel
       ? this.props.rolesModel.map(role => (
-        <DropItem key={role.role} title={role.role} />
-      ))
+          <DropItem key={role.role} title={role.role} />
+        ))
       : null;
 
-  render () {
-    const { model, onClose, rbacExternal } = this.props;
+  render() {
+    const { model, onClose, rbacExternal, passOnly } = this.props;
 
     return (
       <form className="form-horizontal" onSubmit={this.handleFormSubmit}>
@@ -137,85 +141,89 @@ export default class AddUserModal extends Component {
                 area. External RBAC providers are: {rbacExternal}.
               </Alert>
             )}
-            <div className="form-group">
-              <label htmlFor="username" className="col-sm-4 control-label">
-                Username *
-              </label>
-              <div className="col-sm-6">
-                <input
-                  readOnly={model}
-                  ref="username"
-                  type="text"
-                  className="form-control"
-                  id="username"
-                  defaultValue={model ? model.username : ''}
-                />
-              </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor="name" className="col-sm-4 control-label">
-                Full name *
-              </label>
-              <div className="col-sm-6">
-                <input
-                  ref="name"
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  defaultValue={model ? model.name : ''}
-                />
-              </div>
-            </div>
-            {!model && (
-              <div>
+            {!passOnly && (
+              <>
                 <div className="form-group">
-                  <label htmlFor="password" className="col-sm-4 control-label">
-                    Password *
+                  <label htmlFor="username" className="col-sm-4 control-label">
+                    Username *
                   </label>
                   <div className="col-sm-6">
                     <input
-                      ref="password"
-                      type="password"
+                      readOnly={model}
+                      ref="username"
+                      type="text"
                       className="form-control"
-                      id="password"
+                      id="username"
+                      defaultValue={model ? model.username : ''}
                     />
                   </div>
                 </div>
                 <div className="form-group">
-                  <label
-                    htmlFor="password-confirm"
-                    className="col-sm-4 control-label"
-                  >
-                    Confirm password *
+                  <label htmlFor="name" className="col-sm-4 control-label">
+                    Full name *
                   </label>
                   <div className="col-sm-6">
                     <input
-                      ref="passwordConf"
-                      type="password"
+                      ref="name"
+                      type="text"
                       className="form-control"
-                      id="password-confirm"
+                      id="name"
+                      defaultValue={model ? model.name : ''}
                     />
                   </div>
+                </div>
+              </>
+            )}
+            <div className="form-group">
+              <label htmlFor="password" className="col-sm-4 control-label">
+                {passOnly || model ? 'New password' : 'Password *'}
+              </label>
+              <div className="col-sm-6">
+                <input
+                  ref="password"
+                  type="password"
+                  className="form-control"
+                  id="password"
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label
+                htmlFor="password-confirm"
+                className="col-sm-4 control-label"
+              >
+                {passOnly || model
+                  ? 'Confirm new password'
+                  : 'Confirm password *'}
+              </label>
+              <div className="col-sm-6">
+                <input
+                  ref="passwordConf"
+                  type="password"
+                  className="form-control"
+                  id="password-confirm"
+                />
+              </div>
+            </div>
+            {!passOnly && (
+              <div className="form-group">
+                <label htmlFor="roles" className="col-sm-4 control-label">
+                  {' '}
+                  Roles{' '}
+                </label>
+                <div className="col-sm-6">
+                  <Dropdown
+                    id="roles"
+                    multi
+                    onSelect={this.handleRoleSelect}
+                    selected={model ? this.state.roles : null}
+                  >
+                    <DropControl> Select roles </DropControl>
+                    {this.renderRoles()}
+                  </Dropdown>
                 </div>
               </div>
             )}
-            <div className="form-group">
-              <label htmlFor="roles" className="col-sm-4 control-label">
-                {' '}
-                Roles{' '}
-              </label>
-              <div className="col-sm-6">
-                <Dropdown
-                  id="roles"
-                  multi
-                  onSelect={this.handleRoleSelect}
-                  selected={model ? this.state.roles : null}
-                >
-                  <DropControl> Select roles </DropControl>
-                  {this.renderRoles()}
-                </Dropdown>
-              </div>
-            </div>
           </Modal.Body>
           <Modal.Footer>
             <Controls noControls grouped>

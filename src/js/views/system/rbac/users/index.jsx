@@ -49,12 +49,9 @@ const viewSelector: Function = createSelector(
 );
 
 @compose(
-  connect(
-    viewSelector,
-    {
-      load: actions.users.fetch,
-    }
-  ),
+  connect(viewSelector, {
+    load: actions.users.fetch,
+  }),
   withDispatch(),
   modal(),
   sync('users')
@@ -123,17 +120,25 @@ export default class RBACUsers extends Component {
   handleUpdateUserClick: Function = async (
     name: string,
     username: string,
+    pass: string,
     roles: Array<string>
   ): Promise<*> => {
     await this.props.optimisticDispatch(
       actions.users.update,
       name,
       username,
+      pass,
       roles
     );
 
     this.props.closeModal();
   };
+
+  /* handleResetPasswordClick = (username) => {
+    this.props.openModal(
+      <Reset
+    )
+  } */
 
   handleRemoveUserClick: Function = (username): void => {
     const handleConfirm: Function = (): void => {
@@ -148,7 +153,7 @@ export default class RBACUsers extends Component {
     );
   };
 
-  render () {
+  render() {
     const { permissions } = this.props.user;
     const canEdit = hasPermission(
       permissions,

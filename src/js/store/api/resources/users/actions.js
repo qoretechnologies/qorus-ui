@@ -71,10 +71,11 @@ const update: Function = createAction(
   async (
     name: string,
     username: string,
+    pass: string,
     roles: Array<string>,
     dispatch: Function
   ): ?Object => {
-    if (!dispatch) {
+    if (!dispatch && name) {
       return {
         name,
         username,
@@ -91,6 +92,7 @@ const update: Function = createAction(
             body: JSON.stringify({
               name,
               username,
+              pass,
               roles,
             }),
           }
@@ -100,8 +102,10 @@ const update: Function = createAction(
       dispatch
     );
 
-    dispatch(unSyncCurrentUser());
-    dispatch(actions.currentUser.fetch());
+    if (!name) {
+      dispatch(unSyncCurrentUser());
+      dispatch(actions.currentUser.fetch());
+    }
   }
 );
 
