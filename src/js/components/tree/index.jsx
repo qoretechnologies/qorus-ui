@@ -216,12 +216,7 @@ export default class Tree extends Component {
                 level + 1
               )
             : null}
-          {!isObject && (
-            <ContentByType
-              content={data[key]}
-              inline={this.props.contentInline}
-            />
-          )}
+          {!isObject && <ContentByType content={data[key]} inline />}
         </div>
       );
     });
