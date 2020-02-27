@@ -40,13 +40,11 @@ const TreeView = ({
       id={order.id}
       editableKeys={editableKeys}
       caseSensitive
+      contentInline
     />
   );
 };
 
-export default connect(
-  null,
-  {
-    updateData: actions.orders.updateData,
-  }
-)(TreeView);
+export default connect(null, {
+  updateData: actions.orders.updateData,
+})(TreeView);

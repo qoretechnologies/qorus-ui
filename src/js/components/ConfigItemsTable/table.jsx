@@ -137,7 +137,7 @@ export const Value = ({ item }) => {
   }
 
   if (isObject(item.value) || isArray(item.value)) {
-    return <Tree compact data={item.value} />;
+    return <Tree compact data={item.value} conentInline />;
   }
 
   return <ContentByType inTable content={item.value} />;
