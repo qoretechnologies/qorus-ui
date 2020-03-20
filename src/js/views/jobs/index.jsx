@@ -107,7 +107,7 @@ const JobsView: Function = ({
         />
       </Pull>
     </Headbar>
-    <Box top noPadding>
+    <Box top noPadding fill>
       <JobsTable
         collection={jobs}
         openPane={openPane}
@@ -163,15 +163,12 @@ const selector: Function = createSelector(
 
 export default compose(
   hasInterfaceAccess('jobs', 'Jobs'),
-  connect(
-    selector,
-    {
-      load: actions.jobs.fetch,
-      fetch: actions.jobs.fetch,
-      unsync: actions.jobs.unsync,
-      selectNone: actions.jobs.selectNone,
-    }
-  ),
+  connect(selector, {
+    load: actions.jobs.fetch,
+    fetch: actions.jobs.fetch,
+    unsync: actions.jobs.unsync,
+    selectNone: actions.jobs.selectNone,
+  }),
   withSort('jobs', 'jobs', sortDefaults.jobs),
   loadMore('jobs', 'jobs', true, 50),
   mapProps(({ date, isTablet, user, ...rest }: Props): Object => ({

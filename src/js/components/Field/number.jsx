@@ -7,7 +7,13 @@ const NumberField = ({ name, onChange, value, default_value, type, fill }) => {
   useMount(() => {
     // Populate default value
     if (value || default_value) {
-      onChange(name, value || default_value);
+      const val = value || default_value;
+      onChange(
+        name,
+        type === 'int' || type === 'number'
+          ? parseInt(val, 10)
+          : parseFloat(val)
+      );
     }
   });
 
@@ -29,7 +35,7 @@ const NumberField = ({ name, onChange, value, default_value, type, fill }) => {
   return (
     <InputGroup
       className={fill && Classes.FILL}
-      value={!value ? default_value || '' : value}
+      value={value ?? default_value ?? ''}
       onChange={handleInputChange}
       type="number"
       step={type === 'int' || type === 'number' ? 1 : 0.1}

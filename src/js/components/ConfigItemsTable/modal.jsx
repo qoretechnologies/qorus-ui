@@ -144,7 +144,7 @@ export default class ConfigItemsModal extends Component {
       currentType: type,
       error: false,
     });
-
+    console.log(type, value);
     // Validate the value
     const isValid = validateField(type, value, null, canBeNull);
 
@@ -208,7 +208,11 @@ export default class ConfigItemsModal extends Component {
     );
   };
 
-  renderValueContent: Function = (): React.Element<any> => {
+  removeQuotes: (s: string) => string = s => {
+    return s && typeof s === 'string' ? s.replace(/"/g, '') : s;
+  };
+
+  renderValueContent = (): React.Element<any> => {
     const { item } = this.state;
 
     if (item.allowed_values) {
@@ -216,7 +220,7 @@ export default class ConfigItemsModal extends Component {
         <TextArea
           className="bp3-fill"
           rows={getLineCount(this.state.value, null, 4)}
-          value={this.state.value}
+          value={this.removeQuotes(this.state.value)}
           readOnly
           style={{ marginTop: '5px' }}
           title="This area can only be filled from predefined values"
@@ -235,7 +239,7 @@ export default class ConfigItemsModal extends Component {
       <AutoField
         name="configItem"
         {...{ 'type-depends-on': true }}
-        value={this.state.value}
+        value={this.removeQuotes(this.state.value)}
         t={s => s}
         type="auto"
         disabled={!!item.allowed_values}
