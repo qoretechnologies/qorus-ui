@@ -100,9 +100,16 @@ export const validateField: (
     }
     case 'int':
     case 'number':
-      return !isNaN(value) && getTypeFromValue(parseInt(value, 10)) === 'int';
+      return (
+        value === 0 || (!isNaN(value) && getTypeFromValue(value) === 'int')
+      );
     case 'float':
-      return getTypeFromValue(parseFloat(value, 10)) === 'float'
+      return (
+        value === 0 ||
+        (!isNaN(value) &&
+          (getTypeFromValue(value) === 'float' ||
+            getTypeFromValue(value) === 'int'))
+      );
     case 'select-array':
     case 'array':
     case 'file-tree':

@@ -111,7 +111,7 @@ const Login: Function = ({
             </FormGroup>
           </Flex>
           <Flex flex="0 1 auto" className="authorize-footer">
-            <ButtonGroup className="bp3-fill">
+            <ButtonGroup className="bp3-fill" style={{ lineHeight: '30px' }}>
               <Button
                 id="submit"
                 text="Log in"
