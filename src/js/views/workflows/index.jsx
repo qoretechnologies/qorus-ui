@@ -280,7 +280,7 @@ const Workflows: Function = ({
         />
       </div>
     </Headbar>
-    <Box top noPadding>
+    <Box top noPadding fill>
       <WorkflowsTable
         sortKeysObj={sortKeysObj}
         collection={workflows}
@@ -313,15 +313,12 @@ const Workflows: Function = ({
 
 export default compose(
   hasInterfaceAccess('workflows', 'Workflows'),
-  connect(
-    viewSelector,
-    {
-      load: actions.workflows.fetch,
-      fetch: actions.workflows.fetch,
-      unsync: actions.workflows.unsync,
-      unselectAll: actions.workflows.unselectAll,
-    }
-  ),
+  connect(viewSelector, {
+    load: actions.workflows.fetch,
+    fetch: actions.workflows.fetch,
+    unsync: actions.workflows.unsync,
+    unselectAll: actions.workflows.unselectAll,
+  }),
   mapProps(({ date, isTablet, user, ...rest }: Props): Object => ({
     isTablet: isTablet || user.data.storage.sidebarOpen,
     date: date || DATES.PREV_DAY,

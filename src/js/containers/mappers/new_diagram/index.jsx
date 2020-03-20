@@ -289,6 +289,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
       inputs: flattenedInputs,
       outputs: flattenedOutputs,
     };
+    console.log(type, name, fieldTypes[type]);
     // Find the field
     const field = fieldTypes[type].find(input => input.path === name);
     // Return the color
