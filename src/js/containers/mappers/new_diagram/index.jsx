@@ -10,6 +10,10 @@ import omit from 'lodash/omit';
 import findIndex from 'lodash/findIndex';
 import compose from 'recompose/compose';
 import { injectIntl } from 'react-intl';
+import {
+  hasStaticDataField,
+  getStaticDataFieldname,
+} from '../../../helpers/mapper';
 
 const FIELD_HEIGHT = 35;
 const FIELD_MARGIN = 14;
@@ -61,7 +65,8 @@ export const StyledMapperField = styled.div`
         margin-left: ${isChild ? `${level * 15}px` : '0'};
       `}
     
-    height: ${FIELD_HEIGHT}px;
+    height: ${({ isInputHash }) =>
+      isInputHash ? '55px' : `${FIELD_HEIGHT}px`};
     border: 1px solid #d7d7d7;
     border-radius: 3px;
     margin-bottom: ${FIELD_MARGIN}px;
@@ -142,7 +147,9 @@ export const StyledMapperField = styled.div`
         padding: 0;
     }
 
-    p {
+    p.type {
+        background-color: #d7d7d7;
+
         &.string {
             background-color: ${TYPE_COLORS.string};
         }
@@ -238,6 +245,8 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
   inputUrl,
   outputUrl,
   onInfoClick,
+  staticData,
+  intl,
 }) => {
   // This functions flattens the fields, by taking all the
   // deep fields from `type` and adds them right after their
@@ -279,28 +288,35 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
     );
 
   const flattenedInputs = inputs && flattenFields(inputs);
+  const flattenedContextInputs = staticData && flattenFields(staticData);
   const flattenedOutputs = outputs && flattenFields(outputs);
 
   const getFieldTypeColor: (
-    type: 'inputs' | 'outputs',
-    name: string
-  ) => string = (type, name) => {
+    type: 'inputs' | 'outputs' | 'context',
+    name: string,
+    types?: string[]
+  ) => string = (type, name, types) => {
+    if (types) {
+      // Return the color
+      return TYPE_COLORS[types[0].replace(/</g, '').replace(/>/g, '')];
+    }
     const fieldTypes = {
       inputs: flattenedInputs,
       outputs: flattenedOutputs,
+      context: flattenedContextInputs,
     };
-    console.log(type, name, fieldTypes[type]);
     // Find the field
     const field = fieldTypes[type].find(input => input.path === name);
-    // Return the color
-    return TYPE_COLORS[
-      field.type.types_returned[0].replace(/</g, '').replace(/>/g, '')
-    ];
+    if (field) {
+      // Return the color
+      return TYPE_COLORS[
+        field.type.types_returned[0].replace(/</g, '').replace(/>/g, '')
+      ];
+    }
+    return null;
   };
 
-  const getLastChildIndex = (field: any, type: 'inputs' | 'outputs') => {
-    // Save the fields into a accessible object
-    const fields = { inputs: flattenedInputs, outputs: flattenedOutputs };
+  const getLastChildIndex = (field: any, fields: any[]) => {
     // Only get the child index for fields
     // that actually have children
     if (size(field.type.fields)) {
@@ -311,7 +327,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
       // Get the index of the last field in this
       // hierarchy based on the name
       return findIndex(
-        fields[type],
+        fields,
         curField => curField.path === `${field.path}.${name}`
       );
     }
@@ -367,10 +383,28 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
         <StyledMapperWrapper>
           <StyledFieldsWrapper>
             <StyledFieldHeader>
-              {'Input'}{' '}
-              <Tooltip targetTagName="div" content={inputUrl}>
-                <StyledUrlMessage>{inputUrl}</StyledUrlMessage>
-              </Tooltip>
+              <MapperInput
+                name={
+                  <>
+                    <span> Input </span>
+
+                    <Tooltip targetTagName="div" content={inputUrl}>
+                      <StyledUrlMessage
+                        style={{ height: '12px', lineHeight: '12px' }}
+                      >
+                        {inputUrl}
+                      </StyledUrlMessage>
+                    </Tooltip>
+                  </>
+                }
+                types={['hash<auto>']}
+                type={{
+                  base_type: 'hash<auto>',
+                }}
+                id={1}
+                isWholeInput
+                lastChildIndex={0}
+              />
             </StyledFieldHeader>
             {size(flattenedInputs) !== 0
               ? map(flattenedInputs, (input, index) => (
@@ -381,7 +415,9 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                     {...input}
                     field={input}
                     id={index + 1}
-                    lastChildIndex={getLastChildIndex(input, 'inputs') - index}
+                    lastChildIndex={
+                      getLastChildIndex(input, flattenedInputs) - index
+                    }
                   />
                 ))
               : null}
@@ -390,20 +426,66 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                 {'This mapper has no input fields'}
               </StyledInfoMessage>
             ) : null}
+            {size(flattenedContextInputs) !== 0 && (
+              <MapperInput
+                name={
+                  <>
+                    <span>
+                      {intl.formatMessage({ id: 'mapper.staticData' })}
+                    </span>
+
+                    <StyledUrlMessage
+                      style={{ height: '12px', lineHeight: '12px' }}
+                    >
+                      {intl.formatMessage({ id: 'mapper.staticDataDesc' })}
+                    </StyledUrlMessage>
+                  </>
+                }
+                types={['hash<auto>']}
+                type={{
+                  base_type: 'hash<auto>',
+                }}
+                id={1}
+                isWholeInput
+                usesContext
+                lastChildIndex={0}
+              />
+            )}
+            {size(flattenedContextInputs) !== 0
+              ? map(flattenedContextInputs, (input, index) => (
+                  <MapperInput
+                    key={input.path}
+                    name={input.name}
+                    types={input.type.types_returned}
+                    {...input}
+                    field={input}
+                    id={(flattenedInputs?.length || 0) + (index + 1)}
+                    lastChildIndex={
+                      getLastChildIndex(input, flattenedContextInputs) - index
+                    }
+                    usesContext
+                  />
+                ))
+              : null}
           </StyledFieldsWrapper>
           <StyledConnectionsWrapper>
-            {size(relations) && size(flattenedInputs) ? (
+            {size(relations) ? (
               <svg
                 height={
-                  Math.max(flattenedInputs.length, flattenedOutputs.length) *
+                  Math.max(
+                    [
+                      ...(flattenedInputs || []),
+                      ...(flattenedContextInputs || []),
+                    ]?.length,
+                    flattenedOutputs?.length
+                  ) *
                     (FIELD_HEIGHT + FIELD_MARGIN) +
-                  61
+                  126
                 }
               >
-                {map(
-                  relations,
-                  (relation, outputPath) =>
-                    !!relation.name && (
+                {map(relations, (relation, outputPath) => (
+                  <>
+                    {!!relation.name && (
                       <>
                         <defs>
                           <linearGradient
@@ -475,8 +557,212 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           }
                         />
                       </>
-                    )
-                )}
+                    )}
+                    {relation.use_input_record && (
+                      <>
+                        <defs>
+                          <linearGradient
+                            id={outputPath}
+                            x1="0"
+                            y1={27}
+                            x2={0}
+                            y2={
+                              (flattenedOutputs.findIndex(
+                                output => output.path === outputPath
+                              ) +
+                                1) *
+                                (FIELD_HEIGHT + FIELD_MARGIN) -
+                              (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
+                              61 +
+                              0.5
+                            }
+                            gradientUnits="userSpaceOnUse"
+                          >
+                            <stop
+                              stop-color={getFieldTypeColor('inputs', null, [
+                                'hash<auto>',
+                              ])}
+                              offset="0"
+                            />
+                            <stop
+                              stop-color={getFieldTypeColor(
+                                'outputs',
+                                outputPath
+                              )}
+                              offset="1"
+                            />
+                          </linearGradient>
+                        </defs>
+                        <StyledLine
+                          key={outputPath}
+                          stroke={`url(#${outputPath})`}
+                          x1={0}
+                          y1={27}
+                          x2={300}
+                          y2={
+                            (flattenedOutputs.findIndex(
+                              output => output.path === outputPath
+                            ) +
+                              1) *
+                              (FIELD_HEIGHT + FIELD_MARGIN) -
+                            (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
+                            61 +
+                            1.5
+                          }
+                        />
+                      </>
+                    )}
+                    {!!relation.context &&
+                    hasStaticDataField(relation.context) &&
+                    size(flattenedContextInputs) ? (
+                      <>
+                        <defs>
+                          <linearGradient
+                            id={outputPath}
+                            x1="0"
+                            y1={
+                              63 +
+                              63 +
+                              ((size(flattenedInputs) || 1) +
+                                flattenedContextInputs.findIndex(
+                                  input =>
+                                    input.path ===
+                                    getStaticDataFieldname(relation.context)
+                                ) +
+                                1) *
+                                (FIELD_HEIGHT + FIELD_MARGIN) -
+                              (FIELD_HEIGHT / 2 + FIELD_MARGIN)
+                            }
+                            x2={0}
+                            y2={
+                              (flattenedOutputs.findIndex(
+                                output => output.path === outputPath
+                              ) +
+                                1) *
+                                (FIELD_HEIGHT + FIELD_MARGIN) -
+                              (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
+                              61 +
+                              0.5
+                            }
+                            gradientUnits="userSpaceOnUse"
+                          >
+                            <stop
+                              stop-color={getFieldTypeColor(
+                                'context',
+                                getStaticDataFieldname(relation.context)
+                              )}
+                              offset="0"
+                            />
+                            <stop
+                              stop-color={getFieldTypeColor(
+                                'outputs',
+                                outputPath
+                              )}
+                              offset="1"
+                            />
+                          </linearGradient>
+                        </defs>
+                        <StyledLine
+                          key={outputPath}
+                          stroke={`url(#${outputPath})`}
+                          x1={0}
+                          y1={
+                            63 +
+                            63 +
+                            ((size(flattenedInputs) || 1) +
+                              flattenedContextInputs.findIndex(
+                                input =>
+                                  input.path ===
+                                  getStaticDataFieldname(relation.context)
+                              ) +
+                              1) *
+                              (FIELD_HEIGHT + FIELD_MARGIN) -
+                            (FIELD_HEIGHT / 2 + FIELD_MARGIN)
+                          }
+                          x2={300}
+                          y2={
+                            (flattenedOutputs.findIndex(
+                              output => output.path === outputPath
+                            ) +
+                              1) *
+                              (FIELD_HEIGHT + FIELD_MARGIN) -
+                            (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
+                            61 +
+                            1.5
+                          }
+                        />
+                      </>
+                    ) : null}
+                    {!!relation.context &&
+                    relation.context === '$static:*' &&
+                    size(flattenedContextInputs) ? (
+                      <>
+                        <defs>
+                          <linearGradient
+                            id={outputPath}
+                            x1="0"
+                            y1={
+                              63 +
+                              63 +
+                              (size(flattenedInputs) || 1) *
+                                (FIELD_HEIGHT + FIELD_MARGIN) -
+                              31.5
+                            }
+                            x2={0}
+                            y2={
+                              (flattenedOutputs.findIndex(
+                                output => output.path === outputPath
+                              ) +
+                                1) *
+                                (FIELD_HEIGHT + FIELD_MARGIN) -
+                              (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
+                              61 +
+                              0.5
+                            }
+                            gradientUnits="userSpaceOnUse"
+                          >
+                            <stop
+                              stop-color={getFieldTypeColor('context', null, [
+                                'hash<auto>',
+                              ])}
+                              offset="0"
+                            />
+                            <stop
+                              stop-color={getFieldTypeColor(
+                                'outputs',
+                                outputPath
+                              )}
+                              offset="1"
+                            />
+                          </linearGradient>
+                        </defs>
+                        <StyledLine
+                          key={outputPath}
+                          stroke={`url(#${outputPath})`}
+                          x1={0}
+                          y1={
+                            63 +
+                            63 +
+                            (size(flattenedInputs) || 1) *
+                              (FIELD_HEIGHT + FIELD_MARGIN) -
+                            31.5
+                          }
+                          x2={300}
+                          y2={
+                            (flattenedOutputs.findIndex(
+                              output => output.path === outputPath
+                            ) +
+                              1) *
+                              (FIELD_HEIGHT + FIELD_MARGIN) -
+                            (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
+                            61 +
+                            1.5
+                          }
+                        />
+                      </>
+                    ) : null}
+                  </>
+                ))}
               </svg>
             ) : null}
           </StyledConnectionsWrapper>
@@ -501,7 +787,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                     }}
                     accepts={output.type.types_accepted}
                     lastChildIndex={
-                      getLastChildIndex(output, 'outputs') - index
+                      getLastChildIndex(output, flattenedOutputs) - index
                     }
                   />
                 ))
