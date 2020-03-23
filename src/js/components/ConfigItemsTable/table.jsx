@@ -137,10 +137,10 @@ export const Value = ({ item }) => {
   }
 
   if (isObject(item.value) || isArray(item.value)) {
-    return <Tree compact data={item.value} conentInline />;
+    return <Tree compact data={item.value} conentInline noMarkdown />;
   }
 
-  return <ContentByType inTable content={item.value} />;
+  return <ContentByType inTable content={item.value} noMarkdown />;
 };
 
 let ItemsTable: Function = ({

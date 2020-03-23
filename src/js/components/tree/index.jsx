@@ -52,6 +52,7 @@ export default class Tree extends Component {
     compact: boolean,
     caseSensitive: boolean,
     contentInline: boolean,
+    noMarkdown?: boolean,
   } = this.props;
 
   state = {
@@ -216,7 +217,13 @@ export default class Tree extends Component {
                 level + 1
               )
             : null}
-          {!isObject && <ContentByType content={data[key]} inline />}
+          {!isObject && (
+            <ContentByType
+              content={data[key]}
+              inline
+              noMarkdown={this.props.noMarkdown}
+            />
+          )}
         </div>
       );
     });
