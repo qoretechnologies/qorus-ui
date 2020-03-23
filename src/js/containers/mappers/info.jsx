@@ -125,8 +125,9 @@ const MapperInfo = ({
                 </Alert>
               )}
               <MapperCreator
-                inputs={mapper.options.input}
-                outputs={mapper.options.output}
+                inputs={mapper.options.input || {}}
+                outputs={mapper.options.output || {}}
+                staticData={mapper.options?.context?.staticdata?.fields || {}}
                 relations={mapper.fields}
                 inputUrl={getProviderUrl(mapper.option_source, 'input')}
                 outputUrl={getProviderUrl(mapper.option_source, 'output')}

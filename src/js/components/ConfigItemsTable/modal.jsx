@@ -144,7 +144,6 @@ export default class ConfigItemsModal extends Component {
       currentType: type,
       error: false,
     });
-    console.log(type, value);
     // Validate the value
     const isValid = validateField(type, value, null, canBeNull);
 
