@@ -48,6 +48,8 @@ export default {
     'field.autoSelectType': 'Please select type',
     'field.setAsNull': 'Set as null',
     'field.unsetNull': 'Unset null',
+    'mapper.staticData': 'Static data',
+    'mapper.staticDataDesc': 'Static data from context',
   },
   'cs-CZ': {
     'Alerts': 'Poplachy',
@@ -98,6 +100,8 @@ export default {
     'field.autoSelectType': 'Prosím vyberte typ pole',
     'field.setAsNull': 'Nastavit na null',
     'field.unsetNull': 'Zrušit nastavení null',
+    'mapper.staticData': 'Statická data',
+    'mapper.staticDataDesc': 'Statická data z kontextu',
   },
   'ja-JP': {
     'Alerts': 'アラート',
@@ -148,6 +152,8 @@ export default {
     'field.autoSelectType': 'タイプを選択してください',
     'field.setAsNull': 'nullに設定',
     'field.unsetNull': 'nullを設定解除',
+    'mapper.staticData': '静的データ',
+    'mapper.staticDataDesc': 'コンテキスト静的データ',
   },
   'ko-KR': {
     'Alerts': '알림',
@@ -198,5 +204,7 @@ export default {
     'field.autoSelectType': '유형을 선택하십시오',
     'field.setAsNull': 'null로 설정',
     'field.unsetNull': '설정되지 않은 null',
+    'mapper.staticData': '정적 데이터',
+    'mapper.staticDataDesc': '상황에 맞는 정적 데이터',
   },
 };
