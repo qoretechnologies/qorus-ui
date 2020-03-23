@@ -48,10 +48,10 @@ const MapperOutput: FC<IMapperOutputProps> = ({
     >
       <h4>{name}</h4>
       <p
-        className={type.types_returned
+        className={`${type.types_returned
           .join(' ')
           .replace(/</g, '')
-          .replace(/>/g, '')}
+          .replace(/>/g, '')} type`}
       >
         {type.types_returned.join(',')}
       </p>

@@ -29,24 +29,28 @@ const MapperInput: FC<IMapperInputProps> = ({
   type,
   path,
   hasAvailableOutput,
+  isWholeInput,
 }) => {
   return (
     <StyledMapperField
       input
+      isInputHash={isWholeInput}
       isChild={isChild}
       level={level}
       childrenCount={lastChildIndex}
-      title={field.desc}
+      title={field?.desc}
     >
-      <h4>{name}</h4>
-      <p
-        className={types
-          .join(' ')
-          .replace(/</g, '')
-          .replace(/>/g, '')}
-      >
-        {types.join(',')}
-      </p>
+      <h4 style={{ fontSize: isWholeInput ? '16px' : '14px' }}>{name}</h4>
+      {!isWholeInput && (
+        <p
+          className={`${types
+            .join(' ')
+            .replace(/</g, '')
+            .replace(/>/g, '')} type`}
+        >
+          {`${types.includes('nothing') ? '*' : ''}${type.base_type}`}
+        </p>
+      )}
     </StyledMapperField>
   );
 };
