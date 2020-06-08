@@ -1,20 +1,23 @@
 /* @flow */
 import { createAction } from 'redux-actions';
-import { fetchWithNotifications, post, get } from '../../utils';
-import settings from '../../../../settings';
 
+import settings from '../../../../settings';
 import {
-  fetchLoggerAction,
-  addUpdateLoggerAction,
-  deleteLoggerAction,
   addAppenderAction,
+  addUpdateLoggerAction,
   deleteAppenderAction,
-  updateConfigItemWsCommon,
-  fetchDefaultLoggerAction,
   deleteConfigItemAction,
-  updateConfigItemAction,
+  deleteLoggerAction,
   editAppenderAction,
+  fetchLoggerAction,
+  updateConfigItemAction,
+  updateConfigItemWsCommon
 } from '../../common/actions';
+import {
+  fetchWithNotifications,
+  get,
+  post
+} from '../../utils';
 
 const init: Function = createAction('SYSTEM_INIT');
 const unsync: Function = createAction('SYSTEM_UNSYNC');
@@ -51,6 +54,11 @@ const updateStats: Function = createAction(
 
 const updateNodeInfo: Function = createAction(
   'SYSTEM_UPDATENODEINFO',
+  (events: Array<Object>): Object => ({ events })
+);
+
+const removeNode: Function = createAction(
+  'SYSTEM_REMOVENODE',
   (events: Array<Object>): Object => ({ events })
 );
 
@@ -100,7 +108,7 @@ const updateConfigItemWs: Function = updateConfigItemWsCommon('SYSTEM');
 const updateConfigItem: Function = updateConfigItemAction('SYSTEM');
 const deleteConfigItem: Function = deleteConfigItemAction('SYSTEM');
 
-const updateDone = createAction('SYSTEM_UPDATEDONE', id => ({ id }));
+const updateDone = createAction('SYSTEM_UPDATEDONE', (id) => ({ id }));
 
 // LOGGER
 const fetchLogger = fetchLoggerAction('system');
@@ -110,8 +118,9 @@ const fetchDefaultLogger = createAction(
     const [logger, appenders] = await Promise.all([
       get(`${settings.REST_BASE_URL}/${url || intfc}?action=defaultLogger`),
       get(
-        `${settings.REST_BASE_URL}/${url ||
-          intfc}?action=defaultLoggerAppenders`
+        `${settings.REST_BASE_URL}/${
+          url || intfc
+        }?action=defaultLoggerAppenders`
       ),
     ]);
 
@@ -151,33 +160,34 @@ const deleteDefaultAppender = createAction(
 );
 
 export {
-  addProcess,
-  processMemoryChanged,
-  removeProcess,
-  updateDone,
-  incrementItems,
-  decrementItems,
-  updateStats,
-  updateNodeInfo,
-  init,
-  unsync,
-  healthChanged,
-  remoteHealthChanged,
-  killProcess,
-  fetchGlobalConfig,
-  updateConfigItemWs,
-  fetchLogger,
-  fetchDefaultLogger,
-  addUpdateLogger,
-  addUpdateDefaultLogger,
-  deleteLogger,
   addAppender,
-  editAppender,
   addDefaultAppender,
+  addProcess,
+  addUpdateDefaultLogger,
+  addUpdateLogger,
+  decrementItems,
   deleteAppender,
+  deleteConfigItem,
   deleteDefaultAppender,
   deleteDefaultLogger,
-  deleteConfigItem,
-  updateConfigItem,
+  deleteLogger,
+  editAppender,
   editDefaultAppender,
+  fetchDefaultLogger,
+  fetchGlobalConfig,
+  fetchLogger,
+  healthChanged,
+  incrementItems,
+  init,
+  killProcess,
+  processMemoryChanged,
+  remoteHealthChanged,
+  removeNode,
+  removeProcess,
+  unsync,
+  updateConfigItem,
+  updateConfigItemWs,
+  updateDone,
+  updateNodeInfo,
+  updateStats
 };

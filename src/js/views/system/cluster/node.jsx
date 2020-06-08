@@ -1,33 +1,38 @@
 // @flow
 import React from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
-import { Tag } from '@blueprintjs/core';
 
 import {
+  FormattedMessage,
+  injectIntl
+} from 'react-intl';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
+
+import { Tag } from '@blueprintjs/core';
+
+import { ActionColumnHeader } from '../../../components/ActionColumn';
+import EnhancedTable from '../../../components/EnhancedTable';
+import ExpandableItem from '../../../components/ExpandableItem';
+import LoadMore from '../../../components/LoadMore';
+import { NameColumnHeader } from '../../../components/NameColumn';
+import {
+  FixedRow,
   Table,
-  Thead,
   Tbody,
   Th,
-  FixedRow,
+  Thead
 } from '../../../components/new_table';
-import {
-  getProcessObjectLink,
-  calculateMemory,
-  getProcessObjectType,
-} from '../../../helpers/system';
-import ProcessRow from './row';
-import ExpandableItem from '../../../components/ExpandableItem';
-import { NameColumnHeader } from '../../../components/NameColumn';
-import EnhancedTable from '../../../components/EnhancedTable';
 import Pull from '../../../components/Pull';
-import LoadMore from '../../../components/LoadMore';
-import Search from '../../../containers/search';
 import { sortDefaults } from '../../../constants/sort';
-import { ActionColumnHeader } from '../../../components/ActionColumn';
+import Search from '../../../containers/search';
+import {
+  calculateMemory,
+  getProcessObjectLink,
+  getProcessObjectType
+} from '../../../helpers/system';
 import withProcessKill from '../../../hocomponents/withProcessKill';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import ProcessRow from './row';
 
 type Props = {
   node: string,
@@ -86,13 +91,15 @@ const ClusterNode: Function = ({
               <Th>
                 <Pull>
                   <Tag className="bp3-large bp3-minimal">
-                    <FormattedMessage id='cluster.hostname' />: {hostname}
+                    <FormattedMessage id="cluster.hostname" />: {hostname}
                   </Tag>{' '}
                   <Tag className="bp3-large bp3-minimal">
-                    <FormattedMessage id='cluster.node-memory' />: {calculateMemory(memory)}
+                    <FormattedMessage id="cluster.node-memory" />:{' '}
+                    {calculateMemory(memory)}
                   </Tag>{' '}
                   <Tag className="bp3-large bp3-minimal">
-                    <FormattedMessage id='cluster.count-of-processes' />: {processes.length}
+                    <FormattedMessage id="cluster.count-of-processes" />:{' '}
+                    {processes.length}
                   </Tag>
                 </Pull>
                 <Pull right>
@@ -113,7 +120,7 @@ const ClusterNode: Function = ({
             </FixedRow>
             <FixedRow sortData={sortData} onSortChange={onSortChange}>
               <Th className="text" name="node" icon="database">
-                <FormattedMessage id='cluster.node' />
+                <FormattedMessage id="cluster.node" />
               </Th>
               <NameColumnHeader
                 name="client_id"
@@ -122,16 +129,16 @@ const ClusterNode: Function = ({
               />
               <ActionColumnHeader />
               <Th className="text medium" name="type" icon="application">
-                <FormattedMessage id='table.type' />
+                <FormattedMessage id="table.type" />
               </Th>
               <Th className="medium" name="pid">
-                <FormattedMessage id='cluster.pid' />
+                <FormattedMessage id="cluster.pid" />
               </Th>
               <Th className="medium" name="priv" icon="layers">
-                <FormattedMessage id='cluster.memory' />
+                <FormattedMessage id="cluster.memory" />
               </Th>
               <Th className="text" name="status" icon="info-sign">
-                <FormattedMessage id='table.status' />
+                <FormattedMessage id="table.status" />
               </Th>
             </FixedRow>
           </Thead>
@@ -159,13 +166,11 @@ const ClusterNode: Function = ({
 );
 
 export default compose(
-  mapProps(
-    ({ processes, ...rest }: Props): Props => ({
-      hostname: processes[0].host,
-      processes,
-      ...rest,
-    })
-  ),
+  mapProps(({ processes, ...rest }: Props): Props => ({
+    hostname: processes[0]?.host,
+    processes,
+    ...rest,
+  })),
   withProcessKill,
   pure(['node', 'memory', 'processes']),
   injectIntl

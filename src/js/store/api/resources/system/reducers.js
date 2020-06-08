@@ -1,18 +1,15 @@
-import { updateItemWithName } from '../../utils';
-
-import {
-  loggerReducer,
-  addUpdateLoggerReducer,
-  deleteLoggerReducer,
-  addAppenderReducer,
-  deleteAppenderReducer,
-  updateConfigItemWsCommon,
-  defaultLoggerReducer,
-  editAppenderReducer,
-} from '../../common/reducers';
-import isArray from 'lodash/isArray';
 import cloneDeep from 'lodash/cloneDeep';
+
 import { formatAppender } from '../../../../helpers/logger';
+import {
+  addAppenderReducer,
+  addUpdateLoggerReducer,
+  deleteAppenderReducer,
+  deleteLoggerReducer,
+  editAppenderReducer,
+  loggerReducer,
+  updateConfigItemWsCommon
+} from '../../common/reducers';
 
 const addProcess = {
   next(state: Object, { payload: { events } }) {
@@ -35,7 +32,7 @@ const removeProcess = {
     const data = { ...state.data };
     const processes = { ...data.processes };
 
-    events.forEach(event => {
+    events.forEach((event) => {
       delete processes[event.id];
     });
 
@@ -51,7 +48,7 @@ const processMemoryChanged = {
     const processes = { ...data.processes };
 
     if (data.cluster_info) {
-      events.forEach(event => {
+      events.forEach((event) => {
         data.cluster_info[event.node].node_priv = event.node_priv;
         data.cluster_info[event.node].node_load_pct = event.node_load_pct;
         data.cluster_info[event.node].node_ram_in_use = event.node_ram_in_use;
@@ -79,7 +76,7 @@ const incrementItems = {
   next(state: Object, { payload: { events } }) {
     const data = { ...state.data };
 
-    events.forEach(event => {
+    events.forEach((event) => {
       if (event.alert) {
         data['alert-summary'][event.alertType] =
           data['alert-summary'][event.alertType] + 1;
@@ -98,7 +95,7 @@ const decrementItems = {
   next(state: Object, { payload: { events } }) {
     const data = { ...state.data };
 
-    events.forEach(event => {
+    events.forEach((event) => {
       if (event.alert) {
         data['alert-summary'][event.alertType] =
           data['alert-summary'][event.alertType] - 1 < 0
@@ -158,7 +155,7 @@ const updateStats = {
   next(state: Object, { payload: { events } }) {
     const data = { ...state.data };
 
-    events.forEach(event => {
+    events.forEach((event) => {
       data.order_stats = event.bands;
     });
 
@@ -170,7 +167,7 @@ const healthChanged = {
   next(state: Object, { payload: { events } }) {
     const data = { ...state.data };
 
-    events.forEach(event => {
+    events.forEach((event) => {
       data.health.health = event.health;
       data.health.ongoing = event.ongoing;
       data.health.transient = event.transient;
@@ -184,7 +181,7 @@ const remoteHealthChanged = {
   next(state: Object, { payload: { events } }) {
     const data = { ...state.data };
 
-    events.forEach(event => {
+    events.forEach((event) => {
       const remote = data.health.remote(
         (rm: Object): boolean => rm.name === event.name
       );
@@ -198,40 +195,60 @@ const remoteHealthChanged = {
   },
 };
 
+const removeNode = {
+  next(state: Object, { payload: { events } }) {
+    const data = cloneDeep(state.data);
+
+    events.forEach((event) => {
+      delete data.cluster_info[event.name];
+    });
+
+    return { ...state, ...{ data } };
+  },
+};
+
 const updateNodeInfo = {
   next(state: Object, { payload: { events } }) {
     const data = cloneDeep(state.data);
 
-    events.forEach(event => {
-      data.cluster_info[event.name].mem_history.push({
-        node_priv: event.node_priv,
-        node_ram_in_use: event.node_ram_in_use,
-        node_ram_in_use_str: event.node_ram_in_use_str,
-        node_load_pct: event.node_load_pct,
-        node_cpu_count: event.node_cpu_count,
-        node_priv_str: event.node_priv_str,
-        timestamp: event.timestamp,
-      });
+    events.forEach((event) => {
+      if (!data.cluster_info[event.name]) {
+        data.cluster_info[event.name] = {
+          ...event,
+          mem_history: [],
+          process_history: [],
+        };
+      } else {
+        data.cluster_info[event.name].mem_history.push({
+          node_priv: event.node_priv,
+          node_ram_in_use: event.node_ram_in_use,
+          node_ram_in_use_str: event.node_ram_in_use_str,
+          node_load_pct: event.node_load_pct,
+          node_cpu_count: event.node_cpu_count,
+          node_priv_str: event.node_priv_str,
+          timestamp: event.timestamp,
+        });
 
-      if (data.cluster_info[event.name].mem_history.length > 60) {
-        data.cluster_info[event.name].mem_history.shift();
-      }
+        if (data.cluster_info[event.name].mem_history.length > 60) {
+          data.cluster_info[event.name].mem_history.shift();
+        }
 
-      data.cluster_info[event.name].process_history.push({
-        count: event.processes,
-        timestamp: event.timestamp,
-      });
+        data.cluster_info[event.name].process_history.push({
+          count: event.processes,
+          timestamp: event.timestamp,
+        });
 
-      data.cluster_info[event.name].process_count = event.processes;
-      data.cluster_info[event.name].node_load_pct = event.node_load_pct;
-      data.cluster_info[event.name].node_priv = event.node_priv;
-      data.cluster_info[event.name].node_priv_str = event.node_priv_str;
-      data.cluster_info[event.name].node_ram_in_use = event.node_ram_in_use;
-      data.cluster_info[event.name].node_ram_in_use_str =
-        event.node_ram_in_use_str;
+        data.cluster_info[event.name].process_count = event.processes;
+        data.cluster_info[event.name].node_load_pct = event.node_load_pct;
+        data.cluster_info[event.name].node_priv = event.node_priv;
+        data.cluster_info[event.name].node_priv_str = event.node_priv_str;
+        data.cluster_info[event.name].node_ram_in_use = event.node_ram_in_use;
+        data.cluster_info[event.name].node_ram_in_use_str =
+          event.node_ram_in_use_str;
 
-      if (data.cluster_info[event.name].process_history.length > 60) {
-        data.cluster_info[event.name].process_history.shift();
+        if (data.cluster_info[event.name].process_history.length > 60) {
+          data.cluster_info[event.name].process_history.shift();
+        }
       }
     });
 
@@ -309,7 +326,7 @@ const addDefaultAppender = {
     if (state && state.sync) {
       let data = { ...state.data };
       // Go through the events
-      events.forEach(dt => {
+      events.forEach((dt) => {
         // Update the appenders for this interface
         data.defaultLoggers[dt.interface].loggerData.appenders.push(
           formatAppender(dt)
@@ -327,13 +344,13 @@ const editDefaultAppender = {
     if (state && state.sync) {
       let data = { ...state.data };
       // Go through the events
-      events.forEach(dt => {
+      events.forEach((dt) => {
         // Update the appenders for this interface
         data.defaultLoggers[
           dt.interface
         ].loggerData.appenders = data.defaultLoggers[
           dt.interface
-        ].loggerData.appenders.map(appender => {
+        ].loggerData.appenders.map((appender) => {
           if (appender.id === dt.logger_appenderid) {
             return formatAppender(dt);
           }
@@ -354,14 +371,14 @@ const deleteDefaultAppender = {
     if (state && state.sync) {
       let data = { ...state.data };
       // Go through the events
-      events.forEach(dt => {
+      events.forEach((dt) => {
         // Update the appenders for this interface
         data.defaultLoggers[
           dt.interface
         ].loggerData.appenders = data.defaultLoggers[
           dt.interface
         ].loggerData.appenders.filter(
-          appender => appender.id !== dt.logger_appenderid
+          (appender) => appender.id !== dt.logger_appenderid
         );
       });
       // Modify the state
@@ -381,7 +398,7 @@ const addUpdateDefaultLogger = {
         newData.defaultLoggers = {};
       }
       // Go through the events
-      events.forEach(dt => {
+      events.forEach((dt) => {
         // New default logger was added
         if (dt.isNew) {
           // Add the default logger
@@ -411,7 +428,7 @@ const deleteDefaultLogger = {
     if (state && state.sync) {
       let newData = { ...state.data };
       // Go through the events
-      events.forEach(dt => {
+      events.forEach((dt) => {
         newData.defaultLoggers[dt.interface].loggerData.logger = 'empty';
       });
       // Update interface
@@ -423,31 +440,32 @@ const deleteDefaultLogger = {
 };
 
 export {
-  addProcess as ADDPROCESS,
-  removeProcess as REMOVEPROCESS,
-  processMemoryChanged as PROCESSMEMORYCHANGED,
-  updateDone as UPDATEDONE,
-  incrementItems as INCREMENTITEMS,
-  decrementItems as DECREMENTITEMS,
-  updateStats as UPDATESTATS,
-  updateNodeInfo as UPDATENODEINFO,
-  init as INIT,
-  unsync as UNSYNC,
-  healthChanged as HEALTHCHANGED,
-  remoteHealthChanged as REMOTEHEALTHCHANGED,
-  killProcess as KILLPROCESS,
-  fetchGlobalConfig as FETCHGLOBALCONFIG,
-  updateConfigItemWs as UPDATECONFIGITEMWS,
-  fetchLogger as FETCHLOGGER,
-  fetchDefaultLogger as FETCHDEFAULTLOGGER,
-  addUpdateLogger as ADDUPDATELOGGER,
-  deleteLogger as DELETELOGGER,
   addAppender as ADDAPPENDER,
-  editAppender as EDITAPPENDER,
   addDefaultAppender as ADDDEFAULTAPPENDER,
+  addProcess as ADDPROCESS,
+  addUpdateDefaultLogger as ADDUPDATEDEFAULTLOGGER,
+  addUpdateLogger as ADDUPDATELOGGER,
+  decrementItems as DECREMENTITEMS,
   deleteAppender as DELETEAPPENDER,
   deleteDefaultAppender as DELETEDEFAULTAPPENDER,
-  addUpdateDefaultLogger as ADDUPDATEDEFAULTLOGGER,
   deleteDefaultLogger as DELETEDEFAULTLOGGER,
+  deleteLogger as DELETELOGGER,
+  editAppender as EDITAPPENDER,
   editDefaultAppender as EDITDEFAULTAPPENDER,
+  fetchDefaultLogger as FETCHDEFAULTLOGGER,
+  fetchGlobalConfig as FETCHGLOBALCONFIG,
+  fetchLogger as FETCHLOGGER,
+  healthChanged as HEALTHCHANGED,
+  incrementItems as INCREMENTITEMS,
+  init as INIT,
+  killProcess as KILLPROCESS,
+  processMemoryChanged as PROCESSMEMORYCHANGED,
+  remoteHealthChanged as REMOTEHEALTHCHANGED,
+  removeNode as REMOVENODE,
+  removeProcess as REMOVEPROCESS,
+  unsync as UNSYNC,
+  updateConfigItemWs as UPDATECONFIGITEMWS,
+  updateDone as UPDATEDONE,
+  updateNodeInfo as UPDATENODEINFO,
+  updateStats as UPDATESTATS
 };
