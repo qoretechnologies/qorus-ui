@@ -1,30 +1,30 @@
+import includes from 'lodash/includes';
+import invert from 'lodash/invert';
+import startsWith from 'lodash/startsWith';
+import { browserHistory } from 'react-router';
 // @flow
 import { createAction } from 'redux-actions';
-import startsWith from 'lodash/startsWith';
-import includes from 'lodash/includes';
-import { browserHistory } from 'react-router';
 import shortid from 'shortid';
-import invert from 'lodash/invert';
 
-import * as alerts from '../api/resources/alerts/actions';
-import * as services from '../api/resources/services/actions/specials';
-import * as workflows from '../api/resources/workflows/actions/specials';
-import * as orders from '../api/resources/orders/actions/specials';
-import * as jobs from '../api/resources/jobs/actions/specials';
-import * as instances from '../api/resources/instances/actions';
-import * as groups from '../api/resources/groups/actions';
-import * as remotes from '../api/resources/remotes/actions';
-import * as system from '../api/resources/system/actions';
-import * as health from '../api/resources/health/actions';
-import { notifications } from '../ui/actions';
-import { pipeline } from '../../helpers/apievents';
-import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
-import {
-  getProcessObjectInterfaceId,
-  getProcessObjectInterface,
-} from '../../helpers/system';
 import { INTERFACE_IDS } from '../../constants/interfaces';
+import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
+import { pipeline } from '../../helpers/apievents';
 import { getLoggerIntfcType } from '../../helpers/logger';
+import {
+  getProcessObjectInterface,
+  getProcessObjectInterfaceId,
+} from '../../helpers/system';
+import * as alerts from '../api/resources/alerts/actions';
+import * as groups from '../api/resources/groups/actions';
+import * as health from '../api/resources/health/actions';
+import * as instances from '../api/resources/instances/actions';
+import * as jobs from '../api/resources/jobs/actions/specials';
+import * as orders from '../api/resources/orders/actions/specials';
+import * as remotes from '../api/resources/remotes/actions';
+import * as services from '../api/resources/services/actions/specials';
+import * as system from '../api/resources/system/actions';
+import * as workflows from '../api/resources/workflows/actions/specials';
+import { notifications } from '../ui/actions';
 
 const interfaceActions: Object = {
   workflows,
@@ -50,15 +50,21 @@ const handleEvent = (url, data, dispatch, state) => {
         : item[idKey] == id || item.name === id
     );
   const loggerInterfaces: string[] = state.api.system?.data?.loggerParams?.configurable_systems?.map(
-    logData => logData.logger
+    (logData) => logData.logger
   );
 
-  dt.forEach(async d => {
+  dt.forEach(async (d) => {
     const { info, eventstr, classstr, caller } = d;
 
     switch (eventstr) {
+      case 'NODE_REMOVED': {
+        if (state.api.system.sync) {
+          pipeline(eventstr, system.removeNode, info, dispatch);
+        }
+        break;
+      }
       case 'NODE_INFO':
-        if (state.api.system.sync && state.api.system.isOnDashboard) {
+        if (state.api.system.sync) {
           pipeline(
             eventstr,
             system.updateNodeInfo,
@@ -478,7 +484,7 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'SERVICE_START':
         if (state.api.services.sync) {
           const service = state.api.services.data.find(
-            srv => srv.id === info.serviceid
+            (srv) => srv.id === info.serviceid
           );
 
           if (service) {
@@ -512,7 +518,7 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'WORKFLOW_START':
         if (state.api.workflows.sync) {
           const workflow = state.api.workflows.data.find(
-            wf => wf.id === info.workflowid
+            (wf) => wf.id === info.workflowid
           );
 
           if (workflow) {
@@ -561,7 +567,7 @@ const handleEvent = (url, data, dispatch, state) => {
         }
 
         const workflow = state.api.workflows.data.find(
-          wf => wf.id === info.workflowid
+          (wf) => wf.id === info.workflowid
         );
 
         if (state.api.orders.sync && workflow) {
@@ -592,7 +598,7 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'WORKFLOW_RECOVERED': {
         const workflow = state.api.workflows.data.find(
-          wf => wf.id === info.workflowid
+          (wf) => wf.id === info.workflowid
         );
 
         if (state.api.workflows.sync && workflow) {
@@ -612,12 +618,12 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'WORKFLOW_STATUS_CHANGED': {
         const workflow = state.api.workflows.data.find(
-          wf => wf.id === info.workflowid
+          (wf) => wf.id === info.workflowid
         );
 
         if (state.api.orders.sync) {
           const order = state.api.orders.data.find(
-            ord => ord.workflow_instanceid === info.workflow_instanceid
+            (ord) => ord.workflow_instanceid === info.workflow_instanceid
           );
           const ordersCount = state.api.orders.data.length;
           const currentOrder = state.api.orders.data[0];
@@ -683,7 +689,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'WORKFLOW_DATA_UPDATED': {
         const order = state.api.orders.data.find(
-          ord => ord.id === info.workflow_instanceid
+          (ord) => ord.id === info.workflow_instanceid
         );
 
         if (order && state.api.orders.sync) {
@@ -762,7 +768,7 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'JOB_STOP': {
         const job = state.api.jobs.data.find(
-          jb => jb.id === parseInt(info.jobid, 10)
+          (jb) => jb.id === parseInt(info.jobid, 10)
         );
 
         if (job) {
@@ -777,7 +783,7 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'JOB_START': {
         const job = state.api.jobs.data.find(
-          jb => jb.id === parseInt(info.jobid, 10)
+          (jb) => jb.id === parseInt(info.jobid, 10)
         );
 
         if (job) {
@@ -940,7 +946,7 @@ const handleEvent = (url, data, dispatch, state) => {
           switch (info.type) {
             case 'workflow': {
               const workflow = state.api.workflows.data.find(
-                wf => wf.id === parseInt(info.id, 10)
+                (wf) => wf.id === parseInt(info.id, 10)
               );
 
               if (workflow) {
@@ -958,7 +964,7 @@ const handleEvent = (url, data, dispatch, state) => {
             }
             case 'service': {
               const service = state.api.services.data.find(
-                srv => srv.id === parseInt(info.id, 10)
+                (srv) => srv.id === parseInt(info.id, 10)
               );
 
               if (service) {
@@ -976,7 +982,7 @@ const handleEvent = (url, data, dispatch, state) => {
             }
             case 'job': {
               const job = state.api.jobs.data.find(
-                jb => jb.id === parseInt(info.id, 10)
+                (jb) => jb.id === parseInt(info.id, 10)
               );
 
               if (job) {
@@ -1233,4 +1239,4 @@ const disconnect = () => () => {
   }
 };
 
-export { message, disconnect };
+export { disconnect, message };
