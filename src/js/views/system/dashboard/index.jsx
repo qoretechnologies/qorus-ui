@@ -1,45 +1,57 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import map from 'lodash/map';
-import round from 'lodash/round';
-import { browserHistory } from 'react-router';
 
-import Loader from '../../../components/loader';
-import actions from '../../../store/api/actions';
-import DashboardModule from '../../../components/dashboard_module/index';
-import PaneItem from '../../../components/pane_item';
+import round from 'lodash/round';
 import {
-  statusHealth,
+  FormattedMessage,
+  injectIntl
+} from 'react-intl';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import { createSelector } from 'reselect';
+
+import {
+  Breadcrumbs,
+  Crumb
+} from '../../../components/breadcrumbs';
+import ChartComponent from '../../../components/chart';
+import {
+  Control as Button,
+  Controls as ButtonGroup
+} from '../../../components/controls';
+import DashboardModule from '../../../components/dashboard_module/index';
+import Flex from '../../../components/Flex';
+import Headbar from '../../../components/Headbar';
+import Loader from '../../../components/loader';
+import {
+  MasonryLayout,
+  MasonryPanel
+} from '../../../components/MasonryLayout';
+import MultiDispositionChart from '../../../components/MultiDispositionChart';
+import PaneItem from '../../../components/pane_item';
+import Pull from '../../../components/Pull';
+import { COLORS } from '../../../constants/ui';
+import {
+  formatChartTime,
+  prepareHistory
+} from '../../../helpers/chart';
+import {
   calculateMemory,
   getSlicedRemotes,
+  statusHealth
 } from '../../../helpers/system';
-import ChartComponent from '../../../components/chart';
-import { prepareHistory, formatChartTime } from '../../../helpers/chart';
 import withModal from '../../../hocomponents/modal';
-import SLAModal from './modals/sla';
-import GlobalModal from './modals/global';
 import titleManager from '../../../hocomponents/TitleManager';
-import { COLORS } from '../../../constants/ui';
-import MultiDispositionChart from '../../../components/MultiDispositionChart';
-import Flex from '../../../components/Flex';
-import { MasonryLayout, MasonryPanel } from '../../../components/MasonryLayout';
+import actions from '../../../store/api/actions';
 import Nodes from './dropdowns/Nodes';
-import Headbar from '../../../components/Headbar';
-import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
-import Pull from '../../../components/Pull';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../../components/controls';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import GlobalModal from './modals/global';
+import SLAModal from './modals/sla';
 
 const viewSelector = createSelector(
   [
-    state => state.api.health,
-    state => state.api.system,
-    state => state.ui,
-    state => state.api.currentUser,
+    (state) => state.api.health,
+    (state) => state.api.system,
+    (state) => state.ui,
+    (state) => state.api.currentUser,
   ],
   (health, system, ui, currentUser) => ({
     health,
@@ -81,11 +93,11 @@ export default class Dashboard extends Component {
       this.props.health.data.remote && this.props.health.data.remote.length > 5,
   };
 
-  componentWillMount () {
+  componentWillMount() {
     this.props.dispatch(actions.system.init());
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.dispatch(actions.system.unsync());
   }
 
@@ -113,13 +125,13 @@ export default class Dashboard extends Component {
     });
   };
 
-  hasModule = mod =>
+  hasModule = (mod) =>
     this.props.currentUser.data.storage.settings.dashboardModules.includes(mod);
 
   getModulesCount = () =>
     this.props.currentUser.data.storage.settings.dashboardModules.length;
 
-  render () {
+  render() {
     if (!this.props.health.sync) return <Loader />;
 
     const { system, health, isTablet } = this.props;
@@ -251,7 +263,7 @@ export default class Dashboard extends Component {
                       id: 'stats.global-order-stats',
                     })}
                     orderStats={system.order_stats}
-                    onDispositionChartClick={band => {
+                    onDispositionChartClick={(band) => {
                       this.props.openModal(
                         <GlobalModal
                           onClose={this.props.closeModal}
@@ -260,7 +272,7 @@ export default class Dashboard extends Component {
                         />
                       );
                     }}
-                    onSLAChartClick={band => {
+                    onSLAChartClick={(band) => {
                       this.props.openModal(
                         <SLAModal
                           onClose={this.props.closeModal}
@@ -584,7 +596,7 @@ export default class Dashboard extends Component {
                         system.cluster_info[node].node_load_pct;
 
                       const processName = Object.keys(system.processes).find(
-                        process => system.processes[process].node === node
+                        (process) => system.processes[process].node === node
                       );
 
                       const processes: number = Object.keys(
@@ -602,9 +614,7 @@ export default class Dashboard extends Component {
                             this.handleModuleClick('/system/cluster')
                           }
                         >
-                          <div className="dashboard-data-title">
-                            {system.processes[processName].node}
-                          </div>
+                          <div className="dashboard-data-title">{node}</div>
                           <div className="bottom">
                             <div className="module">
                               <div className="top">{memory}</div>
