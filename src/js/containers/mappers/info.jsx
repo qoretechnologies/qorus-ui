@@ -1,30 +1,37 @@
 /* @flow */
 import React from 'react';
-import compose from 'recompose/compose';
-import pure from 'recompose/pure';
-import lifecycle from 'recompose/lifecycle';
-import withHandlers from 'recompose/withHandlers';
+
+import jsyaml from 'js-yaml';
 import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import lifecycle from 'recompose/lifecycle';
+import pure from 'recompose/pure';
+import withHandlers from 'recompose/withHandlers';
 import { createSelector } from 'reselect';
 
-import MapperDiagram from './diagram/index';
-import MapperCreator from './new_diagram/index';
-import actions from '../../store/api/actions';
-import Loader from '../../components/loader';
 import Alert from '../../components/alert';
 import Author from '../../components/author';
-import InfoTable from '../../components/info_table';
-import Releases from '../releases';
-import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';
 import Box from '../../components/box';
-import Headbar from '../../components/Headbar';
+import {
+  Breadcrumbs,
+  Crumb,
+  CrumbTabs
+} from '../../components/breadcrumbs';
 import Flex from '../../components/Flex';
-import withTabs from '../../hocomponents/withTabs';
-import { SimpleTabs, SimpleTab } from '../../components/SimpleTabs';
+import Headbar from '../../components/Headbar';
+import InfoTable from '../../components/info_table';
+import Loader from '../../components/loader';
+import {
+  SimpleTab,
+  SimpleTabs
+} from '../../components/SimpleTabs';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
-import jsyaml from 'js-yaml';
 import modal from '../../hocomponents/modal';
+import withTabs from '../../hocomponents/withTabs';
+import actions from '../../store/api/actions';
+import Releases from '../releases';
 import DetailModal from './diagram/modals/DetailModal';
+import MapperCreator from './new_diagram/index';
 
 export const providers = {
   type: {
@@ -115,24 +122,25 @@ const MapperInfo = ({
         <SimpleTabs activeTab={tabQuery}>
           <SimpleTab name="diagram">
             <Flex scrollY>
-              {!mapper.valid && (
+              {!mapper.valid ? (
                 <Alert
                   bsStyle="danger"
-                  title="Warning: This mapper contains an error and might not be
-                    rendered correctly"
+                  title="Warning: This mapper contains an error and can not be
+                    rendered!"
                 >
                   {mapper.error}
                 </Alert>
+              ) : (
+                <MapperCreator
+                  inputs={mapper.options.input || {}}
+                  outputs={mapper.options.output || {}}
+                  staticData={mapper.options?.context?.staticdata?.fields || {}}
+                  relations={mapper.fields}
+                  inputUrl={getProviderUrl(mapper.option_source, 'input')}
+                  outputUrl={getProviderUrl(mapper.option_source, 'output')}
+                  onInfoClick={(name) => onInfoClick(mapper.fields[name])}
+                />
               )}
-              <MapperCreator
-                inputs={mapper.options.input || {}}
-                outputs={mapper.options.output || {}}
-                staticData={mapper.options?.context?.staticdata?.fields || {}}
-                relations={mapper.fields}
-                inputUrl={getProviderUrl(mapper.option_source, 'input')}
-                outputUrl={getProviderUrl(mapper.option_source, 'output')}
-                onInfoClick={name => onInfoClick(mapper.fields[name])}
-              />
             </Flex>
           </SimpleTab>
           <SimpleTab name="info">
@@ -161,7 +169,9 @@ const MapperInfo = ({
 
 const metaSelector = (state: Object): Object => state.api.mappers;
 const stateSelector = (state, { mapperId }) =>
-  state.api.mappers.data.find(item => item.mapperid === parseInt(mapperId, 10));
+  state.api.mappers.data.find(
+    (item) => item.mapperid === parseInt(mapperId, 10)
+  );
 
 const mapperInfoSelector = createSelector(
   stateSelector,
@@ -192,7 +202,7 @@ export default compose(
 
       history.go(-1);
     },
-    onInfoClick: ({ openModal, closeModal }) => data => {
+    onInfoClick: ({ openModal, closeModal }) => (data) => {
       openModal(<DetailModal detail={data} onClose={closeModal} />);
     },
   }),
