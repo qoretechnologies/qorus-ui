@@ -1,20 +1,24 @@
 /* @flow */
 import React from 'react';
+
+import {
+  FormattedMessage,
+  injectIntl
+} from 'react-intl';
 import compose from 'recompose/compose';
-import withState from 'recompose/withState';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
 
-import Section from './section';
-import CodeTab from './code';
 import ReleasesTab from '../../containers/releases';
-import Tabs, { Pane } from '../tabs';
-import DependenciesList from './dependencies';
-import InfoTable from '../info_table';
 import Alert from '../alert';
 import Flex from '../Flex';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import InfoTable from '../info_table';
+import Tabs, { Pane } from '../tabs';
+import CodeTab from './code';
+import DependenciesList from './dependencies';
+import Section from './section';
 
 type Props = {
   data: Object,
@@ -50,7 +54,8 @@ const Code: Function = ({
       {selected ? (
         <Flex>
           {selected.type &&
-          (selected.type !== 'code' && selected.type !== 'methods') ? (
+          selected.type !== 'code' &&
+          selected.type !== 'methods' ? (
             <Tabs active="code">
               <Pane name="Code">
                 <CodeTab selected={selected} />
@@ -131,8 +136,10 @@ export default compose(
   }),
   lifecycle({
     componentWillReceiveProps(nextProps) {
-      if (this.props.data !== nextProps.data) {
-        this.props.setSelected(selected => {
+      const oldData = JSON.stringify(this.props.data);
+      const newData = JSON.stringify(nextProps.data);
+      if (oldData !== newData) {
+        this.props.setSelected((selected) => {
           if (!selected || !nextProps.data[selected.type]) return null;
 
           const item = nextProps.data[selected.type].find(

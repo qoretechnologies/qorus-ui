@@ -12,7 +12,7 @@ import { pipeline } from '../../helpers/apievents';
 import { getLoggerIntfcType } from '../../helpers/logger';
 import {
   getProcessObjectInterface,
-  getProcessObjectInterfaceId,
+  getProcessObjectInterfaceId
 } from '../../helpers/system';
 import * as alerts from '../api/resources/alerts/actions';
 import * as groups from '../api/resources/groups/actions';
