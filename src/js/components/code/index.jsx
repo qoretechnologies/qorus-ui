@@ -131,7 +131,9 @@ export default compose(
   }),
   lifecycle({
     componentWillReceiveProps(nextProps) {
-      if (this.props.data !== nextProps.data) {
+      const oldData = JSON.stringify(this.props.data);
+      const newData = JSON.stringify(nextProps.data);
+      if (oldData !== newData) {
         this.props.setSelected(selected => {
           if (!selected || !nextProps.data[selected.type]) return null;
 
