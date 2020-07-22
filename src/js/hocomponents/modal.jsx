@@ -1,6 +1,7 @@
+import React from 'react';
+
 /* @flow */
 import PropTypes from 'prop-types';
-import React from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 
 /**
@@ -16,7 +17,7 @@ export default (): Function => (Component: ReactClass<*>): ReactClass<*> => {
 
     modal: ?ReactClass<*> = null;
 
-    componentWillUnmount () {
+    componentWillUnmount() {
       window.removeEventListener('keyup', this.handleEscPress);
     }
 
@@ -34,7 +35,7 @@ export default (): Function => (Component: ReactClass<*>): ReactClass<*> => {
       window.removeEventListener('keyup', this.handleEscPress);
     };
 
-    handleEscPress = event => {
+    handleEscPress = (event) => {
       event.stopPropagation();
 
       if (event.key === 'Escape') {
@@ -42,7 +43,7 @@ export default (): Function => (Component: ReactClass<*>): ReactClass<*> => {
       }
     };
 
-    render () {
+    render() {
       return (
         <Component
           openModal={this.handleOpenModal}

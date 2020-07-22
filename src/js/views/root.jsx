@@ -1,36 +1,66 @@
+import React, { Component } from 'react';
+
+import debounce from 'lodash/debounce';
 // @flow
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import debounce from 'lodash/debounce';
-import pure from 'recompose/onlyUpdateForKeys';
-import { IntlProvider, addLocaleData, FormattedMessage } from 'react-intl';
-import en from 'react-intl/locale-data/en';
+import { addLocaleData, IntlProvider } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';
+import en from 'react-intl/locale-data/en';
 import ja from 'react-intl/locale-data/ja';
+import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
+import { createSelector } from 'reselect';
 
-import Topbar from '../components/topbar';
-import Sidebar from '../components/sidebar';
+import Flex from '../components/Flex';
 import Footer from '../components/footer';
+import FullPageLoading from '../components/FullPageLoading';
 import { Manager as ModalManager } from '../components/modal';
-import actions from '../store/api/actions';
-import { settings } from '../store/ui/actions';
-import messages from '../intl/messages';
+import Sidebar from '../components/sidebar';
+import Topbar from '../components/topbar';
 import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
-import Flex from '../components/Flex';
+import messages from '../intl/messages';
+import actions from '../store/api/actions';
+import { settings } from '../store/ui/actions';
 import { success, warning } from '../store/ui/bubbles/actions';
-import FullPageLoading from '../components/FullPageLoading';
+
+// eslint-disable-next-line
+const consoleError = console.error.bind(console);
+// eslint-disable-next-line
+console.error = (message, ...args) => {
+  if (
+    typeof message === 'string' &&
+    (message.startsWith('[React Intl] Missing message:') ||
+      message.startsWith('[React Intl] Cannot format message:') ||
+      message.startsWith('[Blueprint] <Popover> onInteraction') ||
+      message.startsWith('Warning: [react-router]'))
+  ) {
+    return;
+  }
+  consoleError(message, ...args);
+};
+
+// eslint-disable-next-line
+const consoleWarn = console.warn.bind(console);
+// eslint-disable-next-line
+console.warn = (message, ...args) => {
+  if (
+    typeof message === 'string' &&
+    (message.startsWith('[Blueprint] <Popover> onInteraction') ||
+      message.startsWith("[Violation] 'setTimeout' handler "))
+  ) {
+    return;
+  }
+  consoleWarn(message, ...args);
+};
 
 addLocaleData([...en, ...cs, ...ja]);
-const systemSelector = state => state.api.system;
-const currentUserSelector = state => state.api.currentUser;
-const menuSelector = state => state.ui.menu;
-const settingsSelector = state => state.ui.settings;
-const healthSelector = state => state.api.health;
-const optionsSelector = state => state.api.systemOptions;
+const systemSelector = (state) => state.api.system;
+const currentUserSelector = (state) => state.api.currentUser;
+const menuSelector = (state) => state.ui.menu;
+const settingsSelector = (state) => state.ui.settings;
+const healthSelector = (state) => state.api.health;
+const optionsSelector = (state) => state.api.systemOptions;
 
 /**
  * Basic layout with global navbar, menu, footer and the main content.
@@ -106,7 +136,7 @@ export default class Root extends Component {
 
   _modal = null;
 
-  getChildContext () {
+  getChildContext() {
     return {
       openModal: (...args) => this._modal.open(...args),
       closeModal: (...args) => this._modal.close(...args),
@@ -115,13 +145,13 @@ export default class Root extends Component {
     };
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     await this.fetchGlobalData();
     this.handleResize();
     window.addEventListener('resize', this.handleResize);
 
     // add listener for esc key to remove the maximize mode
-    window.addEventListener('keyup', event => {
+    window.addEventListener('keyup', (event) => {
       if (event.which === 27) {
         if (this.props.isMaximized) {
           this.props.maximize();
@@ -134,7 +164,7 @@ export default class Root extends Component {
 
       if (window.__whmEventSourceWrapper) {
         for (let key of Object.keys(window.__whmEventSourceWrapper)) {
-          window.__whmEventSourceWrapper[key].addMessageListener(msg => {
+          window.__whmEventSourceWrapper[key].addMessageListener((msg) => {
             if (typeof msg.data === 'string' && msg.data.startsWith('{')) {
               const data = JSON.parse(msg.data);
 
@@ -197,7 +227,7 @@ export default class Root extends Component {
     this.props.fetchHealth();
   };
 
-  refModal = modal => {
+  refModal = (modal) => {
     this._modal = modal;
   };
 
@@ -210,7 +240,7 @@ export default class Root extends Component {
     storeTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
-  render () {
+  render() {
     const {
       currentUser,
       info,
@@ -236,8 +266,8 @@ export default class Root extends Component {
     const locale = currentUser.data.storage.locale
       ? currentUser.data.storage.locale
       : navigator.locale
-        ? navigator.locale
-        : 'en-US';
+      ? navigator.locale
+      : 'en-US';
 
     const { favoriteMenuItems = [] } = currentUser.data.storage;
     const isLightTheme = currentUser.data.storage.theme === 'light';
