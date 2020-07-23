@@ -41,7 +41,7 @@ const StyledFSMState = styled.div`
   width: 180px;
   height: 50px;
   background-color: #fff;
-  z-index: 20;
+  z-index: 9;
   border: 2px solid;
   transition: all 0.2s linear;
 
