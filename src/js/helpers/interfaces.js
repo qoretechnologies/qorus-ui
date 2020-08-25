@@ -1,9 +1,9 @@
-// @flow
-import size from 'lodash/size';
+import includes from 'lodash/includes';
+import isObject from 'lodash/isObject';
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
-import isObject from 'lodash/isObject';
-import includes from 'lodash/includes';
+// @flow
+import size from 'lodash/size';
 
 import { normalizeName } from '../components/utils';
 import { INTERFACE_ID_KEYS, INTERFACE_ID_LINKS } from '../constants/interfaces';
@@ -26,24 +26,20 @@ const pullConfigFromStepinfo: Function = (
 
   stepArray
     .filter((step: Object): boolean => step.config)
-    .forEach(
-      (step: Object): void => {
-        const newConfig: Array<Object> = map(
-          step.config,
-          mapConfigToArray(step.stepid)
-        );
+    .forEach((step: Object): void => {
+      const newConfig: Array<Object> = map(
+        step.config,
+        mapConfigToArray(step.stepid)
+      );
 
-        const belongsTo: string = `${step.name} v${step.version} (${
-          step.stepid
-        }) [${step.steptype}]`;
+      const belongsTo: string = `${step.name} v${step.version} (${step.stepid}) [${step.steptype}]`;
 
-        resultObj[belongsTo] = {
-          id,
-          stepId: step.stepid,
-          data: newConfig,
-        };
-      }
-    );
+      resultObj[belongsTo] = {
+        id,
+        stepId: step.stepid,
+        data: newConfig,
+      };
+    });
 
   return resultObj;
 };
@@ -57,12 +53,12 @@ const rebuildConfigHash: Function = (
   const configObj: Object = pullConfigValues
     ? pullConfigFromStepinfo(configHash, model.id)
     : {
-      [normalizeName(model)]: {
-        id: model.id,
-        data: map(configHash, mapConfigToArray(model.id, isGlobal)),
-        isGlobal,
-      },
-    };
+        [normalizeName(model)]: {
+          id: model.id,
+          data: map(configHash, mapConfigToArray(model.id, isGlobal)),
+          isGlobal,
+        },
+      };
 
   let resultObj = { ...configObj };
 
@@ -86,15 +82,13 @@ const normalizeItem: Function = (item: Object): Object => {
       normalized.name = normalizeName(normalized);
       normalized.normalized = true;
     } else {
-      INTERFACE_ID_KEYS.forEach(
-        (idKey: string): void => {
-          if (idKey in item) {
-            normalized = normalizeId(idKey, item);
-            normalized.name = normalizeName(normalized);
-            normalized.normalized = true;
-          }
+      INTERFACE_ID_KEYS.forEach((idKey: string): void => {
+        if (idKey in item) {
+          normalized = normalizeId(idKey, item);
+          normalized.name = normalizeName(normalized);
+          normalized.normalized = true;
         }
-      );
+      });
     }
   }
 
@@ -162,11 +156,7 @@ const getInstancesCountByFilters = (
 };
 
 export {
-  pullConfigFromStepinfo,
-  rebuildConfigHash,
-  normalizeItem,
-  buildLinkToInterfaceId,
-  objectCollectionToArray,
-  arrayCollectionToObject,
-  getInstancesCountByFilters,
+  arrayCollectionToObject, buildLinkToInterfaceId, getInstancesCountByFilters,
+  normalizeItem, objectCollectionToArray, pullConfigFromStepinfo,
+  rebuildConfigHash
 };

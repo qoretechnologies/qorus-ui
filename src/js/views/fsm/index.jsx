@@ -287,8 +287,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
                         }
                         x1={x1 + 90}
                         y1={y1 + 25}
-                        x2={x2 + 90}
-                        y2={y2 + 25}
+                        {...getTargetStatePosition(x1, y1, x2, y2)}
                       />
                     </>
                   )

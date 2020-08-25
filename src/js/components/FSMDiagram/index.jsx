@@ -1,20 +1,22 @@
 import React, {
-  useRef, useState
+  useEffect, useRef, useState
 } from 'react';
 
 import map from 'lodash/map';
+import maxBy from 'lodash/maxBy';
 import reduce from 'lodash/reduce';
 import { injectIntl } from 'react-intl';
-import useMount from 'react-use/lib/useMount';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
+import { createSelector } from 'reselect';
 import styled from 'styled-components';
 
 import TinyGrid from '../../../img/tiny_grid.png';
 import modal from '../../hocomponents/modal';
-import Box from '../box';
-import Modal from '../modal';
-import Tree from '../tree';
+import actions from '../../store/api/actions';
+import Loader from '../loader';
 import FSMDiagramWrapper from './diagramWrapper';
+import StateModal from './modal';
 import FSMState from './state';
 
 export interface IFSMViewProps {
@@ -126,6 +128,9 @@ const FSMView: React.FC<IFSMViewProps> = ({
   openModal,
   closeModal,
   intl,
+  fsm,
+  fsmName,
+  load,
 }) => {
   const wrapperRef = useRef(null);
 
@@ -136,22 +141,32 @@ const FSMView: React.FC<IFSMViewProps> = ({
     height: 0,
   });
 
-  useMount(() => {
-    const { width, height } = wrapperRef.current.getBoundingClientRect();
+  useEffect(() => {
+    load(fsmName);
+  }, [fsmName]);
 
-    currentXPan = 1000 - width / 2;
-    currentYPan = 1000 - height / 2;
+  useEffect(() => {
+    if (fsm) {
+      const { width, height } = wrapperRef.current.getBoundingClientRect();
 
-    setWrapperDimensions({ width, height });
+      currentXPan = 1000 - width / 2;
+      currentYPan = 1000 - height / 2;
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+      setWrapperDimensions({ width, height });
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-    };
-  });
+      window.addEventListener('keydown', handleKeyDown);
+      window.addEventListener('keyup', handleKeyUp);
+
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        window.removeEventListener('keyup', handleKeyUp);
+      };
+    }
+  }, [fsm]);
+
+  if (!fsm) {
+    return <Loader />;
+  }
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === DIAGRAM_DRAG_KEY) {
@@ -174,7 +189,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
     stateId: string,
     targetId: string
   ): IFSMTransition | null => {
-    const { transitions } = states[stateId];
+    const { transitions } = fsm.states[stateId];
 
     return transitions?.find((transition) => transition.state === targetId);
   };
@@ -184,7 +199,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
   };
 
   const transitions = reduce(
-    states,
+    fsm.states,
     (newTransitions: any[], state: IFSMState, id: string) => {
       if (!state.transitions) {
         return newTransitions;
@@ -198,8 +213,8 @@ const FSMView: React.FC<IFSMViewProps> = ({
           targetState: transition.state,
           x1: state.position.x,
           y1: state.position.y,
-          x2: states[transition.state].position.x,
-          y2: states[transition.state].position.y,
+          x2: fsm.states[transition.state].position.x,
+          y2: fsm.states[transition.state].position.y,
           order: transition.errors ? 0 : 1,
         })
       );
@@ -209,14 +224,61 @@ const FSMView: React.FC<IFSMViewProps> = ({
     []
   ).sort((a, b) => a.order - b.order);
 
+  const getTargetStatePosition = (x1, y1, x2, y2) => {
+    const modifiedX1 = x1 + 10000;
+    const modifiedX2 = x2 + 10000;
+    const modifiedY1 = y1 + 10000;
+    const modifiedY2 = y2 + 10000;
+
+    const sides = [];
+
+    const horizontal = modifiedX1 - modifiedX2;
+    const vertical = modifiedY1 - modifiedY2;
+
+    if (x1 > x2) {
+      sides.push({ side: 'left', value: Math.abs(horizontal) });
+    } else {
+      sides.push({ side: 'right', value: Math.abs(horizontal) });
+    }
+
+    if (y1 > y2) {
+      sides.push({ side: 'top', value: Math.abs(vertical) });
+    } else {
+      sides.push({ side: 'bottom', value: Math.abs(vertical) });
+    }
+
+    const { side } = maxBy(sides, 'value');
+
+    switch (side) {
+      case 'right': {
+        return { x2, y2: y2 + 25 };
+      }
+      case 'left': {
+        return { x2: x2 + 180, y2: y2 + 25 };
+      }
+      case 'bottom': {
+        return { x2: x2 + 90, y2 };
+      }
+      case 'top': {
+        return { x2: x2 + 90, y2: y2 + 50 };
+      }
+      default: {
+        return {
+          x2: 0,
+          y2: 0,
+        };
+      }
+    }
+  };
+
   return (
     <>
       <StyledDiagramWrapper ref={wrapperRef} id="fsm-diagram">
         <FSMDiagramWrapper
           wrapperDimensions={wrapperDimensions}
           setPan={setWrapperPan}
-          isHoldingShiftKey={isHoldingShiftKey}
-          items={map(states, (state) => ({
+          isHoldingShiftKey
+          items={map(fsm.states, (state) => ({
             x: state.position.x,
             y: state.position.y,
           }))}
@@ -225,22 +287,17 @@ const FSMView: React.FC<IFSMViewProps> = ({
             key={JSON.stringify(wrapperDimensions)}
             onClick={() => !isHoldingShiftKey && setSelectedState(null)}
           >
-            {map(states, (state, id) => (
+            {map(fsm.states, (state, id) => (
               <FSMState
                 key={id}
                 {...state}
                 onClick={(id) => {
                   openModal(
-                    <Modal>
-                      <Modal.Header onClose={closeModal}>
-                        {intl.formatMessage({ id: 'global.view-state-detail' })}
-                      </Modal.Header>
-                      <Modal.Body>
-                        <Box top fill scrollY>
-                          <Tree data={states[id]} />
-                        </Box>
-                      </Modal.Body>
-                    </Modal>
+                    <StateModal
+                      onClose={closeModal}
+                      fsmId={fsm.id}
+                      stateId={id}
+                    />
                   );
                 }}
                 id={id}
@@ -287,8 +344,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
                         }
                         x1={x1 + 90}
                         y1={y1 + 25}
-                        x2={x2 + 90}
-                        y2={y2 + 25}
+                        {...getTargetStatePosition(x1, y1, x2, y2)}
                       />
                     </>
                   )
@@ -301,4 +357,17 @@ const FSMView: React.FC<IFSMViewProps> = ({
   );
 };
 
-export default compose(modal(), injectIntl)(FSMView);
+const fsmSelector: Function = (state: Object, props: Object): Object =>
+  state.api.fsms.data.find((fsm: Object) => fsm.name === props.fsmName);
+
+const selector = createSelector([fsmSelector], (fsm) => ({
+  fsm,
+}));
+
+export default compose(
+  connect(selector, {
+    load: actions.fsms.fetch,
+  }),
+  modal(),
+  injectIntl
+)(FSMView);

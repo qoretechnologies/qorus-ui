@@ -1,18 +1,12 @@
 import _ from 'lodash';
 
+import settings from '../../../settings';
+import { DEFAULTS as servicesDefaults } from './services';
 import {
-  extendDefaults,
-  normalizeId,
-  normalizeName,
-  checkAlerts,
-  normalizeWorkflowLib,
-  findMissingBand,
-  addHasAlerts,
-  injectStorageDefaults,
+  addHasAlerts, checkAlerts, extendDefaults, findMissingBand,
+  injectStorageDefaults, normalizeId, normalizeName, normalizeWorkflowLib
 } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
-import { DEFAULTS as servicesDefaults } from './services';
-import settings from '../../../settings';
 
 export default [
   {
@@ -29,10 +23,7 @@ export default [
   {
     name: 'steps',
     url: `${settings.REST_BASE_URL}/steps`,
-    transform: _.flowRight(
-      normalizeName,
-      normalizeId('stepid')
-    ),
+    transform: _.flowRight(normalizeName, normalizeId('stepid')),
   },
   {
     name: 'errors',
@@ -42,7 +33,7 @@ export default [
     name: 'system',
     url: `${settings.REST_BASE_URL}/system`,
     initialState: { data: {} },
-    transform: item => {
+    transform: (item) => {
       if (!item.order_stats) {
         return {
           ...item,
@@ -85,7 +76,7 @@ export default [
       if (missingBands.length !== 0) {
         item.order_stats = [
           ...item.order_stats,
-          ...missingBands.map(label => ({
+          ...missingBands.map((label) => ({
             l: [
               { disposition: 'A', count: 0, pct: 0 },
               { disposition: 'M', count: 0, pct: 0 },
@@ -120,18 +111,18 @@ export default [
   {
     name: 'users',
     url: `${settings.REST_BASE_URL}/users`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'roles',
     url: `${settings.REST_BASE_URL}/roles`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'currentUser',
     url: `${settings.REST_BASE_URL}/users?action=current`,
     initialState: { data: {} },
-    transform: item => injectStorageDefaults(item),
+    transform: (item) => injectStorageDefaults(item),
   },
   {
     name: 'services',
@@ -146,11 +137,7 @@ export default [
   {
     name: 'jobs',
     url: `${settings.REST_BASE_URL}/jobs`,
-    transform: _.flowRight(
-      normalizeName,
-      normalizeId('jobid'),
-      addHasAlerts
-    ),
+    transform: _.flowRight(normalizeName, normalizeId('jobid'), addHasAlerts),
   },
   {
     name: 'orders',
@@ -165,35 +152,32 @@ export default [
   {
     name: 'health',
     url: `${settings.REST_BASE_URL}/system/health`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'props',
     url: `${settings.REST_BASE_URL}/system/props`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'groups',
     url: `${settings.REST_BASE_URL}/groups`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'remotes',
     url: `${settings.REST_BASE_URL}/remote`,
-    transform: _.flowRight(
-      normalizeId('name'),
-      addHasAlerts
-    ),
+    transform: _.flowRight(normalizeId('name'), addHasAlerts),
   },
   {
     name: 'userhttp',
     url: `${settings.REST_BASE_URL}/system/userhttp`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'sqlcache',
     url: `${settings.REST_BASE_URL}/system/sqlcache`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'classes',
@@ -213,52 +197,52 @@ export default [
   {
     name: 'ocmd',
     url: `${settings.REST_BASE_URL}/system/api`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'auth',
     url: `${settings.REST_BASE_URL}/public/login`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'info',
     url: `${settings.REST_BASE_URL}/public/info`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'logout',
     url: `${settings.REST_BASE_URL}/logout`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'jobresults',
     url: `${settings.REST_BASE_URL}/jobresults`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'perms',
     url: `${settings.REST_BASE_URL}/perms/`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'extensions',
     url: `${settings.REST_BASE_URL}/system/ui/extensions`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'mappers',
     url: `${settings.REST_BASE_URL}/mappers`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'valuemaps',
     url: `${settings.REST_BASE_URL}/valuemaps`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'instances',
     url: `${settings.REST_BASE_URL}/jobs`,
-    transform: item => item,
+    transform: (item) => item,
   },
   {
     name: 'orderErrors',
@@ -284,5 +268,10 @@ export default [
   {
     name: 'clients',
     url: `${settings.OAUTH_URL}/clients`,
+  },
+  {
+    name: 'fsms',
+    url: `${settings.REST_BASE_URL}/fsms`,
+    transform: _.flowRight(normalizeId('name')),
   },
 ];

@@ -1,27 +1,22 @@
 // @flow
 import React from 'react';
-import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+
 import map from 'lodash/map';
 import size from 'lodash/size';
-
-import actions from '../../store/api/actions';
-import withDispatch from '../../hocomponents/withDispatch';
-import ExpandableItem from '../ExpandableItem';
-
-import NoDataIf from '../NoDataIf';
-import mapProps from 'recompose/mapProps';
-import { connect } from 'react-redux';
-import includes from 'lodash/includes';
-import modal from '../../hocomponents/modal';
-import Table from './table';
-import reduce from 'lodash/reduce';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../components/controls';
-import withState from 'recompose/withState';
 import { injectIntl } from 'react-intl';
+import compose from 'recompose/compose';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import withState from 'recompose/withState';
+
+import {
+  Control as Button, Controls as ButtonGroup
+} from '../../components/controls';
+import modal from '../../hocomponents/modal';
+import withDispatch from '../../hocomponents/withDispatch';
+import actions from '../../store/api/actions';
+import ExpandableItem from '../ExpandableItem';
+import NoDataIf from '../NoDataIf';
+import Table from './table';
 
 type ConfigItemsContainerProps = {
   items: Object,
@@ -57,10 +52,12 @@ let ExpandableConfigWrapper = ({
       size(configItems.data) ? (
         <ButtonGroup>
           <Button
-            onClick={() => setGrouped(cur => !cur)}
+            onClick={() => setGrouped((cur) => !cur)}
             icon={isGrouped ? 'ungroup-objects' : 'group-objects'}
           >
-            {intl.formatMessage({ id: (isGrouped ? 'button.show-un-grouped' : 'button.show-grouped') })}
+            {intl.formatMessage({
+              id: isGrouped ? 'button.show-un-grouped' : 'button.show-grouped',
+            })}
           </Button>
         </ButtonGroup>
       ) : null
@@ -109,6 +106,8 @@ const ConfigItemsContainer: Function = ({
       onSuccess
     );
   };
+
+  console.log(items);
 
   return (
     <NoDataIf condition={size(items) === 0}>

@@ -11,10 +11,10 @@ import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
 import { pipeline } from '../../helpers/apievents';
 import { getLoggerIntfcType } from '../../helpers/logger';
 import {
-  getProcessObjectInterface,
-  getProcessObjectInterfaceId
+  getProcessObjectInterface, getProcessObjectInterfaceId
 } from '../../helpers/system';
 import * as alerts from '../api/resources/alerts/actions';
+import * as fsms from '../api/resources/fsms/actions';
 import * as groups from '../api/resources/groups/actions';
 import * as health from '../api/resources/health/actions';
 import * as instances from '../api/resources/instances/actions';
@@ -33,6 +33,7 @@ const interfaceActions: Object = {
   system,
   instances,
   remotes,
+  fsms,
 };
 
 const handleEvent = (url, data, dispatch, state) => {
