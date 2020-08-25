@@ -1,10 +1,7 @@
 /* @flow */
 import React from 'react';
 
-import {
-  FormattedMessage,
-  injectIntl
-} from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';

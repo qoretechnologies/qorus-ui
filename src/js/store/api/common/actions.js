@@ -1,7 +1,8 @@
 // @flow
 import { createAction } from 'redux-actions';
-import { fetchWithNotifications, put, get, del } from '../utils';
+
 import settings from '../../../settings';
+import { del, fetchWithNotifications, get, put } from '../utils';
 
 const updateConfigItemAction: Function = (intfc: string): Function =>
   createAction(
@@ -18,6 +19,7 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
         WORKFLOWS: stepId ? 'steps' : 'workflows',
         SERVICES: 'services',
         JOBS: 'jobs',
+        FSMS: 'fsms',
       };
 
       const value = newValue || 'null';
@@ -25,8 +27,9 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       const url =
         intfc === 'SYSTEM'
           ? `${settings.REST_BASE_URL}/system/config/${configItemName}?action=yaml`
-          : `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}/${stepId ||
-              id}/config/${configItemName}?action=yaml`;
+          : `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}/${
+              stepId || id
+            }/config/${configItemName}?action=yaml`;
 
       fetchWithNotifications(
         async (): Promise<*> => {
@@ -64,6 +67,7 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
         WORKFLOWS: stepId ? 'steps' : 'workflows',
         SERVICES: 'services',
         JOBS: 'jobs',
+        FSMS: 'fsms',
       };
 
       let realId: number = stepId || id;
@@ -90,7 +94,7 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
   );
 
 const updateBasicDataAction: Function = (intfc: string): Function =>
-  createAction(`${intfc}_UPDATEBASICDATA`, events => ({ events }));
+  createAction(`${intfc}_UPDATEBASICDATA`, (events) => ({ events }));
 
 const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
   createAction(
@@ -136,44 +140,38 @@ const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
   );
 
 const addUpdateLoggerAction: Function = (intfc: string): Function =>
-  createAction(`${intfc.toUpperCase()}_ADDUPDATELOGGER`, events => ({
+  createAction(`${intfc.toUpperCase()}_ADDUPDATELOGGER`, (events) => ({
     events,
   }));
 
 const deleteLoggerAction: Function = (intfc: string): Function =>
-  createAction(`${intfc.toUpperCase()}_DELETELOGGER`, events => ({
+  createAction(`${intfc.toUpperCase()}_DELETELOGGER`, (events) => ({
     events,
   }));
 
 const addAppenderAction: Function = (intfc: string): Function =>
-  createAction(`${intfc.toUpperCase()}_ADDAPPENDER`, events => ({
+  createAction(`${intfc.toUpperCase()}_ADDAPPENDER`, (events) => ({
     events,
   }));
 
 const editAppenderAction: Function = (intfc: string): Function =>
-  createAction(`${intfc.toUpperCase()}_EDITAPPENDER`, events => ({
+  createAction(`${intfc.toUpperCase()}_EDITAPPENDER`, (events) => ({
     events,
   }));
 
 const deleteAppenderAction: Function = (intfc: string): Function =>
-  createAction(`${intfc.toUpperCase()}_DELETEAPPENDER`, events => ({
+  createAction(`${intfc.toUpperCase()}_DELETEAPPENDER`, (events) => ({
     events,
   }));
 
 const updateConfigItemWsCommon: Function = (intfc: string): Function =>
-  createAction(`${intfc.toUpperCase()}_UPDATECONFIGITEMWS`, events => ({
+  createAction(`${intfc.toUpperCase()}_UPDATECONFIGITEMWS`, (events) => ({
     events,
   }));
 
 export {
-  updateConfigItemAction,
-  updateBasicDataAction,
-  fetchLoggerAction,
-  addUpdateLoggerAction,
-  deleteLoggerAction,
-  addAppenderAction,
-  editAppenderAction,
-  deleteAppenderAction,
-  updateConfigItemWsCommon,
-  deleteConfigItemAction,
+  addAppenderAction, addUpdateLoggerAction, deleteAppenderAction,
+  deleteConfigItemAction, deleteLoggerAction, editAppenderAction,
+  fetchLoggerAction, updateBasicDataAction, updateConfigItemAction,
+  updateConfigItemWsCommon
 };

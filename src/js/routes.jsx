@@ -1,21 +1,22 @@
 /* @flow */
 import React from 'react';
+
+import Loadable from 'react-loadable';
+import { connect } from 'react-redux';
+import { IndexRedirect, Redirect, Route, Router } from 'react-router';
 import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
-import { connect } from 'react-redux';
-import { Route, Router, IndexRedirect, Redirect } from 'react-router';
-import Loadable from 'react-loadable';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
-import Root from './views/root';
+import FullPageLoading from './components/FullPageLoading';
+import Loader from './components/loader';
+import { hasPlugin } from './helpers/system';
 import sync from './hocomponents/sync';
 import websocket from './hocomponents/websocket';
 import actions from './store/api/actions';
 import * as events from './store/apievents/actions';
-import Loader from './components/loader';
+import Root from './views/root';
 import System from './views/system';
-import FullPageLoading from './components/FullPageLoading';
-import { hasPlugin } from './helpers/system';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 const Login = Loadable({
   loader: () => import(/* webpackChunkName: "login" */ './views/auth'),
@@ -143,7 +144,7 @@ class AppInfo extends React.Component {
     routerProps: Object,
   } = this.props;
 
-  componentDidMount () {
+  componentDidMount() {
     const { noauth } = this.props.info.data;
     const token = window.localStorage.getItem('token');
 
@@ -194,7 +195,7 @@ class AppInfo extends React.Component {
     logout(replace);
   };
 
-  render () {
+  render() {
     let { info, plugins, routerProps, systemSync } = this.props;
     const token: string = window.localStorage.getItem('token');
 
@@ -239,11 +240,11 @@ class AppInfo extends React.Component {
             ) : null}
             {hasPlugin('oauth2', plugins) &&
             process.env.NODE_ENV === 'development' ? (
-                <Route
-                  path="/plugins/oauth2/code"
-                  component={AuthenticateCodeView}
-                />
-              ) : null}
+              <Route
+                path="/plugins/oauth2/code"
+                component={AuthenticateCodeView}
+              />
+            ) : null}
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
               <Route path="alerts" component={System.Alerts} />
@@ -293,7 +294,7 @@ class AppInfo extends React.Component {
 
 export default compose(
   connect(
-    state => ({
+    (state) => ({
       info: state.api.info,
       plugins: state.api.system.data.plugins,
       systemSync: state.api.system.sync,

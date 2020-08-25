@@ -11,7 +11,10 @@
 
 .breadcrumb-tabs {
   overflow: hidden;
-  margin-left: 15px;
+
+  &:not(:first-child) {
+    margin-left: 15px;
+  }
 
   .bp3-popover-target:not(:first-child) {
     .breadcrumb-tab {

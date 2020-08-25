@@ -1,46 +1,44 @@
 import 'whatwg-fetch';
-import RESOURCES from './resources';
-import * as workflowActions from './resources/workflows/actions';
-import * as stepActions from './resources/steps/actions';
-import * as errorActions from './resources/errors/actions';
-import * as serviceActions from './resources/services/actions';
-import * as jobActions from './resources/jobs/actions';
-import * as orderActions from './resources/orders/actions';
-import * as optionActions from './resources/options/actions';
-import * as propActions from './resources/props/actions';
-import * as groupsActions from './resources/groups/actions';
-import * as logoutActions from './resources/logout/actions';
-import * as alertsActions from './resources/alerts/actions';
-import * as remoteActions from './resources/remotes/actions';
-import * as sqlcacheActions from './resources/sqlcache/actions';
-import * as usersActions from './resources/users/actions';
-import * as rolesActions from './resources/roles/actions';
-import * as permsActions from './resources/perms/actions';
-import * as healthActions from './resources/health/actions';
-import * as currentUserActions from './resources/currentUser/actions';
-import * as valuemapsActions from './resources/valuemaps/actions';
-import * as extensionsActions from './resources/extensions/actions';
-import * as orderErrorsActions from './resources/orderErrors/actions';
-import * as releasesActions from './resources/releases/actions';
-import * as slasActions from './resources/slas/actions';
-import * as slaEventsActions from './resources/slas/events/actions';
-import * as slaPerfActions from './resources/slas/perf/actions';
-import * as systemActions from './resources/system/actions';
-import * as instancesActions from './resources/instances/actions';
-import * as clientsActions from './resources/clients/actions';
-
-import {
-  combineResourceActions,
-  createResourceActions,
-  createApiActions,
-  fetchJson,
-} from './utils';
 
 import qs from 'qs';
 
+import RESOURCES from './resources';
+import * as alertsActions from './resources/alerts/actions';
+import * as clientsActions from './resources/clients/actions';
+import * as currentUserActions from './resources/currentUser/actions';
+import * as errorActions from './resources/errors/actions';
+import * as extensionsActions from './resources/extensions/actions';
+import * as fsmsActions from './resources/fsms/actions';
+import * as groupsActions from './resources/groups/actions';
+import * as healthActions from './resources/health/actions';
+import * as instancesActions from './resources/instances/actions';
+import * as jobActions from './resources/jobs/actions';
+import * as logoutActions from './resources/logout/actions';
+import * as optionActions from './resources/options/actions';
+import * as orderErrorsActions from './resources/orderErrors/actions';
+import * as orderActions from './resources/orders/actions';
+import * as permsActions from './resources/perms/actions';
+import * as propActions from './resources/props/actions';
+import * as releasesActions from './resources/releases/actions';
+import * as remoteActions from './resources/remotes/actions';
+import * as rolesActions from './resources/roles/actions';
+import * as serviceActions from './resources/services/actions';
+import * as slasActions from './resources/slas/actions';
+import * as slaEventsActions from './resources/slas/events/actions';
+import * as slaPerfActions from './resources/slas/perf/actions';
+import * as sqlcacheActions from './resources/sqlcache/actions';
+import * as stepActions from './resources/steps/actions';
+import * as systemActions from './resources/system/actions';
+import * as usersActions from './resources/users/actions';
+import * as valuemapsActions from './resources/valuemaps/actions';
+import * as workflowActions from './resources/workflows/actions';
+import {
+  combineResourceActions, createApiActions, createResourceActions, fetchJson
+} from './utils';
+
 export const DEFAULT_ACTIONS = {
   FETCH: {
-    action: url => (params, id) => {
+    action: (url) => (params, id) => {
       let newUrl = url;
 
       if (id) {
@@ -57,7 +55,7 @@ export const DEFAULT_ACTIONS = {
     meta: (params, id) => ({ params, id }),
   },
   ACTION: {
-    action: url => (params, id, urlParams) =>
+    action: (url) => (params, id, urlParams) =>
       fetchJson(
         'PUT',
         id ? `${url}/${id}` : `${url}/${urlParams || ''}`,
@@ -66,17 +64,17 @@ export const DEFAULT_ACTIONS = {
     meta: (params, id) => ({ params, id }),
   },
   BATCH_ACTION: {
-    action: url => (action, ids, query = '', params, key = 'ids') =>
+    action: (url) => (action, ids, query = '', params, key = 'ids') =>
       fetchJson('PUT', `${url}?action=${action}&${key}=${ids}&${query}`),
     meta: (action, ids, query, params) => ({ action, ids, query, params }),
   },
   UPDATE: {
-    action: url => (params, id) =>
+    action: (url) => (params, id) =>
       fetchJson('POST', id ? `${url}/${id}` : url, params),
     meta: (params, id) => ({ params, id }),
   },
   REMOVE: {
-    action: url => (params, id, urlParams) =>
+    action: (url) => (params, id, urlParams) =>
       fetchJson('DELETE', id ? `${url}/${id}` : `${url}/${urlParams}`, params),
     meta: (params, id) => ({ params, id }),
   },
@@ -135,7 +133,9 @@ Object.assign(actions.systemOptions, optionActions);
 
 Object.assign(actions.clients, clientsActions);
 
-Object.keys(serviceActions.delegates).forEach(a => {
+Object.assign(actions.fsms, fsmsActions);
+
+Object.keys(serviceActions.delegates).forEach((a) => {
   actions.services[a] = serviceActions.delegates[a](actions);
 });
 Object.assign(actions.services, serviceActions.specials);
@@ -144,11 +144,11 @@ actions.jobs = { ...actions.jobs, ...jobActions.specials };
 
 Object.assign(actions.logout, logoutActions);
 
-Object.keys(alertsActions).forEach(a => {
+Object.keys(alertsActions).forEach((a) => {
   actions.alerts[a] = alertsActions[a];
 });
 
-Object.keys(sqlcacheActions).forEach(a => {
+Object.keys(sqlcacheActions).forEach((a) => {
   actions.sqlcache[a] = sqlcacheActions[a];
 });
 

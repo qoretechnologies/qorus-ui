@@ -1,12 +1,12 @@
 // @flow
 import React from 'react';
+
 import pure from 'recompose/onlyUpdateForKeys';
 
-import SourceCode from '../../components/source_code';
 import Loader from '../../components/loader';
-
-import CodeAreaTitle from './title';
+import SourceCode from '../../components/source_code';
 import Flex from '../Flex';
+import FSMView from '../FSMDiagram';
 import InfoHeader from '../InfoHeader';
 
 type Props = {
@@ -23,7 +23,7 @@ class CodeTab extends React.Component {
     height: this.props.height || 'auto',
   };
 
-  componentWillMount() {
+  async componentWillMount() {
     window.addEventListener('resize', this.recalculateSize);
   }
 
@@ -65,9 +65,15 @@ class CodeTab extends React.Component {
         {selected.loading ? (
           <Loader />
         ) : (
-          <SourceCode handleRef={this.handleRef} height={height}>
-            {selected.code}
-          </SourceCode>
+          <>
+            {selected.type === 'fsm' ? (
+              <FSMView fsmName={this.props.selected.item.name} />
+            ) : (
+              <SourceCode handleRef={this.handleRef} height={height}>
+                {selected.code}
+              </SourceCode>
+            )}
+          </>
         )}
       </Flex>
     );

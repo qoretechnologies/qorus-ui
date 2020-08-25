@@ -1,18 +1,12 @@
-import {
-  setUpdatedToNull,
-  updateItemWithId,
-  updateItemWithName,
-} from '../utils';
-import { formatAppender } from '../../../helpers/logger';
 import isArray from 'lodash/isArray';
 
+import { formatAppender } from '../../../helpers/logger';
+import {
+  setUpdatedToNull, updateItemWithId, updateItemWithName
+} from '../utils';
+
 const updateConfigItemWsCommon = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     let newState = { ...state };
     let newData = newState.data;
 
@@ -68,18 +62,13 @@ const updateConfigItemWsCommon = {
 };
 
 const processStartedReducer = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     if (state && state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach(dt => {
+      events.forEach((dt) => {
         newData = updateItemWithId(
           dt.id,
           { process: dt.info, _updated: true },
@@ -95,18 +84,13 @@ const processStartedReducer = {
 };
 
 const processStoppedReducer = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     if (state && state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach(dt => {
+      events.forEach((dt) => {
         newData = updateItemWithId(
           dt.id,
           { process: null, _updated: true },
@@ -122,18 +106,13 @@ const processStoppedReducer = {
 };
 
 const basicDataUpdatedReducer = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     if (state && state.sync) {
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach(dt => {
+      events.forEach((dt) => {
         newData = updateItemWithId(
           dt.id,
           { ...dt.info, _updated: true },
@@ -149,12 +128,7 @@ const basicDataUpdatedReducer = {
 };
 
 const loggerReducer = {
-  next (
-    state,
-    {
-      payload: { logger, appenders, id, empty },
-    }
-  ) {
+  next(state, { payload: { logger, appenders, id, empty } }) {
     let data;
     let editedData;
     const isSystem = !isArray(state.data);
@@ -198,12 +172,7 @@ const loggerReducer = {
 };
 
 const addUpdateLoggerReducer = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     if (state && state.sync) {
       // Check if this is system or interfaces
       const isSystem = !isArray(state.data);
@@ -219,7 +188,7 @@ const addUpdateLoggerReducer = {
         newData = [...state.logs];
       }
 
-      events.forEach(dt => {
+      events.forEach((dt) => {
         let itemUpdate;
 
         if (dt.isNew) {
@@ -233,7 +202,7 @@ const addUpdateLoggerReducer = {
           };
         } else {
           // Get the current items loggerData
-          const { loggerData } = newData.find(item => item.id === dt.id);
+          const { loggerData } = newData.find((item) => item.id === dt.id);
 
           itemUpdate = {
             isUsingDefaultLogger: false,
@@ -261,12 +230,7 @@ const addUpdateLoggerReducer = {
 
 // Deleting CONCRETE logger
 const deleteLoggerReducer = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     if (state && state.sync) {
       // If this is under system
       const isSystem = !isArray(state.data);
@@ -280,7 +244,7 @@ const deleteLoggerReducer = {
         newData = [...state.logs];
       }
       // Loop through the events
-      events.forEach(dt => {
+      events.forEach((dt) => {
         newData = updateItemWithId(
           dt.id,
           {
@@ -305,12 +269,7 @@ const deleteLoggerReducer = {
 };
 
 const addAppenderReducer = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     if (state && state.sync) {
       const isSystem = !isArray(state.data);
       let newData;
@@ -322,7 +281,7 @@ const addAppenderReducer = {
         newData = [...state.logs];
       }
       // Go through the events
-      events.forEach(dt => {
+      events.forEach((dt) => {
         // Get the interface loggerData
         const { loggerData } = newData.find(
           (datum: Object) => datum.id === dt.id
@@ -345,12 +304,7 @@ const addAppenderReducer = {
 };
 
 const editAppenderReducer = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     if (state && state.sync) {
       const isSystem = !isArray(state.data);
       let newData;
@@ -362,13 +316,13 @@ const editAppenderReducer = {
         newData = [...state.logs];
       }
       // Go through the events
-      events.forEach(dt => {
+      events.forEach((dt) => {
         // Get the interface loggerData
         const { loggerData } = newData.find(
           (datum: Object) => datum.id === dt.id
         );
         // Add the new appender to the loggerData
-        loggerData.appenders = loggerData.appenders.map(appender => {
+        loggerData.appenders = loggerData.appenders.map((appender) => {
           if (appender.id === dt.logger_appenderid) {
             return formatAppender(dt);
           }
@@ -392,12 +346,7 @@ const editAppenderReducer = {
 };
 
 const deleteAppenderReducer = {
-  next (
-    state,
-    {
-      payload: { events },
-    }
-  ) {
+  next(state, { payload: { events } }) {
     if (state && state.sync) {
       const isSystem = !isArray(state.data);
       let newData;
@@ -409,14 +358,14 @@ const deleteAppenderReducer = {
         newData = [...state.logs];
       }
 
-      events.forEach(dt => {
+      events.forEach((dt) => {
         // Get the interface loggerData
         const { loggerData } = newData.find(
           (datum: Object) => datum.id === dt.id
         );
         // Remove the appender
         loggerData.appenders = loggerData.appenders.filter(
-          appender => appender.id !== dt.logger_appenderid
+          (appender) => appender.id !== dt.logger_appenderid
         );
         // Update the data
         newData = updateItemWithId(dt.interfaceid, { loggerData }, newData);
@@ -434,14 +383,8 @@ const deleteAppenderReducer = {
 };
 
 export {
-  processStartedReducer,
-  processStoppedReducer,
-  basicDataUpdatedReducer,
-  loggerReducer,
-  addUpdateLoggerReducer,
-  deleteLoggerReducer,
-  addAppenderReducer,
-  editAppenderReducer,
-  deleteAppenderReducer,
-  updateConfigItemWsCommon,
+  addAppenderReducer, addUpdateLoggerReducer, basicDataUpdatedReducer,
+  deleteAppenderReducer, deleteLoggerReducer, editAppenderReducer,
+  loggerReducer, processStartedReducer, processStoppedReducer,
+  updateConfigItemWsCommon
 };
