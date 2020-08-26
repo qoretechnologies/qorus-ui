@@ -1,45 +1,38 @@
 // @flow
 import React, { Component } from 'react';
 
-import Modal from '../modal';
-import Box from '../box';
-import ContentByType from '../ContentByType';
-import {
-  Icon,
-  TextArea,
-  Popover,
-  Button as Btn,
-  ButtonGroup as BtnGrp,
-  Intent,
-  Position,
-  Tooltip,
-  ControlGroup,
-  InputGroup,
-} from '@blueprintjs/core';
-import DatePicker from '../datepicker';
-import Dropdown, { Item, Control as DControl } from '../../components/dropdown';
-import { getLineCount } from '../../helpers/system';
-import Alert from '../alert';
-import Tree from '../tree';
-import settings from '../../settings';
-import { get } from '../../store/api/utils';
-import Loader from '../loader';
 import jsyaml from 'js-yaml';
-import moment from 'moment';
-import { DATE_FORMATS } from '../../constants/dates';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../components/controls';
-import Pull from '../Pull';
+import isNull from 'lodash/isNull';
 import map from 'lodash/map';
 import pickBy from 'lodash/pickBy';
-import isNull from 'lodash/isNull';
-import Tabs, { Pane } from '../tabs';
+import moment from 'moment';
 import ReactMarkdown from 'react-markdown';
+
+import {
+  Button as Btn, ButtonGroup as BtnGrp, ControlGroup, InputGroup, Intent,
+  Popover, Position, TextArea, Tooltip
+} from '@blueprintjs/core';
+
+import {
+  Control as Button, Controls as ButtonGroup
+} from '../../components/controls';
+import Dropdown, {
+  Control as DControl, Item
+} from '../../components/dropdown';
+import { DATE_FORMATS } from '../../constants/dates';
+import { getLineCount } from '../../helpers/system';
+import settings from '../../settings';
+import { get } from '../../store/api/utils';
+import Alert from '../alert';
+import Box from '../box';
+import ContentByType from '../ContentByType';
 import AutoField from '../Field/auto';
-import { validateField, maybeParseYaml } from '../Field/validations';
-import { getItemType } from './table';
+import { validateField } from '../Field/validations';
+import Loader from '../loader';
+import Modal from '../modal';
+import Pull from '../Pull';
+import Tabs, { Pane } from '../tabs';
+import Tree from '../tree';
 
 type Props = {
   onClose: Function,
@@ -55,7 +48,7 @@ type Props = {
 export default class ConfigItemsModal extends Component {
   props: Props = this.props;
 
-  getTemplateType = value => {
+  getTemplateType = (value) => {
     if (value && value.toString().startsWith('$')) {
       const [type] = value.split(':');
 
@@ -65,7 +58,7 @@ export default class ConfigItemsModal extends Component {
     return 'config';
   };
 
-  getTemplateKey = value => {
+  getTemplateKey = (value) => {
     if (value && value.toString().startsWith('$')) {
       const [_type, key] = value.split(':');
 
@@ -173,11 +166,11 @@ export default class ConfigItemsModal extends Component {
     );
   };
 
-  renderAllowedItems: Function = item => {
+  renderAllowedItems: Function = (item) => {
     if (this.state.type === 'hash' || this.state.type === '*hash') {
       return (
         <React.Fragment>
-          {item.allowed_values.map(value => (
+          {item.allowed_values.map((value) => (
             <Tree data={value} compact noControls expanded />
           ))}
         </React.Fragment>
@@ -190,8 +183,8 @@ export default class ConfigItemsModal extends Component {
           Please select from predefined values
         </DControl>
         {item.allowed_values
-          .filter(item => item)
-          .map(value => (
+          .filter((item) => item)
+          .map((value) => (
             <Item
               title={jsyaml.safeLoad(value)}
               onClick={(event, title) => {
@@ -207,8 +200,12 @@ export default class ConfigItemsModal extends Component {
     );
   };
 
-  removeQuotes: (s: string) => string = s => {
-    return s && typeof s === 'string' ? s.replace(/"/g, '') : s;
+  removeQuotes: (s: string) => string = (s) => {
+    if (s[0] === '"' && s[s.length - 1] === '"') {
+      return s && typeof s === 'string' ? s.slice(1, -1) : s;
+    }
+
+    return s;
   };
 
   renderValueContent = (): React.Element<any> => {
@@ -239,10 +236,10 @@ export default class ConfigItemsModal extends Component {
         name="configItem"
         {...{ 'type-depends-on': true }}
         value={this.removeQuotes(this.state.value)}
-        t={s => s}
+        t={(s) => s}
         type="auto"
         disabled={!!item.allowed_values}
-        requestFieldData={field =>
+        requestFieldData={(field) =>
           field === 'can_be_undefined'
             ? item.type.startsWith('*')
             : item.type.replace('*', '')
@@ -264,7 +261,7 @@ export default class ConfigItemsModal extends Component {
     return (
       <Modal
         hasFooter
-        onEnterPress={event => {
+        onEnterPress={(event) => {
           if (event.srcElement.tagName !== 'TEXTAREA') {
             this.handleSaveClick();
           }
@@ -292,7 +289,7 @@ export default class ConfigItemsModal extends Component {
                   <>
                     <Dropdown>
                       <DControl>{item?.name || 'Please select'}</DControl>
-                      {map(globalConfigItems, data => (
+                      {map(globalConfigItems, (data) => (
                         <Item
                           title={data.name}
                           onClick={async (event, name) => {
