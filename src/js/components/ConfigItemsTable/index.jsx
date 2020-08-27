@@ -107,8 +107,6 @@ const ConfigItemsContainer: Function = ({
     );
   };
 
-  console.log(items);
-
   return (
     <NoDataIf condition={size(items) === 0}>
       {() => (

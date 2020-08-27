@@ -274,4 +274,9 @@ export default [
     url: `${settings.REST_BASE_URL}/fsms`,
     transform: _.flowRight(normalizeId('name')),
   },
+  {
+    name: 'pipelines',
+    url: `${settings.REST_BASE_URL}/pipelines`,
+    transform: _.flowRight(normalizeId('name')),
+  },
 ];

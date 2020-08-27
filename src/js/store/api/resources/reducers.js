@@ -26,3 +26,4 @@ export * as health from './health/reducers';
 export * as instances from './instances/reducers';
 export * as clients from './clients/reducers';
 export * as fsms from './fsms/reducers';
+export * as pipelines from './pipelines/reducers';

@@ -19,6 +19,7 @@ import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
+import { ModalContext } from '../context/modal';
 import messages from '../intl/messages';
 import actions from '../store/api/actions';
 import { settings } from '../store/ui/actions';
@@ -126,6 +127,30 @@ export default class Root extends Component {
     sendWarning: Function,
     menu: Object,
   } = this.props;
+
+  state = {
+    modals: [],
+  };
+
+  addModal = (modal) => {
+    this.setState((state) => ({
+      ...state,
+      modals: [...state.modals, modal],
+    }));
+  };
+
+  removeModal = () => {
+    this.setState((state) => {
+      const modals = [...state.modals];
+
+      modals.pop();
+
+      return {
+        ...state,
+        modals,
+      };
+    });
+  };
 
   static childContextTypes = {
     openModal: PropTypes.func,
@@ -274,45 +299,53 @@ export default class Root extends Component {
 
     return (
       <IntlProvider messages={messages(locale)} locale={locale}>
-        <div className={`root ${isMaximized && 'maximized'}`}>
-          {!isMaximized && (
-            <Topbar
-              onMaximizeClick={maximize}
-              info={info}
-              health={health}
-              locale={locale}
-              isTablet={isTablet}
-              light={isLightTheme}
-              onThemeClick={this.onThemeChange}
-              user={currentUser.data}
-              location={location}
-              sendWarning={this.props.sendWarning}
-            />
-          )}
-          <div className="root__center">
+        <ModalContext.Provider
+          value={{
+            addModal: this.addModal,
+            removeModal: this.removeModal,
+            modals: this.state.modals,
+          }}
+        >
+          <div className={`root ${isMaximized && 'maximized'}`}>
             {!isMaximized && (
-              <Sidebar
-                isLight={isLightTheme}
-                isCollapsed={!this.props.sidebarOpen}
-                toggleMenu={this.toggleMenu}
+              <Topbar
+                onMaximizeClick={maximize}
+                info={info}
+                health={health}
+                locale={locale}
                 isTablet={isTablet}
-                location={this.props.location}
-                menu={menu.data}
-                favoriteItems={favoriteMenuItems}
-                plugins={info.plugins}
+                light={isLightTheme}
+                onThemeClick={this.onThemeChange}
+                user={currentUser.data}
+                location={location}
+                sendWarning={this.props.sendWarning}
               />
             )}
-            <Flex className="section" scrollX>
-              <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
-            </Flex>
+            <div className="root__center">
+              {!isMaximized && (
+                <Sidebar
+                  isLight={isLightTheme}
+                  isCollapsed={!this.props.sidebarOpen}
+                  toggleMenu={this.toggleMenu}
+                  isTablet={isTablet}
+                  location={this.props.location}
+                  menu={menu.data}
+                  favoriteItems={favoriteMenuItems}
+                  plugins={info.plugins}
+                />
+              )}
+              <Flex className="section" scrollX>
+                <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
+              </Flex>
+            </div>
+            {!isMaximized && (
+              <Footer path={this.props.location.pathname} info={info.data} />
+            )}
+            <ModalManager />
+            <Notifications />
+            <Bubbles />
           </div>
-          {!isMaximized && (
-            <Footer path={this.props.location.pathname} info={info.data} />
-          )}
-          <ModalManager ref={this.refModal} />
-          <Notifications />
-          <Bubbles />
-        </div>
+        </ModalContext.Provider>
       </IntlProvider>
     );
   }

@@ -91,7 +91,7 @@ const StyledDiagramWrapper = styled.div`
 const StyledDiagram = styled.div`
   width: ${DIAGRAM_SIZE}px;
   height: ${DIAGRAM_SIZE}px;
-  background: ${({ path }) => `url(${`${TinyGrid}`})`};
+  background: ${`url(${`${TinyGrid}`})`};
   display: flex;
   align-items: center;
   justify-content: center;
