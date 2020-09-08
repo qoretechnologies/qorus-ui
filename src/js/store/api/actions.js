@@ -18,6 +18,7 @@ import * as optionActions from './resources/options/actions';
 import * as orderErrorsActions from './resources/orderErrors/actions';
 import * as orderActions from './resources/orders/actions';
 import * as permsActions from './resources/perms/actions';
+import * as pipelinesActions from './resources/pipelines/actions';
 import * as propActions from './resources/props/actions';
 import * as releasesActions from './resources/releases/actions';
 import * as remoteActions from './resources/remotes/actions';
@@ -134,6 +135,8 @@ Object.assign(actions.systemOptions, optionActions);
 Object.assign(actions.clients, clientsActions);
 
 Object.assign(actions.fsms, fsmsActions);
+
+Object.assign(actions.pipelines, pipelinesActions);
 
 Object.keys(serviceActions.delegates).forEach((a) => {
   actions.services[a] = serviceActions.delegates[a](actions);

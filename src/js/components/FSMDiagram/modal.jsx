@@ -9,6 +9,7 @@ import { rebuildConfigHash } from '../../helpers/interfaces';
 import Box from '../box';
 import ConfigItemsTable from '../ConfigItemsTable';
 import Modal from '../modal';
+import PipelineDiagram from '../PipelineDiagram';
 import Tabs, { Pane } from '../tabs';
 import Tree from '../tree';
 
@@ -35,26 +36,36 @@ const StateModal = ({ onClose, intl, fsmId, stateId, fsm }) => {
     return state;
   };
 
+  const state = fsm.states[stateId];
+
   return (
-    <Modal width="60vw" height="50vh">
+    <Modal width="60vw" height="700">
       <Modal.Header onClose={onClose}>
-        {intl.formatMessage({ id: 'global.view-state-detail' })}
+        {intl.formatMessage({ id: 'global.view-state-detail' })} {state.name}
       </Modal.Header>
       <Modal.Body>
         <Box top fill>
-          <Tabs active="info">
-            <Pane name="Info">
-              <Tree data={fsm.states[stateId]} />
-            </Pane>
+          <Tabs
+            active={state.action.type === 'pipeline' ? 'pipeline' : 'config'}
+          >
+            {state.action.type === 'pipeline' && (
+              <Pane name="Pipeline">
+                <br />
+                <h4>{state.action.value}</h4>
+                <br />
+                <PipelineDiagram pipeName={state.action.value} />
+              </Pane>
+            )}
             <Pane name="Config">
               <ConfigItemsTable
-                items={rebuildConfigHash(
-                  getConfigItemsForState(fsm.states[stateId])
-                )}
+                items={rebuildConfigHash(getConfigItemsForState(state))}
                 intrf="fsms"
                 intrfId={fsmId}
                 stateId={stateId}
               />
+            </Pane>
+            <Pane name="Info">
+              <Tree data={state} />
             </Pane>
           </Tabs>
         </Box>

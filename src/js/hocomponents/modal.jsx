@@ -1,60 +1,47 @@
-import React from 'react';
+import React, {
+  useContext, useEffect
+} from 'react';
 
-/* @flow */
-import PropTypes from 'prop-types';
-import wrapDisplayName from 'recompose/wrapDisplayName';
+import { ModalContext } from '../context/modal';
 
 /**
  * A high-order component that provides an easy access to
  * opening and closing a modal
  */
 export default (): Function => (Component: ReactClass<*>): ReactClass<*> => {
-  class ComponentWithModal extends React.Component {
-    static contextTypes = {
-      openModal: PropTypes.func.isRequired,
-      closeModal: PropTypes.func.isRequired,
-    };
+  const ComponentWithModal = (props) => {
+    const { addModal, removeModal, modals } = useContext(ModalContext);
 
-    modal: ?ReactClass<*> = null;
+    useEffect(() => {
+      if (modals.length) {
+        window.addEventListener('keyup', handleKeyUp);
+      } else {
+        window.removeEventListener('keyup', handleKeyUp);
+      }
 
-    componentWillUnmount() {
-      window.removeEventListener('keyup', this.handleEscPress);
-    }
+      return () => {
+        window.removeEventListener('keyup', handleKeyUp);
+      };
+    }, [modals]);
 
-    handleOpenModal: Function = (Modal: ReactClass<*>): void => {
-      this.modal = Modal;
-
-      // Register keyboard events
-      window.addEventListener('keyup', this.handleEscPress);
-
-      this.context.openModal(this.modal);
-    };
-
-    handleCloseModal: Function = (): void => {
-      this.context.closeModal(this.modal);
-      window.removeEventListener('keyup', this.handleEscPress);
-    };
-
-    handleEscPress = (event) => {
-      event.stopPropagation();
-
+    const handleKeyUp = (event) => {
       if (event.key === 'Escape') {
-        this.handleCloseModal();
+        removeModal();
       }
     };
 
-    render() {
-      return (
-        <Component
-          openModal={this.handleOpenModal}
-          closeModal={this.handleCloseModal}
-          {...this.props}
-        />
-      );
-    }
-  }
+    const handleOpenModal = (Modal) => {
+      addModal(Modal);
+    };
 
-  ComponentWithModal.displayName = wrapDisplayName(Component, 'hasModal');
+    return (
+      <Component
+        openModal={handleOpenModal}
+        closeModal={() => removeModal()}
+        {...props}
+      />
+    );
+  };
 
   return ComponentWithModal;
 };

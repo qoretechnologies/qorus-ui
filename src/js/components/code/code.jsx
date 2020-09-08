@@ -51,9 +51,26 @@ class CodeTab extends React.Component {
     }
   };
 
-  render() {
+  renderContent = () => {
     const { selected } = this.props;
     const { height } = this.state;
+
+    switch (selected.type) {
+      case 'fsm':
+        return <FSMView fsmName={this.props.selected.item.name} />;
+      case 'pipeline':
+        return <p>pipeline</p>;
+      default:
+        return (
+          <SourceCode handleRef={this.handleRef} height={height}>
+            {selected.code}
+          </SourceCode>
+        );
+    }
+  };
+
+  render() {
+    const { selected } = this.props;
 
     return (
       <Flex>
@@ -62,19 +79,7 @@ class CodeTab extends React.Component {
         ) : (
           <h5>{selected.name}</h5>
         )}
-        {selected.loading ? (
-          <Loader />
-        ) : (
-          <>
-            {selected.type === 'fsm' ? (
-              <FSMView fsmName={this.props.selected.item.name} />
-            ) : (
-              <SourceCode handleRef={this.handleRef} height={height}>
-                {selected.code}
-              </SourceCode>
-            )}
-          </>
-        )}
+        {selected.loading ? <Loader /> : <>{this.renderContent()}</>}
       </Flex>
     );
   }
