@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { injectIntl } from 'react-intl';
+import shortid from 'shortid';
 import styled, { css } from 'styled-components';
 
 import { Button, ButtonGroup, Tooltip } from '@blueprintjs/core';
@@ -81,6 +82,7 @@ export class ElementPan extends React.Component<
     },
     zoom: number,
     items?: { y: number, x: number }[],
+    panElementId?: string,
   },
   ElementPanState
 > {
@@ -102,6 +104,7 @@ export class ElementPan extends React.Component<
       maxY: 0,
       showMinimap: true,
       showToolbar: true,
+      panElementId: shortid.generate(),
     };
     this.onDragMove = this.onDragMove.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
@@ -289,6 +292,8 @@ export class ElementPan extends React.Component<
 
   render() {
     const t = (id) => this.props.intl.formatMessage({ id });
+    const { panElementId } = this.state;
+
     return (
       <div
         ref={this.ref}
@@ -296,7 +301,7 @@ export class ElementPan extends React.Component<
         style={this.getContainerStyles()}
         onTouchStart={this.props.enableDragging && this.onDragStart}
         onMouseDown={this.props.enableDragging && this.onDragStart}
-        id="pan-element"
+        id={`panElement${panElementId}`}
       >
         {this.props.children}
         {this.state.showToolbar ? (
@@ -333,6 +338,7 @@ export class ElementPan extends React.Component<
               width={this.el?.getBoundingClientRect().width}
               height={this.el?.getBoundingClientRect().height}
               onDrag={this.handleMinimapMove}
+              panElementId={panElementId}
             />
           </StyledToolbar>
         ) : (

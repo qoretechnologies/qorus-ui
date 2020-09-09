@@ -8,6 +8,7 @@ import reduce from 'lodash/reduce';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
 import styled from 'styled-components';
 
@@ -117,13 +118,7 @@ const StyledFSMCircle = styled.circle`
   }
 `;
 
-let currentXPan: number;
-let currentYPan: number;
-
 const FSMView: React.FC<IFSMViewProps> = ({
-  onSubmitSuccess,
-  setFsmReset,
-  interfaceContext,
   states,
   openModal,
   closeModal,
@@ -131,6 +126,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
   fsm,
   fsmName,
   load,
+  statesPath,
 }) => {
   const wrapperRef = useRef(null);
 
@@ -148,9 +144,6 @@ const FSMView: React.FC<IFSMViewProps> = ({
   useEffect(() => {
     if (fsm) {
       const { width, height } = wrapperRef.current.getBoundingClientRect();
-
-      currentXPan = 1000 - width / 2;
-      currentYPan = 1000 - height / 2;
 
       setWrapperDimensions({ width, height });
 
@@ -178,11 +171,6 @@ const FSMView: React.FC<IFSMViewProps> = ({
     if (event.key === DIAGRAM_DRAG_KEY) {
       setIsHoldingShiftKey(false);
     }
-  };
-
-  const setWrapperPan = (x, y) => {
-    currentXPan = x;
-    currentYPan = y;
   };
 
   const getTransitionByState = (
@@ -271,16 +259,28 @@ const FSMView: React.FC<IFSMViewProps> = ({
     }
   };
 
+  const getStateType = (state) => {
+    if (state.type === 'block') {
+      return 'block';
+    }
+
+    if (state.type === 'fsm') {
+      return 'fsm';
+    }
+
+    return state.action?.type;
+  };
+
   return (
     <>
       <StyledDiagramWrapper ref={wrapperRef} id="fsm-diagram">
         <FSMDiagramWrapper
           wrapperDimensions={wrapperDimensions}
-          setPan={setWrapperPan}
           isHoldingShiftKey
           items={map(fsm.states, (state) => ({
             x: state.position.x,
             y: state.position.y,
+            type: getStateType(state),
           }))}
         >
           <StyledDiagram
@@ -297,6 +297,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
                       onClose={closeModal}
                       fsmId={fsm.id}
                       stateId={id}
+                      statesPath={`${statesPath || ''}states`}
                     />
                   );
                 }}
@@ -337,7 +338,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
                       <StyledFSMLine
                         key={index}
                         stroke={isError ? 'red' : '#a9a9a9'}
-                        strokeWidth={isError ? 4 : 2}
+                        strokeWidth={isError ? 2 : 1}
                         strokeDasharray={isError ? '10 2' : undefined}
                         markerEnd={
                           isError ? 'url(#arrowheaderror)' : 'url(#arrowhead)'
@@ -368,6 +369,15 @@ export default compose(
   connect(selector, {
     load: actions.fsms.fetch,
   }),
+  mapProps(({ states, fsmId, fsm, ...rest }) => ({
+    fsm: states
+      ? {
+          states,
+          id: fsmId,
+        }
+      : fsm,
+    ...rest,
+  })),
   modal(),
   injectIntl
 )(FSMView);

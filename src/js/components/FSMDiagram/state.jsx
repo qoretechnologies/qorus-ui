@@ -4,6 +4,7 @@ import styled, {
   css, keyframes
 } from 'styled-components';
 
+import { getStateStyle } from '../PanElement/minimap';
 import { IFSMState } from './';
 
 export interface IFSMStateProps extends IFSMState {
@@ -42,7 +43,7 @@ const StyledFSMState = styled.div`
   height: 50px;
   background-color: #fff;
   z-index: 9;
-  border: 2px solid;
+  border: 1px solid;
   transition: all 0.2s linear;
   border-radius: 3px;
   cursor: pointer;
@@ -72,35 +73,7 @@ const StyledFSMState = styled.div`
     `;
   }};
 
-  ${({ isAvailableForTransition, type }) =>
-    isAvailableForTransition &&
-    css`
-      animation: ${wiggleAnimation(type)} 0.3s linear infinite;
-    `}
-
-  ${({ type }) => {
-    switch (type) {
-      case 'connector':
-        return css`
-          transform: skew(15deg);
-          > * {
-            transform: skew(-15deg);
-          }
-        `;
-      case 'mapper':
-        return null;
-      case 'pipeline':
-        return css`
-          border-radius: 50px;
-        `;
-      case 'fsm':
-        return css`
-          border-style: dashed;
-        `;
-      default:
-        return null;
-    }
-  }}
+  ${({ type }) => getStateStyle(type)}
 `;
 
 const StyledStateName = styled.p`
@@ -156,7 +129,7 @@ const FSMState: React.FC<IFSMStateProps> = ({
       isAvailableForTransition={
         selectedState ? !getTransitionByState(selectedState, id) : false
       }
-      type={type === 'fsm' ? 'fsm' : action?.type}
+      type={type === 'fsm' ? 'fsm' : type === 'block' ? 'block' : action?.type}
     >
       <StyledStateName style={{ fontSize: calculateFontSize() }}>
         {name}
