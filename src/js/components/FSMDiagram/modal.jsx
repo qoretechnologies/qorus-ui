@@ -32,7 +32,7 @@ const StateModal = ({
         // Split the config item name
         const [stateName, configItemName] = name.split(':');
         // Check if the name matches the state name
-        if (stateName === state.name) {
+        if (stateName === state.id) {
           return {
             ...newConfig,
             [name]: configItem,
