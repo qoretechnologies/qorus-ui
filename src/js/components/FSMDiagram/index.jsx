@@ -2,6 +2,7 @@ import React, {
   useEffect, useRef, useState
 } from 'react';
 
+import forEach from 'lodash/forEach';
 import map from 'lodash/map';
 import maxBy from 'lodash/maxBy';
 import reduce from 'lodash/reduce';
@@ -19,6 +20,39 @@ import Loader from '../loader';
 import FSMDiagramWrapper from './diagramWrapper';
 import StateModal from './modal';
 import FSMState from './state';
+
+export const isStateIsolated = (
+  stateKey: string,
+  states: IFSMStates,
+  checkedStates: string[] = []
+): boolean => {
+  if (states[stateKey].initial) {
+    return false;
+  }
+
+  let isIsolated = true;
+
+  forEach(states, (stateData, keyId) => {
+    if (isIsolated) {
+      if (
+        stateData.transitions &&
+        stateData.transitions.find(
+          (transition: IFSMTransition) => transition.state === stateKey
+        )
+      ) {
+        // If the state already exists in the list, do not check it again
+        if (!checkedStates.includes(keyId)) {
+          isIsolated = isStateIsolated(keyId, states, [
+            ...checkedStates,
+            stateKey,
+          ]);
+        }
+      }
+    }
+  });
+
+  return isIsolated;
+};
 
 export interface IFSMViewProps {
   onSubmitSuccess: (data: any) => any;
@@ -80,6 +114,9 @@ export interface IFSMStates {
 export const TOOLBAR_ITEM_TYPE: string = 'toolbar-item';
 export const STATE_ITEM_TYPE: string = 'state';
 
+export const IF_STATE_SIZE: number = 80;
+export const STATE_WIDTH: number = 180;
+export const STATE_HEIGHT: number = 50;
 const DIAGRAM_SIZE: number = 2000;
 const DIAGRAM_DRAG_KEY: string = 'Shift';
 
@@ -195,6 +232,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
 
       const stateTransitions = state.transitions.map(
         (transition: IFSMTransition, index: number) => ({
+          ...transition,
           isError: !!transition.errors,
           transitionIndex: index,
           state: id,
@@ -212,7 +250,15 @@ const FSMView: React.FC<IFSMViewProps> = ({
     []
   ).sort((a, b) => a.order - b.order);
 
-  const getTargetStatePosition = (x1, y1, x2, y2) => {
+  const getXDiff = (type) => {
+    return type === 'if' ? IF_STATE_SIZE / 2 : STATE_WIDTH / 2;
+  };
+
+  const getYDiff = (type) => {
+    return type === 'if' ? IF_STATE_SIZE / 2 : STATE_HEIGHT / 2;
+  };
+
+  const getTargetStatePosition = (x1, y1, x2, y2, targetStateType) => {
     const modifiedX1 = x1 + 10000;
     const modifiedX2 = x2 + 10000;
     const modifiedY1 = y1 + 10000;
@@ -239,16 +285,34 @@ const FSMView: React.FC<IFSMViewProps> = ({
 
     switch (side) {
       case 'right': {
-        return { x2, y2: y2 + 25 };
+        return {
+          x2: targetStateType === 'if' ? x2 - 16 : x2,
+          y2: y2 + getYDiff(targetStateType),
+        };
       }
       case 'left': {
-        return { x2: x2 + 180, y2: y2 + 25 };
+        return {
+          x2:
+            x2 +
+            getXDiff(targetStateType) * 2 +
+            (targetStateType === 'if' ? 16 : 0),
+          y2: y2 + getYDiff(targetStateType),
+        };
       }
       case 'bottom': {
-        return { x2: x2 + 90, y2 };
+        return {
+          x2: x2 + getXDiff(targetStateType),
+          y2: targetStateType === 'if' ? y2 - 16 : y2,
+        };
       }
       case 'top': {
-        return { x2: x2 + 90, y2: y2 + 50 };
+        return {
+          x2: x2 + getXDiff(targetStateType),
+          y2:
+            y2 +
+            getYDiff(targetStateType) * 2 +
+            (targetStateType === 'if' ? 16 : 0),
+        };
       }
       default: {
         return {
@@ -259,13 +323,41 @@ const FSMView: React.FC<IFSMViewProps> = ({
     }
   };
 
-  const getStateType = (state) => {
+  const getTransitionEndMarker = (isError, branch) => {
+    if (isError) {
+      return 'error';
+    }
+
+    if (branch) {
+      return branch;
+    }
+
+    return '';
+  };
+
+  const getTransitionColor = (isError, branch) => {
+    if (isError || branch === 'false') {
+      return 'red';
+    }
+
+    if (branch === 'true') {
+      return 'green';
+    }
+
+    return '#a9a9a9';
+  };
+
+  const getStateType = (state: IFSMState) => {
     if (state.type === 'block') {
       return 'block';
     }
 
     if (state.type === 'fsm') {
       return 'fsm';
+    }
+
+    if (state.type === 'if') {
+      return 'if';
     }
 
     return state.action?.type;
@@ -305,6 +397,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
                 selected={selectedState === id}
                 selectedState={selectedState}
                 getTransitionByState={getTransitionByState}
+                isIsolated={isStateIsolated(id, fsm.states)}
               />
             ))}
             <svg height="100%" width="100%" style={{ position: 'absolute' }}>
@@ -319,6 +412,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
                     targetState,
                     isError,
                     transitionIndex,
+                    branch,
                   },
                   index
                 ) =>
@@ -337,15 +431,22 @@ const FSMView: React.FC<IFSMViewProps> = ({
                     <>
                       <StyledFSMLine
                         key={index}
-                        stroke={isError ? 'red' : '#a9a9a9'}
+                        stroke={getTransitionColor(isError, branch)}
                         strokeWidth={isError ? 2 : 1}
                         strokeDasharray={isError ? '10 2' : undefined}
-                        markerEnd={
-                          isError ? 'url(#arrowheaderror)' : 'url(#arrowhead)'
-                        }
-                        x1={x1 + 90}
-                        y1={y1 + 25}
-                        {...getTargetStatePosition(x1, y1, x2, y2)}
+                        markerEnd={`url(#arrowhead${getTransitionEndMarker(
+                          isError,
+                          branch
+                        )})`}
+                        x1={x1 + getXDiff(fsm.states[state].type)}
+                        y1={y1 + getYDiff(fsm.states[state].type)}
+                        {...getTargetStatePosition(
+                          x1,
+                          y1,
+                          x2,
+                          y2,
+                          fsm.states[targetState].type
+                        )}
                       />
                     </>
                   )

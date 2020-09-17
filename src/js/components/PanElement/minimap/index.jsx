@@ -7,13 +7,16 @@ import useMount from 'react-use/lib/useMount';
 import ResizeObserver from 'resize-observer-polyfill';
 import styled, { css } from 'styled-components';
 
+import { IF_STATE_SIZE, STATE_HEIGHT, STATE_WIDTH } from '../../FSMDiagram';
+
 export const getStateStyle = (type) => {
   switch (type) {
     case 'connector':
       return css`
         transform: skew(15deg);
-        span,
-        p {
+        div,
+        > span,
+        > p {
           transform: skew(-15deg);
         }
       `;
@@ -39,6 +42,14 @@ export const getStateStyle = (type) => {
           #f3f3f3 20px
         );
       `;
+    case 'if':
+      return css`
+        transform: rotateZ(45deg);
+
+        div:first-child {
+          transform: rotateZ(-45deg);
+        }
+      `;
     default:
       return null;
   }
@@ -54,11 +65,11 @@ const StyledMinimapWrapper = styled.div`
 `;
 
 const StyledMinimapItem = styled.div`
-  ${({ top, left }) => css`
+  ${({ top, left, type }) => css`
     left: ${left / 10}px;
     top: ${top / 10}px;
-    width: 18px;
-    height: 5px;
+    width: ${(type === 'if' ? IF_STATE_SIZE : STATE_WIDTH) / 10}px;
+    height: ${(type === 'if' ? IF_STATE_SIZE : STATE_HEIGHT) / 10}px;
     border: 1px solid #a9a9a9;
     position: absolute;
   `}

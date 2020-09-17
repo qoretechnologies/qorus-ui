@@ -56,6 +56,10 @@ const StateModal = ({
       return 'block';
     }
 
+    if (state.type === 'if') {
+      return 'info';
+    }
+
     return 'config';
   };
 
@@ -86,14 +90,16 @@ const StateModal = ({
                 <PipelineDiagram pipeName={state.action.value} />
               </Pane>
             )}
-            <Pane name="Config">
-              <ConfigItemsTable
-                items={rebuildConfigHash(getConfigItemsForState(state))}
-                intrf="fsms"
-                intrfId={fsmId}
-                stateId={stateId}
-              />
-            </Pane>
+            {state.type !== 'if' && (
+              <Pane name="Config">
+                <ConfigItemsTable
+                  items={rebuildConfigHash(getConfigItemsForState(state))}
+                  intrf="fsms"
+                  intrfId={fsmId}
+                  stateId={stateId}
+                />
+              </Pane>
+            )}
             <Pane name="Info">
               <Tree data={state} />
             </Pane>
