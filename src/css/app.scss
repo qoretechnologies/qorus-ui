@@ -248,7 +248,6 @@ div.text-component {
 
   &:not(.text-component-expanded) {
     word-break: break-all;
-    white-space: nowrap;
     text-overflow: ellipsis;
   }
 }

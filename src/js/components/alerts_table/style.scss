@@ -4,6 +4,7 @@
   .alerts-table-reason {
     white-space: pre-wrap;
     font-family: monospace;
+    word-break: break-word;
     padding: 10px 0;
 
     &.isExpandable {

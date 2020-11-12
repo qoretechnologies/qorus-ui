@@ -216,9 +216,9 @@ export default class StepsTab extends Component {
       }
 
       const refCol = refColMin + (refColMax - refColMin) / 2;
-      const col = refCol + n.position * n.width * 2;
+      const col = refCol + n.position * 2;
 
-      rows[n.depth][Math.round(col)] = id;
+      rows[n.depth][Math.floor(col)] = id;
     }
 
     return rows;

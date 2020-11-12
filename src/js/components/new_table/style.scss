@@ -34,7 +34,6 @@ table.text-table {
 td.editable {
   cursor: pointer; /* [1] */
   vertical-align: middle;
-  white-space: nowrap;
 
   &:not(.editor) {
     padding-right: 30px !important;
@@ -58,7 +57,6 @@ td.editable {
     position: relative;
   }
 }
-
 
 div.has-sort:hover,
 th.has-sort:hover {
