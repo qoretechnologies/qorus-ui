@@ -1,25 +1,23 @@
 // @flow
+import { Icon, Tag } from '@blueprintjs/core';
+import classNames from 'classnames';
 import React, { Component } from 'react';
 import createFragment from 'react-addons-create-fragment';
-import classNames from 'classnames';
 import PanElement from 'react-element-pan';
-
-import StepModal from './modal';
-
-import { groupInstances } from '../../helpers/orders';
-import { graph } from '../../lib/graph';
-import { COLORS } from '../../constants/ui';
-import { Tag, Icon } from '@blueprintjs/core';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { COLORS } from '../../constants/ui';
+import { groupInstances } from '../../helpers/orders';
+import modal from '../../hocomponents/modal';
+import { graph } from '../../lib/graph';
 import StepDetailTable from '../../views/order/diagram/step_details';
-import { Controls as ButtonGroup, Control as Button } from '../controls';
-import Loader from '../loader';
+import { Breadcrumbs, Crumb } from '../breadcrumbs';
+import { Control as Button, Controls as ButtonGroup } from '../controls';
 import Flex from '../Flex';
 import Headbar from '../Headbar';
+import Loader from '../loader';
 import Pull from '../Pull';
-import { Breadcrumbs, Crumb } from '../breadcrumbs';
-import modal from '../../hocomponents/modal';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import StepModal from './modal';
 
 /**
  * Typical list of arguments for step-specific functions.
@@ -129,7 +127,7 @@ export default class StepsTab extends Component {
    *
    * @param {number} stepId
    */
-  onBoxClick = stepId => () => {
+  onBoxClick = (stepId) => () => {
     this.props.openModal(
       <StepModal
         id={stepId}
@@ -156,12 +154,12 @@ export default class StepsTab extends Component {
    * @return {Array<number>}
    * @see ROOT_STEP_ID
    */
-  getStepDeps (stepId) {
+  getStepDeps(stepId) {
     const initIds = Object.keys(this.props.workflow.steps).filter(
-      id => this.props.workflow.steps[id].length <= 0
+      (id) => this.props.workflow.steps[id].length <= 0
     );
 
-    const initialDeps = initIds.map(initId => ({ [initId]: [ROOT_STEP_ID] }));
+    const initialDeps = initIds.map((initId) => ({ [initId]: [ROOT_STEP_ID] }));
 
     const deps = Object.assign(
       { [ROOT_STEP_ID]: [] },
@@ -186,7 +184,7 @@ export default class StepsTab extends Component {
    * @see getStepDeps
    * @see DIAGRAM_MIN_COLUMNS
    */
-  getRows () {
+  getRows() {
     const nodes = graph(this.getStepDeps());
 
     const cols =
@@ -220,7 +218,7 @@ export default class StepsTab extends Component {
       const refCol = refColMin + (refColMax - refColMin) / 2;
       const col = refCol + n.position * n.width * 2;
 
-      rows[n.depth][col] = id;
+      rows[n.depth][Math.round(col)] = id;
     }
 
     return rows;
@@ -232,13 +230,13 @@ export default class StepsTab extends Component {
    * @return {Array<StepArgs>}
    * @see getRows
    */
-  getFlattenRows () {
+  getFlattenRows() {
     return this.getRows().reduce(
       (flatten, row, rowIdx) =>
         flatten.concat(
           row
             .map((stepId, colIdx) => ({ stepId, colIdx, row, rowIdx }))
-            .filter(s => typeof s.stepId !== 'undefined')
+            .filter((s) => typeof s.stepId !== 'undefined')
         ),
       []
     );
@@ -251,8 +249,8 @@ export default class StepsTab extends Component {
    * @return {StepArgs}
    * @see getFlattenRows
    */
-  getStepArgs (stepId) {
-    return this.getFlattenRows().find(s => s.stepId === stepId) || null;
+  getStepArgs(stepId) {
+    return this.getFlattenRows().find((s) => s.stepId === stepId) || null;
   }
 
   /**
@@ -266,11 +264,11 @@ export default class StepsTab extends Component {
    * @see getStepDeps
    * @see getStepArgs
    */
-  getFlattenDeps () {
+  getFlattenDeps() {
     return this.getFlattenRows().reduce(
       (flatten, step) =>
         flatten.concat(
-          this.getStepDeps(step.stepId).map(depId => ({
+          this.getStepDeps(step.stepId).map((depId) => ({
             start: this.getStepArgs(depId),
             end: step,
           }))
@@ -298,15 +296,17 @@ export default class StepsTab extends Component {
    *   }
    * }}
    */
-  getStepInfo (stepId) {
+  getStepInfo(stepId) {
     const name = this.props.workflow.stepmap[stepId];
     const info =
-      this.props.workflow.stepinfo.find(si => si.name === name) || null;
+      this.props.workflow.stepinfo.find((si) => si.name === name) || null;
 
     return info && info.ind === 0
       ? Object.assign({}, info, {
-        subwfls: this.props.workflow.stepinfo.filter(si => si.name === name),
-      })
+          subwfls: this.props.workflow.stepinfo.filter(
+            (si) => si.name === name
+          ),
+        })
       : info;
   }
 
@@ -320,7 +320,7 @@ export default class StepsTab extends Component {
    * @return {string}
    * @see ROOT_STEP_ID
    */
-  getStepName (stepId) {
+  getStepName(stepId) {
     return stepId === ROOT_STEP_ID
       ? this.props.workflow.name
       : this.props.workflow.stepmap[stepId];
@@ -335,7 +335,7 @@ export default class StepsTab extends Component {
    * @return {string}
    * @see getStepName
    */
-  getStepDomId (stepId) {
+  getStepDomId(stepId) {
     return this.getStepName(stepId).toLowerCase();
   }
 
@@ -350,7 +350,7 @@ export default class StepsTab extends Component {
    * @see getStepName
    * @see getStepInfo
    */
-  getStepFullname = stepId => {
+  getStepFullname = (stepId) => {
     const info = this.getStepInfo(stepId);
 
     if (info && info.patch) {
@@ -371,7 +371,7 @@ export default class StepsTab extends Component {
    * @return {Array<string>}
    * @see getStepFullname
    */
-  getStepFullnames () {
+  getStepFullnames() {
     return [this.getStepFullname(0)].concat(
       Object.keys(this.props.workflow.steps).map(this.getStepFullname)
     );
@@ -383,8 +383,8 @@ export default class StepsTab extends Component {
    * @return {number}
    * @see getStepFullnames
    */
-  getMaxTextWidth () {
-    return Math.max(...this.getStepFullnames().map(n => n.length));
+  getMaxTextWidth() {
+    return Math.max(...this.getStepFullnames().map((n) => n.length));
   }
 
   /**
@@ -398,7 +398,7 @@ export default class StepsTab extends Component {
    * @see BOX_MIN_WIDTH
    * @see BOX_CHARACTER_WIDTH
    */
-  getBoxWidth () {
+  getBoxWidth() {
     return BOX_MIN_WIDTH;
   }
 
@@ -411,7 +411,7 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    * @see BOX_DIMENSION_RATIO
    */
-  getBoxHeight () {
+  getBoxHeight() {
     return this.getBoxWidth() / BOX_DIMENSION_RATIO;
   }
 
@@ -424,7 +424,7 @@ export default class StepsTab extends Component {
    * @see DIAGRAM_MIN_COLUMNS
    * @see getRows
    */
-  getDiagramColumns () {
+  getDiagramColumns() {
     return Math.max(DIAGRAM_MIN_COLUMNS, this.getRows()[0].length);
   }
 
@@ -434,7 +434,7 @@ export default class StepsTab extends Component {
    * @return {number}
    * @see getRows
    */
-  getDiagramRows () {
+  getDiagramRows() {
     return this.getRows().length;
   }
 
@@ -449,7 +449,7 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    * @see BOX_MARGIN
    */
-  getDiagramWidth () {
+  getDiagramWidth() {
     return (
       Math.ceil(this.getDiagramColumns() / 3) *
       (this.getBoxWidth() + BOX_MARGIN)
@@ -467,7 +467,7 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    * @see BOX_MARGIN
    */
-  getDiagramHeight () {
+  getDiagramHeight() {
     return (
       this.getDiagramRows() * (this.getBoxHeight() + BOX_MARGIN) + BOX_MARGIN
     );
@@ -484,7 +484,7 @@ export default class StepsTab extends Component {
    * @see getDiagramWidth
    * @see BOX_MARGIN
    */
-  getBoxHorizontalCenter (colIdx) {
+  getBoxHorizontalCenter(colIdx) {
     const hSpace = (this.getBoxWidth() + BOX_MARGIN) / 2;
 
     return colIdx * hSpace;
@@ -500,7 +500,7 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    * @see BOX_MARGIN
    */
-  getBoxVerticalCenter (rowIdx) {
+  getBoxVerticalCenter(rowIdx) {
     const vSpace = this.getBoxHeight() + BOX_MARGIN;
 
     return BOX_MARGIN / 2 + vSpace * rowIdx + vSpace / 2;
@@ -514,7 +514,7 @@ export default class StepsTab extends Component {
    * @see getBoxHorizontalCenter
    * @see getBoxWidth
    */
-  getBoxTopCoord (colIdx) {
+  getBoxTopCoord(colIdx) {
     const top = this.getBoxHorizontalCenter(colIdx) + 2;
 
     return top;
@@ -528,7 +528,7 @@ export default class StepsTab extends Component {
    * @see getBoxVerticalCenter
    * @see getBoxHeight
    */
-  getBoxLeftCoord (rowIdx) {
+  getBoxLeftCoord(rowIdx) {
     const left = this.getBoxVerticalCenter(rowIdx) - this.getBoxHeight() / 2;
 
     return left;
@@ -544,7 +544,7 @@ export default class StepsTab extends Component {
    * @see getBoxWidth
    * @see getBoxHeight
    */
-  getStartParams () {
+  getStartParams() {
     return {
       cx: this.getBoxWidth() / 2,
       cy: this.getBoxHeight() / 2,
@@ -565,7 +565,7 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    * @see BOX_ROUNDED_CORNER
    */
-  getDefaultParams () {
+  getDefaultParams() {
     return {
       rx: BOX_ROUNDED_CORNER,
       ry: BOX_ROUNDED_CORNER,
@@ -587,7 +587,7 @@ export default class StepsTab extends Component {
    * @see getBoxHorizontalCenter
    * @see getBoxVerticalCenter
    */
-  getTextParams (stepId) {
+  getTextParams(stepId) {
     return {
       x: this.getBoxWidth() / 2,
       y: this.getBoxHeight() / 2,
@@ -598,7 +598,7 @@ export default class StepsTab extends Component {
     };
   }
 
-  getIconParams (ord) {
+  getIconParams(ord) {
     return {
       x: this.getBoxWidth() - 20 - 22 * ord,
       y: 16,
@@ -614,7 +614,7 @@ export default class StepsTab extends Component {
    * @see getBoxTopCoord
    * @see getBoxLeftCoord
    */
-  getBoxTransform (colIdx, rowIdx, margin = 0) {
+  getBoxTransform(colIdx, rowIdx, margin = 0) {
     return (
       'translate(' +
       `${this.getBoxTopCoord(colIdx) + margin} ` +
@@ -628,7 +628,7 @@ export default class StepsTab extends Component {
    *
    * @param {number} stepId
    */
-  handleStepClick = stepId => () => {
+  handleStepClick = (stepId) => () => {
     this.props.onStepClick(stepId);
   };
 
@@ -670,7 +670,7 @@ export default class StepsTab extends Component {
    * @see getStepDomId
    * @see getStartParams
    */
-  renderStartMask (stepId) {
+  renderStartMask(stepId) {
     return (
       <mask id={this.getStepDomId(stepId)}>
         <ellipse {...this.getStartParams()} className="diagram__mask" />
@@ -692,13 +692,13 @@ export default class StepsTab extends Component {
    * @see getStartParams
    * @see getTextParams
    */
-  renderStartBox (stepId, colIdx, row, rowIdx) {
+  renderStartBox(stepId, colIdx, row, rowIdx) {
     const instances =
       this.props.order && this.props.order.StepInstances
         ? groupInstances(this.props.order.StepInstances)
         : {};
     const css = Object.keys(instances).some(
-      i => instances[i].status === 'ERROR'
+      (i) => instances[i].status === 'ERROR'
     )
       ? 'error'
       : 'normal';
@@ -730,7 +730,7 @@ export default class StepsTab extends Component {
    * @see getStepDomId
    * @see getDefaultParams
    */
-  renderDefaultMask (stepId) {
+  renderDefaultMask(stepId) {
     return (
       <mask id={this.getStepDomId(stepId)}>
         <rect {...this.getDefaultParams()} className="diagram__mask" />
@@ -757,9 +757,9 @@ export default class StepsTab extends Component {
    * @see getStepInfo
    * @see getTextParams
    */
-  renderDefaultBox (stepId, colIdx, row, rowIdx) {
+  renderDefaultBox(stepId, colIdx, row, rowIdx) {
     const onCodeClick = this.onBoxClick(stepId);
-    const handleMouseOver = event => {
+    const handleMouseOver = (event) => {
       event.persist();
       event.stopPropagation();
 
@@ -771,7 +771,7 @@ export default class StepsTab extends Component {
           height,
         } = event.target.getBoundingClientRect();
         const tooltip = this.props.workflow.stepinfo.find(
-          step => step.stepid === stepId
+          (step) => step.stepid === stepId
         );
 
         this.setState({
@@ -867,7 +867,9 @@ export default class StepsTab extends Component {
                 <Pull right>
                   <ButtonGroup>
                     <Button
-                      title={this.props.intl.formatMessage({ id: 'button.show-step-code' })}
+                      title={this.props.intl.formatMessage({
+                        id: 'button.show-step-code',
+                      })}
                       icon="code"
                       onClick={onCodeClick}
                     />
@@ -904,7 +906,7 @@ export default class StepsTab extends Component {
    * @see renderDefaultMask
    * @see ROOT_STEP_ID
    */
-  renderMask (stepId) {
+  renderMask(stepId) {
     return stepId === ROOT_STEP_ID
       ? this.renderStartMask(stepId)
       : this.renderDefaultMask(stepId);
@@ -925,7 +927,7 @@ export default class StepsTab extends Component {
    * @see renderStartBox
    * @see ROOT_STEP_ID
    */
-  renderBox (stepId, colIdx, row, rowIdx) {
+  renderBox(stepId, colIdx, row, rowIdx) {
     return stepId === ROOT_STEP_ID
       ? this.renderStartBox(stepId, colIdx, row, rowIdx)
       : this.renderDefaultBox(stepId, colIdx, row, rowIdx);
@@ -947,7 +949,7 @@ export default class StepsTab extends Component {
    * @see getBoxHeight
    * @see BOX_MARGIN
    */
-  renderPath (start, end) {
+  renderPath(start, end) {
     const startX =
       this.getBoxHorizontalCenter(start.colIdx) + this.getBoxWidth() / 2 + 2;
     const startY = this.getBoxVerticalCenter(start.rowIdx) + 2;
@@ -979,7 +981,7 @@ export default class StepsTab extends Component {
    * @see getFlattenRows
    * @see renderMask
    */
-  renderMasks () {
+  renderMasks() {
     return createFragment(
       this.getFlattenRows().reduce(
         (fs, { stepId }) =>
@@ -998,7 +1000,7 @@ export default class StepsTab extends Component {
    * @see getFlattenRows
    * @see renderBox
    */
-  renderBoxes () {
+  renderBoxes() {
     return this.getFlattenRows().map(({ stepId, colIdx, row, rowIdx }) =>
       this.renderBox(stepId, colIdx, row, rowIdx)
     );
@@ -1011,7 +1013,7 @@ export default class StepsTab extends Component {
    * @see getFlattenDeps
    * @see renderPath
    */
-  renderPaths () {
+  renderPaths() {
     return createFragment(
       this.getFlattenDeps().reduce(
         (fs, { start, end }) =>
@@ -1024,7 +1026,7 @@ export default class StepsTab extends Component {
     );
   }
 
-  handlePanRef = el => {
+  handlePanRef = (el) => {
     if (el) {
       const { width } = el.getBoundingClientRect();
 
@@ -1053,7 +1055,7 @@ export default class StepsTab extends Component {
     </div>
   );
 
-  render () {
+  render() {
     const { selectedStep, diagramScale, panWidth, useDrag } = this.state;
     const { order, workflow, onSkipSubmit } = this.props;
     const nodes = graph(this.getStepDeps());
@@ -1079,11 +1081,15 @@ export default class StepsTab extends Component {
                   style={{ lineHeight: '30px', paddingRight: 5 }}
                   className="text-muted"
                 >
-                  <FormattedMessage id='button.drag-to-move-around' />
+                  <FormattedMessage id="button.drag-to-move-around" />
                 </span>
               )}
               <Button
-                title={this.props.intl.formatMessage({ id: (useDrag ? 'button.use-scrollbars' : 'button.use-drag-to-move') })}
+                title={this.props.intl.formatMessage({
+                  id: useDrag
+                    ? 'button.use-scrollbars'
+                    : 'button.use-drag-to-move',
+                })}
                 icon="hand"
                 onClick={this.handleMoveChange}
                 btnStyle={useDrag && 'primary'}
@@ -1102,7 +1108,9 @@ export default class StepsTab extends Component {
                 big
               />
               <Button
-                title={this.props.intl.formatMessage({ id: 'button.reset-zoom' })}
+                title={this.props.intl.formatMessage({
+                  id: 'button.reset-zoom',
+                })}
                 icon="zoom-to-fit"
                 onClick={this.handleZoomReset}
                 big
