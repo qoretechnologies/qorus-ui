@@ -1,31 +1,30 @@
 /* @flow */
-import React from 'react';
-import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
-import pure from 'recompose/onlyUpdateForKeys';
-import { Link } from 'react-router';
+import { Icon, Position, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { Tooltip, Position, Icon } from '@blueprintjs/core';
-
-import { Tr, Td } from '../../components/new_table';
+import React from 'react';
+import { injectIntl } from 'react-intl';
+import { Link } from 'react-router';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
 import Box from '../../components/box';
-import PaneItem from '../../components/pane_item';
-import WorkflowControls from './controls';
-import AutoStart from './autostart';
-import { ORDER_STATES_ARRAY } from '../../constants/orders';
+import { IdColumn } from '../../components/IdColumn';
 import InstancesBar from '../../components/instances_bar';
 import InstancesChart from '../../components/instances_chart';
-import ProcessSummary from '../../components/ProcessSummary';
-import mapProps from 'recompose/mapProps';
-import withDispatch from '../../hocomponents/withDispatch';
 import NameColumn from '../../components/NameColumn';
+import { Td, Tr } from '../../components/new_table';
+import PaneItem from '../../components/pane_item';
+import ProcessSummary from '../../components/ProcessSummary';
+import { SelectColumn } from '../../components/SelectColumn';
+import { ORDER_STATES_ARRAY } from '../../constants/orders';
 import {
   buildOrderStatsDisposition,
   buildOrderStatsSLA,
 } from '../../helpers/workflows';
-import { SelectColumn } from '../../components/SelectColumn';
-import { IdColumn } from '../../components/IdColumn';
-import { injectIntl } from 'react-intl';
+import withDispatch from '../../hocomponents/withDispatch';
+import AutoStart from './autostart';
+import WorkflowControls from './controls';
 
 type Props = {
   isActive?: boolean,
@@ -113,7 +112,10 @@ const TableRow: Function = ({
               <InstancesChart width={400} states={states} instances={rest} />
             </PaneItem>
           )}
-          <ProcessSummary model={{ enabled, remote, autostart, ...rest }} />
+          <ProcessSummary
+            model={{ enabled, remote, autostart, ...rest }}
+            type="workflow"
+          />
         </Box>
       }
       link={`/workflow/${id}?date=${date}`}
@@ -216,24 +218,20 @@ export default compose(
       }
     },
   }),
-  mapProps(
-    ({ order_stats: orderStats, band, ...rest }: Props): Props => ({
-      orderStats: orderStats && buildOrderStatsDisposition(orderStats, band),
-      slaStats: orderStats && buildOrderStatsSLA(orderStats, band),
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ orderStats, slaStats, ...rest }: Props): Props => ({
-      totalOrderStats: orderStats
-        ? orderStats.completed + orderStats.automatically + orderStats.manually
-        : 0,
-      totalSlaStats: slaStats ? slaStats['In SLA'] + slaStats['Out of SLA'] : 0,
-      orderStats,
-      slaStats,
-      ...rest,
-    })
-  ),
+  mapProps(({ order_stats: orderStats, band, ...rest }: Props): Props => ({
+    orderStats: orderStats && buildOrderStatsDisposition(orderStats, band),
+    slaStats: orderStats && buildOrderStatsSLA(orderStats, band),
+    ...rest,
+  })),
+  mapProps(({ orderStats, slaStats, ...rest }: Props): Props => ({
+    totalOrderStats: orderStats
+      ? orderStats.completed + orderStats.automatically + orderStats.manually
+      : 0,
+    totalSlaStats: slaStats ? slaStats['In SLA'] + slaStats['Out of SLA'] : 0,
+    orderStats,
+    slaStats,
+    ...rest,
+  })),
   pure([
     'isActive',
     'date',

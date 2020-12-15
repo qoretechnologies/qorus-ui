@@ -1,23 +1,19 @@
 // @flow
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
-import { Groups, Group } from '../../../components/groups';
-import Options from '../../../components/options';
-import actions from '../../../store/api/actions';
-import AlertsTable from '../../../components/alerts_table';
-import PaneItem from '../../../components/pane_item';
-import ServicesControls from '../controls';
-import ProcessSummary from '../../../components/ProcessSummary';
-import InfoHeader from '../../../components/InfoHeader';
-import Flex from '../../../components/Flex';
-import Box from '../../../components/box';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import AlertsTable from '../../../components/alerts_table';
+import Box from '../../../components/box';
+import Flex from '../../../components/Flex';
+import { Group, Groups } from '../../../components/groups';
+import InfoHeader from '../../../components/InfoHeader';
+import Options from '../../../components/options';
+import PaneItem from '../../../components/pane_item';
+import ProcessSummary from '../../../components/ProcessSummary';
+import actions from '../../../store/api/actions';
+import ServicesControls from '../controls';
 
-@connect(
-  () => ({}),
-  actions.services
-)
+@connect(() => ({}), actions.services)
 @injectIntl
 export default class DetailTab extends Component {
   props: {
@@ -54,9 +50,9 @@ export default class DetailTab extends Component {
             />
           </PaneItem>
           <AlertsTable alerts={service.alerts} />
-          <ProcessSummary model={service} />
+          <ProcessSummary model={service} type="service" />
           <Groups>
-            {(service.groups || []).map(g => (
+            {(service.groups || []).map((g) => (
               <Group
                 key={g.name}
                 name={g.name}

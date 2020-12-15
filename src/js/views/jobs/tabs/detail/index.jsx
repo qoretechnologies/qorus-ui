@@ -1,28 +1,27 @@
 /* @flow */
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-
-import Options from './options';
-import JobControls from '../../controls';
-import { Groups, Group } from '../../../../components/groups';
-import AlertsTable from '../../../../components/alerts_table';
-import SLAControl from '../../../../components/sla_control';
-import InfoHeader from '../../../../components/InfoHeader';
-import { resourceSelector } from '../../../../selectors';
-import sync from '../../../../hocomponents/sync';
-import actions from '../../../../store/api/actions';
-import { hasPermission } from '../../../../helpers/user';
-import PaneItem from '../../../../components/pane_item';
-import withDispatch from '../../../../hocomponents/withDispatch';
 import withHandlers from 'recompose/withHandlers';
-import ProcessSummary from '../../../../components/ProcessSummary';
+import { createSelector } from 'reselect';
+import AlertsTable from '../../../../components/alerts_table';
 import Box from '../../../../components/box';
 import Flex from '../../../../components/Flex';
+import { Group, Groups } from '../../../../components/groups';
+import InfoHeader from '../../../../components/InfoHeader';
+import PaneItem from '../../../../components/pane_item';
+import ProcessSummary from '../../../../components/ProcessSummary';
 import ScheduleText from '../../../../components/ScheduleText';
-import { injectIntl } from 'react-intl';
+import SLAControl from '../../../../components/sla_control';
+import { hasPermission } from '../../../../helpers/user';
+import sync from '../../../../hocomponents/sync';
+import withDispatch from '../../../../hocomponents/withDispatch';
+import { resourceSelector } from '../../../../selectors';
+import actions from '../../../../store/api/actions';
+import JobControls from '../../controls';
+import Options from './options';
 
 type Props = {
   model: Object,
@@ -74,10 +73,10 @@ const DetailTab = ({
           type="job"
         />
       </PaneItem>
-      <ProcessSummary model={model} />
+      <ProcessSummary model={model} type="job" />
       <AlertsTable alerts={model.alerts} />
       <Groups>
-        {(model.groups || []).map(g => (
+        {(model.groups || []).map((g) => (
           <Group
             key={g.name}
             name={g.name}
@@ -102,13 +101,10 @@ const viewSelector = createSelector(
 );
 
 export default compose(
-  connect(
-    viewSelector,
-    {
-      load: actions.slas.fetch,
-      removeSla: actions.jobs.removeSLAJob,
-    }
-  ),
+  connect(viewSelector, {
+    load: actions.slas.fetch,
+    removeSla: actions.jobs.removeSLAJob,
+  }),
   withDispatch(),
   withHandlers({
     handleSetSLAChange: ({ dispatchAction }): Function => (

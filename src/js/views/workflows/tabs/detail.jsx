@@ -1,44 +1,39 @@
 // @flow
+import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import React, { Component } from 'react';
-import { Groups, Group } from '../../../components/groups';
-import Options from '../../../components/options';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-
+import { ActionColumnHeader } from '../../../components/ActionColumn';
 import AlertsTab from '../../../components/alerts_table';
-import actions from '../../../store/api/actions';
-import { ORDER_STATES } from '../../../constants/orders';
-import PaneItem from '../../../components/pane_item';
-
+import Box from '../../../components/box';
 import { Control, Controls as ButtonGroup } from '../../../components/controls';
-import WorkflowsControls from '../controls';
-import InstancesChart from '../../../components/instances_chart';
-import { InputGroup, ControlGroup } from '@blueprintjs/core';
-import ProcessSummary from '../../../components/ProcessSummary';
-import Autostart from '../autostart';
-import withDispatch from '../../../hocomponents/withDispatch';
+import Dropdown, {
+  Control as DControl,
+  Item,
+} from '../../../components/dropdown';
+import Flex from '../../../components/Flex';
+import { Group, Groups } from '../../../components/groups';
 import InfoHeader from '../../../components/InfoHeader';
+import InstancesBar from '../../../components/instances_bar';
+import InstancesChart from '../../../components/instances_chart';
+import { Table, Tbody, Td, Th, Thead, Tr } from '../../../components/new_table';
 import NoDataIf from '../../../components/NoDataIf';
+import Options from '../../../components/options';
+import PaneItem from '../../../components/pane_item';
+import ProcessSummary from '../../../components/ProcessSummary';
+import { ORDER_STATES } from '../../../constants/orders';
 import {
   buildOrderStatsDisposition,
   buildOrderStatsSLA,
 } from '../../../helpers/workflows';
-import InstancesBar from '../../../components/instances_bar';
-import Dropdown, {
-  Item,
-  Control as DControl,
-} from '../../../components/dropdown';
-import Flex from '../../../components/Flex';
-import Box from '../../../components/box';
-import { Table, Thead, Th, Tbody, Tr, Td } from '../../../components/new_table';
-import { ActionColumnHeader } from '../../../components/ActionColumn';
-import { injectIntl } from 'react-intl';
+import withDispatch from '../../../hocomponents/withDispatch';
+import actions from '../../../store/api/actions';
+import Autostart from '../autostart';
+import WorkflowsControls from '../controls';
 
-@connect(
-  null,
-  {
-    setOptions: actions.workflows.setOptions,
-  }
-)
+@connect(null, {
+  setOptions: actions.workflows.setOptions,
+})
 @withDispatch()
 @injectIntl
 export default class DetailTab extends Component {
@@ -60,15 +55,15 @@ export default class DetailTab extends Component {
     slaBand: this.props.band,
   };
 
-  setOption = opt => {
+  setOption = (opt) => {
     this.props.setOptions(this.props.workflow, opt.name, opt.value);
   };
 
-  deleteOption = opt => {
+  deleteOption = (opt) => {
     this.setOption(Object.assign({}, opt, { value: '' }));
   };
 
-  handleThresholdChange = event => {
+  handleThresholdChange = (event) => {
     this.setState({ slaThreshold: event.target.value });
   };
 
@@ -83,7 +78,7 @@ export default class DetailTab extends Component {
     this.setState({ slaBand });
   };
 
-  handleSubmit: Function = e => {
+  handleSubmit: Function = (e) => {
     e.preventDefault();
 
     const { dispatchAction, workflow } = this.props;
@@ -227,8 +222,10 @@ export default class DetailTab extends Component {
             </PaneItem>
           )}
           <AlertsTab alerts={workflow.alerts} />
-          <ProcessSummary model={workflow} />
-          <PaneItem title={this.props.intl.formatMessage({ id: 'global.instances' })}>
+          <ProcessSummary model={workflow} type="workflow" />
+          <PaneItem
+            title={this.props.intl.formatMessage({ id: 'global.instances' })}
+          >
             <NoDataIf condition={workflow.TOTAL === 0}>
               {() => (
                 <InstancesChart
@@ -240,7 +237,7 @@ export default class DetailTab extends Component {
             </NoDataIf>
           </PaneItem>
           <Groups>
-            {(workflow.groups || []).map(g => (
+            {(workflow.groups || []).map((g) => (
               <Group
                 key={g.name}
                 name={g.name}

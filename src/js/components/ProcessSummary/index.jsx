@@ -1,18 +1,17 @@
-import React from 'react';
-
-import PaneItem from '../pane_item';
 import { Tag } from '@blueprintjs/core';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import NoData from '../nodata';
-import Alert from '../alert';
-import compose from 'recompose/compose';
-import withProcessKill from '../../hocomponents/withProcessKill';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../components/controls';
 import moment from 'moment';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import compose from 'recompose/compose';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import {
+  Control as Button,
+  Controls as ButtonGroup
+} from '../../components/controls';
+import withProcessKill from '../../hocomponents/withProcessKill';
+import Alert from '../alert';
+import NoData from '../nodata';
+import PaneItem from '../pane_item';
 
 type Props = {
   model: Object,
@@ -26,11 +25,14 @@ const ProcessSummary: Function = ({
     remote,
     autostart,
     active,
+    loaded,
     expiry_date: expiry,
     jobid,
+    ...rest,
   },
   handleKillClick,
   intl,
+  type,
 }: Props): React.Element<PaneItem> => {
   if (enabled) {
     if (remote) {
@@ -151,7 +153,18 @@ const ProcessSummary: Function = ({
 
     return (
       <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
-        <NoData title={intl.formatMessage({ id: 'summary.running-in-core' })} />
+        {type === 'service' && !loaded ? (
+          <Alert
+            title={intl.formatMessage({ id: 'summary.service-not-loaded-title' })}
+            bsStyle="warning"
+          >
+            <FormattedMessage id="summary.service-not-loaded" />
+          </Alert>
+        ) : (
+          <NoData
+            title={intl.formatMessage({ id: 'summary.running-in-core' })}
+          />
+        )}
       </PaneItem>
     );
   }

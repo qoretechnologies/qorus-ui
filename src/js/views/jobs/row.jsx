@@ -1,21 +1,20 @@
 // @flow
+import classnames from 'classnames';
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import classnames from 'classnames';
-
-import { Tr, Td } from '../../components/new_table';
-import JobControls from './controls';
-import InstancesBar from '../../components/instances_bar';
+import { ActionColumn } from '../../components/ActionColumn';
 import Box from '../../components/box';
+import { DateColumn } from '../../components/DateColumn';
+import { IdColumn } from '../../components/IdColumn';
+import InstancesBar from '../../components/instances_bar';
+import NameColumn from '../../components/NameColumn';
+import { Td, Tr } from '../../components/new_table';
 import PaneItem from '../../components/pane_item';
 import ProcessSummary from '../../components/ProcessSummary';
-import NameColumn from '../../components/NameColumn';
 import { SelectColumn } from '../../components/SelectColumn';
-import { IdColumn } from '../../components/IdColumn';
-import { ActionColumn } from '../../components/ActionColumn';
-import { DateColumn } from '../../components/DateColumn';
+import JobControls from './controls';
 
 type Props = {
   openPane: Function,
@@ -105,6 +104,7 @@ const ServiceRow: Function = ({
           <PaneItem title={normalizedName}>{rest.description}</PaneItem>
           <ProcessSummary
             model={{ enabled, remote, active, expiry, ...rest }}
+            type="job"
           />
         </Box>
       }
