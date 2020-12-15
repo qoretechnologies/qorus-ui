@@ -1,24 +1,27 @@
 // @flow
-import React, { Component } from 'react';
-
+import {
+  Button as Btn,
+  ButtonGroup as BtnGrp,
+  ControlGroup,
+  InputGroup,
+  Intent,
+  Popover,
+  Position,
+  TextArea,
+  Tooltip,
+} from '@blueprintjs/core';
 import jsyaml from 'js-yaml';
 import isNull from 'lodash/isNull';
 import map from 'lodash/map';
 import pickBy from 'lodash/pickBy';
 import moment from 'moment';
+import React, { Component } from 'react';
 import ReactMarkdown from 'react-markdown';
-
 import {
-  Button as Btn, ButtonGroup as BtnGrp, ControlGroup, InputGroup, Intent,
-  Popover, Position, TextArea, Tooltip
-} from '@blueprintjs/core';
-
-import {
-  Control as Button, Controls as ButtonGroup
+  Control as Button,
+  Controls as ButtonGroup,
 } from '../../components/controls';
-import Dropdown, {
-  Control as DControl, Item
-} from '../../components/dropdown';
+import Dropdown, { Control as DControl, Item } from '../../components/dropdown';
 import { DATE_FORMATS } from '../../constants/dates';
 import { getLineCount } from '../../helpers/system';
 import settings from '../../settings';
@@ -201,7 +204,7 @@ export default class ConfigItemsModal extends Component {
   };
 
   removeQuotes: (s: string) => string = (s) => {
-    if (s[0] === '"' && s[s.length - 1] === '"') {
+    if (s && s[0] === '"' && s[s.length - 1] === '"') {
       return s && typeof s === 'string' ? s.slice(1, -1) : s;
     }
 
