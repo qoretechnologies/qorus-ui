@@ -1,30 +1,21 @@
 /* @flow */
-import React from 'react';
-
 import jsyaml from 'js-yaml';
+import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/pure';
 import withHandlers from 'recompose/withHandlers';
 import { createSelector } from 'reselect';
-
 import Alert from '../../components/alert';
 import Author from '../../components/author';
 import Box from '../../components/box';
-import {
-  Breadcrumbs,
-  Crumb,
-  CrumbTabs
-} from '../../components/breadcrumbs';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';
 import Flex from '../../components/Flex';
 import Headbar from '../../components/Headbar';
 import InfoTable from '../../components/info_table';
 import Loader from '../../components/loader';
-import {
-  SimpleTab,
-  SimpleTabs
-} from '../../components/SimpleTabs';
+import { SimpleTab, SimpleTabs } from '../../components/SimpleTabs';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 import modal from '../../hocomponents/modal';
 import withTabs from '../../hocomponents/withTabs';
@@ -73,6 +64,19 @@ export const providers = {
     recordSuffix: '/record',
     requiresRecord: true,
     type: 'datasource',
+  },
+  factory: {
+    name: 'factory',
+    url: 'dataprovider/factories',
+    filter: null,
+    inputFilter: 'supports_read',
+    outputFilter: 'supports_create',
+    suffix: '',
+    namekey: 'name',
+    desckey: 'desc',
+    recordSuffix: '',
+    requiresRecord: false,
+    type: 'factory',
   },
 };
 

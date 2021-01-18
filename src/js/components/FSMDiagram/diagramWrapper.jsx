@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { ElementPan } from '../PanElement';
 
 export interface IFSMDiagramWrapperProps {
@@ -23,8 +22,8 @@ const FSMDiagramWrapper: React.FC<IFSMDiagramWrapperProps> = ({
       key={JSON.stringify(wrapperDimensions)}
       width="100%"
       height="100%"
-      startX={1000 - wrapperDimensions.width / 2}
-      startY={1000 - wrapperDimensions.height / 2}
+      startX={0}
+      startY={0}
       onPan={({ x, y }) => setPan(x, y)}
       enableDragging={isHoldingShiftKey}
       zoom={zoom}

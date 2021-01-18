@@ -1,17 +1,13 @@
-import React, {
-  useEffect, useRef
-} from 'react';
-
+import { Classes } from '@blueprintjs/core';
+import React, { useEffect, useRef } from 'react';
 import Tree from 'react-d3-tree';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { createSelector } from 'reselect';
 import styled from 'styled-components';
-
-import { Classes } from '@blueprintjs/core';
-
 import TinyGrid from '../../../img/tiny_grid.png';
+import { providers } from '../../containers/mappers/info';
 import modal from '../../hocomponents/modal';
 import actions from '../../store/api/actions';
 import Loader from '../loader';
@@ -22,6 +18,21 @@ const StyledDiagramWrapper = styled.div`
   height: 100%;
   position: relative;
   background: ${`url(${`${TinyGrid}`})`};
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+
+  > div {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-flow: column;
+
+    > svg {
+      height: 100%;
+      flex: 1;
+    }
+  }
 `;
 
 const StyledNodeLabel = styled.div`
@@ -37,6 +48,14 @@ const StyledNodeLabel = styled.div`
   }
 `;
 
+const StyledProviderUrl = styled.div`
+  background-color: #eee;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 5px 0;
+  display: inline-block;
+`;
+
 const calculateFontSize = (name, isAction?: boolean) => {
   if (!name) {
     return undefined;
@@ -49,6 +68,17 @@ const calculateFontSize = (name, isAction?: boolean) => {
   }
 
   return undefined;
+};
+
+const getProviderUrl = (pipeline) => {
+  // Get the mapper options data
+  const { type, name, path = '', subtype } = pipeline.options['input-provider'];
+  // Get the rules for the given provider
+  const { url, suffix, recordSuffix } = providers[type];
+  // Build the URL based on the provider type
+  return `${url}/${name}${suffix}${path}${
+    recordSuffix && !subtype ? recordSuffix : ''
+  }`;
 };
 
 const NodeLabel = ({ nodeData, openModal, closeModal, id }) => {
@@ -166,75 +196,81 @@ const PipelineDiagram = ({
   );
 
   return (
-    <StyledDiagramWrapper ref={wrapperRef} id="pipeline-diagram">
-      {wrapperRef.current && (
-        <Tree
-          data={elements}
-          orientation="vertical"
-          pathFunc="straight"
-          translate={{
-            x: wrapperRef.current.getBoundingClientRect().width / 2,
-            y: 100,
-          }}
-          nodeSize={{ x: 250, y: 250 }}
-          transitionDuration={0}
-          textLayout={{
-            textAnchor: 'middle',
-          }}
-          allowForeignObjects
-          nodeLabelComponent={{
-            render: (
-              <NodeLabel
-                openModal={openModal}
-                closeModal={closeModal}
-                id={pipeline.id}
-              />
-            ),
-            foreignObjectWrapper: {
-              width: '200px',
-              height: '60px',
-              y: -30,
-              x: -100,
-            },
-          }}
-          collapsible={false}
-          styles={{
-            links: {
-              stroke: '#a9a9a9',
-              strokeWidth: 2,
-            },
-            nodes: {
-              node: {
-                ellipse: {
-                  stroke: '#a9a9a9',
+    <>
+      <StyledProviderUrl>
+        Provider: {getProviderUrl(pipeline)}
+      </StyledProviderUrl>
+      <StyledDiagramWrapper ref={wrapperRef} id="pipeline-diagram">
+        {wrapperRef.current && (
+          <Tree
+            style={{ height: '100%' }}
+            data={elements}
+            orientation="vertical"
+            pathFunc="straight"
+            translate={{
+              x: wrapperRef.current.getBoundingClientRect().width / 2,
+              y: 100,
+            }}
+            nodeSize={{ x: 250, y: 250 }}
+            transitionDuration={0}
+            textLayout={{
+              textAnchor: 'middle',
+            }}
+            allowForeignObjects
+            nodeLabelComponent={{
+              render: (
+                <NodeLabel
+                  openModal={openModal}
+                  closeModal={closeModal}
+                  id={pipeline.id}
+                />
+              ),
+              foreignObjectWrapper: {
+                width: '200px',
+                height: '60px',
+                y: -30,
+                x: -100,
+              },
+            }}
+            collapsible={false}
+            styles={{
+              links: {
+                stroke: '#a9a9a9',
+                strokeWidth: 2,
+              },
+              nodes: {
+                node: {
+                  ellipse: {
+                    stroke: '#a9a9a9',
+                  },
+                  rect: {
+                    stroke: '#a9a9a9',
+                    rx: 25,
+                  },
+                  name: {
+                    stroke: '#333',
+                    strokeWidth: 0.8,
+                  },
                 },
-                rect: {
-                  stroke: '#a9a9a9',
-                  rx: 25,
-                },
-                name: {
-                  stroke: '#333',
-                  strokeWidth: 0.8,
+                leafNode: {
+                  ellipse: {
+                    stroke: '#a9a9a9',
+                  },
+                  rect: {
+                    stroke: '#a9a9a9',
+                    rx: 25,
+                  },
+                  name: {
+                    stroke: '#333',
+                    strokeWidth: 0.8,
+                  },
                 },
               },
-              leafNode: {
-                ellipse: {
-                  stroke: '#a9a9a9',
-                },
-                rect: {
-                  stroke: '#a9a9a9',
-                  rx: 25,
-                },
-                name: {
-                  stroke: '#333',
-                  strokeWidth: 0.8,
-                },
-              },
-            },
-          }}
-        />
-      )}
-    </StyledDiagramWrapper>
+            }}
+          />
+        )}
+      </StyledDiagramWrapper>
+    </>
   );
 };
 
