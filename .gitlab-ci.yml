@@ -4,7 +4,7 @@ stages:
 
 build_package:
   stage: build-develop
-  image: alpine:latest
+  image: alpine:3.10
   only:
    - develop
   tags:
