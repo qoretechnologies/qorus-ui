@@ -34,6 +34,7 @@ if (env === 'production') {
 
   // Proxy
   app.use(proxyMiddleware('/api', { target: API_URL, secure: false }));
+  app.use(proxyMiddleware('/raw', { target: API_URL, secure: false }));
   app.use(proxyMiddleware('/oauth2/v1', { target: API_URL, secure: false }));
   app.use(
     proxyMiddleware('/apievents', {
@@ -44,6 +45,13 @@ if (env === 'production') {
   );
   app.use(
     proxyMiddleware('/log/', {
+      target: `${API_WS_URL}`,
+      secure: false,
+      ws: true,
+    })
+  );
+  app.use(
+    proxyMiddleware('/remote-command', {
       target: `${API_WS_URL}`,
       secure: false,
       ws: true,

@@ -1,9 +1,8 @@
 import _ from 'lodash';
 import omit from 'lodash/omit';
-import { createAction } from 'redux-actions';
 import { browserHistory } from 'react-router';
+import { createAction } from 'redux-actions';
 import shortid from 'shortid';
-
 import settings from '../../settings';
 import { warning } from '../ui/bubbles/actions';
 import { processRESTResponse } from './resources/utils';
@@ -23,8 +22,8 @@ export const updateItemWithId: Function = (
     return [...newData, datum];
   }, []);
 
-export function updateItemWithName (name, props, data, nameKey = 'name') {
-  const idx = data.findIndex(i => i[nameKey] === name);
+export function updateItemWithName(name, props, data, nameKey = 'name') {
+  const idx = data.findIndex((i) => i[nameKey] === name);
   const updatedItem = Object.assign({}, data[idx], props);
 
   return data
@@ -33,11 +32,11 @@ export function updateItemWithName (name, props, data, nameKey = 'name') {
     .concat(data.slice(idx + 1));
 }
 
-export function combineResourceActions (...actions) {
+export function combineResourceActions(...actions) {
   return _.merge(...actions);
 }
 
-export function setUpdatedToNull (collection) {
+export function setUpdatedToNull(collection) {
   return collection.reduce(
     (newArray, workflow) => [
       ...newArray,
@@ -47,10 +46,10 @@ export function setUpdatedToNull (collection) {
   );
 }
 
-export function prepareApiActions (url, actions) {
+export function prepareApiActions(url, actions) {
   const actionsHash = {};
 
-  Object.keys(actions).forEach(a => {
+  Object.keys(actions).forEach((a) => {
     let actionFn;
     let metaCreator = null;
     const name = a.toLowerCase();
@@ -71,8 +70,8 @@ export function prepareApiActions (url, actions) {
   return actionsHash;
 }
 
-export function createResourceActions (res, defaultActions = id => id) {
-  const resp = res.map(r => {
+export function createResourceActions(res, defaultActions = (id) => id) {
+  const resp = res.map((r) => {
     const actions = _.isFunction(defaultActions)
       ? defaultActions(r.actions || [])
       : defaultActions;
@@ -85,13 +84,13 @@ export function createResourceActions (res, defaultActions = id => id) {
   return _.merge(...resp);
 }
 
-export function createApiActions (actions) {
+export function createApiActions(actions) {
   const apiActions = {};
 
-  Object.keys(actions).forEach(key => {
+  Object.keys(actions).forEach((key) => {
     apiActions[key] = {};
 
-    Object.keys(actions[key]).forEach(action => {
+    Object.keys(actions[key]).forEach((action) => {
       apiActions[key][action] = createAction(
         `${key}_${action}`.toUpperCase(),
         actions[key][action].action,
@@ -109,7 +108,7 @@ export function createApiActions (actions) {
  *
  * @return {*}  headers for request
  */
-function getRestHeaders (yaml) {
+function getRestHeaders(yaml) {
   let headers = yaml
     ? settings.YAML_REST_HEADERS
     : settings.DEFAULT_REST_HEADERS;
@@ -129,7 +128,7 @@ function getRestHeaders (yaml) {
  * @param {Object} res
  * @param {string} currentPath
  */
-function checkResponse (
+function checkResponse(
   res,
   currentPath,
   redirectOnError = true,
@@ -161,7 +160,7 @@ function checkResponse (
  * @return {Object}
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
-export async function fetchData (
+export async function fetchData(
   method,
   url,
   opts,
@@ -171,15 +170,16 @@ export async function fetchData (
 ) {
   const currentPath = window.location.pathname;
   const fetchOpts: Object = omit(opts, ['notificationId']);
+  const { headers } = fetchOpts;
+
+  console.log(headers, getRestHeaders(yaml));
+
   const res = await fetch(
     url,
-    Object.assign(
-      {
-        method,
-        headers: getRestHeaders(yaml),
-      },
-      fetchOpts
-    )
+    Object.assign(fetchOpts, {
+      method,
+      headers: { ...getRestHeaders(yaml), ...headers },
+    })
   );
 
   if (!dontCheck) {
@@ -194,7 +194,7 @@ export async function fetchData (
   return res;
 }
 
-export async function fetchJson (
+export async function fetchJson(
   method,
   url,
   opts = {},
@@ -222,23 +222,23 @@ export async function fetchJson (
   return jsonRes;
 }
 
-export async function put (...args): Promise<any> {
+export async function put(...args): Promise<any> {
   return await fetchJson('PUT', ...args);
 }
 
-export async function get (...args): Promise<any> {
+export async function get(...args): Promise<any> {
   return await fetchJson('GET', ...args);
 }
 
-export async function post (...args): Promise<any> {
+export async function post(...args): Promise<any> {
   return await fetchJson('POST', ...args);
 }
 
-export async function del (...args): Promise<any> {
+export async function del(...args): Promise<any> {
   return await fetchJson('DELETE', ...args);
 }
 
-export async function fetchYaml (
+export async function fetchYaml(
   method,
   url,
   opts = {},
@@ -258,12 +258,12 @@ export async function fetchYaml (
   return res.text();
 }
 
-export async function fetchText (method, url, opts, dontCheck, redirectOnError) {
+export async function fetchText(method, url, opts, dontCheck, redirectOnError) {
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
   return res.text();
 }
 
-export async function fetchResponse (
+export async function fetchResponse(
   method,
   url,
   opts,
@@ -275,7 +275,7 @@ export async function fetchResponse (
   return res;
 }
 
-export async function fetchWithNotifications (
+export async function fetchWithNotifications(
   fetchFunc: Function,
   notificationBefore: string,
   notificationSuccess: string,

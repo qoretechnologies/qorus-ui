@@ -1,10 +1,10 @@
 /* @flow */
 import classNames from 'classnames';
+import { isString } from 'lodash';
 import round from 'lodash/round';
 import size from 'lodash/size';
-import reduce from 'lodash/reduce';
 import upperFirst from 'lodash/upperFirst';
-import includes from 'lodash/includes';
+import { Link } from 'react-router';
 
 const statusHealth: Function = (health: string): string =>
   classNames({
@@ -221,7 +221,6 @@ const getLineCount: Function = (value: string): number => {
 
 const transformMenu: Function = (
   menu: Object,
-  favoriteItems: Array<Object>,
   plugins: Array<string>
 ): Object => {
   let newMenu: Object = { ...menu };
@@ -229,58 +228,18 @@ const transformMenu: Function = (
   if (size(plugins)) {
     newMenu = {
       ...newMenu,
-      Plugins: [
-        {
-          name: 'Plugins',
-          icon: 'helper-management',
-          activePaths: ['/plugins'],
-          submenu: createPluginsMenu(plugins),
-        },
-      ],
-    };
-  }
-
-  if (size(favoriteItems)) {
-    newMenu = reduce(
-      newMenu,
-      (cur, menuSection: Array<Object>, name: string) => {
-        let newSection = [...menuSection];
-
-        newSection = newSection
-          .map((newSectionItem: Object) => {
-            const copySectionItem: Object = { ...newSectionItem };
-
-            if (copySectionItem.submenu) {
-              copySectionItem.submenu = copySectionItem.submenu.filter(
-                (submenuItem: Object) =>
-                  !favoriteItems.find(
-                    (favoriteItem: Object) =>
-                      favoriteItem.name === submenuItem.name
-                  )
-              );
-
-              if (size(copySectionItem.submenu)) {
-                return copySectionItem;
-              }
-            } else {
-              if (
-                !favoriteItems.find(
-                  (favoriteItem: Object) =>
-                    favoriteItem.name === copySectionItem.name
-                )
-              ) {
-                return copySectionItem;
-              }
-            }
-          })
-          .filter((newSectionItem: Object) => newSectionItem);
-
-        return { ...cur, [name]: newSection };
+      Plugins: {
+        items: [
+          {
+            name: 'Plugins',
+            icon: 'helper-management',
+            activePaths: ['/plugins'],
+            id: 'plugins',
+            submenu: createPluginsMenu(plugins),
+          },
+        ],
       },
-      {}
-    );
-
-    newMenu = { Favorites: favoriteItems, ...newMenu };
+    };
   }
 
   return newMenu;
@@ -291,6 +250,8 @@ const createPluginsMenu: Function = (plugins: Array<string>): Array<Object> =>
     name: upperFirst(plugin),
     link: `/plugins/${plugin}`,
     icon: getPluginIcon(plugin),
+    as: Link,
+    id: 'plugin',
   }));
 
 const getPluginIcon: Function = (plugin: string): string => {
@@ -304,6 +265,10 @@ const getPluginIcon: Function = (plugin: string): string => {
 
 const hasPlugin: Function = (pluginName: string, plugins: Array<string>) =>
   plugins && plugins.includes(pluginName);
+
+export const transformOldFavoriteItems = (fitems) => {
+  return fitems.filter((item) => isString(item));
+};
 
 export {
   statusHealth,

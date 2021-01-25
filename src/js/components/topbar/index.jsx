@@ -1,42 +1,40 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import {
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-  NavbarDivider,
   Button,
   ButtonGroup,
-  Popover,
-  Position,
+  Classes,
+  ControlGroup,
+  InputGroup,
   Intent,
   Menu,
-  MenuItem,
-  Tooltip,
   MenuDivider,
-  InputGroup,
-  Classes,
-  Icon,
-  ControlGroup,
+  MenuItem,
+  Navbar,
+  NavbarDivider,
+  NavbarGroup,
+  NavbarHeading,
+  Popover,
+  Position,
+  Tooltip,
 } from '@blueprintjs/core';
-import { Controls, Control } from '../../components/controls';
 import map from 'lodash/map';
-
+import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import cz from '../../../img/country_flags/cz.jpg';
-import en from '../../../img/country_flags/us.png';
 import jp from '../../../img/country_flags/jp.png';
-
-import withModal from '../../hocomponents/modal';
-import withPane from '../../hocomponents/pane';
+import en from '../../../img/country_flags/us.png';
 import logo from '../../../img/qorus_engine_logo.png';
 import whiteLogo from '../../../img/qorus_engine_logo_white.png';
-import actions from '../../store/api/actions';
+import { Control } from '../../components/controls';
+import { HEALTH_KEYS } from '../../constants/dashboard';
+import Release from '../../containers/release';
+import withModal from '../../hocomponents/modal';
+import withPane from '../../hocomponents/pane';
 import { LANGS } from '../../intl/messages';
 import settings from '../../settings';
-import { HEALTH_KEYS } from '../../constants/dashboard';
+import actions from '../../store/api/actions';
 import Notifications from '../notifications';
-import { injectIntl } from 'react-intl';
 
 const flags: Object = {
   'cs-CZ': cz,
@@ -168,7 +166,7 @@ export default class Topbar extends Component {
     );
   };
 
-  render () {
+  render() {
     const {
       light,
       onThemeClick,
@@ -201,13 +199,24 @@ export default class Topbar extends Component {
                 })}
                 rightElement={this.renderSearchMenu()}
                 value={this.state.quickSearchValue}
-                onChange={e =>
+                onChange={(e) =>
                   this.setState({ quickSearchValue: e.target.value })
                 }
               />
               <Control icon="search" type="submit" big />
             </ControlGroup>
           </form>
+          <NavbarDivider />
+          <ButtonGroup minimal>
+            <Button
+              icon="git-push"
+              onClick={() => {
+                this.props.openModal(
+                  <Release onClose={this.props.closeModal} />
+                );
+              }}
+            />
+          </ButtonGroup>
           <NavbarDivider />
           <Popover
             position={Position.BOTTOM}

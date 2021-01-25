@@ -4,7 +4,7 @@ import settings from '../../settings';
 
 const connections = {};
 
-const connected = createAction('WEBSOCKET_CONNECTED', url => ({ url }));
+const connected = createAction('WEBSOCKET_CONNECTED', (url) => ({ url }));
 
 const disconnected = createAction(
   'WEBSOCKET_DISCONNECTED',
@@ -14,19 +14,20 @@ const disconnected = createAction(
   }
 );
 
-const paused = createAction('WEBSOCKET_PAUSED', url => {
+const paused = createAction('WEBSOCKET_PAUSED', (url) => {
   delete connections[url];
   return { url };
 });
 
-const connectCall: Function = (
+export const connectCall: Function = (
   url: string,
   dispatch: Function,
   onOpen: Function,
   onMessage: Function,
   onError: Function,
   onClose: Function,
-  onPause: Function
+  onPause: Function,
+  useHeartbeat?: boolean = true
 ): Object => {
   const token = localStorage.getItem('token');
 
@@ -38,7 +39,7 @@ const connectCall: Function = (
   let timeout;
   let interval;
 
-  function heartbeat () {
+  function heartbeat() {
     clearTimeout(timeout);
 
     timeout = setTimeout(() => {
@@ -60,12 +61,14 @@ const connectCall: Function = (
 
     if (onOpen) onOpen(url);
 
-    heartbeat();
-    ws.send('ping');
-
-    interval = setInterval(() => {
+    if (useHeartbeat) {
+      heartbeat();
       ws.send('ping');
-    }, 3000);
+
+      interval = setInterval(() => {
+        ws.send('ping');
+      }, 3000);
+    }
   };
 
   ws.onmessage = ({ data }) => {
@@ -104,10 +107,10 @@ const connectCall: Function = (
     }
   };
 
-  return { url };
+  return { url, ws };
 };
 
-const disconnectCall: Function = (url: string, pause: boolean): void => {
+export const disconnectCall: Function = (url: string, pause: boolean): void => {
   if (connections[url]) connections[url].close(1000, pause ? 'paused' : '');
 };
 

@@ -1,10 +1,9 @@
 /* @flow */
-import { createAction } from 'redux-actions';
 import includes from 'lodash/includes';
-
+import { createAction } from 'redux-actions';
 import { buildSorting } from '../../../../helpers/table';
-import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
+import { fetchJson } from '../../utils';
 
 const unSyncCurrentUser: Function = createAction(
   'CURRENTUSER_UNSYNCCURRENTUSER'
@@ -127,25 +126,14 @@ const storeSettings: Function = (setting: string, value: any): Function => (
   dispatch(updateStorage(storage, username));
 };
 
-const storeFavoriteMenuItem: Function = (
-  itemData: Object,
-  remove: boolean
-): Function => (dispatch: Function, getState: Function): void => {
+const storeFavoriteMenuItem: Function = (items): Function => (
+  dispatch: Function,
+  getState: Function
+): void => {
   const { storage: storage = {}, username } = getState().api.currentUser.data;
 
   storage.favoriteMenuItems = storage.favoriteMenuItems || [];
-
-  // Remove the favorite item
-  if (remove) {
-    storage.favoriteMenuItems = storage.favoriteMenuItems.filter(
-      (menuItem: Object): boolean => menuItem.name !== itemData.name
-    );
-    // Else add it
-  } else {
-    const newItemData: Object = { ...itemData, isFavorite: true };
-
-    storage.favoriteMenuItems.push(newItemData);
-  }
+  storage.favoriteMenuItems = [...storage.favoriteMenuItems, ...items];
 
   dispatch(updateStorage(storage, username));
 };

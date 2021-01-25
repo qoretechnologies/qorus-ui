@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-
+import { QorusSidebar, ReqoreUIProvider } from '@qoretechnologies/reqore';
 import debounce from 'lodash/debounce';
 // @flow
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { addLocaleData, IntlProvider } from 'react-intl';
 import cs from 'react-intl/locale-data/cs';
 import en from 'react-intl/locale-data/en';
@@ -10,16 +10,15 @@ import ja from 'react-intl/locale-data/ja';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
-
 import Flex from '../components/Flex';
 import Footer from '../components/footer';
 import FullPageLoading from '../components/FullPageLoading';
 import { Manager as ModalManager } from '../components/modal';
-import Sidebar from '../components/sidebar';
 import Topbar from '../components/topbar';
 import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
 import { ModalContext } from '../context/modal';
+import { transformMenu, transformOldFavoriteItems } from '../helpers/system';
 import messages from '../intl/messages';
 import actions from '../store/api/actions';
 import { settings } from '../store/ui/actions';
@@ -99,6 +98,7 @@ const optionsSelector = (state) => state.api.systemOptions;
     fetchDefaultLogger: actions.system.fetchDefaultLogger,
     sendSuccess: success,
     sendWarning: warning,
+    saveFavoriteItems: actions.currentUser.storeFavoriteMenuItem,
   }
 )
 @mapProps(({ currentUser, ...rest }): Object => ({
@@ -296,56 +296,57 @@ export default class Root extends Component {
 
     const { favoriteMenuItems = [] } = currentUser.data.storage;
     const isLightTheme = currentUser.data.storage.theme === 'light';
+    const menuWithPlugins = transformMenu(menu.data, info.plugins);
 
     return (
       <IntlProvider messages={messages(locale)} locale={locale}>
-        <ModalContext.Provider
-          value={{
-            addModal: this.addModal,
-            removeModal: this.removeModal,
-            modals: this.state.modals,
-          }}
-        >
-          <div className={`root ${isMaximized && 'maximized'}`}>
-            {!isMaximized && (
-              <Topbar
-                onMaximizeClick={maximize}
-                info={info}
-                health={health}
-                locale={locale}
-                isTablet={isTablet}
-                light={isLightTheme}
-                onThemeClick={this.onThemeChange}
-                user={currentUser.data}
-                location={location}
-                sendWarning={this.props.sendWarning}
-              />
-            )}
-            <div className="root__center">
+        <ReqoreUIProvider theme={{ main: isLightTheme ? '#fff' : '#383c44' }}>
+          <ModalContext.Provider
+            value={{
+              addModal: this.addModal,
+              removeModal: this.removeModal,
+              modals: this.state.modals,
+            }}
+          >
+            <div className={`root ${isMaximized && 'maximized'}`}>
               {!isMaximized && (
-                <Sidebar
-                  isLight={isLightTheme}
-                  isCollapsed={!this.props.sidebarOpen}
-                  toggleMenu={this.toggleMenu}
+                <Topbar
+                  onMaximizeClick={maximize}
+                  info={info}
+                  health={health}
+                  locale={locale}
                   isTablet={isTablet}
-                  location={this.props.location}
-                  menu={menu.data}
-                  favoriteItems={favoriteMenuItems}
-                  plugins={info.plugins}
+                  light={isLightTheme}
+                  onThemeClick={this.onThemeChange}
+                  user={currentUser.data}
+                  location={location}
+                  sendWarning={this.props.sendWarning}
                 />
               )}
-              <Flex className="section" scrollX>
-                <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
-              </Flex>
+              <div className="root__center">
+                {!isMaximized && (
+                  <QorusSidebar
+                    isDefaultCollapsed={!this.props.sidebarOpen}
+                    path={this.props.location.pathname}
+                    items={menuWithPlugins}
+                    bookmarks={transformOldFavoriteItems(favoriteMenuItems)}
+                    onBookmarksChange={this.props.saveFavoriteItems}
+                    wrapperStyle={{ height: 'calc(100% - 30px)' }}
+                  />
+                )}
+                <Flex className="section" scrollX>
+                  <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
+                </Flex>
+              </div>
+              {!isMaximized && (
+                <Footer path={this.props.location.pathname} info={info.data} />
+              )}
+              <ModalManager />
+              <Notifications />
+              <Bubbles />
             </div>
-            {!isMaximized && (
-              <Footer path={this.props.location.pathname} info={info.data} />
-            )}
-            <ModalManager />
-            <Notifications />
-            <Bubbles />
-          </div>
-        </ModalContext.Provider>
+          </ModalContext.Provider>
+        </ReqoreUIProvider>
       </IntlProvider>
     );
   }
