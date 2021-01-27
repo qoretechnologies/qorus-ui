@@ -10,6 +10,8 @@ export default {
     'summary.process-not-running': 'Process not running',
     'summary.process-summary': 'Process summary',
     'summary.running-in-core': 'Running locally in qorus-core',
+    'summary.service-not-loaded-title': 'Service not loaded',
+    'summary.service-not-loaded': 'not loaded; click on the load control above to load this service in qorus-core',
   },
   'cs-CZ': {
     'summary.autostart-disabled': 'Automatický start není povolený; pro automatické zapnutí nastavte hodnotu autostart na True',
@@ -22,6 +24,8 @@ export default {
     'summary.process-not-running': 'Process neběží',
     'summary.process-summary': 'Přehled procesu',
     'summary.running-in-core': 'Běží lokálně v qorus-core',
+    'summary.service-not-loaded-title': 'Servisa nebezi',
+    'summary.service-not-loaded': 'Nahrejte servisu kliknutim na tlacitko "Nahrat" vyse',
   },
   'ja-JP': {
     'summary.autostart-disabled': '自動起動は無効です。サービスを自動的に開始するには、autostartをtrueに設定します',
@@ -34,6 +38,8 @@ export default {
     'summary.process-not-running': 'プロセスが実行されていません',
     'summary.process-summary': 'プロセス概要',
     'summary.running-in-core': 'qorus-coreでローカルに実行',
+    'summary.service-not-loaded-title': 'サービスがロードされていません',
+    'summary.service-not-loaded': '読み込まれていない; このサービスをqorus-coreにロードするには、上のロードコントロールをクリックしてください',
   },
   'ko-KR': {
     'summary.autostart-disabled': '자동 시작이 비활성화됩니다. 서비스를 자동으로 시작하려면 자동 시작을 true로 설정하십시오.',
@@ -46,5 +52,7 @@ export default {
     'summary.process-not-running': '프로세스가 실행되고 있지 않습니다',
     'summary.process-summary': '프로세스 요약',
     'summary.running-in-core': '코러스 코어에서 로컬로 실행',
+    'summary.service-not-loaded-title': '서비스가로드되지 않았습니다',
+    'summary.service-not-loaded': '로드되지 않았습니다. qorus-core에서이 서비스를로드하려면 위의로드 제어를 클릭하십시오',
   },
 };
