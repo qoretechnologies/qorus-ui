@@ -12,7 +12,7 @@
     "@blueprintjs/core": "3.36",
     "@blueprintjs/datetime": "^3.15.2",
     "@blueprintjs/select": "^3.11.2",
-    "@qoretechnologies/reqore": "^0.1.49",
+    "@qoretechnologies/reqore": "^0.2.7",
     "bootstrap-sass": "^3.3.6",
     "chart.js": "^2.7.3",
     "classnames": "^2.2.5",

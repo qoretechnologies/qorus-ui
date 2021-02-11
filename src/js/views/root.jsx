@@ -1,4 +1,4 @@
-import { QorusSidebar, ReqoreUIProvider } from '@qoretechnologies/reqore';
+import { ReqoreSidebar, ReqoreUIProvider } from '@qoretechnologies/reqore';
 import debounce from 'lodash/debounce';
 // @flow
 import PropTypes from 'prop-types';
@@ -300,13 +300,19 @@ export default class Root extends Component {
 
     return (
       <IntlProvider messages={messages(locale)} locale={locale}>
-        <ReqoreUIProvider theme={{ main: isLightTheme ? '#fff' : '#383c44' }}>
-          <ModalContext.Provider
-            value={{
-              addModal: this.addModal,
-              removeModal: this.removeModal,
-              modals: this.state.modals,
+        <ModalContext.Provider
+          value={{
+            addModal: this.addModal,
+            removeModal: this.removeModal,
+            modals: this.state.modals,
+          }}
+        >
+          <ReqoreUIProvider
+            theme={{
+              main: '#ffffff',
+              sidebar: { main: isLightTheme ? '#ffffff' : '#383c44' },
             }}
+            withSidebar
           >
             <div className={`root ${isMaximized && 'maximized'}`}>
               {!isMaximized && (
@@ -325,13 +331,14 @@ export default class Root extends Component {
               )}
               <div className="root__center">
                 {!isMaximized && (
-                  <QorusSidebar
+                  <ReqoreSidebar
                     isDefaultCollapsed={!this.props.sidebarOpen}
                     path={this.props.location.pathname}
                     items={menuWithPlugins}
                     bookmarks={transformOldFavoriteItems(favoriteMenuItems)}
                     onBookmarksChange={this.props.saveFavoriteItems}
                     wrapperStyle={{ height: 'calc(100% - 30px)' }}
+                    useNativeTitle
                   />
                 )}
                 <Flex className="section" scrollX>
@@ -345,8 +352,8 @@ export default class Root extends Component {
               <Notifications />
               <Bubbles />
             </div>
-          </ModalContext.Provider>
-        </ReqoreUIProvider>
+          </ReqoreUIProvider>
+        </ModalContext.Provider>
       </IntlProvider>
     );
   }

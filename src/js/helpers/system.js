@@ -248,7 +248,10 @@ const transformMenu: Function = (
 const createPluginsMenu: Function = (plugins: Array<string>): Array<Object> =>
   plugins.map((plugin: string) => ({
     name: upperFirst(plugin),
-    link: `/plugins/${plugin}`,
+    props: {
+      to: `/plugins/${plugin}`,
+    },
+    activePaths: [`/plugins/${plugin}`],
     icon: getPluginIcon(plugin),
     as: Link,
     id: 'plugin',

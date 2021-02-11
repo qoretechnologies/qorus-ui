@@ -9,7 +9,9 @@ const initialState: Object = {
         {
           name: 'Dashboard',
           icon: 'home',
-          link: '/dashboard',
+          props: {
+            to: '/dashboard',
+          },
           activePaths: ['/dashboard'],
           id: 'dashboard',
           as: Link,
@@ -21,7 +23,9 @@ const initialState: Object = {
         {
           name: 'Workflows',
           icon: 'exchange',
-          link: '/workflows',
+          props: {
+            to: '/workflows',
+          },
           activePaths: ['/workflow', '/order'],
           id: 'workflows',
           as: Link,
@@ -29,7 +33,9 @@ const initialState: Object = {
         {
           name: 'Services',
           icon: 'merge-links',
-          link: '/services',
+          props: {
+            to: '/services',
+          },
           activePaths: ['/service'],
           id: 'services',
           as: Link,
@@ -37,7 +43,9 @@ const initialState: Object = {
         {
           name: 'Jobs',
           icon: 'calendar',
-          link: '/jobs',
+          props: {
+            to: '/jobs',
+          },
           activePaths: ['/job'],
           id: 'jobs',
           as: Link,
@@ -45,21 +53,30 @@ const initialState: Object = {
         {
           name: 'Groups',
           icon: 'group-objects',
-          link: '/groups',
+          props: {
+            to: '/groups',
+          },
+          activePaths: ['/groups'],
           id: 'groups',
           as: Link,
         },
         {
           name: 'Connections',
           icon: 'left-join',
-          link: '/remote',
+          props: {
+            to: '/remote',
+          },
+          activePaths: ['/remote'],
           id: 'remote',
           as: Link,
         },
         {
           name: 'Search',
           icon: 'search',
-          link: '/search',
+          props: {
+            to: '/search',
+          },
+          activePaths: ['/search'],
           id: 'search',
           as: Link,
         },
@@ -83,21 +100,29 @@ const initialState: Object = {
             {
               name: 'RBAC',
               icon: 'people',
-              link: '/rbac',
+              props: {
+                to: '/rbac',
+              },
+              activePaths: ['/rbac'],
               id: 'rbac',
               as: Link,
             },
             {
               name: 'Valuemaps',
               icon: 'map',
-              link: '/valuemaps',
+              props: {
+                to: '/valuemaps',
+              },
+              activePaths: ['/valuemaps'],
               id: 'valuemaps',
               as: Link,
             },
             {
               name: 'SLAs',
               icon: 'time',
-              link: '/slas',
+              props: {
+                to: '/slas',
+              },
               activePaths: ['/slas', '/sla'],
               id: 'slas',
               as: Link,
@@ -105,14 +130,20 @@ const initialState: Object = {
             {
               name: 'Releases',
               icon: 'git-push',
-              link: '/releases',
+              props: {
+                to: '/releases',
+              },
+              activePaths: ['/releases'],
               id: 'releases',
               as: Link,
             },
             {
               name: 'Errors',
               icon: 'error',
-              link: '/errors',
+              props: {
+                to: '/errors',
+              },
+              activePaths: ['/errors'],
               id: 'errors',
               as: Link,
             },
@@ -131,21 +162,30 @@ const initialState: Object = {
             {
               name: 'Alerts',
               icon: 'warning-sign',
-              link: '/system/alerts',
+              props: {
+                to: '/system/alerts',
+              },
+              activePaths: ['/system/alerts'],
               id: 'alerts',
               as: Link,
             },
             {
               name: 'Cluster',
               icon: 'heat-grid',
-              link: '/system/cluster',
+              props: {
+                to: '/system/cluster',
+              },
+              activePaths: ['/system/cluster'],
               id: 'cluster',
               as: Link,
             },
             {
               name: 'Order Stats',
               icon: 'vertical-bar-chart-asc',
-              link: '/system/orderStats',
+              props: {
+                to: '/system/orderStats',
+              },
+              activePaths: ['/system/orderStats'],
               id: 'orderstats',
               as: Link,
             },
@@ -153,35 +193,50 @@ const initialState: Object = {
             {
               name: 'Options',
               icon: 'settings',
-              link: '/system/options',
+              props: {
+                to: '/system/options',
+              },
+              activePaths: ['/system/options'],
               id: 'options',
               as: Link,
             },
             {
               name: 'Properties',
               icon: 'properties',
-              link: '/system/props',
+              props: {
+                to: '/system/props',
+              },
+              activePaths: ['/system/props'],
               id: 'props',
               as: Link,
             },
             {
               name: 'Cache',
               icon: 'database',
-              link: '/system/sqlcache',
+              props: {
+                to: '/system/sqlcache',
+              },
+              activePaths: ['/system/sqlcache'],
               id: 'sqlcache',
               as: Link,
             },
             {
               name: 'HTTP Services',
               icon: 'social-media',
-              link: '/system/http',
+              props: {
+                to: '/system/http',
+              },
+              activePaths: ['/system/http'],
               id: 'http',
               as: Link,
             },
             {
               name: 'Config Items',
               icon: 'cog',
-              link: '/system/config-items',
+              props: {
+                to: '/system/config-items',
+              },
+              activePaths: ['/system/config-items'],
               id: 'config-items',
               as: Link,
             },
@@ -201,28 +256,40 @@ const initialState: Object = {
             {
               name: 'Library',
               icon: 'book',
-              link: '/library',
+              props: {
+                to: '/library',
+              },
+              activePaths: ['/library'],
               id: 'library',
               as: Link,
             },
             {
               name: 'Extensions',
               icon: 'layout',
-              link: '/extensions',
+              props: {
+                to: '/extensions',
+              },
+              activePaths: ['/extensions'],
               id: 'extensions',
               as: Link,
             },
             {
               name: 'Logs',
               icon: 'comparison',
-              link: '/logs',
+              props: {
+                to: '/logs',
+              },
+              activePaths: ['/logs'],
               id: 'logs',
               as: Link,
             },
             {
               name: 'Info',
               icon: 'info-sign',
-              link: '/info',
+              props: {
+                to: '/info',
+              },
+              activePaths: ['/info'],
               id: 'info',
               as: Link,
             },
