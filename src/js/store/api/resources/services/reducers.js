@@ -389,7 +389,7 @@ const processStarted = {
         } else {
           processes = processes.reduce((newProc, prcs) => {
             if (prcs.pid === dt.info.pid) {
-              return [...newProc];
+              return [...newProc, dt.info];
             }
 
             return [...newProc, prcs];
