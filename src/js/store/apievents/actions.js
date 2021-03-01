@@ -5,13 +5,13 @@ import { browserHistory } from 'react-router';
 // @flow
 import { createAction } from 'redux-actions';
 import shortid from 'shortid';
-
 import { INTERFACE_IDS } from '../../constants/interfaces';
 import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
 import { pipeline } from '../../helpers/apievents';
 import { getLoggerIntfcType } from '../../helpers/logger';
 import {
-  getProcessObjectInterface, getProcessObjectInterfaceId
+  getProcessObjectInterface,
+  getProcessObjectInterfaceId,
 } from '../../helpers/system';
 import * as alerts from '../api/resources/alerts/actions';
 import * as fsms from '../api/resources/fsms/actions';
@@ -115,7 +115,7 @@ const handleEvent = (url, data, dispatch, state) => {
             pipeline(
               `${eventstr}_${interfaceType}`,
               interfaceActions[interfaceType].processStarted,
-              { id, info },
+              { id, info, started: eventstr === 'PROCESS_STARTED' },
               dispatch
             );
           }

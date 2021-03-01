@@ -1,4 +1,5 @@
 import { Tag } from '@blueprintjs/core';
+import { isArray, size } from 'lodash';
 import moment from 'moment';
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -22,6 +23,7 @@ const ProcessSummary: Function = ({
   model: {
     enabled,
     process: prcs,
+    processes,
     remote,
     autostart,
     active,
@@ -34,42 +36,51 @@ const ProcessSummary: Function = ({
   intl,
   type,
 }: Props): React.Element<PaneItem> => {
+  const processKey = type === 'service' ? processes : prcs;
+  const processData = processKey ? isArray(processKey) ? processKey : [processKey] : null;
+
   if (enabled) {
     if (remote) {
-      if (prcs) {
+      if (size(processData)) {
         return (
           <PaneItem
             title={intl.formatMessage({ id: 'summary.process-summary' })}
-            label={
-              <ButtonGroup>
-                <Button
-                  btnStyle="danger"
-                  icon="cross"
-                  onClick={() => {
-                    handleKillClick(prcs.id);
-                  }}
-                >
-                  <FormattedMessage id="cluster.kill" />
-                </Button>
-              </ButtonGroup>
-            }
           >
-            <Tag>
-              {' '}
-              <FormattedMessage id="cluster.node" />: {prcs.node}
-            </Tag>{' '}
-            <Tag>
-              {' '}
-              <FormattedMessage id="cluster.pid" />: {prcs.pid}
-            </Tag>{' '}
-            <Tag>
-              {' '}
-              <FormattedMessage id="cluster.status" />: {prcs.status_string}
-            </Tag>{' '}
-            <Tag>
-              {' '}
-              <FormattedMessage id="cluster.memory" />: {prcs.priv_str}
-            </Tag>{' '}
+            {processData.map((p) => (
+              <div key={p.pid} style={{ clear: 'both' }}>
+                <div style={{ float: 'left' }}>
+                  <Tag>
+                    {' '}
+                    <FormattedMessage id="cluster.node" />: {p.node}
+                  </Tag>{' '}
+                  <Tag>
+                    {' '}
+                    <FormattedMessage id="cluster.pid" />: {p.pid}
+                  </Tag>{' '}
+                  <Tag>
+                    {' '}
+                    <FormattedMessage id="cluster.status" />: {p.status_string}
+                  </Tag>{' '}
+                  <Tag>
+                    {' '}
+                    <FormattedMessage id="cluster.memory" />: {p.priv_str}
+                  </Tag>{' '}
+                </div>
+                <div style={{ float: 'right ' }}>
+                  <ButtonGroup>
+                    <Button
+                      btnStyle="danger"
+                      icon="cross"
+                      onClick={() => {
+                        handleKillClick(p.id);
+                      }}
+                    >
+                      <FormattedMessage id="cluster.kill" />
+                    </Button>
+                  </ButtonGroup>
+                </div>
+              </div>
+            ))}
           </PaneItem>
         );
       }
