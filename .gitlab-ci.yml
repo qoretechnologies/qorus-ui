@@ -1,12 +1,12 @@
 stages:
-  - build-develop
+  - build-5.0
   - deploy
 
 build_package:
-  stage: build-develop
+  stage: build-5.0
   image: alpine:3.10
   only:
-   - develop
+   - "5.0"
   tags:
     - docker-exec
   artifacts:
@@ -22,11 +22,11 @@ upload_build:
   stage: deploy
   image: alpine:latest
   only:
-   - develop
+   - "5.0"
   tags:
     - docker-exec
   variables:
-    WEBAPP: develop
+    WEBAPP: "5.0"
   dependencies:
     - build_package
   script:
