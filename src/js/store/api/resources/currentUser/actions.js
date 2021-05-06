@@ -135,8 +135,6 @@ const storeFavoriteMenuItem: Function = (items): Function => (
   storage.favoriteMenuItems = storage.favoriteMenuItems || [];
   storage.favoriteMenuItems = [...storage.favoriteMenuItems, ...items];
 
-  console.log(storage);
-
   dispatch(updateStorage(storage, username));
 };
 
