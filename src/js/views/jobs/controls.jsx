@@ -1,21 +1,20 @@
 // @flow
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { connect } from 'react-redux';
-import { Intent } from '@blueprintjs/core';
 import {
-  Controls as ButtonGroup,
-  Control as Button,
+  Control as Button, Controls as ButtonGroup
 } from '../../components/controls';
-
 import withModal from '../../hocomponents/modal';
-import actions from '../../store/api/actions';
-import RescheduleModal from './modals/reschedule';
-import SetExpiryModal from './modals/expiry';
 import withDispatch from '../../hocomponents/withDispatch';
-import { injectIntl } from 'react-intl';
+import actions from '../../store/api/actions';
+import SetExpiryModal from './modals/expiry';
+import RescheduleModal from './modals/reschedule';
+
 
 type Props = {
   handleEnableClick: Function,
@@ -63,6 +62,7 @@ const JobControls: Function = ({
   expiry,
   compact,
   intl,
+  id,
 }: Props): React.Element<any> =>
   scheduleOnly ? (
     <div>
@@ -127,6 +127,14 @@ const JobControls: Function = ({
           title={intl.formatMessage({ id: 'button.reschedule' })}
           icon="time"
           onClick={handleScheduleClick}
+          big={big}
+        />
+        <Button
+          title={intl.formatMessage({ id: 'button.reschedule' })}
+          icon="edit"
+          onClick={() => {
+            window.open(`https://localhost:3000/new/job/${id}/`).focus();
+          }}
           big={big}
         />
       </ButtonGroup>

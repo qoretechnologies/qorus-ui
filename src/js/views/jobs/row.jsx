@@ -115,7 +115,7 @@ const ServiceRow: Function = ({
       hasAlerts={hasAlerts}
       type="job"
     />
-    <ActionColumn className="big">
+    <ActionColumn className="large">
       <JobControls
         enabled={enabled}
         active={active}
