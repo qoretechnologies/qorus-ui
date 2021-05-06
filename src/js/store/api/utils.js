@@ -172,8 +172,6 @@ export async function fetchData(
   const fetchOpts: Object = omit(opts, ['notificationId']);
   const { headers } = fetchOpts;
 
-  console.log(headers, getRestHeaders(yaml));
-
   const res = await fetch(
     url,
     Object.assign(fetchOpts, {

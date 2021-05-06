@@ -14,7 +14,8 @@ import {
   NavbarHeading,
   Popover,
   Position,
-  Tooltip,
+  Tag,
+  Tooltip
 } from '@blueprintjs/core';
 import map from 'lodash/map';
 import React, { Component } from 'react';
@@ -24,6 +25,7 @@ import { browserHistory } from 'react-router';
 import cz from '../../../img/country_flags/cz.jpg';
 import jp from '../../../img/country_flags/jp.png';
 import en from '../../../img/country_flags/us.png';
+import Kubernetes from '../../../img/kubernetes.png';
 import logo from '../../../img/qorus_engine_logo.png';
 import whiteLogo from '../../../img/qorus_engine_logo_white.png';
 import { Control } from '../../components/controls';
@@ -186,6 +188,9 @@ export default class Topbar extends Component {
             <img src={light ? logo : whiteLogo} className="qore-small-logo" />
             <span className="topbar-instance-on">on</span>
             <span className="topbar-instance">{info.data['instance-key']}</span>
+            {info.data.is_kubernetes && (
+              <Tag intent="primary" style={{ marginLeft: '15px', verticalAlign: 'sub' }}><img src={Kubernetes} style={{ width: '15px' }} /> IN KUBERNETES</Tag>
+            )}
           </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
