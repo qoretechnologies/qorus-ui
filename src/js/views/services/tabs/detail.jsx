@@ -36,7 +36,9 @@ function retstr(str) {
 }
 
 @withDispatch()
-@connect(() => ({}), actions.services)
+@connect((state) => ({
+  system: state.api.system.data,
+}), actions.services)
 @injectIntl
 export default class DetailTab extends Component {
   props: {
@@ -110,9 +112,8 @@ export default class DetailTab extends Component {
   }
 
   render() {
-    const { service, intl } = this.props;
-    console.log(this.props);
-
+    const { service, intl, system } = this.props;
+    
     return (
       <Box top fill>
         <InfoHeader model={service} />
@@ -129,6 +130,7 @@ export default class DetailTab extends Component {
               type={service.type}
             />
           </PaneItem>
+          {service.stateless && system.is_kubernetes ? (
           <PaneItem title={this.props.intl.formatMessage({ id: 'service.scaling' })}>
             <Table>
               <Thead>
@@ -179,16 +181,9 @@ export default class DetailTab extends Component {
                 `Updating scaling for ${service.name}...`,
                 `${service.name} scaling updated successfuly`
               );
-              // put(`${settings.REST_BASE_URL}/services/${service.name}/scaling`, {
-              //   body: JSON.stringify({
-              //     'scaling-min-replicas': this.state.minReplicas,
-              //     'scaling-max-replicas': this.state.maxReplicas,
-              //     'scaling-cpu': this.state.cpu,
-              //     'scaling-memory': `${this.state.memory.val}${this.state.memory.unit}`,
-              //   })
-              // })
             }}>Save</Button>
           </PaneItem>
+          ) : null}
           <AlertsTable alerts={service.alerts} />
           <ProcessSummary model={service} type="service" />
           <Groups>
