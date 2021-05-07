@@ -129,14 +129,6 @@ const JobControls: Function = ({
           onClick={handleScheduleClick}
           big={big}
         />
-        <Button
-          title={intl.formatMessage({ id: 'button.reschedule' })}
-          icon="edit"
-          onClick={() => {
-            window.open(`https://localhost:3000/new/job/${id}/`).focus();
-          }}
-          big={big}
-        />
       </ButtonGroup>
     </React.Fragment>
   );
