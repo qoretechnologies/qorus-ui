@@ -1,15 +1,15 @@
 /* @flow */
+import { Button, ButtonGroup, Intent } from '@blueprintjs/core';
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { Button, Intent, ButtonGroup } from '@blueprintjs/core';
-
-import { Tr, Td } from '../../../../components/new_table';
-import Badge from '../../../../components/badge';
-import Text from '../../../../components/text';
-import NameColumn from '../../../../components/NameColumn';
 import { ActionColumn } from '../../../../components/ActionColumn';
+import Badge from '../../../../components/badge';
+import NameColumn from '../../../../components/NameColumn';
+import { Td, Tr } from '../../../../components/new_table';
+import Text from '../../../../components/text';
+
 
 type Props = {
   model: Object,
@@ -55,7 +55,7 @@ const UsersRow: Function = ({
       <Text text={model.username} />
     </Td>
     <Td className="text">
-      {model.roles.map((role, index) => (
+      {model.roles?.map((role, index) => (
         <Badge key={index} val={role} label="info" />
       ))}
     </Td>
