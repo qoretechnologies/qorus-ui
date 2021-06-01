@@ -55,7 +55,7 @@ const Code: Function = ({
           {selected.type &&
           selected.type !== 'code' &&
           selected.type !== 'methods' ? (
-            <Tabs active="code" rightElement={selected.type === 'classes' && selected.item ? <AnchorButton icon="code-block" href={`${WEB_IDE_URL}ide/new/class/${selected.item.id}`} target="_blank"><FormattedMessage id="button.edit-class" /></AnchorButton>  : undefined}>
+            <Tabs active="code" rightElement={selected.type === 'classes' && selected.item ? <AnchorButton icon="code-block" href={`${WEB_IDE_URL}new/class/${selected.item.id}`} target="_blank"><FormattedMessage id="button.edit-class" /></AnchorButton>  : undefined}>
               <Pane name="Code">
                 <CodeTab selected={selected} />
               </Pane>

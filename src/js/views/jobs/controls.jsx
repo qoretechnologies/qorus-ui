@@ -137,7 +137,7 @@ const JobControls: Function = ({
             icon="code-block"
             big={big}
             onClick={() => {
-              window.open(`${WEB_IDE_URL}ide/new/job/${id}`, '_blank');
+              window.open(`${WEB_IDE_URL}new/job/${id}`, '_blank');
             }}
           />
       </ButtonGroup>
