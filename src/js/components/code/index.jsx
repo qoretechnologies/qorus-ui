@@ -1,13 +1,13 @@
 /* @flow */
+import { AnchorButton } from '@blueprintjs/core';
 import React from 'react';
-
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-
+import { WEB_IDE_URL } from '../../../../server_config';
 import ReleasesTab from '../../containers/releases';
 import Alert from '../alert';
 import Flex from '../Flex';
@@ -16,6 +16,8 @@ import Tabs, { Pane } from '../tabs';
 import CodeTab from './code';
 import DependenciesList from './dependencies';
 import Section from './section';
+
+
 
 type Props = {
   data: Object,
@@ -53,7 +55,7 @@ const Code: Function = ({
           {selected.type &&
           selected.type !== 'code' &&
           selected.type !== 'methods' ? (
-            <Tabs active="code">
+            <Tabs active="code" rightElement={selected.type === 'classes' && selected.item ? <AnchorButton icon="code-block" href={`${WEB_IDE_URL}ide/new/class/${selected.item.id}`} target="_blank"><FormattedMessage id="button.edit-class" /></AnchorButton>  : undefined}>
               <Pane name="Code">
                 <CodeTab selected={selected} />
               </Pane>
