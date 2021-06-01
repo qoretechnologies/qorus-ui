@@ -1,24 +1,22 @@
 // @flow
-import React from 'react';
+import { Icon, Intent, Tag } from '@blueprintjs/core';
 import classnames from 'classnames';
-import { connect } from 'react-redux';
-import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
-import pure from 'recompose/onlyUpdateForKeys';
-import { Link } from 'react-router';
-import { Intent, Tag, Icon } from '@blueprintjs/core';
-import { Tr, Td } from '../../../components/new_table';
-import Text from '../../../components/text';
-import actions from '../../../store/api/actions';
-
-import PingModal from './modals/ping';
-
-import withDispatch from '../../../hocomponents/withDispatch';
-import NameColumn from '../../../components/NameColumn';
-import Tree from '../../../components/tree';
-import ContentByType from '../../../components/ContentByType';
+import React from 'react';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import ContentByType from '../../../components/ContentByType';
+import NameColumn from '../../../components/NameColumn';
+import { Td, Tr } from '../../../components/new_table';
+import Text from '../../../components/text';
+import withDispatch from '../../../hocomponents/withDispatch';
+import actions from '../../../store/api/actions';
 import RemoteControls from './controls';
+
+
 
 type Props = {
   name: string,
@@ -83,6 +81,7 @@ const ConnectionRow: Function = ({
   openPane,
   closePane,
   dispatchAction,
+  connectionid,
 }: Props): React.Element<any> => (
   <Tr
     first={first}
@@ -104,7 +103,7 @@ const ConnectionRow: Function = ({
       onDetailClick={handleDetailClick}
       hasAlerts={hasAlerts}
     />
-    <Td className="big">
+    <Td className="large">
       <RemoteControls
         enabled={enabled}
         locked={locked}
@@ -117,6 +116,7 @@ const ConnectionRow: Function = ({
         closePane={closePane}
         dispatchAction={dispatchAction}
         name={name}
+        connid={connectionid}
       />
     </Td>
     <Td className="text">

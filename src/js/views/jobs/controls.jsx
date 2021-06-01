@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
+import { WEB_IDE_URL } from '../../../../server_config';
 import {
   Control as Button, Controls as ButtonGroup
 } from '../../components/controls';
@@ -129,6 +130,16 @@ const JobControls: Function = ({
           onClick={handleScheduleClick}
           big={big}
         />
+      </ButtonGroup>
+      <ButtonGroup>
+          <Button
+            title={intl.formatMessage({ id: 'button.edit-job' })}
+            icon="code-block"
+            big={big}
+            onClick={() => {
+              window.open(`${WEB_IDE_URL}ide/new/job/${id}`, '_blank');
+            }}
+          />
       </ButtonGroup>
     </React.Fragment>
   );
