@@ -13,6 +13,6 @@ module.exports = {
   API_WS_URL: `${WS_PROTO}://${API_HOST}:${API_PORT}`,
   LOCAL_HOST,
   LOCAL_PORT,
-  WEB_IDE_URL: process.env.NODE_ENV === 'development' ? `${PROTO}://localhost:3000/` : '/ide/',
+  WEB_IDE_URL: '/ide/',
   IS_SECURE: PROTO === 'https',
 };
