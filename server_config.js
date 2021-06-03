@@ -5,7 +5,9 @@ const LOCAL_HOST: string = process.env.LOCAL_HOST || 'localhost';
 const PROTO: string = process.env.PROTO || 'https';
 const WS_PROTO: string = PROTO === 'https' ? 'wss' : 'ws';
 const API_HOST: string =
-  process.env.API_HOST || window?.location?.host || 'hq.qoretechnologies.com';
+  process.env.API_HOST ||
+  window?.location?.hostname ||
+  'hq.qoretechnologies.com';
 
 module.exports = {
   SERVER_URL: `${PROTO}://${LOCAL_HOST}:${LOCAL_PORT}`,
