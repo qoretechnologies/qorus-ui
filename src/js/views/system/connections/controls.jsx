@@ -6,7 +6,8 @@ import withHandlers from 'recompose/withHandlers';
 import { WEB_IDE_URL } from '../../../../../server_config';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import {
-  Control as Button, Controls as ButtonGroup
+  Control as Button,
+  Controls as ButtonGroup,
 } from '../../../components/controls';
 import withModal from '../../../hocomponents/modal';
 import actions from '../../../store/api/actions';
@@ -79,14 +80,17 @@ const RemoteControls = ({
       />
     </ButtonGroup>
     <ButtonGroup>
-          <Button
-            title={intl.formatMessage({ id: 'button.edit-connection' })}
-            icon="code-block"
-            onClick={() => {
-              window.open(`${WEB_IDE_URL}new/connection/${connid}`, '_blank');
-            }}
-          />
-      </ButtonGroup>
+      <Button
+        title={intl.formatMessage({ id: 'button.edit-connection' })}
+        icon="code-block"
+        onClick={() => {
+          window.open(
+            `${WEB_IDE_URL}new/connection/${connid}?origin=${window.location.href}`,
+            '_blank'
+          );
+        }}
+      />
+    </ButtonGroup>
   </>
 );
 
@@ -94,79 +98,61 @@ export default compose(
   injectIntl,
   withModal(),
   withHandlers({
-    handleDetailClick: ({
-      name,
-      openPane,
-      isActive,
-      closePane,
-    }): Function => (): void => {
-      if (isActive) {
-        closePane();
-      } else {
-        openPane(name);
-      }
-    },
-    handlePingClick: ({
-      name,
-      remoteType,
-      openModal,
-      closeModal,
-    }): Function => (): void => {
-      openModal(
-        <PingModal name={name} onClose={closeModal} type={remoteType} />
-      );
-    },
-    handleToggleClick: ({
-      name,
-      enabled,
-      remoteType,
-      dispatchAction,
-    }): Function => (): void => {
-      dispatchAction(
-        actions.remotes.toggleConnection,
-        name,
-        !enabled,
-        remoteType
-      );
-    },
-    handleDeleteClick: ({
-      dispatchAction,
-      name,
-      remoteType,
-      openModal,
-      closeModal,
-    }): Function => (): void => {
-      const handleConfirm: Function = (): void => {
-        dispatchAction(actions.remotes.deleteConnection, remoteType, name);
-        closeModal();
-      };
+    handleDetailClick:
+      ({ name, openPane, isActive, closePane }): Function =>
+      (): void => {
+        if (isActive) {
+          closePane();
+        } else {
+          openPane(name);
+        }
+      },
+    handlePingClick:
+      ({ name, remoteType, openModal, closeModal }): Function =>
+      (): void => {
+        openModal(
+          <PingModal name={name} onClose={closeModal} type={remoteType} />
+        );
+      },
+    handleToggleClick:
+      ({ name, enabled, remoteType, dispatchAction }): Function =>
+      (): void => {
+        dispatchAction(
+          actions.remotes.toggleConnection,
+          name,
+          !enabled,
+          remoteType
+        );
+      },
+    handleDeleteClick:
+      ({ dispatchAction, name, remoteType, openModal, closeModal }): Function =>
+      (): void => {
+        const handleConfirm: Function = (): void => {
+          dispatchAction(actions.remotes.deleteConnection, remoteType, name);
+          closeModal();
+        };
 
-      openModal(
-        <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
-          Are you sure you want to delete the {remoteType}{' '}
-          <strong>{name}</strong> ?
-        </ConfirmDialog>
-      );
-    },
-    handleResetClick: ({
-      dispatchAction,
-      name,
-      remoteType,
-    }): Function => (): void => {
-      dispatchAction(actions.remotes.resetConnection, remoteType, name);
-    },
-    handleDebugClick: ({
-      dispatchAction,
-      name,
-      debug_data,
-      remoteType,
-    }): Function => (): void => {
-      dispatchAction(
-        actions.remotes.toggleDebug,
-        name,
-        !debug_data,
-        remoteType
-      );
-    },
+        openModal(
+          <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
+            Are you sure you want to delete the {remoteType}{' '}
+            <strong>{name}</strong> ?
+          </ConfirmDialog>
+        );
+      },
+    handleResetClick:
+      ({ dispatchAction, name, remoteType }): Function =>
+      (): void => {
+        dispatchAction(actions.remotes.resetConnection, remoteType, name);
+      },
+    handleDebugClick:
+      ({ dispatchAction, name, debug_data, remoteType }): Function =>
+      (): void => {
+        dispatchAction(
+          actions.remotes.toggleDebug,
+          name,
+          !debug_data,
+          remoteType
+        );
+      },
   })
 )(RemoteControls);

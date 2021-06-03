@@ -8,14 +8,14 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { WEB_IDE_URL } from '../../../../server_config';
 import {
-  Control as Button, Controls as ButtonGroup
+  Control as Button,
+  Controls as ButtonGroup,
 } from '../../components/controls';
 import withModal from '../../hocomponents/modal';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
 import SetExpiryModal from './modals/expiry';
 import RescheduleModal from './modals/reschedule';
-
 
 type Props = {
   handleEnableClick: Function,
@@ -79,21 +79,27 @@ const JobControls: Function = ({
     <React.Fragment>
       <ButtonGroup>
         <Button
-          title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
+          title={intl.formatMessage({
+            id: enabled ? 'button.disable' : 'button.enable',
+          })}
           icon="power"
           intent={enabled ? Intent.SUCCESS : Intent.DANGER}
           onClick={handleEnableClick}
           big={big}
         />
         <Button
-          title={intl.formatMessage({ id: (active ? 'button.deactivate' : 'button.activate') })}
+          title={intl.formatMessage({
+            id: active ? 'button.deactivate' : 'button.activate',
+          })}
           icon={active ? 'offline' : 'offline'}
           intent={active ? Intent.PRIMARY : Intent.NONE}
           onClick={handleActivateClick}
           big={big}
         />
         <Button
-          title={intl.formatMessage({ id: (remote ? 'button.set-not-remote' : 'button.set-remote') })}
+          title={intl.formatMessage({
+            id: remote ? 'button.set-not-remote' : 'button.set-remote',
+          })}
           icon="globe"
           intent={remote ? Intent.PRIMARY : Intent.NONE}
           onClick={handleRemoteClick}
@@ -132,99 +138,101 @@ const JobControls: Function = ({
         />
       </ButtonGroup>
       <ButtonGroup>
-          <Button
-            title={intl.formatMessage({ id: 'button.edit-job' })}
-            icon="code-block"
-            big={big}
-            onClick={() => {
-              window.open(`${WEB_IDE_URL}new/job/${id}`, '_blank');
-            }}
-          />
+        <Button
+          title={intl.formatMessage({ id: 'button.edit-job' })}
+          icon="code-block"
+          big={big}
+          onClick={() => {
+            window.open(
+              `${WEB_IDE_URL}new/job/${id}?origin=${window.location.href}`,
+              '_blank'
+            );
+          }}
+        />
       </ButtonGroup>
     </React.Fragment>
   );
 
 export default compose(
-  connect(
-    null,
-    {
-      activate: actions.jobs.activate,
-    }
-  ),
+  connect(null, {
+    activate: actions.jobs.activate,
+  }),
   withDispatch(),
   withModal(),
   withHandlers({
-    handleEnableClick: ({
-      enabled,
-      dispatchAction,
-      id,
-    }: Props): Function => (): void => {
-      dispatchAction(
-        actions.jobs.jobsAction,
-        enabled ? 'disable' : 'enable',
-        id
-      );
-    },
-    handleActivateClick: ({
-      active,
-      dispatchAction,
-      id,
-    }: Props): Function => (): void => {
-      dispatchAction(actions.jobs.activate, id, active);
-    },
-    handleRunClick: ({ dispatchAction, id }: Props): Function => (): void => {
-      dispatchAction(actions.jobs.run, id);
-    },
-    handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
-      dispatchAction(actions.jobs.jobsAction, 'reset', id);
-    },
-    handleRemoteClick: ({
-      dispatchAction,
-      id,
-      remote,
-    }: Props): Function => (): void => {
-      dispatchAction(actions.jobs.setRemote, id, !remote);
-    },
-    handleScheduleClick: ({
-      optimisticDispatch,
-      openModal,
-      closeModal,
-      id,
-      minute,
-      hour,
-      day,
-      month,
-      week,
-    }: Props): Function => (): void => {
-      openModal(
-        <RescheduleModal
-          onClose={closeModal}
-          action={optimisticDispatch}
-          id={id}
-          minute={minute}
-          hour={hour}
-          day={day}
-          month={month}
-          week={week}
-        />
-      );
-    },
-    handleExpiryClick: ({
-      onExpiryChange,
-      openModal,
-      closeModal,
-      expiry,
-      id,
-    }: Props): Function => (): void => {
-      openModal(
-        <SetExpiryModal
-          onClose={closeModal}
-          onExpiryChange={onExpiryChange}
-          expiry={expiry}
-          id={id}
-        />
-      );
-    },
+    handleEnableClick:
+      ({ enabled, dispatchAction, id }: Props): Function =>
+      (): void => {
+        dispatchAction(
+          actions.jobs.jobsAction,
+          enabled ? 'disable' : 'enable',
+          id
+        );
+      },
+    handleActivateClick:
+      ({ active, dispatchAction, id }: Props): Function =>
+      (): void => {
+        dispatchAction(actions.jobs.activate, id, active);
+      },
+    handleRunClick:
+      ({ dispatchAction, id }: Props): Function =>
+      (): void => {
+        dispatchAction(actions.jobs.run, id);
+      },
+    handleResetClick:
+      ({ dispatchAction, id }: Props): Function =>
+      (): void => {
+        dispatchAction(actions.jobs.jobsAction, 'reset', id);
+      },
+    handleRemoteClick:
+      ({ dispatchAction, id, remote }: Props): Function =>
+      (): void => {
+        dispatchAction(actions.jobs.setRemote, id, !remote);
+      },
+    handleScheduleClick:
+      ({
+        optimisticDispatch,
+        openModal,
+        closeModal,
+        id,
+        minute,
+        hour,
+        day,
+        month,
+        week,
+      }: Props): Function =>
+      (): void => {
+        openModal(
+          <RescheduleModal
+            onClose={closeModal}
+            action={optimisticDispatch}
+            id={id}
+            minute={minute}
+            hour={hour}
+            day={day}
+            month={month}
+            week={week}
+          />
+        );
+      },
+    handleExpiryClick:
+      ({
+        onExpiryChange,
+        openModal,
+        closeModal,
+        expiry,
+        id,
+      }: Props): Function =>
+      (): void => {
+        openModal(
+          <SetExpiryModal
+            onClose={closeModal}
+            onExpiryChange={onExpiryChange}
+            expiry={expiry}
+            id={id}
+          />
+        );
+      },
   }),
   pure([
     'enabled',

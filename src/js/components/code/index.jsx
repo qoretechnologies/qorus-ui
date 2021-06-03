@@ -17,8 +17,6 @@ import CodeTab from './code';
 import DependenciesList from './dependencies';
 import Section from './section';
 
-
-
 type Props = {
   data: Object,
   selected: Object,
@@ -55,7 +53,20 @@ const Code: Function = ({
           {selected.type &&
           selected.type !== 'code' &&
           selected.type !== 'methods' ? (
-            <Tabs active="code" rightElement={selected.type === 'classes' && selected.item ? <AnchorButton icon="code-block" href={`${WEB_IDE_URL}new/class/${selected.item.id}`} target="_blank"><FormattedMessage id="button.edit-class" /></AnchorButton>  : undefined}>
+            <Tabs
+              active="code"
+              rightElement={
+                selected.type === 'classes' && selected.item ? (
+                  <AnchorButton
+                    icon="code-block"
+                    href={`${WEB_IDE_URL}new/class/${selected.item.id}?origin=${window.location.href}`}
+                    target="_blank"
+                  >
+                    <FormattedMessage id="button.edit-class" />
+                  </AnchorButton>
+                ) : undefined
+              }
+            >
               <Pane name="Code">
                 <CodeTab selected={selected} />
               </Pane>
@@ -106,32 +117,34 @@ const Code: Function = ({
 export default compose(
   withState('selected', 'setSelected', ({ selected }) => selected || null),
   withHandlers({
-    handleItemClick: ({ setSelected, onItemClick }: Props): Function => (
-      name: string,
-      code: string,
-      type: string,
-      id: number,
-      item: Object
-    ): void => {
-      if (onItemClick && !code) {
-        onItemClick(name, code, type, id);
-        setSelected(() => ({
-          name,
-          code,
-          item,
-          type,
-          id,
-          loading: true,
-        }));
-      } else {
-        setSelected(() => ({
-          name,
-          code,
-          item,
-          type,
-        }));
-      }
-    },
+    handleItemClick:
+      ({ setSelected, onItemClick }: Props): Function =>
+      (
+        name: string,
+        code: string,
+        type: string,
+        id: number,
+        item: Object
+      ): void => {
+        if (onItemClick && !code) {
+          onItemClick(name, code, type, id);
+          setSelected(() => ({
+            name,
+            code,
+            item,
+            type,
+            id,
+            loading: true,
+          }));
+        } else {
+          setSelected(() => ({
+            name,
+            code,
+            item,
+            type,
+          }));
+        }
+      },
   }),
   lifecycle({
     componentWillReceiveProps(nextProps) {
