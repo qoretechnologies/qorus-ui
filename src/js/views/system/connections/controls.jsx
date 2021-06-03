@@ -84,10 +84,7 @@ const RemoteControls = ({
         title={intl.formatMessage({ id: 'button.edit-connection' })}
         icon="code-block"
         onClick={() => {
-          window.open(
-            `${WEB_IDE_URL}new/connection/${connid}?origin=${window.location.href}`,
-            '_blank'
-          );
+          window.location.href = `${WEB_IDE_URL}new/connection/${connid}?origin=${window.location.href}`;
         }}
       />
     </ButtonGroup>

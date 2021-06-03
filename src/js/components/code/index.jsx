@@ -60,7 +60,6 @@ const Code: Function = ({
                   <AnchorButton
                     icon="code-block"
                     href={`${WEB_IDE_URL}new/class/${selected.item.id}?origin=${window.location.href}`}
-                    target="_blank"
                   >
                     <FormattedMessage id="button.edit-class" />
                   </AnchorButton>
