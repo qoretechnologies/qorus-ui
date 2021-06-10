@@ -1,12 +1,12 @@
-import { API_URL, API_WS_URL } from "../../server_config";
+import { API_URL, API_WS_URL } from '../../server_config';
 
 const location =
   window && window.location
     ? window.location
     : {
-      protocol: 'http:',
-      host: 'localhost',
-    };
+        protocol: 'http:',
+        host: 'localhost',
+      };
 
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 const settings = {
