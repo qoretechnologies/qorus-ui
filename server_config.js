@@ -1,5 +1,5 @@
 // @ flow
-const API_PORT: number = process.env.API_PORT || 8092;
+const API_PORT: number = process.env.API_PORT || window?.location?.port || 8092;
 const LOCAL_PORT: number = process.env.LOCAL_PORT || 3004;
 const LOCAL_HOST: string = process.env.LOCAL_HOST || 'localhost';
 const PROTO: string = process.env.PROTO || 'https';
