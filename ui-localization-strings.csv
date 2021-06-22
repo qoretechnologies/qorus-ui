@@ -486,3 +486,8 @@ global.js,service.min-replicas,Min.Replicas,Min.Repliky,最小レプリカ,최�
 global.js,service.max-replicas,Max.Replicas,Max.Repliky,最大レプリカ,최대 복제본,
 global.js,service.cpu,CPU %,Procesor %,CPU %,CPU %,
 global.js,service.memory,Memory,Pamět,メモリー,기억,
+global.js,service.resource-limits,Resource limits,Limity prostredku,リソース制限,자원 제한,
+global.js,service.cpu-request,CPU request,Pozadavek CPU,CPUリクエスト,CPU 요청,
+global.js,service.cpu-limit,CPU limit,Limit CPU,CPU制限,CPU 제한,
+global.js,service.memory-limit,Memory limit,Limit pameti,メモリ制限,메모리 제한,
+global.js,service.memory-request,Memory request,Pozadavek pameti,メモリ要求,메모리 요청,
