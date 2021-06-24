@@ -1,16 +1,14 @@
-import { updateItemWithName, setUpdatedToNull } from '../../utils';
 import remove from 'lodash/remove';
-
-import { CONN_MAP, CONN_MAP_REVERSE } from '../../../../constants/remotes';
-import { buildRemoteHash } from '../../../../helpers/remotes';
+import { CONN_MAP_REVERSE } from '../../../../constants/remotes';
 import {
-  loggerReducer,
-  addUpdateLoggerReducer,
-  deleteLoggerReducer,
   addAppenderReducer,
+  addUpdateLoggerReducer,
   deleteAppenderReducer,
+  deleteLoggerReducer,
   editAppenderReducer,
+  loggerReducer,
 } from '../../common/reducers';
+import { setUpdatedToNull, updateItemWithName } from '../../utils';
 
 const initialState = {
   data: [],
@@ -80,7 +78,7 @@ const connectionChange = {
       let newData = updatedData;
 
       events.forEach((dt: Object) => {
-        const exists = state.data.find(conn => conn.name === dt.name);
+        const exists = state.data.find((conn) => conn.name === dt.name);
 
         if (exists) {
           newData = updateItemWithName(
@@ -109,7 +107,7 @@ const debugChange = {
       let newData = updatedData;
 
       events.forEach((dt: Object) => {
-        const exists = state.data.find(conn => conn.name === dt.name);
+        const exists = state.data.find((conn) => conn.name === dt.name);
 
         if (exists) {
           newData = updateItemWithName(
@@ -159,7 +157,7 @@ const updateDone = {
   next(state, { payload: { name } }) {
     if (state.sync) {
       const data = state.data.slice();
-      const connection = data.find(d => d.name === name);
+      const connection = data.find((d) => d.name === name);
 
       if (connection) {
         const newData = updateItemWithName(name, { _updated: null }, data);
@@ -180,7 +178,7 @@ const fetchPass = {
     if (state.sync) {
       const data = [...state.data];
       const connection = data.find(
-        d => d.name === name && CONN_MAP_REVERSE[d.conntype] === remoteType
+        (d) => d.name === name && CONN_MAP_REVERSE[d.conntype] === remoteType
       );
 
       if (connection) {
@@ -203,9 +201,9 @@ const addAlert = {
       const stateData = [...state.data];
       let newData = stateData;
 
-      events.forEach(dt => {
+      events.forEach((dt) => {
         const remote = newData.find(
-          r => r.name === dt.name && r.conntype === dt.type
+          (r) => r.name === dt.name && r.conntype === dt.type
         );
 
         if (remote) {
@@ -242,15 +240,15 @@ const clearAlert = {
       const stateData = [...state.data];
       let newData = stateData;
 
-      events.forEach(dt => {
+      events.forEach((dt) => {
         const remote = newData.find(
-          r => r.name === dt.name && r.conntype === dt.type
+          (r) => r.name === dt.name && r.conntype === dt.type
         );
 
         if (remote) {
           const alerts = [...remote.alerts];
 
-          remove(alerts, alert => alert.alertid === parseInt(dt.alertid, 10));
+          remove(alerts, (alert) => alert.alertid === parseInt(dt.alertid, 10));
 
           newData = updateItemWithName(
             dt.id,
@@ -282,8 +280,8 @@ const updateConnection = {
   next(state: Object = initialState, { payload: { models } }: Object): Object {
     let newData = [...state.data];
 
-    models.forEach(dt => {
-      const exists = state.data.find(conn => conn.name === dt.name);
+    models.forEach((dt) => {
+      const exists = state.data.find((conn) => conn.name === dt.name);
       if (exists) {
         newData = updateItemWithName(
           dt.name,
@@ -304,8 +302,14 @@ const addConnection = {
   next(state: Object = initialState, { payload: { events } }: Object): Object {
     let newData = [...state.data];
 
-    events.forEach(dt => {
-      newData = [...newData, dt];
+    events.forEach((dt) => {
+      newData = [
+        ...newData,
+        {
+          alerts: [],
+          ...dt,
+        },
+      ];
     });
 
     return { ...state, ...{ data: newData } };
@@ -319,7 +323,7 @@ const removeConnectionWs = {
   next(state: Object = initialState, { payload: { events } }: Object): Object {
     const data = [...state.data];
 
-    events.forEach(dt => {
+    events.forEach((dt) => {
       remove(
         data,
         (remote: Object): boolean =>
