@@ -9,9 +9,9 @@ const merge = require('webpack-merge');
 // Root path
 const root = path.resolve(__dirname, './');
 
-//* 
+//*
 //* COMMON CONFIG
-//* 
+//*
 let webpackConfig = {
   name: 'qorus',
   context: `${root}/src`,
@@ -92,6 +92,8 @@ let webpackConfig = {
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.API_HOST': JSON.stringify(process.env.API_HOST),
+      'process.env.API_PORT': JSON.stringify(process.env.API_PORT),
     }),
     new webpack.ProvidePlugin({
       fetch:
