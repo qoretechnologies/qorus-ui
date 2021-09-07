@@ -252,7 +252,14 @@ const initialState: Object = {
           activePaths: ['/ocmd', '/library', '/extensions', '/logs', '/info'],
           id: 'more',
           submenu: [
-            { name: 'OCMD', icon: 'code', link: '/ocmd', id: 'ocmd', as: Link },
+            {
+              name: 'OCMD',
+              icon: 'code',
+              props: { to: '/ocmd' },
+              activePaths: ['/ocmd'],
+              id: 'ocmd',
+              as: Link,
+            },
             {
               name: 'Library',
               icon: 'book',
