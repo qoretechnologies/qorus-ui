@@ -69,7 +69,7 @@ const PipeElementModal = ({
               <Pane name="Config">
                 <ConfigItemsTable
                   items={rebuildConfigHash(getConfigItemsForState(element))}
-                  intrf="fsms"
+                  intrf="pipelines"
                   intrfId={pipelineId}
                 />
               </Pane>
