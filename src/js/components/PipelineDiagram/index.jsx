@@ -71,6 +71,9 @@ const calculateFontSize = (name, isAction?: boolean) => {
 };
 
 const getProviderUrl = (pipeline) => {
+  if (!pipeline.options || !pipeline.options['input-provider']) {
+    return 'None';
+  }
   // Get the mapper options data
   const { type, name, path = '', subtype } = pipeline.options['input-provider'];
   // Get the rules for the given provider
@@ -194,6 +197,8 @@ const PipelineDiagram = ({
     ],
     ''
   );
+
+  console.log(pipeline);
 
   return (
     <>
