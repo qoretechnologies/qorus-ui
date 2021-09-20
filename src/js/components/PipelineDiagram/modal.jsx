@@ -1,10 +1,8 @@
-import React from 'react';
-
 import reduce from 'lodash/reduce';
+import React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
-
 import { rebuildConfigHash } from '../../helpers/interfaces';
 import Box from '../box';
 import ConfigItemsTable from '../ConfigItemsTable';
@@ -21,13 +19,14 @@ const PipeElementModal = ({
   pipeline,
 }) => {
   const getConfigItemsForState = (element) => {
+    console.log(element);
     element.config = reduce(
       pipeline.config,
       (newConfig, configItem, name) => {
         // Split the config item name
         const [elementId] = name.split(':');
         // Check if the name matches the state name
-        if (elementId === element.id) {
+        if (elementId === element.pid) {
           return {
             ...newConfig,
             [name]: configItem,
