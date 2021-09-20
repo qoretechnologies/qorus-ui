@@ -19,7 +19,6 @@ const PipeElementModal = ({
   pipeline,
 }) => {
   const getConfigItemsForState = (element) => {
-    console.log(element);
     element.config = reduce(
       pipeline.config,
       (newConfig, configItem, name) => {

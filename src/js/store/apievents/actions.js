@@ -20,6 +20,7 @@ import * as health from '../api/resources/health/actions';
 import * as instances from '../api/resources/instances/actions';
 import * as jobs from '../api/resources/jobs/actions/specials';
 import * as orders from '../api/resources/orders/actions/specials';
+import * as pipelines from '../api/resources/pipelines/actions';
 import * as remotes from '../api/resources/remotes/actions';
 import * as services from '../api/resources/services/actions/specials';
 import * as system from '../api/resources/system/actions';
@@ -34,6 +35,7 @@ const interfaceActions: Object = {
   instances,
   remotes,
   fsms,
+  pipelines,
 };
 
 const handleEvent = (url, data, dispatch, state) => {
@@ -50,9 +52,10 @@ const handleEvent = (url, data, dispatch, state) => {
         ? customComparator(item)
         : item[idKey] == id || item.name === id
     );
-  const loggerInterfaces: string[] = state.api.system?.data?.loggerParams?.configurable_systems?.map(
-    (logData) => logData.logger
-  );
+  const loggerInterfaces: string[] =
+    state.api.system?.data?.loggerParams?.configurable_systems?.map(
+      (logData) => logData.logger
+    );
 
   dt.forEach(async (d) => {
     const { info, eventstr, classstr, caller } = d;
@@ -721,6 +724,10 @@ const handleEvent = (url, data, dispatch, state) => {
         if (interfaceType === 'global') {
           isLoaded = state.api.system.sync;
           interfaceName = 'system';
+        } else if (interfaceType === 'fsm' || interfaceType === 'pipeline') {
+          interfaceName = `${interfaceType.toLowerCase()}s`;
+          interfaceId = info[INTERFACE_IDS[interfaceName]];
+          isLoaded = true;
         } else {
           interfaceName = `${interfaceType.toLowerCase()}s`;
           interfaceId = info[INTERFACE_IDS[interfaceName]];
@@ -1223,14 +1230,12 @@ const handleEvent = (url, data, dispatch, state) => {
 
 const messageAction = createAction('APIEVENTS_MESSAGE', handleEvent);
 
-const message = (url: string, data: Object) => (
-  dispatch: Function,
-  getState: Function
-) => {
-  if (data !== 'pong') {
-    dispatch(messageAction(url, data, dispatch, getState()));
-  }
-};
+const message =
+  (url: string, data: Object) => (dispatch: Function, getState: Function) => {
+    if (data !== 'pong') {
+      dispatch(messageAction(url, data, dispatch, getState()));
+    }
+  };
 
 const disconnect = () => () => {
   const { pathname, search } = window.location;
