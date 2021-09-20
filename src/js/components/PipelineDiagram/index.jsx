@@ -198,8 +198,6 @@ const PipelineDiagram = ({
     ''
   );
 
-  console.log(pipeline);
-
   return (
     <>
       <StyledProviderUrl>
