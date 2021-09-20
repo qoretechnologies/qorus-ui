@@ -1,6 +1,5 @@
 // @flow
 import { createAction } from 'redux-actions';
-
 import settings from '../../../settings';
 import { del, fetchWithNotifications, get, put } from '../utils';
 
@@ -20,6 +19,7 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
         SERVICES: 'services',
         JOBS: 'jobs',
         FSMS: 'fsms',
+        PIPELINES: 'pipelines',
       };
 
       const value = newValue || 'null';
@@ -68,6 +68,7 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
         SERVICES: 'services',
         JOBS: 'jobs',
         FSMS: 'fsms',
+        PIPELINES: 'pipelines',
       };
 
       let realId: number = stepId || id;
@@ -170,8 +171,14 @@ const updateConfigItemWsCommon: Function = (intfc: string): Function =>
   }));
 
 export {
-  addAppenderAction, addUpdateLoggerAction, deleteAppenderAction,
-  deleteConfigItemAction, deleteLoggerAction, editAppenderAction,
-  fetchLoggerAction, updateBasicDataAction, updateConfigItemAction,
-  updateConfigItemWsCommon
+  addAppenderAction,
+  addUpdateLoggerAction,
+  deleteAppenderAction,
+  deleteConfigItemAction,
+  deleteLoggerAction,
+  editAppenderAction,
+  fetchLoggerAction,
+  updateBasicDataAction,
+  updateConfigItemAction,
+  updateConfigItemWsCommon,
 };
