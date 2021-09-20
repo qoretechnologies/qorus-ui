@@ -1,41 +1,38 @@
 // @flow
+import { includes, lowerCase, upperFirst } from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
-import { upperFirst, includes, lowerCase } from 'lodash';
-import RemoteControls from './controls';
-
-import Pane from '../../../components/pane';
-import {
-  Table,
-  Tbody,
-  Tr,
-  Td,
-  EditableCell,
-  Th,
-} from '../../../components/new_table';
-import Box from '../../../components/box';
-import NoData from '../../../components/nodata';
-import actions from '../../../store/api/actions';
 import Alert from '../../../components/alert';
-import Options from './options';
-import { getDependencyObjectLink } from '../../../helpers/system';
 import AlertsTable from '../../../components/alerts_table';
-import PaneItem from '../../../components/pane_item';
-import { attrsSelector, attrsMapper } from '../../../helpers/remotes';
-import withDispatch from '../../../hocomponents/withDispatch';
+import Box from '../../../components/box';
 import ContentByType from '../../../components/ContentByType';
 import NameColumn from '../../../components/NameColumn';
-import Loader from '../../../components/loader';
-import settings from '../../../settings';
-import mapProps from 'recompose/mapProps';
-import showIfPassed from '../../../hocomponents/show-if-passed';
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
-import Logger from '../../../containers/Logger';
+import {
+  EditableCell,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Tr,
+} from '../../../components/new_table';
+import NoData from '../../../components/nodata';
+import Pane from '../../../components/pane';
+import PaneItem from '../../../components/pane_item';
+import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
 import LogContainer from '../../../containers/log';
+import { attrsMapper, attrsSelector } from '../../../helpers/remotes';
+import { getDependencyObjectLink } from '../../../helpers/system';
+import showIfPassed from '../../../hocomponents/show-if-passed';
+import withDispatch from '../../../hocomponents/withDispatch';
+import settings from '../../../settings';
+import actions from '../../../store/api/actions';
+import RemoteControls from './controls';
+import Options from './options';
 
 const remoteSelector = (state, props) =>
-  state.api.remotes.data.find(a => a.name === props.paneId);
+  state.api.remotes.data.find((a) => a.name === props.paneId);
 
 const viewSelector = createSelector(
   [remoteSelector, attrsSelector],
@@ -156,7 +153,7 @@ export default class ConnectionsPane extends Component {
   };
 
   render() {
-    const { deps, alerts, locked } = this.props.remote;
+    const { deps, alerts, locked, url_hash } = this.props.remote;
     const { paneTab, paneId, remoteType, dispatchAction } = this.props;
     const { isPassLoaded } = this.state;
 
@@ -222,6 +219,7 @@ export default class ConnectionsPane extends Component {
                             <Td className="text">
                               {val.attr === 'options' || val.attr === 'opts' ? (
                                 <Options
+                                  urlProtocol={url_hash?.protocol}
                                   data={val.value}
                                   onSave={this.handleEditSave(val.attr)}
                                   canEdit={canEdit}
