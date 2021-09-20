@@ -1,14 +1,24 @@
 // @flow
-import React, { Component } from 'react';
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
-
-import { Controls, Control as Button } from '../../../components/controls';
+import React, { Component, useState } from 'react';
+import styled from 'styled-components';
+import { Control as Button, Controls } from '../../../components/controls';
+import settings from '../../../settings';
+import { get } from '../../../store/api/utils';
 
 type Props = {
   data?: Object,
   onSave: Function,
   canEdit: boolean,
+  urlProtocol: string,
 };
+
+const StyledSensitive = styled.span`
+  display: inline-block;
+  height: 20px;
+  width: 150px;
+  background-color: #000;
+`;
 
 const Option: Function = ({
   objKey,
@@ -16,7 +26,10 @@ const Option: Function = ({
   onEdit,
   onDelete,
   canEdit,
+  sensitive,
 }: Object): React.Element<any> => {
+  const [isShown, setIsShown] = useState(false);
+
   const handleEditClick: Function = (): void => {
     onEdit('key', objKey);
     onEdit('value', value);
@@ -26,17 +39,21 @@ const Option: Function = ({
     onDelete(objKey);
   };
 
+  const renderValue = () => {
+    if (!sensitive || isShown) {
+      return value.toString();
+    }
+
+    return <StyledSensitive onClick={() => setIsShown(!isShown)} />;
+  };
+
   return (
     <div className="conn-options-item">
-      "{objKey}": "{value.toString()}"{' '}
+      "{objKey}": "{renderValue()}"{' '}
       {canEdit && (
         <div className="pull-right">
           <Controls grouped>
-            <Button
-              icon="edit"
-              btnStyle="warning"
-              onClick={handleEditClick}
-            />
+            <Button icon="edit" btnStyle="warning" onClick={handleEditClick} />
             <Button
               icon="cross"
               btnStyle="danger"
@@ -60,14 +77,26 @@ export default class ConnectionOptions extends Component {
     key: '',
     value: '',
     options: this.props.data || {},
+    optionsData: null,
   };
 
-  componentWillReceiveProps(nextProps: Props) {
+  async componentDidMount() {
+    const optionsData = await get(`${settings.REST_BASE_URL}/options/remote`);
+
+    this.setState({
+      optionsData,
+    });
+  }
+
+  async componentWillReceiveProps(nextProps: Props) {
     if (this.props.data !== nextProps.data) {
+      const optionsData = await get(`${settings.REST_BASE_URL}/options/remote`);
+
       this.setState({
         key: '',
         value: '',
         options: nextProps.data || {},
+        optionsData,
       });
     }
   }
@@ -114,6 +143,10 @@ export default class ConnectionOptions extends Component {
   render() {
     const opts: Array<string> = Object.keys(this.state.options);
 
+    if (!this.state.optionsData) {
+      return <p> Loading ... </p>;
+    }
+
     return (
       <div>
         {opts.length > 0 && (
@@ -121,16 +154,24 @@ export default class ConnectionOptions extends Component {
             <div className="col-sm-12">
               <pre>
                 {opts.map(
-                  (opt: string): React.Element<any> => (
-                    <Option
-                      canEdit={this.props.canEdit}
-                      key={opt}
-                      objKey={opt}
-                      value={this.state.options[opt]}
-                      onEdit={this.changeData}
-                      onDelete={this.handleDelete}
-                    />
-                  )
+                  (opt: string): React.Element<any> =>
+                    console.log(
+                      this.state.optionsData[this.props.urlProtocol]?.[opt],
+                      opt
+                    ) || (
+                      <Option
+                        canEdit={this.props.canEdit}
+                        sensitive={
+                          this.state.optionsData[this.props.urlProtocol]?.[opt]
+                            ?.sensitive
+                        }
+                        key={opt}
+                        objKey={opt}
+                        value={this.state.options[opt]}
+                        onEdit={this.changeData}
+                        onDelete={this.handleDelete}
+                      />
+                    )
                 )}
               </pre>
             </div>
