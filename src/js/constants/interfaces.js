@@ -55,6 +55,7 @@ const INTERFACE_IDS: Object = {
   mappers: 'mapperid',
   mapper: 'mapperid',
   fsms: 'fsm',
+  pipelines: 'pipeline',
 };
 
 const INTERFACE_ID_LINKS: Object = {
@@ -76,5 +77,8 @@ const INTERFACE_ID_LINKS: Object = {
 };
 
 export {
-  INTERFACE_ICONS, INTERFACE_ID_KEYS, INTERFACE_ID_LINKS, INTERFACE_IDS
+  INTERFACE_ICONS,
+  INTERFACE_ID_KEYS,
+  INTERFACE_ID_LINKS,
+  INTERFACE_IDS,
 };

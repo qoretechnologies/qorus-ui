@@ -1,12 +1,14 @@
 import isArray from 'lodash/isArray';
-
 import { formatAppender } from '../../../helpers/logger';
 import {
-  setUpdatedToNull, updateItemWithId, updateItemWithName
+  setUpdatedToNull,
+  updateItemWithId,
+  updateItemWithName,
 } from '../utils';
 
 const updateConfigItemWsCommon = {
   next(state, { payload: { events } }) {
+    console.log(state, events);
     let newState = { ...state };
     let newData = newState.data;
 
@@ -383,8 +385,14 @@ const deleteAppenderReducer = {
 };
 
 export {
-  addAppenderReducer, addUpdateLoggerReducer, basicDataUpdatedReducer,
-  deleteAppenderReducer, deleteLoggerReducer, editAppenderReducer,
-  loggerReducer, processStartedReducer, processStoppedReducer,
-  updateConfigItemWsCommon
+  addAppenderReducer,
+  addUpdateLoggerReducer,
+  basicDataUpdatedReducer,
+  deleteAppenderReducer,
+  deleteLoggerReducer,
+  editAppenderReducer,
+  loggerReducer,
+  processStartedReducer,
+  processStoppedReducer,
+  updateConfigItemWsCommon,
 };
