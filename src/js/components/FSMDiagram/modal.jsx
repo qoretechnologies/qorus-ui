@@ -1,12 +1,10 @@
-import React from 'react';
-
 import { get } from 'lodash';
 import reduce from 'lodash/reduce';
+import React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-
 import { rebuildConfigHash } from '../../helpers/interfaces';
 import Box from '../box';
 import ConfigItemsTable from '../ConfigItemsTable';
@@ -90,7 +88,7 @@ const StateModal = ({
                 <PipelineDiagram pipeName={state.action.value} />
               </Pane>
             )}
-            {state.type !== 'if' && (
+            {state.type !== 'if' && state.action?.type !== 'pipeline' ? (
               <Pane name="Config">
                 <ConfigItemsTable
                   items={rebuildConfigHash(getConfigItemsForState(state))}
@@ -99,7 +97,7 @@ const StateModal = ({
                   stateId={stateId}
                 />
               </Pane>
-            )}
+            ) : null}
             <Pane name="Info">
               <Tree data={state} />
             </Pane>
