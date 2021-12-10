@@ -7,7 +7,7 @@ import { WEB_IDE_URL } from '../../../../../server_config';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import {
   Control as Button,
-  Controls as ButtonGroup,
+  Controls as ButtonGroup
 } from '../../../components/controls';
 import withModal from '../../../hocomponents/modal';
 import actions from '../../../store/api/actions';
@@ -131,7 +131,7 @@ export default compose(
 
         openModal(
           <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
-            Are you sure you want to delete the {remoteType}{' '}
+            Are you sure you want to delete the {remoteType} connection {' '}
             <strong>{name}</strong> ?
           </ConfirmDialog>
         );
