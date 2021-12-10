@@ -25,5 +25,5 @@ module.exports = {
   LOCAL_HOST,
   LOCAL_PORT,
   WEB_IDE_URL: '/ide/',
-  IS_SECURE: PROTO === 'https',
+  IS_SECURE: false,
 };

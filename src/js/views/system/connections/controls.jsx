@@ -8,8 +8,8 @@ import { injectIntl } from 'react-intl';
 import withModal from '../../../hocomponents/modal';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import {
-  Controls as ButtonGroup,
   Control as Button,
+  Controls as ButtonGroup
 } from '../../../components/controls';
 
 const RemoteControls = ({
