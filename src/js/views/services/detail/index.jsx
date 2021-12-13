@@ -124,7 +124,7 @@ export default compose(
       ? service.class_based
         ? service.methods.map((method: Object): Object => ({
           ...method,
-          ...{ body: service.class_source.class_source },
+          ...{ body: service.class_source },
         }))
         : service.methods
       : [],
@@ -144,7 +144,7 @@ export default compose(
           code: [
             {
               name: 'Service code',
-              body: service.class_source.class_source,
+              body: service.class_source,
             },
           ],
         },
