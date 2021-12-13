@@ -1,13 +1,11 @@
 // @flow
-import React from 'react';
-
 import map from 'lodash/map';
 import size from 'lodash/size';
+import React from 'react';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withState from 'recompose/withState';
-
 import {
   Control as Button, Controls as ButtonGroup
 } from '../../components/controls';
@@ -17,6 +15,8 @@ import actions from '../../store/api/actions';
 import ExpandableItem from '../ExpandableItem';
 import NoDataIf from '../NoDataIf';
 import Table from './table';
+
+
 
 type ConfigItemsContainerProps = {
   items: Object,

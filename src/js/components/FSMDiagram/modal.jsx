@@ -54,6 +54,10 @@ const StateModal = ({
       return 'block';
     }
 
+    if (state.type === 'fsm') {
+      return 'fsm';
+    }
+
     if (state.type === 'if') {
       return 'info';
     }
@@ -71,7 +75,14 @@ const StateModal = ({
       <Modal.Body>
         <Box top fill>
           <Tabs active={getActiveTab()}>
-            {state.type === 'block' && (
+            {state.type === 'fsm' ? (
+              <Pane name="Fsm">
+                <FSMDiagram
+                  fsmName={state.name}
+                />
+              </Pane>
+            ) : null}
+            {state.type === 'block' ? (
               <Pane name="Block">
                 <FSMDiagram
                   states={state.states}
@@ -79,7 +90,7 @@ const StateModal = ({
                   statesPath={`${statesPath}.${stateId}.`}
                 />
               </Pane>
-            )}
+            ) : null}
             {state.action?.type === 'pipeline' && (
               <Pane name="Pipeline">
                 <br />
@@ -91,7 +102,7 @@ const StateModal = ({
             {state.type !== 'if' && state.action?.type !== 'pipeline' ? (
               <Pane name="Config">
                 <ConfigItemsTable
-                  items={rebuildConfigHash(getConfigItemsForState(state))}
+                  items={rebuildConfigHash(getConfigItemsForState(state), null, null, fsmId)}
                   intrf="fsms"
                   intrfId={fsmId}
                   stateId={stateId}

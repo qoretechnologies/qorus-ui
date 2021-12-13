@@ -4,10 +4,10 @@ import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 // @flow
 import size from 'lodash/size';
-
 import { normalizeName } from '../components/utils';
 import { INTERFACE_ID_KEYS, INTERFACE_ID_LINKS } from '../constants/interfaces';
 import { normalizeId } from '../store/api/resources/utils';
+
 
 const mapConfigToArray = (id: number, globalView: boolean): Function => (
   configItem: Object,
@@ -47,15 +47,16 @@ const pullConfigFromStepinfo: Function = (
 const rebuildConfigHash: Function = (
   model: Object,
   pullConfigValues: boolean,
-  isGlobal: Boolean
+  isGlobal: Boolean,
+  id,
 ): Object => {
   const configHash = pullConfigValues ? model.stepinfo : model.config || {};
   const configObj: Object = pullConfigValues
-    ? pullConfigFromStepinfo(configHash, model.id)
+    ? pullConfigFromStepinfo(configHash, id || model.id)
     : {
         [normalizeName(model)]: {
-          id: model.id,
-          data: map(configHash, mapConfigToArray(model.id, isGlobal)),
+          id: id || model.id,
+          data: map(configHash, mapConfigToArray(id || model.id, isGlobal)),
           isGlobal,
         },
       };
