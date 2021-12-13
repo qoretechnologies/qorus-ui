@@ -155,10 +155,7 @@ export default class ConnectionOptions extends Component {
               <pre>
                 {opts.map(
                   (opt: string): React.Element<any> =>
-                    console.log(
-                      this.state.optionsData[this.props.urlProtocol]?.[opt],
-                      opt
-                    ) || (
+                    (
                       <Option
                         canEdit={this.props.canEdit}
                         sensitive={
