@@ -30,7 +30,7 @@ type Props = {
 const DataProviderTypes = memo(({ openModal, closeModal }) => {
   const [val, setVal] = React.useState('');
   // Save the field detail
-  const [type, setType] = React.useState('');
+  const [type, setType] = React.useState(null);
 
   const { loading, value, error, retry } = useAsyncRetry(async () => {
     return get('api/latest/dataprovider/types/listAll');
@@ -38,7 +38,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
 
   const fieldsData = useAsyncRetry(async () => {
     if (type) {
-      return get(`api/latest/dataprovider/types${vtypeal}?action=type`);
+      return get(`api/latest/dataprovider/types${type}?action=type`);
     }
   }, [type]);
 
