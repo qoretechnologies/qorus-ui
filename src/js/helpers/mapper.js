@@ -1,8 +1,7 @@
 /* @flow */
-import trimStart from 'lodash/trimStart';
+import { findIndex, omit, reduce, size } from 'lodash';
 import trimEnd from 'lodash/trimEnd';
-
-import { reduce, size, findIndex, omit } from 'lodash';
+import trimStart from 'lodash/trimStart';
 
 const formatFieldSource: Function = (fieldSource: string): Object => {
   let newSource = fieldSource;
@@ -41,7 +40,7 @@ const formatFieldSource: Function = (fieldSource: string): Object => {
   const sourceArray = newSource.split(',');
 
   const data = sourceArray
-    .map(attr => {
+    .map((attr) => {
       if (attr === '' || attr === ' ' || attr === '{}') {
         if (code !== '' && code !== '{}') {
           return {
@@ -73,7 +72,7 @@ const formatFieldSource: Function = (fieldSource: string): Object => {
 
       return { key, value };
     })
-    .filter(item => item);
+    .filter((item) => item);
 
   return {
     data,
@@ -106,11 +105,11 @@ export const flattenFields: (
         },
       ];
       // Check if this field has hierarchy
-      if (size(field.type.fields)) {
+      if (size(field.type?.fields)) {
         // Recursively add deep fields
         res = [
           ...res,
-          ...flattenFields(field.type.fields, true, name, level + 1, newPath),
+          ...flattenFields(field.type?.fields, true, name, level + 1, newPath),
         ];
       }
       // Return the new fields
@@ -122,23 +121,23 @@ export const flattenFields: (
 export const getLastChildIndex = (field: any, fields: any[]) => {
   // Only get the child index for fields
   // that actually have children
-  if (size(field.type.fields)) {
+  if (size(field.type?.fields)) {
     // Get the name of the last field
-    const name: string = Object.keys(field.type.fields).find(
-      (_name, index) => index === size(field.type.fields) - 1
+    const name: string = Object.keys(field.type?.fields).find(
+      (_name, index) => index === size(field.type?.fields) - 1
     );
     // Get the index of the last field in this
     // hierarchy based on the name
     return findIndex(
       fields,
-      curField => curField.path === `${field.path}.${name}`
+      (curField) => curField.path === `${field.path}.${name}`
     );
   }
   // Return nothing
   return 0;
 };
 
-export const filterInternalData = fields => {
+export const filterInternalData = (fields) => {
   return reduce(
     fields,
     (newFields, fieldData, field) => {

@@ -1,13 +1,11 @@
 /* @flow */
 import React from 'react';
-
 import Loadable from 'react-loadable';
 import { connect } from 'react-redux';
 import { IndexRedirect, Redirect, Route, Router } from 'react-router';
 import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-
 import FullPageLoading from './components/FullPageLoading';
 import Loader from './components/loader';
 import { hasPlugin } from './helpers/system';
@@ -112,6 +110,11 @@ const Workflows = Loadable({
 const Sla = Loadable({
   loader: () =>
     import(/* webpackChunkName: "sla" */ './views/system/slas/detail'),
+  loading: Loader,
+});
+
+const Types = Loadable({
+  loader: () => import(/* webpackChunkName: "types" */ './views/types'),
   loading: Loader,
 });
 
@@ -272,6 +275,7 @@ class AppInfo extends React.Component {
             <Route path="jobs" component={Jobs} />
             <Route path="search" component={Search} />
             <Route path="workflows" component={Workflows} />
+            <Route path="types" component={Types} />
           </Route>
           {hasPlugin('oauth2', plugins) ? (
             <Route

@@ -147,6 +147,16 @@ const initialState: Object = {
               id: 'errors',
               as: Link,
             },
+            {
+              name: 'Types',
+              icon: 'key',
+              props: {
+                to: '/types',
+              },
+              activePaths: ['/types'],
+              id: 'types',
+              as: Link,
+            },
           ],
         },
       ],

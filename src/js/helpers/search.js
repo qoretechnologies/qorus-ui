@@ -8,6 +8,7 @@
  * @returns {Array}
  */
 const findBy = (keys, query, collection) => {
+  console.log(keys, query, collection);
   if (query === undefined || query === '' || query === null) return collection;
 
   let keysArray;
@@ -17,21 +18,15 @@ const findBy = (keys, query, collection) => {
   if (query.indexOf(':') !== -1) {
     const qSplit = query.split(':');
     keysArray = [qSplit[0]];
-    q = qSplit[1]
-      .toString()
-      .split(' ')
-      .join('|');
+    q = qSplit[1].toString().split(' ').join('|');
   } else {
     keysArray = typeof keys === 'string' ? [keys] : keys;
-    q = query
-      .toString()
-      .split(' ')
-      .join('|');
+    q = query.toString().split(' ').join('|');
   }
 
   const regex = new RegExp(q, 'i');
 
-  return collection.filter(c => {
+  return collection.filter((c) => {
     for (const k of keysArray) {
       //* Stringify objects to be searchable
       const value = typeof c[k] === 'object' ? JSON.stringify(c[k]) : c[k];
