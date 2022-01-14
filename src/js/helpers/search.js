@@ -8,7 +8,6 @@
  * @returns {Array}
  */
 const findBy = (keys, query, collection) => {
-  console.log(keys, query, collection);
   if (query === undefined || query === '' || query === null) return collection;
 
   let keysArray;
