@@ -77,9 +77,7 @@ const StateModal = ({
           <Tabs active={getActiveTab()}>
             {state.type === 'fsm' ? (
               <Pane name="Fsm">
-                <FSMDiagram
-                  fsmName={state.name}
-                />
+                <FSMDiagram fsmName={state.name} />
               </Pane>
             ) : null}
             {state.type === 'block' ? (
@@ -89,6 +87,11 @@ const StateModal = ({
                   fsmId={fsmId}
                   statesPath={`${statesPath}.${stateId}.`}
                 />
+              </Pane>
+            ) : null}
+            {state.type === 'block' ? (
+              <Pane name="Block config">
+                <Tree data={state['block-config']} />
               </Pane>
             ) : null}
             {state.action?.type === 'pipeline' && (
@@ -102,7 +105,12 @@ const StateModal = ({
             {state.type !== 'if' && state.action?.type !== 'pipeline' ? (
               <Pane name="Config">
                 <ConfigItemsTable
-                  items={rebuildConfigHash(getConfigItemsForState(state), null, null, fsmId)}
+                  items={rebuildConfigHash(
+                    getConfigItemsForState(state),
+                    null,
+                    null,
+                    fsmId
+                  )}
                   intrf="fsms"
                   intrfId={fsmId}
                   stateId={stateId}
