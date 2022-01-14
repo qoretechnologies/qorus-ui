@@ -30,24 +30,24 @@ type Props = {
 const DataProviderTypes = memo(({ openModal, closeModal }) => {
   const [val, setVal] = React.useState('');
   // Save the field detail
-  const [field, setField] = React.useState(null);
+  const [type, setType] = React.useState('');
 
   const { loading, value, error, retry } = useAsyncRetry(async () => {
     return get('api/latest/dataprovider/types/listAll');
   }, []);
 
   const fieldsData = useAsyncRetry(async () => {
-    if (val) {
-      return get(`api/latest/dataprovider/types${val}/type`);
+    if (type) {
+      return get(`api/latest/dataprovider/types${vtypeal}?action=type`);
     }
-  }, [val]);
+  }, [type]);
 
   if (loading) {
     return <p>Loading ...</p>;
   }
 
   const renderTypeFields = () => {
-    if (!val) {
+    if (!type) {
       return null;
     }
 
@@ -129,9 +129,11 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
       <Box top fill>
         <Suggest
           defaultItems={value}
-          value={val}
+          value={type || val}
+          selected={type}
           name="path"
           onChange={(_name, value) => setVal(value)}
+          onSelect={(value) => setType(value)}
         />
         {renderTypeFields()}
       </Box>

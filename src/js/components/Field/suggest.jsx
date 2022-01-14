@@ -30,8 +30,10 @@ const SuggestField: FunctionComponent<ISuggestField> = ({
   placeholder,
   fill,
   disabled,
+  selected,
   requestFieldData,
   warningMessageOnEmpty,
+  onSelect,
   autoSelect,
 }) => {
   const [items, setItems] = useState(defaultItems || []);
@@ -60,7 +62,7 @@ const SuggestField: FunctionComponent<ISuggestField> = ({
           overflow: 'hidden',
         },
       }}
-      open={!value}
+      open={selected !== value}
       inputProps={{
         placeholder: 'Search for a type',
         style: {
@@ -93,8 +95,14 @@ const SuggestField: FunctionComponent<ISuggestField> = ({
       }}
       items={items}
       value={value}
-      onChange={(e) => handleChange(e.target.value)}
-      onSelect={(val) => handleChange(val)}
+      onChange={(e) => {
+        onSelect(null);
+        handleChange(e.target.value);
+      }}
+      onSelect={(val) => {
+        handleChange(null);
+        onSelect(val);
+      }}
       renderItem={(item, isHighlighted) => (
         <div
           style={{
