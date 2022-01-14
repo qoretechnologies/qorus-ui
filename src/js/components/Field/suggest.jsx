@@ -60,6 +60,7 @@ const SuggestField: FunctionComponent<ISuggestField> = ({
           overflow: 'hidden',
         },
       }}
+      open={!value}
       inputProps={{
         placeholder: 'Search for a type',
         style: {
@@ -88,7 +89,7 @@ const SuggestField: FunctionComponent<ISuggestField> = ({
         border: '1px solid #eee',
         borderTop: 0,
         overflowY: 'auto',
-        maxHeight: '300px',
+        maxHeight: value ? '300px' : undefined,
       }}
       items={items}
       value={value}

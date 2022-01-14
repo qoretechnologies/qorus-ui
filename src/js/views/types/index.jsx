@@ -46,9 +46,11 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
     return <p>Loading ...</p>;
   }
 
-  console.log(fieldsData);
-
   const renderTypeFields = () => {
+    if (!val) {
+      return null;
+    }
+
     if (fieldsData.loading) {
       return <p>Loading ...</p>;
     }
