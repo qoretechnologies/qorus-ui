@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
-import MapperInput from './input';
-import MapperOutput from './output';
-import { ButtonGroup, Tooltip, Button, Intent, Icon } from '@blueprintjs/core';
-import size from 'lodash/size';
+import { Tooltip } from '@blueprintjs/core';
+import findIndex from 'lodash/findIndex';
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
-import omit from 'lodash/omit';
-import findIndex from 'lodash/findIndex';
-import compose from 'recompose/compose';
+import size from 'lodash/size';
+import React from 'react';
 import { injectIntl } from 'react-intl';
+import compose from 'recompose/compose';
+import styled, { css } from 'styled-components';
 import {
-  hasStaticDataField,
-  getStaticDataFieldname,
+  getStaticDataFieldname, hasStaticDataField
 } from '../../../helpers/mapper';
+import MapperInput from './input';
+import MapperOutput from './output';
 
 const FIELD_HEIGHT = 35;
 const FIELD_MARGIN = 14;
@@ -34,7 +32,7 @@ const TYPE_COLORS = {
   any: '#a9a9a9',
 };
 
-const StyledMapperWrapper = styled.div`
+export const StyledMapperWrapper = styled.div`
   width: 900px;
   display: flex;
   flex-flow: row;
@@ -43,13 +41,13 @@ const StyledMapperWrapper = styled.div`
   height: 100%;
 `;
 
-const StyledFieldsWrapper = styled.div`
+export const StyledFieldsWrapper = styled.div`
   flex: 1 1 auto;
   height: 100%;
   width: 300px;
 `;
 
-const StyledConnectionsWrapper = styled.div`
+export const StyledConnectionsWrapper = styled.div`
   flex: 1 1 auto;
   height: 100%;
   width: 300px;
@@ -57,16 +55,16 @@ const StyledConnectionsWrapper = styled.div`
 
 export const StyledMapperField = styled.div`
     width: ${({ isChild, level }) =>
-      isChild ? `${300 - level * 15}px` : '300px'};
-    
+    isChild ? `${300 - level * 15}px` : '300px'};
+
     ${({ input, isChild, level }) =>
-      input &&
+    input &&
       css`
         margin-left: ${isChild ? `${level * 15}px` : '0'};
       `}
-    
+
     height: ${({ isInputHash }) =>
-      isInputHash ? '55px' : `${FIELD_HEIGHT}px`};
+    isInputHash ? '55px' : `${FIELD_HEIGHT}px`};
     border: 1px solid #d7d7d7;
     border-radius: 3px;
     margin-bottom: ${FIELD_MARGIN}px;
@@ -81,7 +79,7 @@ export const StyledMapperField = styled.div`
     }
 
     ${({ isDisabled }) =>
-      css`
+    css`
         &:hover {
           border-color: ${isDisabled ? '#d7d7d7' : '#137cbd'};
 
@@ -92,19 +90,19 @@ export const StyledMapperField = styled.div`
       `};
 
     ${({ childrenCount, isDragging }) =>
-      childrenCount !== 0 && !isDragging
-        ? css`
+    childrenCount !== 0 && !isDragging
+      ? css`
             &:after {
               content: '';
               display: table;
               position: absolute;
               width: 1px;
               ${({ input }) =>
-                input
-                  ? css`
+    input
+      ? css`
                       left: -1px;
                     `
-                  : css`
+      : css`
                       right: -1px;
                     `};
               top: ${FIELD_HEIGHT / 2}px;
@@ -113,11 +111,11 @@ export const StyledMapperField = styled.div`
               z-index: 0;
             }
           `
-        : null}
+      : null}
 
     ${({ isChild, isDragging }) =>
-      isChild && !isDragging
-        ? css`
+    isChild && !isDragging
+      ? css`
             &:before {
               content: '';
               display: table;
@@ -125,11 +123,11 @@ export const StyledMapperField = styled.div`
               width: 15px;
               height: 1px;
               ${({ input }) =>
-                input
-                  ? css`
+    input
+      ? css`
                       left: -15px;
                     `
-                  : css`
+      : css`
                       right: -15px;
                     `};
               top: ${FIELD_HEIGHT / 2}px;
@@ -137,7 +135,7 @@ export const StyledMapperField = styled.div`
               z-index: 0;
             }
           `
-        : null}
+      : null}
 
     h4 {
         text-align: center;
@@ -408,18 +406,18 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
             </StyledFieldHeader>
             {size(flattenedInputs) !== 0
               ? map(flattenedInputs, (input, index) => (
-                  <MapperInput
-                    key={input.path}
-                    name={input.name}
-                    types={input.type.types_returned}
-                    {...input}
-                    field={input}
-                    id={index + 1}
-                    lastChildIndex={
-                      getLastChildIndex(input, flattenedInputs) - index
-                    }
-                  />
-                ))
+                <MapperInput
+                  key={input.path}
+                  name={input.name}
+                  types={input.type.types_returned}
+                  {...input}
+                  field={input}
+                  id={index + 1}
+                  lastChildIndex={
+                    getLastChildIndex(input, flattenedInputs) - index
+                  }
+                />
+              ))
               : null}
             {size(flattenedInputs) === 0 ? (
               <StyledInfoMessage>
@@ -453,19 +451,19 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
             )}
             {size(flattenedContextInputs) !== 0
               ? map(flattenedContextInputs, (input, index) => (
-                  <MapperInput
-                    key={input.path}
-                    name={input.name}
-                    types={input.type.types_returned}
-                    {...input}
-                    field={input}
-                    id={(flattenedInputs?.length || 0) + (index + 1)}
-                    lastChildIndex={
-                      getLastChildIndex(input, flattenedContextInputs) - index
-                    }
-                    usesContext
-                  />
-                ))
+                <MapperInput
+                  key={input.path}
+                  name={input.name}
+                  types={input.type.types_returned}
+                  {...input}
+                  field={input}
+                  id={(flattenedInputs?.length || 0) + (index + 1)}
+                  lastChildIndex={
+                    getLastChildIndex(input, flattenedContextInputs) - index
+                  }
+                  usesContext
+                />
+              ))
               : null}
           </StyledFieldsWrapper>
           <StyledConnectionsWrapper>
@@ -692,7 +690,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           }
                         />
                       </>
-                    ) : null}
+                      ) : null}
                     {!!relation.context &&
                     relation.context === '$static:*' &&
                     size(flattenedContextInputs) ? (
@@ -760,7 +758,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           }
                         />
                       </>
-                    ) : null}
+                      ) : null}
                   </>
                 ))}
               </svg>
@@ -775,22 +773,22 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
             </StyledFieldHeader>
             {size(flattenedOutputs) !== 0
               ? map(flattenedOutputs, (output, index) => (
-                  <MapperOutput
-                    key={output.path}
-                    name={output.name}
-                    hasRelation={!!relations[output.path]}
-                    {...output}
-                    field={output}
-                    id={index + 1}
-                    onManageClick={() => {
-                      !!relations[output.path] && onInfoClick(output.path);
-                    }}
-                    accepts={output.type.types_accepted}
-                    lastChildIndex={
-                      getLastChildIndex(output, flattenedOutputs) - index
-                    }
-                  />
-                ))
+                <MapperOutput
+                  key={output.path}
+                  name={output.name}
+                  hasRelation={!!relations[output.path]}
+                  {...output}
+                  field={output}
+                  id={index + 1}
+                  onManageClick={() => {
+                    !!relations[output.path] && onInfoClick(output.path);
+                  }}
+                  accepts={output.type.types_accepted}
+                  lastChildIndex={
+                    getLastChildIndex(output, flattenedOutputs) - index
+                  }
+                />
+              ))
               : null}
             {size(flattenedOutputs) === 0 ? (
               <StyledInfoMessage>

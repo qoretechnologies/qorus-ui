@@ -39,6 +39,7 @@ const MapperInput: FC<IMapperInputProps> = ({
       level={level}
       childrenCount={lastChildIndex}
       title={field?.desc}
+      onClick={onClick}
     >
       <h4 style={{ fontSize: isWholeInput ? '16px' : '14px' }}>{name}</h4>
       {!isWholeInput && (
