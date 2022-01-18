@@ -26,6 +26,15 @@ const StyledProviderUrl = styled.div`
   }
 `;
 
+/* The getUrlFromProvider function takes a provider object and returns the URL for that provider. */
+export const getUrlFromProvider = (val) => {
+  const { type, name, path } = val;
+  // Get the rules for the given provider
+  const { url, suffix, recordSuffix, requiresRecord } = providers[type];
+  // Build the URL based on the provider type
+  return `${url}/${name}${suffix}${path}${requiresRecord ? recordSuffix : ''}`;
+};
+
 const ConnectorField: React.FC<IConnectorFieldProps> = ({
   title,
   onChange,
@@ -51,16 +60,6 @@ const ConnectorField: React.FC<IConnectorFieldProps> = ({
     setProvider(null);
     setOptionProvider(null);
     setIsLoading(false);
-  };
-
-  const getUrlFromProvider: (val: any) => string = (val) => {
-    const { type, name, path } = val;
-    // Get the rules for the given provider
-    const { url, suffix, recordSuffix, requiresRecord } = providers[type];
-    // Build the URL based on the provider type
-    return `${url}/${name}${suffix}${path}${
-      requiresRecord ? recordSuffix : ''
-    }`;
   };
 
   // Update the editing state when initial editing changes

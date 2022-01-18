@@ -1,14 +1,15 @@
 // @flow
+import { Icon, Intent } from '@blueprintjs/core';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import { getType } from '../../helpers/functions';
-import { Icon, Intent } from '@blueprintjs/core';
-import Text from '../../components/text';
 import Date from '../../components/date';
-import Flex from '../Flex';
+import Text from '../../components/text';
 import { isDate } from '../../helpers/date';
-import ReactMarkdown from 'react-markdown';
+import { getType } from '../../helpers/functions';
+import { getUrlFromProvider } from '../DataproviderSelector';
+import Flex from '../Flex';
 
 type ContentByTypeProps = {
   content: any,
@@ -27,9 +28,34 @@ const ContentByType: Function = ({
   noControls,
   noMarkdown,
   inline,
+  baseType,
 }: ContentByTypeProps): React.Element<any> => {
-  const type: string = getType(content);
+  const type: string = baseType || getType(content);
   const className: string = `content-by-type ${type} ${inline ? 'inline' : ''}`;
+
+  // If the type is data-provider get the provider url from the value and render the provider
+  if (type === 'data-provider') {
+    const url = getUrlFromProvider(content);
+
+    return inTable ? (
+      <Flex className={className} title={content}>
+        {url}
+      </Flex>
+    ) : (
+      <div className={className}>{url}</div>
+    );
+  }
+
+  if (type === 'null') {
+    return (
+      <div
+        className={className}
+        style={{ opacity: 0.7, color: '#a9a9a9', fontStyle: 'italic' }}
+      >
+        null
+      </div>
+    );
+  }
 
   if (type === 'boolean') {
     return (
