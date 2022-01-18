@@ -83,6 +83,7 @@ export default class ConfigItemsModal extends Component {
     templateKey?: string,
   } = {
     value: this.props.item?.value,
+    origValue: this.props.item?.value,
     item: this.props.item,
     error: false,
     yamlData: null,
@@ -239,6 +240,7 @@ export default class ConfigItemsModal extends Component {
         name="configItem"
         {...{ 'type-depends-on': true }}
         value={this.removeQuotes(this.state.value)}
+        default_value={this.removeQuotes(this.state.origValue)}
         t={(s) => s}
         type="auto"
         disabled={!!item.allowed_values}
