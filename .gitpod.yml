@@ -4,9 +4,11 @@
 
 tasks:
   - init: |
+      git config --global http.sslverify false
       nvm install v10.19
       yarn install
     command: |
+      git config --global http.sslverify false
       nvm install v10.19
       API_PORT=8092 yarn start
 vscode:
