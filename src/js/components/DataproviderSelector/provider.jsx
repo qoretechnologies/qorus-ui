@@ -1,39 +1,15 @@
-import {
-  Button,
-  ButtonGroup,
-  Callout,
-  Classes,
-  Dialog,
-  Spinner,
-} from '@blueprintjs/core';
+import { Button, ButtonGroup, Callout, Classes, Dialog, Spinner } from '@blueprintjs/core';
+import { omit } from 'lodash';
 import map from 'lodash/map';
 import nth from 'lodash/nth';
 import size from 'lodash/size';
-import React, { FC, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useDebounce } from 'react-use';
 import styled, { css } from 'styled-components';
 import SelectField from '../../components/Field/select';
 import String from '../../components/Field/string';
 import { validateField } from '../../components/Field/validations';
 import { get } from '../../store/api/utils';
-
-export interface IProviderProps {
-  type: 'inputs' | 'outputs';
-  provider: string;
-  setProvider: any;
-  nodes: any[];
-  setChildren: any;
-  isLoading: boolean;
-  setIsLoading: any;
-  record: any;
-  setRecord: any;
-  setFields: any;
-  initialData: any;
-  clear: any;
-  title: string;
-  setOptionProvider: any;
-  hide: any;
-  style: any;
-}
 
 const StyledWrapper = styled.div`
   margin-bottom: 10px;
@@ -59,7 +35,7 @@ const StyledHeader = styled.h3`
   text-align: center;
 `;
 
-export const providers = {
+export let providers = {
   type: {
     name: 'type',
     url: 'api/latest/dataprovider/types',
@@ -106,16 +82,17 @@ export const providers = {
     filter: null,
     inputFilter: 'supports_read',
     outputFilter: 'supports_create',
-    suffix: '',
+    suffix: '/provider',
     namekey: 'name',
     desckey: 'desc',
     recordSuffix: '',
     requiresRecord: false,
+    suffixRequiresOptions: true,
     type: 'factory',
   },
 };
 
-const MapperProvider: FC<IProviderProps> = ({
+const MapperProvider = ({
   provider,
   setProvider,
   nodes,
@@ -134,8 +111,29 @@ const MapperProvider: FC<IProviderProps> = ({
   compact,
   canSelectNull,
   style,
+  isConfigItem,
+  options,
 }) => {
   const [wildcardDiagram, setWildcardDiagram] = useState(null);
+  const [optionString, setOptionString] = useState('');
+
+  /* When the options hash changes, we want to update the query string. */
+  useDebounce(
+    () => {
+      if (size(options)) {
+        // Turn the options hash into a query string
+        const str = map(options, (value, key) => `${key}=${value.value}`).join(',');
+        setOptionString(`provider_options={${str}}`);
+      } else {
+        setOptionString('');
+      }
+    },
+    500,
+    [options]
+  );
+
+  // Omit type and factory from the list of providers if is config item
+  providers = isConfigItem ? omit(providers, ['type']) : providers;
 
   const handleProviderChange = (provider) => {
     setProvider((current) => {
@@ -171,9 +169,7 @@ const MapperProvider: FC<IProviderProps> = ({
         setChildren([
           {
             values: children.map((child) => ({
-              name: providers[provider].namekey
-                ? child[providers[provider].namekey]
-                : child,
+              name: providers[provider].namekey ? child[providers[provider].namekey] : child,
               desc: '',
               url,
               suffix: providers[provider].suffix,
@@ -197,9 +193,14 @@ const MapperProvider: FC<IProviderProps> = ({
     clear && clear(true);
     // Set loading
     setIsLoading(true);
+    // Build the suffix
+    let suffixString = providers[provider].suffixRequiresOptions
+      ? optionString && optionString !== ''
+        ? `${suffix}?${optionString}`
+        : ''
+      : suffix;
     // Fetch the data
-    const data = await get(`${url}/${value}${suffix}`);
-
+    const data = await get(`${url}/${value}${suffixString}`);
     // Reset loading
     setIsLoading(false);
     // Add new child
@@ -221,24 +222,29 @@ const MapperProvider: FC<IProviderProps> = ({
           return newItem;
         })
         .filter((item) => item);
-      if (data.has_type) {
+      if (data.has_type || isConfigItem) {
         (async () => {
           setIsLoading(true);
           if (type === 'outputs' && data.mapper_keys) {
             // Save the mapper keys
             setMapperKeys && setMapperKeys(data.mapper_keys);
           }
+
+          suffixString = providers[provider].suffixRequiresOptions
+            ? optionString && optionString !== ''
+              ? `${suffix}${providers[provider].recordSuffix}?${optionString}${
+                  type === 'outputs' ? '&soft=true' : ''
+                }`
+              : ''
+            : `${suffix}${providers[provider].recordSuffix}`;
+          console.log(url, value, suffixString);
           // Fetch the record
-          const record = await get(
-            `${url}/${value}${suffix}${providers[provider].recordSuffix}${
-              type === 'outputs' ? '?soft=true' : ''
-            }`
-          );
+          const record = await get(`${url}/${value}${suffixString}`);
           // Remove loading
           setIsLoading(false);
           // Save the name by pulling the 3rd item from the split
           // url (same for every provider type)
-          const name = `${url}/${value}`.split('/')[2];
+          const name = `${url}/${value}`.split('/')[4];
           // Set the provider option
           setOptionProvider({
             type: providers[provider].type,
@@ -248,12 +254,10 @@ const MapperProvider: FC<IProviderProps> = ({
               .replace(`${name}`, '')
               .replace(`${providers[provider].url}/`, '')
               .replace('provider/', ''),
+            options,
           });
           // Set the record data
-          setRecord &&
-            setRecord(
-              !providers[provider].requiresRecord ? record.fields : record
-            );
+          setRecord && setRecord(!providers[provider].requiresRecord ? record.fields : record);
           //
         })();
       }
@@ -302,14 +306,13 @@ const MapperProvider: FC<IProviderProps> = ({
         if (data.fields) {
           // Save the name by pulling the 3rd item from the split
           // url (same for every provider type)
-          const name = `${url}/${value}`.split('/')[2];
+          const name = `${url}/${value}`.split('/')[4];
           // Set the provider option
           setOptionProvider({
             type: providers[provider].type,
             can_manage_fields: data.can_manage_fields,
             name,
-            subtype:
-              value === 'request' || value === 'response' ? value : undefined,
+            subtype: value === 'request' || value === 'response' ? value : undefined,
             path: `${url}/${value}`
               .replace(`${name}`, '')
               .replace(`${providers[provider].url}/`, '')
@@ -321,7 +324,7 @@ const MapperProvider: FC<IProviderProps> = ({
           setRecord && setRecord(data.fields);
         }
         // Check if there is a record
-        else if (data.has_record || !providers[provider].requiresRecord) {
+        else if (isConfigItem || data.has_record || !providers[provider].requiresRecord) {
           (async () => {
             setIsLoading(true);
             if (type === 'outputs' && data.mapper_keys) {
@@ -338,7 +341,7 @@ const MapperProvider: FC<IProviderProps> = ({
             setIsLoading(false);
             // Save the name by pulling the 3rd item from the split
             // url (same for every provider type)
-            const name = `${url}/${value}`.split('/')[2];
+            const name = `${url}/${value}`.split('/')[4];
             // Set the provider option
             setOptionProvider({
               type: providers[provider].type,
@@ -348,12 +351,10 @@ const MapperProvider: FC<IProviderProps> = ({
                 .replace(`${name}`, '')
                 .replace(`${providers[provider].url}/`, '')
                 .replace('provider/', ''),
+              options,
             });
             // Set the record data
-            setRecord &&
-              setRecord(
-                !providers[provider].requiresRecord ? record.fields : record
-              );
+            setRecord && setRecord(!providers[provider].requiresRecord ? record.fields : record);
             //
           })();
         }
@@ -376,13 +377,11 @@ const MapperProvider: FC<IProviderProps> = ({
       {wildcardDiagram?.isOpen && (
         <Dialog title="Wildcard" isOpen isCloseButtonShown={false}>
           <div className={Classes.DIALOG_BODY}>
-            <Callout intent="primary">{'WildcardReplace'}</Callout>
+            <Callout intent="primary">{'Replace wildcard'}</Callout>
             <br />
             <String
               name="wildcard"
-              onChange={(_name, value) =>
-                setWildcardDiagram((cur) => ({ ...cur, value }))
-              }
+              onChange={(_name, value) => setWildcardDiagram((cur) => ({ ...cur, value }))}
               value={wildcardDiagram.value}
             />
           </div>
@@ -420,31 +419,52 @@ const MapperProvider: FC<IProviderProps> = ({
             value={provider}
           />
           {nodes.map((child, index) => (
-            <SelectField
-              key={`${title}-${index}`}
-              name={`provider-${type ? `${type}-` : ''}${index}`}
-              disabled={isLoading}
-              defaultItems={child.values}
-              onChange={(_name, value) => {
-                // Get the child data
-                const { url, suffix } = child.values.find(
-                  (val) => val.name === value
-                );
-                // If the value is a wildcard present a dialog that the user has to fill
-                if (value === '*') {
-                  setWildcardDiagram({
-                    index,
-                    isOpen: true,
-                    url,
-                    suffix,
-                  });
-                } else {
-                  // Change the child
-                  handleChildFieldChange(value, url, index, suffix);
-                }
-              }}
-              value={child.value}
-            />
+            <ButtonGroup>
+              <SelectField
+                key={`${title}-${index}`}
+                name={`provider-${type ? `${type}-` : ''}${index}`}
+                disabled={isLoading}
+                defaultItems={child.values}
+                onChange={(_name, value) => {
+                  // Get the child data
+                  const { url, suffix } = child.values.find((val) => val.name === value);
+                  // If the value is a wildcard present a dialog that the user has to fill
+                  if (value === '*') {
+                    setWildcardDiagram({
+                      index,
+                      isOpen: true,
+                      url,
+                      suffix,
+                    });
+                  } else {
+                    // Change the child
+                    handleChildFieldChange(value, url, index, suffix);
+                  }
+                }}
+                value={child.value}
+              />
+              {index === 0 && size(options) ? (
+                <Button
+                  icon="refresh"
+                  onClick={() => {
+                    // Get the child data
+                    const { url, suffix } = child.values.find((val) => val.name === child.value);
+                    // If the value is a wildcard present a dialog that the user has to fill
+                    if (child.value === '*') {
+                      setWildcardDiagram({
+                        index,
+                        isOpen: true,
+                        url,
+                        suffix,
+                      });
+                    } else {
+                      // Change the child
+                      handleChildFieldChange(child.value, url, index, suffix);
+                    }
+                  }}
+                />
+              ) : null}
+            </ButtonGroup>
           ))}
           {isLoading && <Spinner size={15} />}
           {nodes.length > 0 && (
@@ -466,16 +486,13 @@ const MapperProvider: FC<IProviderProps> = ({
                   const result = [...cur];
 
                   result.pop();
-                  console.log(result);
 
                   const lastChild = nth(result, -2);
 
                   if (lastChild) {
                     const index = size(result) - 2;
                     const { value, values } = lastChild;
-                    const { url, suffix } = values.find(
-                      (val) => val.name === value
-                    );
+                    const { url, suffix } = values.find((val) => val.name === value);
 
                     // If the value is a wildcard present a dialog that the user has to fill
                     if (value === '*') {
@@ -489,6 +506,11 @@ const MapperProvider: FC<IProviderProps> = ({
                       // Change the child
                       handleChildFieldChange(value, url, index, suffix);
                     }
+                  }
+
+                  // If there are no children then we need to reset the provider
+                  if (size(result) === 0) {
+                    handleProviderChange(provider);
                   }
 
                   return result;

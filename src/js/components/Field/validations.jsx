@@ -1,11 +1,11 @@
-import isNumber from 'lodash/isNumber';
+import jsyaml from 'js-yaml';
 import isArray from 'lodash/isArray';
 import isNaN from 'lodash/isNaN';
-import uniqWith from 'lodash/uniqWith';
-import size from 'lodash/size';
-import jsyaml from 'js-yaml';
+import isNumber from 'lodash/isNumber';
 import isObject from 'lodash/isPlainObject';
-import { isString, isDate, isBoolean, isUndefined, isNull } from 'util';
+import size from 'lodash/size';
+import uniqWith from 'lodash/uniqWith';
+import { isBoolean, isNull, isString, isUndefined } from 'util';
 
 export const validateField: (
   type: string,
@@ -18,6 +18,14 @@ export const validateField: (
   if (canBeNull && isNull(value)) {
     return true;
   }
+  // Get the actual type
+  // Check if there is a `<` in the type
+  const pos = type.indexOf('<');
+  // If there is a <
+  if (pos > 0) {
+    // Get the type from start to the position of the `<`
+    type = type.slice(0, pos);
+  }
   // Check individual types
   switch (type) {
     case 'binary':
@@ -25,6 +33,14 @@ export const validateField: (
     case 'select-string':
     case 'file-string':
     case 'long-string':
+    case 'mapper':
+    case 'workflow':
+    case 'service':
+    case 'job':
+    case 'value-map':
+    case 'connection':
+    case 'softstring':
+    case 'data-provider':
       // Strings cannot be empty
       return value !== undefined && value !== null && value !== '';
     case 'mapper-options': {
@@ -35,9 +51,7 @@ export const validateField: (
       // assigned properly
       return value.every(
         (pair: { [key: string]: string }): boolean =>
-          pair.name &&
-          pair.name !== '' &&
-          validateField(pair.type, pair.value, field)
+          pair.name && pair.name !== '' && validateField(pair.type, pair.value, field)
       );
     }
     case 'array-of-pairs': {
@@ -55,17 +69,13 @@ export const validateField: (
       if (
         !value.every(
           (pair: { [key: string]: string }): boolean =>
-            pair.name !== '' &&
-            (pair['input-method'] !== '' || pair['output-method'] !== '')
+            pair.name !== '' && (pair['input-method'] !== '' || pair['output-method'] !== '')
         )
       ) {
         valid = false;
       }
       // Get a list of unique values
-      const uniqueValues: any[] = uniqWith(
-        value,
-        (cur, prev) => cur.name === prev.name
-      );
+      const uniqueValues: any[] = uniqWith(value, (cur, prev) => cur.name === prev.name);
       // Check if there are any duplicates
       if (size(uniqueValues) !== size(value)) {
         valid = false;
@@ -78,18 +88,14 @@ export const validateField: (
       let valid = true;
       // Check if the fields are not empty
       if (
-        !value.every(
-          (pair: { [key: string]: string }): boolean =>
-            pair.name && pair.name !== ''
-        )
+        !value.every((pair: { [key: string]: string }): boolean => pair.name && pair.name !== '')
       ) {
         valid = false;
       }
       // Get a list of unique values
       const uniqueValues: any[] = uniqWith(
         value,
-        (cur, prev) =>
-          `${cur.prefix}${cur.name}` === `${prev.prefix}${prev.name}`
+        (cur, prev) => `${cur.prefix}${cur.name}` === `${prev.prefix}${prev.name}`
       );
       // Check if there are any duplicates
       if (size(uniqueValues) !== size(value)) {
@@ -100,15 +106,12 @@ export const validateField: (
     }
     case 'int':
     case 'number':
-      return (
-        value === 0 || (!isNaN(value) && getTypeFromValue(value) === 'int')
-      );
+      return value === 0 || (!isNaN(value) && getTypeFromValue(value) === 'int');
     case 'float':
       return (
         value === 0 ||
         (!isNaN(value) &&
-          (getTypeFromValue(value) === 'float' ||
-            getTypeFromValue(value) === 'int'))
+          (getTypeFromValue(value) === 'float' || getTypeFromValue(value) === 'int'))
       );
     case 'select-array':
     case 'array':
@@ -181,7 +184,7 @@ export const validateField: (
   }
 };
 
-export const maybeParseYaml: (yaml: any) => any = yaml => {
+export const maybeParseYaml: (yaml: any) => any = (yaml) => {
   // If we are dealing with basic boolean
   if (yaml === true || yaml === false) {
     return yaml;
