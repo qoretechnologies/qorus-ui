@@ -1,7 +1,7 @@
 /* @flow */
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup } from '@blueprintjs/core';
 
 type Props = {
   children: Array<React.Element<any>>,
@@ -21,9 +21,9 @@ const Controls: Function = ({
   className,
   ...rest
 }: Props): React.Element<any> => (
-  <ButtonGroup className={className} style={{ marginRight }} {...rest}>
+  <ReqoreControlGroup className={className} style={{ marginRight }} {...rest}>
     {children}
-  </ButtonGroup>
+  </ReqoreControlGroup>
 );
 
 export default pure(['children'])(Controls);

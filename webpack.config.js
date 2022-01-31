@@ -75,7 +75,7 @@ let webpackConfig = {
     runtimeChunk: false,
     splitChunks: {
       cacheGroups: {
-        vendors: {
+        defaultVendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           enforce: true,
@@ -85,7 +85,7 @@ let webpackConfig = {
     },
   },
   plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/ }),
     new MiniCssExtractPlugin({
       filename: 'css/base.css',
       chunkFilename: 'css/[name].css',
@@ -98,6 +98,11 @@ let webpackConfig = {
     new webpack.ProvidePlugin({
       fetch:
         'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch',
+    }),
+    // fix "process is not defined" error:
+    // (do "npm install process" before running the build)
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
     }),
   ],
 };

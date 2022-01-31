@@ -1,22 +1,25 @@
 import {
   Button,
   ButtonGroup,
-  Classes,
-  ControlGroup,
-  InputGroup,
   Intent,
   Menu,
   MenuDivider,
   MenuItem,
-  Navbar,
   NavbarDivider,
-  NavbarGroup,
-  NavbarHeading,
   Popover,
   Position,
   Tag,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
+import {
+  ReqoreButton,
+  ReqoreControlGroup,
+  ReqoreDropdown,
+  ReqoreHeader,
+  ReqoreInput,
+  ReqoreNavbarDivider,
+  ReqoreNavbarGroup,
+} from '@qoretechnologies/reqore';
 import map from 'lodash/map';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -28,7 +31,6 @@ import en from '../../../img/country_flags/us.png';
 import Kubernetes from '../../../img/kubernetes.png';
 import logo from '../../../img/qorus_engine_logo.png';
 import whiteLogo from '../../../img/qorus_engine_logo_white.png';
-import { Control } from '../../components/controls';
 import { HEALTH_KEYS } from '../../constants/dashboard';
 import Release from '../../containers/release';
 import withModal from '../../hocomponents/modal';
@@ -38,7 +40,7 @@ import settings from '../../settings';
 import actions from '../../store/api/actions';
 import Notifications from '../notifications';
 
-const flags: Object = {
+const flags = {
   'cs-CZ': cz,
   'en-US': en,
   'ja-JP': jp,
@@ -137,34 +139,27 @@ export default class Topbar extends Component {
     const sortedInterfaces: Array<string> = interfaces.sort();
 
     return (
-      <Popover
-        content={
-          <Menu>
-            {sortedInterfaces.map((key: string): React.Element<MenuItem> => (
-              <MenuItem
-                text={key}
-                key={key}
-                onClick={() => this.setState({ quickSearchType: key })}
-              />
-            ))}
-          </Menu>
-        }
-        popoverClassName="popover-dropdown"
-        position={Position.BOTTOM}
-      >
-        <Button
-          className={Classes.MINIMAL}
-          text={this.props.intl.formatMessage(
-            { id: 'system.global-search-type' },
-            {
-              type: this.props.intl.formatMessage({
-                id: this.state.quickSearchType,
-              }),
-            }
-          )}
-          rightIconName="caret-down"
-        />
-      </Popover>
+      <ReqoreDropdown
+        label={this.props.intl.formatMessage(
+          { id: 'system.global-search-type' },
+          {
+            type: this.props.intl.formatMessage({
+              id: this.state.quickSearchType,
+            }),
+          }
+        )}
+        componentProps={{
+          flat: true,
+        }}
+        items={sortedInterfaces.map((key: string): React.Element<MenuItem> => ({
+          label: key,
+          id: key,
+          selected: this.quickSearchType === key,
+          onClick: () => {
+            this.setState({ quickSearchType: key });
+          },
+        }))}
+      />
     );
   };
 
@@ -182,46 +177,44 @@ export default class Topbar extends Component {
     const [countryCode] = this.props.locale.split('-');
 
     return (
-      <Navbar className={`bp3-fixed-top ${light ? '' : 'bp3-dark'} topbar`}>
-        <NavbarGroup>
-          <NavbarHeading>
-            <img src={light ? logo : whiteLogo} className="qore-small-logo" />
-            <span className="topbar-instance-on">on</span>
-            <span className="topbar-instance">{info.data['instance-key']}</span>
-            {info.data.is_kubernetes && (
-              <Tag intent="primary" style={{ marginLeft: '15px', verticalAlign: 'sub' }}><img src={Kubernetes} style={{ width: '15px' }} /> IN KUBERNETES</Tag>
-            )}
-          </NavbarHeading>
-        </NavbarGroup>
-        <NavbarGroup align="right">
-          <form onSubmit={this.handleSubmit} id="quickSearchForm">
-            <ControlGroup>
-              <InputGroup
-                id="quickSearch"
-                lefticonName="search"
-                placeholder={intl.formatMessage({
-                  id: 'system.global-search',
-                })}
-                rightElement={this.renderSearchMenu()}
-                value={this.state.quickSearchValue}
-                onChange={(e) =>
-                  this.setState({ quickSearchValue: e.target.value })
-                }
-              />
-              <Control icon="search" type="submit" big />
-            </ControlGroup>
-          </form>
-          <NavbarDivider />
-          <ButtonGroup minimal>
-            <Button
-              icon="git-push"
-              onClick={() => {
-                this.props.openModal(
-                  <Release onClose={this.props.closeModal} />
-                );
-              }}
+      <ReqoreHeader>
+        <ReqoreNavbarGroup>
+          <img src={light ? logo : whiteLogo} className="qore-small-logo" />
+          <span className="topbar-instance-on">on</span>
+          <span className="topbar-instance">{info.data['instance-key']}</span>
+          {info.data.is_kubernetes && (
+            <Tag
+              intent="primary"
+              style={{ marginLeft: '15px', verticalAlign: 'sub' }}
+            >
+              <img src={Kubernetes} style={{ width: '15px' }} /> IN KUBERNETES
+            </Tag>
+          )}
+        </ReqoreNavbarGroup>
+        <ReqoreNavbarGroup position="right">
+          <ReqoreControlGroup stack>
+            <ReqoreInput
+              flat
+              id="quickSearch"
+              icon="SearchLine"
+              placeholder={intl.formatMessage({
+                id: 'system.global-search',
+              })}
+              value={this.state.quickSearchValue}
+              onChange={(e) =>
+                this.setState({ quickSearchValue: e.target.value })
+              }
             />
-          </ButtonGroup>
+            {this.renderSearchMenu()}
+            <ReqoreButton icon="SearchLine" intent="info" flat />
+          </ReqoreControlGroup>
+          <ReqoreNavbarDivider />
+          <Button
+            icon="git-push"
+            onClick={() => {
+              this.props.openModal(<Release onClose={this.props.closeModal} />);
+            }}
+          />
           <NavbarDivider />
           <Popover
             position={Position.BOTTOM}
@@ -365,8 +358,8 @@ export default class Topbar extends Component {
               id="themeToggle"
             />
           </ButtonGroup>
-        </NavbarGroup>
-      </Navbar>
+        </ReqoreNavbarGroup>
+      </ReqoreHeader>
     );
   }
 }

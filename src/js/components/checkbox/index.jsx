@@ -1,9 +1,9 @@
 /* @flow */
+import { ReqoreCheckbox } from '@qoretechnologies/reqore';
 import React from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
 import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { Checkbox } from '@blueprintjs/core';
 
 type Props = {
   checked: string,
@@ -21,24 +21,18 @@ const CheckboxElement: Function = ({
   checked,
   intent,
 }: Props): React.Element<any> => (
-  <Checkbox
-    indeterminate={checked === 'HALFCHECKED'}
-    checked={checked === 'CHECKED'}
-    onChange={handleClick}
-    className="checkbox-wrapper bp3-align-right"
-    intent={intent}
-  />
+  <ReqoreCheckbox checked={checked === 'CHECKED'} onChange={handleClick} />
 );
 
 export default compose(
   withHandlers({
-    handleClick: ({ action, setChecked }: Props): Function => (
-      event: Object
-    ): void => {
-      event.persist();
+    handleClick:
+      ({ action, setChecked }: Props): Function =>
+      (event: Object): void => {
+        event.persist();
 
-      if (action) action(event);
-    },
+        if (action) action(event);
+      },
   }),
   pure(['checked'])
 )(CheckboxElement);

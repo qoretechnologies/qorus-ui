@@ -1,4 +1,10 @@
-import { ReqoreSidebar, ReqoreUIProvider } from '@qoretechnologies/reqore';
+import {
+  ReqoreColors,
+  ReqoreContent,
+  ReqoreLayoutContent,
+  ReqoreSidebar,
+  ReqoreUIProvider,
+} from '@qoretechnologies/reqore';
 import debounce from 'lodash/debounce';
 // @flow
 import PropTypes from 'prop-types';
@@ -10,7 +16,6 @@ import ja from 'react-intl/locale-data/ja';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
-import Flex from '../components/Flex';
 import Footer from '../components/footer';
 import FullPageLoading from '../components/FullPageLoading';
 import { Manager as ModalManager } from '../components/modal';
@@ -309,52 +314,56 @@ export default class Root extends Component {
         >
           <ReqoreUIProvider
             theme={{
-              main: '#ffffff',
-              sidebar: { main: isLightTheme ? '#ffffff' : '#383c44' },
+              main: '#131a22',
+              sidebar: {
+                main: '#11161d',
+                item: { activeBackground: ReqoreColors.BLUE },
+              },
+              header: { main: '#11161d' },
+              intents: {
+                success: '#7fba27',
+                danger: '#e62727',
+                pending: '#ffdf34',
+                warning: ReqoreColors.ORANGE,
+              },
+              breadcrumbs: {
+                item: {
+                  color: '#b9b9b9',
+                  activeColor: ReqoreColors.BLUE,
+                },
+              },
             }}
             withSidebar
           >
-            <div
-              className={`root ${isMaximized ? 'maximized' : ''}`}
-              style={{ flex: 1 }}
-            >
-              {!isMaximized && (
-                <Topbar
-                  onMaximizeClick={maximize}
-                  info={info}
-                  health={health}
-                  locale={locale}
-                  isTablet={isTablet}
-                  light={isLightTheme}
-                  onThemeClick={this.onThemeChange}
-                  user={currentUser.data}
-                  location={location}
-                  sendWarning={this.props.sendWarning}
-                />
-              )}
-              <div className="root__center">
-                {!isMaximized && (
-                  <ReqoreSidebar
-                    isDefaultCollapsed={!this.props.sidebarOpen}
-                    path={this.props.location.pathname}
-                    items={menuWithPlugins}
-                    bookmarks={transformOldFavoriteItems(favoriteMenuItems)}
-                    onBookmarksChange={this.props.saveFavoriteItems}
-                    wrapperStyle={{ height: 'calc(100% - 30px)' }}
-                    useNativeTitle
-                  />
-                )}
-                <Flex className="section" scrollX>
-                  <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
-                </Flex>
-              </div>
-              {!isMaximized && (
-                <Footer path={this.props.location.pathname} info={info.data} />
-              )}
-              <ModalManager />
-              <Notifications />
-              <Bubbles />
-            </div>
+            <ReqoreSidebar
+              isDefaultCollapsed={!this.props.sidebarOpen}
+              path={this.props.location.pathname}
+              items={menuWithPlugins}
+              bookmarks={transformOldFavoriteItems(favoriteMenuItems)}
+              onBookmarksChange={this.props.saveFavoriteItems}
+              useNativeTitle
+            />
+
+            <ReqoreLayoutContent>
+              <Topbar
+                onMaximizeClick={maximize}
+                info={info}
+                health={health}
+                locale={locale}
+                isTablet={isTablet}
+                light={isLightTheme}
+                onThemeClick={this.onThemeChange}
+                user={currentUser.data}
+                location={location}
+                sendWarning={this.props.sendWarning}
+              />
+
+              <ReqoreContent>{this.props.children}</ReqoreContent>
+              <Footer path={this.props.location.pathname} info={info.data} />
+            </ReqoreLayoutContent>
+            <ModalManager />
+            <Notifications />
+            <Bubbles />
           </ReqoreUIProvider>
         </ModalContext.Provider>
       </IntlProvider>

@@ -1,20 +1,19 @@
 /* @flow */
+import { ReqoreButton } from '@qoretechnologies/reqore';
 import React from 'react';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import mapProps from 'recompose/mapProps';
-import classNames from 'classnames';
-import { Button, Intent } from '@blueprintjs/core';
-import { connect } from 'react-redux';
 
 const intentTransform = {
-  success: Intent.SUCCESS,
-  danger: Intent.DANGER,
-  info: Intent.PRIMARY,
-  primary: Intent.PRIMARY,
+  success: 'success',
+  danger: 'danger',
+  info: 'info',
+  primary: 'info',
   default: null,
-  warning: Intent.WARNING,
+  warning: 'warning',
 };
 
 type Props = {
@@ -55,7 +54,7 @@ const Control: Function = ({
   loading,
   big,
 }: Props): React.Element<any> => (
-  <Button
+  <ReqoreButton
     id={id}
     className={className}
     title={isTablet ? text : title}
@@ -65,10 +64,11 @@ const Control: Function = ({
     type={type}
     style={css}
     icon={iconName}
-    text={isTablet ? (iconName ? undefined : text) : text}
     intent={intent}
     loading={loading}
-  />
+  >
+    {isTablet ? (iconName ? undefined : text) : text}
+  </ReqoreButton>
 );
 
 export default compose(
@@ -88,30 +88,27 @@ export default compose(
       btnStyle,
       ...rest
     }: Props): Props => ({
-      className: classNames(className, {
-        'bp3-small': !big,
-      }),
       big,
       iconName: icon || iconName,
       text: text || label || children,
-      intent: intent || intent === 0 ? intent : intentTransform[btnStyle],
+      intent: intentTransform[intent || btnStyle],
       btnStyle,
       ...rest,
     })
   ),
   withHandlers({
-    handleClick: ({ action, onClick, stopPropagation }: Props): Function => (
-      event: Object
-    ): void => {
-      const act: ?Function = action || onClick;
+    handleClick:
+      ({ action, onClick, stopPropagation }: Props): Function =>
+      (event: Object): void => {
+        const act: ?Function = action || onClick;
 
-      if (!stopPropagation) event.stopPropagation();
+        if (!stopPropagation) event.stopPropagation();
 
-      if (act) {
-        event.preventDefault();
-        act(event);
-      }
-    },
+        if (act) {
+          event.preventDefault();
+          act(event);
+        }
+      },
   }),
   pure([
     'className',
