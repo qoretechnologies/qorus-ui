@@ -34,10 +34,7 @@ const ContentByType: Function = ({
 
   if (type === 'null') {
     return (
-      <div
-        className={className}
-        style={{ opacity: 0.7, color: '#a9a9a9', fontStyle: 'italic' }}
-      >
+      <div className={className} style={{ opacity: 0.7, color: '#a9a9a9', fontStyle: 'italic' }}>
         null
       </div>
     );
@@ -58,18 +55,17 @@ const ContentByType: Function = ({
     return <div className={className}>{emptyTypeToString[type]}</div>;
   }
 
+  console.log(type, content);
+
   if (
-    type === 'string' ||
-    new Date(content).toString() !== 'Invalid Date' ||
-    type === 'data-provider'
+    type !== 'number' &&
+    (type === 'string' ||
+      new Date(content).toString() !== 'Invalid Date' ||
+      type === 'data-provider')
   ) {
     const isContentDate: boolean = isDate(content);
 
-    let newContent = inTable ? (
-      <Text text={content} noControls={noControls} />
-    ) : (
-      content
-    );
+    let newContent = inTable ? <Text text={content} noControls={noControls} /> : content;
     newContent = isContentDate ? <Date date={content} /> : newContent;
 
     return inTable ? (
@@ -78,7 +74,11 @@ const ContentByType: Function = ({
       </Flex>
     ) : (
       <div className={className} title={newContent}>
-        {noMarkdown ? newContent : <ReactMarkdown>{newContent}</ReactMarkdown>}
+        {noMarkdown || isContentDate ? (
+          newContent
+        ) : (
+          <ReactMarkdown>{newContent.toString()}</ReactMarkdown>
+        )}
       </div>
     );
   }
