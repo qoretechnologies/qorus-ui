@@ -1,50 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import { Button, Callout, ControlGroup } from '@blueprintjs/core';
+import React, { useEffect, useState } from 'react';
 import useMount from 'react-use/lib/useMount';
-import StringField from './string';
+import ConnectorField from '../DataproviderSelector';
 import BooleanField from './boolean';
 import DateField from './date';
-import TextareaField from './textarea';
-import SelectField from './select';
-import { Callout, ControlGroup, Button } from '@blueprintjs/core';
+import LongStringField from './longString';
 import NumberField from './number';
+import OptionHashField from './optionHash';
+import SelectField from './select';
+import StringField from './string';
 import {
   getTypeFromValue,
-  maybeParseYaml,
   getValueOrDefaultValue,
+  maybeParseYaml,
 } from './validations';
-import { isBoolean, isNull, isUndefined } from 'util';
-import { injectIntl } from 'react-intl';
 
-const AutoField = ({
+const AutoField: FunctionComponent<IField & IFieldChange> = ({
   name,
   onChange,
   value,
   default_value,
   defaultType,
+  defaultInternalType,
   requestFieldData,
   type,
-  intl: { formatMessage },
+  t,
+  noSoft,
   ...rest
 }) => {
-  const [currentType, setType] = useState(null);
-  const [currentInternalType, setInternalType] = useState(null);
+  const [currentType, setType] = useState(defaultInternalType || null);
+  const [currentInternalType, setInternalType] = useState(
+    defaultInternalType || 'any'
+  );
   const [isSetToNull, setIsSetToNull] = useState(false);
 
+  console.log(currentType, currentInternalType);
+
   useMount(() => {
-    const defType = defaultType && defaultType.replace(/"/g, '').trim();
+    let defType = defaultType && defaultType.replace(/"/g, '').trim();
+    defType = defType || 'any';
     // If value already exists, but the type is auto or any
     // set the type based on the value
-    if (value && (defType === 'auto' || defType === 'any')) {
+    if (
+      value &&
+      (defType === 'auto' || defType === 'any') &&
+      !defaultInternalType
+    ) {
       setInternalType(getTypeFromValue(maybeParseYaml(value)));
     } else {
-      setInternalType(defType);
+      setInternalType(defaultInternalType || defType);
     }
 
     setType(defType);
+    console.log(
+      getValueOrDefaultValue(value, default_value, canBeNull(defType)),
+      canBeNull(defType)
+    );
     // If the value is null and can be null, set the null flag
     if (
-      (value === 'null' || isNull(getValueOrDefaultValue(value, default_value, canBeNull()))) &&
-      canBeNull()
+      (getValueOrDefaultValue(value, default_value, canBeNull(defType)) ===
+        'null' ||
+        getValueOrDefaultValue(value, default_value, canBeNull(defType)) ===
+          null) &&
+      canBeNull(defType)
     ) {
       setIsSetToNull(true);
     }
@@ -52,7 +70,7 @@ const AutoField = ({
     // Set the default value
     handleChange(
       name,
-      getValueOrDefaultValue(value, default_value, canBeNull())
+      getValueOrDefaultValue(value, default_value, canBeNull(defType))
     );
   });
 
@@ -61,24 +79,36 @@ const AutoField = ({
     // which will be used as a type
     if (rest['type-depends-on']) {
       // Get the requested type
-      const typeValue: string = requestFieldData(
-        rest['type-depends-on'],
-        'value'
-      );
+      const typeValue = requestFieldData(rest['type-depends-on'], 'value');
       // Check if the field has the value set yet
       if (typeValue && typeValue !== currentType) {
         // If this is auto / any field
         // set the internal type
         if (typeValue === 'auto' || typeValue === 'any') {
           setInternalType(
-            value ? getTypeFromValue(maybeParseYaml(value)) : null
+            value ? getTypeFromValue(maybeParseYaml(value)) : 'any'
           );
         } else {
           setInternalType(typeValue);
         }
         // Set the new type
         setType(typeValue);
-        handleChange(name, undefined);
+        if (!currentType) {
+          handleChange(name, value === undefined ? undefined : value);
+        } else if (typeValue !== 'any') {
+          const typeFromValue = value
+            ? getTypeFromValue(maybeParseYaml(value))
+            : 'any';
+
+          handleChange(
+            name,
+            value === null
+              ? null
+              : typeValue === typeFromValue
+              ? value
+              : undefined
+          );
+        }
       }
     }
     // If can be undefined was toggled off, but the value right now is null
@@ -89,7 +119,11 @@ const AutoField = ({
     }
   });
 
-  const canBeNull = () => {
+  const canBeNull = (type = currentType) => {
+    if (type === 'any' || type === 'Any') {
+      return true;
+    }
+
     if (requestFieldData) {
       return requestFieldData('can_be_undefined', 'value');
     }
@@ -105,15 +139,19 @@ const AutoField = ({
   };
 
   const handleNullToggle = () => {
-    setIsSetToNull(current => !current);
+    setType(defaultType || 'any');
+    setInternalType(defaultType || 'any');
+    setIsSetToNull((current) => {
+      return !current;
+    });
+
     // Handle change
-    handleChange(name, null);
+    handleChange(name, isSetToNull ? undefined : null);
   };
 
-  const renderField = currentType => {
-    if (!currentType) {
-      return null;
-    }
+  console.log(isSetToNull);
+
+  const renderField = (currentType: string) => {
     // If this field is set to null
     if (isSetToNull) {
       // Render a readonly field with null
@@ -127,13 +165,25 @@ const AutoField = ({
         />
       );
     }
+    if (!currentType) {
+      return null;
+    }
+    // Check if there is a `<` in the type
+    const pos: number = currentType.indexOf('<');
+
+    if (pos > 0) {
+      // Get the type from start to the position of the `<`
+      currentType = currentType.slice(0, pos);
+    }
+
     // Render the field based on the type
     switch (currentType) {
       case 'string':
+      case 'softstring':
       case 'data':
       case 'binary':
         return (
-          <StringField
+          <LongStringField
             fill
             {...rest}
             name={name}
@@ -143,6 +193,7 @@ const AutoField = ({
           />
         );
       case 'bool':
+      case 'softbool':
         return (
           <BooleanField
             fill
@@ -167,20 +218,25 @@ const AutoField = ({
       case 'hash':
       case 'hash<auto>':
       case 'list':
+      case 'softlist<string>':
+      case 'softlist':
       case 'list<auto>':
         return (
-          <TextareaField
+          <LongStringField
             {...rest}
             name={name}
             onChange={handleChange}
             value={value}
             fill
             type={currentType}
-            placeholder={'Yaml'}
+            noWrap
+            placeholder={t('Yaml')}
           />
         );
       case 'int':
+      case 'softint':
       case 'float':
+      case 'softfloat':
         return (
           <NumberField
             {...rest}
@@ -202,8 +258,35 @@ const AutoField = ({
             type={currentType}
           />
         );
+      case 'select-string': {
+        return (
+          <SelectField
+            defaultItems={rest.allowed_values}
+            value={value}
+            name={name}
+            onChange={handleChange}
+            type={currentType}
+          />
+        );
+      }
+      case 'data-provider': {
+        return (
+          <ConnectorField
+            value={value}
+            isInitialEditing={!!default_value}
+            name={name}
+            inline
+            minimal
+            onChange={handleChange}
+          />
+        );
+      }
+      case 'any':
+        return null;
+      case 'auto':
+        return <Callout>Please select data type</Callout>;
       default:
-        return <Callout>{formatMessage({ id: 'field.autoSelectType' })}</Callout>;
+        return <Callout intent="danger">{t('UnknownType')}</Callout>;
     }
   };
 
@@ -214,6 +297,33 @@ const AutoField = ({
       currentType === 'auto' ||
       currentType === 'any');
 
+  const types = !noSoft
+    ? [
+        { name: 'bool' },
+        { name: 'softbool' },
+        { name: 'date' },
+        { name: 'string' },
+        { name: 'softstring' },
+        { name: 'binary' },
+        { name: 'float' },
+        { name: 'softfloat' },
+        { name: 'list' },
+        { name: 'softlist' },
+        { name: 'hash' },
+        { name: 'int' },
+        { name: 'softint' },
+      ]
+    : [
+        { name: 'bool' },
+        { name: 'date' },
+        { name: 'string' },
+        { name: 'binary' },
+        { name: 'float' },
+        { name: 'list' },
+        { name: 'hash' },
+        { name: 'int' },
+      ];
+
   // Render type picker if the type is auto or any
   return (
     <>
@@ -221,16 +331,7 @@ const AutoField = ({
         {showPicker && (
           <SelectField
             name="type"
-            defaultItems={[
-              { name: 'bool' },
-              { name: 'date' },
-              { name: 'string' },
-              { name: 'binary' },
-              { name: 'float' },
-              { name: 'list' },
-              { name: 'hash' },
-              { name: 'int' },
-            ]}
+            defaultItems={types}
             value={currentInternalType}
             onChange={(_name, value) => {
               handleChange(name, null);
@@ -246,7 +347,7 @@ const AutoField = ({
             icon={isSetToNull && 'cross'}
             onClick={handleNullToggle}
           >
-            {isSetToNull ? formatMessage({ id: 'field.unsetNull' }) : formatMessage({ id: 'field.setAsNull' })}
+            {isSetToNull ? 'Unset null' : 'Set as null'}
           </Button>
         )}
       </ControlGroup>
@@ -254,4 +355,4 @@ const AutoField = ({
   );
 };
 
-export default injectIntl(AutoField);
+export default AutoField;
