@@ -80,16 +80,31 @@ export let providers = {
     name: 'factory',
     url: 'api/latest/dataprovider/factories',
     filter: null,
-    inputFilter: 'supports_read',
-    outputFilter: 'supports_create',
+    inputFilter: null,
+    outputFilter: null,
     suffix: '/provider',
     namekey: 'name',
     desckey: 'desc',
-    recordSuffix: '',
-    requiresRecord: false,
+    recordSuffix: '/record',
+    requiresRecord: true,
     suffixRequiresOptions: true,
     type: 'factory',
   },
+};
+
+export const configItemFactory = {
+  name: 'factory',
+  url: 'api/latest/dataprovider/factories',
+  filter: null,
+  inputFilter: null,
+  outputFilter: null,
+  suffix: '/provider',
+  namekey: 'name',
+  desckey: 'desc',
+  recordSuffix: '',
+  requiresRecord: false,
+  suffixRequiresOptions: true,
+  type: 'factory',
 };
 
 const MapperProvider = ({
@@ -122,10 +137,10 @@ const MapperProvider = ({
     () => {
       if (size(options)) {
         // Turn the options hash into a query string
-        const str = map(options, (value, key) => `${key}=${value.value}`).join(',');
-        setOptionString(`provider_options={${str}}`);
+        const str = map(options, (value, key) => `${key}=${btoa(value.value)}`).join(',');
+        setOptionString(`provider_yaml_options={${str}}`);
       } else {
-        setOptionString('');
+        setOptionString('provider_yaml_options={}');
       }
     },
     500,
@@ -133,7 +148,9 @@ const MapperProvider = ({
   );
 
   // Omit type and factory from the list of providers if is config item
-  providers = isConfigItem ? omit(providers, ['type']) : providers;
+  providers = isConfigItem
+    ? { ...omit(providers, ['type', 'factory']), factory: configItemFactory }
+    : providers;
 
   const handleProviderChange = (provider) => {
     setProvider((current) => {
@@ -195,9 +212,11 @@ const MapperProvider = ({
     setIsLoading(true);
     // Build the suffix
     let suffixString = providers[provider].suffixRequiresOptions
-      ? optionString && optionString !== ''
+      ? optionString && optionString !== '' && size(options)
         ? `${suffix}?${optionString}`
-        : ''
+        : itemIndex === 1
+        ? ''
+        : suffix
       : suffix;
     // Fetch the data
     const data = await get(`${url}/${value}${suffixString}`);
@@ -231,11 +250,11 @@ const MapperProvider = ({
           }
 
           suffixString = providers[provider].suffixRequiresOptions
-            ? optionString && optionString !== ''
+            ? optionString && optionString !== '' && size(options)
               ? `${suffix}${providers[provider].recordSuffix}?${optionString}${
                   type === 'outputs' ? '&soft=true' : ''
                 }`
-              : ''
+              : `${suffix}`
             : `${suffix}${providers[provider].recordSuffix}`;
           console.log(url, value, suffixString);
           // Fetch the record
@@ -256,8 +275,10 @@ const MapperProvider = ({
               .replace('provider/', ''),
             options,
           });
-          // Set the record data
-          setRecord && setRecord(!providers[provider].requiresRecord ? record.fields : record);
+          if (data.has_type || isConfigItem) {
+            // Set the record data
+            setRecord && setRecord(!providers[provider].requiresRecord ? record.fields : record);
+          }
           //
         })();
       }
@@ -331,12 +352,15 @@ const MapperProvider = ({
               // Save the mapper keys
               setMapperKeys && setMapperKeys(data.mapper_keys);
             }
+            suffixString = providers[provider].suffixRequiresOptions
+              ? optionString && optionString !== '' && size(options)
+                ? `${suffix}${providers[provider].recordSuffix}?${optionString}${
+                    type === 'outputs' ? '&soft=true' : ''
+                  }`
+                : suffix
+              : `${suffix}${providers[provider].recordSuffix}`;
             // Fetch the record
-            const record = await get(
-              `${url}/${value}${suffix}${providers[provider].recordSuffix}${
-                type === 'outputs' ? '?soft=true' : ''
-              }`
-            );
+            const record = await get(`${url}/${value}${suffix}${suffixString}`);
             // Remove loading
             setIsLoading(false);
             // Save the name by pulling the 3rd item from the split
@@ -443,7 +467,7 @@ const MapperProvider = ({
                 }}
                 value={child.value}
               />
-              {index === 0 && size(options) ? (
+              {index === 0 ? (
                 <Button
                   icon="refresh"
                   onClick={() => {
