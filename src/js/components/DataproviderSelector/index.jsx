@@ -30,26 +30,34 @@ export const getUrlFromProvider = (val, withOptions) => {
     // Build the option string for URL
     optionString = `provider_options={${map(
       options,
-      (value, key) => `${key}=${value.value || value}`
+      (value, key) => `${key}=${btoa(value?.value || value || '')}`
     ).join(',')}}`;
   }
   // Get the rules for the given provider
   const { url, suffix, recordSuffix, requiresRecord, suffixRequiresOptions } = providers[type];
+
+  if (withOptions) {
+    return `${url}/${name}/${
+      type === 'factory' ? 'provider_info/' : ''
+    }constructor_options?context=ui`;
+  }
+
+  // Check if the path ends in /request or /response
+  const endsInSubtype = path.endsWith('/request') || path.endsWith('/response');
+
   // Build the suffix
-  const realPath = `${suffix}${path}${requiresRecord ? recordSuffix : ''}${
+  const realPath = `${suffix}${path}${endsInSubtype ? '' : recordSuffix || ''}${
     withOptions ? '/constructor_options' : ''
   }`;
 
   const suffixString = suffixRequiresOptions
     ? optionString && optionString !== ''
       ? `${realPath}?${optionString}`
-      : `${withOptions ? '/constructor_options' : ''}`
+      : `${withOptions ? '/constructor_options' : `${realPath}`}`
     : realPath;
 
-  console.log(url, name, suffixString);
-
   // Build the URL based on the provider type
-  return `${url}/${name}${suffixString}`;
+  return `${url}/${name}${suffixString}${type === 'type' && endsInSubtype ? '?action=type' : ''}`;
 };
 
 const maybeBuildOptionProvider = (provider) => {
