@@ -8,7 +8,6 @@ import Date from '../../components/date';
 import Text from '../../components/text';
 import { isDate } from '../../helpers/date';
 import { getType } from '../../helpers/functions';
-import { getUrlFromProvider } from '../DataproviderSelector';
 import Flex from '../Flex';
 
 type ContentByTypeProps = {
@@ -33,19 +32,6 @@ const ContentByType: Function = ({
   const type: string = baseType || getType(content);
   const className: string = `content-by-type ${type} ${inline ? 'inline' : ''}`;
 
-  // If the type is data-provider get the provider url from the value and render the provider
-  if (type === 'data-provider') {
-    const url = getUrlFromProvider(content);
-
-    return inTable ? (
-      <Flex className={className} title={content}>
-        {url}
-      </Flex>
-    ) : (
-      <div className={className}>{url}</div>
-    );
-  }
-
   if (type === 'null') {
     return (
       <div
@@ -68,7 +54,15 @@ const ContentByType: Function = ({
     );
   }
 
-  if (type === 'string') {
+  if (type === 'object' || type === 'array') {
+    return <div className={className}>{emptyTypeToString[type]}</div>;
+  }
+
+  if (
+    type === 'string' ||
+    new Date(content).toString() !== 'Invalid Date' ||
+    type === 'data-provider'
+  ) {
     const isContentDate: boolean = isDate(content);
 
     let newContent = inTable ? (
@@ -91,10 +85,6 @@ const ContentByType: Function = ({
 
   if (type === 'number') {
     return <div className={className}>{content}</div>;
-  }
-
-  if (type === 'object' || type === 'array') {
-    return <div className={className}>{emptyTypeToString[type]}</div>;
   }
 
   return <div className={className}>-</div>;

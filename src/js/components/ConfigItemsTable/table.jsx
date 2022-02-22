@@ -1,41 +1,37 @@
 // @flow
-import React, { useState, useEffect } from 'react';
-import compose from 'recompose/compose';
-import classnames from 'classnames';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import EnhancedTable from '../EnhancedTable';
-import { ActionColumnHeader, ActionColumn } from '../ActionColumn';
-import type { EnhancedTableProps } from '../EnhancedTable';
-import { sortDefaults } from '../../constants/sort';
-import NameColumn, { NameColumnHeader } from '../NameColumn';
-import DataOrEmptyTable from '../DataOrEmptyTable';
-import { Table, Thead, Tr, Th, Tbody, Td, FixedRow } from '../new_table';
-import LoadMore from '../LoadMore';
-import Search from '../../containers/search';
-import Pull from '../Pull';
-import ContentByType from '../ContentByType';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-} from '../../components/controls';
-import ConfigItemsModal from './modal';
-import Tree from '../tree';
-import withState from 'recompose/withState';
-import withHandlers from 'recompose/withHandlers';
-import actions from '../../store/api/actions';
-import withDispatch from '../../hocomponents/withDispatch';
-import mapProps from 'recompose/mapProps';
-import reduce from 'lodash/reduce';
-import map from 'lodash/map';
-import size from 'lodash/size';
-import PaneItem from '../pane_item';
 import { Icon } from '@blueprintjs/core';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import { getTypeFromValue, maybeParseYaml } from '../Field/validations';
-import isUndefined from 'lodash/isUndefined';
+import classnames from 'classnames';
+import isArray from 'lodash/isArray';
 import isNull from 'lodash/isNull';
 import isObject from 'lodash/isObject';
-import isArray from 'lodash/isArray';
+import isUndefined from 'lodash/isUndefined';
+import map from 'lodash/map';
+import reduce from 'lodash/reduce';
+import size from 'lodash/size';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
+import { sortDefaults } from '../../constants/sort';
+import Search from '../../containers/search';
+import withDispatch from '../../hocomponents/withDispatch';
+import actions from '../../store/api/actions';
+import { ActionColumn, ActionColumnHeader } from '../ActionColumn';
+import ContentByType from '../ContentByType';
+import DataOrEmptyTable from '../DataOrEmptyTable';
+import type { EnhancedTableProps } from '../EnhancedTable';
+import EnhancedTable from '../EnhancedTable';
+import { getTypeFromValue, maybeParseYaml } from '../Field/validations';
+import LoadMore from '../LoadMore';
+import NameColumn, { NameColumnHeader } from '../NameColumn';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../new_table';
+import Pull from '../Pull';
+import Tree from '../tree';
+import ConfigItemsModal from './modal';
 
 type ConfigItemsTableProps = {
   items: Object,
@@ -51,9 +47,7 @@ type ConfigItemsTableProps = {
   stepId?: number,
 };
 
-const ConfigItemsTable: Function = (
-  props: ConfigItemsTableProps
-): React.Element<any> => (
+const ConfigItemsTable: Function = (props: ConfigItemsTableProps): React.Element<any> => (
   <React.Fragment>
     {props.isGrouped && size(props.data) ? (
       map(props.data, (configItemsData, groupName) => (
@@ -82,7 +76,7 @@ export const getItemType = (type, value) => {
   return type.replace('*', '');
 };
 
-export const Value = ({ item }) => {
+export const Value = ({ item, useDefault }) => {
   const [showValue, setShowValue] = useState(!item.sensitive);
   const [hideTimer, setHideTimer] = useState(null);
 
@@ -95,6 +89,9 @@ export const Value = ({ item }) => {
       clearTimeout(hideTimer);
     };
   }, [hideTimer]);
+
+  const value = useDefault ? item.default_value : item.value;
+  const yamlValue = useDefault ? item.yamlData?.default_value : item.yamlData?.value;
 
   if (!showValue) {
     return (
@@ -126,21 +123,26 @@ export const Value = ({ item }) => {
     );
   }
 
-  if (isUndefined(item.value)) {
+  if (isUndefined(value)) {
     return <span> - </span>;
   }
-  if (isNull(item.value)) {
+  if (isNull(value)) {
     return <span> null </span>;
   }
   if (item.isTemplatedString) {
-    return <ContentByType inTable content={item.value} />;
+    return <ContentByType inTable content={value} />;
   }
 
-  if (isObject(item.value) || isArray(item.value)) {
+  const type =
+    item.type === 'auto' || item.type === 'any'
+      ? item.value_true_type || getItemType(item.type, yamlValue)
+      : item.type;
+
+  if (isObject(item.value) || isArray(item.value) || type === 'hash' || type === 'list') {
     return <Tree compact data={item.value} conentInline noMarkdown />;
   }
 
-  return <ContentByType inTable content={item.value} noMarkdown />;
+  return <ContentByType inTable content={item.value} noMarkdown baseType={type} />;
 };
 
 let ItemsTable: Function = ({
@@ -187,8 +189,8 @@ let ItemsTable: Function = ({
                 {groupName && (
                   <Pull>
                     <h5 style={{ lineHeight: '30px' }}>
-                      <Icon icon="group-objects" />{' '}
-                      <FormattedMessage id="table.group" />: {groupName}
+                      <Icon icon="group-objects" /> <FormattedMessage id="table.group" />:{' '}
+                      {groupName}
                     </h5>
                   </Pull>
                 )}
@@ -211,10 +213,7 @@ let ItemsTable: Function = ({
                       total={loadMoreTotal}
                       limit={limit}
                     />
-                    <Search
-                      onSearchUpdate={handleSearchChange}
-                      resource="configItems"
-                    />
+                    <Search onSearchUpdate={handleSearchChange} resource="configItems" />
                   </ButtonGroup>
                 </Pull>
               </Th>
@@ -239,12 +238,8 @@ let ItemsTable: Function = ({
               <Th icon="code" name="type" />
             </FixedRow>
           </Thead>
-          <DataOrEmptyTable
-            condition={!collection || collection.length === 0}
-            cols={7}
-            small
-          >
-            {props => (
+          <DataOrEmptyTable condition={!collection || collection.length === 0} cols={7} small>
+            {(props) => (
               <Tbody {...props}>
                 {collection.map((item: Object, index: number) => (
                   <React.Fragment>
@@ -290,11 +285,7 @@ let ItemsTable: Function = ({
                             title={intl.formatMessage({
                               id: 'button.remove-this-value',
                             })}
-                            disabled={
-                              item.level
-                                ? !item.level.startsWith(levelType || '')
-                                : true
-                            }
+                            disabled={item.level ? !item.level.startsWith(levelType || '') : true}
                             btnStyle="warning"
                             onClick={() => {
                               dispatchAction(
@@ -309,8 +300,7 @@ let ItemsTable: Function = ({
                         </ButtonGroup>
                       </ActionColumn>
                       <Td
-                        className={`text ${item.level === 'workflow' ||
-                          item.level === 'global'}`}
+                        className={`text ${item.level === 'workflow' || item.level === 'global'}`}
                       >
                         <Value item={item} />
                       </Td>
@@ -318,9 +308,7 @@ let ItemsTable: Function = ({
                         <ContentByType content={item.strictly_local} />
                       </Td>
                       <Td className="medium">{item.level}</Td>
-                      {!title && (
-                        <Td className="medium">{item.config_group}</Td>
-                      )}
+                      {!title && <Td className="medium">{item.config_group}</Td>}
                       <Td className="narrow">
                         <code>{item.type}</code>
                       </Td>
@@ -346,9 +334,11 @@ let ItemsTable: Function = ({
 ItemsTable = compose(
   withState('showDescription', 'toggleDescription', false),
   withHandlers({
-    handleToggleDescription: ({ toggleDescription }) => () => {
-      toggleDescription(value => !value);
-    },
+    handleToggleDescription:
+      ({ toggleDescription }) =>
+      () => {
+        toggleDescription((value) => !value);
+      },
   }),
   injectIntl
 )(ItemsTable);

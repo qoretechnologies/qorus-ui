@@ -4,16 +4,13 @@ import useMount from 'react-use/lib/useMount';
 import ConnectorField from '../DataproviderSelector';
 import BooleanField from './boolean';
 import DateField from './date';
+import { InterfaceSelector } from './interfaceSelector';
 import LongStringField from './longString';
 import NumberField from './number';
 import OptionHashField from './optionHash';
 import SelectField from './select';
 import StringField from './string';
-import {
-  getTypeFromValue,
-  getValueOrDefaultValue,
-  maybeParseYaml,
-} from './validations';
+import { getTypeFromValue, getValueOrDefaultValue, maybeParseYaml } from './validations';
 
 const AutoField: FunctionComponent<IField & IFieldChange> = ({
   name,
@@ -29,49 +26,32 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
   ...rest
 }) => {
   const [currentType, setType] = useState(defaultInternalType || null);
-  const [currentInternalType, setInternalType] = useState(
-    defaultInternalType || 'any'
-  );
+  const [currentInternalType, setInternalType] = useState(defaultInternalType || 'any');
   const [isSetToNull, setIsSetToNull] = useState(false);
-
-  console.log(currentType, currentInternalType);
 
   useMount(() => {
     let defType = defaultType && defaultType.replace(/"/g, '').trim();
     defType = defType || 'any';
     // If value already exists, but the type is auto or any
     // set the type based on the value
-    if (
-      value &&
-      (defType === 'auto' || defType === 'any') &&
-      !defaultInternalType
-    ) {
+    if (value && (defType === 'auto' || defType === 'any') && !defaultInternalType) {
       setInternalType(getTypeFromValue(maybeParseYaml(value)));
     } else {
       setInternalType(defaultInternalType || defType);
     }
 
     setType(defType);
-    console.log(
-      getValueOrDefaultValue(value, default_value, canBeNull(defType)),
-      canBeNull(defType)
-    );
     // If the value is null and can be null, set the null flag
     if (
-      (getValueOrDefaultValue(value, default_value, canBeNull(defType)) ===
-        'null' ||
-        getValueOrDefaultValue(value, default_value, canBeNull(defType)) ===
-          null) &&
+      (getValueOrDefaultValue(value, default_value, canBeNull(defType)) === 'null' ||
+        getValueOrDefaultValue(value, default_value, canBeNull(defType)) === null) &&
       canBeNull(defType)
     ) {
       setIsSetToNull(true);
     }
 
     // Set the default value
-    handleChange(
-      name,
-      getValueOrDefaultValue(value, default_value, canBeNull(defType))
-    );
+    handleChange(name, getValueOrDefaultValue(value, default_value, canBeNull(defType)));
   });
 
   useEffect(() => {
@@ -85,9 +65,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
         // If this is auto / any field
         // set the internal type
         if (typeValue === 'auto' || typeValue === 'any') {
-          setInternalType(
-            value ? getTypeFromValue(maybeParseYaml(value)) : 'any'
-          );
+          setInternalType(value ? getTypeFromValue(maybeParseYaml(value)) : 'any');
         } else {
           setInternalType(typeValue);
         }
@@ -96,17 +74,11 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
         if (!currentType) {
           handleChange(name, value === undefined ? undefined : value);
         } else if (typeValue !== 'any') {
-          const typeFromValue = value
-            ? getTypeFromValue(maybeParseYaml(value))
-            : 'any';
+          const typeFromValue = value ? getTypeFromValue(maybeParseYaml(value)) : 'any';
 
           handleChange(
             name,
-            value === null
-              ? null
-              : typeValue === typeFromValue
-              ? value
-              : undefined
+            value === null ? null : typeValue === typeFromValue ? value : undefined
           );
         }
       }
@@ -155,15 +127,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
     // If this field is set to null
     if (isSetToNull) {
       // Render a readonly field with null
-      return (
-        <StringField
-          name={name}
-          value={null}
-          onChange={handleChange}
-          read_only
-          canBeNull
-        />
-      );
+      return <StringField name={name} value={null} onChange={handleChange} read_only canBeNull />;
     }
     if (!currentType) {
       return null;
@@ -269,6 +233,16 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
           />
         );
       }
+      case 'mapper':
+      case 'workflow':
+      case 'service':
+      case 'job':
+      case 'value-map':
+      case 'connection': {
+        return (
+          <InterfaceSelector type={currentType} name={name} value={value} onChange={handleChange} />
+        );
+      }
       case 'data-provider': {
         return (
           <ConnectorField
@@ -277,6 +251,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             name={name}
             inline
             minimal
+            isConfigItem
             onChange={handleChange}
           />
         );
@@ -286,7 +261,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
       case 'auto':
         return <Callout>Please select data type</Callout>;
       default:
-        return <Callout intent="danger">{t('UnknownType')}</Callout>;
+        return <Callout intent="danger">{'Unknown Type'}</Callout>;
     }
   };
 
