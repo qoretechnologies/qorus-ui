@@ -1,14 +1,14 @@
 // @flow
+import { Icon, Intent } from '@blueprintjs/core';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import { getType } from '../../helpers/functions';
-import { Icon, Intent } from '@blueprintjs/core';
-import Text from '../../components/text';
 import Date from '../../components/date';
-import Flex from '../Flex';
+import Text from '../../components/text';
 import { isDate } from '../../helpers/date';
-import ReactMarkdown from 'react-markdown';
+import { getType } from '../../helpers/functions';
+import Flex from '../Flex';
 
 type ContentByTypeProps = {
   content: any,
@@ -27,9 +27,18 @@ const ContentByType: Function = ({
   noControls,
   noMarkdown,
   inline,
+  baseType,
 }: ContentByTypeProps): React.Element<any> => {
-  const type: string = getType(content);
+  const type: string = baseType || getType(content);
   const className: string = `content-by-type ${type} ${inline ? 'inline' : ''}`;
+
+  if (type === 'null') {
+    return (
+      <div className={className} style={{ opacity: 0.7, color: '#a9a9a9', fontStyle: 'italic' }}>
+        null
+      </div>
+    );
+  }
 
   if (type === 'boolean') {
     return (
@@ -42,14 +51,21 @@ const ContentByType: Function = ({
     );
   }
 
-  if (type === 'string') {
+  if (type === 'object' || type === 'array') {
+    return <div className={className}>{emptyTypeToString[type]}</div>;
+  }
+
+  console.log(type, content);
+
+  if (
+    type !== 'number' &&
+    (type === 'string' ||
+      new Date(content).toString() !== 'Invalid Date' ||
+      type === 'data-provider')
+  ) {
     const isContentDate: boolean = isDate(content);
 
-    let newContent = inTable ? (
-      <Text text={content} noControls={noControls} />
-    ) : (
-      content
-    );
+    let newContent = inTable ? <Text text={content} noControls={noControls} /> : content;
     newContent = isContentDate ? <Date date={content} /> : newContent;
 
     return inTable ? (
@@ -58,17 +74,17 @@ const ContentByType: Function = ({
       </Flex>
     ) : (
       <div className={className} title={newContent}>
-        {noMarkdown ? newContent : <ReactMarkdown>{newContent}</ReactMarkdown>}
+        {noMarkdown || isContentDate ? (
+          newContent
+        ) : (
+          <ReactMarkdown>{newContent.toString()}</ReactMarkdown>
+        )}
       </div>
     );
   }
 
   if (type === 'number') {
     return <div className={className}>{content}</div>;
-  }
-
-  if (type === 'object' || type === 'array') {
-    return <div className={className}>{emptyTypeToString[type]}</div>;
   }
 
   return <div className={className}>-</div>;
