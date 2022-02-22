@@ -12,3 +12,15 @@ tasks:
 vscode:
   extensions:
     - dbaeumer.vscode-eslint
+    - mintlify.document
+    - sirmspencer.vscode-autohide
+    - streetsidesoftware.code-spell-checker
+    - tombonnike.vscode-status-bar-format-toggle
+    - github.copilot
+    - eamodio.gitlens
+    - oderwat.indent-rainbow
+    - fivepointseven.node-version
+    - p42ai.refactor
+    - esbenp.prettier-vscode
+    - visualstudioexptteam.vscodeintellicode
+    - styled-components.vscode-styled-components
