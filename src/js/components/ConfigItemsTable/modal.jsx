@@ -17,10 +17,7 @@ import pickBy from 'lodash/pickBy';
 import moment from 'moment';
 import React, { Component } from 'react';
 import ReactMarkdown from 'react-markdown';
-import {
-  Control as Button,
-  Controls as ButtonGroup,
-} from '../../components/controls';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import Dropdown, { Control as DControl, Item } from '../../components/dropdown';
 import { DATE_FORMATS } from '../../constants/dates';
 import { getLineCount } from '../../helpers/system';
@@ -93,8 +90,7 @@ export default class ConfigItemsModal extends Component {
         ? this.props.item?.currentType || null
         : this.props.item?.type,
     useTemplate:
-      typeof this.props.item?.value === 'string' &&
-      this.props.item?.value?.startsWith('$'),
+      typeof this.props.item?.value === 'string' && this.props.item?.value?.startsWith('$'),
     templateType: this.getTemplateType(this.props.item?.value),
     templateKey: this.getTemplateKey(this.props.item?.value),
   };
@@ -105,9 +101,7 @@ export default class ConfigItemsModal extends Component {
 
       const stepPath: string = stepId ? `/stepinfo/${stepId}` : '';
 
-      const interfacePath: string = intrfId
-        ? `${intrf}/${intrfId}${stepPath}`
-        : 'system';
+      const interfacePath: string = intrfId ? `${intrf}/${intrfId}${stepPath}` : 'system';
 
       const yamlData: Object = await get(
         `${settings.REST_BASE_URL}/${interfacePath}/config/${item.name}?action=yaml`
@@ -243,11 +237,11 @@ export default class ConfigItemsModal extends Component {
         default_value={this.removeQuotes(this.state.origValue)}
         t={(s) => s}
         type="auto"
+        defaultType={item.type}
+        defaultInternalType={item.value_true_type || item.type}
         disabled={!!item.allowed_values}
         requestFieldData={(field) =>
-          field === 'can_be_undefined'
-            ? item.type.startsWith('*')
-            : item.type.replace('*', '')
+          field === 'can_be_undefined' ? item.type.startsWith('*') : item.type.replace('*', '')
         }
         onChange={(name, value, type, canBeNull) => {
           this.handleObjectChange(value, type, canBeNull);
@@ -259,9 +253,7 @@ export default class ConfigItemsModal extends Component {
   render() {
     const { onClose, isGlobal, globalConfig } = this.props;
     const { error, yamlData, value, item, useTemplate } = this.state;
-    const globalConfigItems = pickBy(globalConfig, (data, name) =>
-      isNull(data.value)
-    );
+    const globalConfigItems = pickBy(globalConfig, (data, name) => isNull(data.value));
 
     return (
       <Modal
@@ -273,9 +265,7 @@ export default class ConfigItemsModal extends Component {
         }}
       >
         <Modal.Header onClose={onClose} titleId="yamlEdit">
-          {!item
-            ? 'Assign new config item value'
-            : `Editing ${item.name} config item`}
+          {!item ? 'Assign new config item value' : `Editing ${item.name} config item`}
         </Modal.Header>
         <Modal.Body>
           <Box top fill scrollY>
@@ -287,8 +277,8 @@ export default class ConfigItemsModal extends Component {
             {isGlobal && (
               <>
                 <Alert bsStyle="warning">
-                  {!item ? 'Creating new ' : 'Editing'} global config value will
-                  affect all interfaces using this item.
+                  {!item ? 'Creating new ' : 'Editing'} global config value will affect all
+                  interfaces using this item.
                 </Alert>
                 {!item && (
                   <>
@@ -346,14 +336,8 @@ export default class ConfigItemsModal extends Component {
                             <ButtonGroup>
                               <Tooltip
                                 content={
-                                  this.state.type === 'hash' ||
-                                  this.state.type === 'list' ? (
-                                    <Tree
-                                      data={item.default_value}
-                                      noButtons
-                                      expanded
-                                      compact
-                                    />
+                                  this.state.type === 'hash' || this.state.type === 'list' ? (
+                                    <Tree data={item.default_value} noButtons expanded compact />
                                   ) : (
                                     <ContentByType
                                       inTable
@@ -376,8 +360,7 @@ export default class ConfigItemsModal extends Component {
                       <div className="body">
                         {item?.allowed_values && (
                           <Alert bsStyle="warning" icon="warning-sign">
-                            This config item can only be set using predefined
-                            values
+                            This config item can only be set using predefined values
                           </Alert>
                         )}
                         {error && (
@@ -400,9 +383,7 @@ export default class ConfigItemsModal extends Component {
                         </Alert>
                         <ControlGroup className="bp3-fill">
                           <Dropdown className="bp3-fixed">
-                            <DControl icon="dollar">
-                              {this.state.templateType}
-                            </DControl>
+                            <DControl icon="dollar">{this.state.templateType}</DControl>
                             <Item
                               title="config"
                               onClick={() => {
@@ -483,21 +464,15 @@ export default class ConfigItemsModal extends Component {
           {yamlData ? (
             <div className="pull-right">
               <ButtonGroup>
-                <Button
-                  label="Cancel"
-                  btnStyle="default"
-                  action={onClose}
-                  big
-                />
+                <Button label="Cancel" btnStyle="default" action={onClose} big />
                 {!isGlobal && value === yamlData?.default_value ? (
                   <Popover
                     position={Position.TOP}
                     content={
                       <Box fill top style={{ width: '300px' }}>
                         <p>
-                          The value submitted is same as default value, but will
-                          not change when default value is changed in the
-                          future.
+                          The value submitted is same as default value, but will not change when
+                          default value is changed in the future.
                         </p>
                         <BtnGrp>
                           <Btn
@@ -510,11 +485,7 @@ export default class ConfigItemsModal extends Component {
                       </Box>
                     }
                   >
-                    <Btn
-                      text="Save"
-                      icon="warning-sign"
-                      intent={Intent.WARNING}
-                    />
+                    <Btn text="Save" icon="warning-sign" intent={Intent.WARNING} />
                   </Popover>
                 ) : (
                   <Button
