@@ -6,6 +6,7 @@ import isObject from 'lodash/isPlainObject';
 import size from 'lodash/size';
 import uniqWith from 'lodash/uniqWith';
 import { isBoolean, isNull, isString, isUndefined } from 'util';
+import { maybeBuildOptionProvider } from '../DataproviderSelector';
 
 export const validateField: (
   type: string,
@@ -40,7 +41,6 @@ export const validateField: (
     case 'value-map':
     case 'connection':
     case 'softstring':
-    case 'data-provider':
       // Strings cannot be empty
       return value !== undefined && value !== null && value !== '';
     case 'mapper-options': {
@@ -62,6 +62,31 @@ export const validateField: (
           pair[field.fields[0]] !== '' && pair[field.fields[1]] !== ''
       );
     }
+    case 'type-selector':
+    case 'data-provider':
+      let newValue = maybeBuildOptionProvider(value);
+
+      if (!newValue) {
+        return false;
+      }
+
+      if (newValue?.type === 'factory') {
+        if (newValue.optionsChanged) {
+          return false;
+        }
+
+        let options = true;
+
+        if (newValue.options) {
+          options = validateField('system-options', newValue.options);
+        }
+
+        // Type path and name are required
+        return !!(newValue.type && newValue.name && options);
+      }
+
+      // Type path and name are required
+      return !!(newValue.type && newValue.path && newValue.name);
     case 'class-connectors': {
       let valid = true;
       // Check if every pair has name, input method and output method
