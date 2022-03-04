@@ -19,7 +19,6 @@ vscode:
     - streetsidesoftware.code-spell-checker
     - tombonnike.vscode-status-bar-format-toggle
     - github.copilot
-    - eamodio.gitlens
     - oderwat.indent-rainbow
     - fivepointseven.node-version
     - esbenp.prettier-vscode
