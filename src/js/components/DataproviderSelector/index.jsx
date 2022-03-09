@@ -105,8 +105,14 @@ export const maybeBuildOptionProvider = (provider) => {
     };
   }
 
+  // split the provider by /
+  const [type, name, ...path] = provider.split('/');
   // Return it
-  return provider;
+  return {
+    type,
+    name,
+    path: path.join('/'),
+  };
 };
 
 const ConnectorField = ({
