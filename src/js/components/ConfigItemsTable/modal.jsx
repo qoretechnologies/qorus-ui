@@ -391,21 +391,63 @@ export default class ConfigItemsModal extends Component {
                               }}
                             />
                             <Item
-                              title="local"
-                              onClick={() => {
-                                this.setState({ templateType: 'local' });
-                              }}
-                            />
-                            <Item
                               title="dynamic"
                               onClick={() => {
                                 this.setState({ templateType: 'dynamic' });
                               }}
                             />
                             <Item
+                              title="jinfo"
+                              onClick={() => {
+                                this.setState({ templateType: 'jinfo' });
+                              }}
+                            />
+                            <Item
                               title="keys"
                               onClick={() => {
                                 this.setState({ templateType: 'keys' });
+                              }}
+                            />
+                            <Item
+                              title="local"
+                              onClick={() => {
+                                this.setState({ templateType: 'local' });
+                              }}
+                            />
+                            <Item
+                              title="parse-value"
+                              onClick={() => {
+                                this.setState({ templateType: 'parse-value' });
+                              }}
+                            />
+                            <Item
+                              title="pstate"
+                              onClick={() => {
+                                this.setState({ templateType: 'pstate' });
+                              }}
+                            />
+                            <Item
+                              title="python-expr"
+                              onClick={() => {
+                                this.setState({ templateType: 'python-expr' });
+                              }}
+                            />
+                            <Item
+                              title="qore-expr"
+                              onClick={() => {
+                                this.setState({ templateType: 'qore-expr' });
+                              }}
+                            />
+                            <Item
+                              title="qore-expr-value"
+                              onClick={() => {
+                                this.setState({ templateType: 'qore-expr-value' });
+                              }}
+                            />
+                            <Item
+                              title="rest"
+                              onClick={() => {
+                                this.setState({ templateType: 'rest' });
                               }}
                             />
                             <Item
@@ -423,6 +465,12 @@ export default class ConfigItemsModal extends Component {
                               }}
                             />
                             <Item
+                              title="state"
+                              onClick={() => {
+                                this.setState({ templateType: 'state' });
+                              }}
+                            />
+                            <Item
                               title="static"
                               onClick={() => {
                                 this.setState({ templateType: 'static' });
@@ -435,9 +483,45 @@ export default class ConfigItemsModal extends Component {
                               }}
                             />
                             <Item
-                              title="parse-value"
+                              title="sysprop"
                               onClick={() => {
-                                this.setState({ templateType: 'parse-value' });
+                                this.setState({ templateType: 'sysprop' });
+                              }}
+                            />
+                            <Item
+                              title="temp"
+                              onClick={() => {
+                                this.setState({ templateType: 'temp' });
+                              }}
+                            />
+                            <Item
+                              title="timestamp"
+                              onClick={() => {
+                                this.setState({ templateType: 'timestamp' });
+                              }}
+                            />
+                            <Item
+                              title="transient"
+                              onClick={() => {
+                                this.setState({ templateType: 'transient' });
+                              }}
+                            />
+                            <Item
+                              title="value-map"
+                              onClick={() => {
+                                this.setState({ templateType: 'value-map' });
+                              }}
+                            />
+                            <Item
+                              title="var"
+                              onClick={() => {
+                                this.setState({ templateType: 'var' });
+                              }}
+                            />
+                            <Item
+                              title="xconfig"
+                              onClick={() => {
+                                this.setState({ templateType: 'xconfig' });
                               }}
                             />
                           </Dropdown>
