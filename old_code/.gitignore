@@ -1,0 +1,22 @@
+# Build
+/flow-typed
+/node_modules
+/dist
+/cypress/screenshots
+
+# Runtime
+/.*.pid
+
+# Tools
+.idea
+.nfs*
+TAGS
+yarn-error.log
+
+# FS
+._*
+
+npm-debug.log*
+/i.txt
+/rest.http
+launch.json

@@ -51,12 +51,7 @@ let webpackConfig = {
       },
       {
         test: /\.(c|sc)ss$/,
-        use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ],
+        use: ['style-loader', MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|jpg|gif|woff|woff2|mp3)$/,
@@ -75,7 +70,7 @@ let webpackConfig = {
     runtimeChunk: false,
     splitChunks: {
       cacheGroups: {
-        vendors: {
+        defaultVendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           enforce: true,
@@ -85,7 +80,7 @@ let webpackConfig = {
     },
   },
   plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/ }),
     new MiniCssExtractPlugin({
       filename: 'css/base.css',
       chunkFilename: 'css/[name].css',
@@ -96,8 +91,12 @@ let webpackConfig = {
       'process.env.API_PORT': JSON.stringify(process.env.API_PORT),
     }),
     new webpack.ProvidePlugin({
-      fetch:
-        'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch',
+      fetch: 'imports-loader?this=>global!exports-loader?global.fetch!whatwg-fetch',
+    }),
+    // fix "process is not defined" error:
+    // (do "npm install process" before running the build)
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
     }),
   ],
 };
@@ -126,10 +125,7 @@ if (process.env.NODE_ENV === 'development') {
     cache: true,
     mode: 'development',
     devtool: 'eval-source-map',
-    plugins: [
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoEmitOnErrorsPlugin(),
-    ],
+    plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.NoEmitOnErrorsPlugin()],
   });
 
   //* PRODUCTION CONFIG

@@ -1,4 +1,4 @@
-import { ReqoreSidebar, ReqoreUIProvider } from '@qoretechnologies/reqore';
+import { ReqoreColors, ReqoreSidebar, ReqoreUIProvider } from '@qoretechnologies/reqore';
 import debounce from 'lodash/debounce';
 // @flow
 import PropTypes from 'prop-types';
@@ -258,31 +258,16 @@ export default class Root extends Component {
 
   onThemeChange: Function = (): void => {
     const { currentUser, storeTheme } = this.props;
-    const theme = currentUser.sync
-      ? currentUser.data.storage.theme || 'dark'
-      : 'dark';
+    const theme = currentUser.sync ? currentUser.data.storage.theme || 'dark' : 'dark';
 
     storeTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
   render() {
-    const {
-      currentUser,
-      info,
-      isTablet,
-      health,
-      options,
-      menu,
-      isMaximized,
-      maximize,
-      location,
-    } = this.props;
+    const { currentUser, info, isTablet, health, options, menu, isMaximized, maximize, location } =
+      this.props;
     const isSynced: boolean =
-      currentUser.sync &&
-      info.sync &&
-      health.sync &&
-      options.sync &&
-      info.globalConfig;
+      currentUser.sync && info.sync && health.sync && options.sync && info.globalConfig;
 
     if (!isSynced) {
       return <FullPageLoading />;
@@ -310,14 +295,27 @@ export default class Root extends Component {
           <ReqoreUIProvider
             theme={{
               main: '#ffffff',
-              sidebar: { main: isLightTheme ? '#ffffff' : '#383c44' },
+              sidebar: {
+                main: '#383c44',
+                item: { activeBackground: ReqoreColors.BLUE },
+              },
+              header: { main: '#383c44' },
+              intents: {
+                success: '#7fba27',
+                danger: '#e62727',
+                pending: '#ffdf34',
+                warning: ReqoreColors.ORANGE,
+              },
+              breadcrumbs: {
+                item: {
+                  color: '#b9b9b9',
+                  activeColor: ReqoreColors.BLUE,
+                },
+              },
             }}
             withSidebar
           >
-            <div
-              className={`root ${isMaximized ? 'maximized' : ''}`}
-              style={{ flex: 1 }}
-            >
+            <div className={`root ${isMaximized ? 'maximized' : ''}`} style={{ flex: 1 }}>
               {!isMaximized && (
                 <Topbar
                   onMaximizeClick={maximize}
@@ -348,9 +346,7 @@ export default class Root extends Component {
                   <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
                 </Flex>
               </div>
-              {!isMaximized && (
-                <Footer path={this.props.location.pathname} info={info.data} />
-              )}
+              {!isMaximized && <Footer path={this.props.location.pathname} info={info.data} />}
               <ModalManager />
               <Notifications />
               <Bubbles />

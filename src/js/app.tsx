@@ -1,10 +1,9 @@
+import '@blueprintjs/datetime/lib/css/blueprint-datetime.css';
 import React from 'react';
 import { Provider } from 'react-redux';
-import reduxStore from './store';
 import { browserHistory } from 'react-router';
 import Routes from './routes';
-import { hot } from 'react-hot-loader/root';
-import '@blueprintjs/datetime/lib/css/blueprint-datetime.css';
+import reduxStore from './store';
 
 require('normalize.css/normalize.css');
 require('@blueprintjs/core/lib/css/blueprint.css');
@@ -23,4 +22,4 @@ const App: Function = () => (
   </Provider>
 );
 
-export default hot(App);
+export default App;

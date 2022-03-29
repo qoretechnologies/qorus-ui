@@ -1,5 +1,3 @@
-import '@babel/polyfill';
-import './ie10-fix';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './js/app';
