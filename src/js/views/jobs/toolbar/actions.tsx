@@ -1,0 +1,78 @@
+// @flow
+import React from 'react';
+import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
+import { connect } from 'react-redux';
+import pure from 'recompose/onlyUpdateForKeys';
+
+import actions from '../../../store/api/actions';
+import withDispatch from '../../../hocomponents/withDispatch';
+import showIfPassed from '../../../hocomponents/show-if-passed';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
+
+type Props = {
+  selectNone: Function,
+  selectedIds: Array<number>,
+  dispatchAction: Function,
+  handleBatchAction: Function,
+  handleEnableClick: Function,
+  handleDisableClick: Function,
+  handleResetClick: Function,
+};
+
+const ToolbarActions: Function = ({
+  handleEnableClick,
+  handleDisableClick,
+  handleResetClick,
+// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+}: Props): ?React.Element<any> => (
+  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+  <Dropdown>
+    // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message
+    <Control icon="cog">With selected</Control>
+    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    <Item title="Enable" icon="power" onClick={handleEnableClick} />
+    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    <Item title="Disable" icon="power" onClick={handleDisableClick} />
+    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    <Item title="Reset" icon="refresh" onClick={handleResetClick} />
+  </Dropdown>
+);
+
+export default compose(
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+  showIfPassed(({ show }) => show),
+  connect(
+    null,
+    {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+      selectNone: actions.jobs.selectNone,
+    }
+  ),
+  withDispatch(),
+  withHandlers({
+    handleBatchAction: ({
+      selectedIds,
+      dispatchAction,
+      selectNone,
+    }: Props): Function => (actionType: string): void => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+      dispatchAction(actions.jobs.jobsAction, actionType, selectedIds);
+      selectNone();
+    },
+  }),
+  withHandlers({
+    handleEnableClick: ({ handleBatchAction }: Props): Function => (): void => {
+      handleBatchAction('enable');
+    },
+    handleDisableClick: ({
+      handleBatchAction,
+    }: Props): Function => (): void => {
+      handleBatchAction('disable');
+    },
+    handleResetClick: ({ handleBatchAction }: Props): Function => (): void => {
+      handleBatchAction('reset');
+    },
+  }),
+  pure(['show'])
+)(ToolbarActions);

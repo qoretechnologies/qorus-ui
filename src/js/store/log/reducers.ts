@@ -1,0 +1,27 @@
+/* @flow */
+import { handleActions } from 'redux-actions';
+import { ACTIONS, DEFAULTSTATE } from '../../constants/log';
+
+const initialState: Object = {};
+
+const data = handleActions({
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'LOG_INIT' does not exist on type 'Object... Remove this comment to see the full error message
+  [ACTIONS.LOG_INIT]: (state: Object, { payload: { url } }) => (
+    { ...state, ...{ [url]: DEFAULTSTATE } }
+  ),
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'LOG_MESSAGE' does not exist on type 'Obj... Remove this comment to see the full error message
+  [ACTIONS.LOG_MESSAGE]: (state: Object, { payload: { url, msg } }) => {
+    const messages = state[url].messages.slice();
+    messages.push(msg);
+
+    return { ...state, ...{ [url]: { messages } } };
+  },
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'LOG_CLEAR' does not exist on type 'Objec... Remove this comment to see the full error message
+  [ACTIONS.LOG_CLEAR]: (state: Object, { payload: { url } }) => (
+    { ...state, ...{ [url]: DEFAULTSTATE } }
+  ),
+}, initialState);
+
+export {
+  data,
+};

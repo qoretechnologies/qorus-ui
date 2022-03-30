@@ -1,0 +1,255 @@
+// @flow
+import React from 'react';
+import { findDOMNode } from 'react-dom';
+import Pull from '../../Pull';
+import withTabs from '../../../hocomponents/withTabs';
+import capitalize from 'lodash/capitalize';
+import isString from 'lodash/isString';
+
+import CrumbTab from './tab';
+import compose from 'recompose/compose';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { Popover, Menu, MenuItem, Position } from '@blueprintjs/core';
+import mapProps from 'recompose/mapProps';
+import { connect } from 'react-redux';
+import ResizeObserver from 'resize-observer-polyfill';
+import { Link } from 'react-router';
+import { buildPageLinkWithQueries } from '../../../helpers/router';
+import { injectIntl } from 'react-intl';
+
+type Props = {
+  tabs: Array<any>,
+  handleTabChange: Function,
+  onChange?: Function,
+  tabQuery?: string,
+  activeTab?: string,
+  compact?: boolean,
+  queryIdentifier?: string,
+  width: number,
+  local: boolean,
+};
+
+@injectIntl
+class CrumbTabs extends React.Component {
+  props: Props = this.props;
+
+  _tabsWrapper: any;
+
+  state = {
+    showTabs: false,
+    tabsLen: 0,
+  };
+
+  handleRef: Function = (ref: any): void => {
+    if (ref) {
+      this._tabsWrapper = ref;
+
+      const ro = new ResizeObserver((entries, observer) => {
+        this.handleTabsResize();
+      });
+
+      const parent: any = findDOMNode(this._tabsWrapper).parentNode.parentNode;
+      ro.observe(parent);
+
+      this.handleTabsResize();
+    }
+  };
+
+  handleTabsResize: Function = (): void => {
+    if (this._tabsWrapper) {
+      const parent: any = findDOMNode(this._tabsWrapper).parentNode.parentNode;
+
+      let childrenWidth: number = 0;
+      const parentWidth: number = parent.getBoundingClientRect().width;
+
+      Array.from(parent.children).forEach((element, index) => {
+        if (index === 0) {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'children' does not exist on type 'unknow... Remove this comment to see the full error message
+          Array.from(element.children).forEach(childElement => {
+            // @ts-expect-error ts-migrate(2339) FIXME: Property 'tagName' does not exist on type 'unknown... Remove this comment to see the full error message
+            if (childElement.tagName === 'LI') {
+              childrenWidth =
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'getBoundingClientRect' does not exist on... Remove this comment to see the full error message
+                childrenWidth + childElement.getBoundingClientRect().width;
+            }
+          });
+        } else {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getBoundingClientRect' does not exist on... Remove this comment to see the full error message
+          childrenWidth = childrenWidth + element.getBoundingClientRect().width;
+        }
+      });
+
+      let tabsLen: number = 0;
+      const spaceWidth: number = parentWidth - childrenWidth;
+      let tabsWidth: number = 0;
+      let collapsed: boolean = false;
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'language' does not exist on type 'Props'... Remove this comment to see the full error message
+      const characterLength = this.props.language === 'ja-JP' ? 1.8 : 1;
+
+      this.props.tabs.forEach((tab: any): void => {
+        const strLen: number = tab.title.length * characterLength;
+        if (strLen * 10.5 + tabsWidth < spaceWidth) {
+          tabsLen = tabsLen + 1;
+          tabsWidth = tabsWidth + strLen * 10.5;
+        } else {
+          collapsed = true;
+        }
+      });
+
+      this.setState(() => ({
+        showTabs: true,
+        tabsLen: collapsed ? tabsLen - 1 : tabsLen,
+      }));
+    }
+  };
+
+  render() {
+    const {
+      tabs,
+      handleTabChange,
+      tabQuery,
+      queryIdentifier = 'tab',
+      local,
+    }: Props = this.props;
+    const { tabsLen, showTabs } = this.state;
+    const tabsCollapsed: boolean = tabs.length > tabsLen;
+
+    let newTabs: Array<any> = tabs;
+    let leftoverTabs: Array<any> = [];
+
+    //* There is more tabs than we can display
+    if (tabsCollapsed) {
+      newTabs = tabs.slice(0, tabsLen - 1);
+      leftoverTabs = tabs.slice(tabsLen - 1, tabs.length);
+    }
+
+    const leftoverTabSelected = leftoverTabs.find(
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'tabId' does not exist on type 'Object'.
+      (tab: Object): boolean => tab.tabId === capitalize(tabQuery)
+    );
+
+    return (
+      <Pull className="breadcrumb-tabs" handleRef={this.handleRef}>
+        {showTabs && [
+          // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+          newTabs.map((tab: Object): React.Element<CrumbTab> => (
+            <CrumbTab
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
+              key={tab.title}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'tabId' does not exist on type 'Object'.
+              active={tab.tabId.toLowerCase() === tabQuery}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
+              title={tab.title}
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'tabId' does not exist on type 'Object'.
+              tabId={tab.tabId}
+              onClick={handleTabChange}
+              local={local}
+              queryIdentifier={queryIdentifier}
+            />
+          )),
+          leftoverTabs.length !== 0 && (
+            <Popover
+              position={Position.BOTTOM}
+              // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; position: "bottom"; use... Remove this comment to see the full error message
+              useSmartPositioning
+              useSmartArrowPositioning
+              key="crumbtabs-popover"
+              content={
+                <Menu>
+                  {leftoverTabs
+                    .filter(
+                      (tab: Object): boolean =>
+                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'tabId' does not exist on type 'Object'.
+                        tab.tabId.toLowerCase() !== tabQuery
+                    )
+                    // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                    .map((tab: Object): React.Element<MenuItem> =>
+                      local ? (
+                        <MenuItem
+                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
+                          key={tab.title}
+                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
+                          text={tab.title}
+                          onClick={() =>
+                            // @ts-expect-error ts-migrate(2339) FIXME: Property 'tabId' does not exist on type 'Object'.
+                            handleTabChange(tab.tabId.toLowerCase())
+                          }
+                        />
+                      ) : (
+                        <Link
+                          to={buildPageLinkWithQueries(
+                            queryIdentifier,
+                            // @ts-expect-error ts-migrate(2339) FIXME: Property 'tabId' does not exist on type 'Object'.
+                            tab.tabId
+                          )}
+                          className="non-decorated-link"
+                        >
+                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
+                          <MenuItem key={tab.title} text={tab.title} />
+                        </Link>
+                      )
+                    )}
+                </Menu>
+              }
+            >
+              <CrumbTab
+                // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+                title={this.props.intl.formatMessage({
+                  id: leftoverTabSelected ? capitalize(tabQuery) : 'More...',
+                })}
+                active={leftoverTabSelected}
+                compact
+              />
+            </Popover>
+          ),
+        ]}
+      </Pull>
+    );
+  }
+}
+
+export default compose(
+  injectIntl,
+  connect((state: Object): Object => ({
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
+    windowWidth: state.ui.settings.width,
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    language: state.api.currentUser.data.storage.locale,
+  })),
+  // @ts-expect-error ts-migrate(2339) FIXME: Property 'windowWidth' does not exist on type 'Pro... Remove this comment to see the full error message
+  mapProps(({ tabs, width, windowWidth, intl, ...rest }: Props): Props => ({
+    tabs: tabs.map((tab: any): Object =>
+      isString(tab)
+        ? { title: intl.formatMessage({ id: tab }), tabId: tab }
+        : {
+            title: `${intl.formatMessage({ id: tab.title })}${
+              tab.suffix ? ` ${tab.suffix}` : ''
+            }`,
+            tabId: tab.title,
+          }
+    ),
+    width: width || windowWidth,
+    ...rest,
+  })),
+  withTabs(
+    ({ defaultTab, tabs }) => defaultTab || tabs[0].tabId.toLowerCase(),
+    ({ queryIdentifier }) => queryIdentifier || 'tab',
+    ({ isPane }) => !!isPane
+  ),
+  mapProps(
+    ({
+      local,
+      tabQuery,
+      handleTabChange,
+      activeTab,
+      onChange,
+      ...rest
+    }: Props): Props => ({
+      tabQuery: local ? activeTab : tabQuery,
+      handleTabChange: local ? onChange : handleTabChange,
+      local,
+      ...rest,
+    })
+  ),
+  onlyUpdateForKeys(['tabQuery', 'tabs', 'width'])
+)(CrumbTabs);
