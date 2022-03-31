@@ -38,7 +38,7 @@ const ErrorsRow: Function = ({
 
   return (
     <Tr first={first}>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */ }
       <NameColumn name={data.error} />
       <ActionColumn>
         <Controls grouped>
@@ -55,21 +55,21 @@ const ErrorsRow: Function = ({
           />
         </Controls>
       </ActionColumn>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */ }
       {!compact && <DescriptionColumn>{data.description}</DescriptionColumn>}
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'severity' does not exist on type 'Object... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'severity' does not exist on type 'Object... Remove this comment to see the full error message */ }
       <Td className="medium">{data.severity}</Td>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Object'.
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Object'. */ }
       <Td className="medium">{data.status}</Td>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'retry_delay_secs' does not exist on type... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'retry_delay_secs' does not exist on type... Remove this comment to see the full error message */ }
       <Td className="narrow">{data.retry_delay_secs}</Td>
       <Td className="medium">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'business_flag' does not exist on type 'O... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'business_flag' does not exist on type 'O... Remove this comment to see the full error message */ }
         <ContentByType content={data.business_flag} />
       </Td>
       {type === 'workflow' && (
         <Td className="medium">
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'manually_updated' does not exist on type... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'manually_updated' does not exist on type... Remove this comment to see the full error message */ }
           <ContentByType content={data.manually_updated} />
         </Td>
       )}

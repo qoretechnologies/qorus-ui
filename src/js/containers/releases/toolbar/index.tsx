@@ -35,7 +35,7 @@ const ReleasesToolbar: Function = ({
   <Toolbar marginBottom>
     <div className="pull-left clear">
       <Dropdown id="release-sort">
-        // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any[]; }' is missing the followi... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any[]; }' is missing the followi... Remove this comment to see the full error message */ }
         <Control><FormattedMessage id='dropdown.sort-by' />:{' '}
           {
             sort === 'Name'
@@ -58,7 +58,7 @@ const ReleasesToolbar: Function = ({
         />
       </Dropdown>{' '}
       <Dropdown id="release-sortDir">
-        // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any[]; }' is missing the followi... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any[]; }' is missing the followi... Remove this comment to see the full error message */ }
         <Control><FormattedMessage id='dropdown.sort-direction' />:{' '}
           {
             // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message

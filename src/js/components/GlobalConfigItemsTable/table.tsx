@@ -144,9 +144,9 @@ const ConfigItemsTable: Function = ({
                 <Tbody {...props}>
                   {collection.map((item: Object, index: number) => (
                     <React.Fragment>
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
                       <Tr key={item.name} first={index === 0}>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
                         <NameColumn name={item.name} />
                         <ActionColumn>
                           <ButtonGroup>
@@ -190,11 +190,11 @@ const ConfigItemsTable: Function = ({
                             // @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
                             item.level === 'global'}`}
                         >
-                          // @ts-expect-error ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message */ }
                           <Value item={item} />
                         </Td>
                         <Td className="narrow">
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
                           <code>{item.type}</code>
                         </Td>
                       </Tr>

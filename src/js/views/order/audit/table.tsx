@@ -116,21 +116,21 @@ const AuditTable: Function = ({ audits, intl }: Props): React.Element<Table> => 
                 (step: Object, index: number): React.Element<any> => (
                   // @ts-expect-error ts-migrate(2339) FIXME: Property 'audit_eventid' does not exist on type 'O... Remove this comment to see the full error message
                   <Tr key={step.audit_eventid} first={index === 0}>
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'audit_eventid' does not exist on type 'O... Remove this comment to see the full error message
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'audit_eventid' does not exist on type 'O... Remove this comment to see the full error message */ }
                     <IdColumn className="medium">{step.audit_eventid}</IdColumn>
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'event' does not exist on type 'Object'.
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'event' does not exist on type 'Object'. */ }
                     <NameColumn name={step.event} />
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'audit_event_code' does not exist on type... Remove this comment to see the full error message
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'audit_event_code' does not exist on type... Remove this comment to see the full error message */ }
                     <Td className="normal">{step.audit_event_code}</Td>
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'source' does not exist on type 'Object'.
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'source' does not exist on type 'Object'. */ }
                     <DescriptionColumn>{step.source}</DescriptionColumn>
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'.
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */ }
                     <DescriptionColumn>{step.reason}</DescriptionColumn>
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'info1' does not exist on type 'Object'.
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'info1' does not exist on type 'Object'. */ }
                     <DescriptionColumn>{step.info1}</DescriptionColumn>
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'who' does not exist on type 'Object'.
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'who' does not exist on type 'Object'. */ }
                     <AuthorColumn>{step.who}</AuthorColumn>
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */ }
                     <DateColumn>{step.created}</DateColumn>
                   </Tr>
                 )

@@ -55,7 +55,7 @@ const Login: Function = ({
   >
     <Flex style={{ justifyContent: 'center', alignItems: 'center' }}>
       <img src={logo} style={{ width: 400 }} />
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */ }
       <form onSubmit={handleFormSubmit}>
         <Box top noPadding width={400}>
           <Flex
@@ -91,7 +91,7 @@ const Login: Function = ({
                 <br />
               </React.Fragment>
             )}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */ }
             <FormGroup label="Username" labelFor="username" required={true}>
               <InputGroup
                 id="username"
@@ -103,7 +103,7 @@ const Login: Function = ({
                 value={username}
               />
             </FormGroup>
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */ }
             <FormGroup label="Password" labelFor="password" required={true}>
               <InputGroup
                 required={true}

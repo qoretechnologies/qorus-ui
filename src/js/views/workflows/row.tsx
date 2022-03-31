@@ -108,9 +108,9 @@ const TableRow: Function = ({
     <NameColumn
       popoverContent={
         <Box top>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */ }
           <PaneItem title={rest.normalizedName}>{rest.description}</PaneItem>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */ }
           {rest.TOTAL > 0 && (
             <PaneItem title={intl.formatMessage({ id: 'table.instances' })}>
               <InstancesChart width={400} states={states} instances={rest} />
@@ -152,9 +152,9 @@ const TableRow: Function = ({
       />
     </Td>
     <Td className="narrow">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */ }
       <Tooltip content={rest.TOTAL || 0} position={Position.TOP}>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */ }
         <Link to={`/workflow/${id}?date=${date}`}>{rest.TOTAL || 0}</Link>
       </Tooltip>
     </Td>

@@ -16,11 +16,11 @@ const ServiceMethodModal: Function = ({
 }: Props): React.Element<Modal> => (
   <Modal>
     <Modal.Header titleId="methodsTableModalLabel" onClose={onClose}>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
       Source code for {method.name}
     </Modal.Header>
     <Modal.Body>
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
       <SourceCode>{method.body}</SourceCode>
     </Modal.Body>
   </Modal>

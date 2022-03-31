@@ -168,7 +168,7 @@ export default class extends Component {
                       show={this.state.showDomains}
                       onHide={this.handleDomainClose}
                     >
-                      // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message
+                      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */ }
                       <DControl> Select </DControl>
                       {this.renderDomains()}
                     </Dropdown>
@@ -194,7 +194,7 @@ export default class extends Component {
                   !data || !data.key ? 'input-group' : ''
                 }`}
               >
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'.
+                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'. */ }
                 {(!data || !data.key) && (
                   <div className="input-group-btn">
                     <Dropdown
@@ -202,7 +202,7 @@ export default class extends Component {
                       show={this.state.showKeys}
                       onHide={this.handleKeysClose}
                     >
-                      // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; disabled: boolean; }' ... Remove this comment to see the full error message
+                      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; disabled: boolean; }' ... Remove this comment to see the full error message */ }
                       <DControl disabled={!collection[this.state.domain]}>
                         {' '}
                         Select{' '}

@@ -24,7 +24,7 @@ const OptionsModal: Function = ({
       Edit options
     </Modal.Header>
     <Modal.Body>
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
       <Options
         data={data}
         onSave={onSave}

@@ -154,7 +154,7 @@ export default class Search extends Component {
           {searches && searches.length !== 0 ? (
             // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
             <Dropdown>
-              // @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; noCaret: true; }' is missing... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; noCaret: true; }' is missing... Remove this comment to see the full error message */ }
               <Control icon="history" noCaret />
               {this.renderHistoryItems()}
             </Dropdown>

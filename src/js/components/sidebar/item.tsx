@@ -91,14 +91,14 @@ let SidebarItem: Function = ({
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
           onMouseLeave={handleMouseLeave}
         >
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'icon' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'icon' does not exist on type 'Object'. */ }
           <Icon icon={itemData.icon} />{' '}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
           {!isCollapsed && intl.formatMessage({ id: itemData.name })}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'isFavorite' does not exist on type 'Obje... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'isFavorite' does not exist on type 'Obje... Remove this comment to see the full error message */ }
           {(isHovered || itemData.isFavorite) && !isCollapsed && (
             <ButtonGroup className="bp3-minimal sidebarFavorite">
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'isFavorite' does not exist on type 'Obje... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'isFavorite' does not exist on type 'Obje... Remove this comment to see the full error message */ }
               {itemData.isFavorite ? (
                 <Tooltip content="Remove from favorites">
                   <Button
@@ -136,9 +136,9 @@ let SidebarItem: Function = ({
         // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
         onClick={onExpandClick}
       >
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'icon' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'icon' does not exist on type 'Object'. */ }
         <Icon icon={itemData.icon} />{' '}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
         {!isCollapsed && intl.formatMessage({ id: itemData.name })}
         {onExpandClick && (
           <Icon

@@ -67,7 +67,7 @@ const Releases: Function = ({
           key="release-toolbar"
         />,
         <Flex key="release-content">
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <Tree data={data} />
         </Flex>,
       ]
@@ -75,7 +75,7 @@ const Releases: Function = ({
       <Box top>
         <ReleasesToolbar sort={sort} sortDir={sortDir} />
         <Flex>
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <Tree data={data} />
         </Flex>
       </Box>

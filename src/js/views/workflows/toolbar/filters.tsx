@@ -33,7 +33,7 @@ const ToolbarFilters: Function = ({
 }: Props): React.Element<any> => (
   // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: (string | Element)[]; intent: "p... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: (string | Element)[]; intent: "p... Remove this comment to see the full error message */ }
     <Control
       intent={
         deprecatedQuery || runningQuery || latestQuery

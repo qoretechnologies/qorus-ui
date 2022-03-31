@@ -237,7 +237,7 @@ export default class OCMDView extends Component {
       if (output.err) {
         return (
           <Alert bsStyle="danger" title="Error">
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'string | O... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'string | O... Remove this comment to see the full error message */ }
             {output.desc}
           </Alert>
         );
@@ -263,12 +263,12 @@ export default class OCMDView extends Component {
             <Crumb active>OCMD</Crumb>
             <Crumb>
               <Pull>
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+                { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */ }
                 <form onSubmit={this.handleFormSubmit}>
                   <ButtonGroup>
-                    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                     <Dropdown show={this.state.showDropdown}>
-                      // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message
+                      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */ }
                       <Control icon="list">Command list</Control>
                       {size(this.state.filtered) !== 0 ||
                       this.state.value === ''

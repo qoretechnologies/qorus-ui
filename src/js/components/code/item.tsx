@@ -75,9 +75,9 @@ const CodeItem: Function = ({
 
   return (
     <div>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
       <p className="code-item-header">{item.name}</p>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'functions' does not exist on type 'Objec... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'functions' does not exist on type 'Objec... Remove this comment to see the full error message */ }
       {item.functions ? (
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'functions' does not exist on type 'Objec... Remove this comment to see the full error message
         item.functions.map(

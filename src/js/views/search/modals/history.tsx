@@ -53,7 +53,7 @@ let SearchHistoryRow: Function = ({
   return (
     <Tr first={first}>
       <Td className="text medium">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'. */ }
         <Text text={item.ids} />
       </Td>
       <Td className="text medium">
@@ -75,27 +75,27 @@ let SearchHistoryRow: Function = ({
         )}
       </Td>
       <Td className="text big">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mindate' does not exist on type 'Object'... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mindate' does not exist on type 'Object'... Remove this comment to see the full error message */ }
         <ContentByType content={item.mindate} />
       </Td>
       <Td className="text big">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'maxdate' does not exist on type 'Object'... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'maxdate' does not exist on type 'Object'... Remove this comment to see the full error message */ }
         <ContentByType content={item.maxdate} />
       </Td>
       {type !== 'ordersSearch' && (
         <Td className="narrow">
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'retry' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'retry' does not exist on type 'Object'. */ }
           <AutoComp>{item.retry && item.retry !== ''}</AutoComp>
         </Td>
       )}
       {type !== 'ordersSearch' && (
         <Td className="narrow">
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'busErr' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'busErr' does not exist on type 'Object'. */ }
           <AutoComp>{item.busErr && item.busErr !== ''}</AutoComp>
         </Td>
       )}
       <Td className="text">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'filter' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'filter' does not exist on type 'Object'. */ }
         <Text text={item.filter} />
       </Td>
       <Td className="narrow">

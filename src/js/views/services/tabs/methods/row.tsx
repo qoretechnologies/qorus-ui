@@ -53,7 +53,7 @@ const MethodsRow: Function = ({
 }: Props): React.Element<any> => (
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message
   <Tr title={method.description} first={first}>
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
     <NameColumn name={method.name} />
     <ActionColumn>
       <Controls>
@@ -62,19 +62,19 @@ const MethodsRow: Function = ({
       </Controls>
     </ActionColumn>
     <Td className="narrow">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'locktype' does not exist on type 'Object... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'locktype' does not exist on type 'Object... Remove this comment to see the full error message */ }
       <ContentByType content={method.locktype} />
     </Td>
     <Td className="tiny">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'internal' does not exist on type 'Object... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'internal' does not exist on type 'Object... Remove this comment to see the full error message */ }
       <ContentByType content={method.internal} />
     </Td>
     <Td className="tiny">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'write' does not exist on type 'Object'.
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'write' does not exist on type 'Object'. */ }
       <ContentByType content={method.write} />
     </Td>
     <Td className="text">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
       {service.type === 'user' && (
         <SLAControl
           canModify={canModify}

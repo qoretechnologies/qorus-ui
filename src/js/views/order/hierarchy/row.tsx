@@ -45,40 +45,40 @@ const HierarchyRow: Function = ({
       type="workflow"
     />
     <Td className="medium">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflowstatus' does not exist on type '... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'workflowstatus' does not exist on type '... Remove this comment to see the full error message */ }
       <span className={`label status-${label}`}>{item.workflowstatus}</span>
     </Td>
     <Td className="tiny">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'hierarchy_level' does not exist on type ... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'hierarchy_level' does not exist on type ... Remove this comment to see the full error message */ }
       <ContentByType content={item.hierarchy_level} />
     </Td>
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'priority' does not exist on type 'Object... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'priority' does not exist on type 'Object... Remove this comment to see the full error message */ }
     <Td className="medium">{item.priority}</Td>
     <Td className="tiny">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'business_error' does not exist on type '... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'business_error' does not exist on type '... Remove this comment to see the full error message */ }
       <ContentByType content={item.business_error} />
     </Td>
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'error_count' does not exist on type 'Obj... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'error_count' does not exist on type 'Obj... Remove this comment to see the full error message */ }
     {!compact && <Td className="narrow">{item.error_count}</Td>}
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'warning_count' does not exist on type 'O... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'warning_count' does not exist on type 'O... Remove this comment to see the full error message */ }
     {!compact && <Td className="medium">{item.warning_count}</Td>}
     {!compact && (
       <Td className="tiny">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'subworkflow' does not exist on type 'Obj... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'subworkflow' does not exist on type 'Obj... Remove this comment to see the full error message */ }
         <ContentByType content={item.subworkflow} />
       </Td>
     )}
     {!compact && (
       <Td className="tiny">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'synchronous' does not exist on type 'Obj... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'synchronous' does not exist on type 'Obj... Remove this comment to see the full error message */ }
         <ContentByType content={item.synchronous} />
       </Td>
     )}
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'scheduled' does not exist on type 'Objec... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'scheduled' does not exist on type 'Objec... Remove this comment to see the full error message */ }
     {!compact && <DateColumn>{item.scheduled}</DateColumn>}
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'started' does not exist on type 'Object'... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'started' does not exist on type 'Object'... Remove this comment to see the full error message */ }
     {!compact && <DateColumn>{item.started}</DateColumn>}
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message */ }
     {!compact && <DateColumn>{item.completed}</DateColumn>}
   </Tr>
 );

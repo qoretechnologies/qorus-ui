@@ -53,7 +53,7 @@ type ConfigItemsTableProps = {
 // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 const ConfigItemsTable: Function = (props: ConfigItemsTableProps): React.Element<any> => (
   <React.Fragment>
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'isGrouped' does not exist on type 'Confi... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'isGrouped' does not exist on type 'Confi... Remove this comment to see the full error message */ }
     {props.isGrouped && size(props.data) ? (
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'ConfigItem... Remove this comment to see the full error message
       map(props.data, (configItemsData, groupName) => (
@@ -326,26 +326,26 @@ let ItemsTable: Function = ({
                         // @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
                         className={`text ${item.level === 'workflow' || item.level === 'global'}`}
                       >
-                        // @ts-expect-error ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message
+                        { /* @ts-expect-error ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message */ }
                         <Value item={item} />
                       </Td>
                       <Td className="narrow">
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'strictly_local' does not exist on type '... Remove this comment to see the full error message
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'strictly_local' does not exist on type '... Remove this comment to see the full error message */ }
                         <ContentByType content={item.strictly_local} />
                       </Td>
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
+                      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */ }
                       <Td className="medium">{item.level}</Td>
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'config_group' does not exist on type 'Ob... Remove this comment to see the full error message
+                      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'config_group' does not exist on type 'Ob... Remove this comment to see the full error message */ }
                       {!title && <Td className="medium">{item.config_group}</Td>}
                       <Td className="narrow">
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
                         <code>{item.type}</code>
                       </Td>
                     </Tr>
                     {showDescription && (
                       <Tr>
                         <Td className="text" colspan={groupName ? 6 : 7}>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */ }
                           <ContentByType inTable content={item.desc} />
                         </Td>
                       </Tr>

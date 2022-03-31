@@ -57,7 +57,7 @@ const SLADetail: Function = ({
       <Breadcrumbs>
         <Crumb link="/slas"> SLAs </Crumb>
         <Crumb>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
           {sla.name} <small>({sla.slaid})</small>
         </Crumb>
         <CrumbTabs

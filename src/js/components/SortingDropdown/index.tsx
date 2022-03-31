@@ -33,11 +33,11 @@ const SortingDropdown: Function = ({
       }
       onClick={(e: any) => handleSortChange(e, sortBy)}
     />
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <Dropdown key={`${sortBy}_${sortByKey.direction}`}>
-      // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
       <Control>{intl.formatMessage({ id: sortBy })}</Control>
-      // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */ }
       {map(sortKeys, (column: string, name: string): React.Element<Item> => (
         <Item
           title={name}

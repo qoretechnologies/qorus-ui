@@ -43,7 +43,7 @@ const AuthLabelsDropdown: Function = compose(
 )(({ label, id, optimisticDispatch, values }: Object) => (
   // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; small: true; }' is missing ... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; small: true; }' is missing ... Remove this comment to see the full error message */ }
     <Control small>{label.value}</Control>
     {values.map((val: string) => (
       <Item
@@ -122,7 +122,7 @@ const AuthLabelsContainer: Function = ({
               <Tbody {...props}>
                 {collection.map((label: Object, index: number) => (
                   <Tr first={index === 0} key={index}>
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
                     <NameColumn name={label.name} />
                     <Td className="text">
                       <AuthLabelsDropdown

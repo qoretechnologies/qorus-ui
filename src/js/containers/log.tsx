@@ -60,7 +60,7 @@ const LogArea = compose(
 const LogContainer = props => (
   // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
   <Tabs active="log">
-    // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
     <Pane name="Log">
       <LogArea {...props} />
     </Pane>

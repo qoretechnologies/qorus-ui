@@ -146,7 +146,7 @@ class ManageModal extends Component {
         <Modal.Header titleId="manage" onClose={onClose}>
           {edit ? 'Edit connection' : 'Add connection'}
         </Modal.Header>
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */ }
         <form onSubmit={this.handleFormSubmit} className="form-horizontal">
           <Modal.Body>
             {this.state.error && (
@@ -211,7 +211,7 @@ class ManageModal extends Component {
                   Options *
                 </label>
                 <div className="col-lg-6">
-                  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                  { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                   <Options
                     canEdit
                     data={opts}

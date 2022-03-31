@@ -54,7 +54,7 @@ const StatsModal: Function = ({
           noContainer
           rightElement={<Band band={band} onChange={handleBandChange} />}
         >
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
           <Pane name="Local">
             <GlobalTable
               workflows={workflows}
@@ -64,7 +64,7 @@ const StatsModal: Function = ({
               local
             />
           </Pane>
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
           <Pane name="Global">
             <GlobalTable
               workflows={workflows}

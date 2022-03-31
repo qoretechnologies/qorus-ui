@@ -21,7 +21,7 @@ const ChartBandDropdown: Function = ({
 }: ChartBandDropdownProps): React.Element<any> => (
   // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; small: true; icon: string; ... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; small: true; icon: string; ... Remove this comment to see the full error message */ }
     <Control small icon="time">
       {intl.formatMessage({ id: chartTab })}
     </Control>

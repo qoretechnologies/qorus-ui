@@ -90,7 +90,7 @@ const JobPage = ({
         />
       </Breadcrumbs>
       <Pull right>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'. */ }
         <Controls {...job} week={job.wday} expiry={job.expiry_date} big />
         {tabQuery === 'instances' && (
           <Search

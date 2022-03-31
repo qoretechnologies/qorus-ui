@@ -56,7 +56,7 @@ const OptionHashField = ({
           <div>
             <ControlGroup fill>
               <Button text={`${index + 1}.`} />
-              // @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; value: string; defaultItems:... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; value: string; defaultItems:... Remove this comment to see the full error message */ }
               <SelectField
                 name="name"
                 value={pair.name}

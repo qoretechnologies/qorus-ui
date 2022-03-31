@@ -80,7 +80,7 @@ const ProcessSummary: Function = ({
                     <FormattedMessage id="cluster.memory" />: {p.priv_str}
                   </Tag>{' '}
                 </div>
-                // @ts-expect-error ts-migrate(2322) FIXME: Type '"right "' is not assignable to type 'Float'.
+                { /* @ts-expect-error ts-migrate(2322) FIXME: Type '"right "' is not assignable to type 'Float'. */ }
                 <div style={{ float: 'right ' }}>
                   <ButtonGroup>
                     <Button

@@ -32,22 +32,22 @@ const AuditTable = ({ audit = [] }: { audit: Array<Object> }) => (
       {audit.map((item, idx) => (
         <Tr key={`audit_info_${idx}`}>
           <Td>{idx}</Td>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'audit_event_code' does not exist on type... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'audit_event_code' does not exist on type... Remove this comment to see the full error message */ }
           <Td>{item.audit_event_code}</Td>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'event' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'event' does not exist on type 'Object'. */ }
           <Td className="name">{item.event}</Td>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */ }
           <Td className="text">{item.reason}</Td>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'info1' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'info1' does not exist on type 'Object'. */ }
           <Td className="text">{item.info1}</Td>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'info2' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'info2' does not exist on type 'Object'. */ }
           <Td className="text">{item.info2}</Td>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'who' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'who' does not exist on type 'Object'. */ }
           <Td className="text">{item.who}</Td>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'source' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'source' does not exist on type 'Object'. */ }
           <Td className="text">{item.source}</Td>
           <Td>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */ }
             <Date date={item.created} />
           </Td>
         </Tr>

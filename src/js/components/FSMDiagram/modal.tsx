@@ -74,7 +74,7 @@ const StateModal = ({
       </Modal.Header>
       <Modal.Body>
         <Box top fill>
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <Tabs active={getActiveTab()}>
             {state.type === 'fsm' ? (
               // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
@@ -95,7 +95,7 @@ const StateModal = ({
             {state.type === 'block' ? (
               // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
               <Pane name="Block config">
-                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                 <Tree data={state['block-config']} />
               </Pane>
             ) : null}
@@ -124,9 +124,9 @@ const StateModal = ({
                 />
               </Pane>
             ) : null}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
             <Pane name="Info">
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
               <Tree data={state} />
             </Pane>
           </Tabs>

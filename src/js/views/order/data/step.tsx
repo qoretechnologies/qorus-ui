@@ -28,7 +28,7 @@ const StepDataView = ({
         (step: Object): React.Element<Tree> => (
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
           <PaneItem title={`Step: ${normalizeName(step)} (${step.stepid})`}>
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
             <Tree
               // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
               key={step.stepid}

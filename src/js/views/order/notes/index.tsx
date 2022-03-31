@@ -100,7 +100,7 @@ export default class NotesView extends Component {
     return (
       <Box top>
         <PaneItem title="New note">
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message */ }
           {this.state.error && (
             <Callout
               intent={Intent.DANGER}

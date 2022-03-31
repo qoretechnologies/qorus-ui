@@ -52,13 +52,13 @@ const NotificationList: Function = ({ collection }: Props) => (
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'when' does not exist on type 'Object'.
             label={<NotificationTime time={alert.when} />}
           >
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
             <Link to={getAlertObjectLink(alert.type, alert)}>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'object' does not exist on type 'Object'.
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'object' does not exist on type 'Object'. */ }
               {alert.object}
             </Link>
             <div>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'.
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */ }
               <small>{alert.reason}</small>
             </div>
           </PaneItem>

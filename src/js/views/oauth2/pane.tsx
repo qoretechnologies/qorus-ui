@@ -55,7 +55,7 @@ const ClientPane: Function = ({
           </ButtonGroup>
         }
       >
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message */ }
         <NoDataIf condition={!size(client.permissions)}>
           {() =>
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message

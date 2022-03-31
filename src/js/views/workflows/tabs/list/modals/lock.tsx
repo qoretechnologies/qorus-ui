@@ -39,7 +39,7 @@ export default class extends Component {
           Reason
         </Modal.Header>
         <Modal.Body>
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
+          { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'. */ }
           <textarea ref="text" rows="12" className="form-control" />
         </Modal.Body>
         <Modal.Footer>

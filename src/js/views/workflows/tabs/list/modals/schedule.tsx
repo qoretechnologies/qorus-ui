@@ -28,7 +28,7 @@ const Schedule: Function = ({
       Reschedule order
     </Modal.Header>
     <Modal.Body>
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
       <Datepicker date="now" onApplyDate={handleDateSelect} futureOnly />
     </Modal.Body>
   </Modal>

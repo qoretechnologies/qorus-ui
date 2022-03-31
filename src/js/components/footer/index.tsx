@@ -31,14 +31,14 @@ const HelpModal: Function = ({
     </Modal.Header>
     <Modal.Body>
       <Box top>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'overview' does not exist on type 'Object... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'overview' does not exist on type 'Object... Remove this comment to see the full error message */ }
         {helpData.overview && <p className="lead">{helpData.overview}</p>}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
         {Object.keys(helpData.data).map(
           // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
           (header: string): React.Element<any> => (
             <PaneItem title={header} key={header}>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
               {helpData.data[header]}
             </PaneItem>
           )

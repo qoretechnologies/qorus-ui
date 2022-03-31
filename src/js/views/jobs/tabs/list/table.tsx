@@ -95,7 +95,7 @@ const ResultTable = ({
               limit={limit}
             />
             <ButtonGroup>
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
               <DatePicker date={dateQuery} onApplyDate={changeDateQuery} />
             </ButtonGroup>
             <Filters items={JOB_STATES} />

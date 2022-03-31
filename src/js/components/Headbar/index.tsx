@@ -29,7 +29,7 @@ class Headbar extends React.Component {
           flex: '0 1 auto',
         }}
       >
-        // @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
+        { /* @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable. */ }
         {typeof children === 'function' ? children(this._el) : children}
       </div>
     );

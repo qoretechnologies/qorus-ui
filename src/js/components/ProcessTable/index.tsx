@@ -45,7 +45,7 @@ const ProcessTable: Function = ({
             </ButtonGroup>
           }
         />
-        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
         <Tree
           data={{
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message

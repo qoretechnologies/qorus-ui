@@ -45,7 +45,7 @@ const ServiceTabs: Function = ({
   <SimpleTabs activeTab={activeTab}>
     {isPane && (
       <SimpleTab name="detail">
-        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
         <DetailTab
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           key={service.name}
@@ -76,13 +76,13 @@ const ServiceTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="mappers">
       <Box top fill noPadding>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */ }
         <MappersTable mappers={service.mappers} />
       </Box>
     </SimpleTab>
     <SimpleTab name="value maps">
       <Box top fill noPadding>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */ }
         <Valuemaps vmaps={service.vmaps} />
       </Box>
     </SimpleTab>

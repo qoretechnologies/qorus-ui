@@ -99,7 +99,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
                             <br />
 
                             <h4>Field data</h4>
-                            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                             <Tree data={input} />
                           </Box>
                         </Modal.Body>

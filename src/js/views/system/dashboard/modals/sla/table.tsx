@@ -62,7 +62,7 @@ const GlobalModalTable: Function = ({
               type="workflow"
             />
             <Td>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'inSla' does not exist on type 'Object'.
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'inSla' does not exist on type 'Object'. */ }
               {workflow.inSla} ({orderStatsPct(workflow.inSla, totalStats)}
               %)
               <ProgressBar
@@ -73,9 +73,9 @@ const GlobalModalTable: Function = ({
               />
             </Td>
             <Td>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message */ }
               {workflow.outOfSla} (
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message */ }
               {orderStatsPct(workflow.outOfSla, totalStats)}
               %)
               <ProgressBar

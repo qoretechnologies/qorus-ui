@@ -235,7 +235,7 @@ export default class DatePicker extends Component {
           action={this.handleAllClick}
         />
         <Dropdown id="date-selection">
-          // @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ btnStyle:... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ btnStyle:... Remove this comment to see the full error message */ }
           <DropdownControl btnStyle="default" />
           <DropdownItem
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
@@ -317,7 +317,7 @@ export default class DatePicker extends Component {
               hideDatepicker={this.hideDatepicker}
               futureOnly={this.props.futureOnly}
             >
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
               <Calendar
                 futureOnly={this.props.futureOnly}
                 date={this.state.date}
@@ -354,7 +354,7 @@ export default class DatePicker extends Component {
         {!futureOnly && !noButtons && (
           // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
           <Dropdown disabled={disabled}>
-            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ small: boolean; }' is missing the followin... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ small: boolean; }' is missing the followin... Remove this comment to see the full error message */ }
             <DropdownControl small={small} />
             <DropdownItem
               // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.

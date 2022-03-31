@@ -67,7 +67,7 @@ const AuthenticateView: Function = ({
               <span>Authorization required</span>,
             ]}
           </span>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
           <span style={{ color: '#aaa' }}>{info.data['instance-key']}</span>
         </Flex>
         <Flex
@@ -78,7 +78,7 @@ const AuthenticateView: Function = ({
           {hasDenied && (
             <div>
               You have <strong>denied</strong> the authorization request for
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message */ }
               <div className="client-id">{allQueryObj.client_id} </div>
               If this was a mistake, select "Undo".
             </div>
@@ -86,7 +86,7 @@ const AuthenticateView: Function = ({
           {!hasDenied && (
             <div>
               The following client is requesting authorization
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message */ }
               <div className="client-id">{allQueryObj.client_id} </div>
               By authorizing this request, the client will have access to your
               resources and information. Select "Deny" if you do not wish to

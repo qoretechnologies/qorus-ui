@@ -219,7 +219,7 @@ export default class DetailTab extends Component {
               type={service.type}
             />
           </PaneItem>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'stateless' does not exist on type 'Objec... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'stateless' does not exist on type 'Objec... Remove this comment to see the full error message */ }
           {service.stateless && system.is_kubernetes ? (
             <PaneItem
               // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
@@ -279,7 +279,7 @@ export default class DetailTab extends Component {
                       />
                     </Td>
                     <Td className="text">
-                      // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message
+                      { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */ }
                       <ControlGroup fluid>
                         <InputGroup
                           intent={
@@ -296,13 +296,13 @@ export default class DetailTab extends Component {
                           value={this.state.memoryRequest.val}
                           type="number"
                         />
-                        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                         <Dropdown>
-                          // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
                           <Control>
                             {this.state.memoryRequest.unit || 'Select unit'}
                           </Control>
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryRequest', {
@@ -312,7 +312,7 @@ export default class DetailTab extends Component {
                             }
                             title="KiB"
                           />
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryRequest', {
@@ -322,7 +322,7 @@ export default class DetailTab extends Component {
                             }
                             title="MiB"
                           />
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryRequest', {
@@ -336,7 +336,7 @@ export default class DetailTab extends Component {
                       </ControlGroup>
                     </Td>
                     <Td className="text">
-                      // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message
+                      { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */ }
                       <ControlGroup fluid>
                         <InputGroup
                           style={{ width: '70px' }}
@@ -350,13 +350,13 @@ export default class DetailTab extends Component {
                           value={this.state.memoryLimit.val}
                           type="number"
                         />
-                        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                         <Dropdown>
-                          // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
                           <Control>
                             {this.state.memoryLimit.unit || 'Select unit'}
                           </Control>
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryLimit', {
@@ -366,7 +366,7 @@ export default class DetailTab extends Component {
                             }
                             title="KiB"
                           />
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryLimit', {
@@ -376,7 +376,7 @@ export default class DetailTab extends Component {
                             }
                             title="MiB"
                           />
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryLimit', {
@@ -425,7 +425,7 @@ export default class DetailTab extends Component {
               </Button>
             </PaneItem>
           ) : null}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'stateless' does not exist on type 'Objec... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'stateless' does not exist on type 'Objec... Remove this comment to see the full error message */ }
           {service.stateless && system.is_kubernetes ? (
             <PaneItem
               // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
@@ -502,7 +502,7 @@ export default class DetailTab extends Component {
                       />
                     </Td>
                     <Td className="text">
-                      // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message
+                      { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */ }
                       <ControlGroup fluid>
                         <InputGroup
                           style={{ width: '70px' }}
@@ -516,13 +516,13 @@ export default class DetailTab extends Component {
                           value={this.state.memory.val}
                           type="number"
                         />
-                        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                         <Dropdown>
-                          // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
                           <Control>
                             {this.state.memory.unit || 'Select unit'}
                           </Control>
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memory', {
@@ -532,7 +532,7 @@ export default class DetailTab extends Component {
                             }
                             title="KiB"
                           />
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memory', {
@@ -542,7 +542,7 @@ export default class DetailTab extends Component {
                             }
                             title="MiB"
                           />
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Item
                             action={() =>
                               this.handleScalingChange('memory', {
@@ -591,11 +591,11 @@ export default class DetailTab extends Component {
               </Button>
             </PaneItem>
           ) : null}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */ }
           <AlertsTable alerts={service.alerts} />
           <ProcessSummary model={service} type="service" />
           <Groups>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type 'Object'. */ }
             {(service.groups || []).map((g) => (
               <Group
                 key={g.name}

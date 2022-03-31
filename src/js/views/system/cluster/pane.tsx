@@ -30,7 +30,7 @@ const ClusterPane: Function = ({
     <Box top>
       {process ? (
         <PaneItem title={process}>
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <Tree data={urls} />
         </PaneItem>
       ) : (

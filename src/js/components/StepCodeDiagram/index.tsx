@@ -1095,7 +1095,7 @@ export default class StepsTab extends Component {
       <Flex>
         <Headbar>
           <Breadcrumbs collapsed>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */ }
             <Crumb>{workflow.normalizedName}</Crumb>
           </Breadcrumbs>
           <Pull right>

@@ -81,17 +81,17 @@ const NotesList: Function = ({ notes }: Props): React.Element<any> => (
             <Tbody {...props}>
               {collection.map((note: Object, index: number) => (
                 <Tr first={index === 0} key={index}>
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'note' does not exist on type 'Object'.
+                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'note' does not exist on type 'Object'. */ }
                   <DescriptionColumn>{note.note}</DescriptionColumn>
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message
+                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */ }
                   <AuthorColumn>{note.username}</AuthorColumn>
                   <Td className="tiny">
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'saved' does not exist on type 'Object'.
+                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'saved' does not exist on type 'Object'. */ }
                     <ContentByType content={note.saved} />
                   </Td>
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message
+                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */ }
                   <DateColumn>{note.created}</DateColumn>
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'modified' does not exist on type 'Object... Remove this comment to see the full error message
+                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'modified' does not exist on type 'Object... Remove this comment to see the full error message */ }
                   <DateColumn>{note.modified}</DateColumn>
                 </Tr>
               ))}

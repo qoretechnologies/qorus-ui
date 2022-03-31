@@ -109,19 +109,19 @@ export default class StepModal extends Component {
       return (
         // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
         <Tabs className="step-info" active="code" noContainer>
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; name: string; }' is n... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; name: string; }' is n... Remove this comment to see the full error message */ }
           <Pane name="Code">
             <InfoHeader model={step} />
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
             <SourceCode lineOffset={0} language={step.language}>
               {code}
             </SourceCode>
           </Pane>
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
           <Pane name="Step Info">
             <InfoTable object={step} omit={['class', 'functions']} />
           </Pane>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'. */ }
           {this.props.step.config && (
             // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; key: string; name: stri... Remove this comment to see the full error message
             <Pane key="step-info" name="Config" scrollY>
@@ -143,10 +143,10 @@ export default class StepModal extends Component {
     return classData ? (
       // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
       <Tabs className="step-info" active="code" noContainer>
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; name: string; }' is n... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; name: string; }' is n... Remove this comment to see the full error message */ }
         <Pane name="Code">
           <InfoHeader model={classData} />
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <SourceCode
             lineOffset={parseInt(classData.offset, 10)}
             language={classData.language}
@@ -154,7 +154,7 @@ export default class StepModal extends Component {
             {classData.body}
           </SourceCode>
         </Pane>
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
         <Pane name="Class Info">
           <InfoTable
             object={{
@@ -164,11 +164,11 @@ export default class StepModal extends Component {
             omit={['body', 'type', 'language_info']}
           />
         </Pane>
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
         <Pane name="Step Info">
           <InfoTable object={step} omit={['class', 'functions']} />
         </Pane>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'. */ }
         {this.props.step.config && (
           // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; key: string; name: stri... Remove this comment to see the full error message
           <Pane key="step-info" name="Config" scrollY>
@@ -192,7 +192,7 @@ export default class StepModal extends Component {
         active={this.props.step.functions[0].type}
         noContainer
       >
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'functions' does not exist on type 'Objec... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'functions' does not exist on type 'Objec... Remove this comment to see the full error message */ }
         {this.props.step.functions.map(func => (
           // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; key: any; name: any; }'... Remove this comment to see the full error message
           <Pane key={func.type} name={_.capitalize(func.type)}>
@@ -203,15 +203,15 @@ export default class StepModal extends Component {
               active="code"
               noContainer
             >
-              // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; name: string; }' is n... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; name: string; }' is n... Remove this comment to see the full error message */ }
               <Pane name="Code">
                 <InfoHeader model={func} />
-                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                 <SourceCode lineOffset={parseInt(func.offset, 10)}>
                   {func.body}
                 </SourceCode>
               </Pane>
-              // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
               <Pane name="Function Info">
                 <InfoTable
                   object={{
@@ -224,11 +224,11 @@ export default class StepModal extends Component {
             </Tabs>
           </Pane>
         ))}
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; key: string; name: stri... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; key: string; name: stri... Remove this comment to see the full error message */ }
         <Pane key="step-info" name="Step Info">
           <InfoTable object={this.props.step} omit={['functions']} />
         </Pane>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'. */ }
         {this.props.step.config && (
           // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; key: string; name: stri... Remove this comment to see the full error message
           <Pane key="step-config" name="Config" scrollY>
@@ -263,7 +263,7 @@ export default class StepModal extends Component {
   render () {
     return (
       <Modal width="70vw" height={600}>
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'Object' is not assignable to par... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'Object' is not assignable to par... Remove this comment to see the full error message */ }
         {this.renderHeader(this.props.step ? this.props.step : this.props)}
         <Modal.Body>
           <Box top fill>

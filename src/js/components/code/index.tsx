@@ -54,7 +54,7 @@ const Code: Function = ({
     <Flex className="code-source">
       {selected ? (
         <Flex>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
           {selected.type &&
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
           selected.type !== 'code' &&
@@ -76,11 +76,11 @@ const Code: Function = ({
                 ) : undefined
               }
             >
-              // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
               <Pane name="Code">
                 <CodeTab selected={selected} />
               </Pane>
-              // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
               <Pane name="Info">
                 <InfoTable
                   object={{
@@ -101,7 +101,7 @@ const Code: Function = ({
                   }}
                 />
               </Pane>
-              // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
               <Pane name="Releases">
                 <ReleasesTab
                   // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
@@ -110,7 +110,7 @@ const Code: Function = ({
                   compact
                 />
               </Pane>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'. */ }
               {selected.item.requires && selected.item.requires.length > 0 ? (
                 // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
                 <Pane name="Dependencies">

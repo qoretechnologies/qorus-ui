@@ -107,7 +107,7 @@ export default class ChartView extends Component {
 
     return (
       <div className="chart-view">
-        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
         <Editable
           text={
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'days' does not exist on type 'Readonly<{... Remove this comment to see the full error message

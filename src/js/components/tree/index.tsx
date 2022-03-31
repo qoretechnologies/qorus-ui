@@ -375,7 +375,7 @@ export default class Tree extends Component {
         )}
         {this.state.mode === 'normal' && (
           <Flex scrollY className="tree-wrapper">
-            // @ts-expect-error ts-migrate(2554) FIXME: Expected 4-5 arguments, but got 2.
+            { /* @ts-expect-error ts-migrate(2554) FIXME: Expected 4-5 arguments, but got 2. */ }
             {this.renderTree(this.props.data, true)}
           </Flex>
         )}

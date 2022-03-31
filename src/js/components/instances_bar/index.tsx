@@ -72,7 +72,7 @@ const InstancesBar: Function = ({
                 // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
                 onClick={onClick}
               >
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
+                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */ }
                 <div className={`instance-bar-value bar-${state.label}`}>
                   {showPct
                     // @ts-expect-error ts-migrate(2339) FIXME: Property 'pct' does not exist on type 'Object'.

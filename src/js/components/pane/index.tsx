@@ -67,7 +67,7 @@ const Pane: Function = ({
       </Breadcrumbs>
     </Headbar>
     <Flex className="pane__content">{children}</Flex>
-    // @ts-expect-error ts-migrate(2739) FIXME: Type '{ onStop: Function; left: true; min: { width... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ onStop: Function; left: true; min: { width... Remove this comment to see the full error message */ }
     <ResizeHandle onStop={onResize} left min={{ width: 600 }} />
   </Flex>
 );

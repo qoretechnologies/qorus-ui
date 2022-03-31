@@ -118,7 +118,7 @@ const MapperInfo = ({
         <Breadcrumbs>
           <Crumb>Mappers</Crumb>
           <Crumb>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
             {mapper.name} v{mapper.version} ({mapper.mapperid})
           </Crumb>
           <CrumbTabs tabs={['Diagram', 'Releases', 'Info']} />
@@ -128,14 +128,14 @@ const MapperInfo = ({
         <SimpleTabs activeTab={tabQuery}>
           <SimpleTab name="diagram">
             <Flex scrollY>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'valid' does not exist on type 'Object'.
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'valid' does not exist on type 'Object'. */ }
               {!mapper.valid ? (
                 <Alert
                   bsStyle="danger"
                   title="Warning: This mapper contains an error and can not be
                     rendered!"
                 >
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
+                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */ }
                   {mapper.error}
                 </Alert>
               ) : (

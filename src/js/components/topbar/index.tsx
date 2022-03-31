@@ -144,7 +144,7 @@ export default class Topbar extends Component {
       <Popover
         content={
           <Menu>
-            // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */ }
             {sortedInterfaces.map((key: string): React.Element<MenuItem> => (
               <MenuItem
                 text={key}
@@ -198,16 +198,16 @@ export default class Topbar extends Component {
           <NavbarHeading>
             <img src={light ? logo : whiteLogo} className="qore-small-logo" />
             <span className="topbar-instance-on">on</span>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
             <span className="topbar-instance">{info.data['instance-key']}</span>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
             {info.data.is_kubernetes && (
               <Tag intent="primary" style={{ marginLeft: '15px', verticalAlign: 'sub' }}><img src={Kubernetes} style={{ width: '15px' }} /> IN KUBERNETES</Tag>
             )}
           </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */ }
           <form onSubmit={this.handleSubmit} id="quickSearchForm">
             <ControlGroup>
               <InputGroup
@@ -244,7 +244,7 @@ export default class Topbar extends Component {
             useSmartPositioning
             content={
               <Menu>
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
                 <MenuDivider title={this.props.user.name} />
                 <MenuItem
                   text="My profile"

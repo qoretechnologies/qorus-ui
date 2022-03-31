@@ -37,7 +37,7 @@ const RolesRow: Function = ({
 // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'role' does not exist on type 'Object'.
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'role' does not exist on type 'Object'. */ }
     <NameColumn name={model.role} />
     <ActionColumn className="medium">
       <ButtonGroup>
@@ -72,10 +72,10 @@ const RolesRow: Function = ({
       </ButtonGroup>
     </ActionColumn>
     <Td className="text">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'provider' does not exist on type 'Object... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'provider' does not exist on type 'Object... Remove this comment to see the full error message */ }
       <Text text={model.provider} />
     </Td>
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */ }
     <DescriptionColumn>{model.desc}</DescriptionColumn>
   </Tr>
 );

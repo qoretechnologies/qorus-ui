@@ -43,7 +43,7 @@ const JobsDetailTabs: Function = ({
   <SimpleTabs activeTab={activeTab}>
     {isPane && (
       <SimpleTab name="detail">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
         <DetailTab key={model.name} model={model} isTablet={isTablet} />
       </SimpleTab>
     )}
@@ -54,7 +54,7 @@ const JobsDetailTabs: Function = ({
     )}
     <SimpleTab name="code">
       <Box top fill>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'. */ }
         {model.code ? (
           <Code
             selected={{
@@ -95,13 +95,13 @@ const JobsDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="mappers">
       <Box top fill noPadding>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */ }
         <Mappers mappers={model.mappers} />
       </Box>
     </SimpleTab>
     <SimpleTab name="value maps">
       <Box top fill noPadding>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */ }
         <Valuemaps vmaps={model.vmaps} />
       </Box>
     </SimpleTab>

@@ -46,11 +46,11 @@ const DispositionChart: Function = ({
           <FormattedMessage id='stats.estimated-savings-1' />{' '}
           <strong>{autoRecoveriesCount}</strong>{' '}
           <FormattedMessage id='stats.estimated-savings-2' />{' '}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'. */ }
           <strong>{formatter.format(recoveryAmount)}</strong>{' '}
           <FormattedMessage id='stats.estimated-savings-3' />{' '}
           <strong>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'. */ }
             {formatter.format(recoveryAmount * autoRecoveriesCount)}
           </strong>
           <div
@@ -110,7 +110,7 @@ const DispositionChart: Function = ({
           </div>
         </Callout>
       )}
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <ChartComponent
       title={intl.formatMessage({ id: 'stats.workflow-disposition' })}
       onClick={onDispositionChartClick}
@@ -147,7 +147,7 @@ const DispositionChart: Function = ({
         },
       ]}
     />
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <ChartComponent
       title={intl.formatMessage({ id: 'stats.sla-stats' })}
       width={150}

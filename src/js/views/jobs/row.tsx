@@ -102,7 +102,7 @@ const ServiceRow: Function = ({
     <NameColumn
       popoverContent={
         <Box top>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type '{ o... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type '{ o... Remove this comment to see the full error message */ }
           <PaneItem title={normalizedName}>{rest.description}</PaneItem>
           <ProcessSummary
             model={{ enabled, remote, active, expiry, ...rest }}

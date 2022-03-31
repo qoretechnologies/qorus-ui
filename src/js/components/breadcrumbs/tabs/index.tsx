@@ -184,7 +184,7 @@ class CrumbTabs extends React.Component {
                           )}
                           className="non-decorated-link"
                         >
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'. */ }
                           <MenuItem key={tab.title} text={tab.title} />
                         </Link>
                       )

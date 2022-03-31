@@ -82,7 +82,7 @@ const DiagramInfoTable: Function = ({
           <DateColumnHeader><FormattedMessage id='table.modified' /></DateColumnHeader>
           <DateColumn>{modified}</DateColumn>
           <Th icon="warning-sign"><FormattedMessage id='table.priority' /></Th>
-          // @ts-expect-error ts-migrate(2741) FIXME: Property 'className' is missing in type '{ value: ... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2741) FIXME: Property 'className' is missing in type '{ value: ... Remove this comment to see the full error message */ }
           <EditableCell
             value={priority}
             type="number"
@@ -108,7 +108,7 @@ const DiagramInfoTable: Function = ({
           )}
           <Th icon="refresh"> Synchronous </Th>
           <Td>
-            // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message */ }
             <ContentByType content={synchronous !== 0} />
           </Td>
         </Tr>

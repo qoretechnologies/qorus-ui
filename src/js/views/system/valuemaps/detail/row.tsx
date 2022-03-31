@@ -63,7 +63,7 @@ const RowDetail: Function = ({
           />
         </ButtonGroup>
       </ActionColumn>
-      // @ts-expect-error ts-migrate(2739) FIXME: Type '{ value: any; onSave: (newValue: string | nu... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ value: any; onSave: (newValue: string | nu... Remove this comment to see the full error message */ }
       <EditableCell value={value} onSave={handleValueChange} />
     </Tr>
   );

@@ -71,7 +71,7 @@ const SLAEventsTable: Function = ({
       </FixedRow>
     </Thead>
     <Tbody>
-      // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */ }
       {collection.map((event: Object, idx: number): React.Element<any> => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'producer' does not exist on type 'Object... Remove this comment to see the full error message
         const producerSplit = event.producer.split(' ');
@@ -88,25 +88,25 @@ const SLAEventsTable: Function = ({
         return (
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'sla_eventid' does not exist on type 'Obj... Remove this comment to see the full error message
           <Tr key={event.sla_eventid} first={idx === 0}>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'sla_eventid' does not exist on type 'Obj... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'sla_eventid' does not exist on type 'Obj... Remove this comment to see the full error message */ }
             <Td className="narrow">{event.sla_eventid}</Td>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'. */ }
             <Td className="text">{event.err}</Td>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'errdesc' does not exist on type 'Object'... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'errdesc' does not exist on type 'Object'... Remove this comment to see the full error message */ }
             <Td className="text">{event.errdesc}</Td>
             <Td className="text">
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'producer' does not exist on type 'Object... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'producer' does not exist on type 'Object... Remove this comment to see the full error message */ }
               <Link to={producerUrl}>{event.producer}</Link>
             </Td>
             <Td className="big">
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */ }
               <Date date={event.created} />
             </Td>
             <Td className="tiny">
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'success' does not exist on type 'Object'... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'success' does not exist on type 'Object'... Remove this comment to see the full error message */ }
               <Autocomponent>{event.success}</Autocomponent>
             </Td>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'. */ }
             <Td className="text">{event.value}</Td>
           </Tr>
         );

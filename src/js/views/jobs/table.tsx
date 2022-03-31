@@ -108,7 +108,7 @@ const JobsTable: Function = ({
           </Pull>
         </Th>
         <Th className="separated-cell">
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <DatePicker date={dateQuery || '24h'} onApplyDate={changeDateQuery} />
         </Th>
       </FixedRow>
@@ -139,7 +139,7 @@ const JobsTable: Function = ({
     >
       {props => (
         <Tbody {...props}>
-          // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */ }
           {collection.map((job: Object, index: number): React.Element<Row> => (
             <Row
               first={index === 0}

@@ -32,7 +32,7 @@ const UsersRow: Function = ({
 // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 }: Props): React.Element<any> => (
   <Tr first={first}>
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
     <NameColumn name={model.name} />
     <ActionColumn>
       <ButtonGroup>
@@ -56,11 +56,11 @@ const UsersRow: Function = ({
       </ButtonGroup>
     </ActionColumn>
     <Td className="text big">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */ }
       <Text text={model.username} />
     </Td>
     <Td className="text">
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'roles' does not exist on type 'Object'.
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'roles' does not exist on type 'Object'. */ }
       {model.roles?.map((role, index) => (
         <Badge key={index} val={role} label="info" />
       ))}

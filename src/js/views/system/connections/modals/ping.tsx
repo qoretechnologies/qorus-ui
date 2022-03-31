@@ -69,7 +69,7 @@ export default class Ping extends Component {
       return (
         <Box top>
           <Alert bsStyle="danger" title="Ping unsuccessful">
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'info' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'info' does not exist on type 'Object'. */ }
             {this.state.data.info}
           </Alert>
         </Box>

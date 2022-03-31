@@ -404,7 +404,7 @@ const MapperProvider = ({
           <div className={Classes.DIALOG_BODY}>
             <Callout intent="primary">{'Replace wildcard'}</Callout>
             <br />
-            // @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; onChange: (_name: any, value... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; onChange: (_name: any, value... Remove this comment to see the full error message */ }
             <String
               name="wildcard"
               onChange={(_name, value) => setWildcardDiagram((cur) => ({ ...cur, value }))}
@@ -435,7 +435,7 @@ const MapperProvider = ({
         {!compact && <StyledHeader>{title}</StyledHeader>}
         {compact && title && <span>{title}: </span>}{' '}
         <ButtonGroup>
-          // @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; disabled: any; defaultItems:... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; disabled: any; defaultItems:... Remove this comment to see the full error message */ }
           <SelectField
             name={`provider${type ? `-${type}` : ''}`}
             disabled={isLoading}
@@ -447,7 +447,7 @@ const MapperProvider = ({
           />
           {nodes.map((child, index) => (
             <ButtonGroup>
-              // @ts-expect-error ts-migrate(2740) FIXME: Type '{ key: string; name: string; disabled: any; ... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ key: string; name: string; disabled: any; ... Remove this comment to see the full error message */ }
               <SelectField
                 key={`${title}-${index}`}
                 name={`provider-${type ? `${type}-` : ''}${index}`}

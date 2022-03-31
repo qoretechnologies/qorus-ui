@@ -237,7 +237,7 @@ const ConnectorField = ({
           <StyledProviderUrl>
             {title && <span>{title}:</span>}{' '}
             <Tag minimal large onRemove={clear}>
-              // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+              { /* @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1. */ }
               {getUrlFromProvider(value)}{' '}
             </Tag>
           </StyledProviderUrl>
@@ -251,7 +251,7 @@ const ConnectorField = ({
   return (
     <div style={{ overflow: 'hidden' }}>
       <SubField title={'Select'}>
-        // @ts-expect-error ts-migrate(2740) FIXME: Type '{ isConfigItem: any; nodes: any[]; setChildr... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ isConfigItem: any; nodes: any[]; setChildr... Remove this comment to see the full error message */ }
         <Provider
           isConfigItem={isConfigItem}
           nodes={nodes}
@@ -277,7 +277,7 @@ const ConnectorField = ({
       ) : null}
       {provider === 'factory' && optionProvider ? (
         <SubField title={'Factory Options'}>
-          // @ts-expect-error ts-migrate(2741) FIXME: Property 'url' is missing in type '{ onChange: (nm... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2741) FIXME: Property 'url' is missing in type '{ onChange: (nm... Remove this comment to see the full error message */ }
           <Options
             onChange={(nm, val) => {
               setOptionProvider((cur) => ({

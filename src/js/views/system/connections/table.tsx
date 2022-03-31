@@ -146,7 +146,7 @@ const ConnectionTable: Function = ({
     <DataOrEmptyTable condition={!remotes || size(remotes) === 0} cols={7}>
       {props => (
         <Tbody {...props}>
-          // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */ }
           {remotes.map((remote: Object, index: number): React.Element<any> => (
             <ConnectionRow
               first={index === 0}

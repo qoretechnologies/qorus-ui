@@ -64,7 +64,7 @@ const Schedule: Function = ({
       <Modal.Header onClose={onClose} titleId="reschedule-modal">
         Reschedule job
       </Modal.Header>
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */ }
       <form onSubmit={handleFormSubmit}>
         <Modal.Body>
           <div>

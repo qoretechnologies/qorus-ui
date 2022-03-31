@@ -246,7 +246,7 @@ export default class ChartComponent extends Component {
               // @ts-expect-error ts-migrate(2339) FIXME: Property 'backgroundColor' does not exist on type ... Remove this comment to see the full error message
               style={{ backgroundColor: d.backgroundColor || '#d7d7d7' }}
             />
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */ }
             {d.label}
           </li>
         ));
@@ -272,7 +272,7 @@ export default class ChartComponent extends Component {
                   : this.props.datasets[0].backgroundColor[key] || '#d7d7d7',
               }}
             />
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
             {`${d} (${this.props.datasets[0].data[key]}${
               this.props.unit ? this.props.unit : ''
             })`}

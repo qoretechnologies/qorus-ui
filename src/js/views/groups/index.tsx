@@ -82,12 +82,12 @@ const GroupsView: Function = ({
             <FormattedMessage id="Groups" />
           </Crumb>
           <Crumb active>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
             {group.name} ({group.id})
           </Crumb>
         </Breadcrumbs>
         <Pull right>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message */ }
           <Controls enabled={group.enabled} name={group.name} big />
         </Pull>
       </Headbar>

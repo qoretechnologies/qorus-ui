@@ -49,7 +49,7 @@ const AlertsTableItem: Function = ({
         isExpandable,
       })}
     >
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'.
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */ }
       {item.reason}
     </div>
     {isExpandable && (

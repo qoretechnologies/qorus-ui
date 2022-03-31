@@ -46,7 +46,7 @@ const ErrorsModal: Function = ({
   <form className="form-horizontal" onSubmit={handleSubmit}>
     <Modal hasFooter>
       <Modal.Header titleId="errors_modal" onClose={onClose}>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */ }
         {data.error || 'Add new error'}
       </Modal.Header>
       <Modal.Body>
@@ -155,7 +155,7 @@ const ErrorsModal: Function = ({
               />
             </div>
           </div>
-          // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message */ }
           {id !== 'omit' && (
             <div className="form-group">
               <label

@@ -29,7 +29,7 @@ const ResourceFileModal: Function = ({
     </Modal.Header>
     <Modal.Body>
       <Box top fill>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'string'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'string'. */ }
         {contents ? <pre>{contents.data}</pre> : <Loader />}
       </Box>
     </Modal.Body>

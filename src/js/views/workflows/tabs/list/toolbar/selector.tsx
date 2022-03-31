@@ -29,15 +29,15 @@ const ToolbarSelector: Function = ({
 }: Props): React.Element<any> => (
   // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown disabled={disabled}>
-    // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: (string | number | Element)[]; }... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: (string | number | Element)[]; }... Remove this comment to see the full error message */ }
     <Control>
       <Checkbox checked={CHECKBOX_STATES[selected]} /> {selectedCount || null}
     </Control>
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <Item action={selectAll} title="All" />
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <Item action={selectNone} title="None" />
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <Item action={selectInvert} title="Invert" />
   </Dropdown>
 );

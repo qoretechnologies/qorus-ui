@@ -248,7 +248,7 @@ export default class AddUserModal extends Component {
                     onSelect={this.handleRoleSelect}
                     selected={model ? this.state.roles : null}
                   >
-                    // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message
+                    { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */ }
                     <DropControl> Select roles </DropControl>
                     {this.renderRoles()}
                   </Dropdown>

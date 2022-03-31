@@ -47,7 +47,7 @@ const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
       title="Alert detail"
     >
       <Box top fill scrollY>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
         {alert.type !== 'RBAC' && !(alert.type === 'GROUP' && alert.id < 1) && (
           <Toolbar mb>
             <InterfaceTag

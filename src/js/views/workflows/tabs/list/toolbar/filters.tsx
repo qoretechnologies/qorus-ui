@@ -32,9 +32,9 @@ const ToolbarFilters: Function = ({
       onSubmit={handleFilterChange}
       selected={filterQuery ? filterQuery.split(',') : ['All']}
     >
-      // @ts-expect-error ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */ }
       <Control />
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
       <Item title="All" />
       {items.map((o, k) => (
         // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.

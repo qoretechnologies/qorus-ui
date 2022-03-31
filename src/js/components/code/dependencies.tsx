@@ -30,9 +30,9 @@ let CodeDependencyItem: Function = ({
     {() => (
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       <ExpandableItem title={classItem.name} show={show}>
-        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
         <SourceCode height={400} language={classItem.language}>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type 'Object'. */ }
           {classItem.body}
         </SourceCode>
       </ExpandableItem>

@@ -90,7 +90,7 @@ const AddClientModal: Function = ({
                   onSubmit={handlePermissionsChange}
                   selected={permissions}
                 >
-                  // @ts-expect-error ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message
+                  { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */ }
                   <Control />
                   {userPermissions.map((perm: string, index: number) => (
                     // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.

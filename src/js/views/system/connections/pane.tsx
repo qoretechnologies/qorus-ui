@@ -224,7 +224,7 @@ export default class ConnectionsPane extends Component {
                               attrsMapper(val.attr).replace(/_/g, ' ')
                             )}
                           </Th>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'editable' does not exist on type 'Object... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'editable' does not exist on type 'Object... Remove this comment to see the full error message */ }
                           {val.editable &&
                           canEdit &&
                           // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
@@ -243,7 +243,7 @@ export default class ConnectionsPane extends Component {
                             />
                           ) : (
                             <Td className="text">
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
+                              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'. */ }
                               {val.attr === 'options' || val.attr === 'opts' ? (
                                 <Options
                                   urlProtocol={url_hash?.protocol}

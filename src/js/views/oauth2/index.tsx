@@ -171,9 +171,9 @@ const ClientsView: Function = ({
                             />
                           </ButtonGroup>
                         </ActionColumn>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message */ }
                         <Td className="text">{client.client_secret}</Td>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */ }
                         <AuthorColumn>{client.username}</AuthorColumn>
                       </Tr>
                     )

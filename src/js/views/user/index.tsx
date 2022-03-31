@@ -54,7 +54,7 @@ const UserView: Function = ({
     <Headbar>
       <Breadcrumbs>
         <Crumb>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
           {userData.name} <small>({userData.provider})</small>
         </Crumb>
         <CrumbTabs tabs={['Overview', 'Settings']} />
@@ -109,13 +109,13 @@ const UserView: Function = ({
             </PaneItem>
           ))}
           <PaneItem title={intl.formatMessage({ id: 'user.storage-data' })}>
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
             <Tree data={userData.storage} />
           </PaneItem>
         </Box>
       </SimpleTab>
       <SimpleTab name="settings">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message */ }
         <UserSettings {...userData.storage.settings} />
       </SimpleTab>
     </SimpleTabs>

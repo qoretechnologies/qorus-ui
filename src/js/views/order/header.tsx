@@ -68,10 +68,10 @@ export default class OrderHeader extends Component {
         <Breadcrumbs>
           <CollapsedCrumb links={{ Workflows: '/workflows' }} />
           <Crumb link={backQueriesStr}>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'. */ }
             {workflowName} <strong>#{this.props.data.id}</strong>{' '}
             <span className={`label status-${label}`}>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflowstatus' does not exist on type '... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'workflowstatus' does not exist on type '... Remove this comment to see the full error message */ }
               {this.props.data.workflowstatus}
             </span>
           </Crumb>

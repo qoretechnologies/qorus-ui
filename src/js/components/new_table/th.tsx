@@ -57,7 +57,7 @@ const Th: Function = ({
       onClick={handleClick}
       title={title}
     >
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message */ }
       {icon && <Icon icon={icon} iconSize={10} className="header-icon" />}
       {icon && ' '}
       <span>{children}</span>
@@ -93,7 +93,7 @@ const Th: Function = ({
       title={title}
       colSpan={colspan}
     >
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message */ }
       {icon && <Icon iconSize={10} icon={icon} className="header-icon" />}
       {icon && ' '}
       {children}

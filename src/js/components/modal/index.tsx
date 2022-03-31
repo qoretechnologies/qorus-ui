@@ -187,15 +187,15 @@ export default class Modal extends Component {
             }}
           >
             {this.props.children}
-            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ left: true; onStop: Function; }' is missin... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ left: true; onStop: Function; }' is missin... Remove this comment to see the full error message */ }
             <ResizeHandle left onStop={this.handleStop} />
-            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ right: true; onStop: Function; }' is missi... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ right: true; onStop: Function; }' is missi... Remove this comment to see the full error message */ }
             <ResizeHandle right onStop={this.handleStop} />
-            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ bottom: true; onStop: Function; }' is miss... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ bottom: true; onStop: Function; }' is miss... Remove this comment to see the full error message */ }
             <ResizeHandle bottom onStop={this.handleStop} />
-            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ left: true; bottom: true; onStop: Function... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ left: true; bottom: true; onStop: Function... Remove this comment to see the full error message */ }
             <ResizeHandle left bottom onStop={this.handleStop} />
-            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ right: true; bottom: true; onStop: Functio... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ right: true; bottom: true; onStop: Functio... Remove this comment to see the full error message */ }
             <ResizeHandle right bottom onStop={this.handleStop} />
           </div>
         </Draggable>

@@ -89,11 +89,11 @@ const NewAppenderPopover: Function = ({
       />
     </FormGroup>
 
-    // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message */ }
     <FormGroup label="Appender type " requiredLabel>
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
       <Dropdown>
-        // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
         <Control>{appenderType || 'Please select'}</Control>
         {appendersTypes.map((appType: string) => (
           // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.

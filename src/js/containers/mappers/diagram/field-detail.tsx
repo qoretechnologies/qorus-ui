@@ -39,7 +39,7 @@ const FieldDetail = ({
       {data.length > 1 || (code !== '' && code !== '(') ? (
         <div>
           <div className="grad" />
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */ }
           <div className="field-detail__showall" onClick={handleShowAllClick}>
             <a> SHOW DETAILS </a>
           </div>

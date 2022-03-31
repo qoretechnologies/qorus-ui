@@ -172,13 +172,13 @@ export default class Calendar extends Component {
       <table className="table table-condensed">
         <thead>
           <tr>
-            // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */ }
             <th className="month" onClick={this.prevMonth}>
               <Icon icon="chevron-left" />
             </th>
-            // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
+            { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'. */ }
             <th colSpan="5">{this.renderYearAndMonth()}</th>
-            // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */ }
             <th className="month" onClick={this.nextMonth}>
               <Icon icon="chevron-right" />
             </th>

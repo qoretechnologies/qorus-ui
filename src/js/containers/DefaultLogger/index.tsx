@@ -248,12 +248,12 @@ const DefaultLoggerContainer: Function = ({
             </Thead>
             <Tbody>
               <Tr first>
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
                 <NameColumn name={logger.name} />
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
+                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */ }
                 <Td>{Object.keys(logger.level)[0]}</Td>
                 <Td>
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'additivity' does not exist on type 'Obje... Remove this comment to see the full error message
+                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'additivity' does not exist on type 'Obje... Remove this comment to see the full error message */ }
                   <ContentByType content={logger.additivity} />
                 </Td>
               </Tr>
@@ -323,26 +323,26 @@ const DefaultLoggerContainer: Function = ({
                     (appender: Object, index: number): any => (
                       // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                       <Tr first={index === 0} key={appender.id}>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
                         <NameColumn name={appender.name} />
                         <Td className="text">
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
                           <ContentByType content={appender.type} />
                         </Td>
                         <Td className="text">
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'Object... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'Object... Remove this comment to see the full error message */ }
                           <ContentByType content={appender.filename} />
                         </Td>
                         <Td className="text">
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'Object... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'Object... Remove this comment to see the full error message */ }
                           <ContentByType content={appender.encoding} />
                         </Td>
                         <Td className="text">
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'O... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'O... Remove this comment to see the full error message */ }
                           <ContentByType content={appender.layoutPattern} />
                         </Td>
                         <Td className="narrow">
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'O... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'O... Remove this comment to see the full error message */ }
                           <ContentByType content={appender.rotationCount} />
                         </Td>
                         <Td className="narrow">

@@ -33,7 +33,7 @@ const ResultDetail = ({
     <Headbar key="job-detail-header">
       <Pull>
         <Breadcrumbs icon="list-detail-view">
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'job_instanceid' does not exist on type '... Remove this comment to see the full error message
+          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'job_instanceid' does not exist on type '... Remove this comment to see the full error message */ }
           <Crumb active>{result.job_instanceid}</Crumb>
         </Breadcrumbs>
       </Pull>
@@ -48,7 +48,7 @@ const ResultDetail = ({
 
   return (
     <Flex className={`job-result-info ${sidebarOpen ? 'sidebar-open' : ''}`}>
-      // @ts-expect-error ts-migrate(2739) FIXME: Type '{ top: true; }' is missing the following pro... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ top: true; }' is missing the following pro... Remove this comment to see the full error message */ }
       <Resize top />
       {result ? renderResult() : <Loader />}
     </Flex>

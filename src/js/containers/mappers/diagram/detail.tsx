@@ -21,7 +21,7 @@ const DiagramDetail: Function = ({
 }: Props): React.Element<any> => (
   // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
   <Tabs active={tab}>
-    // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
     <Pane name="Info">
       <Box top fill>
         <InfoTable object={rest} />
@@ -31,7 +31,7 @@ const DiagramDetail: Function = ({
       // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
       <Pane name="Code">
         <Box top fill>
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <SourceCode>{code}</SourceCode>
         </Box>
       </Pane>

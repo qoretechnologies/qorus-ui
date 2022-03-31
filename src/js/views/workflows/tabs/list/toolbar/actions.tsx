@@ -44,7 +44,7 @@ const ToolbarActions: Function = ({
 }: Props): ?React.Element<any> => (
   <ButtonGroup>
     <Dropdown id="hidden">
-      // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */ }
       <DropdownControl icon="cog">With selected</DropdownControl>
       <DropdownItem
         title={intl.formatMessage({ id: 'order.retry' })}

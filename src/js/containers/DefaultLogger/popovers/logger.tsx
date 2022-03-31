@@ -77,9 +77,9 @@ const NewLoggerPopover: Function = ({
       // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message
       requiredLabel
     >
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
       <Dropdown>
-        // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
         <Control>{level || intl.formatMessage({ id: 'dropdown.please-select' })}</Control>
         {Object.keys(loggerLevels).map((loggerLevel: string) => (
           <Item

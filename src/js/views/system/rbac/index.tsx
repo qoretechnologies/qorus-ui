@@ -64,15 +64,15 @@ const RBAC: Function = ({
     <Box top noPadding>
       <SimpleTabs activeTab={tabQuery}>
         <SimpleTab name="users">
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <Users location={location} />
         </SimpleTab>
         <SimpleTab name="roles">
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <Roles location={location} />
         </SimpleTab>
         <SimpleTab name="permissions">
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <Permissions location={location} />
         </SimpleTab>
       </SimpleTabs>

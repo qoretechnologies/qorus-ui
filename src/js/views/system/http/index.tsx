@@ -54,17 +54,17 @@ const UserHttp: Function = ({ collection }: Props): any => (
                     // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                     (httpService: Object, idx: number): React.Element<any> => (
                       <Tr key={idx}>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'. */ }
                         <Td className="text name">{httpService.title}</Td>
                         <Td className="text">
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'URL' does not exist on type 'Object'.
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'URL' does not exist on type 'Object'. */ }
                           <Link to={httpService.URL}>{httpService.url}</Link>
                         </Td>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message */ }
                         <Td className="text">{httpService.service}</Td>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'version' does not exist on type 'Object'... Remove this comment to see the full error message
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'version' does not exist on type 'Object'... Remove this comment to see the full error message */ }
                         <Td className="narrow">{httpService.version}</Td>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'serviceid' does not exist on type 'Objec... Remove this comment to see the full error message
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'serviceid' does not exist on type 'Objec... Remove this comment to see the full error message */ }
                         <Td className="narrow">{httpService.serviceid}</Td>
                       </Tr>
                     )

@@ -301,7 +301,7 @@ export default class EditableCell extends Component {
           </form>
         ) : (
           <React.Fragment>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message */ }
             <Text text={this.state.value} noMarkdown={this.props.noMarkdown} />
             <Control
               title="Edit"

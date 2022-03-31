@@ -46,7 +46,7 @@ const WorkflowHeader: Function = ({
         {' '}
         <FormattedMessage id="Workflows" />{' '}
       </Crumb>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */ }
       <Crumb>{workflow.normalizedName}</Crumb>
       <CrumbTabs
         tabs={[
@@ -80,7 +80,7 @@ const WorkflowHeader: Function = ({
       />
     </Breadcrumbs>
     <Pull right>
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'hasAlerts' does not exist on type 'Objec... Remove this comment to see the full error message
+      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'hasAlerts' does not exist on type 'Objec... Remove this comment to see the full error message */ }
       {workflow.hasAlerts && (
         <ButtonGroup>
           <Button
@@ -90,7 +90,7 @@ const WorkflowHeader: Function = ({
             onClick={handleAlertClick}
             title="This workflow has alerts raised against it which may prevent it from working properly"
           >
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */ }
             {workflow.alerts.length}
           </Button>
         </ButtonGroup>

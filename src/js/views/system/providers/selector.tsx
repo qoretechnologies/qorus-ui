@@ -250,9 +250,9 @@ const DataProvider: FC<IProviderProps> = ({
     >
       <PaneItem title={intl.formatMessage({ id: 'global.select-provider ' })}>
         <ButtonGroup>
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
           <Dropdown disabled={isLoading}>
-            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
             <Control>
               {provider || intl.formatMessage({ id: 'dropdown.please-select' })}
             </Control>
@@ -268,7 +268,7 @@ const DataProvider: FC<IProviderProps> = ({
           {nodes.map((child, index) => (
             // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
             <Dropdown disabled={isLoading} key={title + index}>
-              // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
               <Control>
                 {child.value ||
                   intl.formatMessage({ id: 'dropdown.please-select' })}

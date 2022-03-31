@@ -209,9 +209,9 @@ export default class SearchToolbar extends Component {
                   : this.state.filter.split(',')
               }
             >
-              // @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */ }
               <Control icon="filter-list" />
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
               <Item title="All" />
               {ORDER_STATES.map((o, k) => (
                 // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.

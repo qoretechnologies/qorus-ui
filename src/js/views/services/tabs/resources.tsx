@@ -57,7 +57,7 @@ const ResourceTable: Function = ({
 }: Props): React.Element<any> => (
   // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
   <Tabs active="resources">
-    // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; suffix: a... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; suffix: a... Remove this comment to see the full error message */ }
     <Pane name="Resources" suffix={size(resources)}>
       <EnhancedTable
         collection={objectCollectionToArray(resources)}
@@ -128,16 +128,16 @@ const ResourceTable: Function = ({
                     // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                     (item: Object, key: number): React.Element<any> => (
                       <Tr key={key} first={key === 0}>
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
                         <NameColumn name={item.name} />
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
+                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */ }
                         <DescriptionColumn>{item.desc}</DescriptionColumn>
                         <Td className="text">
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
                           <Text text={item.type} />
                         </Td>
                         <Td className="text">
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
                           <Tree compact data={item.info} />
                         </Td>
                       </Tr>
@@ -150,7 +150,7 @@ const ResourceTable: Function = ({
         )}
       </EnhancedTable>
     </Pane>
-    // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; suffix: a... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; suffix: a... Remove this comment to see the full error message */ }
     <Pane name="Resource files" suffix={size(resourceFiles)}>
       <EnhancedTable
         collection={resourceFiles}

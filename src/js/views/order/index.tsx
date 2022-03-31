@@ -148,7 +148,7 @@ export default class Order extends Component {
 
     return (
       <Flex>
-        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
         <Header
           data={this.props.order}
           workflow={this.props.workflow}
@@ -159,7 +159,7 @@ export default class Order extends Component {
         />
         <SimpleTabs activeTab={this.props.tabQuery}>
           <SimpleTab name="overview">
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
             <DiagramView
               {...{
                 order: this.props.order,
@@ -251,12 +251,12 @@ export default class Order extends Component {
           </SimpleTab>
           <SimpleTab name="mappers">
             <Box top fill noPadding>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */ }
               <MappersTable mappers={this.props.workflow.mappers} />
             </Box>
           </SimpleTab>
           <SimpleTab name="notes">
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
             <NotesView
               {...{
                 order: this.props.order,
@@ -268,7 +268,7 @@ export default class Order extends Component {
             />
           </SimpleTab>
           <SimpleTab name="log">
-            // @ts-expect-error ts-migrate(2741) FIXME: Property 'location' is missing in type '{ order: O... Remove this comment to see the full error message
+            { /* @ts-expect-error ts-migrate(2741) FIXME: Property 'location' is missing in type '{ order: O... Remove this comment to see the full error message */ }
             <LogView
               {...{
                 order: this.props.order,

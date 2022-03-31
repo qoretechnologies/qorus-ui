@@ -57,11 +57,11 @@ const ValuemapsPane: Function = ({
     <Box top fill scrollY>
       <InfoHeader model={valuemap} />
       <PaneItem title="Type">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'valuetype' does not exist on type 'Objec... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'valuetype' does not exist on type 'Objec... Remove this comment to see the full error message */ }
         <code>{valuemap.valuetype}</code>
       </PaneItem>
       <PaneItem title="Throws exception">
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'throws_exception' does not exist on type... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'throws_exception' does not exist on type... Remove this comment to see the full error message */ }
         <ContentByType content={valuemap.throws_exception} />
       </PaneItem>
       <Table

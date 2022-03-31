@@ -68,7 +68,7 @@ class CodeTab extends React.Component {
         return (
           // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
           <SourceCode handleRef={this.handleRef} height={height}>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
+            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'. */ }
             {selected.code}
           </SourceCode>
         );
@@ -80,7 +80,7 @@ class CodeTab extends React.Component {
 
     return (
       <Flex>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'. */ }
         {selected.item ? (
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
           <InfoHeader model={selected.item} />
@@ -88,7 +88,7 @@ class CodeTab extends React.Component {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           <h5>{selected.name}</h5>
         )}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message
+        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message */ }
         {selected.loading ? <Loader /> : <>{this.renderContent()}</>}
       </Flex>
     );

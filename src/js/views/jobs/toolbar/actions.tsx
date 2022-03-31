@@ -28,13 +28,13 @@ const ToolbarActions: Function = ({
 }: Props): ?React.Element<any> => (
   // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    // @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message
+    { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */ }
     <Control icon="cog">With selected</Control>
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <Item title="Enable" icon="power" onClick={handleEnableClick} />
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <Item title="Disable" icon="power" onClick={handleDisableClick} />
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
     <Item title="Reset" icon="refresh" onClick={handleResetClick} />
   </Dropdown>
 );

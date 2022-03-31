@@ -68,9 +68,9 @@ const GlobalModalTable: Function = ({
               link={`/workflows?paneId=${workflow.id}&paneTab=order stats`}
             />
             <Td>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message */ }
               {workflow.completed} (
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message */ }
               {orderStatsPct(workflow.completed, totalStats)}
               %)
               <ProgressBar
@@ -81,9 +81,9 @@ const GlobalModalTable: Function = ({
               />
             </Td>
             <Td>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'automatically' does not exist on type 'O... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'automatically' does not exist on type 'O... Remove this comment to see the full error message */ }
               {workflow.automatically} (
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'automatically' does not exist on type 'O... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'automatically' does not exist on type 'O... Remove this comment to see the full error message */ }
               {orderStatsPct(workflow.automatically, totalStats)}
               %)
               <ProgressBar
@@ -93,9 +93,9 @@ const GlobalModalTable: Function = ({
               />
             </Td>
             <Td>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'manually' does not exist on type 'Object... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'manually' does not exist on type 'Object... Remove this comment to see the full error message */ }
               {workflow.manually} (
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'manually' does not exist on type 'Object... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'manually' does not exist on type 'Object... Remove this comment to see the full error message */ }
               {orderStatsPct(workflow.manually, totalStats)}
               %)
               <ProgressBar

@@ -131,7 +131,7 @@ const StepsTable: Function = ({ steps, intl }: Props): React.Element<Table> => (
                     <Tbody>
                       {map(collection, (step: Object, stepIndex: number) => (
                         <Tr first={stepIndex === 0} key={stepIndex}>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepname' does not exist on type 'Object... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'stepname' does not exist on type 'Object... Remove this comment to see the full error message */ }
                           <NameColumn name={step.stepname} />
                           <Td className="normal">
                             <span
@@ -142,29 +142,29 @@ const StepsTable: Function = ({ steps, intl }: Props): React.Element<Table> => (
                                 ).label
                               }`}
                             >
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepstatus' does not exist on type 'Obje... Remove this comment to see the full error message
+                              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'stepstatus' does not exist on type 'Obje... Remove this comment to see the full error message */ }
                               {step.stepstatus}
                             </span>
                           </Td>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'custom_status' does not exist on type 'O... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'custom_status' does not exist on type 'O... Remove this comment to see the full error message */ }
                           <Td className="big">{step.custom_status}</Td>
                           <IdColumn className="medium">
-                            // @ts-expect-error ts-migrate(2339) FIXME: Property 'subworkflow_instanceid' does not exist o... Remove this comment to see the full error message
+                            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'subworkflow_instanceid' does not exist o... Remove this comment to see the full error message */ }
                             {step.subworkflow_instanceid}
                           </IdColumn>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'error_type' does not exist on type 'Obje... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'error_type' does not exist on type 'Obje... Remove this comment to see the full error message */ }
                           <Td className="medium">{step.error_type}</Td>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'ind' does not exist on type 'Object'.
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'ind' does not exist on type 'Object'. */ }
                           <Td className="narrow">{step.ind}</Td>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'retries' does not exist on type 'Object'... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'retries' does not exist on type 'Object'... Remove this comment to see the full error message */ }
                           <Td className="normal">{step.retries}</Td>
                           <Td className="narrow">
-                            // @ts-expect-error ts-migrate(2339) FIXME: Property 'skip' does not exist on type 'Object'.
+                            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'skip' does not exist on type 'Object'. */ }
                             <ContentByType content={step.skip} />
                           </Td>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'started' does not exist on type 'Object'... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'started' does not exist on type 'Object'... Remove this comment to see the full error message */ }
                           <DateColumn>{step.started}</DateColumn>
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message
+                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message */ }
                           <DateColumn>{step.completed}</DateColumn>
                         </Tr>
                       ))}

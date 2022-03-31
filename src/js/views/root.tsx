@@ -385,7 +385,7 @@ export default class Root extends Component {
                   <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
                 </Flex>
               </div>
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message
+              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message */ }
               {!isMaximized && <Footer path={this.props.location.pathname} info={info.data} />}
               <ModalManager />
               <Notifications />
