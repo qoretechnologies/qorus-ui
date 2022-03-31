@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
-import { fetchWithNotifications, post, put, del } from '../../utils';
 import settings from '../../../../settings';
+import { del, fetchWithNotifications, post, put } from '../../utils';
 
 const createClient: Function = createAction(
   'CLIENTS_CREATECLIENT',
@@ -11,7 +11,7 @@ const createClient: Function = createAction(
     permissions: Array<string>,
     onSuccess: Function,
     dispatch?: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   ): Object => {
     if (!dispatch) {
       return {
@@ -59,7 +59,7 @@ const updateClient: Function = createAction(
     permissions: Array<string>,
     onSuccess: Function,
     dispatch?: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   ): Object => {
     if (!dispatch) {
       return {
@@ -102,7 +102,7 @@ const deleteClient: Function = createAction(
     clientId: string,
     onSuccess: Function,
     dispatch?: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   ): Object => {
     if (!dispatch) {
       return {

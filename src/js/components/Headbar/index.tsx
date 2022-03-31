@@ -3,8 +3,8 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import HeadbarDivider from './divider';
 
 type Props = {
-  // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  children: Array<React.Element<any>>,
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  children: Array<React.Element<any>>;
 };
 
 class Headbar extends React.Component {
@@ -12,24 +12,24 @@ class Headbar extends React.Component {
 
   handleRef: Function = (ref: any): void => {
     if (ref) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_el' does not exist on type 'Headbar'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_el' does not exist on type 'Headbar'.
       this._el = ref;
     }
   };
 
-  render () {
+  render() {
     const { children } = this.props;
 
     return (
       <div
         className="headbar"
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'LegacyR... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'LegacyR... Remove this comment to see the full error message
         ref={this.handleRef}
         style={{
           flex: '0 1 auto',
         }}
       >
-        { /* @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable. */ }
+        {/* @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable. */}
         {typeof children === 'function' ? children(this._el) : children}
       </div>
     );

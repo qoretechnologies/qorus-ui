@@ -1,19 +1,16 @@
 /* @flow */
 import { createAction } from 'redux-actions';
-
-import { fetchJson, fetchWithNotifications } from '../../utils';
 import settings from '../../../../settings';
+import { fetchJson, fetchWithNotifications } from '../../utils';
 
 const fetch: Function = createAction(
   'ERRORS_FETCH',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   async (type: string, id: number | string): Object => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
     const errors = await fetchJson(
       'GET',
-      `${settings.REST_BASE_URL}/errors/${type}${
-        id && id !== 'omit' ? `/${id}` : ''
-      }`
+      `${settings.REST_BASE_URL}/errors/${type}${id && id !== 'omit' ? `/${id}` : ''}`
     );
 
     return { type, errors };
@@ -28,14 +25,13 @@ const createOrUpdate: Function = createAction(
     data: Object,
     onSuccess: Function,
     dispatch: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  ): ?Object => {
-    const dt =
-      type === 'workflow' ? { ...data, ...{ forceworkflow: true } } : data;
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
+  ): Object => {
+    const dt = type === 'workflow' ? { ...data, ...{ forceworkflow: true } } : data;
 
     const result = await fetchWithNotifications(
       async () => {
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
         const res = await fetchJson(
           'POST',
           `${settings.REST_BASE_URL}/errors/${type}${
@@ -70,20 +66,18 @@ const removeError: Function = createAction(
     id: number | string,
     name: string,
     dispatch: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  ): ?Object => {
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
+  ): Object => {
     if (!dispatch) {
       return { type, name };
     }
 
     await fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
         await fetchJson(
           'DELETE',
-          `${settings.REST_BASE_URL}/errors/${type}${
-            id && id !== 'omit' ? `/${id}` : ''
-          }/${name}`
+          `${settings.REST_BASE_URL}/errors/${type}${id && id !== 'omit' ? `/${id}` : ''}/${name}`
         ),
       'Deleting error...',
       'Error deleted',

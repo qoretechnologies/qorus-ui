@@ -1,47 +1,46 @@
 // @flow
+import { Icon } from '@blueprintjs/core';
+import classnames from 'classnames';
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import classnames from 'classnames';
-
-import { Tr, Td } from '../../components/new_table';
-import ServiceControls from './controls';
-import withDispatch from '../../hocomponents/withDispatch';
-import { Icon } from '@blueprintjs/core';
-import NameColumn from '../../components/NameColumn';
-import { IdColumn } from '../../components/IdColumn';
-import { SelectColumn } from '../../components/SelectColumn';
 import { ActionColumn } from '../../components/ActionColumn';
 import { DescriptionColumn } from '../../components/DescriptionColumn';
+import { IdColumn } from '../../components/IdColumn';
+import NameColumn from '../../components/NameColumn';
+import { Td, Tr } from '../../components/new_table';
+import { SelectColumn } from '../../components/SelectColumn';
+import withDispatch from '../../hocomponents/withDispatch';
+import ServiceControls from './controls';
 
 type Props = {
-  openPane: Function,
-  closePane: Function,
-  isActive?: boolean,
-  updateDone: Function,
-  select: Function,
-  _updated?: boolean,
-  has_alerts?: boolean,
-  handleHighlightEnd: Function,
-  handleCheckboxClick: Function,
-  handleDetailClick: Function,
-  _selected?: boolean,
-  id: number,
-  type?: string,
-  threads: number,
-  normalizedName: string,
-  name: string,
-  version: string,
-  desc: string,
-  enabled: boolean,
-  autostart: boolean,
-  status: string,
-  first: boolean,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  remote: ?boolean,
-  optimisticDispatch: Function,
-  handleRemoteClick: Function,
+  openPane: Function;
+  closePane: Function;
+  isActive?: boolean;
+  updateDone: Function;
+  select: Function;
+  _updated?: boolean;
+  has_alerts?: boolean;
+  handleHighlightEnd: Function;
+  handleCheckboxClick: Function;
+  handleDetailClick: Function;
+  _selected?: boolean;
+  id: number;
+  type?: string;
+  threads: number;
+  normalizedName: string;
+  name: string;
+  version: string;
+  desc: string;
+  enabled: boolean;
+  autostart: boolean;
+  status: string;
+  first: boolean;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  remote: boolean;
+  optimisticDispatch: Function;
+  handleRemoteClick: Function;
 };
 
 const ServiceRow: Function = ({
@@ -62,8 +61,8 @@ const ServiceRow: Function = ({
   status,
   first,
   remote,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Tr
     first={first}
     highlight={_updated}
@@ -109,24 +108,25 @@ const ServiceRow: Function = ({
 export default compose(
   withDispatch(),
   withHandlers({
-    handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
-      select(id);
-    },
-    handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
-      updateDone(id);
-    },
-    handleDetailClick: ({
-      openPane,
-      id,
-      isActive,
-      closePane,
-    }: Props): Function => (): void => {
-      if (isActive) {
-        closePane();
-      } else {
-        openPane(id);
-      }
-    },
+    handleCheckboxClick:
+      ({ select, id }: Props): Function =>
+      (): void => {
+        select(id);
+      },
+    handleHighlightEnd:
+      ({ updateDone, id }: Props): Function =>
+      (): void => {
+        updateDone(id);
+      },
+    handleDetailClick:
+      ({ openPane, id, isActive, closePane }: Props): Function =>
+      (): void => {
+        if (isActive) {
+          closePane();
+        } else {
+          openPane(id);
+        }
+      },
   }),
   pure([
     'isActive',

@@ -1,5 +1,4 @@
 import cloneDeep from 'lodash/cloneDeep';
-
 import { formatAppender } from '../../../../helpers/logger';
 import {
   addAppenderReducer,
@@ -8,17 +7,16 @@ import {
   deleteLoggerReducer,
   editAppenderReducer,
   loggerReducer,
-  updateConfigItemWsCommon
+  updateConfigItemWsCommon,
 } from '../../common/reducers';
 
 const addProcess = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
     const processes = { ...data.processes };
     const newProcesses = events.reduce(
-      (cur, event) =>
-        event.status === 0 ? cur : { ...processes, ...{ [event.id]: event } },
+      (cur, event) => (event.status === 0 ? cur : { ...processes, ...{ [event.id]: event } }),
       processes
     );
 
@@ -30,7 +28,7 @@ const addProcess = {
 
 const removeProcess = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
     const processes = { ...data.processes };
 
@@ -46,7 +44,7 @@ const removeProcess = {
 
 const processMemoryChanged = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
     const processes = { ...data.processes };
 
@@ -56,8 +54,7 @@ const processMemoryChanged = {
         data.cluster_info[event.node].node_load_pct = event.node_load_pct;
         data.cluster_info[event.node].node_ram_in_use = event.node_ram_in_use;
         data.cluster_info[event.node].node_priv_str = event.node_priv_str;
-        data.cluster_info[event.node].node_ram_in_use_str =
-          event.node_ram_in_use_str;
+        data.cluster_info[event.node].node_ram_in_use_str = event.node_ram_in_use_str;
 
         if (event.status_string === 'IDLE') {
           delete processes[event.id];
@@ -77,13 +74,12 @@ const processMemoryChanged = {
 
 const incrementItems = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
     events.forEach((event) => {
       if (event.alert) {
-        data['alert-summary'][event.alertType] =
-          data['alert-summary'][event.alertType] + 1;
+        data['alert-summary'][event.alertType] = data['alert-summary'][event.alertType] + 1;
       }
 
       if (event.type) {
@@ -97,7 +93,7 @@ const incrementItems = {
 
 const decrementItems = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
     events.forEach((event) => {
@@ -119,7 +115,7 @@ const decrementItems = {
 
 const updateDone = {
   next(state: Object, { payload: { id } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
     const processes = { ...data.processes };
 
@@ -135,7 +131,7 @@ const init = {
   next(state: Object) {
     const newState = { ...state };
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'isOnDashboard' does not exist on type '{... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'isOnDashboard' does not exist on type '{... Remove this comment to see the full error message
     newState.isOnDashboard = true;
 
     return { ...newState };
@@ -146,7 +142,7 @@ const unsync = {
   next(state: Object) {
     const newState = { ...state };
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'isOnDashboard' does not exist on type '{... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'isOnDashboard' does not exist on type '{... Remove this comment to see the full error message
     newState.isOnDashboard = false;
 
     return { ...newState };
@@ -161,7 +157,7 @@ const killProcess = {
 
 const updateStats = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
     events.forEach((event) => {
@@ -174,7 +170,7 @@ const updateStats = {
 
 const healthChanged = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
     events.forEach((event) => {
@@ -189,12 +185,12 @@ const healthChanged = {
 
 const remoteHealthChanged = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
     events.forEach((event) => {
       const remote = data.health.remote(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         (rm: Object): boolean => rm.name === event.name
       );
 
@@ -209,7 +205,7 @@ const remoteHealthChanged = {
 
 const removeNode = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = cloneDeep(state.data);
 
     events.forEach((event) => {
@@ -222,7 +218,7 @@ const removeNode = {
 
 const updateNodeInfo = {
   next(state: Object, { payload: { events } }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = cloneDeep(state.data);
 
     events.forEach((event) => {
@@ -257,8 +253,7 @@ const updateNodeInfo = {
         data.cluster_info[event.name].node_priv = event.node_priv;
         data.cluster_info[event.name].node_priv_str = event.node_priv_str;
         data.cluster_info[event.name].node_ram_in_use = event.node_ram_in_use;
-        data.cluster_info[event.name].node_ram_in_use_str =
-          event.node_ram_in_use_str;
+        data.cluster_info[event.name].node_ram_in_use_str = event.node_ram_in_use_str;
 
         if (data.cluster_info[event.name].process_history.length > 60) {
           data.cluster_info[event.name].process_history.shift();
@@ -275,7 +270,7 @@ const fetchGlobalConfig = {
   next(state: Object, { payload: { globalConfig } }) {
     const newState = { ...state };
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'globalConfig' does not exist on type '{ ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'globalConfig' does not exist on type '{ ... Remove this comment to see the full error message
     newState.globalConfig = globalConfig;
 
     return { ...newState };
@@ -304,10 +299,7 @@ const fetchDefaultLogger = {
       };
     } else {
       const flattenedAppenders = appenders.reduce(
-        (cur: Array<Object>, appender: Object) => [
-          ...cur,
-          formatAppender(appender),
-        ],
+        (cur: Array<Object>, appender: Object) => [...cur, formatAppender(appender)],
         []
       );
 
@@ -343,9 +335,7 @@ const addDefaultAppender = {
       // Go through the events
       events.forEach((dt) => {
         // Update the appenders for this interface
-        data.defaultLoggers[dt.interface].loggerData.appenders.push(
-          formatAppender(dt)
-        );
+        data.defaultLoggers[dt.interface].loggerData.appenders.push(formatAppender(dt));
       });
       // Modify the state
       return { ...state, ...{ data } };
@@ -361,9 +351,7 @@ const editDefaultAppender = {
       // Go through the events
       events.forEach((dt) => {
         // Update the appenders for this interface
-        data.defaultLoggers[
-          dt.interface
-        ].loggerData.appenders = data.defaultLoggers[
+        data.defaultLoggers[dt.interface].loggerData.appenders = data.defaultLoggers[
           dt.interface
         ].loggerData.appenders.map((appender) => {
           if (appender.id === dt.logger_appenderid) {
@@ -388,13 +376,9 @@ const deleteDefaultAppender = {
       // Go through the events
       events.forEach((dt) => {
         // Update the appenders for this interface
-        data.defaultLoggers[
+        data.defaultLoggers[dt.interface].loggerData.appenders = data.defaultLoggers[
           dt.interface
-        ].loggerData.appenders = data.defaultLoggers[
-          dt.interface
-        ].loggerData.appenders.filter(
-          (appender) => appender.id !== dt.logger_appenderid
-        );
+        ].loggerData.appenders.filter((appender) => appender.id !== dt.logger_appenderid);
       });
       // Modify the state
       return { ...state, ...{ data } };
@@ -482,5 +466,5 @@ export {
   updateConfigItemWs as UPDATECONFIGITEMWS,
   updateDone as UPDATEDONE,
   updateNodeInfo as UPDATENODEINFO,
-  updateStats as UPDATESTATS
+  updateStats as UPDATESTATS,
 };

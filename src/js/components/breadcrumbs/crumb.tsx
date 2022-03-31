@@ -3,12 +3,12 @@ import React from 'react';
 import { Link } from 'react-router';
 
 type Props = {
-  link?: string,
-  disabled?: boolean,
-  children?: any,
-  text?: string,
-  active?: boolean,
-  icon?: string,
+  link?: string;
+  disabled?: boolean;
+  children?: any;
+  text?: string;
+  active?: boolean;
+  icon?: string;
 };
 
 const Crumb: Function = ({
@@ -17,8 +17,8 @@ const Crumb: Function = ({
   text,
   children,
   active,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <li>
     {link ? (
       <Link

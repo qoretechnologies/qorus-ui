@@ -1,20 +1,14 @@
 // @flow
-import React from 'react';
-import {
-  Popover,
-  Menu,
-  MenuItem,
-  Position,
-  PopoverInteractionKind,
-} from '@blueprintjs/core';
+import { Menu, MenuItem, Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 import map from 'lodash/map';
+import React from 'react';
 import { browserHistory } from 'react-router';
 
 type Props = {
-  links: Object,
+  links: Object;
 };
 
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 const CollapsedCrumb: Function = ({ links }: Props): React.Element<any> => (
   <li>
     <Popover
@@ -23,11 +17,7 @@ const CollapsedCrumb: Function = ({ links }: Props): React.Element<any> => (
       content={
         <Menu>
           {map(links, (link, name) => (
-            <MenuItem
-              key={name}
-              text={name}
-              onClick={() => browserHistory.push(link)}
-            />
+            <MenuItem key={name} text={name} onClick={() => browserHistory.push(link)} />
           ))}
         </Menu>
       }

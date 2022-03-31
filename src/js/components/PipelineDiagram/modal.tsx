@@ -10,14 +10,7 @@ import Modal from '../modal';
 import Tabs, { Pane } from '../tabs';
 import Tree from '../tree';
 
-const PipeElementModal = ({
-  onClose,
-  intl,
-  pipelineId,
-  elementId,
-  elementName,
-  pipeline,
-}) => {
+const PipeElementModal = ({ onClose, intl, pipelineId, elementId, elementName, pipeline }) => {
   const getConfigItemsForState = (element) => {
     element.config = reduce(
       pipeline.config,
@@ -51,22 +44,19 @@ const PipeElementModal = ({
   };
 
   const elements = flattenPipeline(pipeline.children);
-  const element = elements.find((el) =>
-    el.pid ? el.pid === elementId : el.name === elementName
-  );
+  const element = elements.find((el) => (el.pid ? el.pid === elementId : el.name === elementName));
 
   return (
     <Modal width="40vw" height="500">
       <Modal.Header onClose={onClose}>
-        {intl.formatMessage({ id: 'global.view-element-detail' })}{' '}
-        {element.name}
+        {intl.formatMessage({ id: 'global.view-element-detail' })} {element.name}
       </Modal.Header>
       <Modal.Body>
         <Box top fill>
-          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Tabs active={element.type === 'processor' ? 'config' : 'info'}>
             {element.type === 'processor' && (
-              // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
               <Pane name="Config">
                 <ConfigItemsTable
                   items={rebuildConfigHash(getConfigItemsForState(element))}
@@ -75,9 +65,9 @@ const PipeElementModal = ({
                 />
               </Pane>
             )}
-            { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
             <Pane name="Info">
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Tree data={element} />
             </Pane>
           </Tabs>
@@ -89,9 +79,7 @@ const PipeElementModal = ({
 
 export default compose(
   connect((state, props) => ({
-    pipeline: state.api.pipelines.data.find(
-      (pipe) => pipe.id === props.pipelineId
-    ),
+    pipeline: state.api.pipelines.data.find((pipe) => pipe.id === props.pipelineId),
   })),
   injectIntl
 )(PipeElementModal);

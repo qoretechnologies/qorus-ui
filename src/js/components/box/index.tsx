@@ -4,16 +4,16 @@ import pure from 'recompose/onlyUpdateForKeys';
 import Flex from '../Flex';
 
 type Props = {
-  noPadding: boolean,
-  top: boolean,
-  noTransition: boolean,
-  children: any,
-  column: number,
-  style?: Object,
-  width: string | number,
-  scrollX?: boolean,
-  scrollY?: boolean,
-  fill?: boolean,
+  noPadding: boolean;
+  top: boolean;
+  noTransition: boolean;
+  children: any;
+  column: number;
+  style?: Object;
+  width: string | number;
+  scrollX?: boolean;
+  scrollY?: boolean;
+  fill?: boolean;
 };
 
 const Box: Function = ({
@@ -27,8 +27,8 @@ const Box: Function = ({
   scrollY,
   fill,
   width = 'initial',
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> =>
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> =>
   noTransition ? (
     <div
       className="white-box"

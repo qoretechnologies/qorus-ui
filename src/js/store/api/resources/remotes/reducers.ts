@@ -72,22 +72,22 @@ const manageConnection = {
 
 const connectionChange = {
   next(state: Object = initialState, { payload: { events } }): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
       events.forEach((dt: Object) => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
         const exists = state.data.find((conn) => conn.name === dt.name);
 
         if (exists) {
           newData = updateItemWithName(
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             dt.name,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'up' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'up' does not exist on type 'Object'.
             { up: dt.up, enabled: dt.enabled, _updated: true },
             newData
           );
@@ -106,22 +106,22 @@ const connectionChange = {
 
 const debugChange = {
   next(state: Object = initialState, { payload: { events } }): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
       events.forEach((dt: Object) => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
         const exists = state.data.find((conn) => conn.name === dt.name);
 
         if (exists) {
           newData = updateItemWithName(
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             dt.name,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'debug_data' does not exist on type 'Obje... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'debug_data' does not exist on type 'Obje... Remove this comment to see the full error message
             { debug_data: dt.debug_data, _updated: true },
             newData
           );
@@ -140,18 +140,18 @@ const debugChange = {
 
 const enabledChange = {
   next(state: Object = initialState, { payload: { events } }): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
       events.forEach((dt: Object) => {
         newData = updateItemWithName(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           dt.name,
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
           { enabled: dt.enabled, _updated: true },
           newData
         );
@@ -216,9 +216,7 @@ const addAlert = {
       let newData = stateData;
 
       events.forEach((dt) => {
-        const remote = newData.find(
-          (r) => r.name === dt.name && r.conntype === dt.type
-        );
+        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.type);
 
         if (remote) {
           const alerts = [...remote.alerts, dt];
@@ -255,9 +253,7 @@ const clearAlert = {
       let newData = stateData;
 
       events.forEach((dt) => {
-        const remote = newData.find(
-          (r) => r.name === dt.name && r.conntype === dt.type
-        );
+        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.type);
 
         if (remote) {
           const alerts = [...remote.alerts];
@@ -291,20 +287,16 @@ const clearAlert = {
 };
 
 const updateConnection = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: Object = initialState, { payload: { models } }: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let newData = [...state.data];
 
     models.forEach((dt) => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const exists = state.data.find((conn) => conn.name === dt.name);
       if (exists) {
-        newData = updateItemWithName(
-          dt.name,
-          { ...dt, _updated: true },
-          newData
-        );
+        newData = updateItemWithName(dt.name, { ...dt, _updated: true }, newData);
       }
     });
 
@@ -316,9 +308,9 @@ const updateConnection = {
 };
 
 const addConnection = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: Object = initialState, { payload: { events } }: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let newData = [...state.data];
 
     events.forEach((dt) => {
@@ -339,16 +331,16 @@ const addConnection = {
 };
 
 const removeConnectionWs = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: Object = initialState, { payload: { events } }: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
 
     events.forEach((dt) => {
       remove(
         data,
         (remote: Object): boolean =>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           remote.name === dt.name && remote.conntype === dt.type
       );
     });

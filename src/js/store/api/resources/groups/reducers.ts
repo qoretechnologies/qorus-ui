@@ -1,26 +1,20 @@
 /* @flow */
-import { updateItemWithName, setUpdatedToNull } from '../../utils';
-import {
-  select,
-  selectAll,
-  selectNone,
-  selectInvert,
-} from '../../../../helpers/resources';
-
+import { select, selectAll, selectInvert, selectNone } from '../../../../helpers/resources';
+import { setUpdatedToNull, updateItemWithName } from '../../utils';
 
 const initialState: Object = { data: [], sync: false, loading: false };
 
 const setEnabled: Object = {
   next(state: Object = initialState, { payload: { events } }): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data = state.data.slice();
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
       events.forEach((dt: Object): void => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         newData = updateItemWithName(dt.name, { enabled: dt.enabled, _updated: true }, newData);
       });
 
@@ -32,11 +26,11 @@ const setEnabled: Object = {
 };
 
 const updateDone = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-  next(state: Object, { payload: { name } }: { payload: Object, name: string }) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+  next(state: Object, { payload: { name } }: { payload: Object; name: string }) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data = state.data.slice();
       const newData = updateItemWithName(name, { _updated: null }, data);
 
@@ -49,7 +43,7 @@ const updateDone = {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       error: action.payload,
     });
   },
@@ -62,8 +56,8 @@ const groupAction = {
 };
 
 const selectGroup = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-  next(state: Object = initialState, { payload: { id } }: { payload: Object, id: string }) {
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+  next(state: Object = initialState, { payload: { id } }: { payload: Object; id: string }) {
     return select(state, id);
   },
 };

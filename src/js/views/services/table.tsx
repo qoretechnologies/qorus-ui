@@ -1,44 +1,43 @@
 // @flow
+import size from 'lodash/size';
 import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import { connect } from 'react-redux';
-import size from 'lodash/size';
-
-import actions from '../../store/api/actions';
-import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
-import Row from './row';
-import Pull from '../../components/Pull';
-import Selector from './toolbar/selector';
-import Actions from './toolbar/actions';
-import LoadMore from '../../components/LoadMore';
-import DataOrEmptyTable from '../../components/DataOrEmptyTable';
-import { NameColumnHeader } from '../../components/NameColumn';
-import { SelectColumnHeader } from '../../components/SelectColumn';
-import { IdColumnHeader } from '../../components/IdColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
+import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
+import { IdColumnHeader } from '../../components/IdColumn';
+import LoadMore from '../../components/LoadMore';
+import { NameColumnHeader } from '../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../components/new_table';
+import Pull from '../../components/Pull';
+import { SelectColumnHeader } from '../../components/SelectColumn';
 import SortingDropdown from '../../components/SortingDropdown';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import actions from '../../store/api/actions';
+import Row from './row';
+import Actions from './toolbar/actions';
+import Selector from './toolbar/selector';
 
 type Props = {
-  sortData: Object,
-  onSortChange: Function,
-  collection: Array<Object>,
-  paneId: string | number,
-  openPane: Function,
-  closePane: Function,
-  select: Function,
-  updateDone: Function,
-  canLoadMore: boolean,
-  selected: string,
-  selectedIds: Array<number>,
-  handleLoadMore: Function,
-  handleLoadAll: Function,
-  loadMoreCurrent: number,
-  loadMoreTotal: number,
-  limit: number,
-  sortKeys: Object,
+  sortData: Object;
+  onSortChange: Function;
+  collection: Array<Object>;
+  paneId: string | number;
+  openPane: Function;
+  closePane: Function;
+  select: Function;
+  updateDone: Function;
+  canLoadMore: boolean;
+  selected: string;
+  selectedIds: Array<number>;
+  handleLoadMore: Function;
+  handleLoadAll: Function;
+  loadMoreCurrent: number;
+  loadMoreTotal: number;
+  limit: number;
+  sortKeys: Object;
 };
 
 const ServicesTable: Function = ({
@@ -59,18 +58,11 @@ const ServicesTable: Function = ({
   loadMoreTotal,
   limit,
   sortKeys,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
-  <Table
-    fixed
-    hover
-    condensed
-    striped
-    className="resource-table"
-    key={collection.length}
-  >
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
+  <Table fixed hover condensed striped className="resource-table" key={collection.length}>
     <Thead>
       <FixedRow className="toolbar-row">
         <Th>
@@ -81,11 +73,7 @@ const ServicesTable: Function = ({
               disabled={size(collection) === 0}
             />
             <Actions selectedIds={selectedIds} show={selected !== 'none'} />
-            <SortingDropdown
-              onSortChange={onSortChange}
-              sortData={sortData}
-              sortKeys={sortKeys}
-            />
+            <SortingDropdown onSortChange={onSortChange} sortData={sortData} sortKeys={sortKeys} />
           </Pull>
           <Pull right>
             <LoadMore
@@ -105,25 +93,25 @@ const ServicesTable: Function = ({
         <NameColumnHeader />
         <ActionColumnHeader />
         <Th name="type" icon="info-sign">
-          <FormattedMessage id='table.type' />
+          <FormattedMessage id="table.type" />
         </Th>
         <Th name="threads" icon="multi-select">
-          <FormattedMessage id='table.threads' />
+          <FormattedMessage id="table.threads" />
         </Th>
         <DescriptionColumnHeader />
       </FixedRow>
     </Thead>
     <DataOrEmptyTable condition={size(collection) === 0} cols={7}>
-      {props => (
+      {(props) => (
         <Tbody {...props}>
           {collection.map(
-            // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
             (service: Object, index: number): React.Element<Row> => (
               <Row
                 first={index === 0}
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 key={`service_${service.id}`}
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 isActive={service.id === parseInt(paneId, 10)}
                 openPane={openPane}
                 closePane={closePane}
@@ -140,15 +128,12 @@ const ServicesTable: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
-      updateDone: actions.services.updateDone,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
-      select: actions.services.select,
-    }
-  ),
+  connect(null, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
+    updateDone: actions.services.updateDone,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
+    select: actions.services.select,
+  }),
   pure(['collection', 'sortData', 'paneId']),
   injectIntl
 )(ServicesTable);

@@ -1,16 +1,11 @@
 const remoteChanged = {
-  next (
-    state: Object,
-    {
-      payload: { events },
-    }
-  ) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+  next(state: Object, { payload: { events } }) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
-    events.forEach(event => {
+    events.forEach((event) => {
       const remote = data.remote.find(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         (rm: Object): boolean => rm.name === event.name
       );
 

@@ -1,8 +1,8 @@
 const clearCache = {
   next(state: Object = {}, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let data = Object.assign({}, state.data);
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     const { datasource, name } = action.payload;
 
     if (name) {
@@ -20,6 +20,4 @@ const clearCache = {
   },
 };
 
-export {
-  clearCache as CLEARCACHE,
-};
+export { clearCache as CLEARCACHE };

@@ -29,7 +29,7 @@ const MapperInput: FC<IMapperInputProps> = ({
   type,
   path,
   hasAvailableOutput,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isWholeInput' does not exist on type 'Pr... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'isWholeInput' does not exist on type 'Pr... Remove this comment to see the full error message
   isWholeInput,
 }) => {
   return (
@@ -44,12 +44,7 @@ const MapperInput: FC<IMapperInputProps> = ({
     >
       <h4 style={{ fontSize: isWholeInput ? '16px' : '14px' }}>{name}</h4>
       {!isWholeInput && (
-        <p
-          className={`${types
-            .join(' ')
-            .replace(/</g, '')
-            .replace(/>/g, '')} type`}
-        >
+        <p className={`${types.join(' ').replace(/</g, '').replace(/>/g, '')} type`}>
           {`${types.includes('nothing') ? '*' : ''}${type.base_type}`}
         </p>
       )}

@@ -8,11 +8,11 @@ const initialState: Object = {
 
 const create: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data: Array<Object> = state.data.slice();
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       const { username, name, pass, roles } = action.payload;
 
       data.push({
@@ -33,13 +33,13 @@ const create: Object = {
 
 const removeRole: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data: Array<Object> = state.data.slice();
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-      remove(data, user => user.username === action.payload.username);
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      remove(data, (user) => user.username === action.payload.username);
 
       return Object.assign({}, state, { data });
     }
@@ -53,14 +53,14 @@ const removeRole: Object = {
 
 const update: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       const { username, name, roles } = action.payload;
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data: Array<Object> = state.data.slice();
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message
-      const match: Object = data.find(user => user.username === username);
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message
+      const match: Object = data.find((user) => user.username === username);
 
       Object.assign(match, {
         name,
@@ -86,9 +86,4 @@ const unSyncUsers: Object = {
   },
 };
 
-export {
-  create as CREATE,
-  removeRole as REMOVE,
-  update as UPDATE,
-  unSyncUsers as UNSYNCUSERS,
-};
+export { create as CREATE, removeRole as REMOVE, update as UPDATE, unSyncUsers as UNSYNCUSERS };

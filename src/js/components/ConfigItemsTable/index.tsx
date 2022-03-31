@@ -6,10 +6,7 @@ import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withState from 'recompose/withState';
-import {
-  Control as Button, Controls as ButtonGroup
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import modal from '../../hocomponents/modal';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
@@ -17,14 +14,12 @@ import ExpandableItem from '../ExpandableItem';
 import NoDataIf from '../NoDataIf';
 import Table from './table';
 
-
-
 type ConfigItemsContainerProps = {
-  items: Object,
-  dispatchAction: Function,
-  intrf: string,
-  openModal: Function,
-  stepId?: number,
+  items: Object;
+  dispatchAction: Function;
+  intrf: string;
+  openModal: Function;
+  stepId?: number;
 };
 
 const intrfToLevelType = {
@@ -91,16 +86,16 @@ const ConfigItemsContainer: Function = ({
   items,
   dispatchAction,
   intrf,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'showDescription' does not exist on type ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'showDescription' does not exist on type ... Remove this comment to see the full error message
   showDescription,
   openModal,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'closeModal' does not exist on type 'Conf... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'closeModal' does not exist on type 'Conf... Remove this comment to see the full error message
   closeModal,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intrfId' does not exist on type 'ConfigI... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intrfId' does not exist on type 'ConfigI... Remove this comment to see the full error message
   intrfId,
   stepId,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: ConfigItemsContainerProps): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+ConfigItemsContainerProps): React.Element<any> => {
   const saveValue = (item, newValue, onSuccess, newStepId?) => {
     dispatchAction(
       actions[intrf].updateConfigItem,
@@ -117,7 +112,7 @@ const ConfigItemsContainer: Function = ({
       {() => (
         <React.Fragment>
           {map(items, (configItems: Array<Object>, belongsTo: string) => (
-            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ configItems: Object[]; belongsTo: string; ... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2739) FIXME: Type '{ configItems: Object[]; belongsTo: string; ... Remove this comment to see the full error message
             <ExpandableConfigWrapper
               configItems={configItems}
               belongsTo={belongsTo}

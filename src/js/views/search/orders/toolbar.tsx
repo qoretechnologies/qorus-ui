@@ -1,63 +1,51 @@
 // @flow
-import React, { Component } from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
+import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-import { ControlGroup, InputGroup } from '@blueprintjs/core';
-
+import React, { Component } from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import Datepicker from '../../../components/datepicker';
-import Dropdown, { Item, Control } from '../../../components/dropdown';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
+import Pull from '../../../components/Pull';
+import { DATE_FORMATS } from '../../../constants/dates';
 import { ORDER_STATES } from '../../../constants/orders';
 import { formatDate } from '../../../helpers/date';
-import { DATE_FORMATS } from '../../../constants/dates';
 import HistoryModal from '../modals/history';
-import Pull from '../../../components/Pull';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
 
 type Props = {
-  mindateQuery: string,
-  changeMindateQuery: Function,
-  maxdateQuery: string,
-  changeMaxdateQuery: Function,
-  filterQuery: string,
-  changeFilterQuery: Function,
-  idsQuery: string,
-  changeIdsQuery: Function,
-  keynameQuery: string,
-  changeKeynameQuery: Function,
-  keyvalueQuery: string,
-  changeKeyvalueQuery: Function,
-  changeAllQuery: Function,
-  allQuery: string,
-  defaultDate: string,
-  saveSearch: Function,
-  username: string,
-  openModal: Function,
-  closeModal: Function,
+  mindateQuery: string;
+  changeMindateQuery: Function;
+  maxdateQuery: string;
+  changeMaxdateQuery: Function;
+  filterQuery: string;
+  changeFilterQuery: Function;
+  idsQuery: string;
+  changeIdsQuery: Function;
+  keynameQuery: string;
+  changeKeynameQuery: Function;
+  keyvalueQuery: string;
+  changeKeyvalueQuery: Function;
+  changeAllQuery: Function;
+  allQuery: string;
+  defaultDate: string;
+  saveSearch: Function;
+  username: string;
+  openModal: Function;
+  closeModal: Function;
 };
 
-@pure([
-  'mindateQuery',
-  'maxdateQuery',
-  'filterQuery',
-  'keyvalueQuery',
-  'keynameQuery',
-  'idsQuery',
-])
+@pure(['mindateQuery', 'maxdateQuery', 'filterQuery', 'keyvalueQuery', 'keynameQuery', 'idsQuery'])
 export default class SearchToolbar extends Component {
   props: Props = this.props;
 
   state: {
-    mindate: string,
-    maxdate: string,
-    filter: string,
-    ids: string,
-    keyname: string,
-    keyvalue: string,
+    mindate: string;
+    maxdate: string;
+    filter: string;
+    ids: string;
+    keyname: string;
+    keyvalue: string;
   } = {
     mindate: this.props.mindateQuery,
     maxdate: this.props.maxdateQuery,
@@ -89,17 +77,11 @@ export default class SearchToolbar extends Component {
   }, 280);
 
   handleHistoryClick: Function = (): void => {
-    this.props.openModal(
-      <HistoryModal type="orderSearch" onClose={this.props.closeModal} />
-    );
+    this.props.openModal(<HistoryModal type="orderSearch" onClose={this.props.closeModal} />);
   };
 
   handleSaveClick: Function = (): void => {
-    this.props.saveSearch(
-      'orderSearch',
-      this.props.allQuery,
-      this.props.username
-    );
+    this.props.saveSearch('orderSearch', this.props.allQuery, this.props.username);
   };
 
   handleClearClick: Function = (): void => {
@@ -127,17 +109,17 @@ export default class SearchToolbar extends Component {
     this.setState({ filter: value[0] === 'All' ? '' : value.join(',') });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleIdsChange: Function = (event: EventHandler): void => {
     this.setState({ ids: event.target.value });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleKeynameChange: Function = (event: EventHandler): void => {
     this.setState({ keyname: event.target.value });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleKeyvalueChange: Function = (event: EventHandler): void => {
     this.setState({ keyvalue: event.target.value });
   };
@@ -151,7 +133,7 @@ export default class SearchToolbar extends Component {
               <InputGroup
                 type="text"
                 placeholder="Workflow Order ID..."
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
                 onChange={this.handleIdsChange}
                 value={this.state.ids || ''}
                 id="instance-id"
@@ -159,7 +141,7 @@ export default class SearchToolbar extends Component {
               <InputGroup
                 type="text"
                 placeholder="Keyname"
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
                 onChange={this.handleKeynameChange}
                 value={this.state.keyname || ''}
                 id="keyname"
@@ -167,7 +149,7 @@ export default class SearchToolbar extends Component {
               <InputGroup
                 type="text"
                 placeholder="Keyvalue"
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
                 onChange={this.handleKeyvalueChange}
                 value={this.state.keyvalue || ''}
                 id="keyvalue"
@@ -178,7 +160,7 @@ export default class SearchToolbar extends Component {
             <Datepicker
               placeholder="Min date..."
               date={this.state.mindate}
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               onApplyDate={this.handleMinDateChange}
               applyOnBlur
               id="mindate"
@@ -188,7 +170,7 @@ export default class SearchToolbar extends Component {
             <Datepicker
               placeholder="Max date..."
               date={this.state.maxdate}
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               onApplyDate={this.handleMaxDateChange}
               applyOnBlur
               noButtons
@@ -201,7 +183,7 @@ export default class SearchToolbar extends Component {
               multi
               def="All"
               submitOnBlur
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               onSubmit={this.handleFilterChange}
               selected={
                 !this.state.filter || this.state.filter === ''
@@ -209,23 +191,18 @@ export default class SearchToolbar extends Component {
                   : this.state.filter.split(',')
               }
             >
-              { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
               <Control icon="filter-list" />
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="All" />
               {ORDER_STATES.map((o, k) => (
-                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                 <Item key={k} title={o.title} />
               ))}
             </Dropdown>
           </ButtonGroup>
           <ButtonGroup>
-            <Button
-              text="Clear"
-              icon="cross"
-              onClick={this.handleClearClick}
-              big
-            />
+            <Button text="Clear" icon="cross" onClick={this.handleClearClick} big />
           </ButtonGroup>
         </Pull>
       </div>

@@ -2,18 +2,20 @@
 const fetchReleases: Object = {
   next(
     state: Object,
-    { payload: {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'releases' does not exist on type 'Object... Remove this comment to see the full error message
-      releases,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'fetchMore' does not exist on type 'Objec... Remove this comment to see the full error message
-      fetchMore,
-    } } : {
-      payload: Object,
-      releases: Array<Object>,
-      fetchMore: boolean,
+    {
+      payload: {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'releases' does not exist on type 'Object... Remove this comment to see the full error message
+        releases,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'fetchMore' does not exist on type 'Objec... Remove this comment to see the full error message
+        fetchMore,
+      },
+    }: {
+      payload: Object;
+      releases: Array<Object>;
+      fetchMore: boolean;
     }
   ): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = fetchMore ? [...data, ...releases] : releases;
 
@@ -22,9 +24,9 @@ const fetchReleases: Object = {
 };
 
 const changeOffset: Object = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: Object, { payload: { newOffset } }: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Object'.
     const offset = newOffset || newOffset === 0 ? newOffset : state.offset + 50;
 
     return { ...state, ...{ offset } };
@@ -32,14 +34,14 @@ const changeOffset: Object = {
 };
 
 const changeSort: Object = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: Object, { payload: { newSort } }: Object): Object {
     return { ...state, ...{ sort: newSort } };
   },
 };
 
 const changeSortDir: Object = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: Object, { payload: { newSortDir } }: Object): Object {
     return { ...state, ...{ sortDir: newSortDir } };
   },

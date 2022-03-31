@@ -9,14 +9,7 @@ import AlertsTable from '../../../components/alerts_table';
 import Box from '../../../components/box';
 import ContentByType from '../../../components/ContentByType';
 import NameColumn from '../../../components/NameColumn';
-import {
-  EditableCell,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Tr,
-} from '../../../components/new_table';
+import { EditableCell, Table, Tbody, Td, Th, Tr } from '../../../components/new_table';
 import NoData from '../../../components/nodata';
 import Pane from '../../../components/pane';
 import PaneItem from '../../../components/pane_item';
@@ -34,17 +27,14 @@ import Options from './options';
 const remoteSelector = (state, props) =>
   state.api.remotes.data.find((a) => a.name === props.paneId);
 
-const viewSelector = createSelector(
-  [remoteSelector, attrsSelector],
-  (remote, attrs) => ({
-    remote,
-    attrs: attrs.attrs,
-    editable: attrs.editable,
-  })
-);
+const viewSelector = createSelector([remoteSelector, attrsSelector], (remote, attrs) => ({
+  remote,
+  attrs: attrs.attrs,
+  editable: attrs.editable,
+}));
 
 @connect(viewSelector)
-// @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+// @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
 @showIfPassed(({ remote }) => remote)
 @withDispatch()
 @mapProps(({ remote, ...rest }) => ({
@@ -53,27 +43,27 @@ const viewSelector = createSelector(
 }))
 export default class ConnectionsPane extends Component {
   props: {
-    remote: Object,
-    onClose: Function,
-    attrs: Array<string>,
-    editable: Array<string>,
-    type: string,
-    width: number,
-    onResize: Function,
-    optimisticDispatch: Function,
-    dispatchAction: Function,
-    remoteType: string,
-    canEdit: boolean,
-    paneId: string,
+    remote: Object;
+    onClose: Function;
+    attrs: Array<string>;
+    editable: Array<string>;
+    type: string;
+    width: number;
+    onResize: Function;
+    optimisticDispatch: Function;
+    dispatchAction: Function;
+    remoteType: string;
+    canEdit: boolean;
+    paneId: string;
   } = this.props;
 
-  // @ts-expect-error ts-migrate(2741) FIXME: Property 'isPassLoaded' is missing in type '{ erro... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2741) FIXME: Property 'isPassLoaded' is missing in type '{ erro... Remove this comment to see the full error message
   state: {
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    error: ?string,
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    options: ?string,
-    isPassLoaded: boolean,
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    error: string;
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    options: string;
+    isPassLoaded: boolean;
   } = {
     error: null,
     options: null,
@@ -82,25 +72,25 @@ export default class ConnectionsPane extends Component {
   componentDidMount() {
     if (!settings.IS_HTTP) {
       this.props.dispatchAction(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
         actions.remotes.fetchPass,
         this.props.remoteType,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         this.props.remote.name
       );
     }
   }
 
   componentWillReceiveProps(nextProps: Object) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
     if (this.props.paneId !== nextProps.paneId && !settings.IS_HTTP) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
       nextProps.dispatchAction(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
         actions.remotes.fetchPass,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'remoteType' does not exist on type 'Obje... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'remoteType' does not exist on type 'Obje... Remove this comment to see the full error message
         nextProps.remoteType,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
         nextProps.remote.name
       );
     }
@@ -123,8 +113,7 @@ export default class ConnectionsPane extends Component {
   handleEditSave: Function = (attr: string) => (value: any) => {
     const { dispatchAction, remoteType } = this.props;
     const optsKey = 'opts';
-    const val =
-      (value === '' || value === '{}') && attr === 'opts' ? null : value;
+    const val = (value === '' || value === '{}') && attr === 'opts' ? null : value;
 
     const data = { ...this.props.remote, ...{ [attr]: val } };
 
@@ -153,11 +142,11 @@ export default class ConnectionsPane extends Component {
         });
       } else if (dispatchAction) {
         dispatchAction(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
           actions.remotes.manageConnection,
           remoteType,
           data,
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           this.props.remote.name,
           null
         );
@@ -166,14 +155,14 @@ export default class ConnectionsPane extends Component {
   };
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'deps' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'deps' does not exist on type 'Object'.
     const { deps, alerts, locked, url_hash } = this.props.remote;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'paneTab' does not exist on type '{ remot... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'paneTab' does not exist on type '{ remot... Remove this comment to see the full error message
     const { paneTab, paneId, remoteType, dispatchAction } = this.props;
     const { isPassLoaded } = this.state;
 
     const canEdit = !locked && this.props.canEdit;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'canDelete' does not exist on type '{ rem... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'canDelete' does not exist on type '{ rem... Remove this comment to see the full error message
     const canDelete = this.props.canDelete;
 
     return (
@@ -181,7 +170,7 @@ export default class ConnectionsPane extends Component {
         width={this.props.width || 400}
         onClose={this.props.onClose}
         onResize={this.props.onResize}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         title={`${this.props.remote.name} detail`}
         tabs={{
           tabs: remoteType === 'datasources' ? ['Detail', 'Log'] : ['Detail'],
@@ -204,9 +193,7 @@ export default class ConnectionsPane extends Component {
                   />
                 }
               >
-                {this.state.error && (
-                  <Alert bsStyle="danger">{this.state.error}</Alert>
-                )}
+                {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
                 {settings.IS_HTTP && (
                   <Alert bsStyle="warning" title="Insecure connection">
                     Passwords are not displayed
@@ -215,49 +202,49 @@ export default class ConnectionsPane extends Component {
                 <Table condensed clean className="text-table">
                   <Tbody>
                     {this.getData().map(
-                      // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                      // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                       (val: Object, key: number): React.Element<any> => (
                         <Tr key={key}>
                           <Th className="name">
                             {upperFirst(
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
                               attrsMapper(val.attr).replace(/_/g, ' ')
                             )}
                           </Th>
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'editable' does not exist on type 'Object... Remove this comment to see the full error message */ }
+                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'editable' does not exist on type 'Object... Remove this comment to see the full error message */}
                           {val.editable &&
                           canEdit &&
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
+                          // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
                           val.attr !== 'options' &&
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
+                          // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
                           val.attr !== 'opts' ? (
-                            // @ts-expect-error ts-migrate(2739) FIXME: Type '{ noMarkdown: boolean; className: string; va... Remove this comment to see the full error message
+                            // @ts-ignore ts-migrate(2739) FIXME: Type '{ noMarkdown: boolean; className: string; va... Remove this comment to see the full error message
                             <EditableCell
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
                               noMarkdown={val.attr === 'url'}
                               className="text"
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
                               value={val.value}
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
                               onSave={this.handleEditSave(val.attr)}
                             />
                           ) : (
                             <Td className="text">
-                              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'. */ }
+                              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'. */}
                               {val.attr === 'options' || val.attr === 'opts' ? (
                                 <Options
                                   urlProtocol={url_hash?.protocol}
-                                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
                                   data={val.value}
-                                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
+                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
                                   onSave={this.handleEditSave(val.attr)}
                                   canEdit={canEdit}
                                 />
                               ) : (
                                 <ContentByType
-                                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
                                   content={val.value}
-                                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
+                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
                                   noMarkdown={val.attr === 'url'}
                                 />
                               )}
@@ -275,15 +262,15 @@ export default class ConnectionsPane extends Component {
                   <Table striped condensed>
                     <Tbody>
                       {deps.map(
-                        // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                        // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                         (dep: Object, index: number): React.Element<any> => (
                           <Tr key={index}>
                             <NameColumn
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                               name={dep.name}
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
                               link={getDependencyObjectLink(dep.type, dep)}
-                              // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
                               type={lowerCase(dep.type)}
                             />
                           </Tr>

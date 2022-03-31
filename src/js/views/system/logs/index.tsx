@@ -1,26 +1,25 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
-
-import LogContainer from '../../../containers/log';
-import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
+import lifecycle from 'recompose/lifecycle';
 import Box from '../../../components/box';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
+import ExpandableItem from '../../../components/ExpandableItem';
+import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
+import Loader from '../../../components/loader';
+import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
+import DefaultLogger from '../../../containers/DefaultLogger';
+import LogContainer from '../../../containers/log';
+import showIfPassed from '../../../hocomponents/show-if-passed';
 import titleManager from '../../../hocomponents/TitleManager';
 import withTabs from '../../../hocomponents/withTabs';
-import Flex from '../../../components/Flex';
-import lifecycle from 'recompose/lifecycle';
-import showIfPassed from '../../../hocomponents/show-if-passed';
 import actions from '../../../store/api/actions';
-import { connect } from 'react-redux';
-import Loader from '../../../components/loader';
-import DefaultLogger from '../../../containers/DefaultLogger';
-import ExpandableItem from '../../../components/ExpandableItem';
 
 type Props = {
-  tabQuery: string,
-  location: Object,
-  logs: Object,
+  tabQuery: string;
+  location: Object;
+  logs: Object;
 };
 
 const Log: Function = ({ tabQuery, logs }: Props) => (
@@ -29,69 +28,41 @@ const Log: Function = ({ tabQuery, logs }: Props) => (
       <Breadcrumbs>
         <Crumb>Logs</Crumb>
         <CrumbTabs
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'.
-          tabs={[...logs.map(log => log.name || log.logger), 'Default Loggers']}
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'.
+          tabs={[...logs.map((log) => log.name || log.logger), 'Default Loggers']}
         />
       </Breadcrumbs>
     </Headbar>
 
     <SimpleTabs activeTab={tabQuery}>
-      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'. */ }
-      {logs.map(log => (
-        <SimpleTab
-          name={log.name ? log.name.toLowerCase() : log.logger.toLowerCase()}
-        >
+      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'. */}
+      {logs.map((log) => (
+        <SimpleTab name={log.name ? log.name.toLowerCase() : log.logger.toLowerCase()}>
           <Box top fill scrollY>
-            <LogContainer
-              resource={log.uri_path}
-              intfc="system"
-              id={log.logger}
-            />
+            <LogContainer resource={log.uri_path} intfc="system" id={log.logger} />
           </Box>
         </SimpleTab>
       ))}
       <SimpleTab name="default loggers" show>
         <Box top fill scrollY>
           <ExpandableItem title="System default logger">
-            {() => (
-              <DefaultLogger name="Logger data" defaultOnly resource="system" />
-            )}
+            {() => <DefaultLogger name="Logger data" defaultOnly resource="system" />}
           </ExpandableItem>
           <br />
           <ExpandableItem title="Workflows default logger" show>
-            {() => (
-              <DefaultLogger
-                name="Logger data"
-                defaultOnly
-                resource="workflows"
-              />
-            )}
+            {() => <DefaultLogger name="Logger data" defaultOnly resource="workflows" />}
           </ExpandableItem>
           <br />
           <ExpandableItem title="Services default logger" show>
-            {() => (
-              <DefaultLogger
-                name="Logger data"
-                defaultOnly
-                resource="services"
-              />
-            )}
+            {() => <DefaultLogger name="Logger data" defaultOnly resource="services" />}
           </ExpandableItem>
           <br />
           <ExpandableItem title="Jobs default logger" show>
-            {() => (
-              <DefaultLogger name="Logger data" defaultOnly resource="jobs" />
-            )}
+            {() => <DefaultLogger name="Logger data" defaultOnly resource="jobs" />}
           </ExpandableItem>
           <br />
           <ExpandableItem title="Datasources default logger" show>
-            {() => (
-              <DefaultLogger
-                name="Logger data"
-                defaultOnly
-                resource="remotes"
-              />
-            )}
+            {() => <DefaultLogger name="Logger data" defaultOnly resource="remotes" />}
           </ExpandableItem>
         </Box>
       </SimpleTab>
@@ -101,22 +72,22 @@ const Log: Function = ({ tabQuery, logs }: Props) => (
 
 export default compose(
   connect(
-    state => ({
+    (state) => ({
       logs: state.api.system.data.loggerParams.configurable_systems,
       defaultLogger: state.api.system.data.defaultLoggers?.system,
     }),
     {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'system' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'system' does not exist on type '{}'.
       fetchDefaultLogger: actions.system.fetchDefaultLogger,
     }
   ),
   lifecycle({
-    componentWillMount () {
+    componentWillMount() {
       this.props.fetchDefaultLogger('system');
     },
   }),
   showIfPassed(({ defaultLogger }) => defaultLogger, <Loader />),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   withTabs('audit'),
   titleManager('Logs')
 )(Log);

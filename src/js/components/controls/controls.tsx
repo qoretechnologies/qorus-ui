@@ -1,12 +1,12 @@
 /* @flow */
+import { ButtonGroup } from '@blueprintjs/core';
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup } from '@blueprintjs/core';
 
 type Props = {
-  // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  children: Array<React.Element<any>>,
-  marginRight?: number,
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  children: Array<React.Element<any>>;
+  marginRight?: number;
 };
 
 /**
@@ -19,11 +19,11 @@ type Props = {
 const Controls: Function = ({
   children,
   marginRight,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'className' does not exist on type 'Props... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'className' does not exist on type 'Props... Remove this comment to see the full error message
   className,
   ...rest
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <ButtonGroup className={className} style={{ marginRight }} {...rest}>
     {children}
   </ButtonGroup>

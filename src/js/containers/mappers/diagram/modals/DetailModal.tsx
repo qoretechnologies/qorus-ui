@@ -1,15 +1,14 @@
-import React from 'react';
-import Modal from '../../../../components/modal';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import Box from '../../../../components/box';
 import map from 'lodash/map';
-import ContentByType from '../../../../components/ContentByType';
-import PaneItem from '../../../../components/pane_item';
+import React from 'react';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import styled from 'styled-components';
+import Box from '../../../../components/box';
+import ContentByType from '../../../../components/ContentByType';
+import Modal from '../../../../components/modal';
 
 type Props = {
-  detail: Object,
-  onClose: Function,
+  detail: Object;
+  onClose: Function;
 };
 
 const StyledInfoWrapper = styled.div`
@@ -26,7 +25,7 @@ const StyledInfoWrapper = styled.div`
   }
 `;
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'tab' does not exist on type 'Props'.
+// @ts-ignore ts-migrate(2339) FIXME: Property 'tab' does not exist on type 'Props'.
 const DetailModal: Function = ({ detail, onClose, tab }: Props): any => (
   <Modal width={600}>
     <Modal.Header onClose={onClose} titleId="diagram-modal">

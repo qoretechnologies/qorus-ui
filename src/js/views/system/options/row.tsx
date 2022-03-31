@@ -1,53 +1,48 @@
 // @flow
+import { Icon, Intent, Tag } from '@blueprintjs/core';
 import React from 'react';
-import compose from 'recompose/compose';
 import { connect } from 'react-redux';
-import withHandlers from 'recompose/withHandlers';
-import pure from 'recompose/onlyUpdateForKeys';
+import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import { Tag, Icon, Intent } from '@blueprintjs/core';
-
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
-import { Tr, Td } from '../../../components/new_table';
-import actions from '../../../store/api/actions';
-import withModal from '../../../hocomponents/modal';
-import OptionModal from './modal';
-import Text from '../../../components/text';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import NameColumn from '../../../components/NameColumn';
-import { hasPermission } from '../../../helpers/user';
+import { Td, Tr } from '../../../components/new_table';
+import Text from '../../../components/text';
 import { typeToString } from '../../../helpers/system';
+import { hasPermission } from '../../../helpers/user';
+import withModal from '../../../hocomponents/modal';
 import withDispatch from '../../../hocomponents/withDispatch';
+import actions from '../../../store/api/actions';
+import OptionModal from './modal';
 
 type Props = {
-  dispatchAction: Function,
-  handleEditClick: Function,
-  handleOptionSave: Function,
-  name: string,
-  status: string,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  workflow: ?string,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  service: ?string,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  job: ?string,
-  default?: any,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  def: ?any,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  value: ?any,
-  openModal: Function,
-  closeModal: Function,
-  permissions: Array<string>,
-  canEdit: boolean,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  stringDef: ?any,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  stringVal: ?any,
-  first: boolean,
+  dispatchAction: Function;
+  handleEditClick: Function;
+  handleOptionSave: Function;
+  name: string;
+  status: string;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  workflow: string;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  service: string;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  job: string;
+  default?: any;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  def: any;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  value: any;
+  openModal: Function;
+  closeModal: Function;
+  permissions: Array<string>;
+  canEdit: boolean;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  stringDef: any;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  stringVal: any;
+  first: boolean;
 };
 
 const OptionRow: Function = ({
@@ -61,8 +56,8 @@ const OptionRow: Function = ({
   handleEditClick,
   canEdit,
   first,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Tr first={first}>
     <Td className="narrow">
       {status === 'locked' && (
@@ -120,7 +115,7 @@ const OptionRow: Function = ({
 export default compose(
   connect(
     (state: Object): Object => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       permissions: state.api.currentUser.data.permissions,
     })
   ),
@@ -129,8 +124,7 @@ export default compose(
     ({ permissions, status, default: def, value, ...rest }: Props): Props => ({
       stringDef: typeToString(def),
       stringVal: typeToString(value),
-      canEdit:
-        status === 'unlocked' && hasPermission(permissions, 'OPTION-CONTROL'),
+      canEdit: status === 'unlocked' && hasPermission(permissions, 'OPTION-CONTROL'),
       def,
       value,
       status,
@@ -140,30 +134,19 @@ export default compose(
   ),
   withModal(),
   withHandlers({
-    handleOptionSave: ({
-      dispatchAction,
-      closeModal,
-      name,
-    }: Props): Function => (model: Object, value: any): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'systemOptions' does not exist on type '{... Remove this comment to see the full error message
-      dispatchAction(actions.systemOptions.setOption, name, value, closeModal);
-    },
+    handleOptionSave:
+      ({ dispatchAction, closeModal, name }: Props): Function =>
+      (model: Object, value: any): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'systemOptions' does not exist on type '{... Remove this comment to see the full error message
+        dispatchAction(actions.systemOptions.setOption, name, value, closeModal);
+      },
   }),
   withHandlers({
-    handleEditClick: ({
-      openModal,
-      closeModal,
-      handleOptionSave,
-      ...rest
-    }: Props): Function => (): void => {
-      openModal(
-        <OptionModal
-          onClose={closeModal}
-          onSave={handleOptionSave}
-          model={rest}
-        />
-      );
-    },
+    handleEditClick:
+      ({ openModal, closeModal, handleOptionSave, ...rest }: Props): Function =>
+      (): void => {
+        openModal(<OptionModal onClose={closeModal} onSave={handleOptionSave} model={rest} />);
+      },
   }),
   pure(['value'])
 )(OptionRow);

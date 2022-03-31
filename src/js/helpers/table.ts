@@ -1,6 +1,6 @@
-import { ORDER_STATES } from '../constants/orders';
-import firstBy from 'thenby';
 import moment from 'moment';
+import firstBy from 'thenby';
+import { ORDER_STATES } from '../constants/orders';
 
 const CSVheaders = {
   workflows: {
@@ -103,14 +103,14 @@ const CSVheaders = {
   },
 };
 
-Object.keys(ORDER_STATES).forEach(key => {
+Object.keys(ORDER_STATES).forEach((key) => {
   CSVheaders.workflows[ORDER_STATES[key].name] = ORDER_STATES[key].short;
 });
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'total' does not exist on type '{ exec_co... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2339) FIXME: Property 'total' does not exist on type '{ exec_co... Remove this comment to see the full error message
 CSVheaders.workflows.total = 'Total';
 
-const getCSVHeaders = view => CSVheaders[view];
+const getCSVHeaders = (view) => CSVheaders[view];
 
 /**
  * Generates the CSV string from the collection
@@ -192,26 +192,24 @@ const sortFunc = (sort, v1, v2) => {
 
 const sortTable = (data, sort) => {
   const direction = sort.sortByKey ? sort.sortByKey.direction : 1;
-  const historyDirection = sort.historySortByKey
-    ? sort.historySortByKey.direction
-    : 1;
+  const historyDirection = sort.historySortByKey ? sort.historySortByKey.direction : 1;
 
   if (sort.historySortBy) {
-    return data
-      .slice()
-      .sort(
-        // @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
-        firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction).thenBy(
-          (v1, v2) => sortFunc(sort.historySortBy, v1, v2),
-          historyDirection
-        )
-      );
+    return data.slice().sort(
+      // @ts-ignore ts-migrate(2349) FIXME: This expression is not callable.
+      firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction).thenBy(
+        (v1, v2) => sortFunc(sort.historySortBy, v1, v2),
+        historyDirection
+      )
+    );
   }
 
-  return data
-    .slice()
-    // @ts-expect-error ts-migrate(2349) FIXME: This expression is not callable.
-    .sort(firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction));
+  return (
+    data
+      .slice()
+      // @ts-ignore ts-migrate(2349) FIXME: This expression is not callable.
+      .sort(firstBy((v1, v2) => sortFunc(sort.sortBy, v1, v2), direction))
+  );
 };
 
 export { getCSVHeaders, generateCSV, sortTable, buildSorting };

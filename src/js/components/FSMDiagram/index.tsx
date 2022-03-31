@@ -1,18 +1,14 @@
-import React, {
-  useEffect, useRef, useState
-} from 'react';
-
 import forEach from 'lodash/forEach';
 import map from 'lodash/map';
 import maxBy from 'lodash/maxBy';
 import reduce from 'lodash/reduce';
+import React, { useEffect, useRef, useState } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
 import styled from 'styled-components';
-
 import TinyGrid from '../../../img/tiny_grid.png';
 import modal from '../../hocomponents/modal';
 import actions from '../../store/api/actions';
@@ -36,16 +32,11 @@ export const isStateIsolated = (
     if (isIsolated) {
       if (
         stateData.transitions &&
-        stateData.transitions.find(
-          (transition: IFSMTransition) => transition.state === stateKey
-        )
+        stateData.transitions.find((transition: IFSMTransition) => transition.state === stateKey)
       ) {
         // If the state already exists in the list, do not check it again
         if (!checkedStates.includes(keyId)) {
-          isIsolated = isStateIsolated(keyId, states, [
-            ...checkedStates,
-            stateKey,
-          ]);
+          isIsolated = isStateIsolated(keyId, states, [...checkedStates, stateKey]);
         }
       }
     }
@@ -70,35 +61,35 @@ export interface IFSMTransition {
   state?: string;
   fsm?: number;
   condition?: {
-    type: string,
+    type: string;
   };
   errors?: string[];
 }
 
-export type TTrigger = { class?: string, connector?: string, method?: string };
+export type TTrigger = { class?: string; connector?: string; method?: string };
 
 export interface IFSMMetadata {
   name: string;
   desc: string;
   target_dir: string;
   fsm_options?: {
-    'action-strategy': 'one' | 'all',
-    'max-thread-count': number,
+    'action-strategy': 'one' | 'all';
+    'max-thread-count': number;
   };
 }
 
 export interface IFSMState {
   position?: {
-    x?: number,
-    y?: number,
+    x?: number;
+    y?: number;
   };
   transitions?: IFSMTransition[];
   'error-transitions'?: IFSMTransition[];
   initial?: boolean;
   final?: boolean;
   action?: {
-    type: any,
-    value?: string | { class: string, connector: string, prefix?: string },
+    type: any;
+    value?: string | { class: string; connector: string; prefix?: string };
   };
   'input-type'?: any;
   'output-type'?: any;
@@ -156,21 +147,21 @@ const StyledFSMCircle = styled.circle`
 `;
 
 const FSMView: React.FC<IFSMViewProps> = ({
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'states' does not exist on type 'PropsWit... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'states' does not exist on type 'PropsWit... Remove this comment to see the full error message
   states,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'openModal' does not exist on type 'Props... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'openModal' does not exist on type 'Props... Remove this comment to see the full error message
   openModal,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'closeModal' does not exist on type 'Prop... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'closeModal' does not exist on type 'Prop... Remove this comment to see the full error message
   closeModal,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'PropsWithC... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'PropsWithC... Remove this comment to see the full error message
   intl,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'fsm' does not exist on type 'PropsWithCh... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'fsm' does not exist on type 'PropsWithCh... Remove this comment to see the full error message
   fsm,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'fsmName' does not exist on type 'PropsWi... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'fsmName' does not exist on type 'PropsWi... Remove this comment to see the full error message
   fsmName,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'load' does not exist on type 'PropsWithC... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'load' does not exist on type 'PropsWithC... Remove this comment to see the full error message
   load,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'statesPath' does not exist on type 'Prop... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'statesPath' does not exist on type 'Prop... Remove this comment to see the full error message
   statesPath,
 }) => {
   const wrapperRef = useRef(null);
@@ -218,10 +209,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
     }
   };
 
-  const getTransitionByState = (
-    stateId: string,
-    targetId: string
-  ): IFSMTransition | null => {
+  const getTransitionByState = (stateId: string, targetId: string): IFSMTransition | null => {
     const { transitions } = fsm.states[stateId];
 
     return transitions?.find((transition) => transition.state === targetId);
@@ -300,10 +288,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
       }
       case 'left': {
         return {
-          x2:
-            x2 +
-            getXDiff(targetStateType) * 2 +
-            (targetStateType === 'if' ? 16 : 0),
+          x2: x2 + getXDiff(targetStateType) * 2 + (targetStateType === 'if' ? 16 : 0),
           y2: y2 + getYDiff(targetStateType),
         };
       }
@@ -316,10 +301,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
       case 'top': {
         return {
           x2: x2 + getXDiff(targetStateType),
-          y2:
-            y2 +
-            getYDiff(targetStateType) * 2 +
-            (targetStateType === 'if' ? 16 : 0),
+          y2: y2 + getYDiff(targetStateType) * 2 + (targetStateType === 'if' ? 16 : 0),
         };
       }
       default: {
@@ -356,7 +338,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
   };
 
   const getStateType = (state: IFSMState) => {
-    // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
     if (state.type === 'block') {
       return 'block';
     }
@@ -365,7 +347,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
       return 'fsm';
     }
 
-    // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
     if (state.type === 'if') {
       return 'if';
     }
@@ -379,7 +361,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
         <FSMDiagramWrapper
           wrapperDimensions={wrapperDimensions}
           isHoldingShiftKey
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; wrapperDimensions: { wi... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; wrapperDimensions: { wi... Remove this comment to see the full error message
           items={map(fsm.states, (state) => ({
             x: state.position.x,
             y: state.position.y,
@@ -413,20 +395,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
             ))}
             <svg height="100%" width="100%" style={{ position: 'absolute' }}>
               {transitions.map(
-                (
-                  {
-                    x1,
-                    x2,
-                    y1,
-                    y2,
-                    state,
-                    targetState,
-                    isError,
-                    transitionIndex,
-                    branch,
-                  },
-                  index
-                ) =>
+                ({ x1, x2, y1, y2, state, targetState, isError, transitionIndex, branch }, index) =>
                   isTransitionToSelf(state, targetState) ? (
                     <StyledFSMCircle
                       cx={x1 + 90}
@@ -445,19 +414,10 @@ const FSMView: React.FC<IFSMViewProps> = ({
                         stroke={getTransitionColor(isError, branch)}
                         strokeWidth={isError ? 2 : 1}
                         strokeDasharray={isError ? '10 2' : undefined}
-                        markerEnd={`url(#arrowhead${getTransitionEndMarker(
-                          isError,
-                          branch
-                        )})`}
+                        markerEnd={`url(#arrowhead${getTransitionEndMarker(isError, branch)})`}
                         x1={x1 + getXDiff(fsm.states[state].type)}
                         y1={y1 + getYDiff(fsm.states[state].type)}
-                        {...getTargetStatePosition(
-                          x1,
-                          y1,
-                          x2,
-                          y2,
-                          fsm.states[targetState].type
-                        )}
+                        {...getTargetStatePosition(x1, y1, x2, y2, fsm.states[targetState].type)}
                       />
                     </>
                   )
@@ -471,17 +431,17 @@ const FSMView: React.FC<IFSMViewProps> = ({
 };
 
 const fsmSelector: Function = (state: Object, props: Object): Object =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.fsms.data.find((fsm: Object) => fsm.name === props.fsmName);
 
-// @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+// @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
 const selector = createSelector([fsmSelector], (fsm) => ({
   fsm,
 }));
 
 export default compose(
   connect(selector, {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'fsms' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'fsms' does not exist on type '{}'.
     load: actions.fsms.fetch,
   }),
   mapProps(({ states, fsmId, fsm, ...rest }) => ({

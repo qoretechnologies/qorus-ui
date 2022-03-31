@@ -1,53 +1,47 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import isNull from 'lodash/isNull';
 import map from 'lodash/map';
 import size from 'lodash/size';
-import isNull from 'lodash/isNull';
-
-import actions from '../../store/api/actions';
-import withDispatch from '../../hocomponents/withDispatch';
-import ExpandableItem from '../ExpandableItem';
-
-import NoDataIf from '../NoDataIf';
+import React from 'react';
+import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import modal from '../../hocomponents/modal';
-import Table from './table';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
+import withDispatch from '../../hocomponents/withDispatch';
+import actions from '../../store/api/actions';
 import AddConfigItemModal from '../ConfigItemsTable/modal';
+import ExpandableItem from '../ExpandableItem';
+import NoDataIf from '../NoDataIf';
+import Table from './table';
 
 type GlobalConfigItemsContainerProps = {
-  items: Object,
-  dispatchAction: Function,
-  intrf: string,
-  openModal: Function,
-  globalItems: Object,
+  items: Object;
+  dispatchAction: Function;
+  intrf: string;
+  openModal: Function;
+  globalItems: Object;
 };
 
 const WorkflowConfigItemsContainer: Function = ({
   items,
   dispatchAction,
   intrf,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'showDescription' does not exist on type ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'showDescription' does not exist on type ... Remove this comment to see the full error message
   showDescription,
   openModal,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'closeModal' does not exist on type 'Glob... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'closeModal' does not exist on type 'Glob... Remove this comment to see the full error message
   closeModal,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intrfId' does not exist on type 'GlobalC... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intrfId' does not exist on type 'GlobalC... Remove this comment to see the full error message
   intrfId,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'globalConfig' does not exist on type 'Gl... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'globalConfig' does not exist on type 'Gl... Remove this comment to see the full error message
   globalConfig,
   globalItems,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: GlobalConfigItemsContainerProps): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+GlobalConfigItemsContainerProps): React.Element<any> => {
   const saveValue = (item, newValue, onSuccess, stepId?) => {
     dispatchAction(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
       actions.workflows.updateConfigItem,
       intrfId,
       stepId,
@@ -63,7 +57,7 @@ const WorkflowConfigItemsContainer: Function = ({
         <React.Fragment>
           {map(items, (configItems: Array<Object>, belongsTo: string) => (
             <ExpandableItem
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object[]'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object[]'.
               title={`${belongsTo} (${size(configItems.data)})`}
               key={belongsTo}
               label={
@@ -78,7 +72,7 @@ const WorkflowConfigItemsContainer: Function = ({
                         <AddConfigItemModal
                           onClose={closeModal}
                           onSubmit={saveValue}
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                           globalConfig={globalItems}
                           isGlobal
                         />
@@ -87,7 +81,7 @@ const WorkflowConfigItemsContainer: Function = ({
                   />
                 </ButtonGroup>
               }
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object[]'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object[]'.
               show={size(configItems.data) !== 0}
             >
               {() => (
@@ -114,11 +108,9 @@ export default compose(
   withDispatch(),
   mapProps(({ globalConfig, globalItems, ...rest }) => ({
     globalConfig: globalItems.filter(
-      configItem => !isNull(configItem.value) || configItem.is_set
+      (configItem) => !isNull(configItem.value) || configItem.is_set
     ),
-    globalItems: globalItems.filter(
-      configItem => isNull(configItem.value) && !configItem.is_set
-    ),
+    globalItems: globalItems.filter((configItem) => isNull(configItem.value) && !configItem.is_set),
     ...rest,
   })),
   mapProps(({ globalConfig, ...rest }) => ({

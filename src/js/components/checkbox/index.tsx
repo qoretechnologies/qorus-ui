@@ -1,18 +1,18 @@
 /* @flow */
-import React from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
-import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
 import { Checkbox } from '@blueprintjs/core';
+import React from 'react';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
 
 type Props = {
-  checked: string,
-  checkedState: string,
-  action: Function,
-  handleClick: Function,
-  setChecked: Function,
-  className: string,
-  intent: string,
+  checked: string;
+  checkedState: string;
+  action: Function;
+  handleClick: Function;
+  setChecked: Function;
+  className: string;
+  intent: string;
 };
 
 const CheckboxElement: Function = ({
@@ -20,12 +20,12 @@ const CheckboxElement: Function = ({
   handleClick,
   checked,
   intent,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Checkbox
     indeterminate={checked === 'HALFCHECKED'}
     checked={checked === 'CHECKED'}
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
     onChange={handleClick}
     className="checkbox-wrapper bp3-align-right"
     intent={intent}
@@ -34,14 +34,14 @@ const CheckboxElement: Function = ({
 
 export default compose(
   withHandlers({
-    handleClick: ({ action, setChecked }: Props): Function => (
-      event: Object
-    ): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
-      event.persist();
+    handleClick:
+      ({ action, setChecked }: Props): Function =>
+      (event: Object): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
+        event.persist();
 
-      if (action) action(event);
-    },
+        if (action) action(event);
+      },
   }),
   pure(['checked'])
 )(CheckboxElement);

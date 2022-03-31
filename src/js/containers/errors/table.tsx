@@ -1,34 +1,29 @@
 /* @flow */
 import React from 'react';
 import compose from 'recompose/compose';
-
-import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
-import { NameColumnHeader } from '../../components/NameColumn';
-import ErrorRow from './row';
-import { sortDefaults } from '../../constants/sort';
-import DataOrEmptyTable from '../../components/DataOrEmptyTable';
-import EnhancedTable from '../../components/EnhancedTable';
-import type { EnhancedTableProps } from '../../components/EnhancedTable';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import Pull from '../../components/Pull';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
-import LoadMore from '../../components/LoadMore';
-import Search from '../search';
-import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
+import DataOrEmptyTable from '../../components/DataOrEmptyTable';
+import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
+import type { EnhancedTableProps } from '../../components/EnhancedTable';
+import EnhancedTable from '../../components/EnhancedTable';
+import LoadMore from '../../components/LoadMore';
+import { NameColumnHeader } from '../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../components/new_table';
+import Pull from '../../components/Pull';
+import { sortDefaults } from '../../constants/sort';
+import Search from '../search';
+import ErrorRow from './row';
 
 type Props = {
-  type: string,
-  data: Array<Object>,
-  compact?: boolean,
-  onEditClick: Function,
-  onDeleteClick: Function,
-  onCreateClick: Function,
-  height: string | number,
+  type: string;
+  data: Array<Object>;
+  compact?: boolean;
+  onEditClick: Function;
+  onDeleteClick: Function;
+  onCreateClick: Function;
+  height: string | number;
 };
 
 const ErrorsTable: Function = ({
@@ -39,8 +34,8 @@ const ErrorsTable: Function = ({
   onDeleteClick,
   onCreateClick,
   height,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <EnhancedTable
     collection={data}
     tableId="globalErrors"
@@ -65,12 +60,7 @@ const ErrorsTable: Function = ({
             <Th>
               <Pull>
                 <ButtonGroup>
-                  <Button
-                    text="Add error"
-                    icon="plus"
-                    onClick={onCreateClick}
-                    big
-                  />
+                  <Button text="Add error" icon="plus" onClick={onCreateClick} big />
                 </ButtonGroup>
               </Pull>
               <Pull right>
@@ -83,10 +73,7 @@ const ErrorsTable: Function = ({
                   limit={limit}
                 />
                 {compact && (
-                  <Search
-                    onSearchUpdate={handleSearchChange}
-                    resource={`${type}Errors`}
-                  />
+                  <Search onSearchUpdate={handleSearchChange} resource={`${type}Errors`} />
                 )}
               </Pull>
             </Th>
@@ -118,14 +105,14 @@ const ErrorsTable: Function = ({
           condition={!collection || collection.length === 0}
           cols={type === 'workflow' ? (compact ? 7 : 8) : compact ? 6 : 7}
         >
-          {props => (
+          {(props) => (
             <Tbody {...props}>
               {collection.map(
-                // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                 (error: Object, index: number): React.Element<ErrorRow> => (
                   <ErrorRow
                     first={index === 0}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
                     key={error.error}
                     data={error}
                     compact={compact}

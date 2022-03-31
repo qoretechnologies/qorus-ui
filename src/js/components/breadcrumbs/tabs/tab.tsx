@@ -1,24 +1,24 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
-import classnames from 'classnames';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Icon } from '@blueprintjs/core';
-import mapProps from 'recompose/mapProps';
+import classnames from 'classnames';
+import React from 'react';
 import { Link } from 'react-router';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
 import { buildPageLinkWithQueries } from '../../../helpers/router';
 
 type Props = {
-  title: string,
-  tabId: string,
-  active: boolean,
-  onClick: Function,
-  handleClick: Function,
-  compact: boolean,
-  fontSize: number,
-  local?: boolean,
-  queryIdentifier: string,
+  title: string;
+  tabId: string;
+  active: boolean;
+  onClick: Function;
+  handleClick: Function;
+  compact: boolean;
+  fontSize: number;
+  local?: boolean;
+  queryIdentifier: string;
 };
 
 const TITLE_BASE_SIZE: number = 16;
@@ -32,11 +32,11 @@ const CrumbTab: Function = ({
   local,
   queryIdentifier,
   tabId,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <div
     className={classnames('breadcrumb-tab', { active, compact })}
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
     onClick={handleClick}
     style={{ fontSize }}
   >
@@ -65,14 +65,16 @@ const CrumbTab: Function = ({
 
 export default compose(
   withHandlers({
-    handleClick: ({ tabId, active, onClick, local }): Function => (): any => {
-      if (!active && local && onClick) {
-        onClick(tabId.toLowerCase());
-      }
-    },
+    handleClick:
+      ({ tabId, active, onClick, local }): Function =>
+      (): any => {
+        if (!active && local && onClick) {
+          onClick(tabId.toLowerCase());
+        }
+      },
   }),
   mapProps(
-    // @ts-expect-error ts-migrate(2740) FIXME: Type '{ fontSize: number; title: any; }' is missin... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2740) FIXME: Type '{ fontSize: number; title: any; }' is missin... Remove this comment to see the full error message
     ({ title, ...rest }): Props => ({
       fontSize: TITLE_BASE_SIZE,
       title,

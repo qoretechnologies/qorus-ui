@@ -2,34 +2,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-
-import Pane from '../../../components/pane';
-import InfoTable from '../../../components/info_table';
-import Box from '../../../components/box';
-import { getAlertObjectLink } from '../../../helpers/system';
-import InterfaceTag from '../../../components/InterfaceTag';
-import Toolbar from '../../../components/toolbar';
 import AlertsTable from '../../../components/alerts_table';
+import Box from '../../../components/box';
+import InfoTable from '../../../components/info_table';
+import InterfaceTag from '../../../components/InterfaceTag';
+import Pane from '../../../components/pane';
 import PaneItem from '../../../components/pane_item';
+import Toolbar from '../../../components/toolbar';
+import { getAlertObjectLink } from '../../../helpers/system';
 
 const alertSelector = (state, props) => {
-  return state.api.alerts.data.find(
-    a => a.alertid === parseInt(props.paneId, 10)
-  );
+  return state.api.alerts.data.find((a) => a.alertid === parseInt(props.paneId, 10));
 };
 
-const viewSelector = createSelector(
-  [alertSelector],
-  alert => ({
-    alert,
-  })
-);
+const viewSelector = createSelector([alertSelector], (alert) => ({
+  alert,
+}));
 
 type Props = {
-  alert: Object,
-  onClose: Function,
-  width: number,
-  onResize: Function,
+  alert: Object;
+  onClose: Function;
+  width: number;
+  onResize: Function;
 };
 
 const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
@@ -40,23 +34,18 @@ const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
   }
 
   return (
-    <Pane
-      width={width || 550}
-      onClose={onClose}
-      onResize={onResize}
-      title="Alert detail"
-    >
+    <Pane width={width || 550} onClose={onClose} onResize={onResize} title="Alert detail">
       <Box top fill scrollY>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
         {alert.type !== 'RBAC' && !(alert.type === 'GROUP' && alert.id < 1) && (
           <Toolbar mb>
             <InterfaceTag
               flex="0 1 auto"
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
               type={alert.type}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
               link={getAlertObjectLink(alert.type, alert)}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
               title={alert.name}
             />
           </Toolbar>

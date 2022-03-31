@@ -9,11 +9,11 @@ const initialState: Object = {
 
 const create: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data: Array<Object> = state.data.slice();
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       const { role, desc, perms, groups } = action.payload;
 
       data.push({
@@ -35,13 +35,13 @@ const create: Object = {
 
 const removeRole: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data: Array<Object> = state.data.slice();
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-      remove(data, r => r.role === action.payload.role);
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      remove(data, (r) => r.role === action.payload.role);
 
       return Object.assign({}, state, { data });
     }
@@ -54,19 +54,14 @@ const removeRole: Object = {
 
 const update: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       const { role, desc, perms, groups } = action.payload;
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       let data: Array<Object> = state.data.slice();
 
-      data = updateItemWithId(
-        role,
-        { desc, permissions: perms, groups },
-        data,
-        'role'
-      );
+      data = updateItemWithId(role, { desc, permissions: perms, groups }, data, 'role');
 
       return Object.assign({}, state, { data });
     }
@@ -86,9 +81,4 @@ const unSyncRoles: Object = {
   },
 };
 
-export {
-  create as CREATE,
-  removeRole as REMOVE,
-  update as UPDATE,
-  unSyncRoles as UNSYNCROLES,
-};
+export { create as CREATE, removeRole as REMOVE, update as UPDATE, unSyncRoles as UNSYNCROLES };

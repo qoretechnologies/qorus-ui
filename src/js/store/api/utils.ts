@@ -38,10 +38,7 @@ export function combineResourceActions(...actions) {
 
 export function setUpdatedToNull(collection) {
   return collection.reduce(
-    (newArray, workflow) => [
-      ...newArray,
-      { ...workflow, ...{ _updated: null } },
-    ],
+    (newArray, workflow) => [...newArray, { ...workflow, ...{ _updated: null } }],
     []
   );
 }
@@ -72,9 +69,7 @@ export function prepareApiActions(url, actions) {
 
 export function createResourceActions(res, defaultActions = (id) => id) {
   const resp = res.map((r) => {
-    const actions = _.isFunction(defaultActions)
-      ? defaultActions(r.actions || [])
-      : defaultActions;
+    const actions = _.isFunction(defaultActions) ? defaultActions(r.actions || []) : defaultActions;
 
     return {
       [r.name]: prepareApiActions(r.url, actions),
@@ -109,9 +104,7 @@ export function createApiActions(actions) {
  * @return {*}  headers for request
  */
 function getRestHeaders(yaml) {
-  let headers = yaml
-    ? settings.YAML_REST_HEADERS
-    : settings.DEFAULT_REST_HEADERS;
+  let headers = yaml ? settings.YAML_REST_HEADERS : settings.DEFAULT_REST_HEADERS;
 
   const token = window.localStorage.getItem('token');
 
@@ -128,12 +121,7 @@ function getRestHeaders(yaml) {
  * @param {Object} res
  * @param {string} currentPath
  */
-function checkResponse(
-  res,
-  currentPath,
-  redirectOnError = true,
-  notificationId
-) {
+function checkResponse(res, currentPath, redirectOnError = true, notificationId) {
   const pathname = window.location.pathname;
   if (res.status === 401 && currentPath === pathname) {
     window.localStorage.removeItem('token');
@@ -160,17 +148,10 @@ function checkResponse(
  * @return {Object}
  * @see {@link https://fetch.spec.whatwg.org/|Fetch Standard}
  */
-export async function fetchData(
-  method,
-  url,
-  opts,
-  dontCheck,
-  redirectOnError,
-  yaml
-) {
+export async function fetchData(method, url, opts, dontCheck, redirectOnError, yaml) {
   const currentPath = window.location.pathname;
   const fetchOpts: Object = omit(opts, ['notificationId']);
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'headers' does not exist on type 'Object'... Remove this comment to see the full error message
   const { headers } = fetchOpts;
 
   const res = await fetch(
@@ -182,25 +163,14 @@ export async function fetchData(
   );
 
   if (!dontCheck) {
-    checkResponse(
-      res,
-      currentPath,
-      redirectOnError,
-      opts && opts.notificationId
-    );
+    checkResponse(res, currentPath, redirectOnError, opts && opts.notificationId);
   }
 
   return res;
 }
 
-export async function fetchJson(
-  method,
-  url,
-  opts = {},
-  dontCheck,
-  redirectOnError
-) {
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
+export async function fetchJson(method, url, opts = {}, dontCheck, redirectOnError) {
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
   let jsonRes;
 
@@ -223,59 +193,39 @@ export async function fetchJson(
 }
 
 export async function put(...args): Promise<any> {
-  // @ts-expect-error ts-migrate(2556) FIXME: Expected 5 arguments, but got 1 or more.
+  // @ts-ignore ts-migrate(2556) FIXME: Expected 5 arguments, but got 1 or more.
   return await fetchJson('PUT', ...args);
 }
 
 export async function get(...args): Promise<any> {
-  // @ts-expect-error ts-migrate(2556) FIXME: Expected 5 arguments, but got 1 or more.
+  // @ts-ignore ts-migrate(2556) FIXME: Expected 5 arguments, but got 1 or more.
   return await fetchJson('GET', ...args);
 }
 
 export async function post(...args): Promise<any> {
-  // @ts-expect-error ts-migrate(2556) FIXME: Expected 5 arguments, but got 1 or more.
+  // @ts-ignore ts-migrate(2556) FIXME: Expected 5 arguments, but got 1 or more.
   return await fetchJson('POST', ...args);
 }
 
 export async function del(...args): Promise<any> {
-  // @ts-expect-error ts-migrate(2556) FIXME: Expected 5 arguments, but got 1 or more.
+  // @ts-ignore ts-migrate(2556) FIXME: Expected 5 arguments, but got 1 or more.
   return await fetchJson('DELETE', ...args);
 }
 
-export async function fetchYaml(
-  method,
-  url,
-  opts = {},
-  dontCheck,
-  redirectOnError,
-  yaml
-) {
-  const res = await fetchData(
-    method,
-    url,
-    opts,
-    dontCheck,
-    redirectOnError,
-    yaml
-  );
+export async function fetchYaml(method, url, opts = {}, dontCheck, redirectOnError, yaml) {
+  const res = await fetchData(method, url, opts, dontCheck, redirectOnError, yaml);
 
   return res.text();
 }
 
 export async function fetchText(method, url, opts, dontCheck, redirectOnError) {
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
   return res.text();
 }
 
-export async function fetchResponse(
-  method,
-  url,
-  opts,
-  dontCheck,
-  redirectOnError
-) {
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
+export async function fetchResponse(method, url, opts, dontCheck, redirectOnError) {
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
 
   return res;
@@ -286,7 +236,7 @@ export async function fetchWithNotifications(
   notificationBefore: string,
   notificationSuccess: string,
   dispatch
-// @ts-expect-error ts-migrate(1055) FIXME: Type 'any' is not a valid async function return ty... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'any' is not a valid async function return ty... Remove this comment to see the full error message
 ): any {
   if (fetchFunc) {
     const notificationId = shortid.generate();

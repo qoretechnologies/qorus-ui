@@ -1,6 +1,6 @@
+import { Button, Tooltip } from '@blueprintjs/core';
 import React, { FC } from 'react';
 import { StyledMapperField } from '.';
-import { Button, Tooltip } from '@blueprintjs/core';
 
 export interface IMapperOutputProps {
   onDrop: (inputPath: string, outputPath: string) => any;
@@ -34,7 +34,7 @@ const MapperOutput: FC<IMapperOutputProps> = ({
   isCustom,
   path,
   hasRelation,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 't' does not exist on type 'PropsWithChil... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 't' does not exist on type 'PropsWithChil... Remove this comment to see the full error message
   t,
 }) => {
   return (
@@ -48,12 +48,7 @@ const MapperOutput: FC<IMapperOutputProps> = ({
       }}
     >
       <h4>{name}</h4>
-      <p
-        className={`${type.types_returned
-          .join(' ')
-          .replace(/</g, '')
-          .replace(/>/g, '')} type`}
-      >
+      <p className={`${type.types_returned.join(' ').replace(/</g, '').replace(/>/g, '')} type`}>
         {type.types_returned.join(',')}
       </p>
       <Tooltip content={'ManageMapperFieldOptions'} position="right">

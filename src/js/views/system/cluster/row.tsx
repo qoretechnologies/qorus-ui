@@ -1,46 +1,40 @@
 // @flow
 import React from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-
-import { Tr, Td } from '../../../components/new_table';
-import NameColumn from '../../../components/NameColumn';
-import actions from '../../../store/api/actions';
-import ContentByType from '../../../components/ContentByType';
 import { ActionColumn } from '../../../components/ActionColumn';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
+import ContentByType from '../../../components/ContentByType';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
+import NameColumn from '../../../components/NameColumn';
+import { Td, Tr } from '../../../components/new_table';
+import actions from '../../../store/api/actions';
 
 type Props = {
-  type: string,
-  client_id: string,
-  pid: number,
-  priv_str: string,
-  status_string: string,
-  urls: Array<string>,
-  link?: string,
-  _updated?: boolean,
-  updateDone: Function,
-  node: string,
-  openPane: Function,
-  closePane: Function,
-  id: string,
-  isActive: boolean,
-  handleDetailClick: Function,
-  interfaceType?: string,
-  first?: boolean,
-  handleKillClick: Function,
-  onKillClick: Function,
+  type: string;
+  client_id: string;
+  pid: number;
+  priv_str: string;
+  status_string: string;
+  urls: Array<string>;
+  link?: string;
+  _updated?: boolean;
+  updateDone: Function;
+  node: string;
+  openPane: Function;
+  closePane: Function;
+  id: string;
+  isActive: boolean;
+  handleDetailClick: Function;
+  interfaceType?: string;
+  first?: boolean;
+  handleKillClick: Function;
+  onKillClick: Function;
 };
 
 const typeNames: Object = {
-  'qorus-master':
-    'Qorus node master process controlling process start / stop on each node',
+  'qorus-master': 'Qorus node master process controlling process start / stop on each node',
   'qorus-core':
     'Qorus core process providing global integration services to the application cluster',
   qdsp: 'Qorus distributed datasource pool process',
@@ -64,8 +58,8 @@ const ProcessRow: Function = ({
   interfaceType,
   first,
   handleKillClick,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Tr highlight={_updated} onHighlightEnd={updateDone} first={first}>
     <Td className="big text">{node}</Td>
     <NameColumn
@@ -77,12 +71,7 @@ const ProcessRow: Function = ({
     />
     <ActionColumn>
       <ButtonGroup>
-        <Button
-          icon="cross"
-          btnStyle="danger"
-          title="Kill"
-          onClick={handleKillClick}
-        />
+        <Button icon="cross" btnStyle="danger" title="Kill" onClick={handleKillClick} />
       </ButtonGroup>
     </ActionColumn>
     <Td className="text medium" title={typeNames[type]}>
@@ -98,25 +87,24 @@ const ProcessRow: Function = ({
 
 export default compose(
   withHandlers({
-    handleDetailClick: ({
-      openPane,
-      closePane,
-      isActive,
-      id,
-    }: Props): Function => (): void => {
-      if (isActive) {
-        closePane();
-      } else {
-        openPane(id);
-      }
-    },
-    handleKillClick: ({ id, onKillClick }: Props): Function => (): void => {
-      onKillClick(id);
-    },
+    handleDetailClick:
+      ({ openPane, closePane, isActive, id }: Props): Function =>
+      (): void => {
+        if (isActive) {
+          closePane();
+        } else {
+          openPane(id);
+        }
+      },
+    handleKillClick:
+      ({ id, onKillClick }: Props): Function =>
+      (): void => {
+        onKillClick(id);
+      },
   }),
   connect(
     null,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'system' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'system' does not exist on type '{}'.
     { updateDone: actions.system.updateDone }
   ),
   pure(['priv_str', 'status_string', 'isActive'])

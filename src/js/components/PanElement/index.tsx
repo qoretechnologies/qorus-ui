@@ -1,11 +1,8 @@
+import { Button, ButtonGroup, Tooltip } from '@blueprintjs/core';
 import React from 'react';
-
 import { injectIntl } from 'react-intl';
 import shortid from 'shortid';
 import styled, { css } from 'styled-components';
-
-import { Button, ButtonGroup, Tooltip } from '@blueprintjs/core';
-
 import Minimap from './minimap';
 
 const eventListener = require('eventlistener');
@@ -67,22 +64,22 @@ let timeout;
 @injectIntl
 export class ElementPan extends React.Component<
   {
-    className?: string,
-    onPanStart?: (e?: ElementPanState) => void,
-    onPan?: (coords?: { x: number, y: number }) => void,
-    onPanStop?: (coords?: { x: number, y: number }) => void,
-    enableDragging?: boolean,
-    startX?: number,
-    startY?: number,
-    width?: number,
-    height?: number,
-    refElem?: (el: HTMLDivElement) => void,
+    className?: string;
+    onPanStart?: (e?: ElementPanState) => void;
+    onPan?: (coords?: { x: number; y: number }) => void;
+    onPanStop?: (coords?: { x: number; y: number }) => void;
+    enableDragging?: boolean;
+    startX?: number;
+    startY?: number;
+    width?: number;
+    height?: number;
+    refElem?: (el: HTMLDivElement) => void;
     style?: {
-      [key: string]: any,
-    },
-    zoom: number,
-    items?: { y: number, x: number }[],
-    panElementId?: string,
+      [key: string]: any;
+    };
+    zoom: number;
+    items?: { y: number; x: number }[];
+    panElementId?: string;
   },
   ElementPanState
 > {
@@ -104,7 +101,7 @@ export class ElementPan extends React.Component<
       maxY: 0,
       showMinimap: true,
       showToolbar: true,
-      // @ts-expect-error ts-migrate(2322) FIXME: Type '{ dragging: false; elHeight: number; elWidth... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2322) FIXME: Type '{ dragging: false; elHeight: number; elWidth... Remove this comment to see the full error message
       panElementId: shortid.generate(),
     };
     this.onDragMove = this.onDragMove.bind(this);
@@ -134,15 +131,9 @@ export class ElementPan extends React.Component<
     }
 
     // Find start position of drag based on touch/mouse coordinates
-    var startX =
-      typeof e.clientX === 'undefined'
-        ? e.changedTouches[0].clientX
-        : e.clientX;
+    var startX = typeof e.clientX === 'undefined' ? e.changedTouches[0].clientX : e.clientX;
 
-    var startY =
-      typeof e.clientY === 'undefined'
-        ? e.changedTouches[0].clientY
-        : e.clientY;
+    var startY = typeof e.clientY === 'undefined' ? e.changedTouches[0].clientY : e.clientY;
 
     var state = {
       dragging: true,
@@ -166,7 +157,7 @@ export class ElementPan extends React.Component<
     this.setState(state);
 
     if (this.props.onPanStart) {
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ dragging: boolean; elHeight: n... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2345) FIXME: Argument of type '{ dragging: boolean; elHeight: n... Remove this comment to see the full error message
       this.props.onPanStart(state);
     }
   }
@@ -178,15 +169,9 @@ export class ElementPan extends React.Component<
       return;
     }
 
-    var x =
-      typeof e.clientX === 'undefined'
-        ? e.changedTouches[0].clientX
-        : e.clientX;
+    var x = typeof e.clientX === 'undefined' ? e.changedTouches[0].clientX : e.clientX;
 
-    var y =
-      typeof e.clientY === 'undefined'
-        ? e.changedTouches[0].clientY
-        : e.clientY;
+    var y = typeof e.clientY === 'undefined' ? e.changedTouches[0].clientY : e.clientY;
 
     // Letting the browser automatically stop on scrollHeight
     // gives weird bugs where some extra pixels are showing.
@@ -252,13 +237,13 @@ export class ElementPan extends React.Component<
 
     if (this.props.startX) {
       this.el.scrollLeft = this.props.startX;
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'scrollX' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'scrollX' does not exist on type '{}'.
       state.scrollX = this.el.scrollLeft;
     }
 
     if (this.props.startY) {
       this.el.scrollTop = this.props.startY;
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'scrollY' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'scrollY' does not exist on type '{}'.
       state.scrollY = this.el.scrollTop;
     }
 
@@ -295,9 +280,9 @@ export class ElementPan extends React.Component<
   }
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     const t = (id) => this.props.intl.formatMessage({ id });
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'panElementId' does not exist on type 'Re... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'panElementId' does not exist on type 'Re... Remove this comment to see the full error message
     const { panElementId } = this.state;
 
     return (
@@ -321,9 +306,7 @@ export class ElementPan extends React.Component<
                 <Tooltip content={t('global.toggle-minimap')}>
                   <Button
                     icon="map"
-                    onClick={() =>
-                      this.setState({ showMinimap: !this.state.showMinimap })
-                    }
+                    onClick={() => this.setState({ showMinimap: !this.state.showMinimap })}
                     intent={this.state.showMinimap ? 'primary' : 'none'}
                   />
                 </Tooltip>

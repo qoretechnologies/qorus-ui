@@ -1,41 +1,27 @@
 // @flow
 import React from 'react';
-
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Td,
-  Th,
-  FixedRow,
-} from '../../../components/new_table';
-import { hasPermission } from '../../../helpers/user';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
-import Text from '../../../components/text';
 import ConfirmDialog from '../../../components/confirm_dialog';
-import ExpandableItem from '../../../components/ExpandableItem';
-import Pull from '../../../components/Pull';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
+import type { EnhancedTableProps } from '../../../components/EnhancedTable';
 import LocalTable from '../../../components/EnhancedTable';
+import ExpandableItem from '../../../components/ExpandableItem';
 import LoadMore from '../../../components/LoadMore';
 import { NameColumnHeader } from '../../../components/NameColumn';
-import Search from '../../../containers/search';
-
-import type { EnhancedTableProps } from '../../../components/EnhancedTable';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../../components/new_table';
+import Pull from '../../../components/Pull';
+import Text from '../../../components/text';
 import { sortDefaults } from '../../../constants/sort';
+import Search from '../../../containers/search';
+import { hasPermission } from '../../../helpers/user';
 
 type Props = {
-  data: Array<Object>,
-  title: string,
-  perms: Array<Object>,
-  onDelete: Function,
-  onEdit: Function,
-  openModal: Function,
-  closeModal: Function,
+  data: Array<Object>;
+  title: string;
+  perms: Array<Object>;
+  onDelete: Function;
+  onEdit: Function;
+  openModal: Function;
+  closeModal: Function;
 };
 
 const Property: Function = ({
@@ -46,8 +32,8 @@ const Property: Function = ({
   onEdit,
   openModal,
   closeModal,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => {
   const handlePropDeleteClick = (): void => {
     const confirmFunc = () => {
       onDelete({ domain: title });
@@ -56,31 +42,31 @@ const Property: Function = ({
 
     openModal(
       <ConfirmDialog onClose={closeModal} onConfirm={confirmFunc}>
-        Are you sure you want to delete the property group{' '}
-        <strong>{title}</strong>
+        Are you sure you want to delete the property group <strong>{title}</strong>
       </ConfirmDialog>
     );
   };
 
-  const handleKeyDeleteClick = (key: string): Function => (): void => {
-    const confirmFunc = () => {
-      onDelete({ domain: title, key });
-      closeModal();
+  const handleKeyDeleteClick =
+    (key: string): Function =>
+    (): void => {
+      const confirmFunc = () => {
+        onDelete({ domain: title, key });
+        closeModal();
+      };
+
+      openModal(
+        <ConfirmDialog onClose={closeModal} onConfirm={confirmFunc}>
+          Are you sure you want to delete the property key <strong>{key}</strong>
+        </ConfirmDialog>
+      );
     };
 
-    openModal(
-      <ConfirmDialog onClose={closeModal} onConfirm={confirmFunc}>
-        Are you sure you want to delete the property key <strong>{key}</strong>
-      </ConfirmDialog>
-    );
-  };
-
-  const handleEditClick = (
-    key: string,
-    value: string
-  ): Function => (): void => {
-    onEdit(null, { domain: title, key, value });
-  };
+  const handleEditClick =
+    (key: string, value: string): Function =>
+    (): void => {
+      onEdit(null, { domain: title, key, value });
+    };
 
   const handlePropAddClick = (): void => {
     onEdit(null, { domain: title });
@@ -113,23 +99,10 @@ const Property: Function = ({
                   {title !== 'omq' && (
                     <Pull>
                       <ButtonGroup>
-                        {hasPermission(
-                          perms,
-                          ['SERVER-CONTROL', 'SET-PROPERTY'],
-                          'or'
-                        ) && (
-                          <Button
-                            text="Add property"
-                            icon="add"
-                            onClick={handlePropAddClick}
-                            big
-                          />
+                        {hasPermission(perms, ['SERVER-CONTROL', 'SET-PROPERTY'], 'or') && (
+                          <Button text="Add property" icon="add" onClick={handlePropAddClick} big />
                         )}
-                        {hasPermission(
-                          perms,
-                          ['SERVER-CONTROL', 'DELETE-PROPERTY'],
-                          'or'
-                        ) && (
+                        {hasPermission(perms, ['SERVER-CONTROL', 'DELETE-PROPERTY'], 'or') && (
                           <Button
                             text="Remove group"
                             icon="cross"
@@ -150,10 +123,7 @@ const Property: Function = ({
                       limit={limit}
                       canLoadMore={canLoadMore}
                     />
-                    <Search
-                      resource="properties"
-                      onSearchUpdate={handleSearchChange}
-                    />
+                    <Search resource="properties" onSearchUpdate={handleSearchChange} />
                   </Pull>
                 </Th>
               </FixedRow>
@@ -167,36 +137,28 @@ const Property: Function = ({
             </Thead>
             <Tbody>
               {collection.map((datum: Object, key: number) => (
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                 <Tr key={datum.name} first={key === 0}>
-                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                   <Td className="name">{datum.name}</Td>
                   <Td className="text">
-                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'prop' does not exist on type 'Object'. */ }
+                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'prop' does not exist on type 'Object'. */}
                     <Text text={datum.prop} renderTree caseSensitiveTree />
                   </Td>
                   <Td className="normal">
                     {title !== 'omq' && (
                       <ButtonGroup>
-                        {hasPermission(
-                          perms,
-                          ['SERVER-CONTROL', 'SET-PROPERTY'],
-                          'or'
-                        ) && (
+                        {hasPermission(perms, ['SERVER-CONTROL', 'SET-PROPERTY'], 'or') && (
                           <Button
                             icon="edit"
-                            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                             onClick={handleEditClick(datum.name, datum.prop)}
                           />
                         )}
-                        {hasPermission(
-                          perms,
-                          ['SERVER-CONTROL', 'DELETE-PROPERTY'],
-                          'or'
-                        ) && (
+                        {hasPermission(perms, ['SERVER-CONTROL', 'DELETE-PROPERTY'], 'or') && (
                           <Button
                             icon="cross"
-                            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                             onClick={handleKeyDeleteClick(datum.name)}
                             btnStyle="danger"
                           />

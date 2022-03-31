@@ -1,30 +1,29 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
+import { Icon } from '@blueprintjs/core';
 import classnames from 'classnames';
 import map from 'lodash/map';
-import Scroll from 'react-scrollbar';
-
-import SidebarSection from './section';
-import { Icon } from '@blueprintjs/core';
-import withState from 'recompose/withState';
-import withHandlers from 'recompose/withHandlers';
-import mapProps from 'recompose/mapProps';
-import { transformMenu } from '../../helpers/system';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import React from 'react';
 import { injectIntl } from 'react-intl';
+import Scroll from 'react-scrollbar';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import { transformMenu } from '../../helpers/system';
+import SidebarSection from './section';
 
 type SidebarProps = {
-  isTablet: boolean,
-  isCollapsed: boolean,
-  isLight: boolean,
-  toggleMenu: Function,
-  location: Object,
-  expandedSection: string,
-  handleSectionToggle: Function,
-  menu: Object,
-  favoriteItems: Array<Object>,
-  plugins: Array<string>,
+  isTablet: boolean;
+  isCollapsed: boolean;
+  isLight: boolean;
+  toggleMenu: Function;
+  location: Object;
+  expandedSection: string;
+  handleSectionToggle: Function;
+  menu: Object;
+  favoriteItems: Array<Object>;
+  plugins: Array<string>;
 };
 
 const Sidebar: Function = ({
@@ -37,10 +36,10 @@ const Sidebar: Function = ({
   handleSectionToggle,
   menu,
   favoriteItems,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'SidebarPro... Remove this comment to see the full error message
-  intl
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: SidebarProps): React.Element<any> => (
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'SidebarPro... Remove this comment to see the full error message
+  intl,
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+SidebarProps): React.Element<any> => (
   <div
     className={classnames('sidebar', isLight ? 'light' : 'dark', {
       expanded: !isCollapsed,
@@ -60,13 +59,9 @@ const Sidebar: Function = ({
       ))}
     </Scroll>
     <div className="sidebarSection" id="menuCollapse">
-      { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */ }
+      {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
       <div className="sidebarItem" onClick={toggleMenu}>
-        <Icon
-          icon={
-            isCollapsed ? 'double-chevron-right' : 'double-chevron-left'
-          }
-        />{' '}
+        <Icon icon={isCollapsed ? 'double-chevron-right' : 'double-chevron-left'} />{' '}
         {!isCollapsed && intl.formatMessage({ id: 'global.collapse' })}
       </div>
     </div>
@@ -76,17 +71,17 @@ const Sidebar: Function = ({
 export default compose(
   withState('expandedSection', 'toggleSectionExpand', null),
   withHandlers({
-    handleSectionToggle: ({ toggleSectionExpand }): Function => (
-      sectionId: string
-    ): void => {
-      toggleSectionExpand(currentSectionId => {
-        if (currentSectionId === sectionId) {
-          return null;
-        }
+    handleSectionToggle:
+      ({ toggleSectionExpand }): Function =>
+      (sectionId: string): void => {
+        toggleSectionExpand((currentSectionId) => {
+          if (currentSectionId === sectionId) {
+            return null;
+          }
 
-        return sectionId;
-      });
-    },
+          return sectionId;
+        });
+      },
   }),
   mapProps(({ menu, favoriteItems, plugins, ...rest }) => ({
     menu: transformMenu(menu, favoriteItems, plugins),

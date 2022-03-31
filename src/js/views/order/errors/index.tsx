@@ -1,21 +1,20 @@
+import includes from 'lodash/includes';
 import React from 'react';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import compose from 'recompose/compose';
-import includes from 'lodash/includes';
-
-import ErrorsTable from './table';
-import csv from '../../../hocomponents/csv';
-import withState from 'recompose/withState';
-import withHandlers from 'recompose/withHandlers';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import { createSelector } from 'reselect';
+import csv from '../../../hocomponents/csv';
+import ErrorsTable from './table';
 
 type ErrorsViewProps = {
-  errors: Array<Object>,
-  onCSVClick: Function,
-  compact?: boolean,
-  handleFilterChange: Function,
-  tableId: string,
+  errors: Array<Object>;
+  onCSVClick: Function;
+  compact?: boolean;
+  handleFilterChange: Function;
+  tableId: string;
 };
 
 const ErrorsView: Function = ({
@@ -45,15 +44,13 @@ const transformErrors = (order, filter, stepId) => {
     const copy = e;
     copy.id = index;
     copy.error_type = e.business_error ? 'Business' : 'Other';
-    copy.step_name = order.StepInstances.find(
-      s => s.stepid === e.stepid
-    )?.stepname;
+    copy.step_name = order.StepInstances.find((s) => s.stepid === e.stepid)?.stepname;
 
     return copy;
-  }).filter(d => includes(filter, d.severity) || includes(filter, 'ALL'));
+  }).filter((d) => includes(filter, d.severity) || includes(filter, 'ALL'));
 
   if (stepId) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
     return res.filter((errInst: Object) => errInst.stepid === stepId);
   }
 
@@ -65,25 +62,20 @@ const errorSelector = createSelector(
   (order, filter, stepId) => transformErrors(order, filter, stepId)
 );
 
-const selector = createSelector(
-  [errorSelector, orderSelector],
-  (errors, order) => ({
-    errors,
-    steps: order.StepInstances,
-    order,
-  })
-);
+const selector = createSelector([errorSelector, orderSelector], (errors, order) => ({
+  errors,
+  steps: order.StepInstances,
+  order,
+}));
 
 export default compose(
   withState('errorFilter', 'changeErrorFilter', ['ALL']),
   withHandlers({
-    handleFilterChange: ({
-      changeErrorFilter,
-    }: {
-      changeErrorFilter: Function,
-    }): Function => (name: string): void => {
-      changeErrorFilter(() => name);
-    },
+    handleFilterChange:
+      ({ changeErrorFilter }: { changeErrorFilter: Function }): Function =>
+      (name: string): void => {
+        changeErrorFilter(() => name);
+      },
   }),
   connect(selector),
   csv('errors', 'order_errors'),

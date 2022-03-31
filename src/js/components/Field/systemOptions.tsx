@@ -192,7 +192,7 @@ const Options = ({ name, value, onChange, url, customUrl, ...rest }) => {
       )}
       <Spacer size={10} />
       {size(filteredOptions) >= 1 && (
-        // @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; defaultItems: { name: string... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2740) FIXME: Type '{ name: string; defaultItems: { name: string... Remove this comment to see the full error message
         <SelectField
           name="options"
           defaultItems={Object.keys(filteredOptions).map((option) => ({

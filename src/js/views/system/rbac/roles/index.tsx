@@ -1,44 +1,45 @@
 /* @flow */
-import React, { Component } from 'react';
-import compose from 'recompose/compose';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import flowRight from 'lodash/flowRight';
-
-import sync from '../../../../hocomponents/sync';
-import modal from '../../../../hocomponents/modal';
-import withDispatch from '../../../../hocomponents/withDispatch';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import { createSelector } from 'reselect';
 import ConfirmDialog from '../../../../components/confirm_dialog';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
+import modal from '../../../../hocomponents/modal';
+import sync from '../../../../hocomponents/sync';
+import withDispatch from '../../../../hocomponents/withDispatch';
+import actions from '../../../../store/api/actions';
 import Modal from './modal';
 import Table from './table';
 
-import actions from '../../../../store/api/actions';
-
 const currentUserSelector: Function = (state: Object): Object =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.currentUser;
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+// @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
 const rolesSelector: Function = (state: Object): Object => state.api.roles;
-// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const querySelector: Function = (state: Object, props: Object): ?string =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+const querySelector: Function = (state: Object, props: Object): string =>
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
   props.location.query.search;
-// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const filterData: Function = (query: ?string): Function => (
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  collection: Array<*>
-) => findBy(['role', 'provider', 'desc'], query, collection);
+// @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+const filterData: Function =
+  (query: string): Function =>
+  (
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    collection: Array<*>
+  ) =>
+    findBy(['role', 'provider', 'desc'], query, collection);
 
 const collectionSelector: Function = createSelector(
-  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [rolesSelector, querySelector],
   (collection, query) => flowRight(filterData(query))(collection.data)
 );
 
 const viewSelector: Function = createSelector(
-  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [currentUserSelector, rolesSelector, querySelector, collectionSelector],
   (currentUser, roles, query, collection) => ({
     user: currentUser.data,
@@ -49,25 +50,22 @@ const viewSelector: Function = createSelector(
 );
 
 @compose(
-  connect(
-    viewSelector,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'roles' does not exist on type '{}'.
-      loadRoles: actions.roles.fetch,
-    }
-  ),
+  connect(viewSelector, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'roles' does not exist on type '{}'.
+    loadRoles: actions.roles.fetch,
+  }),
   withDispatch(),
   modal(),
   sync('roles', true, 'loadRoles')
 )
 export default class RBACRoles extends Component {
   props: {
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    rolesModel: Array<*>,
-    openModal: Function,
-    closeModal: Function,
-    optimisticDispatch: Function,
-    user: Object,
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    rolesModel: Array<*>;
+    openModal: Function;
+    closeModal: Function;
+    optimisticDispatch: Function;
+    user: Object;
   } = this.props;
 
   handleAddRoleClick: Function = (): void => {
@@ -114,10 +112,10 @@ export default class RBACRoles extends Component {
     desc: string,
     perms: Array<string>,
     groups: Array<string>
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   ): Promise<*> => {
     await this.props.optimisticDispatch(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'roles' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'roles' does not exist on type '{}'.
       actions.roles.create,
       role,
       desc,
@@ -133,10 +131,10 @@ export default class RBACRoles extends Component {
     desc: string,
     perms: Array<string>,
     groups: Array<string>
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   ): Promise<*> => {
     await this.props.optimisticDispatch(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'roles' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'roles' does not exist on type '{}'.
       actions.roles.update,
       role,
       desc,
@@ -149,7 +147,7 @@ export default class RBACRoles extends Component {
 
   handleRemoveRoleClick: Function = (role): void => {
     const handleConfirm: Function = (): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'roles' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'roles' does not exist on type '{}'.
       this.props.optimisticDispatch(actions.roles.remove, role);
       this.props.closeModal();
     };
@@ -161,24 +159,12 @@ export default class RBACRoles extends Component {
     );
   };
 
-  render () {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
+  render() {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
     const { permissions } = this.props.user;
-    const canEdit = hasPermission(
-      permissions,
-      ['USER-CONTROL', 'MODIFY-ROLE'],
-      'or'
-    );
-    const canDelete = hasPermission(
-      permissions,
-      ['USER-CONTROL', 'DELETE-ROLE'],
-      'or'
-    );
-    const canCreate = hasPermission(
-      permissions,
-      ['USER-CONTROL', 'ADD-ROLE'],
-      'or'
-    );
+    const canEdit = hasPermission(permissions, ['USER-CONTROL', 'MODIFY-ROLE'], 'or');
+    const canDelete = hasPermission(permissions, ['USER-CONTROL', 'DELETE-ROLE'], 'or');
+    const canCreate = hasPermission(permissions, ['USER-CONTROL', 'ADD-ROLE'], 'or');
 
     return (
       <Table

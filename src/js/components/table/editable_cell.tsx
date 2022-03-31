@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-
-import { pureRender } from '../utils';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control } from '../controls';
+import { pureRender } from '../utils';
 
 /**
  * Table data cell component which allows editing value.
@@ -21,11 +20,7 @@ import { Control } from '../controls';
 @pureRender
 export default class EditableCell extends Component {
   static propTypes = {
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.bool,
-    ]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
     startEdit: PropTypes.bool,
     onSave: PropTypes.func,
     onCancel: PropTypes.func,
@@ -52,11 +47,11 @@ export default class EditableCell extends Component {
   constructor(props) {
     super(props);
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
     this._cell = null;
-    // @ts-expect-error ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
     this._editField = null;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_cancelablePromise' does not exist on ty... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_cancelablePromise' does not exist on ty... Remove this comment to see the full error message
     this._cancelablePromise = null;
   }
 
@@ -65,9 +60,9 @@ export default class EditableCell extends Component {
    */
   componentWillMount() {
     this.setState({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
       value: this.props.value,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'startEdit' does not exist on type 'Reado... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'startEdit' does not exist on type 'Reado... Remove this comment to see the full error message
       edit: this.props.startEdit,
       width: '',
       error: false,
@@ -80,7 +75,7 @@ export default class EditableCell extends Component {
    * @param {object} nextProps
    */
   componentWillReceiveProps(nextProps) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     if (!this.state.edit) {
       this.setState({ value: nextProps.value });
     }
@@ -90,29 +85,29 @@ export default class EditableCell extends Component {
    * Focuses the input field when editing has been started.
    */
   componentDidUpdate(prevProps, prevState) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     if (this.state.edit && document.activeElement !== this._editField) {
-      // @ts-expect-error ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
       this._editField.focus();
       document.addEventListener('click', this.handleOutsideClick);
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Readonly<{... Remove this comment to see the full error message
       if (this.props.type !== 'number') {
-        // @ts-expect-error ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
         this._editField.setSelectionRange(
-          // @ts-expect-error ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
           this._editField.value.length,
-          // @ts-expect-error ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
           this._editField.value.length
         );
       }
     }
 
     // call this.props.onCancel if canceled avoid error to setState on unmounted component
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     if (!this.state.edit && prevState.edit) {
       document.removeEventListener('click', this.handleOutsideClick);
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'onCancel' does not exist on type 'Readon... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'onCancel' does not exist on type 'Readon... Remove this comment to see the full error message
       this.props.onCancel();
     }
   }
@@ -125,8 +120,8 @@ export default class EditableCell extends Component {
    * Close editable if click outside cell
    * @param e
    */
-  handleOutsideClick = e => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
+  handleOutsideClick = (e) => {
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
     if (this._cell && !this._cell.contains(e.target)) {
       this.cancel();
     }
@@ -137,7 +132,7 @@ export default class EditableCell extends Component {
    *
    * @param {Event} ev
    */
-  onChange = ev => {
+  onChange = (ev) => {
     this.setState({ value: ev.target.value });
   };
 
@@ -148,7 +143,7 @@ export default class EditableCell extends Component {
    *
    * @param {KeyboardEvent} ev
    */
-  onKeyUp = ev => {
+  onKeyUp = (ev) => {
     switch (ev.key) {
       case 'Escape':
         this.cancel();
@@ -164,13 +159,13 @@ export default class EditableCell extends Component {
    *
    * @param {HTMLTableCellElement} c
    */
-  cellDidRender = c => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
+  cellDidRender = (c) => {
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
     this._cell = c;
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
     if (this._cell && this.state.edit) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
       this.setState({ width: `${this._cell.offsetWidth}px` });
     }
   };
@@ -181,19 +176,19 @@ export default class EditableCell extends Component {
    * @return {boolean}
    */
   canEdit() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message
     return this.state.edit && this.state.width;
   }
 
   /**
    * Starts edit mode.
    */
-  start = event => {
+  start = (event) => {
     event.stopPropagation();
 
     this.setState({
       edit: true,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_cell' does not exist on type 'EditableC... Remove this comment to see the full error message
       width: `${this._cell.offsetWidth}px`,
     });
   };
@@ -203,22 +198,23 @@ export default class EditableCell extends Component {
    *
    * It also stops the edit mode.
    */
-  commit = ev => {
+  commit = (ev) => {
     if (ev) ev.preventDefault();
 
     if (
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Readonly<{... Remove this comment to see the full error message
       (this.props.type === 'number' &&
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'min' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
-        (this.props.min && this.state.value < this.props.min)) ||
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'max' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'min' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
+        this.props.min &&
+        this.state.value < this.props.min) ||
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'max' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
       (this.props.max && this.state.value > this.props.max)
     ) {
       this.setState({
         error: true,
       });
     } else {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'onSave' does not exist on type 'Readonly... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'onSave' does not exist on type 'Readonly... Remove this comment to see the full error message
       this.props.onSave(this.state.value);
 
       this.setState({
@@ -234,7 +230,7 @@ export default class EditableCell extends Component {
    */
   cancel = () => {
     this.setState({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
       value: this.props.value,
       edit: false,
       width: '',
@@ -247,8 +243,8 @@ export default class EditableCell extends Component {
    *
    * @param {HTMLInputElement} el
    */
-  refEditField = el => {
-    // @ts-expect-error ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
+  refEditField = (el) => {
+    // @ts-ignore ts-migrate(2551) FIXME: Property '_editField' does not exist on type 'Edit... Remove this comment to see the full error message
     this._editField = el;
   };
 
@@ -258,13 +254,7 @@ export default class EditableCell extends Component {
    * @return {ReactElement}
    */
   render() {
-    const props = omit(this.props, [
-      'value',
-      'onSave',
-      'startEdit',
-      'onCancel',
-      'showControl',
-    ]);
+    const props = omit(this.props, ['value', 'onSave', 'startEdit', 'onCancel', 'showControl']);
 
     return (
       <td
@@ -274,7 +264,7 @@ export default class EditableCell extends Component {
           editor: this.canEdit(),
         })}
         onClick={this.start}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'width' does not exist on type 'Readonly<... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'width' does not exist on type 'Readonly<... Remove this comment to see the full error message
         style={{ width: this.state.width }}
         ref={this.cellDidRender}
       >
@@ -283,22 +273,22 @@ export default class EditableCell extends Component {
             <input
               key="input"
               name="newValue"
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Readonly<{... Remove this comment to see the full error message
               type={this.props.type}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
               value={this.state.value || ''}
               onChange={this.onChange}
               onKeyUp={this.onKeyUp}
               ref={this.refEditField}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'min' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'min' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
               min={this.props.min}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'max' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'max' does not exist on type 'Readonly<{}... Remove this comment to see the full error message
               max={this.props.max}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message
               className={this.state.error ? 'form-error' : ''}
             />
             <Control
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'showControl' does not exist on type 'Rea... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'showControl' does not exist on type 'Rea... Remove this comment to see the full error message
               className={classNames({ hide: !this.props.showControl })}
               key="button"
               type="submit"
@@ -307,7 +297,7 @@ export default class EditableCell extends Component {
             />
           </form>
         ) : (
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
           <span>{this.state.value.toString()}</span>
         )}
       </td>

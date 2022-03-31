@@ -1,45 +1,41 @@
 // @flow
 import React from 'react';
-
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
-import DetailTab from './detail';
-import Code from '../../../components/code';
-import StepsTab from '../../../components/StepCodeDiagram';
-import LogContainer from '../../../containers/log';
-import ErrorsTab from './errors';
-import MappersTable from '../../../containers/mappers';
-import Valuemaps from '../../../containers/valuemaps';
-import Releases from '../../../containers/releases';
-import InfoTable from '../../../components/info_table/index';
 import Box from '../../../components/box';
-import OrderStats from '../../../components/OrderStats';
+import Code from '../../../components/code';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
+import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
+import InfoTable from '../../../components/info_table/index';
+import OrderStats from '../../../components/OrderStats';
 import ProcessTable from '../../../components/ProcessTable';
+import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
+import StepsTab from '../../../components/StepCodeDiagram';
+import WorkflowConfigItemsTable from '../../../components/WorkflowConfigItemsTable';
 import { ORDER_STATES } from '../../../constants/orders';
-import {
-  rebuildConfigHash,
-  objectCollectionToArray,
-} from '../../../helpers/interfaces';
+import LogContainer from '../../../containers/log';
+import MappersTable from '../../../containers/mappers';
+import Releases from '../../../containers/releases';
+import Valuemaps from '../../../containers/valuemaps';
+import { objectCollectionToArray, rebuildConfigHash } from '../../../helpers/interfaces';
+import DetailTab from './detail';
+import ErrorsTab from './errors';
 import List from './list';
 import Performance from './performance';
-import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
-import WorkflowConfigItemsTable from '../../../components/WorkflowConfigItemsTable';
 
 type WorkflowDetailTabsProps = {
-  workflow: Object,
-  activeTab: string,
-  systemOptions?: Object,
-  band?: string,
-  isPane: boolean,
-  location: Object,
-  date?: string,
-  linkDate?: string,
+  workflow: Object;
+  activeTab: string;
+  systemOptions?: Object;
+  band?: string;
+  isPane: boolean;
+  location: Object;
+  date?: string;
+  linkDate?: string;
 };
 
 const WorkflowDetailTabs: Function = ({
   workflow,
   activeTab,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'lib' does not exist on type 'WorkflowDet... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'lib' does not exist on type 'WorkflowDet... Remove this comment to see the full error message
   lib,
   systemOptions,
   band,
@@ -47,8 +43,8 @@ const WorkflowDetailTabs: Function = ({
   location,
   date,
   linkDate,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: WorkflowDetailTabsProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+WorkflowDetailTabsProps): React.Element<any> => (
   <SimpleTabs activeTab={activeTab}>
     {!isPane && (
       <SimpleTab name="orders">
@@ -63,10 +59,10 @@ const WorkflowDetailTabs: Function = ({
     {isPane && (
       <SimpleTab name="detail">
         <DetailTab
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           key={workflow.name}
           workflow={workflow}
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           systemOptions={systemOptions}
           band={band}
         />
@@ -79,17 +75,17 @@ const WorkflowDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="steps">
       <Box top fill>
-        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
         <StepsTab workflow={workflow} />
       </Box>
     </SimpleTab>
     <SimpleTab name="log">
       <Box top fill>
         <LogContainer
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           id={workflow.id}
           intfc="workflows"
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           resource={`workflows/${workflow.id}`}
           location={location}
         />
@@ -102,24 +98,24 @@ const WorkflowDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="mappers">
       <Box top fill noPadding>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <MappersTable mappers={workflow.mappers} />
       </Box>
     </SimpleTab>
     <SimpleTab name="value maps">
       <Box top fill noPadding>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
         <Valuemaps vmaps={workflow.vmaps} />
       </Box>
     </SimpleTab>
     <SimpleTab name="releases">
       <Box top fill>
         <Releases
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           component={workflow.name}
           compact
           location={location}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           key={workflow.name}
         />
       </Box>
@@ -132,15 +128,15 @@ const WorkflowDetailTabs: Function = ({
     <SimpleTab name="config">
       <Box top fill scrollY>
         <GlobalConfigItemsTable
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'global_config' does not exist on type 'O... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'global_config' does not exist on type 'O... Remove this comment to see the full error message
           globalItems={workflow.global_config}
           intrf="system"
         />
         <WorkflowConfigItemsTable
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
           globalItems={objectCollectionToArray(workflow.config)}
           intrf="workflows"
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           intrfId={workflow.id}
         />
         <ConfigItemsTable
@@ -148,14 +144,14 @@ const WorkflowDetailTabs: Function = ({
             ...rebuildConfigHash(workflow, true),
           }}
           intrf="workflows"
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           intrfId={workflow.id}
         />
       </Box>
     </SimpleTab>
     <SimpleTab name="order stats">
       <Box top fill scrollY>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message */}
         <OrderStats renderRows orderStats={workflow.order_stats} />
       </Box>
     </SimpleTab>
@@ -181,7 +177,7 @@ const WorkflowDetailTabs: Function = ({
             'timestamp',
             'id',
             'normalizedName',
-          ].concat(ORDER_STATES.map(os => os.name))}
+          ].concat(ORDER_STATES.map((os) => os.name))}
         />
       </Box>
     </SimpleTab>

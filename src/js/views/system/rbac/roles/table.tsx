@@ -1,46 +1,35 @@
 /* @flow */
+import size from 'lodash/size';
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import size from 'lodash/size';
-
-import RolesRow from './row';
-import {
-  Table,
-  Tbody,
-  Thead,
-  Th,
-  FixedRow,
-} from '../../../../components/new_table';
-import { sortDefaults } from '../../../../constants/sort';
-import Pull from '../../../../components/Pull';
-import LoadMore from '../../../../components/LoadMore';
-import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control as Button } from '../../../../components/controls';
-import { NameColumnHeader } from '../../../../components/NameColumn';
-import { DescriptionColumnHeader } from '../../../../components/DescriptionColumn';
 import { ActionColumnHeader } from '../../../../components/ActionColumn';
-import EnhancedTable from '../../../../components/EnhancedTable';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control as Button } from '../../../../components/controls';
+import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
+import { DescriptionColumnHeader } from '../../../../components/DescriptionColumn';
 import type { EnhancedTableProps } from '../../../../components/EnhancedTable';
+import EnhancedTable from '../../../../components/EnhancedTable';
+import LoadMore from '../../../../components/LoadMore';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../../../components/new_table';
+import Pull from '../../../../components/Pull';
+import { sortDefaults } from '../../../../constants/sort';
+import RolesRow from './row';
 
 type Props = {
-  roles: Array<Object>,
-  canCreate: boolean,
-  onAddRoleClick: Function,
+  roles: Array<Object>;
+  canCreate: boolean;
+  onAddRoleClick: Function;
 };
 
 const RolesTable: Function = ({
   roles,
   onAddRoleClick,
   ...rest
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<Table> => (
-  <EnhancedTable
-    collection={roles}
-    tableId="rbacRoles"
-    sortDefault={sortDefaults.rbacRoles}
-  >
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<Table> => (
+  <EnhancedTable collection={roles} tableId="rbacRoles" sortDefault={sortDefaults.rbacRoles}>
     {({
       canLoadMore,
       handleLoadAll,
@@ -87,14 +76,14 @@ const RolesTable: Function = ({
           </FixedRow>
         </Thead>
         <DataOrEmptyTable condition={size(collection) === 0} cols={4}>
-          {props => (
+          {(props) => (
             <Tbody {...props}>
               {collection.map(
-                // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                 (role: Object, index: number): React.Element<RolesRow> => (
                   <RolesRow
                     first={index === 0}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     key={role.name}
                     model={role}
                     {...rest}

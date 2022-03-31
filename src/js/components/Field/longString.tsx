@@ -3,22 +3,14 @@ import React from 'react';
 import { getLineCount } from '../../helpers/system';
 
 export interface ILongStringField {
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'TTranslator'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'TTranslator'.
   t?: TTranslator;
   fill?: boolean;
   placeholder?: string;
   noWrap?: boolean;
 }
 
-const LongStringField = ({
-  name,
-  onChange,
-  value,
-  default_value,
-  fill,
-  placeholder,
-  noWrap,
-}) => {
+const LongStringField = ({ name, onChange, value, default_value, fill, placeholder, noWrap }) => {
   // When input value changes
   const handleInputChange = (event): void => {
     onChange(name, event.target.value);

@@ -1,26 +1,25 @@
 /* @flow */
+import { Button, ButtonGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ButtonGroup, Button, Intent } from '@blueprintjs/core';
-
-import Toolbar from '../toolbar';
-import { getControlChar } from '../../helpers/document';
 import Icon from '../../components/icon';
+import { getControlChar } from '../../helpers/document';
 import Flex from '../Flex';
 import Pull from '../Pull';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import Toolbar from '../toolbar';
 
 @pure(['messages', 'height'])
 @injectIntl
 export default class LogComponent extends Component {
   props: {
-    messages: Array<string>,
-    onClearClick: Function,
-    height: any,
+    messages: Array<string>;
+    onClearClick: Function;
+    height: any;
   } = this.props;
 
   state: {
-    autoScroll: boolean,
+    autoScroll: boolean;
   } = {
     autoScroll: true,
   };
@@ -36,7 +35,7 @@ export default class LogComponent extends Component {
   scroll: any = null;
   el: any;
 
-  scrollRef: Function = el => {
+  scrollRef: Function = (el) => {
     this.scroll = el;
     this.el = el;
   };
@@ -66,25 +65,26 @@ export default class LogComponent extends Component {
           <Pull>
             <ButtonGroup>
               <Button
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ messages... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ messages... Remove this comment to see the full error message
                 text={this.props.intl.formatMessage({ id: 'button.autoscroll' })}
                 icon={this.state.autoScroll ? 'selection' : 'circle'}
                 intent={this.state.autoScroll ? Intent.PRIMARY : Intent.NONE}
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
                 onClick={this.setAutoScroll}
               />
               <Button
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ messages... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ messages... Remove this comment to see the full error message
                 text={this.props.intl.formatMessage({ id: 'button.clear' })}
                 icon="cross"
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
                 onClick={onClearClick}
               />
             </ButtonGroup>
           </Pull>
           <Pull right>
-            <Icon icon="info-circle" /><FormattedMessage id='component.use' />{' '}
-            <strong>"{getControlChar()} + f"</strong>{' '}<FormattedMessage id='component.to-search-log' />
+            <Icon icon="info-circle" />
+            <FormattedMessage id="component.use" /> <strong>"{getControlChar()} + f"</strong>{' '}
+            <FormattedMessage id="component.to-search-log" />
           </Pull>
         </Toolbar>
         <Flex className="log-area" scrollY>
@@ -93,7 +93,7 @@ export default class LogComponent extends Component {
             style={{
               height: `${height || 'auto'}`,
             }}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'LegacyR... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'LegacyR... Remove this comment to see the full error message
             ref={this.scrollRef}
           >
             <code className="language-log">

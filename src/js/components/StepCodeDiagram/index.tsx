@@ -12,7 +12,7 @@ import modal from '../../hocomponents/modal';
 import { graph } from '../../lib/graph';
 import StepDetailTable from '../../views/order/diagram/step_details';
 import { Breadcrumbs, Crumb } from '../breadcrumbs';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control as Button, Controls as ButtonGroup } from '../controls';
 import Flex from '../Flex';
 import Headbar from '../Headbar';
@@ -93,25 +93,25 @@ const DIAGRAM_MIN_COLUMNS = 1;
 @injectIntl
 export default class StepsTab extends Component {
   props: {
-    workflow: Object,
-    order: Object,
-    onStepClick: Function,
-    onSkipSubmit: Function,
-    openModal: Function,
-    closeModal: Function,
+    workflow: Object;
+    order: Object;
+    onStepClick: Function;
+    onSkipSubmit: Function;
+    openModal: Function;
+    closeModal: Function;
   } = this.props;
 
   state: {
-    tooltip?: string,
-    left: number,
-    top: number,
-    width: number,
-    height: number,
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    selectedStep: ?any,
-    diagramScale: number,
-    panWidth: number,
-    useDrag: boolean,
+    tooltip?: string;
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    selectedStep: any;
+    diagramScale: number;
+    panWidth: number;
+    useDrag: boolean;
   } = {
     tooltip: null,
     left: 0,
@@ -131,7 +131,7 @@ export default class StepsTab extends Component {
    */
   onBoxClick = (stepId) => () => {
     this.props.openModal(
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
       <StepModal
         id={stepId}
         name={this.getStepName(stepId)}
@@ -158,9 +158,9 @@ export default class StepsTab extends Component {
    * @see ROOT_STEP_ID
    */
   getStepDeps(stepId) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Object'.
     const initIds = Object.keys(this.props.workflow.steps).filter(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Object'.
       (id) => this.props.workflow.steps[id].length <= 0
     );
 
@@ -168,7 +168,7 @@ export default class StepsTab extends Component {
 
     const deps = Object.assign(
       { [ROOT_STEP_ID]: [] },
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Object'.
       this.props.workflow.steps,
       ...initialDeps
     );
@@ -191,11 +191,10 @@ export default class StepsTab extends Component {
    * @see DIAGRAM_MIN_COLUMNS
    */
   getRows() {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     const nodes = graph(this.getStepDeps());
 
-    const cols =
-      Math.max(DIAGRAM_MIN_COLUMNS, nodes.get(ROOT_STEP_ID).width) * 2 - 1;
+    const cols = Math.max(DIAGRAM_MIN_COLUMNS, nodes.get(ROOT_STEP_ID).width) * 2 - 1;
 
     const rows = [];
     // noinspection JSAnnotator
@@ -304,18 +303,16 @@ export default class StepsTab extends Component {
    * }}
    */
   getStepInfo(stepId) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepmap' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'stepmap' does not exist on type 'Object'... Remove this comment to see the full error message
     const name = this.props.workflow.stepmap[stepId];
     const info =
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
       this.props.workflow.stepinfo.find((si) => si.name === name) || null;
 
     return info && info.ind === 0
       ? Object.assign({}, info, {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
-          subwfls: this.props.workflow.stepinfo.filter(
-            (si) => si.name === name
-          ),
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
+          subwfls: this.props.workflow.stepinfo.filter((si) => si.name === name),
         })
       : info;
   }
@@ -332,10 +329,10 @@ export default class StepsTab extends Component {
    */
   getStepName(stepId) {
     return stepId === ROOT_STEP_ID
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-      ? this.props.workflow.name
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepmap' does not exist on type 'Object'... Remove this comment to see the full error message
-      : this.props.workflow.stepmap[stepId];
+      ? // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        this.props.workflow.name
+      : // @ts-ignore ts-migrate(2339) FIXME: Property 'stepmap' does not exist on type 'Object'... Remove this comment to see the full error message
+        this.props.workflow.stepmap[stepId];
   }
 
   /**
@@ -385,7 +382,7 @@ export default class StepsTab extends Component {
    */
   getStepFullnames() {
     return [this.getStepFullname(0)].concat(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Object'.
       Object.keys(this.props.workflow.steps).map(this.getStepFullname)
     );
   }
@@ -463,10 +460,7 @@ export default class StepsTab extends Component {
    * @see BOX_MARGIN
    */
   getDiagramWidth() {
-    return (
-      Math.ceil(this.getDiagramColumns() / 3) *
-      (this.getBoxWidth() + BOX_MARGIN)
-    );
+    return Math.ceil(this.getDiagramColumns() / 3) * (this.getBoxWidth() + BOX_MARGIN);
   }
 
   /**
@@ -481,9 +475,7 @@ export default class StepsTab extends Component {
    * @see BOX_MARGIN
    */
   getDiagramHeight() {
-    return (
-      this.getDiagramRows() * (this.getBoxHeight() + BOX_MARGIN) + BOX_MARGIN
-    );
+    return this.getDiagramRows() * (this.getBoxHeight() + BOX_MARGIN) + BOX_MARGIN;
   }
 
   /**
@@ -647,21 +639,21 @@ export default class StepsTab extends Component {
 
   handleMoveChange: Function = () => {
     this.setState((state: Object) => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'useDrag' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'useDrag' does not exist on type 'Object'... Remove this comment to see the full error message
       useDrag: !state.useDrag,
     }));
   };
 
   handleZoomIn: Function = () => {
     this.setState((state: Object) => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'diagramScale' does not exist on type 'Ob... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'diagramScale' does not exist on type 'Ob... Remove this comment to see the full error message
       diagramScale: state.diagramScale + 0.1,
     }));
   };
 
   handleZoomOut: Function = () => {
     this.setState((state: Object) => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'diagramScale' does not exist on type 'Ob... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'diagramScale' does not exist on type 'Ob... Remove this comment to see the full error message
       diagramScale: state.diagramScale - 0.1 < 0 ? 0 : state.diagramScale - 0.1,
     }));
   };
@@ -710,14 +702,12 @@ export default class StepsTab extends Component {
    */
   renderStartBox(stepId, colIdx, row, rowIdx) {
     const instances =
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
       this.props.order && this.props.order.StepInstances
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
-        ? groupInstances(this.props.order.StepInstances)
+        ? // @ts-ignore ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
+          groupInstances(this.props.order.StepInstances)
         : {};
-    const css = Object.keys(instances).some(
-      (i) => instances[i].status === 'ERROR'
-    )
+    const css = Object.keys(instances).some((i) => instances[i].status === 'ERROR')
       ? 'error'
       : 'normal';
 
@@ -782,16 +772,9 @@ export default class StepsTab extends Component {
       event.stopPropagation();
 
       if (event.target.tagName === 'rect') {
-        const {
-          left,
-          top,
-          width,
-          height,
-        } = event.target.getBoundingClientRect();
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
-        const tooltip = this.props.workflow.stepinfo.find(
-          (step) => step.stepid === stepId
-        );
+        const { left, top, width, height } = event.target.getBoundingClientRect();
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
+        const tooltip = this.props.workflow.stepinfo.find((step) => step.stepid === stepId);
 
         this.setState({
           tooltip: tooltip ? tooltip.desc : null,
@@ -818,15 +801,13 @@ export default class StepsTab extends Component {
     let arrayStep = [];
 
     if (this.props.order) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
       instances = this.props.order.StepInstances
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
-        ? groupInstances(this.props.order.StepInstances)
+        ? // @ts-ignore ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
+          groupInstances(this.props.order.StepInstances)
         : {};
 
-      statusCss = instances[name]
-        ? instances[name].status.toLowerCase()
-        : statusCss;
+      statusCss = instances[name] ? instances[name].status.toLowerCase() : statusCss;
 
       if (stepInfo.arraytype !== 'NONE' && instances[name]) {
         arrayStep = instances[name].steps;
@@ -864,12 +845,7 @@ export default class StepsTab extends Component {
           }}
         >
           <rect {...this.getDefaultParams()} />
-          <foreignObject
-            x={0}
-            y={0}
-            width={this.getBoxWidth()}
-            height={this.getBoxHeight()}
-          >
+          <foreignObject x={0} y={0} width={this.getBoxWidth()} height={this.getBoxHeight()}>
             <Flex height="100%" style={{ padding: '5px' }}>
               <div>
                 <Pull>
@@ -880,15 +856,13 @@ export default class StepsTab extends Component {
                       </React.Fragment>
                     )}
                     {type} <Icon icon="dot" />{' '}
-                    {instances && instances[name]
-                      ? instances[name].status
-                      : 'NONE'}
+                    {instances && instances[name] ? instances[name].status : 'NONE'}
                   </Tag>
                 </Pull>
                 <Pull right>
                   <ButtonGroup>
                     <Button
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
+                      // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
                       title={this.props.intl.formatMessage({
                         id: 'button.show-step-code',
                       })}
@@ -929,9 +903,7 @@ export default class StepsTab extends Component {
    * @see ROOT_STEP_ID
    */
   renderMask(stepId) {
-    return stepId === ROOT_STEP_ID
-      ? this.renderStartMask(stepId)
-      : this.renderDefaultMask(stepId);
+    return stepId === ROOT_STEP_ID ? this.renderStartMask(stepId) : this.renderDefaultMask(stepId);
   }
 
   /**
@@ -972,16 +944,13 @@ export default class StepsTab extends Component {
    * @see BOX_MARGIN
    */
   renderPath(start, end) {
-    const startX =
-      this.getBoxHorizontalCenter(start.colIdx) + this.getBoxWidth() / 2 + 2;
+    const startX = this.getBoxHorizontalCenter(start.colIdx) + this.getBoxWidth() / 2 + 2;
     const startY = this.getBoxVerticalCenter(start.rowIdx) + 2;
 
-    const endX =
-      this.getBoxHorizontalCenter(end.colIdx) + this.getBoxWidth() / 2 + 2;
+    const endX = this.getBoxHorizontalCenter(end.colIdx) + this.getBoxWidth() / 2 + 2;
     const endY = this.getBoxVerticalCenter(end.rowIdx) + 2;
 
-    const joint =
-      Math.max(startY, endY) - this.getBoxHeight() / 2 - BOX_MARGIN / 2 + 2;
+    const joint = Math.max(startY, endY) - this.getBoxHeight() / 2 - BOX_MARGIN / 2 + 2;
 
     return (
       <path
@@ -1040,8 +1009,8 @@ export default class StepsTab extends Component {
       this.getFlattenDeps().reduce(
         (fs, { start, end }) =>
           Object.assign(fs, {
-            [`p-${this.getStepDomId(start.stepId)}+` +
-            `${this.getStepDomId(end.stepId)}`]: this.renderPath(start, end),
+            [`p-${this.getStepDomId(start.stepId)}+` + `${this.getStepDomId(end.stepId)}`]:
+              this.renderPath(start, end),
           }),
         {}
       )
@@ -1066,10 +1035,7 @@ export default class StepsTab extends Component {
         margin: 'auto',
       }}
     >
-      <svg
-        viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`}
-        className="diagram"
-      >
+      <svg viewBox={`0 0 ${diaWidth} ${this.getDiagramHeight()}`} className="diagram">
         <defs>{this.renderMasks()}</defs>
         {this.renderPaths()}
         {this.renderBoxes()}
@@ -1080,12 +1046,10 @@ export default class StepsTab extends Component {
   render() {
     const { selectedStep, diagramScale, panWidth, useDrag } = this.state;
     const { order, workflow, onSkipSubmit } = this.props;
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     const nodes = graph(this.getStepDeps());
 
-    const diaWidth =
-      Math.max(1, nodes.get(ROOT_STEP_ID).width) *
-      (this.getBoxWidth() + BOX_MARGIN);
+    const diaWidth = Math.max(1, nodes.get(ROOT_STEP_ID).width) * (this.getBoxWidth() + BOX_MARGIN);
 
     const half = diaWidth / 2;
     const panHalf = panWidth / 2;
@@ -1095,25 +1059,20 @@ export default class StepsTab extends Component {
       <Flex>
         <Headbar>
           <Breadcrumbs collapsed>
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
             <Crumb>{workflow.normalizedName}</Crumb>
           </Breadcrumbs>
           <Pull right>
             <ButtonGroup>
               {useDrag && (
-                <span
-                  style={{ lineHeight: '30px', paddingRight: 5 }}
-                  className="text-muted"
-                >
+                <span style={{ lineHeight: '30px', paddingRight: 5 }} className="text-muted">
                   <FormattedMessage id="button.drag-to-move-around" />
                 </span>
               )}
               <Button
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
                 title={this.props.intl.formatMessage({
-                  id: useDrag
-                    ? 'button.use-scrollbars'
-                    : 'button.use-drag-to-move',
+                  id: useDrag ? 'button.use-scrollbars' : 'button.use-drag-to-move',
                 })}
                 icon="hand"
                 onClick={this.handleMoveChange}
@@ -1121,21 +1080,21 @@ export default class StepsTab extends Component {
                 big
               />
               <Button
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
                 title={this.props.intl.formatMessage({ id: 'button.zoom-in' })}
                 icon="zoom-in"
                 onClick={this.handleZoomIn}
                 big
               />
               <Button
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
                 title={this.props.intl.formatMessage({ id: 'button.zoom-out' })}
                 icon="zoom-out"
                 onClick={this.handleZoomOut}
                 big
               />
               <Button
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
                 title={this.props.intl.formatMessage({
                   id: 'button.reset-zoom',
                 })}
@@ -1159,20 +1118,18 @@ export default class StepsTab extends Component {
           ) : (
             [
               useDrag ? (
-                // @ts-expect-error ts-migrate(2604) FIXME: JSX element type 'PanElement' does not have any co... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2604) FIXME: JSX element type 'PanElement' does not have any co... Remove this comment to see the full error message
                 <PanElement startX={startX}>
                   {this.renderContent(diagramScale, diaWidth)}
                 </PanElement>
               ) : (
-                <div style={{ overflow: 'auto' }}>
-                  {this.renderContent(diagramScale, diaWidth)}
-                </div>
+                <div style={{ overflow: 'auto' }}>{this.renderContent(diagramScale, diaWidth)}</div>
               ),
               selectedStep && (
-                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                 <StepDetailTable
                   step={selectedStep}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
                   instances={order.StepInstances}
                   order={order}
                   onSkipSubmit={onSkipSubmit}

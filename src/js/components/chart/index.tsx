@@ -1,22 +1,13 @@
 /* @flow */
+import Chart from 'chart.js';
+import round from 'lodash/round';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Chart from 'chart.js';
-import pure from 'recompose/onlyUpdateForKeys';
-import round from 'lodash/round';
-
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/la... Remove this comment to see the full error message
-import { CenterWrapper } from '../layout';
-
-import {
-  getMaxValue,
-  getStepSize,
-  scaleData,
-  getUnit,
-  getFormattedValue,
-} from '../../helpers/chart';
-import { NonIdealState } from '../../../../node_modules/@blueprintjs/core';
 import { injectIntl } from 'react-intl';
+import { NonIdealState } from '../../../../node_modules/@blueprintjs/core';
+import { getMaxValue, getStepSize, getUnit, scaleData } from '../../helpers/chart';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/la... Remove this comment to see the full error message
+import { CenterWrapper } from '../layout';
 
 @injectIntl
 export default class ChartComponent extends Component {
@@ -29,97 +20,94 @@ export default class ChartComponent extends Component {
   };
 
   props: {
-    id: string,
-    width: number | string,
-    height: number,
-    type: string,
-    labels: Array<any>,
-    datasets: Array<Object>,
-    yAxisLabel: string,
-    xAxisLabel: string,
-    beginAtZero: boolean,
-    unit?: string,
-    isNotTime?: boolean,
-    empty?: boolean,
-    title?: string,
-    stepSize?: number,
-    yMax?: number,
-    yMin?: number,
-    legendHandlers?: Array<Function>,
-    onClick?: Function,
+    id: string;
+    width: number | string;
+    height: number;
+    type: string;
+    labels: Array<any>;
+    datasets: Array<Object>;
+    yAxisLabel: string;
+    xAxisLabel: string;
+    beginAtZero: boolean;
+    unit?: string;
+    isNotTime?: boolean;
+    empty?: boolean;
+    title?: string;
+    stepSize?: number;
+    yMax?: number;
+    yMin?: number;
+    legendHandlers?: Array<Function>;
+    onClick?: Function;
   } = this.props;
 
   state: {
-    chart: Object,
+    chart: Object;
   };
 
-  // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'state'.
+  // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'state'.
   state = {
     chart: {},
   };
 
-  componentDidMount () {
+  componentDidMount() {
     this.renderChart(this.props);
   }
 
-  componentWillReceiveProps (nextProps: Object) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+  componentWillReceiveProps(nextProps: Object) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
     if (this.props.id !== nextProps.id) {
       this.renderChart(nextProps);
     } else if (
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepSize' does not exist on type 'Object... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'stepSize' does not exist on type 'Object... Remove this comment to see the full error message
       (this.props.stepSize !== nextProps.stepSize ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'labels' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'labels' does not exist on type 'Object'.
         this.props.labels !== nextProps.labels) &&
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       this.state.chart.data
     ) {
       const chart = this.state.chart;
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepSize' does not exist on type 'Object... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'stepSize' does not exist on type 'Object... Remove this comment to see the full error message
       const { stepSize, unit } = this.getOptionsData(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
         nextProps.datasets,
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'Object' is not assignable to par... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2345) FIXME: Argument of type 'Object' is not assignable to par... Remove this comment to see the full error message
         nextProps
       );
       const datasets =
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
         nextProps.type === 'line' || nextProps.type === 'bar'
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
-          ? scaleData(nextProps.datasets, nextProps.isNotTime)
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
-          : nextProps.datasets;
+          ? // @ts-ignore ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
+            scaleData(nextProps.datasets, nextProps.isNotTime)
+          : // @ts-ignore ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
+            nextProps.datasets;
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       chart.data.labels = nextProps.labels;
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       chart.data.datasets = datasets;
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
       if (nextProps.type === 'line' || nextProps.type === 'bar') {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
-        chart.options.scales.yAxes[0].ticks.callback = val =>
-          round(val, 2) + unit;
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+        chart.options.scales.yAxes[0].ticks.callback = (val) => round(val, 2) + unit;
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
         chart.options.scales.yAxes[0].ticks.stepSize = stepSize;
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
         chart.options.scales.xAxes[0].scaleLabel.labelString =
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'xAxisLabel' does not exist on type 'Obje... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'xAxisLabel' does not exist on type 'Obje... Remove this comment to see the full error message
           nextProps.xAxisLabel;
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
-        chart.options.tooltips.callbacks.label = item =>
-          round(item.yLabel, 2) + unit;
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+        chart.options.tooltips.callbacks.label = (item) => round(item.yLabel, 2) + unit;
       }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'update' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'update' does not exist on type 'Object'.
       chart.update();
     }
   }
 
-  getOptionsData (data: Array<Object>, props = this.props): Object {
+  getOptionsData(data: Array<Object>, props = this.props): Object {
     const unit: string = props.unit || getUnit(getMaxValue(data));
-    const stepSize: number =
-      props.stepSize || getStepSize(data, props.isNotTime);
+    const stepSize: number = props.stepSize || getStepSize(data, props.isNotTime);
 
     return {
       unit,
@@ -127,8 +115,8 @@ export default class ChartComponent extends Component {
     };
   }
 
-  getOptions (props) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepSize' does not exist on type 'Object... Remove this comment to see the full error message
+  getOptions(props) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'stepSize' does not exist on type 'Object... Remove this comment to see the full error message
     const { stepSize, unit } = this.getOptionsData(props.datasets);
     const { yMin, yMax } = props;
     const min = yMin ? yMin - yMin / 10 : 0;
@@ -151,7 +139,7 @@ export default class ChartComponent extends Component {
           tooltips: {
             mode: 'label',
             callbacks: {
-              label (item) {
+              label(item) {
                 return item.yLabel + unit;
               },
             },
@@ -161,18 +149,18 @@ export default class ChartComponent extends Component {
               {
                 ticks: max
                   ? {
-                    min,
-                    max,
-                    stepSize,
-                    callback: val => round(val, 2) + unit,
-                    fontSize: 10,
-                  }
+                      min,
+                      max,
+                      stepSize,
+                      callback: (val) => round(val, 2) + unit,
+                      fontSize: 10,
+                    }
                   : {
-                    min,
-                    stepSize,
-                    callback: val => round(val, 2) + unit,
-                    fontSize: 10,
-                  },
+                      min,
+                      stepSize,
+                      callback: (val) => round(val, 2) + unit,
+                      fontSize: 10,
+                    },
                 scaleLabel: {
                   display: !!props.yAxisLabel,
                   labelString: props.yAxisLabel,
@@ -205,13 +193,13 @@ export default class ChartComponent extends Component {
   renderChart: Function = (props: Object): void => {
     const el: Object = ReactDOM.findDOMNode(this.refs.chart);
     const options: Object = this.getOptions(props);
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
     const datasets: Array<Object> = scaleData(props.datasets, props.isNotTime);
     const chart: Object = new Chart(el, {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
       type: props.type,
       data: {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'labels' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'labels' does not exist on type 'Object'.
         labels: props.labels,
         datasets,
       },
@@ -223,7 +211,7 @@ export default class ChartComponent extends Component {
     });
   };
 
-  // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
   renderLegend: Function = (): Array<React.Element<any>> => {
     switch (this.props.type) {
       case 'bar':
@@ -233,9 +221,9 @@ export default class ChartComponent extends Component {
           <li
             className="chart-legend"
             key={key}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
             onClick={
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
               this.props.datasets[0].data[key] !== 0 &&
               this.props.legendHandlers &&
               this.props.legendHandlers[key]
@@ -243,10 +231,10 @@ export default class ChartComponent extends Component {
           >
             <span
               className="color-box"
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'backgroundColor' does not exist on type ... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'backgroundColor' does not exist on type ... Remove this comment to see the full error message
               style={{ backgroundColor: d.backgroundColor || '#d7d7d7' }}
             />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */}
             {d.label}
           </li>
         ));
@@ -255,9 +243,9 @@ export default class ChartComponent extends Component {
           <li
             className="chart-legend"
             key={key}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
             onClick={
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
               this.props.datasets[0].data[key] !== 0 &&
               this.props.legendHandlers &&
               this.props.legendHandlers[key]
@@ -268,52 +256,43 @@ export default class ChartComponent extends Component {
               style={{
                 backgroundColor: this.props.empty
                   ? '#eeeeee'
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'backgroundColor' does not exist on type ... Remove this comment to see the full error message
-                  : this.props.datasets[0].backgroundColor[key] || '#d7d7d7',
+                  : // @ts-ignore ts-migrate(2339) FIXME: Property 'backgroundColor' does not exist on type ... Remove this comment to see the full error message
+                    this.props.datasets[0].backgroundColor[key] || '#d7d7d7',
               }}
             />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
-            {`${d} (${this.props.datasets[0].data[key]}${
-              this.props.unit ? this.props.unit : ''
-            })`}
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
+            {`${d} (${this.props.datasets[0].data[key]}${this.props.unit ? this.props.unit : ''})`}
           </li>
         ));
     }
   };
 
-  // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render (): React.Element<any> {
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  render(): React.Element<any> {
     return (
-      <div
-        className={`chart-wrapper ${
-          this.props.type === 'doughnut' ? 'pie' : ''
-        }`}
-      >
+      <div className={`chart-wrapper ${this.props.type === 'doughnut' ? 'pie' : ''}`}>
         {this.props.title && <p>{this.props.title}</p>}
         <div
           className="chart-box"
           style={{ width: this.props.width, height: this.props.height }}
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
           onClick={!this.props.empty && this.props.onClick}
         >
           {this.props.empty && this.props.type === 'doughnut' && (
             <div className="pie-chart-placeholder">
               <NonIdealState
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ id: stri... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ id: stri... Remove this comment to see the full error message
                 title={this.props.intl.formatMessage({
                   id: 'component.no-data',
                 })}
-                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ title: any; visual: string; }' is not assi... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type '{ title: any; visual: string; }' is not assi... Remove this comment to see the full error message
                 visual="warning-sign"
               />
             </div>
           )}
           <canvas
             style={{
-              display:
-                this.props.empty && this.props.type === 'doughnut'
-                  ? 'none'
-                  : 'initial',
+              display: this.props.empty && this.props.type === 'doughnut' ? 'none' : 'initial',
             }}
             ref="chart"
             id={this.props.id}

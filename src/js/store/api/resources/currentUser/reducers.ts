@@ -14,17 +14,13 @@ const unSync: Object = {
 };
 
 const updateStorage: Object = {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: Object = initialState, { payload: { storage } }: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data: Object = { ...state.data, ...{ storage } };
 
     return { ...state, ...{ data } };
   },
 };
 
-
-export {
-  unSync as UNSYNCCURRENTUSER,
-  updateStorage as UPDATESTORAGE,
-};
+export { unSync as UNSYNCCURRENTUSER, updateStorage as UPDATESTORAGE };

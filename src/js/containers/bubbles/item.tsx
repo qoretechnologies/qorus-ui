@@ -1,15 +1,14 @@
 /* @flow */
 import React from 'react';
 import { connect } from 'react-redux';
-import shortid from 'shortid';
 import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import mapProps from 'recompose/mapProps';
-
-import { bubbles, notifications } from '../../store/ui/actions';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import shortid from 'shortid';
+import qoreLogo from '../../../img/qore_logo_purple.png';
 import { Bubble } from '../../components/bubbles';
 import queryControl from '../../hocomponents/queryControl';
-import qoreLogo from '../../../img/qore_logo_purple.png';
+import { bubbles, notifications } from '../../store/ui/actions';
 
 const timeoutByBubbleType = {
   WARNING: '30000',
@@ -19,32 +18,32 @@ const timeoutByBubbleType = {
 };
 
 type Props = {
-  bubble: Object,
-  dismiss: Function,
-  timeout: number,
-  type?: string,
-  changeNotificationsPaneQuery: Function,
-  stack: number,
-  notificationsSound: boolean,
-  notificationsBrowser: boolean,
-  dismissNotification: Function,
-  deleteBubble: Function,
+  bubble: Object;
+  dismiss: Function;
+  timeout: number;
+  type?: string;
+  changeNotificationsPaneQuery: Function;
+  stack: number;
+  notificationsSound: boolean;
+  notificationsBrowser: boolean;
+  dismissNotification: Function;
+  deleteBubble: Function;
 };
 
 export class BubbleItem extends React.Component {
   props: Props = this.props;
   _timeout: any;
 
-  componentDidMount () {
+  componentDidMount() {
     const { timeout, bubble, notificationsBrowser, type, stack } = this.props;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
     const timeoutByType = timeout || timeoutByBubbleType[bubble.type];
 
     // Check if user has browser notifications turned on
     if (notificationsBrowser && type === 'notification') {
       // Send new notification
       const notif = new Notification(`New Qorus alert raised (${stack})`, {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
         body: bubble.notificationType,
         icon: qoreLogo,
         tag: shortid.generate(),
@@ -58,15 +57,15 @@ export class BubbleItem extends React.Component {
     this._timeout = setTimeout(this.handleDelete, timeoutByType);
   }
 
-  componentWillReceiveProps (nextProps: Props) {
+  componentWillReceiveProps(nextProps: Props) {
     if (
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
       this.props.bubble.type !== nextProps.bubble.type &&
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
       this.props.bubble.type === 'WARNING'
     ) {
       const timeoutByType =
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
         nextProps.timeout || timeoutByBubbleType[nextProps.bubble.type];
 
       this._timeout = setTimeout(this.handleDelete, timeoutByType);
@@ -75,7 +74,7 @@ export class BubbleItem extends React.Component {
     if (this.props.stack < nextProps.stack) {
       this.cancelTimeout();
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
       const timeoutByType = timeoutByBubbleType[nextProps.bubble.type];
 
       this._timeout = setTimeout(this.handleDelete, timeoutByType);
@@ -93,28 +92,28 @@ export class BubbleItem extends React.Component {
     this.handleDelete('all');
   };
 
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  handleDelete = (dismissType: ?string) => {
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  handleDelete = (dismissType: string) => {
     const { bubble, dismiss, type } = this.props;
 
     if (dismissType && dismissType === 'all') {
       dismiss('all');
     } else {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
       dismiss(type === 'notification' ? bubble.notificationType : bubble.id);
     }
   };
 
-  render () {
+  render() {
     const { bubble, type, stack, notificationsSound } = this.props;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
     const message: string = bubble.notificationType || bubble.message;
 
     return (
       <Bubble
         onClick={this.handleDelete}
         onViewClick={type === 'notification' && this.handleView}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
         type={bubble.type.toLowerCase()}
         stack={stack}
         notification={type === 'notification'}
@@ -145,18 +144,10 @@ export default compose(
     }
   ),
   mapProps((props: Props) => ({
-    dismiss:
-      props.type === 'notification'
-        ? props.dismissNotification
-        : props.deleteBubble,
+    dismiss: props.type === 'notification' ? props.dismissNotification : props.deleteBubble,
     ...props,
   })),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
   queryControl('notificationsPane'),
-  onlyUpdateForKeys([
-    'bubble',
-    'timeout',
-    'notificationsSound',
-    'notificationsBrowser',
-  ])
+  onlyUpdateForKeys(['bubble', 'timeout', 'notificationsSound', 'notificationsBrowser'])
 )(BubbleItem);

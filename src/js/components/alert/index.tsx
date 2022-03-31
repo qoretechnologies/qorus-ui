@@ -1,7 +1,7 @@
 /* @flow */
+import { Callout } from '@blueprintjs/core';
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Callout } from '@blueprintjs/core';
 import { getIntentFromBsStyle } from '../../constants/components';
 
 const Alert: Function = ({
@@ -11,17 +11,17 @@ const Alert: Function = ({
   className,
   iconName = 'warning-sign',
 }: {
-  children: any,
-  bsStyle?: string,
-  title?: string,
-  iconName?: string,
-  className?: string,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  children: any;
+  bsStyle?: string;
+  title?: string;
+  iconName?: string;
+  className?: string;
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 }): React.Element<any> => (
   <Callout
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'Intent'.
+    // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'Intent'.
     intent={getIntentFromBsStyle(bsStyle)}
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
     icon={iconName}
     title={title}
     className={className}

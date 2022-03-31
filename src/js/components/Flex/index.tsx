@@ -2,17 +2,17 @@
 import React from 'react';
 
 type FlexProps = {
-  children: any,
-  display?: string,
-  flexFlow?: string,
-  flex?: string,
-  height?: any,
-  className?: string,
-  style?: Object,
-  scrollX?: boolean,
-  scrollY?: boolean,
-  flexRef?: Function,
-  id?: string,
+  children: any;
+  display?: string;
+  flexFlow?: string;
+  flex?: string;
+  height?: any;
+  className?: string;
+  style?: Object;
+  scrollX?: boolean;
+  scrollY?: boolean;
+  flexRef?: Function;
+  id?: string;
 };
 
 const Flex: Function = ({
@@ -27,10 +27,10 @@ const Flex: Function = ({
   scrollY,
   flexRef,
   id,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'FlexProps... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'title' does not exist on type 'FlexProps... Remove this comment to see the full error message
   title,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: FlexProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+FlexProps): React.Element<any> => (
   <div
     title={title}
     style={{
@@ -43,7 +43,7 @@ const Flex: Function = ({
       overflowY: scrollY ? 'auto' : 'hidden',
     }}
     id={id || undefined}
-    ref={ref => flexRef && flexRef(ref)}
+    ref={(ref) => flexRef && flexRef(ref)}
     className={className}
   >
     {children}

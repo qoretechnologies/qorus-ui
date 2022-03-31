@@ -1,30 +1,29 @@
 /* @flow */
-import React from 'react';
-import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
-import compose from 'recompose/compose';
 import classnames from 'classnames';
-
-import { Thead, Tbody, Tfooter } from './section';
-import Tr from './row';
-import FixedRow from './fixed_row';
-import Th from './th';
-import Td from './td';
-import EditableCell from './editable_cell';
+import React from 'react';
+import compose from 'recompose/compose';
+import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
 import Flex from '../Flex';
+import EditableCell from './editable_cell';
+import FixedRow from './fixed_row';
+import Tr from './row';
+import { Tbody, Tfooter, Thead } from './section';
+import Td from './td';
+import Th from './th';
 
 type Props = {
-  children: any,
-  className?: string,
-  condensed?: string,
-  striped?: boolean,
-  bordered?: boolean,
-  hover?: boolean,
-  fixed?: boolean,
-  info?: boolean,
-  height?: string | number,
-  marginBottom?: number,
-  width?: number | string,
-  clean?: boolean,
+  children: any;
+  className?: string;
+  condensed?: string;
+  striped?: boolean;
+  bordered?: boolean;
+  hover?: boolean;
+  fixed?: boolean;
+  info?: boolean;
+  height?: string | number;
+  marginBottom?: number;
+  width?: number | string;
+  clean?: boolean;
 };
 
 let Table: Function = ({
@@ -40,15 +39,15 @@ let Table: Function = ({
   marginBottom,
   info,
   width,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> =>
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> =>
   fixed ? (
     <Flex className="table-wrapper">
       {React.Children.map(
         children,
-        // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
         (child: Object): React.Element<any> =>
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           React.cloneElement(child, {
             fixed,
             striped,
@@ -84,22 +83,16 @@ let Table: Function = ({
     >
       {React.Children.map(
         children,
-        // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
         (child: Object): React.Element<any> =>
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           React.cloneElement(child, { fixed })
       )}
     </table>
   );
 
-Table = compose(
-  updateOnlyForKeys([
-    'children',
-    'className',
-    'marginBottom',
-    'height',
-    'width',
-  ])
-)(Table);
+Table = compose(updateOnlyForKeys(['children', 'className', 'marginBottom', 'height', 'width']))(
+  Table
+);
 
 export { Table, Thead, Tbody, Tfooter, Tr, Th, Td, EditableCell, FixedRow };

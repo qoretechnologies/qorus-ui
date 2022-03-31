@@ -2,31 +2,31 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import { rebuildConfigHash } from '../../../helpers/interfaces';
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
-import DetailTab from './detail';
 import Box from '../../../components/box';
 import Code from '../../../components/code';
+import ConfigItemsTable from '../../../components/ConfigItemsTable';
+import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
+import InfoTable from '../../../components/info_table';
 import Loader from '../../../components/loader';
 import ProcessTable from '../../../components/ProcessTable';
+import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
 import LogContainer from '../../../containers/log';
 import Mappers from '../../../containers/mappers';
-import Valuemaps from '../../../containers/valuemaps';
 import Releases from '../../../containers/releases';
-import ConfigItemsTable from '../../../components/ConfigItemsTable';
-import InfoTable from '../../../components/info_table';
+import Valuemaps from '../../../containers/valuemaps';
+import { rebuildConfigHash } from '../../../helpers/interfaces';
+import DetailTab from './detail';
 import Instances from './list';
-import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
 
 type JobsDetailTabsProps = {
-  activeTab: string,
-  model: Object,
-  isTablet?: boolean,
-  lib: Object,
-  location: Object,
-  date?: string,
-  linkDate?: string,
-  isPane?: boolean,
+  activeTab: string;
+  model: Object;
+  isTablet?: boolean;
+  lib: Object;
+  location: Object;
+  date?: string;
+  linkDate?: string;
+  isPane?: boolean;
 };
 
 const JobsDetailTabs: Function = ({
@@ -38,12 +38,12 @@ const JobsDetailTabs: Function = ({
   date,
   linkDate,
   isPane,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: JobsDetailTabsProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+JobsDetailTabsProps): React.Element<any> => (
   <SimpleTabs activeTab={activeTab}>
     {isPane && (
       <SimpleTab name="detail">
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
         <DetailTab key={model.name} model={model} isTablet={isTablet} />
       </SimpleTab>
     )}
@@ -54,16 +54,16 @@ const JobsDetailTabs: Function = ({
     )}
     <SimpleTab name="code">
       <Box top fill>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'. */}
         {model.code ? (
           <Code
             selected={{
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
               name: lib.code[0].name,
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
               code: lib.code[0].body,
               item: {
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
                 name: lib.code[0].name,
               },
               type: 'code',
@@ -84,10 +84,10 @@ const JobsDetailTabs: Function = ({
     <SimpleTab name="log">
       <Box top fill>
         <LogContainer
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           id={model.id}
           intfc="jobs"
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           resource={`jobs/${model.id}`}
           location={location}
         />
@@ -95,23 +95,23 @@ const JobsDetailTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="mappers">
       <Box top fill noPadding>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <Mappers mappers={model.mappers} />
       </Box>
     </SimpleTab>
     <SimpleTab name="value maps">
       <Box top fill noPadding>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
         <Valuemaps vmaps={model.vmaps} />
       </Box>
     </SimpleTab>
     <SimpleTab name="releases">
       <Box top fill>
         <Releases
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           component={model.name}
           compact
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           key={model.name}
           location={location}
         />
@@ -120,14 +120,14 @@ const JobsDetailTabs: Function = ({
     <SimpleTab name="config">
       <Box top fill scrollY>
         <GlobalConfigItemsTable
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'global_config' does not exist on type 'O... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'global_config' does not exist on type 'O... Remove this comment to see the full error message
           globalItems={model.global_config}
           intrf="system"
         />
         <ConfigItemsTable
           items={rebuildConfigHash(model)}
           intrf="jobs"
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           intrfId={model.id}
         />
       </Box>
@@ -140,6 +140,6 @@ const JobsDetailTabs: Function = ({
   </SimpleTabs>
 );
 
-export default compose(
-  onlyUpdateForKeys(['model', 'activeTab', 'lib', 'isTablet'])
-)(JobsDetailTabs);
+export default compose(onlyUpdateForKeys(['model', 'activeTab', 'lib', 'isTablet']))(
+  JobsDetailTabs
+);

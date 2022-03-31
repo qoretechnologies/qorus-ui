@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 
 /**
  * Table section supporting static and dynamic rows.
@@ -16,7 +16,7 @@ import PropTypes from 'prop-types';
  * defined.
  *
  * @param {!{
- *   cells: ?function,
+ *   cells: function,
  *   data: *,
  *   children: ReactNode,
  * }} props

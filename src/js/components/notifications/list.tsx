@@ -1,35 +1,29 @@
 /* @flow */
+import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router';
-
+import compose from 'recompose/compose';
+import lifecycle from 'recompose/lifecycle';
+import mapProps from 'recompose/mapProps';
+import withState from 'recompose/withState';
 import { getAlertObjectLink } from '../../helpers/system';
-import PaneItem from '../pane_item';
 import Box from '../box';
 import NoDataIf from '../NoDataIf';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
-import moment from 'moment';
-import Flex from '../Flex';
-import withState from 'recompose/withState';
-import lifecycle from 'recompose/lifecycle';
+import PaneItem from '../pane_item';
 
 type Props = {
-  collection: Array<Object>,
-  paneTab: string,
+  collection: Array<Object>;
+  paneTab: string;
 };
 
 let NotificationTime = ({ time }) => (
-  <div className="text-muted">
-    {moment(time)
-      .startOf('second')
-      .from(moment())}
-  </div>
+  <div className="text-muted">{moment(time).startOf('second').from(moment())}</div>
 );
 
 NotificationTime = compose(
   withState('timeInt', 'setTimeInt', 0),
   lifecycle({
-    componentDidMount () {
+    componentDidMount() {
       const { setTimeInt } = this.props;
       // Create an interval and update the time state
       setInterval(() => {
@@ -45,20 +39,20 @@ const NotificationList: Function = ({ collection }: Props) => (
       <Box top scrollY>
         {collection.map((alert: Object, index: number) => (
           <PaneItem
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'notificationId' does not exist on type '... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationId' does not exist on type '... Remove this comment to see the full error message
             key={alert.notificationId}
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'alert' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'alert' does not exist on type 'Object'.
             title={alert.alert}
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'when' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'when' does not exist on type 'Object'.
             label={<NotificationTime time={alert.when} />}
           >
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
             <Link to={getAlertObjectLink(alert.type, alert)}>
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'object' does not exist on type 'Object'. */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'object' does not exist on type 'Object'. */}
               {alert.object}
             </Link>
             <div>
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */}
               <small>{alert.reason}</small>
             </div>
           </PaneItem>
@@ -74,9 +68,9 @@ export default compose(
       collection:
         paneTab !== 'all'
           ? collection.filter(
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
-            (alert: Object) => alert.notificationType === paneTab
-          )
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
+              (alert: Object) => alert.notificationType === paneTab
+            )
           : collection,
       paneTab,
       ...rest,

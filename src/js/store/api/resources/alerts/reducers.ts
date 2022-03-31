@@ -1,17 +1,11 @@
 import remove from 'lodash/remove';
-
 import { setUpdatedToNull, updateItemWithId } from '../../utils';
 
 const initialState = {};
 
 const markAllAsRead = {
-  next(
-    state = initialState,
-    {
-      payload: { type },
-    }
-  ) {
-    const markNotification = notification => {
+  next(state = initialState, { payload: { type } }) {
+    const markNotification = (notification) => {
       if (!type || type === notification.alerttype) {
         return { _read: true, ...notification };
       }
@@ -19,7 +13,7 @@ const markAllAsRead = {
     };
     return {
       ...state,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type '{}'.
       ...{ data: state.data.map(markNotification) },
     };
   },
@@ -29,22 +23,17 @@ const markAllAsRead = {
 };
 
 const alertRaised = {
-  next(
-    state = initialState,
-    {
-      payload: { events },
-    }
-  ) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sync' does not exist on type '{}'.
+  next(state = initialState, { payload: { events } }) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type '{}'.
     if (state.sync) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type '{}'.
       const stateData = state.data.slice();
       const updatedData = setUpdatedToNull(stateData);
       let newData = updatedData;
 
-      events.forEach(dt => {
+      events.forEach((dt) => {
         const findAlert = newData.findIndex(
-          alert => alert.type === dt.type && alert.id === dt.alertid
+          (alert) => alert.type === dt.type && alert.id === dt.alertid
         );
 
         // Alert exists, update it instead
@@ -79,20 +68,15 @@ const alertRaised = {
 };
 
 const alertCleared = {
-  next(
-    state = initialState,
-    {
-      payload: { events },
-    }
-  ) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sync' does not exist on type '{}'.
+  next(state = initialState, { payload: { events } }) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type '{}'.
     if (state.sync) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type '{}'.
       const data = [...state.data];
       const updatedData = setUpdatedToNull(data);
 
       events.forEach(({ id }) => {
-        remove(updatedData, alert => alert.alertid === id);
+        remove(updatedData, (alert) => alert.alertid === id);
       });
 
       return { ...state, ...{ data: updatedData } };
@@ -106,23 +90,13 @@ const alertCleared = {
 };
 
 const updateDone = {
-  next(
-    state,
-    {
-      payload: { id },
-    }
-  ) {
+  next(state, { payload: { id } }) {
     if (state.sync) {
       const data = state.data.slice();
-      const alert = data.find(d => d.alertid === id);
+      const alert = data.find((d) => d.alertid === id);
 
       if (alert) {
-        const newData = updateItemWithId(
-          id,
-          { _updated: null },
-          data,
-          'alertid'
-        );
+        const newData = updateItemWithId(id, { _updated: null }, data, 'alertid');
 
         return { ...state, ...{ data: newData } };
       }

@@ -11,56 +11,57 @@ import Loader from '../components/loader';
  * @param {Function} loadFunc - custom loading function
  */
 export default (
-  propName: string,
-  showLoader: boolean = true,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  loadFunc: ?string = null
-// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
-): Function => (Component: ReactClass<*>): ReactClass<*> => {
-  class WrappedComponent extends React.Component {
-    state: {
-      hasStartedLoading: boolean,
-    } = {
-      hasStartedLoading: false,
-    };
+    propName: string,
+    showLoader: boolean = true,
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    loadFunc: string = null
+    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
+  ): Function =>
+  (Component) => {
+    class WrappedComponent extends React.Component {
+      state: {
+        hasStartedLoading: boolean;
+      } = {
+        hasStartedLoading: false,
+      };
 
-    componentDidMount () {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'load' does not exist on type 'Readonly<{... Remove this comment to see the full error message
-      const load = this.props[loadFunc] || this.props.load;
-      const value = this.props[propName];
+      componentDidMount() {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'load' does not exist on type 'Readonly<{... Remove this comment to see the full error message
+        const load = this.props[loadFunc] || this.props.load;
+        const value = this.props[propName];
 
-      if (!value.loading && !value.sync) {
-        this.setState(state => ({
-          ...state,
-          hasStartedLoading: true,
-        }));
-        load();
+        if (!value.loading && !value.sync) {
+          this.setState((state) => ({
+            ...state,
+            hasStartedLoading: true,
+          }));
+          load();
+        }
+      }
+
+      componentDidUpdate(nextProps) {
+        const load = nextProps[loadFunc] || nextProps.load;
+        const value = nextProps[propName];
+
+        if (!this.state.hasStartedLoading) {
+          this.setState((state) => ({
+            ...state,
+            hasStartedLoading: true,
+          }));
+          load();
+        }
+      }
+
+      render() {
+        if (showLoader && !this.props[propName].sync) {
+          return <Loader />;
+        }
+
+        return <Component {...this.props} />;
       }
     }
 
-    componentDidUpdate (nextProps) {
-      const load = nextProps[loadFunc] || nextProps.load;
-      const value = nextProps[propName];
-
-      if (!this.state.hasStartedLoading) {
-        this.setState(state => ({
-          ...state,
-          hasStartedLoading: true,
-        }));
-        load();
-      }
-    }
-
-    render () {
-      if (showLoader && !this.props[propName].sync) {
-        return <Loader />;
-      }
-
-      return <Component {...this.props} />;
-    }
-  }
-
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'displayName' does not exist on type 'typ... Remove this comment to see the full error message
-  WrappedComponent.displayName = `sync(${Component.displayName})`;
-  return WrappedComponent;
-};
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'displayName' does not exist on type 'typ... Remove this comment to see the full error message
+    WrappedComponent.displayName = `sync(${Component.displayName})`;
+    return WrappedComponent;
+  };

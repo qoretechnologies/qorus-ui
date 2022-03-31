@@ -1,26 +1,20 @@
-import { createAction } from 'redux-actions';
-import queryString from 'qs';
 import isArray from 'lodash/isArray';
-
-import {
-  fetchJson,
-  fetchText,
-  fetchData,
-  fetchWithNotifications,
-} from '../../../utils';
+import queryString from 'qs';
+import { createAction } from 'redux-actions';
 import settings from '../../../../../settings';
 import {
-  updateConfigItemAction,
-  updateBasicDataAction,
-  fetchLoggerAction,
-  addUpdateLoggerAction,
-  deleteLoggerAction,
   addAppenderAction,
+  addUpdateLoggerAction,
   deleteAppenderAction,
-  updateConfigItemWsCommon,
   deleteConfigItemAction,
+  deleteLoggerAction,
   editAppenderAction,
+  fetchLoggerAction,
+  updateBasicDataAction,
+  updateConfigItemAction,
+  updateConfigItemWsCommon,
 } from '../../../common/actions';
+import { fetchData, fetchJson, fetchText, fetchWithNotifications } from '../../../utils';
 
 const jobsUrl = `${settings.REST_BASE_URL}/jobs`;
 
@@ -44,7 +38,7 @@ const setOptionsPayload = async (model, opt, optimistic) => {
     };
   }
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
   await fetchData('PUT', `${settings.REST_BASE_URL}/jobs/${model.id}`, {
     body: JSON.stringify({
       action: 'setOptions',
@@ -60,27 +54,23 @@ const setOptionsMeta = (model, opt, optimistic) => ({
   optimistic,
 });
 
-const setOptionsAction = createAction(
-  'JOBS_SETOPTIONS',
-  setOptionsPayload,
-  setOptionsMeta
-);
+const setOptionsAction = createAction('JOBS_SETOPTIONS', setOptionsPayload, setOptionsMeta);
 
 /**
  * Sends real and optimistic actions to set option
  * @param {Object} model model that should be updated
  * @param {Object} opt updated option
  */
-const setOptions = (model, opt) => dispatch => {
+const setOptions = (model, opt) => (dispatch) => {
   dispatch(setOptionsAction(model, opt, true));
   dispatch(setOptionsAction(model, opt));
 };
 
-const fetchLibSourcesPayload = baseUrl => model =>
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+const fetchLibSourcesPayload = (baseUrl) => (model) =>
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
   fetchJson('GET', `${baseUrl}/${model.id}?lib_source=true&method_source=true`);
 
-function fetchLibSourcesMeta (model) {
+function fetchLibSourcesMeta(model) {
   return { modelId: model.id };
 }
 
@@ -90,23 +80,25 @@ const fetchLibSources = createAction(
   fetchLibSourcesMeta
 );
 
-const addNew = createAction('JOBS_ADDNEW', async id => {
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+const addNew = createAction('JOBS_ADDNEW', async (id) => {
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
   const job = await fetchJson('GET', `${settings.REST_BASE_URL}/jobs/${id}`);
 
   return { job };
 });
 
-const fetchResultsPayload = baseUrl => (model, query, offset = 0, limit = 50) =>
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-  fetchJson(
-    'GET',
-    `${baseUrl}/${model.id}/results?${queryString.stringify({
-      ...query,
-      limit,
-      offset,
-    })}`
-  );
+const fetchResultsPayload =
+  (baseUrl) =>
+  (model, query, offset = 0, limit = 50) =>
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+    fetchJson(
+      'GET',
+      `${baseUrl}/${model.id}/results?${queryString.stringify({
+        ...query,
+        limit,
+        offset,
+      })}`
+    );
 const fetchResultsMeta = ({ id: modelId }, query, offset = 0, limit = 50) => ({
   modelId,
   offset,
@@ -124,10 +116,12 @@ const startFetchingResults = createAction(
   ({ id: modelId }) => ({ modelId })
 );
 
-const fetchResults = (...args) => dispatch => {
-  dispatch(startFetchingResults(...args));
-  dispatch(fetchResultsCall(...args));
-};
+const fetchResults =
+  (...args) =>
+  (dispatch) => {
+    dispatch(startFetchingResults(...args));
+    dispatch(fetchResultsCall(...args));
+  };
 
 const clearResults = createAction(
   'JOBS_CLEARRESULTS',
@@ -135,90 +129,75 @@ const clearResults = createAction(
   ({ id: modelId }) => ({ modelId })
 );
 
-const fetchCodePayload = async job => ({
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+const fetchCodePayload = async (job) => ({
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
   code: await fetchText('GET', `${settings.REST_BASE_URL}/jobs/${job.id}/code`),
 });
-const fetchCodeMeta = job => ({ job });
+const fetchCodeMeta = (job) => ({ job });
 
-const fetchCode = createAction(
-  'JOBS_FETCHCODE',
-  fetchCodePayload,
-  fetchCodeMeta
-);
-const setActive = createAction('JOBS_SETACTIVE', events => ({ events }));
+const fetchCode = createAction('JOBS_FETCHCODE', fetchCodePayload, fetchCodeMeta);
+const setActive = createAction('JOBS_SETACTIVE', (events) => ({ events }));
 
-const setEnabled = createAction('JOBS_SETENABLED', events => ({ events }));
+const setEnabled = createAction('JOBS_SETENABLED', (events) => ({ events }));
 
-const updateDone = createAction('JOBS_UPDATEDONE', id => ({ id }));
+const updateDone = createAction('JOBS_UPDATEDONE', (id) => ({ id }));
 
-const instanceUpdateDone = createAction(
-  'JOBS_INSTANCEUPDATEDONE',
-  (jobid, id) => ({ jobid, id })
-);
+const instanceUpdateDone = createAction('JOBS_INSTANCEUPDATEDONE', (jobid, id) => ({ jobid, id }));
 
-const addInstance = createAction('JOBS_ADDINSTANCE', events => ({ events }));
+const addInstance = createAction('JOBS_ADDINSTANCE', (events) => ({ events }));
 
-const modifyInstance = createAction('JOBS_MODIFYINSTANCE', events => ({
+const modifyInstance = createAction('JOBS_MODIFYINSTANCE', (events) => ({
   events,
 }));
 
-const addAlert = createAction('JOBS_ADDALERT', events => ({ events }));
+const addAlert = createAction('JOBS_ADDALERT', (events) => ({ events }));
 
-const clearAlert = createAction('JOBS_CLEARALERT', events => ({ events }));
+const clearAlert = createAction('JOBS_CLEARALERT', (events) => ({ events }));
 
-const select = createAction('JOBS_SELECT', id => ({ id }));
+const select = createAction('JOBS_SELECT', (id) => ({ id }));
 
-const jobsAction = createAction(
-  'JOBS_ACTION',
-  async (action, ids, dispatch) => {
-    const id = isArray(ids) ? ids.join(',') : ids;
-    const url = `${settings.REST_BASE_URL}/jobs?ids=${id}&action=${action}`;
+const jobsAction = createAction('JOBS_ACTION', async (action, ids, dispatch) => {
+  const id = isArray(ids) ? ids.join(',') : ids;
+  const url = `${settings.REST_BASE_URL}/jobs?ids=${id}&action=${action}`;
 
-    fetchWithNotifications(
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-      async () => await fetchJson('PUT', url),
-      `Executing ${action} on job(s) ${id}...`,
-      `${action} successfuly executed on job(s) ${ids}`,
-      dispatch
-    );
+  fetchWithNotifications(
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+    async () => await fetchJson('PUT', url),
+    `Executing ${action} on job(s) ${id}...`,
+    `${action} successfuly executed on job(s) ${ids}`,
+    dispatch
+  );
 
-    return {};
-  }
-);
+  return {};
+});
 
-const expire = createAction(
-  'JOBS_EXPIRE',
-  async (id, date, onFinish, dispatch) => {
-    fetchWithNotifications(
-      async () => {
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-        const res: Object = await fetchJson(
-          'PUT',
-          `${settings.REST_BASE_URL}/jobs/${id}?action=setExpiry&date=${date}`
-        );
+const expire = createAction('JOBS_EXPIRE', async (id, date, onFinish, dispatch) => {
+  fetchWithNotifications(
+    async () => {
+      // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+      const res: Object = await fetchJson(
+        'PUT',
+        `${settings.REST_BASE_URL}/jobs/${id}?action=setExpiry&date=${date}`
+      );
 
-        if (onFinish) onFinish();
+      if (onFinish) onFinish();
 
-        return res;
-      },
-      `Executing expire on ${id}...`,
-      `Expire change executed on ${id}`,
-      dispatch
-    );
-  }
-);
+      return res;
+    },
+    `Executing expire on ${id}...`,
+    `Expire change executed on ${id}`,
+    dispatch
+  );
+});
 
 const reschedule = createAction(
   'JOBS_RESCHEDULE',
   async (id, { minute, hour, day, month, wday }, dispatch) => {
     const cron = `${minute} ${hour} ${day} ${month} ${wday}`;
-    const url = `${
-      settings.REST_BASE_URL
-    }/jobs/${id}?action=schedule&schedule=${cron}`;
+    const url = `${settings.REST_BASE_URL}/jobs/${id}?action=schedule&schedule=${cron}`;
 
     fetchWithNotifications(
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+      // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
       async () => await fetchJson('PUT', url),
       `Rescheduling job ${id}...`,
       `Job ${id} rescheduled`,
@@ -228,12 +207,10 @@ const reschedule = createAction(
 );
 
 const activate = createAction('JOBS_ACTIVATE', (id, active, dispatch) => {
-  const url = `${
-    settings.REST_BASE_URL
-  }/jobs/${id}?action=setActive&active=${!active}`;
+  const url = `${settings.REST_BASE_URL}/jobs/${id}?action=setActive&active=${!active}`;
 
   fetchWithNotifications(
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
     async () => await fetchJson('PUT', url),
     `Activating job ${id}...`,
     `Job ${id} activated`,
@@ -245,7 +222,7 @@ const run = createAction('JOBS_RUN', (id, dispatch) => {
   const url = `${settings.REST_BASE_URL}/jobs/${id}?action=run`;
 
   fetchWithNotifications(
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
     async () => await fetchJson('PUT', url),
     `Running job ${id}...`,
     `Job ${id} ran`,
@@ -255,15 +232,12 @@ const run = createAction('JOBS_RUN', (id, dispatch) => {
 
 const setSLAJob = createAction(
   'JOBS_SETSLAJOB',
-  // @ts-expect-error ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
   (job, sla, dispatch): Object => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-        await fetchJson(
-          'PUT',
-          `${settings.REST_BASE_URL}/slas/${sla}?action=setJob&job=${job}`
-        ),
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        await fetchJson('PUT', `${settings.REST_BASE_URL}/slas/${sla}?action=setJob&job=${job}`),
       `Setting SLA for job ${job}...`,
       `SLA for job ${job} set`,
       dispatch
@@ -273,13 +247,13 @@ const setSLAJob = createAction(
 
 const removeSLAJob = createAction(
   'JOBS_REMOVESLAJOB',
-  // @ts-expect-error ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
   (job, sla, dispatch): Object => {
     const url = `${settings.REST_BASE_URL}/slas/${sla}?`;
     const args = `action=removeJob&job=${job}`;
 
     fetchWithNotifications(
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+      // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
       async () => await fetchJson('PUT', url + args),
       `Removing SLA from job ${job}`,
       `SLA removed from job ${job}`,
@@ -288,37 +262,30 @@ const removeSLAJob = createAction(
   }
 );
 
-const setRemote = createAction(
-  'JOBS_SETREMOTE',
-  async (id, value, dispatch) => {
-    fetchWithNotifications(
-      async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
-        await fetchJson(
-          'PUT',
-          `${settings.REST_BASE_URL}/jobs/${id}/setRemote`,
-          {
-            body: JSON.stringify({
-              remote: value,
-            }),
-          }
-        ),
-      `Setting job ${id} as ${!value ? 'not' : ''} remote...`,
-      `Set job ${id} as ${!value ? 'not' : ''} remote`,
-      dispatch
-    );
-  }
-);
+const setRemote = createAction('JOBS_SETREMOTE', async (id, value, dispatch) => {
+  fetchWithNotifications(
+    async () =>
+      // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+      await fetchJson('PUT', `${settings.REST_BASE_URL}/jobs/${id}/setRemote`, {
+        body: JSON.stringify({
+          remote: value,
+        }),
+      }),
+    `Setting job ${id} as ${!value ? 'not' : ''} remote...`,
+    `Set job ${id} as ${!value ? 'not' : ''} remote`,
+    dispatch
+  );
+});
 
 const updateConfigItem: Function = updateConfigItemAction('JOBS');
 const deleteConfigItem: Function = deleteConfigItemAction('JOBS');
 const updateConfigItemWs = updateConfigItemWsCommon('JOBS');
 
-const processStarted = createAction('JOBS_PROCESSSTARTED', events => ({
+const processStarted = createAction('JOBS_PROCESSSTARTED', (events) => ({
   events,
 }));
 
-const processStopped = createAction('JOBS_PROCESSSTOPPED', events => ({
+const processStopped = createAction('JOBS_PROCESSSTOPPED', (events) => ({
   events,
 }));
 

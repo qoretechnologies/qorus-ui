@@ -1,37 +1,30 @@
 /* @flow */
+import size from 'lodash/size';
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import size from 'lodash/size';
-
-import PermsRow from './row';
-import {
-  Table,
-  Tbody,
-  Thead,
-  FixedRow,
-  Th,
-} from '../../../../components/new_table';
-import { sortDefaults } from '../../../../constants/sort';
-import Pull from '../../../../components/Pull';
-import LoadMore from '../../../../components/LoadMore';
-import { NameColumnHeader } from '../../../../components/NameColumn';
-import { DescriptionColumnHeader } from '../../../../components/DescriptionColumn';
 import { ActionColumnHeader } from '../../../../components/ActionColumn';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control as Button } from '../../../../components/controls';
 import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
-import EnhancedTable from '../../../../components/EnhancedTable';
+import { DescriptionColumnHeader } from '../../../../components/DescriptionColumn';
 import type { EnhancedTableProps } from '../../../../components/EnhancedTable';
+import EnhancedTable from '../../../../components/EnhancedTable';
+import LoadMore from '../../../../components/LoadMore';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../../../components/new_table';
+import Pull from '../../../../components/Pull';
+import { sortDefaults } from '../../../../constants/sort';
+import PermsRow from './row';
 
 type Props = {
-  perms: Array<Object>,
-  onEditClick: Function,
-  onDeleteClick: Function,
-  canEdit: boolean,
-  canDelete: boolean,
-  canAdd: boolean,
-  onAddPermClick: Function,
+  perms: Array<Object>;
+  onEditClick: Function;
+  onDeleteClick: Function;
+  canEdit: boolean;
+  canDelete: boolean;
+  canAdd: boolean;
+  onAddPermClick: Function;
 };
 
 const PermsTable: Function = ({
@@ -39,13 +32,9 @@ const PermsTable: Function = ({
   canAdd,
   onAddPermClick,
   ...rest
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<Table> => (
-  <EnhancedTable
-    collection={perms}
-    tableId="rbacPerms"
-    sortDefault={sortDefaults.rbacPerms}
-  >
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<Table> => (
+  <EnhancedTable collection={perms} tableId="rbacPerms" sortDefault={sortDefaults.rbacPerms}>
     {({
       canLoadMore,
       handleLoadAll,
@@ -85,25 +74,21 @@ const PermsTable: Function = ({
           <FixedRow {...{ onSortChange, sortData }}>
             <NameColumnHeader />
             <ActionColumnHeader />
-            <Th
-              className="text normal"
-              name="permission_type"
-              icon="info-sign"
-            >
+            <Th className="text normal" name="permission_type" icon="info-sign">
               Type
             </Th>
             <DescriptionColumnHeader />
           </FixedRow>
         </Thead>
         <DataOrEmptyTable condition={size(collection) === 0} cols={4}>
-          {props => (
+          {(props) => (
             <Tbody {...props}>
               {collection.map(
-                // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                 (role: Object, index: number): React.Element<PermsRow> => (
                   <PermsRow
                     first={index === 0}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     key={role.name}
                     model={role}
                     {...rest}

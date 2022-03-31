@@ -1,39 +1,24 @@
 /* @flow */
-import React from 'react';
 import size from 'lodash/size';
-
+import React from 'react';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import EnhancedTable from '../../../components/EnhancedTable';
-import { sortDefaults } from '../../../constants/sort';
-import {
-  Table,
-  FixedRow,
-  Thead,
-  Tbody,
-  Tr,
-  Td,
-  Th,
-} from '../../../components/new_table';
-import {
-  DescriptionColumnHeader,
-  DescriptionColumn,
-} from '../../../components/DescriptionColumn';
-import {
-  AuthorColumnHeader,
-  AuthorColumn,
-} from '../../../components/AuthorColumn';
-import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
-import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import { AuthorColumn, AuthorColumnHeader } from '../../../components/AuthorColumn';
 import ContentByType from '../../../components/ContentByType';
-import Pull from '../../../components/Pull';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import { DateColumn, DateColumnHeader } from '../../../components/DateColumn';
+import { DescriptionColumn, DescriptionColumnHeader } from '../../../components/DescriptionColumn';
+import EnhancedTable from '../../../components/EnhancedTable';
 import LoadMore from '../../../components/LoadMore';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../../components/new_table';
+import Pull from '../../../components/Pull';
+import { sortDefaults } from '../../../constants/sort';
 import Search from '../../../containers/search';
 
 type Props = {
-  notes: Array<Object>,
+  notes: Array<Object>;
 };
 
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 const NotesList: Function = ({ notes }: Props): React.Element<any> => (
   <EnhancedTable
     searchBy={['created', 'modified', 'username', 'note']}
@@ -77,21 +62,21 @@ const NotesList: Function = ({ notes }: Props): React.Element<any> => (
           </FixedRow>
         </Thead>
         <DataOrEmptyTable condition={size(collection) === 0} cols={5}>
-          {props => (
+          {(props) => (
             <Tbody {...props}>
               {collection.map((note: Object, index: number) => (
                 <Tr first={index === 0} key={index}>
-                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'note' does not exist on type 'Object'. */ }
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'note' does not exist on type 'Object'. */}
                   <DescriptionColumn>{note.note}</DescriptionColumn>
-                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */ }
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */}
                   <AuthorColumn>{note.username}</AuthorColumn>
                   <Td className="tiny">
-                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'saved' does not exist on type 'Object'. */ }
+                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'saved' does not exist on type 'Object'. */}
                     <ContentByType content={note.saved} />
                   </Td>
-                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */}
                   <DateColumn>{note.created}</DateColumn>
-                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'modified' does not exist on type 'Object... Remove this comment to see the full error message */ }
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'modified' does not exist on type 'Object... Remove this comment to see the full error message */}
                   <DateColumn>{note.modified}</DateColumn>
                 </Tr>
               ))}

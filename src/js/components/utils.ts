@@ -11,7 +11,7 @@ import { isEqual } from 'lodash';
  * @return {boolean}
  */
 function shouldComponentUpdate(nextProps, nextState) {
-  // @ts-expect-error ts-migrate(2683) FIXME: 'this' implicitly has type 'any' because it does n... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2683) FIXME: 'this' implicitly has type 'any' because it does n... Remove this comment to see the full error message
   return !(isEqual(this.props, nextProps) && isEqual(this.state, nextState));
 }
 
@@ -48,9 +48,7 @@ export const normalizeName = (item, idAttr = 'id') => {
   const { name, version, patch } = item;
   const id = item[idAttr];
 
-  const versionString: string = version
-    ? ` v${version}${patch ? `.${patch}` : ''}`
-    : '';
+  const versionString: string = version ? ` v${version}${patch ? `.${patch}` : ''}` : '';
 
   const idString: string = id ? ` (${id})` : '';
 

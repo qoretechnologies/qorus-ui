@@ -5,14 +5,12 @@ import { buildSorting } from '../../../../helpers/table';
 import settings from '../../../../settings';
 import { fetchJson } from '../../utils';
 
-const unSyncCurrentUser: Function = createAction(
-  'CURRENTUSER_UNSYNCCURRENTUSER'
-);
+const unSyncCurrentUser: Function = createAction('CURRENTUSER_UNSYNCCURRENTUSER');
 
 const updateStorage: Function = createAction(
   'CURRENTUSER_UPDATESTORAGE',
   (storage: Object, username: string): Object => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
     fetchJson('PUT', `${settings.REST_BASE_URL}/users/${username}`, {
       body: JSON.stringify({
         storage,
@@ -23,130 +21,119 @@ const updateStorage: Function = createAction(
   }
 );
 
-const storeSortChange: Function = (
-  table: string,
-  sortData: Object
-): Function => (dispatch: Function, getState: Function): void => {
-  const {
-    ui: { sort },
-    api: {
-      currentUser: {
-        data: {
-          username,
-          storage = {
-            [table]: {},
+const storeSortChange: Function =
+  (table: string, sortData: Object): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const {
+      ui: { sort },
+      api: {
+        currentUser: {
+          data: {
+            username,
+            storage = {
+              [table]: {},
+            },
           },
         },
       },
-    },
-  } = getState();
+    } = getState();
 
-  const newSort: Object = buildSorting(sortData, table, sort);
+    const newSort: Object = buildSorting(sortData, table, sort);
 
-  storage[table] = storage[table] || {};
-  storage[table].sort = newSort;
-
-  dispatch(updateStorage(storage, username));
-};
-
-const storePaneSize: Function = (
-  type: string,
-  width: number,
-  username: Object
-): Function => (dispatch: Function, getState: Function): void => {
-  const storage = getState().api.currentUser.data.storage || {};
-
-  storage[type] = storage[type] || {};
-  storage[type].paneSize = width;
-
-  dispatch(updateStorage(storage, username));
-};
-
-const storeSearch: Function = (
-  type: string,
-  query: string,
-  username: Object
-): Function => (dispatch: Function, getState: Function): void => {
-  const storage = getState().api.currentUser.data.storage || {};
-
-  storage[type] = storage[type] || {};
-  storage[type].searches = storage[type].searches || [];
-
-  if (!includes(storage[type].searches, query) && query.length > 2) {
-    storage[type].searches.unshift(query);
-
-    if (storage[type].searches.length > 15) {
-      storage[type].searches.splice(-1, 1);
-    }
+    storage[table] = storage[table] || {};
+    storage[table].sort = newSort;
 
     dispatch(updateStorage(storage, username));
-  }
-};
+  };
 
-const storeLocale: Function = (locale: string): Function => (
-  dispatch: Function,
-  getState: Function
-): void => {
-  const { storage = {}, username } = getState().api.currentUser.data;
+const storePaneSize: Function =
+  (type: string, width: number, username: Object): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const storage = getState().api.currentUser.data.storage || {};
 
-  storage.locale = locale;
+    storage[type] = storage[type] || {};
+    storage[type].paneSize = width;
 
-  dispatch(updateStorage(storage, username));
-};
+    dispatch(updateStorage(storage, username));
+  };
 
-const storeSidebar: Function = (sidebarOpen: boolean): Function => (
-  dispatch: Function,
-  getState: Function
-): void => {
-  const { storage = {}, username } = getState().api.currentUser.data;
+const storeSearch: Function =
+  (type: string, query: string, username: Object): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const storage = getState().api.currentUser.data.storage || {};
 
-  storage.sidebarOpen = sidebarOpen;
+    storage[type] = storage[type] || {};
+    storage[type].searches = storage[type].searches || [];
 
-  dispatch(updateStorage(storage, username));
-};
+    if (!includes(storage[type].searches, query) && query.length > 2) {
+      storage[type].searches.unshift(query);
 
-const storeTheme: Function = (theme: string): Function => (
-  dispatch: Function,
-  getState: Function
-): void => {
-  const { storage = {}, username } = getState().api.currentUser.data;
+      if (storage[type].searches.length > 15) {
+        storage[type].searches.splice(-1, 1);
+      }
 
-  storage.theme = theme;
+      dispatch(updateStorage(storage, username));
+    }
+  };
 
-  dispatch(updateStorage(storage, username));
-};
+const storeLocale: Function =
+  (locale: string): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const { storage = {}, username } = getState().api.currentUser.data;
 
-const storeSettings: Function = (setting: string, value: any): Function => (
-  dispatch: Function,
-  getState: Function
-): void => {
-  const { storage = {}, username } = getState().api.currentUser.data;
+    storage.locale = locale;
 
-  storage.settings[setting] = value;
+    dispatch(updateStorage(storage, username));
+  };
 
-  dispatch(updateStorage(storage, username));
-};
+const storeSidebar: Function =
+  (sidebarOpen: boolean): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const { storage = {}, username } = getState().api.currentUser.data;
 
-const storeFavoriteMenuItem: Function = (items): Function => (
-  dispatch: Function,
-  getState: Function
-): void => {
-  const { storage = {}, username } = getState().api.currentUser.data;
+    storage.sidebarOpen = sidebarOpen;
 
-  storage.favoriteMenuItems = storage.favoriteMenuItems || [];
-  storage.favoriteMenuItems = [...storage.favoriteMenuItems, ...items];
+    dispatch(updateStorage(storage, username));
+  };
 
-  dispatch(updateStorage(storage, username));
-};
+const storeTheme: Function =
+  (theme: string): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const { storage = {}, username } = getState().api.currentUser.data;
 
-const clearStorage: Function = (): Function => (
-  dispatch: Function,
-  getState: Function
-): void => {
-  const { username } = getState().api.currentUser.data;
+    storage.theme = theme;
 
-  dispatch(updateStorage({}, username));
-};
+    dispatch(updateStorage(storage, username));
+  };
+
+const storeSettings: Function =
+  (setting: string, value: any): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const { storage = {}, username } = getState().api.currentUser.data;
+
+    storage.settings[setting] = value;
+
+    dispatch(updateStorage(storage, username));
+  };
+
+const storeFavoriteMenuItem: Function =
+  (items): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const { storage = {}, username } = getState().api.currentUser.data;
+
+    storage.favoriteMenuItems = storage.favoriteMenuItems || [];
+    storage.favoriteMenuItems = [...storage.favoriteMenuItems, ...items];
+
+    dispatch(updateStorage(storage, username));
+  };
+
+const clearStorage: Function =
+  (): Function =>
+  (dispatch: Function, getState: Function): void => {
+    const { username } = getState().api.currentUser.data;
+
+    dispatch(updateStorage({}, username));
+  };
 
 export {
   unSyncCurrentUser,

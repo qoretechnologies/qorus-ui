@@ -8,7 +8,7 @@ import AlertsTable from '../../../components/alerts_table';
 import Box from '../../../components/box';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
 import Flex from '../../../components/Flex';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/gr... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/gr... Remove this comment to see the full error message
 import { Group, Groups } from '../../../components/groups';
 import InfoHeader from '../../../components/InfoHeader';
 import { Table, Tbody, Td, Th, Thead, Tr } from '../../../components/new_table';
@@ -41,15 +41,15 @@ function retstr(str) {
   (state) => ({
     system: state.api.system.data,
   }),
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
   actions.services
 )
 @injectIntl
 export default class DetailTab extends Component {
   props: {
-    service: Object,
-    systemOptions: Array<Object>,
-    setOptions: Function,
+    service: Object;
+    systemOptions: Array<Object>;
+    setOptions: Function;
   } = this.props;
 
   state = {
@@ -60,20 +60,20 @@ export default class DetailTab extends Component {
       val: retnum(this.props.service['scaling_memory']) || 0,
       unit: retstr(this.props.service['scaling_memory']) || '',
     },
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'container_cpu_limit' does not exist on t... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'container_cpu_limit' does not exist on t... Remove this comment to see the full error message
     cpuLimit: this.props.service.container_cpu_limit || 0,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'container_cpu_request' does not exist on... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'container_cpu_request' does not exist on... Remove this comment to see the full error message
     cpuRequest: this.props.service.container_cpu_request || 0,
     memoryLimit: {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'container_memory_limit' does not exist o... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'container_memory_limit' does not exist o... Remove this comment to see the full error message
       val: retnum(this.props.service.container_memory_limit) || 0,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'container_memory_limit' does not exist o... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'container_memory_limit' does not exist o... Remove this comment to see the full error message
       unit: retstr(this.props.service.container_memory_limit) || '',
     },
     memoryRequest: {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'container_memory_request' does not exist... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'container_memory_request' does not exist... Remove this comment to see the full error message
       val: retnum(this.props.service.container_memory_request) || 0,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'container_memory_request' does not exist... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'container_memory_request' does not exist... Remove this comment to see the full error message
       unit: retstr(this.props.service.container_memory_request) || '',
     },
   };
@@ -139,7 +139,7 @@ export default class DetailTab extends Component {
 
     if (
       this.isNumberIncorrect(this.state.memoryLimit?.val) ||
-      // @ts-expect-error ts-migrate(2365) FIXME: Operator '<' cannot be applied to types '{ val: nu... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2365) FIXME: Operator '<' cannot be applied to types '{ val: nu... Remove this comment to see the full error message
       this.state.memoryLimit < this.state.memoryRequest?.val
     ) {
       isValid = false;
@@ -147,7 +147,7 @@ export default class DetailTab extends Component {
 
     if (
       this.isNumberIncorrect(this.state.memoryRequest?.val) ||
-      // @ts-expect-error ts-migrate(2365) FIXME: Operator '>' cannot be applied to types '{ val: nu... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2365) FIXME: Operator '>' cannot be applied to types '{ val: nu... Remove this comment to see the full error message
       this.state.memoryRequest > this.state.memoryLimit?.val
     ) {
       isValid = false;
@@ -185,62 +185,48 @@ export default class DetailTab extends Component {
   };
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
     const { service, intl, system } = this.props;
-    const {
-      minReplicas,
-      maxReplicas,
-      cpuLimit,
-      cpuRequest,
-      memoryLimit,
-      memoryRequest,
-    } = this.state;
+    const { minReplicas, maxReplicas, cpuLimit, cpuRequest, memoryLimit, memoryRequest } =
+      this.state;
 
     return (
       <Box top fill>
         <InfoHeader model={service} />
         <Flex scrollY>
           <PaneItem
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
             title={this.props.intl.formatMessage({ id: 'component.controls' })}
           >
             <ServicesControls
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Object'.
               status={service.status}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
               enabled={service.enabled}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'autostart' does not exist on type 'Objec... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'autostart' does not exist on type 'Objec... Remove this comment to see the full error message
               autostart={service.autostart}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
               id={service.id}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
               remote={service.remote}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
               type={service.type}
             />
           </PaneItem>
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'stateless' does not exist on type 'Objec... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'stateless' does not exist on type 'Objec... Remove this comment to see the full error message */}
           {service.stateless && system.is_kubernetes ? (
             <PaneItem
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
               title={this.props.intl.formatMessage({
                 id: 'service.resource-limits',
               })}
             >
               <Table>
                 <Thead>
-                  <Th className="text">
-                    {intl.formatMessage({ id: 'service.cpu-request' })}
-                  </Th>
-                  <Th className="text">
-                    {intl.formatMessage({ id: 'service.cpu-limit' })}
-                  </Th>
-                  <Th className="text">
-                    {intl.formatMessage({ id: 'service.memory-request' })}
-                  </Th>
-                  <Th className="text">
-                    {intl.formatMessage({ id: 'service.memory-limit' })}
-                  </Th>
+                  <Th className="text">{intl.formatMessage({ id: 'service.cpu-request' })}</Th>
+                  <Th className="text">{intl.formatMessage({ id: 'service.cpu-limit' })}</Th>
+                  <Th className="text">{intl.formatMessage({ id: 'service.memory-request' })}</Th>
+                  <Th className="text">{intl.formatMessage({ id: 'service.memory-limit' })}</Th>
                 </Thead>
                 <Tbody>
                   <Tr>
@@ -250,13 +236,10 @@ export default class DetailTab extends Component {
                         style={{ width: '70px' }}
                         intent={cpuLimit < cpuRequest ? 'danger' : undefined}
                         onChange={(event) =>
-                          this.handleScalingChange(
-                            'cpuRequest',
-                            parseFloat(event.target.value)
-                          )
+                          this.handleScalingChange('cpuRequest', parseFloat(event.target.value))
                         }
                         value={this.state.cpuRequest}
-                        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ step: number; style: { width: string; }; i... Remove this comment to see the full error message
+                        // @ts-ignore ts-migrate(2322) FIXME: Type '{ step: number; style: { width: string; }; i... Remove this comment to see the full error message
                         fixed
                         type="number"
                       />
@@ -267,24 +250,19 @@ export default class DetailTab extends Component {
                         style={{ width: '70px' }}
                         intent={cpuRequest > cpuLimit ? 'danger' : undefined}
                         onChange={(event) =>
-                          this.handleScalingChange(
-                            'cpuLimit',
-                            parseFloat(event.target.value)
-                          )
+                          this.handleScalingChange('cpuLimit', parseFloat(event.target.value))
                         }
                         value={this.state.cpuLimit}
-                        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ step: number; style: { width: string; }; i... Remove this comment to see the full error message
+                        // @ts-ignore ts-migrate(2322) FIXME: Type '{ step: number; style: { width: string; }; i... Remove this comment to see the full error message
                         fixed
                         type="number"
                       />
                     </Td>
                     <Td className="text">
-                      { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */ }
+                      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */}
                       <ControlGroup fluid>
                         <InputGroup
-                          intent={
-                            memoryRequest > memoryLimit ? 'danger' : undefined
-                          }
+                          intent={memoryRequest > memoryLimit ? 'danger' : undefined}
                           style={{ width: '70px' }}
                           onChange={(event) =>
                             this.handleScalingChange('memoryRequest', {
@@ -292,17 +270,15 @@ export default class DetailTab extends Component {
                               unit: this.state.memoryRequest.unit,
                             })
                           }
-                          // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string & ... Remove this comment to see the full error message
+                          // @ts-ignore ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string & ... Remove this comment to see the full error message
                           value={this.state.memoryRequest.val}
                           type="number"
                         />
-                        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                         <Dropdown>
-                          { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
-                          <Control>
-                            {this.state.memoryRequest.unit || 'Select unit'}
-                          </Control>
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
+                          <Control>{this.state.memoryRequest.unit || 'Select unit'}</Control>
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryRequest', {
@@ -312,7 +288,7 @@ export default class DetailTab extends Component {
                             }
                             title="KiB"
                           />
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryRequest', {
@@ -322,7 +298,7 @@ export default class DetailTab extends Component {
                             }
                             title="MiB"
                           />
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryRequest', {
@@ -336,7 +312,7 @@ export default class DetailTab extends Component {
                       </ControlGroup>
                     </Td>
                     <Td className="text">
-                      { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */ }
+                      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */}
                       <ControlGroup fluid>
                         <InputGroup
                           style={{ width: '70px' }}
@@ -346,17 +322,15 @@ export default class DetailTab extends Component {
                               unit: this.state.memoryLimit.unit,
                             })
                           }
-                          // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string & ... Remove this comment to see the full error message
+                          // @ts-ignore ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string & ... Remove this comment to see the full error message
                           value={this.state.memoryLimit.val}
                           type="number"
                         />
-                        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                         <Dropdown>
-                          { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
-                          <Control>
-                            {this.state.memoryLimit.unit || 'Select unit'}
-                          </Control>
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
+                          <Control>{this.state.memoryLimit.unit || 'Select unit'}</Control>
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryLimit', {
@@ -366,7 +340,7 @@ export default class DetailTab extends Component {
                             }
                             title="KiB"
                           />
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryLimit', {
@@ -376,7 +350,7 @@ export default class DetailTab extends Component {
                             }
                             title="MiB"
                           />
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memoryLimit', {
@@ -396,13 +370,13 @@ export default class DetailTab extends Component {
                 disabled={!this.isContainerValid()}
                 intent="success"
                 onClick={() => {
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
                   this.props.dispatchAction(
                     fetchWithNotifications,
-                    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+                    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
                     async (): Promise<*> => {
                       await put(
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                         `${settings.REST_BASE_URL}/services/${service.name}/resourceLimits`,
                         {
                           body: JSON.stringify({
@@ -414,9 +388,9 @@ export default class DetailTab extends Component {
                         }
                       );
                     },
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     `Updating resource limits for ${service.name}...`,
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     `${service.name} resource limits updated successfuly`
                   );
                 }}
@@ -425,43 +399,30 @@ export default class DetailTab extends Component {
               </Button>
             </PaneItem>
           ) : null}
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'stateless' does not exist on type 'Objec... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'stateless' does not exist on type 'Objec... Remove this comment to see the full error message */}
           {service.stateless && system.is_kubernetes ? (
             <PaneItem
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ service:... Remove this comment to see the full error message
               title={this.props.intl.formatMessage({ id: 'service.scaling' })}
             >
               <Table>
                 <Thead>
-                  <Th className="text">
-                    {intl.formatMessage({ id: 'service.min-replicas' })}
-                  </Th>
-                  <Th className="text">
-                    {intl.formatMessage({ id: 'service.max-replicas' })}
-                  </Th>
-                  <Th className="text">
-                    {intl.formatMessage({ id: 'service.cpu' })}
-                  </Th>
-                  <Th className="text">
-                    {intl.formatMessage({ id: 'service.memory' })}
-                  </Th>
+                  <Th className="text">{intl.formatMessage({ id: 'service.min-replicas' })}</Th>
+                  <Th className="text">{intl.formatMessage({ id: 'service.max-replicas' })}</Th>
+                  <Th className="text">{intl.formatMessage({ id: 'service.cpu' })}</Th>
+                  <Th className="text">{intl.formatMessage({ id: 'service.memory' })}</Th>
                 </Thead>
                 <Tbody>
                   <Tr>
                     <Td className="text">
                       <InputGroup
                         style={{ width: '70px' }}
-                        intent={
-                          minReplicas > maxReplicas ? 'danger' : undefined
-                        }
+                        intent={minReplicas > maxReplicas ? 'danger' : undefined}
                         onChange={(event) =>
-                          this.handleScalingChange(
-                            'minReplicas',
-                            parseInt(event.target.value)
-                          )
+                          this.handleScalingChange('minReplicas', parseInt(event.target.value))
                         }
                         value={this.state.minReplicas}
-                        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ style: { width: string; }; intent: "danger... Remove this comment to see the full error message
+                        // @ts-ignore ts-migrate(2322) FIXME: Type '{ style: { width: string; }; intent: "danger... Remove this comment to see the full error message
                         fixed
                         type="number"
                       />
@@ -469,17 +430,12 @@ export default class DetailTab extends Component {
                     <Td className="text">
                       <InputGroup
                         style={{ width: '70px' }}
-                        intent={
-                          maxReplicas < minReplicas ? 'danger' : undefined
-                        }
+                        intent={maxReplicas < minReplicas ? 'danger' : undefined}
                         onChange={(event) =>
-                          this.handleScalingChange(
-                            'maxReplicas',
-                            parseInt(event.target.value)
-                          )
+                          this.handleScalingChange('maxReplicas', parseInt(event.target.value))
                         }
                         value={this.state.maxReplicas}
-                        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ style: { width: string; }; intent: "danger... Remove this comment to see the full error message
+                        // @ts-ignore ts-migrate(2322) FIXME: Type '{ style: { width: string; }; intent: "danger... Remove this comment to see the full error message
                         fixed
                         type="number"
                       />
@@ -488,13 +444,10 @@ export default class DetailTab extends Component {
                       <InputGroup
                         style={{ width: '70px' }}
                         onChange={(event) =>
-                          this.handleScalingChange(
-                            'cpu',
-                            parseInt(event.target.value)
-                          )
+                          this.handleScalingChange('cpu', parseInt(event.target.value))
                         }
                         value={this.state.cpu}
-                        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ style: { width: string; }; onChange: (even... Remove this comment to see the full error message
+                        // @ts-ignore ts-migrate(2322) FIXME: Type '{ style: { width: string; }; onChange: (even... Remove this comment to see the full error message
                         fixed
                         type="number"
                         max={100}
@@ -502,7 +455,7 @@ export default class DetailTab extends Component {
                       />
                     </Td>
                     <Td className="text">
-                      { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */ }
+                      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element[]; fluid: true; }' is no... Remove this comment to see the full error message */}
                       <ControlGroup fluid>
                         <InputGroup
                           style={{ width: '70px' }}
@@ -512,17 +465,15 @@ export default class DetailTab extends Component {
                               unit: this.state.memory.unit,
                             })
                           }
-                          // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string & ... Remove this comment to see the full error message
+                          // @ts-ignore ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string & ... Remove this comment to see the full error message
                           value={this.state.memory.val}
                           type="number"
                         />
-                        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                         <Dropdown>
-                          { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
-                          <Control>
-                            {this.state.memory.unit || 'Select unit'}
-                          </Control>
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
+                          <Control>{this.state.memory.unit || 'Select unit'}</Control>
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memory', {
@@ -532,7 +483,7 @@ export default class DetailTab extends Component {
                             }
                             title="KiB"
                           />
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memory', {
@@ -542,7 +493,7 @@ export default class DetailTab extends Component {
                             }
                             title="MiB"
                           />
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Item
                             action={() =>
                               this.handleScalingChange('memory', {
@@ -562,13 +513,13 @@ export default class DetailTab extends Component {
                 disabled={!this.isScalingValid()}
                 intent="success"
                 onClick={() => {
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
                   this.props.dispatchAction(
                     fetchWithNotifications,
-                    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+                    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
                     async (): Promise<*> => {
                       await put(
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                         `${settings.REST_BASE_URL}/services/${service.name}/scaling`,
                         {
                           body: JSON.stringify({
@@ -580,9 +531,9 @@ export default class DetailTab extends Component {
                         }
                       );
                     },
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     `Updating scaling for ${service.name}...`,
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     `${service.name} scaling updated successfuly`
                   );
                 }}
@@ -591,11 +542,11 @@ export default class DetailTab extends Component {
               </Button>
             </PaneItem>
           ) : null}
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */}
           <AlertsTable alerts={service.alerts} />
           <ProcessSummary model={service} type="service" />
           <Groups>
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type 'Object'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type 'Object'. */}
             {(service.groups || []).map((g) => (
               <Group
                 key={g.name}

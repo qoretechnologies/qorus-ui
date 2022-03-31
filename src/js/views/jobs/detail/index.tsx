@@ -1,54 +1,49 @@
 /* @flow */
-import React from 'react';
-import compose from 'recompose/compose';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import size from 'lodash/size';
-
-import sync from '../../../hocomponents/sync';
-import patch from '../../../hocomponents/patchFuncArgs';
-import actions from '../../../store/api/actions';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import lifecycle from 'recompose/lifecycle';
+import mapProps from 'recompose/mapProps';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { createSelector } from 'reselect';
 import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
-import Controls from '../controls';
-import withTabs from '../../../hocomponents/withTabs';
-import titleManager from '../../../hocomponents/TitleManager';
+import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
-import JobsDetailTabs from '../tabs';
 import { normalizeName } from '../../../components/utils';
-import queryControl from '../../../hocomponents/queryControl';
-import Search from '../../../containers/search';
-import mapProps from 'recompose/mapProps';
 import { DATES, DATE_FORMATS } from '../../../constants/dates';
+import Search from '../../../containers/search';
 import { formatDate } from '../../../helpers/date';
-import {
-  resourceSelector,
-  querySelector,
-  paramSelector,
-} from '../../../selectors';
-import lifecycle from 'recompose/lifecycle';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import unsync from '../../../hocomponents/unsync';
-import Flex from '../../../components/Flex';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
+import patch from '../../../hocomponents/patchFuncArgs';
+import queryControl from '../../../hocomponents/queryControl';
+import sync from '../../../hocomponents/sync';
+import titleManager from '../../../hocomponents/TitleManager';
+import unsync from '../../../hocomponents/unsync';
+import withTabs from '../../../hocomponents/withTabs';
+import { paramSelector, querySelector, resourceSelector } from '../../../selectors';
+import actions from '../../../store/api/actions';
 import { countConfigItems } from '../../../utils';
-import { FormattedMessage } from 'react-intl';
+import Controls from '../controls';
+import JobsDetailTabs from '../tabs';
 
 type Props = {
-  job: Object,
-  location: Object,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  children: ?Object,
-  tabQuery: string,
-  searchQuery?: string,
-  changeSearchQuery: Function,
-  date: string,
-  linkDate: string,
-  fetch: Function,
-  id: number,
-  fetchParams: Object,
-  lib: Object,
-  configItems: Object,
+  job: Object;
+  location: Object;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  children: Object;
+  tabQuery: string;
+  searchQuery?: string;
+  changeSearchQuery: Function;
+  date: string;
+  linkDate: string;
+  fetch: Function;
+  id: number;
+  fetchParams: Object;
+  lib: Object;
+  configItems: Object;
 };
 
 const JobPage = ({
@@ -78,9 +73,9 @@ const JobPage = ({
               suffix: `(${countConfigItems(configItems)})`,
             },
             'Process',
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
             { title: 'Mappers', suffix: `(${size(job.mappers)})` },
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
             { title: 'Valuemaps', suffix: `(${size(job.vmaps)})` },
             'Releases',
             'Code',
@@ -90,14 +85,10 @@ const JobPage = ({
         />
       </Breadcrumbs>
       <Pull right>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'. */}
         <Controls {...job} week={job.wday} expiry={job.expiry_date} big />
         {tabQuery === 'instances' && (
-          <Search
-            defaultValue={searchQuery}
-            onSearchUpdate={changeSearchQuery}
-            resource="job"
-          />
+          <Search defaultValue={searchQuery} onSearchUpdate={changeSearchQuery} resource="job" />
         )}
       </Pull>
     </Headbar>
@@ -113,19 +104,14 @@ const JobPage = ({
 );
 
 const jobSelector: Function = (state: Object, props: Object): Object =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.jobs.data.find(
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
     (job: Object) => parseInt(props.params.id, 10) === parseInt(job.id, 10)
   );
 
 const selector: Object = createSelector(
-  [
-    resourceSelector('jobs'),
-    jobSelector,
-    querySelector('date'),
-    paramSelector('id'),
-  ],
+  [resourceSelector('jobs'), jobSelector, querySelector('date'), paramSelector('id')],
   (meta, job, date, id) => ({
     meta,
     job,
@@ -136,23 +122,27 @@ const selector: Object = createSelector(
 
 export default compose(
   connect(selector, {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
     load: actions.jobs.fetch,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
     fetch: actions.jobs.fetch,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
     unsync: actions.jobs.unsync,
   }),
-  mapProps(({ date, ...rest }: Props): Object => ({
-    date: date || DATES.PREV_DAY,
-    ...rest,
-  })),
-  mapProps(({ date, ...rest }: Props): Object => ({
-    fetchParams: { lib_source: true, date: formatDate(date).format() },
-    linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
-    date,
-    ...rest,
-  })),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      date: date || DATES.PREV_DAY,
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ date, ...rest }: Props): Object => ({
+      fetchParams: { lib_source: true, date: formatDate(date).format() },
+      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+      date,
+      ...rest,
+    })
+  ),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   lifecycle({
@@ -164,29 +154,31 @@ export default compose(
       }
     },
   }),
-  mapProps((props: Object): Object => ({
-    ...props,
-    lib: {
-      ...{
-        code: [
-          {
-            name: 'Job code',
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
-            body: props.job.code,
-          },
-        ],
+  mapProps(
+    (props: Object): Object => ({
+      ...props,
+      lib: {
+        ...{
+          code: [
+            {
+              name: 'Job code',
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
+              body: props.job.code,
+            },
+          ],
+        },
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
+        ...props.job.lib,
       },
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
-      ...props.job.lib,
-    },
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
-    configItems: rebuildConfigHash(props.job),
-  })),
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
+      configItems: rebuildConfigHash(props.job),
+    })
+  ),
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
   titleManager(({ job }): string => job.name),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
   queryControl('search'),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   withTabs('instances'),
   unsync(),
   onlyUpdateForKeys(['job', 'location', 'children'])

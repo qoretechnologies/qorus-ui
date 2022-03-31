@@ -1,25 +1,25 @@
 /* @flow */
+import classNames from 'classnames';
 import React from 'react';
+import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
 import setDisplayName from 'recompose/setDisplayName';
-import compose from 'recompose/compose';
-import classNames from 'classnames';
 import Flex from '../Flex';
 
 type Props = {
-  type: string,
-  children: any,
-  className?: string,
-  hover?: boolean,
-  striped?: boolean,
-  bordered?: boolean,
-  height?: number | string,
-  fixed?: boolean,
-  Tag: string,
-  marginBottom: number,
-  hasFooter: boolean,
-  clean?: boolean,
+  type: string;
+  children: any;
+  className?: string;
+  hover?: boolean;
+  striped?: boolean;
+  bordered?: boolean;
+  height?: number | string;
+  fixed?: boolean;
+  Tag: string;
+  marginBottom: number;
+  hasFooter: boolean;
+  clean?: boolean;
 };
 
 let Section: Function = ({
@@ -33,10 +33,10 @@ let Section: Function = ({
   bordered,
   height,
   clean,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => {
   if (!fixed) {
-    // @ts-expect-error ts-migrate(2559) FIXME: Type '{ children: any; }' has no properties in com... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2559) FIXME: Type '{ children: any; }' has no properties in com... Remove this comment to see the full error message
     return <Tag>{children}</Tag>;
   }
 

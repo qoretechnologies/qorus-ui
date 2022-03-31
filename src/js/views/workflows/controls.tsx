@@ -1,24 +1,23 @@
 /* @flow */
 import React from 'react';
-import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
-import pure from 'recompose/onlyUpdateForKeys';
-
-import actions from '../../store/api/actions';
-import withDispatch from '../../hocomponents/withDispatch';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Controls, Control } from '../../components/controls';
 import { injectIntl } from 'react-intl';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control, Controls } from '../../components/controls';
+import withDispatch from '../../hocomponents/withDispatch';
+import actions from '../../store/api/actions';
 
 type Props = {
-  id: number,
-  enabled: boolean,
-  remote: boolean,
-  dispatchAction: Function,
-  handleToggleEnabledClick: Function,
-  handleResetClick: Function,
-  handleRemoteClick: Function,
-  big: boolean,
+  id: number;
+  enabled: boolean;
+  remote: boolean;
+  dispatchAction: Function;
+  handleToggleEnabledClick: Function;
+  handleResetClick: Function;
+  handleRemoteClick: Function;
+  big: boolean;
 };
 
 const WorkflowControls: Function = ({
@@ -28,13 +27,13 @@ const WorkflowControls: Function = ({
   handleResetClick,
   handleRemoteClick,
   big,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Controls marginRight={big ? 3 : 0}>
     <Control
-      title={intl.formatMessage({ id: (enabled ? 'button.disable' : 'button.enable') })}
+      title={intl.formatMessage({ id: enabled ? 'button.disable' : 'button.enable' })}
       icon="power"
       btnStyle={enabled ? 'success' : 'danger'}
       onClick={handleToggleEnabledClick}
@@ -47,7 +46,7 @@ const WorkflowControls: Function = ({
       onClick={handleResetClick}
     />
     <Control
-      title={intl.formatMessage({ id: (remote ? 'button.set-not-remote' : 'button.set-remote') })}
+      title={intl.formatMessage({ id: remote ? 'button.set-not-remote' : 'button.set-remote' })}
       icon="globe"
       btnStyle={remote ? 'info' : 'default'}
       onClick={handleRemoteClick}
@@ -59,26 +58,24 @@ const WorkflowControls: Function = ({
 export default compose(
   withDispatch(),
   withHandlers({
-    handleToggleEnabledClick: ({
-      id,
-      enabled,
-      dispatchAction,
-    }: Props): Function => (): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
-      dispatchAction(actions.workflows.toggleEnabled, id, !enabled);
-    },
-    handleResetClick: ({ dispatchAction, id }: Props): Function => (): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
-      dispatchAction(actions.workflows.reset, id);
-    },
-    handleRemoteClick: ({
-      id,
-      remote,
-      dispatchAction,
-    }: Props): Function => (): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
-      dispatchAction(actions.workflows.setRemote, id, !remote);
-    },
+    handleToggleEnabledClick:
+      ({ id, enabled, dispatchAction }: Props): Function =>
+      (): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
+        dispatchAction(actions.workflows.toggleEnabled, id, !enabled);
+      },
+    handleResetClick:
+      ({ dispatchAction, id }: Props): Function =>
+      (): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
+        dispatchAction(actions.workflows.reset, id);
+      },
+    handleRemoteClick:
+      ({ id, remote, dispatchAction }: Props): Function =>
+      (): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
+        dispatchAction(actions.workflows.setRemote, id, !remote);
+      },
   }),
   pure(['enabled', 'remote']),
   injectIntl

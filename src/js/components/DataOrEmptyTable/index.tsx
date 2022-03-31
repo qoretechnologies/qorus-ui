@@ -1,6 +1,6 @@
 import React from 'react';
-import { Tbody, Tr, Td } from '../new_table';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { Tbody, Td, Tr } from '../new_table';
 import NoData from '../nodata';
 
 const DataOrEmptyTable: Function = ({
@@ -10,16 +10,16 @@ const DataOrEmptyTable: Function = ({
   small,
   ...rest
 }: {
-  cols: number,
-  condition: boolean,
-  children: Function,
-  small: boolean,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  cols: number;
+  condition: boolean;
+  children: Function;
+  small: boolean;
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 }): React.Element<Tbody> =>
   condition ? (
     <Tbody {...rest} className="tbody-empty-table">
       <Tr first className="placeholder-row">
-        {[...Array(cols)].map(col => (
+        {[...Array(cols)].map((col) => (
           <Td key={col} />
         ))}
       </Tr>
@@ -35,6 +35,4 @@ const DataOrEmptyTable: Function = ({
     children(rest)
   );
 
-export default onlyUpdateForKeys(['cols', 'children', 'condition'])(
-  DataOrEmptyTable
-);
+export default onlyUpdateForKeys(['cols', 'children', 'condition'])(DataOrEmptyTable);

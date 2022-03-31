@@ -1,15 +1,14 @@
 // @flow
 import React, { Component } from 'react';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control as Button, Controls } from '../../../components/controls';
 import Modal from '../../../components/modal';
-
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Controls, Control as Button } from '../../../components/controls';
-import actions from '../../../store/api/actions';
 import withDispatch from '../../../hocomponents/withDispatch';
+import actions from '../../../store/api/actions';
 
 type Props = {
-  onClose: Function,
-  optimisticDispatch: Function,
+  onClose: Function;
+  optimisticDispatch: Function;
 };
 
 @withDispatch()
@@ -17,19 +16,19 @@ export default class SLACreateModal extends Component {
   props: Props = this.props;
 
   handleFormSubmit: Function = (event: Object): void => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
     event.preventDefault();
 
     const { form, name, desc } = this.refs;
 
     this.props.optimisticDispatch(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'slas' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'slas' does not exist on type '{}'.
       actions.slas.create,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
       name.value,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
       desc.value,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'units' does not exist on type 'ReactInst... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'units' does not exist on type 'ReactInst... Remove this comment to see the full error message
       form.units.value
     );
     this.props.onClose();
@@ -39,7 +38,7 @@ export default class SLACreateModal extends Component {
     return (
       <form
         className="form-horizontal"
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
         onSubmit={this.handleFormSubmit}
         ref="form"
       >
@@ -58,7 +57,7 @@ export default class SLACreateModal extends Component {
                   type="text"
                   className="form-control"
                   id="name"
-                  // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
+                  // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
                   required="required"
                 />
               </div>
@@ -73,7 +72,7 @@ export default class SLACreateModal extends Component {
                   type="text"
                   className="form-control"
                   id="desc"
-                  // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
+                  // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
                   required="required"
                 />
               </div>
@@ -88,7 +87,7 @@ export default class SLACreateModal extends Component {
                     name="units"
                     type="radio"
                     value="seconds"
-                    // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
+                    // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
                     required="required"
                   />{' '}
                   Seconds
@@ -98,7 +97,7 @@ export default class SLACreateModal extends Component {
                     name="units"
                     type="radio"
                     value="other"
-                    // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
+                    // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'boolean'.
                     required="required"
                   />{' '}
                   Other
@@ -109,12 +108,7 @@ export default class SLACreateModal extends Component {
           <Modal.Footer>
             <div className="pull-right">
               <Controls noControls grouped>
-                <Button
-                  label="Cancel"
-                  big
-                  btnStyle="default"
-                  onClick={this.props.onClose}
-                />
+                <Button label="Cancel" big btnStyle="default" onClick={this.props.onClose} />
                 <Button label="Submit" big btnStyle="success" type="submit" />
               </Controls>
             </div>

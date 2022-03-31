@@ -1,32 +1,27 @@
 /* @flow */
-import { createAction } from 'redux-actions';
 import isArray from 'lodash/isArray';
-import { fetchJson, fetchWithNotifications } from '../../../utils';
+import { createAction } from 'redux-actions';
 import settings from '../../../../../settings';
+import { fetchJson, fetchWithNotifications } from '../../../utils';
 
-const setEnabled: Function = createAction('GROUPS_SETENABLED', events => ({
+const setEnabled: Function = createAction('GROUPS_SETENABLED', (events) => ({
   events,
 }));
 
-const updateDone: Function = createAction(
-  'GROUPS_UPDATEDONE',
-  (name: string) => ({ name })
-);
+const updateDone: Function = createAction('GROUPS_UPDATEDONE', (name: string) => ({ name }));
 
 const groupAction: Function = createAction(
   'GROUPS_GROUPACTION',
-  // @ts-expect-error ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
   (groups: any, action: string, dispatch: Function): Object => {
     const grps = isArray(groups) ? groups.join(',') : groups;
 
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
         await fetchJson(
           'PUT',
-          `${
-            settings.REST_BASE_URL
-          }/groups?action=setStatus&enabled=${action}&groups=${grps}`
+          `${settings.REST_BASE_URL}/groups?action=setStatus&enabled=${action}&groups=${grps}`
         ),
       `${action ? 'Enabling' : 'Disabling'} group(s) ${grps}`,
       `Group(s) ${grps} ${action ? 'enabled' : 'disabled'}`,
@@ -40,12 +35,4 @@ const selectAll = createAction('GROUPS_SELECTALL');
 const selectNone = createAction('GROUPS_SELECTNONE');
 const selectInvert = createAction('GROUPS_SELECTINVERT');
 
-export {
-  setEnabled,
-  updateDone,
-  groupAction,
-  select,
-  selectAll,
-  selectNone,
-  selectInvert,
-};
+export { setEnabled, updateDone, groupAction, select, selectAll, selectNone, selectInvert };

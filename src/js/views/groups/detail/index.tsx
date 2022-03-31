@@ -2,25 +2,24 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import DetailTable from './table';
 import Box from '../../../components/box';
-import titleManager from '../../../hocomponents/TitleManager';
 import Flex from '../../../components/Flex';
 import { MasonryLayout, MasonryPanel } from '../../../components/MasonryLayout';
+import titleManager from '../../../hocomponents/TitleManager';
+import DetailTable from './table';
 
 type Props = {
-  onBackClick: Function,
-  id: number,
-  name: string,
-  description: string,
-  services: Array<Object>,
-  workflows: Array<Object>,
-  jobs: Array<Object>,
-  roles: Array<Object>,
-  mappers: Array<Object>,
-  vmaps: Array<Object>,
-  enabled: boolean,
+  onBackClick: Function;
+  id: number;
+  name: string;
+  description: string;
+  services: Array<Object>;
+  workflows: Array<Object>;
+  jobs: Array<Object>;
+  roles: Array<Object>;
+  mappers: Array<Object>;
+  vmaps: Array<Object>;
+  enabled: boolean;
 };
 
 const GroupDetail: Function = ({
@@ -30,17 +29,13 @@ const GroupDetail: Function = ({
   roles,
   mappers,
   vmaps,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Flex scrollY>
     <MasonryLayout columns={3}>
       <MasonryPanel>
         <Box top>
-          <DetailTable
-            data={services}
-            columns={['type', 'autostart']}
-            type="Services"
-          />
+          <DetailTable data={services} columns={['type', 'autostart']} type="Services" />
         </Box>
       </MasonryPanel>
       <MasonryPanel>
@@ -73,7 +68,7 @@ const GroupDetail: Function = ({
 );
 
 export default compose(
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '({ name }: Props) => string' is ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2345) FIXME: Argument of type '({ name }: Props) => string' is ... Remove this comment to see the full error message
   titleManager(({ name }: Props): string => name, 'Groups', 'prefix'),
   pure(['enabled'])
 )(GroupDetail);

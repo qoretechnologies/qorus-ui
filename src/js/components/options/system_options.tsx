@@ -1,11 +1,10 @@
 // @flow
 import React, { Component } from 'react';
-
-import { pureRender } from '../utils';
-import Toolbar from '../toolbar';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Controls as ButtonGroup, Control as Button } from '../controls';
 import { injectIntl } from 'react-intl';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control as Button, Controls as ButtonGroup } from '../controls';
+import Toolbar from '../toolbar';
+import { pureRender } from '../utils';
 
 /**
  * Drop-down component with a button to add options.
@@ -14,8 +13,8 @@ import { injectIntl } from 'react-intl';
 @injectIntl
 export default class SystemOptions extends Component {
   props: {
-    options: Array<Object>,
-    onAdd: Function,
+    options: Array<Object>;
+    onAdd: Function;
   } = this.props;
 
   /**
@@ -30,11 +29,11 @@ export default class SystemOptions extends Component {
    *
    * @param {Event} ev
    */
-  onChange = ev => {
+  onChange = (ev) => {
     this.setState({
       selected: this.props.options.find(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        opt => opt.name === ev.currentTarget.value
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        (opt) => opt.name === ev.currentTarget.value
       ),
     });
   };
@@ -58,10 +57,10 @@ export default class SystemOptions extends Component {
    *
    * @param {Event} ev
    */
-  commit = ev => {
+  commit = (ev) => {
     ev.preventDefault();
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'selected' does not exist on type 'Readon... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'selected' does not exist on type 'Readon... Remove this comment to see the full error message
     this.props.onAdd(this.state.selected);
     this.setState({ edit: false, selected: null });
   };
@@ -77,14 +76,14 @@ export default class SystemOptions extends Component {
         <ButtonGroup>
           <select
             className="form-control"
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'selected' does not exist on type 'Readon... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'selected' does not exist on type 'Readon... Remove this comment to see the full error message
             value={this.state.selected && this.state.selected.name}
             onChange={this.onChange}
           >
-            {this.props.options.map(opt => (
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            {this.props.options.map((opt) => (
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
               <option key={opt.name} value={opt.name}>
-                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                 {opt.name}
               </option>
             ))}
@@ -93,14 +92,14 @@ export default class SystemOptions extends Component {
             type="submit"
             btnStyle="primary"
             icon="plus"
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ options:... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ options:... Remove this comment to see the full error message
             text={this.props.intl.formatMessage({ id: 'button.submit' })}
           />
           <Button
             type="button"
             onClick={this.cancel}
             icon="cross"
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ options:... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ options:... Remove this comment to see the full error message
             text={this.props.intl.formatMessage({ id: 'button.cancel' })}
           />
         </ButtonGroup>
@@ -120,7 +119,7 @@ export default class SystemOptions extends Component {
           btnStyle="primary"
           onClick={this.start}
           disabled={!this.props.options.length}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ options:... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ options:... Remove this comment to see the full error message
           text={this.props.intl.formatMessage({ id: 'button.add-option' })}
           icon="plus"
           big
@@ -137,7 +136,7 @@ export default class SystemOptions extends Component {
   render() {
     return (
       <Toolbar mt>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
         {this.state.edit ? this.renderOptions() : this.renderButton()}
       </Toolbar>
     );

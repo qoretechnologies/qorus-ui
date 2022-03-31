@@ -1,4 +1,4 @@
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../../server_config' or its co... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2307) FIXME: Cannot find module '../../server_config' or its co... Remove this comment to see the full error message
 import { API_URL, API_WS_URL } from '../../server_config';
 
 const location =
@@ -12,7 +12,7 @@ const location =
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 const settings = {
   REST_BASE_URL:
-    // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
     process.env.TESTINST || process.env.NODE_ENV === 'dev_fix'
       ? `${API_URL}/api`
       : `${API_URL}/api/latest`,

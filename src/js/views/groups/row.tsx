@@ -1,41 +1,40 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
-import { connect } from 'react-redux';
-
-import { Tr, Td } from '../../components/new_table';
-import Controls from './controls';
-import actions from '../../store/api/actions';
-import { SelectColumn } from '../../components/SelectColumn';
-import { IdColumn } from '../../components/IdColumn';
-import NameColumn from '../../components/NameColumn';
 import { ActionColumn } from '../../components/ActionColumn';
 import { DescriptionColumn } from '../../components/DescriptionColumn';
+import { IdColumn } from '../../components/IdColumn';
+import NameColumn from '../../components/NameColumn';
+import { Td, Tr } from '../../components/new_table';
+import { SelectColumn } from '../../components/SelectColumn';
+import actions from '../../store/api/actions';
+import Controls from './controls';
 
 type Props = {
-  updateDone: Function,
-  select: Function,
-  _updated?: boolean,
-  handleHighlightEnd: Function,
-  handleCheckboxClick: Function,
-  _selected?: boolean,
-  id: number,
-  enabled: boolean,
-  workflows_count: number,
-  services_count: number,
-  jobs_count: number,
-  vmaps_count: number,
-  roles_count: number,
-  mappers_count: number,
-  handleEnableClick: Function,
-  handleNameClick: Function,
-  changeGroupQuery: Function,
-  action: Function,
-  name: string,
-  description: string,
-  isTablet: boolean,
-  first: boolean,
+  updateDone: Function;
+  select: Function;
+  _updated?: boolean;
+  handleHighlightEnd: Function;
+  handleCheckboxClick: Function;
+  _selected?: boolean;
+  id: number;
+  enabled: boolean;
+  workflows_count: number;
+  services_count: number;
+  jobs_count: number;
+  vmaps_count: number;
+  roles_count: number;
+  mappers_count: number;
+  handleEnableClick: Function;
+  handleNameClick: Function;
+  changeGroupQuery: Function;
+  action: Function;
+  name: string;
+  description: string;
+  isTablet: boolean;
+  first: boolean;
 };
 
 const ServiceRow: Function = ({
@@ -55,8 +54,8 @@ const ServiceRow: Function = ({
   mappers_count: mappersCount,
   isTablet,
   first,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Tr
     first={first}
     highlight={_updated}
@@ -81,19 +80,20 @@ const ServiceRow: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type '{}'.
-      action: actions.groups.groupAction,
-    }
-  ),
+  connect(null, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'groups' does not exist on type '{}'.
+    action: actions.groups.groupAction,
+  }),
   withHandlers({
-    handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
-      select(id);
-    },
-    handleHighlightEnd: ({ updateDone, name }: Props): Function => (): void => {
-      updateDone(name);
-    },
+    handleCheckboxClick:
+      ({ select, id }: Props): Function =>
+      (): void => {
+        select(id);
+      },
+    handleHighlightEnd:
+      ({ updateDone, name }: Props): Function =>
+      (): void => {
+        updateDone(name);
+      },
   })
 )(ServiceRow);

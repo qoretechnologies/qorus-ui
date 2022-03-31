@@ -1,46 +1,40 @@
 /* @flow */
 import React from 'react';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import sync from '../../hocomponents/sync';
-import patch from '../../hocomponents/patchFuncArgs';
+import { createSelector } from 'reselect';
+import Box from '../../components/box';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import ConfirmDialog from '../../components/confirm_dialog';
+import Flex from '../../components/Flex';
+import Headbar from '../../components/Headbar';
+import Pull from '../../components/Pull';
+import Search from '../../containers/search';
+import { findBy } from '../../helpers/search';
 import withModal from '../../hocomponents/modal';
+import patch from '../../hocomponents/patchFuncArgs';
 import withSearch from '../../hocomponents/search';
+import sync from '../../hocomponents/sync';
 import unsync from '../../hocomponents/unsync';
 import withDispatch from '../../hocomponents/withDispatch';
-import { findBy } from '../../helpers/search';
 import actions from '../../store/api/actions';
-import Search from '../../containers/search';
-import ConfirmDialog from '../../components/confirm_dialog';
-import Table from './table';
 import ErrorModal from './modal';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
-import Box from '../../components/box';
-import Pull from '../../components/Pull';
-import Headbar from '../../components/Headbar';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
-import Flex from '../../components/Flex';
+import Table from './table';
 
 type Props = {
-  onSearchChange: Function,
-  query?: string,
-  title?: string,
-  errors: Array<Object>,
-  compact: boolean,
-  type: string,
-  openModal: Function,
-  closeModal: Function,
-  dispatchAction: Function,
-  id: string | number,
-  height: string | number,
+  onSearchChange: Function;
+  query?: string;
+  title?: string;
+  errors: Array<Object>;
+  compact: boolean;
+  type: string;
+  openModal: Function;
+  closeModal: Function;
+  dispatchAction: Function;
+  id: string | number;
+  height: string | number;
 };
 
 const ErrorsContainer: Function = ({
@@ -53,26 +47,19 @@ const ErrorsContainer: Function = ({
   openModal,
   closeModal,
   dispatchAction,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'optimisticDispatch' does not exist on ty... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'optimisticDispatch' does not exist on ty... Remove this comment to see the full error message
   optimisticDispatch,
   id,
   height,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => {
   const handleFormSubmit: Function = (data: Object) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
     dispatchAction(actions.errors.createOrUpdate, type, id, data, closeModal);
   };
 
   const handleModalOpen: Function = (data: Object) => {
-    openModal(
-      <ErrorModal
-        onClose={closeModal}
-        onSubmit={handleFormSubmit}
-        data={data}
-        id={id}
-      />
-    );
+    openModal(<ErrorModal onClose={closeModal} onSubmit={handleFormSubmit} data={data} id={id} />);
   };
 
   const handleCreateClick: Function = () => {
@@ -83,13 +70,13 @@ const ErrorsContainer: Function = ({
     });
   };
 
-  const handleEditClick: Function = data => {
+  const handleEditClick: Function = (data) => {
     handleModalOpen(data);
   };
 
-  const handleDeleteClick: Function = name => {
+  const handleDeleteClick: Function = (name) => {
     const handleConfirm = (): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
       optimisticDispatch(actions.errors.removeError, type, id, name);
       closeModal();
     };
@@ -145,32 +132,32 @@ const ErrorsContainer: Function = ({
 };
 
 const metaSelector: Function = (state: Object, props: Object): Object => ({
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   data: state.api.errors[props.type].data,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   sync: state.api.errors[props.type].sync,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   loading: state.api.errors[props.type].loading,
 });
 
 const querySelector: Function = (state: Object, props: Object): string =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
   props.location.query[`${props.type}ErrQuery`];
 
-const filterErrors: Function = (query: string): Function => (
-  collection: Array<Object>
-): Array<Object> =>
-  findBy(['error', 'severity', 'type', 'description'], query, collection);
+const filterErrors: Function =
+  (query: string): Function =>
+  (collection: Array<Object>): Array<Object> =>
+    findBy(['error', 'severity', 'type', 'description'], query, collection);
 
 const errorsSelector: Function = createSelector(
-  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [metaSelector, querySelector],
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
   (meta: Object, query: string): Array<Object> => filterErrors(query)(meta.data)
 );
 
 const selector: Function = createSelector(
-  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [metaSelector, errorsSelector],
   (meta: Object, errors: Array<Object>): Object => ({
     meta,
@@ -179,15 +166,12 @@ const selector: Function = createSelector(
 );
 
 export default compose(
-  connect(
-    selector,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
-      load: actions.errors.fetch,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
-      unsync: actions.errors.unsync,
-    }
-  ),
+  connect(selector, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
+    load: actions.errors.fetch,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
+    unsync: actions.errors.unsync,
+  }),
   defaultProps({
     id: 'omit',
   }),
@@ -195,7 +179,7 @@ export default compose(
   sync('meta'),
   withDispatch(),
   withModal(),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   withSearch((props: Object) => `${props.type}ErrQuery`),
   unsync(),
   pure(['query', 'errors', 'compact', 'id', 'fixed', 'height'])

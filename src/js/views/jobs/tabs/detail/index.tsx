@@ -9,7 +9,7 @@ import { createSelector } from 'reselect';
 import AlertsTable from '../../../../components/alerts_table';
 import Box from '../../../../components/box';
 import Flex from '../../../../components/Flex';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/gr... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/gr... Remove this comment to see the full error message
 import { Group, Groups } from '../../../../components/groups';
 import InfoHeader from '../../../../components/InfoHeader';
 import PaneItem from '../../../../components/pane_item';
@@ -25,12 +25,12 @@ import JobControls from '../../controls';
 import Options from './options';
 
 type Props = {
-  model: Object,
-  handleSetSLAChange: Function,
-  handleRemoveSLAChange: Function,
-  perms: Object,
-  slas: Array<Object>,
-  isTablet: boolean,
+  model: Object;
+  handleSetSLAChange: Function;
+  handleRemoveSLAChange: Function;
+  perms: Object;
+  slas: Array<Object>;
+  isTablet: boolean;
 };
 
 const DetailTab = ({
@@ -40,7 +40,7 @@ const DetailTab = ({
   handleRemoveSLAChange,
   perms,
   slas,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: Props) => (
   <Box top fill>
@@ -48,31 +48,31 @@ const DetailTab = ({
     <Flex scrollY>
       <PaneItem title={intl.formatMessage({ id: 'component.controls' })}>
         <JobControls
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
           enabled={model.enabled}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'active' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'active' does not exist on type 'Object'.
           active={model.active}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           id={model.id}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'minute' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'minute' does not exist on type 'Object'.
           minute={model.minute}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'hour' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'hour' does not exist on type 'Object'.
           hour={model.hour}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'day' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'day' does not exist on type 'Object'.
           day={model.day}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'month' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'month' does not exist on type 'Object'.
           month={model.month}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'.
           week={model.wday}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
           remote={model.remote}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'expiry_date' does not exist on type 'Obj... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'expiry_date' does not exist on type 'Obj... Remove this comment to see the full error message
           expiry={model.expiry_date}
         />
       </PaneItem>
       <PaneItem title={intl.formatMessage({ id: 'component.schedule' })}>
         <ScheduleText
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'minute' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'minute' does not exist on type 'Object'.
           cron={`${model.minute} ${model.hour} ${model.day} ${model.month} ${model.wday}`}
         />
       </PaneItem>
@@ -87,10 +87,10 @@ const DetailTab = ({
         />
       </PaneItem>
       <ProcessSummary model={model} type="job" />
-      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */ }
+      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */}
       <AlertsTable alerts={model.alerts} />
       <Groups>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type 'Object'. */}
         {(model.groups || []).map((g) => (
           <Group
             key={g.name}
@@ -117,27 +117,25 @@ const viewSelector = createSelector(
 
 export default compose(
   connect(viewSelector, {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'slas' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'slas' does not exist on type '{}'.
     load: actions.slas.fetch,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
     removeSla: actions.jobs.removeSLAJob,
   }),
   withDispatch(),
   withHandlers({
-    handleSetSLAChange: ({ dispatchAction }): Function => (
-      name: string,
-      value: string
-    ): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
-      dispatchAction(actions.jobs.setSLAJob, name, value);
-    },
-    handleRemoveSLAChange: ({ dispatchAction }): Function => (
-      name: string,
-      value: string
-    ): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
-      dispatchAction(actions.jobs.removeSLAJob, name, value);
-    },
+    handleSetSLAChange:
+      ({ dispatchAction }): Function =>
+      (name: string, value: string): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+        dispatchAction(actions.jobs.setSLAJob, name, value);
+      },
+    handleRemoveSLAChange:
+      ({ dispatchAction }): Function =>
+      (name: string, value: string): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+        dispatchAction(actions.jobs.removeSLAJob, name, value);
+      },
   }),
   sync('meta'),
   pure(['model', 'isTablet']),

@@ -1,42 +1,38 @@
 /* @flow */
+import map from 'lodash/map';
 import React from 'react';
 import compose from 'recompose/compose';
-import pure from 'recompose/pure';
 import mapProps from 'recompose/mapProps';
+import pure from 'recompose/pure';
 import withProps from 'recompose/withProps';
 import withState from 'recompose/withState';
-import map from 'lodash/map';
-
+import Flex from '../../../components/Flex';
+import modal from '../../../hocomponents/modal';
+import Connection from './connection';
 import Header from './header';
+import DetailModal from './modals/DetailModal';
 import SelectableLabel from './selectable-label';
 import Tooltip from './tooltip';
-import Connection from './connection';
-import modal from '../../../hocomponents/modal';
-import DetailModal from './modals/DetailModal';
-import Flex from '../../../components/Flex';
 
 const getRelations = (fields: Object, inputs: Object): Array<Object> =>
-  map(
-    fields,
-    (outputData, outputName): any => {
-      if (typeof outputData === 'string') {
-        return { [outputName]: outputData };
-      } else if (outputData.name) {
-        let name = outputData.name;
+  map(fields, (outputData, outputName): any => {
+    if (typeof outputData === 'string') {
+      return { [outputName]: outputData };
+    } else if (outputData.name) {
+      let name = outputData.name;
 
-        if (outputData.name.indexOf('.') !== -1) {
-          name = outputData.name.split('.')[0];
-        }
-
-        return { [outputName]: name };
+      if (outputData.name.indexOf('.') !== -1) {
+        name = outputData.name.split('.')[0];
       }
 
-      return null;
+      return { [outputName]: name };
     }
-  ).filter(item => item);
+
+    return null;
+  }).filter((item) => item);
 
 function hasRelation(array, input, output) {
-  return !!array.find(item => {
+  return !!array.find((item) => {
     const [[outputValue, inputValue]] = Object.entries(item);
     return inputValue === input && outputValue === output;
   });
@@ -75,51 +71,46 @@ export const Diagramm = ({
   toggleTooltip,
   fields,
 }: {
-  id: string,
-  svgWidth: number,
-  svgHeight: number,
-  offsetX: number,
-  offsetY: number,
-  inputOffsetY: number,
-  outputOffsetY: number,
-  rectWidth: number,
-  rectHeight: number,
-  headerHeight: number,
-  paddingElements: number,
-  headerTextColor: string,
-  rectBackgroundColor: string,
-  rectSelectedBackgroundColor: string,
-  rectTextColor: string,
-  lineColor: string,
-  selectedInput: string,
-  selectedOutput: string,
-  inputMap: Object,
-  outputMap: Object,
-  relations: Object,
-  handleInputSelected: Function,
-  handleInputUnselected: Function,
-  handleOutputSelected: Function,
-  handleOutputUnselected: Function,
-  mapper: Object,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  selectedDetail: ?Object,
-  handleDetailSelection: Function,
-  opts: Object,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  tooltip: ?Object,
-  toggleTooltip: Function,
-  fields: any,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  id: string;
+  svgWidth: number;
+  svgHeight: number;
+  offsetX: number;
+  offsetY: number;
+  inputOffsetY: number;
+  outputOffsetY: number;
+  rectWidth: number;
+  rectHeight: number;
+  headerHeight: number;
+  paddingElements: number;
+  headerTextColor: string;
+  rectBackgroundColor: string;
+  rectSelectedBackgroundColor: string;
+  rectTextColor: string;
+  lineColor: string;
+  selectedInput: string;
+  selectedOutput: string;
+  inputMap: Object;
+  outputMap: Object;
+  relations: Object;
+  handleInputSelected: Function;
+  handleInputUnselected: Function;
+  handleOutputSelected: Function;
+  handleOutputUnselected: Function;
+  mapper: Object;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  selectedDetail: Object;
+  handleDetailSelection: Function;
+  opts: Object;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  tooltip: Object;
+  toggleTooltip: Function;
+  fields: any;
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 }): React.Element<any> => (
   <Flex className="mapper-wrapper" scrollY>
     <Tooltip data={tooltip} />
     <div id={id} className="svg-diagram">
-      <svg
-        height={svgHeight}
-        width={svgWidth}
-        id="mapper"
-        style={{ margin: '0 auto' }}
-      >
+      <svg height={svgHeight} width={svgWidth} id="mapper" style={{ margin: '0 auto' }}>
         <Header
           textColor={headerTextColor}
           offsetX={offsetX}
@@ -135,19 +126,15 @@ export const Diagramm = ({
             x={1}
             y={
               inputOffsetY +
-              (headerHeight +
-                parseInt(position, 10) * (rectHeight + paddingElements))
+              (headerHeight + parseInt(position, 10) * (rectHeight + paddingElements))
             }
             offsetX={10}
             width={rectWidth}
             height={rectHeight}
             textColor={rectTextColor}
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'input' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'input' does not exist on type 'Object'.
             details={opts.input[name]}
-            isSelected={
-              selectedInput === name ||
-              hasRelation(relations, name, selectedOutput)
-            }
+            isSelected={selectedInput === name || hasRelation(relations, name, selectedOutput)}
             toggleTooltip={toggleTooltip}
             onInputSelected={handleInputSelected}
             onInputUnselected={handleInputUnselected}
@@ -166,19 +153,15 @@ export const Diagramm = ({
             x={rectWidth + rectWidth / 2 + 1}
             y={
               outputOffsetY +
-              (headerHeight +
-                parseInt(position, 10) * (rectHeight + paddingElements))
+              (headerHeight + parseInt(position, 10) * (rectHeight + paddingElements))
             }
             offsetX={10}
             width={rectWidth}
             height={rectHeight}
             textColor={rectTextColor}
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'output' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'output' does not exist on type 'Object'.
             details={{ ...opts.output[name], ...fields[name] }}
-            isSelected={
-              selectedOutput === name ||
-              hasRelation(relations, selectedInput, name)
-            }
+            isSelected={selectedOutput === name || hasRelation(relations, selectedInput, name)}
             toggleTooltip={toggleTooltip}
             onInputSelected={handleOutputSelected}
             onInputUnselected={handleOutputUnselected}
@@ -192,14 +175,12 @@ export const Diagramm = ({
         ))}
 
         {relations &&
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'.
           relations.map((item, index) => (
             <Connection
               key={`input_${index}`}
               item={item}
-              isSelected={Object.entries(item)[0].includes(
-                selectedInput || selectedOutput
-              )}
+              isSelected={Object.entries(item)[0].includes(selectedInput || selectedOutput)}
               type="input-arrow"
               {...{
                 rectWidth,
@@ -217,15 +198,13 @@ export const Diagramm = ({
           ))}
 
         {relations &&
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'.
           relations.map((item, index) => (
             <Connection
               key={`output_${index}`}
               item={item}
               type="output-arrow"
-              isSelected={Object.entries(item)[0].includes(
-                selectedInput || selectedOutput
-              )}
+              isSelected={Object.entries(item)[0].includes(selectedInput || selectedOutput)}
               {...{
                 rectWidth,
                 inputOffsetY,
@@ -242,15 +221,13 @@ export const Diagramm = ({
           ))}
 
         {relations &&
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'.
           relations.map((item, index) => (
             <Connection
               key={`line_${index}`}
               item={item}
               type="line"
-              isSelected={Object.entries(item)[0].includes(
-                selectedInput || selectedOutput
-              )}
+              isSelected={Object.entries(item)[0].includes(selectedInput || selectedOutput)}
               {...{
                 rectWidth,
                 inputOffsetY,
@@ -279,20 +256,16 @@ const PADDING_ELEMENTS = 5;
 const RECT_HEIGHT = 65;
 const RECT_WIDTH = 250;
 
-const getFieldsMap = source =>
+const getFieldsMap = (source) =>
   Object.keys(source)
     .map((item, idx) => [item, idx])
     .reduce((prev, current) => ({ ...prev, [current[0]]: current[1] }), {});
 
-const getRelationsData = mapProps(props => ({
+const getRelationsData = mapProps((props) => ({
   ...props,
-  inputMap: props.mapper.options.input
-    ? getFieldsMap(props.mapper.options.input)
-    : [],
-  outputMap: props.mapper.options.output
-    ? getFieldsMap(props.mapper.options.output)
-    : [],
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+  inputMap: props.mapper.options.input ? getFieldsMap(props.mapper.options.input) : [],
+  outputMap: props.mapper.options.output ? getFieldsMap(props.mapper.options.output) : [],
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   relations: getRelations(props.mapper.fields),
   opts: props.mapper.options,
   fields: props.mapper.fields,
@@ -301,10 +274,7 @@ const getRelationsData = mapProps(props => ({
 const appendMaxElementCount = withProps(({ inputMap, outputMap }) => ({
   inputCount: Object.keys(inputMap).length,
   outputCount: Object.keys(outputMap).length,
-  elementCount: Math.max(
-    Object.keys(inputMap).length,
-    Object.keys(outputMap).length
-  ),
+  elementCount: Math.max(Object.keys(inputMap).length, Object.keys(outputMap).length),
 }));
 
 const appendDiagramParams = compose(
@@ -321,10 +291,7 @@ const appendDiagramParams = compose(
     rectTextColor: 'white',
     headerTextColor: 'black',
     lineColor: 'black',
-    svgHeight:
-      elementCount * (RECT_HEIGHT + PADDING_ELEMENTS) +
-      HEADER_HEIGHT +
-      OFFSET_Y * 2,
+    svgHeight: elementCount * (RECT_HEIGHT + PADDING_ELEMENTS) + HEADER_HEIGHT + OFFSET_Y * 2,
     inputOffsetY: 0,
     outputOffsetY: 0,
   }))
@@ -333,7 +300,7 @@ const appendDiagramParams = compose(
 const addInputSelection = compose(
   withState('selectedInput', 'setSelectedInput', null),
   withProps(({ setSelectedInput }) => ({
-    handleInputSelected: input => setSelectedInput(input),
+    handleInputSelected: (input) => setSelectedInput(input),
     handleInputUnselected: () => setSelectedInput(null),
   }))
 );
@@ -341,7 +308,7 @@ const addInputSelection = compose(
 const addOutputSelection = compose(
   withState('selectedOutput', 'setSelectedOutput', null),
   withProps(({ setSelectedOutput }) => ({
-    handleOutputSelected: input => setSelectedOutput(input),
+    handleOutputSelected: (input) => setSelectedOutput(input),
     handleOutputUnselected: () => setSelectedOutput(null),
   }))
 );
@@ -357,7 +324,7 @@ const setDetail = compose(
 const toggleTooltip = compose(
   withState('tooltip', 'detailToggler', null),
   withProps(({ detailToggler }) => ({
-    toggleTooltip: detail => detailToggler(detail),
+    toggleTooltip: (detail) => detailToggler(detail),
   }))
 );
 

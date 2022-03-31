@@ -1,51 +1,50 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
-import pure from 'recompose/onlyUpdateForKeys';
-import mapProps from 'recompose/mapProps';
-import { connect } from 'react-redux';
 import flowRight from 'lodash/flowRight';
+import React from 'react';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
 import { createSelector } from 'reselect';
-
-import actions from '../../../../store/api/actions';
-import { querySelector, resourceSelector } from '../../../../selectors';
+import Box from '../../../../components/box';
+import { sortDefaults } from '../../../../constants/sort';
 import { findBy } from '../../../../helpers/search';
-import sync from '../../../../hocomponents/sync';
-import patch from '../../../../hocomponents/patchFuncArgs';
-import selectable from '../../../../hocomponents/selectable';
-import unsync from '../../../../hocomponents/unsync';
 import withCSV from '../../../../hocomponents/csv';
 import loadMore from '../../../../hocomponents/loadMore';
+import patch from '../../../../hocomponents/patchFuncArgs';
+import selectable from '../../../../hocomponents/selectable';
 import withSort from '../../../../hocomponents/sort';
-import { sortDefaults } from '../../../../constants/sort';
-import Box from '../../../../components/box';
+import sync from '../../../../hocomponents/sync';
+import unsync from '../../../../hocomponents/unsync';
+import { querySelector, resourceSelector } from '../../../../selectors';
+import actions from '../../../../store/api/actions';
 import Table from './table';
 
 type Props = {
-  date: string,
-  linkDate: string,
-  workflow?: Object,
-  selected: string,
-  fetch: Function,
-  onCSVClick: Function,
-  selectedIds: Array<number>,
-  unselectAll: Function,
-  location: Object,
-  orders: Array<Object>,
-  changeOffset: Function,
-  limit: number,
-  searchData?: Object,
-  searchPage?: boolean,
-  canLoadMore: boolean,
-  handleLoadMore: Function,
-  loadMoreCurrent: number,
-  loadMoreTotal: number,
-  sortData: Object,
-  onSortChange: Function,
-  filter: string,
-  isTablet: boolean,
-  children?: any,
+  date: string;
+  linkDate: string;
+  workflow?: Object;
+  selected: string;
+  fetch: Function;
+  onCSVClick: Function;
+  selectedIds: Array<number>;
+  unselectAll: Function;
+  location: Object;
+  orders: Array<Object>;
+  changeOffset: Function;
+  limit: number;
+  searchData?: Object;
+  searchPage?: boolean;
+  canLoadMore: boolean;
+  handleLoadMore: Function;
+  loadMoreCurrent: number;
+  loadMoreTotal: number;
+  sortData: Object;
+  onSortChange: Function;
+  filter: string;
+  isTablet: boolean;
+  children?: any;
 };
 
 const WorkflowOrders: Function = ({
@@ -66,8 +65,8 @@ const WorkflowOrders: Function = ({
   onCSVClick,
   workflow,
   children,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Box top noPadding>
     <Table
       collection={orders}
@@ -92,20 +91,20 @@ const WorkflowOrders: Function = ({
   </Box>
 );
 
-const filterOrders: Function = (id): Function => (
-  orders: Array<Object>
-): Array<Object> =>
-  id
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflowid' does not exist on type 'Obje... Remove this comment to see the full error message
-    ? orders.filter((order: Object): boolean => order.workflowid === id)
-    : orders;
+const filterOrders: Function =
+  (id): Function =>
+  (orders: Array<Object>): Array<Object> =>
+    id
+      ? // @ts-ignore ts-migrate(2339) FIXME: Property 'workflowid' does not exist on type 'Obje... Remove this comment to see the full error message
+        orders.filter((order: Object): boolean => order.workflowid === id)
+      : orders;
 
-const filterSearch: Function = (search: string): Function => (
-  orders: Array<Object>
-): Array<Object> => findBy(['id', 'workflowstatus'], search, orders);
+const filterSearch: Function =
+  (search: string): Function =>
+  (orders: Array<Object>): Array<Object> =>
+    findBy(['id', 'workflowstatus'], search, orders);
 
-const idSelector: Function = (state, props) =>
-  props.workflow ? props.workflow.id : null;
+const idSelector: Function = (state, props) => (props.workflow ? props.workflow.id : null);
 
 const collectionSelector: Function = createSelector(
   [querySelector('search'), resourceSelector('orders'), idSelector],
@@ -113,11 +112,11 @@ const collectionSelector: Function = createSelector(
     flowRight(
       filterSearch(search),
       filterOrders(id)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     )(orders.data)
 );
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
+// @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
 const settingsSelector = (state: Object): Object => state.ui.settings;
 
 const viewSelector: Function = createSelector(
@@ -135,31 +134,28 @@ const viewSelector: Function = createSelector(
     orders,
     user,
     filter,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'tablet' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'tablet' does not exist on type 'Object'.
     isTablet: settings.tablet,
   })
 );
 
 export default compose(
-  connect(
-    viewSelector,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
-      load: actions.orders.fetchOrders,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
-      fetch: actions.orders.fetchOrders,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
-      unsync: actions.orders.unsync,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
-      unselectAll: actions.orders.unselectAll,
-    }
-  ),
+  connect(viewSelector, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
+    load: actions.orders.fetchOrders,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
+    fetch: actions.orders.fetchOrders,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
+    unsync: actions.orders.unsync,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
+    unselectAll: actions.orders.unselectAll,
+  }),
   withSort('orders', 'orders', sortDefaults.orders),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 2.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 4 arguments, but got 2.
   loadMore('orders', 'orders'),
   mapProps(
     ({ workflow, ...rest }: Props): Object => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       id: workflow ? workflow.id : null,
       workflow,
       ...rest,
@@ -178,7 +174,7 @@ export default compose(
   ]),
   sync('meta'),
   lifecycle({
-    componentWillReceiveProps (nextProps: Props) {
+    componentWillReceiveProps(nextProps: Props) {
       const {
         id,
         date,
@@ -198,33 +194,33 @@ export default compose(
 
       if (
         (date !== nextProps.date || searchHasChanged) &&
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Props'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Props'.
         nextProps.offset !== 0
       ) {
         changeOffset(0);
       } else if (
         date !== nextProps.date ||
         filter !== nextProps.filter ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Props'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Props'.
         sort !== nextProps.sort ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'sortDir' does not exist on type 'Props'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'sortDir' does not exist on type 'Props'.
         sortDir !== nextProps.sortDir ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Props'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Props'.
         offset !== nextProps.offset ||
         searchHasChanged
       ) {
         fetch(
           id,
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Props'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Props'.
           nextProps.offset !== 0,
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Props'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Props'.
           nextProps.offset,
           nextProps.linkDate,
           nextProps.filter,
           nextProps.limit,
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'sortDir' does not exist on type 'Props'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'sortDir' does not exist on type 'Props'.
           nextProps.sortDir,
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Props'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Props'.
           nextProps.sort,
           nextProps.searchData
         );

@@ -1,49 +1,43 @@
 // @flow
-import React, { Component } from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
+import { ControlGroup, InputGroup, Intent } from '@blueprintjs/core';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-import { Intent, ControlGroup, InputGroup } from '@blueprintjs/core';
-
-import Toolbar from '../../../components/toolbar';
+import React, { Component } from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import Datepicker from '../../../components/datepicker';
-import Dropdown, { Item, Control } from '../../../components/dropdown';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
+import Pull from '../../../components/Pull';
+import { DATE_FORMATS } from '../../../constants/dates';
+import { INTERFACE_ICONS } from '../../../constants/interfaces';
 import { ORDER_STATES } from '../../../constants/orders';
 import { formatDate } from '../../../helpers/date';
-import { DATE_FORMATS } from '../../../constants/dates';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
-import Pull from '../../../components/Pull';
-import { INTERFACE_ICONS } from '../../../constants/interfaces';
 
 type Props = {
-  mindateQuery: string,
-  changeMindateQuery: Function,
-  maxdateQuery: string,
-  changeMaxdateQuery: Function,
-  filterQuery: string,
-  changeFilterQuery: Function,
-  idsQuery: string,
-  changeIdsQuery: Function,
-  nameQuery: string,
-  changeNameQuery: Function,
-  errorQuery: string,
-  changeErrorQuery: Function,
-  retryQuery: string,
-  changeRetryQuery: Function,
-  busErrQuery: string,
-  changeBuserrQuery: Function,
-  changeAllQuery: Function,
-  defaultDate: string,
-  workflows: Array<string>,
-  allQuery: string,
-  username: string,
-  openModal: Function,
-  closeModal: Function,
-  saveSearch: Function,
+  mindateQuery: string;
+  changeMindateQuery: Function;
+  maxdateQuery: string;
+  changeMaxdateQuery: Function;
+  filterQuery: string;
+  changeFilterQuery: Function;
+  idsQuery: string;
+  changeIdsQuery: Function;
+  nameQuery: string;
+  changeNameQuery: Function;
+  errorQuery: string;
+  changeErrorQuery: Function;
+  retryQuery: string;
+  changeRetryQuery: Function;
+  busErrQuery: string;
+  changeBuserrQuery: Function;
+  changeAllQuery: Function;
+  defaultDate: string;
+  workflows: Array<string>;
+  allQuery: string;
+  username: string;
+  openModal: Function;
+  closeModal: Function;
+  saveSearch: Function;
 };
 
 @pure([
@@ -61,14 +55,14 @@ export default class SearchToolbar extends Component {
   props: Props = this.props;
 
   state: {
-    mindate: string,
-    maxdate: string,
-    filter: string,
-    ids: string,
-    name: string,
-    error: string,
-    retry: string,
-    busErr: string,
+    mindate: string;
+    maxdate: string;
+    filter: string;
+    ids: string;
+    name: string;
+    error: string;
+    retry: string;
+    busErr: string;
   } = {
     mindate: this.props.mindateQuery,
     maxdate: this.props.maxdateQuery,
@@ -134,12 +128,12 @@ export default class SearchToolbar extends Component {
     this.setState({ ids: value.join(',') });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleNameChange: Function = (event: EventHandler): void => {
     this.setState({ name: event.target.value });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleErrorChange: Function = (event: EventHandler): void => {
     this.setState({ error: event.target.value });
   };
@@ -164,7 +158,7 @@ export default class SearchToolbar extends Component {
             <InputGroup
               type="text"
               placeholder="Name"
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleNameChange}
               value={this.state.name || ''}
               id="name"
@@ -172,7 +166,7 @@ export default class SearchToolbar extends Component {
             <InputGroup
               type="text"
               placeholder="Error"
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleErrorChange}
               value={this.state.error || ''}
               id="error"
@@ -183,7 +177,7 @@ export default class SearchToolbar extends Component {
           <Datepicker
             placeholder="Min date..."
             date={this.state.mindate}
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             onApplyDate={this.handleMinDateChange}
             applyOnBlur
             id="mindate"
@@ -193,7 +187,7 @@ export default class SearchToolbar extends Component {
           <Datepicker
             placeholder="Max date..."
             date={this.state.maxdate}
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             onApplyDate={this.handleMaxDateChange}
             applyOnBlur
             noButtons
@@ -205,18 +199,14 @@ export default class SearchToolbar extends Component {
             id="ids"
             multi
             submitOnBlur
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             onSubmit={this.handleIdsChange}
-            selected={
-              !this.state.ids || this.state.ids === ''
-                ? []
-                : this.state.ids.split(',')
-            }
+            selected={!this.state.ids || this.state.ids === '' ? [] : this.state.ids.split(',')}
           >
-            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
             <Control icon={INTERFACE_ICONS.workflow} />
             {this.props.workflows.map((o, k) => (
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               <Item key={k} title={o} />
             ))}
           </Dropdown>
@@ -227,7 +217,7 @@ export default class SearchToolbar extends Component {
             multi
             def="All"
             submitOnBlur
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             onSubmit={this.handleFilterChange}
             selected={
               !this.state.filter || this.state.filter === ''
@@ -235,12 +225,12 @@ export default class SearchToolbar extends Component {
                 : this.state.filter.split(',')
             }
           >
-            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
             <Control icon="info-sign" />
-            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
             <Item title="All" />
             {ORDER_STATES.map((o, k) => (
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               <Item key={k} title={o.title} />
             ))}
           </Dropdown>
@@ -260,12 +250,7 @@ export default class SearchToolbar extends Component {
           />
         </ButtonGroup>
         <ButtonGroup>
-          <Button
-            text="Clear"
-            icon="cross"
-            onClick={this.handleClearClick}
-            big
-          />
+          <Button text="Clear" icon="cross" onClick={this.handleClearClick} big />
         </ButtonGroup>
       </Pull>
     );

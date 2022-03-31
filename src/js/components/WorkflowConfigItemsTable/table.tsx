@@ -1,49 +1,42 @@
 // @flow
 import React from 'react';
+import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import EnhancedTable from '../EnhancedTable';
-import { ActionColumnHeader, ActionColumn } from '../ActionColumn';
-import type { EnhancedTableProps } from '../EnhancedTable';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import { sortDefaults } from '../../constants/sort';
-import NameColumn, { NameColumnHeader } from '../NameColumn';
-import DataOrEmptyTable from '../DataOrEmptyTable';
-import { Table, Thead, Tr, Th, Tbody, Td, FixedRow } from '../new_table';
-import LoadMore from '../LoadMore';
 import Search from '../../containers/search';
-import Pull from '../Pull';
-import ContentByType from '../ContentByType';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
-import Tree from '../tree';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
+import { ActionColumn, ActionColumnHeader } from '../ActionColumn';
 import AddConfigItemModal from '../ConfigItemsTable/modal';
-import size from 'lodash/size';
-import { injectIntl, FormattedMessage } from 'react-intl';
 import { Value } from '../ConfigItemsTable/table';
+import DataOrEmptyTable from '../DataOrEmptyTable';
+import type { EnhancedTableProps } from '../EnhancedTable';
+import EnhancedTable from '../EnhancedTable';
+import LoadMore from '../LoadMore';
+import NameColumn, { NameColumnHeader } from '../NameColumn';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../new_table';
+import Pull from '../Pull';
 
 type ConfigItemsTableProps = {
-  items: Object,
-  dispatchAction: Function,
-  // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'intrf'.
-  intrf: string,
-  openModal: Function,
-  closeModal: Function,
-  saveValue: Function,
-  // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'intrf'.
-  intrf: string,
-  belongsTo: string,
-  showDescription: boolean,
-  globalItems: any,
-  intrfId: number,
+  items: Object;
+  dispatchAction: Function;
+  // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'intrf'.
+  intrf: string;
+  openModal: Function;
+  closeModal: Function;
+  saveValue: Function;
+  // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'intrf'.
+  intrf: string;
+  belongsTo: string;
+  showDescription: boolean;
+  globalItems: any;
+  intrfId: number;
 };
 
 const WorkflowConfigItemsTable: Function = ({
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'configItems' does not exist on type 'Con... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'configItems' does not exist on type 'Con... Remove this comment to see the full error message
   configItems,
   belongsTo,
   openModal,
@@ -51,16 +44,16 @@ const WorkflowConfigItemsTable: Function = ({
   saveValue,
   intrf,
   showDescription,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'handleToggleDescription' does not exist ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleToggleDescription' does not exist ... Remove this comment to see the full error message
   handleToggleDescription,
   dispatchAction,
   globalItems,
   intrfId,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'ConfigItem... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'ConfigItem... Remove this comment to see the full error message
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: ConfigItemsTableProps): React.Element<any> =>
-  (configItems && configItems.data?.length) ? (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+ConfigItemsTableProps): React.Element<any> =>
+  configItems && configItems.data?.length ? (
     <EnhancedTable
       collection={configItems.data}
       searchBy={['name', 'default_value', 'value', 'type', 'mandatory', 'desc']}
@@ -92,10 +85,7 @@ const WorkflowConfigItemsTable: Function = ({
                     total={loadMoreTotal}
                     limit={limit}
                   />
-                  <Search
-                    onSearchUpdate={handleSearchChange}
-                    resource="configItems"
-                  />
+                  <Search onSearchUpdate={handleSearchChange} resource="configItems" />
                 </Pull>
               </Th>
             </FixedRow>
@@ -108,18 +98,14 @@ const WorkflowConfigItemsTable: Function = ({
               <Th icon="code" name="type" />
             </FixedRow>
           </Thead>
-          <DataOrEmptyTable
-            condition={!collection || collection.length === 0}
-            cols={4}
-            small
-          >
-            {props => (
+          <DataOrEmptyTable condition={!collection || collection.length === 0} cols={4} small>
+            {(props) => (
               <Tbody {...props}>
                 {collection.map((item: Object, index: number) => (
                   <React.Fragment>
-                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                     <Tr key={item.name} first={index === 0}>
-                      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                       <NameColumn name={item.name} />
                       <ActionColumn>
                         <ButtonGroup>
@@ -131,7 +117,7 @@ const WorkflowConfigItemsTable: Function = ({
                                 <AddConfigItemModal
                                   onClose={closeModal}
                                   item={item}
-                                  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                                  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                                   belongsTo={belongsTo}
                                   onSubmit={saveValue}
                                   intrf={intrf}
@@ -147,11 +133,11 @@ const WorkflowConfigItemsTable: Function = ({
                             btnStyle="danger"
                             onClick={() => {
                               dispatchAction(
-                                // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
+                                // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
                                 actions.workflows.deleteConfigItem,
                                 intrfId,
                                 null,
-                                // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                                // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                                 item.name,
                                 null
                               );
@@ -160,16 +146,18 @@ const WorkflowConfigItemsTable: Function = ({
                         </ButtonGroup>
                       </ActionColumn>
                       <Td
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
-                        className={`text ${item.level === 'workflow' ||
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
-                          item.level === 'global'}`}
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
+                        className={`text ${
+                          item.level === 'workflow' ||
+                          // @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
+                          item.level === 'global'
+                        }`}
                       >
-                        { /* @ts-expect-error ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message */ }
+                        {/* @ts-expect-error ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message */}
                         <Value item={item} />
                       </Td>
                       <Td className="narrow">
-                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
+                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                         <code>{item.type}</code>
                       </Td>
                     </Tr>

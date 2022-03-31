@@ -1,18 +1,14 @@
 /* @flow */
 import { createAction } from 'redux-actions';
-
-import { fetchJson, fetchWithNotifications } from '../../utils';
 import settings from '../../../../settings';
+import { fetchJson, fetchWithNotifications } from '../../utils';
 
 const fetchValues = createAction(
   'VALUEMAPS_FETCHVALUES',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   async (id: number): Object => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-    const values = await fetchJson(
-      'GET',
-      `${settings.REST_BASE_URL}/valuemaps/${id}/values`
-    );
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+    const values = await fetchJson('GET', `${settings.REST_BASE_URL}/valuemaps/${id}/values`);
 
     return { values, id };
   }
@@ -20,13 +16,10 @@ const fetchValues = createAction(
 
 const getDump = createAction(
   'VALUEMAPS_GETDUMP',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   async (id: number): Object => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-    const dump = await fetchJson(
-      'GET',
-      `${settings.REST_BASE_URL}/valuemaps/${id}?action=dump`
-    );
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+    const dump = await fetchJson('GET', `${settings.REST_BASE_URL}/valuemaps/${id}?action=dump`);
 
     return { dump, id };
   }
@@ -42,11 +35,11 @@ const updateValue = createAction(
     value: string | number,
     enabled: boolean,
     dispatch: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   ): Object => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
         await fetchJson('PUT', `${settings.REST_BASE_URL}/valuemaps/${id}`, {
           body: JSON.stringify({
             key,
@@ -74,7 +67,7 @@ const deleteValue = createAction(
   (id: number, key: string, dispatch: Function): Object => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
         await fetchJson('PUT', `${settings.REST_BASE_URL}/valuemaps/${id}`, {
           body: JSON.stringify({
             key,
@@ -95,16 +88,10 @@ const deleteValue = createAction(
 
 const addValue = createAction(
   'VALUEMAPS_ADDVALUE',
-  (
-    id: number,
-    key: string,
-    value: string,
-    enabled: boolean,
-    dispatch: Function
-  ): Object => {
+  (id: number, key: string, value: string, enabled: boolean, dispatch: Function): Object => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
         await fetchJson('PUT', `${settings.REST_BASE_URL}/valuemaps/${id}`, {
           body: JSON.stringify({
             key,

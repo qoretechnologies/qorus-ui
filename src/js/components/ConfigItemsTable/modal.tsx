@@ -17,7 +17,6 @@ import pickBy from 'lodash/pickBy';
 import moment from 'moment';
 import React, { Component } from 'react';
 import ReactMarkdown from 'react-markdown';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import Dropdown, { Control as DControl, Item } from '../../components/dropdown';
 import { DATE_FORMATS } from '../../constants/dates';
@@ -36,14 +35,14 @@ import Tabs, { Pane } from '../tabs';
 import Tree from '../tree';
 
 type Props = {
-  onClose: Function,
-  item: Object,
-  onSubmit: Function,
-  levelType: string,
-  intrf: string,
-  intrfId: number,
-  stepId: number,
-  isGlobal: Boolean,
+  onClose: Function;
+  item: Object;
+  onSubmit: Function;
+  levelType: string;
+  intrf: string;
+  intrfId: number;
+  stepId: number;
+  isGlobal: Boolean;
 };
 
 export default class ConfigItemsModal extends Component {
@@ -70,38 +69,38 @@ export default class ConfigItemsModal extends Component {
   };
 
   state: {
-    value: any,
-    item: Object,
-    error: boolean,
-    yamlData?: string,
-    type: string,
-    selectedConfigItem?: string,
-    useTemplate?: boolean,
-    templateType?: string,
-    templateKey?: string,
+    value: any;
+    item: Object;
+    error: boolean;
+    yamlData?: string;
+    type: string;
+    selectedConfigItem?: string;
+    useTemplate?: boolean;
+    templateType?: string;
+    templateKey?: string;
   } = {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
     value: this.props.item?.value,
-    // @ts-expect-error ts-migrate(2322) FIXME: Type '{ value: any; origValue: any; item: Object; ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2322) FIXME: Type '{ value: any; origValue: any; item: Object; ... Remove this comment to see the full error message
     origValue: this.props.item?.value,
     item: this.props.item,
     error: false,
     yamlData: null,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
     currentType: this.props.item?.type,
     type:
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
       this.props.item?.type === 'any'
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentType' does not exist on type 'Obj... Remove this comment to see the full error message
-        ? this.props.item?.currentType || null
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-        : this.props.item?.type,
+        ? // @ts-ignore ts-migrate(2339) FIXME: Property 'currentType' does not exist on type 'Obj... Remove this comment to see the full error message
+          this.props.item?.currentType || null
+        : // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+          this.props.item?.type,
     useTemplate:
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
       typeof this.props.item?.value === 'string' && this.props.item?.value?.startsWith('$'),
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
     templateType: this.getTemplateType(this.props.item?.value),
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
     templateKey: this.getTemplateKey(this.props.item?.value),
   };
 
@@ -114,13 +113,13 @@ export default class ConfigItemsModal extends Component {
       const interfacePath: string = intrfId ? `${intrf}/${intrfId}${stepPath}` : 'system';
 
       const yamlData: Object = await get(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         `${settings.REST_BASE_URL}/${interfacePath}/config/${item.name}?action=yaml`
       );
 
       this.setState({
         yamlData,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
         value: yamlData.value,
       });
     }
@@ -141,7 +140,7 @@ export default class ConfigItemsModal extends Component {
     this.setState({
       value,
       yamlData: {
-        // @ts-expect-error ts-migrate(2698) FIXME: Spread types may only be created from object types... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2698) FIXME: Spread types may only be created from object types... Remove this comment to see the full error message
         ...this.state.yamlData,
         value,
       },
@@ -156,13 +155,13 @@ export default class ConfigItemsModal extends Component {
 
   handleDefaultClick = () => {
     this.setState({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 's... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 's... Remove this comment to see the full error message
       value: this.state.yamlData.default_value,
     });
   };
 
   handleSaveClick: Function = (): void => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentType' does not exist on type '{ v... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'currentType' does not exist on type '{ v... Remove this comment to see the full error message
     let { value, currentType } = this.state;
 
     if (currentType !== 'hash' && currentType !== 'list') {
@@ -184,7 +183,7 @@ export default class ConfigItemsModal extends Component {
       return (
         <React.Fragment>
           {item.allowed_values.map((value) => (
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             <Tree data={value} compact noControls expanded />
           ))}
         </React.Fragment>
@@ -192,9 +191,9 @@ export default class ConfigItemsModal extends Component {
     }
 
     return (
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
       <Dropdown>
-        { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; small: tru... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; small: tru... Remove this comment to see the full error message */}
         <DControl icon="list" small>
           Please select from predefined values
         </DControl>
@@ -203,7 +202,7 @@ export default class ConfigItemsModal extends Component {
           .map((value) => (
             <Item
               title={jsyaml.safeLoad(value)}
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               onClick={(event, title) => {
                 this.handleObjectChange(
                   title,
@@ -225,11 +224,11 @@ export default class ConfigItemsModal extends Component {
     return s;
   };
 
-  // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
   renderValueContent = (): React.Element<any> => {
     const { item } = this.state;
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message
     if (item.allowed_values) {
       return (
         <TextArea
@@ -242,9 +241,9 @@ export default class ConfigItemsModal extends Component {
           onChange={(event: any) => {
             this.handleObjectChange(
               event.target.value,
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
               item.type.replace('*', ''),
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
               item.type.startsWith('*')
             );
           }}
@@ -257,18 +256,18 @@ export default class ConfigItemsModal extends Component {
         name="configItem"
         {...{ 'type-depends-on': true }}
         value={this.removeQuotes(this.state.value)}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'origValue' does not exist on type '{ val... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'origValue' does not exist on type '{ val... Remove this comment to see the full error message
         default_value={this.removeQuotes(this.state.origValue)}
         t={(s) => s}
         type="auto"
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
         defaultType={item.type}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'value_true_type' does not exist on type ... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'value_true_type' does not exist on type ... Remove this comment to see the full error message
         defaultInternalType={item.value_true_type || item.type}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message
         disabled={!!item.allowed_values}
         requestFieldData={(field) =>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
           field === 'can_be_undefined' ? item.type.startsWith('*') : item.type.replace('*', '')
         }
         onChange={(name, value, type, canBeNull) => {
@@ -279,7 +278,7 @@ export default class ConfigItemsModal extends Component {
   };
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'globalConfig' does not exist on type 'Pr... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'globalConfig' does not exist on type 'Pr... Remove this comment to see the full error message
     const { onClose, isGlobal, globalConfig } = this.props;
     const { error, yamlData, value, item, useTemplate } = this.state;
     const globalConfigItems = pickBy(globalConfig, (data, name) => isNull(data.value));
@@ -294,15 +293,15 @@ export default class ConfigItemsModal extends Component {
         }}
       >
         <Modal.Header onClose={onClose} titleId="yamlEdit">
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
           {!item ? 'Assign new config item value' : `Editing ${item.name} config item`}
         </Modal.Header>
         <Modal.Body>
           <Box top fill scrollY>
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
             {item?.desc && (
               <Alert icon="info-sign">
-                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */ }
+                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
                 <ReactMarkdown>{item.desc}</ReactMarkdown>
               </Alert>
             )}
@@ -314,14 +313,14 @@ export default class ConfigItemsModal extends Component {
                 </Alert>
                 {!item && (
                   <>
-                    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                    {/*  @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                     <Dropdown>
-                      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
+                      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
                       <DControl>{item?.name || 'Please select'}</DControl>
                       {map(globalConfigItems, (data) => (
                         <Item
                           title={data.name}
-                          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                           onClick={async (event, name) => {
                             const { intrf, intrfId } = this.props;
 
@@ -351,19 +350,19 @@ export default class ConfigItemsModal extends Component {
 
             {!yamlData && <Loader />}
             {yamlData ? (
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               <Tabs
                 active={useTemplate ? 'template' : 'custom'}
                 onChangeEnd={() => {
                   this.setState({ value: null });
                 }}
               >
-                { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
+                {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
                 <Pane name="custom">
                   <React.Fragment>
                     <div className="configItemsEditor">
                       <div className="header">
-                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */ }
+                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
                         {yamlData.allowed_values
                           ? this.renderAllowedItems(yamlData)
                           : isGlobal
@@ -375,13 +374,13 @@ export default class ConfigItemsModal extends Component {
                               <Tooltip
                                 content={
                                   this.state.type === 'hash' || this.state.type === 'list' ? (
-                                    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+                                    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                                     <Tree data={item.default_value} noButtons expanded compact />
                                   ) : (
                                     <ContentByType
                                       inTable
                                       noControls
-                                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 'O... Remove this comment to see the full error message
+                                      // @ts-ignore ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 'O... Remove this comment to see the full error message
                                       content={item.default_value}
                                     />
                                   )
@@ -389,7 +388,7 @@ export default class ConfigItemsModal extends Component {
                               >
                                 <Button
                                   label="Set default value"
-                                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 'O... Remove this comment to see the full error message
+                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 'O... Remove this comment to see the full error message
                                   disabled={!item.default_value}
                                   onClick={this.handleDefaultClick}
                                 />
@@ -399,7 +398,7 @@ export default class ConfigItemsModal extends Component {
                         )}
                       </div>
                       <div className="body">
-                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */ }
+                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
                         {item?.allowed_values && (
                           <Alert bsStyle="warning" icon="warning-sign">
                             This config item can only be set using predefined values
@@ -415,9 +414,9 @@ export default class ConfigItemsModal extends Component {
                     </div>
                   </React.Fragment>
                 </Pane>
-                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */ }
+                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
                 {!item?.allowed_values && (
-                  // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
                   <Pane name="template">
                     <div className="configItemsEditor">
                       <div className="header">Set custom template</div>
@@ -426,95 +425,95 @@ export default class ConfigItemsModal extends Component {
                           {'Template items are in the format: $<type>:<key>'}
                         </Alert>
                         <ControlGroup className="bp3-fill">
-                          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Dropdown className="bp3-fixed">
-                            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */ }
+                            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
                             <DControl icon="dollar">{this.state.templateType}</DControl>
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="config"
                               onClick={() => {
                                 this.setState({ templateType: 'config' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="dynamic"
                               onClick={() => {
                                 this.setState({ templateType: 'dynamic' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="jinfo"
                               onClick={() => {
                                 this.setState({ templateType: 'jinfo' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="keys"
                               onClick={() => {
                                 this.setState({ templateType: 'keys' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="local"
                               onClick={() => {
                                 this.setState({ templateType: 'local' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="parse-value"
                               onClick={() => {
                                 this.setState({ templateType: 'parse-value' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="pstate"
                               onClick={() => {
                                 this.setState({ templateType: 'pstate' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="python-expr"
                               onClick={() => {
                                 this.setState({ templateType: 'python-expr' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="qore-expr"
                               onClick={() => {
                                 this.setState({ templateType: 'qore-expr' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="qore-expr-value"
                               onClick={() => {
                                 this.setState({ templateType: 'qore-expr-value' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="rest"
                               onClick={() => {
                                 this.setState({ templateType: 'rest' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="sensitive"
                               onClick={() => {
                                 this.setState({ templateType: 'sensitive' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="sensitive-alias"
                               onClick={() => {
@@ -523,70 +522,70 @@ export default class ConfigItemsModal extends Component {
                                 });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="state"
                               onClick={() => {
                                 this.setState({ templateType: 'state' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="static"
                               onClick={() => {
                                 this.setState({ templateType: 'static' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="step"
                               onClick={() => {
                                 this.setState({ templateType: 'step' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="sysprop"
                               onClick={() => {
                                 this.setState({ templateType: 'sysprop' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="temp"
                               onClick={() => {
                                 this.setState({ templateType: 'temp' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="timestamp"
                               onClick={() => {
                                 this.setState({ templateType: 'timestamp' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="transient"
                               onClick={() => {
                                 this.setState({ templateType: 'transient' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="value-map"
                               onClick={() => {
                                 this.setState({ templateType: 'value-map' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="var"
                               onClick={() => {
                                 this.setState({ templateType: 'var' });
                               }}
                             />
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Item
                               title="xconfig"
                               onClick={() => {
@@ -618,7 +617,7 @@ export default class ConfigItemsModal extends Component {
             <div className="pull-right">
               <ButtonGroup>
                 <Button label="Cancel" btnStyle="default" action={onClose} big />
-                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 's... Remove this comment to see the full error message */ }
+                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 's... Remove this comment to see the full error message */}
                 {!isGlobal && value === yamlData?.default_value ? (
                   <Popover
                     position={Position.TOP}
@@ -633,7 +632,7 @@ export default class ConfigItemsModal extends Component {
                             className="bp3-fill"
                             text="Submit anyway"
                             intent={Intent.SUCCESS}
-                            // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
+                            // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
                             onClick={this.handleSaveClick}
                           />
                         </BtnGrp>

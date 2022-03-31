@@ -6,13 +6,10 @@ const connections = {};
 
 const connected = createAction('WEBSOCKET_CONNECTED', (url) => ({ url }));
 
-const disconnected = createAction(
-  'WEBSOCKET_DISCONNECTED',
-  (url: string, code: number) => {
-    delete connections[url];
-    return { url, code };
-  }
-);
+const disconnected = createAction('WEBSOCKET_DISCONNECTED', (url: string, code: number) => {
+  delete connections[url];
+  return { url, code };
+});
 
 const paused = createAction('WEBSOCKET_PAUSED', (url) => {
   delete connections[url];
@@ -27,7 +24,7 @@ export const connectCall: Function = (
   onError: Function,
   onClose: Function,
   onPause: Function,
-  // @ts-expect-error ts-migrate(1015) FIXME: Parameter cannot have question mark and initialize... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1015) FIXME: Parameter cannot have question mark and initialize... Remove this comment to see the full error message
   useHeartbeat?: boolean = true
 ): Object => {
   const token = localStorage.getItem('token');
@@ -81,7 +78,7 @@ export const connectCall: Function = (
     }
   };
 
-  ws.onclose = ({ code, reason }: { code: number, reason: string }) => {
+  ws.onclose = ({ code, reason }: { code: number; reason: string }) => {
     // Cancel the timeout and interval
     clearInterval(interval);
     clearTimeout(timeout);
@@ -115,33 +112,27 @@ export const disconnectCall: Function = (url: string, pause: boolean): void => {
   if (connections[url]) connections[url].close(1000, pause ? 'paused' : '');
 };
 
-const connectAction: Function = createAction(
-  'WEBSOCKET_CONNECTING',
-  connectCall
-);
+const connectAction: Function = createAction('WEBSOCKET_CONNECTING', connectCall);
 
-const connect: Function = (
-  url: string,
-  onOpen: Function,
-  onMessage: Function,
-  onError: Function,
-  onClose: Function,
-  onPause: Function
-): Function => (dispatch: Function) => {
-  dispatch(
-    connectAction(url, dispatch, onOpen, onMessage, onError, onClose, onPause)
-  );
-};
+const connect: Function =
+  (
+    url: string,
+    onOpen: Function,
+    onMessage: Function,
+    onError: Function,
+    onClose: Function,
+    onPause: Function
+  ): Function =>
+  (dispatch: Function) => {
+    dispatch(connectAction(url, dispatch, onOpen, onMessage, onError, onClose, onPause));
+  };
 
-const disconnectAction: Function = createAction(
-  'WEBSOCKET_DISCONNECTING',
-  disconnectCall
-);
+const disconnectAction: Function = createAction('WEBSOCKET_DISCONNECTING', disconnectCall);
 
-const disconnect: Function = (url: string, pause: boolean): Function => (
-  dispatch: Function
-) => {
-  dispatch(disconnectAction(url, pause));
-};
+const disconnect: Function =
+  (url: string, pause: boolean): Function =>
+  (dispatch: Function) => {
+    dispatch(disconnectAction(url, pause));
+  };
 
 export { connect, disconnect };

@@ -1,20 +1,13 @@
 // @flow
 import { createAction } from 'redux-actions';
-import { fetchJson } from '../../utils';
 import settings from '../../../../settings';
+import { fetchJson } from '../../utils';
 
 const fetchReleases: Function = createAction(
   'RELEASES_FETCHRELEASES',
-  async (
-    fileName,
-    component,
-    maxdate,
-    mindate,
-    limit,
-    offset,
-    fetchMore,
-  ) => {
-    let url = `${settings.REST_BASE_URL}/releases?with_components=1` +
+  async (fileName, component, maxdate, mindate, limit, offset, fetchMore) => {
+    let url =
+      `${settings.REST_BASE_URL}/releases?with_components=1` +
       `&limit=${limit}` +
       `&offset=${offset}`;
 
@@ -34,13 +27,8 @@ const fetchReleases: Function = createAction(
       url += `&mindate=${mindate}`;
     }
 
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    const releases: Promise<*> = await fetchJson(
-      'GET',
-      url,
-      null,
-      true
-    );
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    const releases: Promise<*> = await fetchJson('GET', url, null, true);
 
     return {
       releases,
@@ -51,33 +39,19 @@ const fetchReleases: Function = createAction(
 
 const changeOffset: Function = createAction(
   'RELEASES_CHANGEOFFSET',
-  (newOffset: number): Object => (
-    { newOffset }
-  )
+  (newOffset: number): Object => ({ newOffset })
 );
 
 const changeSort: Function = createAction(
   'RELEASES_CHANGESORT',
-  (newSort: string): Object => (
-    { newSort }
-  )
+  (newSort: string): Object => ({ newSort })
 );
 
 const changeSortDir: Function = createAction(
   'RELEASES_CHANGESORTDIR',
-  (newSortDir: string): Object => (
-    { newSortDir }
-  )
+  (newSortDir: string): Object => ({ newSortDir })
 );
 
-const unsync: Function = createAction(
-  'RELEASES_UNSYNC',
-);
+const unsync: Function = createAction('RELEASES_UNSYNC');
 
-export {
-  fetchReleases,
-  changeOffset,
-  changeSort,
-  changeSortDir,
-  unsync,
-};
+export { fetchReleases, changeOffset, changeSort, changeSortDir, unsync };

@@ -8,8 +8,8 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
     `${intfc}_UPDATE_CONFIG_ITEM`,
     (
       id: number | string,
-      // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-      stepId: ?number,
+      // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+      stepId: number,
       configItemName: string,
       newValue: any,
       onSuccess: Function,
@@ -33,7 +33,7 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
             }/config/${configItemName}?action=yaml`;
 
       fetchWithNotifications(
-        // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
         async (): Promise<*> => {
           const res = await put(url, {
             body: JSON.stringify({
@@ -59,8 +59,8 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
     `${intfc}_DELETE_CONFIG_ITEM`,
     (
       id: number | string,
-      // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-      stepId: ?number,
+      // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+      stepId: number,
       configItemName: string,
       onSuccess: Function,
       dispatch: Function
@@ -74,7 +74,7 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
         PIPELINES: 'pipelines',
       };
 
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string | number' is not assignable to type '... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2322) FIXME: Type 'string | number' is not assignable to type '... Remove this comment to see the full error message
       let realId: number = stepId || id;
 
       const url = `${settings.REST_BASE_URL}/${intfcToApiPath[intfc]}${
@@ -82,7 +82,7 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
       }/config/${configItemName}`;
 
       fetchWithNotifications(
-        // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
         async (): Promise<*> => {
           const res = await del(url);
 
@@ -107,17 +107,12 @@ const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
     `${intfc.toUpperCase()}_FETCHLOGGER`,
     async (id: number | string, dispatch: Function) => {
       const loggerPath: string = id ? `/${id}/logger` : '/logger';
-      const appendersPath: string = id
-        ? `/${id}/logger/appenders`
-        : '/logger/appenders';
+      const appendersPath: string = id ? `/${id}/logger/appenders` : '/logger/appenders';
 
       url = url || intfc;
 
       const logger: Object = await fetchWithNotifications(
-        async () =>
-          await get(
-            `${settings.REST_BASE_URL}/${url}/${loggerPath.toLowerCase()}`
-          ),
+        async () => await get(`${settings.REST_BASE_URL}/${url}/${loggerPath.toLowerCase()}`),
         null,
         null,
         dispatch
@@ -125,10 +120,7 @@ const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
 
       if (logger !== 'success') {
         const appenders: Object = await fetchWithNotifications(
-          async () =>
-            await get(
-              `${settings.REST_BASE_URL}/${url}/${appendersPath.toLowerCase()}`
-            ),
+          async () => await get(`${settings.REST_BASE_URL}/${url}/${appendersPath.toLowerCase()}`),
           null,
           null,
           dispatch

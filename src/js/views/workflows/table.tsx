@@ -1,67 +1,66 @@
 /* @flow */
+import size from 'lodash/size';
 import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { connect } from 'react-redux';
-import size from 'lodash/size';
-
-import { Table, Thead, Tbody, Th, FixedRow } from '../../components/new_table';
-import withModal from '../../hocomponents/modal';
-import Row from './row';
-import SortModal from './modals/sort_modal';
-import actions from '../../store/api/actions';
-import queryControl from '../../hocomponents/queryControl';
-import DatePicker from '../../components/datepicker';
-import Selector from './toolbar/selector';
-import Actions from './toolbar/actions';
-import Filters from './toolbar/filters';
-import LoadMore from '../../components/LoadMore';
+import { ActionColumnHeader } from '../../components/ActionColumn';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
-import SortingDropdown from '../../components/SortingDropdown';
+import DatePicker from '../../components/datepicker';
+import { IdColumnHeader } from '../../components/IdColumn';
+import LoadMore from '../../components/LoadMore';
 import { NameColumnHeader } from '../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../components/new_table';
 import Pull from '../../components/Pull';
 import { SelectColumnHeader } from '../../components/SelectColumn';
-import { ActionColumnHeader } from '../../components/ActionColumn';
-import { IdColumnHeader } from '../../components/IdColumn';
+import SortingDropdown from '../../components/SortingDropdown';
+import withModal from '../../hocomponents/modal';
+import queryControl from '../../hocomponents/queryControl';
+import actions from '../../store/api/actions';
+import SortModal from './modals/sort_modal';
+import Row from './row';
+import Actions from './toolbar/actions';
 import Band from './toolbar/band';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import Filters from './toolbar/filters';
+import Selector from './toolbar/selector';
 
 type Props = {
-  sortData: Object,
-  onSortChange: Function,
-  states: Object,
-  deprecated?: boolean,
-  collection: Array<Object>,
-  paneId?: number,
-  openPane: Function,
-  closePane: Function,
-  date: string,
-  select: Function,
-  updateDone: Function,
-  expanded: boolean,
-  canLoadMore: boolean,
-  isTablet: boolean,
-  totalInstances: Object,
-  setRemote: Function,
-  openModal: Function,
-  closeModal: Function,
-  handleInstancesClick: Function,
-  dateQuery: string,
-  changeDateQuery: Function,
-  dispositionQuery: string,
-  changeDispositionQuery: Function,
-  handleDispositionChange: Function,
-  selected: string,
-  selectedIds: Array<number>,
-  location: Object,
-  handleLoadMore: Function,
-  handleLoadAll: Function,
-  loadMoreCurrent: number,
-  loadMoreTotal: number,
-  limit: number,
-  sortKeysObj: Object,
-  band: string,
+  sortData: Object;
+  onSortChange: Function;
+  states: Object;
+  deprecated?: boolean;
+  collection: Array<Object>;
+  paneId?: number;
+  openPane: Function;
+  closePane: Function;
+  date: string;
+  select: Function;
+  updateDone: Function;
+  expanded: boolean;
+  canLoadMore: boolean;
+  isTablet: boolean;
+  totalInstances: Object;
+  setRemote: Function;
+  openModal: Function;
+  closeModal: Function;
+  handleInstancesClick: Function;
+  dateQuery: string;
+  changeDateQuery: Function;
+  dispositionQuery: string;
+  changeDispositionQuery: Function;
+  handleDispositionChange: Function;
+  selected: string;
+  selectedIds: Array<number>;
+  location: Object;
+  handleLoadMore: Function;
+  handleLoadAll: Function;
+  loadMoreCurrent: number;
+  loadMoreTotal: number;
+  limit: number;
+  sortKeysObj: Object;
+  band: string;
 };
 
 const WorkflowsTable: Function = ({
@@ -94,10 +93,10 @@ const WorkflowsTable: Function = ({
   loadMoreCurrent,
   loadMoreTotal,
   sortKeysObj,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
@@ -108,11 +107,7 @@ const WorkflowsTable: Function = ({
               selectedCount={selectedIds.length}
               disabled={size(collection) === 0}
             />
-            <Actions
-              selectedIds={selectedIds}
-              show={selected !== 'none'}
-              isTablet={isTablet}
-            />
+            <Actions selectedIds={selectedIds} show={selected !== 'none'} isTablet={isTablet} />
             <Filters location={location} isTablet={isTablet} />
             <SortingDropdown
               onSortChange={onSortChange}
@@ -134,7 +129,7 @@ const WorkflowsTable: Function = ({
         <Th className="separated-cell" colspan={2}>
           <DatePicker
             date={dateQuery || '24h'}
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             onApplyDate={changeDateQuery}
             className="toolbar-item"
           />
@@ -149,45 +144,38 @@ const WorkflowsTable: Function = ({
         <NameColumnHeader />
         <ActionColumnHeader />
         <Th name="autostart" icon="automatic-updates">
-          <FormattedMessage id='table.auto-execs' />
+          <FormattedMessage id="table.auto-execs" />
         </Th>
         {deprecated && (
           <Th name="deprecated" icon="flag">
-            <FormattedMessage id='table.deprecated' />
+            <FormattedMessage id="table.deprecated" />
           </Th>
         )}
-        <Th
-          className="separated-cell"
-          onClick={handleInstancesClick}
-          icon="layout-grid"
-        >
-          <FormattedMessage id='table.instances' />
+        <Th className="separated-cell" onClick={handleInstancesClick} icon="layout-grid">
+          <FormattedMessage id="table.instances" />
         </Th>
         <Th name="TOTAL" icon="grid">
-          <FormattedMessage id='table.all' />
+          <FormattedMessage id="table.all" />
         </Th>
         <Th className="separated-cell" icon="pie-chart">
-          <FormattedMessage id='table.disposition' /> (%)
+          <FormattedMessage id="table.disposition" /> (%)
         </Th>
         <Th className="normal" icon="time">
-          <FormattedMessage id='table.sla' /> (%)
+          <FormattedMessage id="table.sla" /> (%)
         </Th>
       </FixedRow>
     </Thead>
-    <DataOrEmptyTable
-      condition={collection.length === 0}
-      cols={deprecated ? 10 : 9}
-    >
-      {props => (
+    <DataOrEmptyTable condition={collection.length === 0} cols={deprecated ? 10 : 9}>
+      {(props) => (
         <Tbody {...props}>
           {collection.map(
-            // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
             (workflow: Object, index: number): React.Element<Row> => (
               <Row
                 first={index === 0}
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 key={workflow.id}
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 isActive={workflow.id === parseInt(paneId, 10)}
                 openPane={openPane}
                 closePane={closePane}
@@ -211,40 +199,32 @@ const WorkflowsTable: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
-      updateDone: actions.workflows.updateDone,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
-      select: actions.workflows.select,
-    }
-  ),
+  connect(null, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
+    updateDone: actions.workflows.updateDone,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
+    select: actions.workflows.select,
+  }),
   withModal(),
   withHandlers({
-    handleInstancesClick: ({
-      sortData,
-      onSortChange,
-      openModal,
-      closeModal,
-    }: Props): Function => (): void => {
-      openModal(
-        <SortModal
-          sortData={sortData}
-          onSortChange={onSortChange}
-          closeModal={closeModal}
-        />
-      );
-    },
-    handleDispositionChange: ({ changeDispositionQuery }: Props): Function => (
-      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-      event: EventHandler,
-      title: string
-    ): void => {
-      changeDispositionQuery(title);
-    },
+    handleInstancesClick:
+      ({ sortData, onSortChange, openModal, closeModal }: Props): Function =>
+      (): void => {
+        openModal(
+          <SortModal sortData={sortData} onSortChange={onSortChange} closeModal={closeModal} />
+        );
+      },
+    handleDispositionChange:
+      ({ changeDispositionQuery }: Props): Function =>
+      (
+        // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+        event: EventHandler,
+        title: string
+      ): void => {
+        changeDispositionQuery(title);
+      },
   }),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
   queryControl('date'),
   pure([
     'sortData',

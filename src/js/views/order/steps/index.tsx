@@ -1,47 +1,38 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
-import mapProps from 'recompose/mapProps';
 import map from 'lodash/map';
 import size from 'lodash/size';
-
-import { groupInstances } from '../../../helpers/orders';
-import {
-  Table,
-  Thead,
-  Tr,
-  Th,
-  FixedRow,
-  Tbody,
-  Td,
-} from '../../../components/new_table';
+import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import Box from '../../../components/box';
-import ExpandableItem from '../../../components/ExpandableItem';
-import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
-import { IdColumnHeader, IdColumn } from '../../../components/IdColumn';
-import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
 import ContentByType from '../../../components/ContentByType';
-import { ALL_ORDER_STATES } from '../../../constants/orders';
-import EnhancedTable from '../../../components/EnhancedTable';
+import { DateColumn, DateColumnHeader } from '../../../components/DateColumn';
 import type { EnhancedTableProps } from '../../../components/EnhancedTable';
-import { sortDefaults } from '../../../constants/sort';
-import Pull from '../../../components/Pull';
+import EnhancedTable from '../../../components/EnhancedTable';
+import ExpandableItem from '../../../components/ExpandableItem';
+import { IdColumn, IdColumnHeader } from '../../../components/IdColumn';
 import LoadMore from '../../../components/LoadMore';
-import Search from '../../../containers/search';
+import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../../components/new_table';
 import NoDataIf from '../../../components/NoDataIf';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import Pull from '../../../components/Pull';
+import { ALL_ORDER_STATES } from '../../../constants/orders';
+import { sortDefaults } from '../../../constants/sort';
+import Search from '../../../containers/search';
+import { groupInstances } from '../../../helpers/orders';
 
 type Props = {
-  order: Object,
-  steps: Object,
+  order: Object;
+  steps: Object;
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+// @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
 const StepsTable: Function = ({ steps, intl }: Props): React.Element<Table> => (
   <NoDataIf condition={size(steps) === 0} big inBox>
     {() => (
       <Box top fill scrollY>
-        {Object.keys(steps).map(stepName => (
+        {Object.keys(steps).map((stepName) => (
           <ExpandableItem
             show
             title={`${steps[stepName].name} - ${steps[stepName].status}`}
@@ -90,81 +81,78 @@ const StepsTable: Function = ({ steps, intl }: Props): React.Element<Table> => (
                               total={loadMoreTotal}
                               limit={limit}
                             />
-                            <Search
-                              onSearchUpdate={handleSearchChange}
-                              resource="steps"
-                            />
+                            <Search onSearchUpdate={handleSearchChange} resource="steps" />
                           </Pull>
                         </Th>
                       </FixedRow>
                       <FixedRow {...{ sortData, onSortChange }}>
                         <NameColumnHeader name="stepname" />
                         <Th icon="info-sign" name="stepstatus">
-                          <FormattedMessage id='table.status' />
+                          <FormattedMessage id="table.status" />
                         </Th>
                         <Th icon="info-sign" name="custom_status">
-                          <FormattedMessage id='table.custom-status' />
+                          <FormattedMessage id="table.custom-status" />
                         </Th>
                         <IdColumnHeader name="subworkflow_instanceid">
-                          <FormattedMessage id='table.subwf-iid' />
+                          <FormattedMessage id="table.subwf-iid" />
                         </IdColumnHeader>
                         <Th icon="error" name="error_type">
-                          <FormattedMessage id='table.error-type' />
+                          <FormattedMessage id="table.error-type" />
                         </Th>
                         <Th icon="info-sign" name="ind">
-                          <FormattedMessage id='table.ind' />
+                          <FormattedMessage id="table.ind" />
                         </Th>
                         <Th icon="refresh" name="retries">
-                          <FormattedMessage id='table.retries' />
+                          <FormattedMessage id="table.retries" />
                         </Th>
                         <Th icon="exclude-row" name="skip">
-                          <FormattedMessage id='table.skip' />
+                          <FormattedMessage id="table.skip" />
                         </Th>
                         <DateColumnHeader name="started">
-                          <FormattedMessage id='table.started' />
+                          <FormattedMessage id="table.started" />
                         </DateColumnHeader>
                         <DateColumnHeader name="completed">
-                          <FormattedMessage id='table.completed' />
+                          <FormattedMessage id="table.completed" />
                         </DateColumnHeader>
                       </FixedRow>
                     </Thead>
                     <Tbody>
                       {map(collection, (step: Object, stepIndex: number) => (
                         <Tr first={stepIndex === 0} key={stepIndex}>
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'stepname' does not exist on type 'Object... Remove this comment to see the full error message */ }
+                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'stepname' does not exist on type 'Object... Remove this comment to see the full error message */}
                           <NameColumn name={step.stepname} />
                           <Td className="normal">
                             <span
                               className={`label status-${
                                 ALL_ORDER_STATES.find(
-                                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepstatus' does not exist on type 'Obje... Remove this comment to see the full error message
-                                  o => o.name === step.stepstatus
+                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'stepstatus' does not exist on type 'Obje... Remove this comment to see the full error message
+                                  (o) => o.name === step.stepstatus
                                 ).label
                               }`}
                             >
-                              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'stepstatus' does not exist on type 'Obje... Remove this comment to see the full error message */ }
+                              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'stepstatus' does not exist on type 'Obje... Remove this comment to see the full error message */}
                               {step.stepstatus}
                             </span>
                           </Td>
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'custom_status' does not exist on type 'O... Remove this comment to see the full error message */ }
+                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'custom_status' does not exist on type 'O... Remove this comment to see the full error message */}
                           <Td className="big">{step.custom_status}</Td>
                           <IdColumn className="medium">
-                            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'subworkflow_instanceid' does not exist o... Remove this comment to see the full error message */ }
+                            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'subworkflow_instanceid' does not exist o... Remove this comment to see the full error message */}
                             {step.subworkflow_instanceid}
                           </IdColumn>
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'error_type' does not exist on type 'Obje... Remove this comment to see the full error message */ }
+                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'error_type' does not exist on type 'Obje... Remove this comment to see the full error message */}
                           <Td className="medium">{step.error_type}</Td>
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'ind' does not exist on type 'Object'. */ }
+                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'ind' does not exist on type 'Object'. */}
                           <Td className="narrow">{step.ind}</Td>
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'retries' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'retries' does not exist on type 'Object'... Remove this comment to see the full error message */}
                           <Td className="normal">{step.retries}</Td>
                           <Td className="narrow">
-                            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'skip' does not exist on type 'Object'. */ }
+                            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'skip' does not exist on type 'Object'. */}
                             <ContentByType content={step.skip} />
                           </Td>
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'started' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'started' does not exist on type 'Object'... Remove this comment to see the full error message */}
                           <DateColumn>{step.started}</DateColumn>
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message */ }
+                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message */}
                           <DateColumn>{step.completed}</DateColumn>
                         </Tr>
                       ))}
@@ -183,7 +171,7 @@ const StepsTable: Function = ({ steps, intl }: Props): React.Element<Table> => (
 export default compose(
   mapProps(
     ({ order, ...rest }: Props): Props => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'StepInstances' does not exist on type 'O... Remove this comment to see the full error message
       steps: order.StepInstances,
       order,
       ...rest,
@@ -191,7 +179,7 @@ export default compose(
   ),
   mapProps(
     ({ steps, ...rest }: Props): Props => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'length' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'length' does not exist on type 'Object'.
       steps: steps && steps.length ? groupInstances(steps) : {},
       ...rest,
     })

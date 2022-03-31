@@ -4,19 +4,19 @@ import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Breadcrumbs, CrumbTabs } from '../breadcrumbs';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control, Controls } from '../controls';
 import Flex from '../Flex';
 import Headbar from '../Headbar';
 import ResizeHandle from '../resize/handle';
 
 type Props = {
-  width?: number,
-  onClose: Function,
-  children: any,
-  onResize?: Function,
-  title?: string,
-  tabs?: Object,
+  width?: number;
+  onClose: Function;
+  children: any;
+  onResize?: Function;
+  title?: string;
+  tabs?: Object;
 };
 
 const Pane: Function = ({
@@ -26,7 +26,7 @@ const Pane: Function = ({
   onResize,
   title,
   tabs,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: Props) => (
   <Flex className="pane right" style={{ width }}>
@@ -39,7 +39,7 @@ const Pane: Function = ({
       }}
     >
       {title && (
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: string; style: { float: "left"; ... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: string; style: { float: "left"; ... Remove this comment to see the full error message
         <h4 style={{ float: 'left' }} active>
           {title}
         </h4>
@@ -57,9 +57,9 @@ const Pane: Function = ({
       <Breadcrumbs icon="list-detail-view">
         {tabs && (
           <CrumbTabs
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'tabs' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'tabs' does not exist on type 'Object'.
             tabs={tabs.tabs}
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'queryIdentifier' does not exist on type ... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'queryIdentifier' does not exist on type ... Remove this comment to see the full error message
             queryIdentifier={tabs.queryIdentifier}
             isPane
           />
@@ -67,7 +67,7 @@ const Pane: Function = ({
       </Breadcrumbs>
     </Headbar>
     <Flex className="pane__content">{children}</Flex>
-    { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ onStop: Function; left: true; min: { width... Remove this comment to see the full error message */ }
+    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ onStop: Function; left: true; min: { width... Remove this comment to see the full error message */}
     <ResizeHandle onStop={onResize} left min={{ width: 600 }} />
   </Flex>
 );

@@ -1,25 +1,21 @@
 // @flow
+import classnames from 'classnames';
 import React from 'react';
 import compose from 'recompose/compose';
-import withState from 'recompose/withState';
-import withHandlers from 'recompose/withHandlers';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import InterfaceTag from '../InterfaceTag';
 import mapProps from 'recompose/mapProps';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import { getLineCount } from '../../helpers/system';
-import classnames from 'classnames';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
+import InterfaceTag from '../InterfaceTag';
 
 type AlertsTableItemProps = {
-  item: Object,
-  handleExpandClick: () => void,
-  expanded: boolean,
-  noTag?: boolean,
-  isExpandable: boolean,
+  item: Object;
+  handleExpandClick: () => void;
+  expanded: boolean;
+  noTag?: boolean;
+  isExpandable: boolean;
 };
 
 const AlertsTableItem: Function = ({
@@ -28,16 +24,16 @@ const AlertsTableItem: Function = ({
   isExpandable,
   handleExpandClick,
   noTag,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: AlertsTableItemProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+AlertsTableItemProps): React.Element<any> => (
   <div className="alerts-table-item">
     {!noTag && (
       <InterfaceTag
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'alert' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'alert' does not exist on type 'Object'.
         title={item.alert}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'alerttype' does not exist on type 'Objec... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'alerttype' does not exist on type 'Objec... Remove this comment to see the full error message
         link={`/system/alerts?tab=${item.alerttype.toLowerCase()}&paneId=${
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'alertid' does not exist on type 'Object'... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'alertid' does not exist on type 'Object'... Remove this comment to see the full error message
           item.alertid
         }`}
         type="alert"
@@ -49,7 +45,7 @@ const AlertsTableItem: Function = ({
         isExpandable,
       })}
     >
-      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */ }
+      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */}
       {item.reason}
     </div>
     {isExpandable && (
@@ -65,7 +61,7 @@ const AlertsTableItem: Function = ({
 );
 
 export default compose(
-  // @ts-expect-error ts-migrate(2749) FIXME: 'AlertsTableItem' refers to a value, but is being ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2749) FIXME: 'AlertsTableItem' refers to a value, but is being ... Remove this comment to see the full error message
   mapProps(({ item, ...rest }: AlertsTableItem) => ({
     isExpandable: getLineCount(item.reason) > 3,
     item,
@@ -73,9 +69,11 @@ export default compose(
   })),
   withState('expanded', 'changeExpanded', ({ isExpandable }) => !isExpandable),
   withHandlers({
-    handleExpandClick: ({ changeExpanded }): Function => (): void => {
-      changeExpanded(expanded => !expanded);
-    },
+    handleExpandClick:
+      ({ changeExpanded }): Function =>
+      (): void => {
+        changeExpanded((expanded) => !expanded);
+      },
   }),
   onlyUpdateForKeys(['item', 'expanded'])
 )(AlertsTableItem);

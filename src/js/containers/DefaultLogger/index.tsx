@@ -1,73 +1,60 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
-import { connect } from 'react-redux';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import { Icon, Popover, Position } from '@blueprintjs/core';
 import size from 'lodash/size';
-
-import withDispatch from '../../hocomponents/withDispatch';
-import PaneItem from '../../components/pane_item';
-import DataOrEmptyTable from '../../components/DataOrEmptyTable';
-import {
-  Table,
-  Thead,
-  FixedRow,
-  Th,
-  Tbody,
-  Tr,
-  Td,
-} from '../../components/new_table';
-import NameColumn, { NameColumnHeader } from '../../components/NameColumn';
-import ContentByType from '../../components/ContentByType';
-import NewLoggerPopover from './popovers/logger';
-import NewAppenderPopover from './popovers/appender';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
-import { Popover, Position, Icon } from '@blueprintjs/core';
-import withState from 'recompose/withState';
+import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { fetchWithNotifications, del, post } from '../../store/api/utils';
-import settings from '../../settings';
+import withState from 'recompose/withState';
 import Alert from '../../components/alert';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import ContentByType from '../../components/ContentByType';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
+import DataOrEmptyTable from '../../components/DataOrEmptyTable';
+import NameColumn, { NameColumnHeader } from '../../components/NameColumn';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../components/new_table';
+import PaneItem from '../../components/pane_item';
+import withDispatch from '../../hocomponents/withDispatch';
+import settings from '../../settings';
+import { del, fetchWithNotifications, post } from '../../store/api/utils';
+import NewAppenderPopover from './popovers/appender';
+import NewLoggerPopover from './popovers/logger';
 
 type LoggerContainerProps = {
-  logger: Object,
-  appenders: Array<Object>,
-  id: number,
-  resource: string,
-  handleLoggerDeleteClick: Function,
-  handleDeleteAppenderClick: Function,
-  handleLoggerDuplicateClick: Function,
-  name: string,
-  url: string,
+  logger: Object;
+  appenders: Array<Object>;
+  id: number;
+  resource: string;
+  handleLoggerDeleteClick: Function;
+  handleDeleteAppenderClick: Function;
+  handleLoggerDuplicateClick: Function;
+  name: string;
+  url: string;
 };
 
 const DefaultLoggerContainer: Function = ({
   logger,
   appenders,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isLoggerPopoverOpen' does not exist on t... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'isLoggerPopoverOpen' does not exist on t... Remove this comment to see the full error message
   isLoggerPopoverOpen,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isDefaultLoggerPopoverOpen' does not exi... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'isDefaultLoggerPopoverOpen' does not exi... Remove this comment to see the full error message
   isDefaultLoggerPopoverOpen,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isLoggerEditPopoverOpen' does not exist ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'isLoggerEditPopoverOpen' does not exist ... Remove this comment to see the full error message
   isLoggerEditPopoverOpen,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isAppenderPopoverOpen' does not exist on... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'isAppenderPopoverOpen' does not exist on... Remove this comment to see the full error message
   isAppenderPopoverOpen,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isEditAppenderPopoverOpen' does not exis... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'isEditAppenderPopoverOpen' does not exis... Remove this comment to see the full error message
   isEditAppenderPopoverOpen,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'toggleLoggerPopover' does not exist on t... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'toggleLoggerPopover' does not exist on t... Remove this comment to see the full error message
   toggleLoggerPopover,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'toggleDefaultLoggerPopover' does not exi... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'toggleDefaultLoggerPopover' does not exi... Remove this comment to see the full error message
   toggleDefaultLoggerPopover,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'toggleLoggerEditPopover' does not exist ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'toggleLoggerEditPopover' does not exist ... Remove this comment to see the full error message
   toggleLoggerEditPopover,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'toggleAppenderPopover' does not exist on... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'toggleAppenderPopover' does not exist on... Remove this comment to see the full error message
   toggleAppenderPopover,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'toggleEditAppenderPopover' does not exis... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'toggleEditAppenderPopover' does not exis... Remove this comment to see the full error message
   toggleEditAppenderPopover,
   handleDeleteAppenderClick,
   resource,
@@ -75,20 +62,19 @@ const DefaultLoggerContainer: Function = ({
   handleLoggerDeleteClick,
   handleLoggerDuplicateClick,
   name,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'defaultOnly' does not exist on type 'Log... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'defaultOnly' does not exist on type 'Log... Remove this comment to see the full error message
   defaultOnly,
   url,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'LoggerCont... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'LoggerCont... Remove this comment to see the full error message
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: LoggerContainerProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+LoggerContainerProps): React.Element<any> => (
   <React.Fragment>
     {logger === 'empty' ? (
       <PaneItem
         title={
           <>
-            <Icon icon="info-sign" />{' '}
-            {name || intl.formatMessage({ id: 'component.logger' })}
+            <Icon icon="info-sign" /> {name || intl.formatMessage({ id: 'component.logger' })}
           </>
         }
         label={
@@ -146,7 +132,10 @@ const DefaultLoggerContainer: Function = ({
         }
       >
         <Alert bsStyle="danger">
-          {intl.formatMessage({ id: 'component.no-logger-defined-for-res' }, { resource: resource })}{' '}
+          {intl.formatMessage(
+            { id: 'component.no-logger-defined-for-res' },
+            { resource: resource }
+          )}{' '}
           {!defaultOnly && intl.formatMessage({ id: 'component.no-logger-defined-for-res-2' })}.
         </Alert>
       </PaneItem>
@@ -155,8 +144,7 @@ const DefaultLoggerContainer: Function = ({
         <PaneItem
           title={
             <>
-              <Icon icon="info-sign" />{' '}
-              {name || intl.formatMessage({ id: 'component.logger' })}
+              <Icon icon="info-sign" /> {name || intl.formatMessage({ id: 'component.logger' })}
             </>
           }
           label={
@@ -235,25 +223,29 @@ const DefaultLoggerContainer: Function = ({
         >
           {!defaultOnly && (
             <Alert bsStyle="warning">
-              <FormattedMessage id='component.interface-using-def-logger' />
+              <FormattedMessage id="component.interface-using-def-logger" />
             </Alert>
           )}
           <Table fixed striped>
             <Thead>
               <FixedRow>
                 <NameColumnHeader />
-                <Th icon="info-sign"><FormattedMessage id='logger.level' /></Th>
-                <Th icon="info-sign"><FormattedMessage id='logger.additivity' /></Th>
+                <Th icon="info-sign">
+                  <FormattedMessage id="logger.level" />
+                </Th>
+                <Th icon="info-sign">
+                  <FormattedMessage id="logger.additivity" />
+                </Th>
               </FixedRow>
             </Thead>
             <Tbody>
               <Tr first>
-                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                 <NameColumn name={logger.name} />
-                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */ }
+                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */}
                 <Td>{Object.keys(logger.level)[0]}</Td>
                 <Td>
-                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'additivity' does not exist on type 'Obje... Remove this comment to see the full error message */ }
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'additivity' does not exist on type 'Obje... Remove this comment to see the full error message */}
                   <ContentByType content={logger.additivity} />
                 </Td>
               </Tr>
@@ -264,8 +256,7 @@ const DefaultLoggerContainer: Function = ({
         <PaneItem
           title={
             <>
-              <Icon icon="info-sign" />{' '}
-              <FormattedMessage id='component.appenders' />
+              <Icon icon="info-sign" /> <FormattedMessage id="component.appenders" />
             </>
           }
           label={
@@ -295,96 +286,84 @@ const DefaultLoggerContainer: Function = ({
               <FixedRow>
                 <NameColumnHeader />
                 <Th className="text" icon="info-sign">
-                  <FormattedMessage id='table.type' />
+                  <FormattedMessage id="table.type" />
                 </Th>
                 <Th className="text" icon="info-sign">
-                  <FormattedMessage id='logger.filename' />
+                  <FormattedMessage id="logger.filename" />
                 </Th>
                 <Th className="text" icon="info-sign">
-                  <FormattedMessage id='logger.encoding' />
+                  <FormattedMessage id="logger.encoding" />
                 </Th>
                 <Th className="text" icon="info-sign">
-                  <FormattedMessage id='logger.layout-pattern' />
+                  <FormattedMessage id="logger.layout-pattern" />
                 </Th>
-                <Th
-                  icon="refresh"
-                  title={intl.formatMessage({ id: 'logger.rotation-count' })}
-                />
-                <Th
-                  icon="wrench"
-                  title={intl.formatMessage({ id: 'table.actions' })}
-                />
+                <Th icon="refresh" title={intl.formatMessage({ id: 'logger.rotation-count' })} />
+                <Th icon="wrench" title={intl.formatMessage({ id: 'table.actions' })} />
               </FixedRow>
             </Thead>
             <DataOrEmptyTable condition={size(appenders) === 0} cols={7} small>
               {(props: Object) => (
                 <Tbody {...props}>
-                  {appenders.map(
-                    (appender: Object, index: number): any => (
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                      <Tr first={index === 0} key={appender.id}>
-                        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
-                        <NameColumn name={appender.name} />
-                        <Td className="text">
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
-                          <ContentByType content={appender.type} />
-                        </Td>
-                        <Td className="text">
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'Object... Remove this comment to see the full error message */ }
-                          <ContentByType content={appender.filename} />
-                        </Td>
-                        <Td className="text">
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'Object... Remove this comment to see the full error message */ }
-                          <ContentByType content={appender.encoding} />
-                        </Td>
-                        <Td className="text">
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'O... Remove this comment to see the full error message */ }
-                          <ContentByType content={appender.layoutPattern} />
-                        </Td>
-                        <Td className="narrow">
-                          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'O... Remove this comment to see the full error message */ }
-                          <ContentByType content={appender.rotationCount} />
-                        </Td>
-                        <Td className="narrow">
-                          <ButtonGroup>
-                            <Popover
-                              content={
-                                <NewAppenderPopover
-                                  resource={resource}
-                                  url={url}
-                                  id={id}
-                                  data={appender}
-                                  onCancel={() =>
-                                    toggleEditAppenderPopover(() => false)
-                                  }
-                                />
-                              }
-                              position={Position.LEFT_TOP}
-                              isOpen={isEditAppenderPopoverOpen}
-                            >
-                              <Button
-                                title={intl.formatMessage({ id: 'button.edit' })}
-                                icon="edit"
-                                stopPropagation
-                                onClick={() =>
-                                  toggleEditAppenderPopover(() => true)
-                                }
+                  {appenders.map((appender: Object, index: number): any => (
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                    <Tr first={index === 0} key={appender.id}>
+                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                      <NameColumn name={appender.name} />
+                      <Td className="text">
+                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                        <ContentByType content={appender.type} />
+                      </Td>
+                      <Td className="text">
+                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'Object... Remove this comment to see the full error message */}
+                        <ContentByType content={appender.filename} />
+                      </Td>
+                      <Td className="text">
+                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'Object... Remove this comment to see the full error message */}
+                        <ContentByType content={appender.encoding} />
+                      </Td>
+                      <Td className="text">
+                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'O... Remove this comment to see the full error message */}
+                        <ContentByType content={appender.layoutPattern} />
+                      </Td>
+                      <Td className="narrow">
+                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'O... Remove this comment to see the full error message */}
+                        <ContentByType content={appender.rotationCount} />
+                      </Td>
+                      <Td className="narrow">
+                        <ButtonGroup>
+                          <Popover
+                            content={
+                              <NewAppenderPopover
+                                resource={resource}
+                                url={url}
+                                id={id}
+                                data={appender}
+                                onCancel={() => toggleEditAppenderPopover(() => false)}
                               />
-                            </Popover>
+                            }
+                            position={Position.LEFT_TOP}
+                            isOpen={isEditAppenderPopoverOpen}
+                          >
                             <Button
-                              title={intl.formatMessage({ id: 'button.remove-appender' })}
-                              btnStyle="danger"
-                              icon="remove"
-                              onClick={() =>
-                                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                                handleDeleteAppenderClick(appender.id)
-                              }
+                              title={intl.formatMessage({ id: 'button.edit' })}
+                              icon="edit"
+                              stopPropagation
+                              onClick={() => toggleEditAppenderPopover(() => true)}
                             />
-                          </ButtonGroup>
-                        </Td>
-                      </Tr>
-                    )
-                  )}
+                          </Popover>
+                          <Button
+                            title={intl.formatMessage({ id: 'button.remove-appender' })}
+                            btnStyle="danger"
+                            icon="remove"
+                            onClick={() =>
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                              handleDeleteAppenderClick(appender.id)
+                            }
+                          />
+                        </ButtonGroup>
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               )}
             </DataOrEmptyTable>
@@ -398,7 +377,7 @@ const DefaultLoggerContainer: Function = ({
 export default compose(
   connect((state, ownProps) => {
     let {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'loggerData' does not exist on type 'Obje... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'loggerData' does not exist on type 'Obje... Remove this comment to see the full error message
       loggerData: { logger, appenders },
     }: Object = state.api.system.data.defaultLoggers[ownProps.resource];
 
@@ -415,67 +394,66 @@ export default compose(
   withState('isAppenderPopoverOpen', 'toggleAppenderPopover', false),
   withState('isEditAppenderPopoverOpen', 'toggleEditAppenderPopover', false),
   withHandlers({
-    handleLoggerDeleteClick: ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Logger... Remove this comment to see the full error message
-      dispatch,
-      resource,
-      url,
-      logger,
-      id,
-    }: LoggerContainerProps): Function => (): void => {
-      fetchWithNotifications(
-        async () =>
-          del(
-            `${settings.REST_BASE_URL}/${url || resource}?action=defaultLogger`
-          ),
-        `Removing logger...`,
-        `Logger successfuly removed`,
-        dispatch
-      );
-    },
-    handleLoggerDuplicateClick: ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Logger... Remove this comment to see the full error message
-      dispatch,
-      resource,
-      url,
-      id,
-    }: LoggerContainerProps): Function => (): void => {
-      fetchWithNotifications(
-        async () =>
-          post(
-            `${settings.REST_BASE_URL}/${url || resource}/${
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'toLowerCase' does not exist on type 'nev... Remove this comment to see the full error message
-              typeof id === 'string' ? id.toLowerCase() : id
-            }/logger?cloneDefault=true`
-          ),
-        `Duplicating logger...`,
-        `Logger successfuly duplicated`,
-        dispatch
-      );
-    },
-    handleDeleteAppenderClick: ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Logger... Remove this comment to see the full error message
-      dispatch,
-      resource,
-      url,
-      id,
-    }: LoggerContainerProps): Function => (appenderId): void => {
-      fetchWithNotifications(
-        async () =>
-          del(
-            `${settings.REST_BASE_URL}/${url ||
-              resource}?action=defaultLoggerAppenders`,
-            {
+    handleLoggerDeleteClick:
+      ({
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Logger... Remove this comment to see the full error message
+        dispatch,
+        resource,
+        url,
+        logger,
+        id,
+      }: LoggerContainerProps): Function =>
+      (): void => {
+        fetchWithNotifications(
+          async () => del(`${settings.REST_BASE_URL}/${url || resource}?action=defaultLogger`),
+          `Removing logger...`,
+          `Logger successfuly removed`,
+          dispatch
+        );
+      },
+    handleLoggerDuplicateClick:
+      ({
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Logger... Remove this comment to see the full error message
+        dispatch,
+        resource,
+        url,
+        id,
+      }: LoggerContainerProps): Function =>
+      (): void => {
+        fetchWithNotifications(
+          async () =>
+            post(
+              `${settings.REST_BASE_URL}/${url || resource}/${
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'toLowerCase' does not exist on type 'nev... Remove this comment to see the full error message
+                typeof id === 'string' ? id.toLowerCase() : id
+              }/logger?cloneDefault=true`
+            ),
+          `Duplicating logger...`,
+          `Logger successfuly duplicated`,
+          dispatch
+        );
+      },
+    handleDeleteAppenderClick:
+      ({
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Logger... Remove this comment to see the full error message
+        dispatch,
+        resource,
+        url,
+        id,
+      }: LoggerContainerProps): Function =>
+      (appenderId): void => {
+        fetchWithNotifications(
+          async () =>
+            del(`${settings.REST_BASE_URL}/${url || resource}?action=defaultLoggerAppenders`, {
               body: JSON.stringify({
                 id: appenderId,
               }),
-            }
-          ),
-        `Removing appender...`,
-        `Appender successfuly removed`,
-        dispatch
-      );
-    },
+            }),
+          `Removing appender...`,
+          `Appender successfuly removed`,
+          dispatch
+        );
+      },
   }),
   onlyUpdateForKeys([
     'update',

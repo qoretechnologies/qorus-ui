@@ -1,99 +1,104 @@
 // @flow
+import size from 'lodash/size';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
-import size from 'lodash/size';
-
 import DetailPane from '../../../components/pane';
-import actions from '../../../store/api/actions';
-import titleManager from '../../../hocomponents/TitleManager';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import { countArrayItemsInObject, countConfigItems } from '../../../utils';
+import titleManager from '../../../hocomponents/TitleManager';
+import actions from '../../../store/api/actions';
+import { countConfigItems } from '../../../utils';
 import ServiceTabs from '../tabs';
 
 @connect(
   (state, props) => ({
-    service: state.api.services.data.find(
-      service => service.id === parseInt(props.paneId, 10)
-    ),
+    service: state.api.services.data.find((service) => service.id === parseInt(props.paneId, 10)),
   }),
   {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
     load: actions.services.fetchLibSources,
   }
 )
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
-@mapProps(({ service, ...rest }: Object): Object => ({
-  methods: service.lib
-    ? service.class_based
-      ? service.methods.map((method: Object): Object => ({
-        ...method,
-        ...{ body: service.class_source },
-      }))
-      : service.methods
-    : [],
-  service,
-  ...rest,
-}))
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
-@mapProps(({ service, methods, ...rest }: Object): Object => ({
-  data: service.lib ? Object.assign(service.lib, { methods }) : {},
-  service,
-  methods,
-  ...rest,
-}))
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-@mapProps(({ data, service, ...rest }: Object): Object => ({
-  data: service.class_based
-    ? {
-      ...{
-        code: [
-          {
-            name: 'Service code',
-            body: service.class_source,
+// @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
+@mapProps(
+  ({ service, ...rest }: Object): Object => ({
+    methods: service.lib
+      ? service.class_based
+        ? service.methods.map(
+            (method: Object): Object => ({
+              ...method,
+              ...{ body: service.class_source },
+            })
+          )
+        : service.methods
+      : [],
+    service,
+    ...rest,
+  })
+)
+// @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
+@mapProps(
+  ({ service, methods, ...rest }: Object): Object => ({
+    data: service.lib ? Object.assign(service.lib, { methods }) : {},
+    service,
+    methods,
+    ...rest,
+  })
+)
+// @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+@mapProps(
+  ({ data, service, ...rest }: Object): Object => ({
+    data: service.class_based
+      ? {
+          ...{
+            code: [
+              {
+                name: 'Service code',
+                body: service.class_source,
+              },
+            ],
           },
-        ],
-      },
-      ...data,
-    }
-    : data,
-  service,
-  ...rest,
-}))
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
+          ...data,
+        }
+      : data,
+    service,
+    ...rest,
+  })
+)
+// @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
 @titleManager(({ service }): string => service.name, 'Services', 'prefix')
 export default class ServicesDetail extends Component {
   props: {
-    service: Object,
-    systemOptions: Array<Object>,
-    paneTab: string,
-    paneId: number,
-    onClose: Function,
-    location: Object,
-    width: number,
-    onResize: Function,
-    data: Object,
+    service: Object;
+    systemOptions: Array<Object>;
+    paneTab: string;
+    paneId: number;
+    onClose: Function;
+    location: Object;
+    width: number;
+    onResize: Function;
+    data: Object;
   } = this.props;
 
-  componentWillMount () {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'load' does not exist on type '{ service:... Remove this comment to see the full error message
+  componentWillMount() {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'load' does not exist on type '{ service:... Remove this comment to see the full error message
     this.props.load(this.props.paneId);
   }
 
-  componentWillReceiveProps (nextProps: Object) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
+  componentWillReceiveProps(nextProps: Object) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
     if (this.props.paneId !== nextProps.paneId) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'load' does not exist on type '{ service:... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'load' does not exist on type '{ service:... Remove this comment to see the full error message
       this.props.load(nextProps.paneId);
     }
   }
 
-  render () {
+  render() {
     const {
       service,
       paneTab,
       systemOptions,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'methods' does not exist on type '{ servi... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'methods' does not exist on type '{ servi... Remove this comment to see the full error message
       methods,
       location,
       data,
@@ -104,16 +109,14 @@ export default class ServicesDetail extends Component {
       return null;
     }
 
-    const configItemsCount: number = countConfigItems(
-      rebuildConfigHash(service)
-    );
+    const configItemsCount: number = countConfigItems(rebuildConfigHash(service));
 
     return (
       <DetailPane
         width={this.props.width || 600}
         onClose={this.props.onClose}
         onResize={this.props.onResize}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         title={service.name}
         tabs={{
           tabs: [
@@ -125,17 +128,17 @@ export default class ServicesDetail extends Component {
             'Code',
             { title: 'Methods', suffix: `(${size(methods)})` },
             'Log',
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
             { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
             { title: 'Mappers', suffix: `(${size(service.mappers)})` },
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
             { title: 'Valuemaps', suffix: `(${size(service.vmaps)})` },
             {
               title: 'Resources',
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'resources' does not exist on type 'Objec... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'resources' does not exist on type 'Objec... Remove this comment to see the full error message
               suffix: `(${size(service.resources)} / ${size(
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'resource_files' does not exist on type '... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'resource_files' does not exist on type '... Remove this comment to see the full error message
                 service.resource_files
               )})`,
             },

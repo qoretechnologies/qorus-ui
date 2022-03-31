@@ -1,55 +1,54 @@
 /* @flow */
 import React from 'react';
-import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
-import pure from 'recompose/onlyUpdateForKeys';
-import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
-
-import { Tr, Td } from '../../../../components/new_table';
-import actions from '../../../../store/api/actions';
-import OrderControls from './controls';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import { ActionColumn } from '../../../../components/ActionColumn';
+import ContentByType from '../../../../components/ContentByType';
+import { DateColumn } from '../../../../components/DateColumn';
+import NameColumn from '../../../../components/NameColumn';
+import { Td, Tr } from '../../../../components/new_table';
+import { SelectColumn } from '../../../../components/SelectColumn';
 import { ALL_ORDER_STATES } from '../../../../constants/orders';
 import queryControl from '../../../../hocomponents/queryControl';
+import actions from '../../../../store/api/actions';
+import OrderControls from './controls';
 import Lock from './lock';
-import { SelectColumn } from '../../../../components/SelectColumn';
-import NameColumn from '../../../../components/NameColumn';
-import { ActionColumn } from '../../../../components/ActionColumn';
-import { DateColumn } from '../../../../components/DateColumn';
-import ContentByType from '../../../../components/ContentByType';
 
 type Props = {
-  date: string,
-  openPane: Function,
-  select: Function,
-  handleCheckboxClick: Function,
-  handleHighlightEnd: Function,
-  updateDone: Function,
-  id: number,
-  _selected: boolean,
-  _updated: boolean,
-  business_error: boolean,
-  // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'normalizedName'.
-  normalizedName: string,
-  name: string,
-  // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'normalizedName'.
-  normalizedName: string,
-  started: string,
-  completed: string,
-  modified: string,
-  scheduled: string,
-  error_count: number,
-  warning_count: number,
-  operator_lock: boolean,
-  note_count: number,
-  workflowstatus: string,
-  label: string,
-  isTablet: boolean,
-  searchPage?: boolean,
-  workflowid: number,
-  allQuery: Object,
-  target: string,
-  first: boolean,
+  date: string;
+  openPane: Function;
+  select: Function;
+  handleCheckboxClick: Function;
+  handleHighlightEnd: Function;
+  updateDone: Function;
+  id: number;
+  _selected: boolean;
+  _updated: boolean;
+  business_error: boolean;
+  // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'normalizedName'.
+  normalizedName: string;
+  name: string;
+  // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'normalizedName'.
+  normalizedName: string;
+  started: string;
+  completed: string;
+  modified: string;
+  scheduled: string;
+  error_count: number;
+  warning_count: number;
+  operator_lock: boolean;
+  note_count: number;
+  workflowstatus: string;
+  label: string;
+  isTablet: boolean;
+  searchPage?: boolean;
+  workflowid: number;
+  allQuery: Object;
+  target: string;
+  first: boolean;
 };
 
 const TableRow: Function = ({
@@ -75,8 +74,8 @@ const TableRow: Function = ({
   allQuery,
   target,
   first,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Tr
     first={first}
     onHighlightEnd={handleHighlightEnd}
@@ -87,9 +86,7 @@ const TableRow: Function = ({
     <SelectColumn onClick={handleCheckboxClick} checked={_selected} />
     <NameColumn
       name={id}
-      link={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(
-        allQuery
-      )}`}
+      link={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(allQuery)}`}
       className="normal"
       type="order"
     />
@@ -123,20 +120,17 @@ const TableRow: Function = ({
 );
 
 export default compose(
-  connect(
-    () => ({}),
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
-      select: actions.orders.select,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
-      updateDone: actions.orders.updateDone,
-    }
-  ),
+  connect(() => ({}), {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
+    select: actions.orders.select,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
+    updateDone: actions.orders.updateDone,
+  }),
   mapProps(
-    // @ts-expect-error ts-migrate(2740) FIXME: Type '{ label: any; workflowstatus: any; target: s... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2740) FIXME: Type '{ label: any; workflowstatus: any; target: s... Remove this comment to see the full error message
     ({ workflowstatus, ...rest }): Props => ({
       label: ALL_ORDER_STATES.find(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         (state: Object): boolean => state.name === workflowstatus
       ).label,
       workflowstatus,
@@ -145,14 +139,18 @@ export default compose(
     })
   ),
   withHandlers({
-    handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
-      select(id);
-    },
-    handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
-      updateDone(id);
-    },
+    handleCheckboxClick:
+      ({ select, id }: Props): Function =>
+      (): void => {
+        select(id);
+      },
+    handleHighlightEnd:
+      ({ updateDone, id }: Props): Function =>
+      (): void => {
+        updateDone(id);
+      },
   }),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 0.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 0.
   queryControl(),
   pure([
     'date',

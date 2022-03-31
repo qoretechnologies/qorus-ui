@@ -14,8 +14,7 @@ const statusHealth: Function = (health: string): string =>
     none: health === 'UNREACHABLE' || health === 'UNKNOWN',
   });
 
-const utf8ToB64: Function = (str: string): string =>
-  window.btoa(encodeURIComponent(str));
+const utf8ToB64: Function = (str: string): string => window.btoa(encodeURIComponent(str));
 
 const alertTypeToResource: Object = {
   WORKFLOW: {
@@ -91,15 +90,12 @@ const getAlertObjectLink: Function = (type: string, data: Object): string => {
   }
 
   // eslint-disable-next-line
-  return `/${res.resource}${
-    res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`
-  }${res.suffix || ''}`;
+  return `/${res.resource}${res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`}${
+    res.suffix || ''
+  }`;
 };
 
-const getDependencyObjectLink: Function = (
-  type: string,
-  data: Object
-): string => {
+const getDependencyObjectLink: Function = (type: string, data: Object): string => {
   const res = interfaceTypeToResource[type];
 
   if (!res) {
@@ -107,9 +103,7 @@ const getDependencyObjectLink: Function = (
   }
 
   // eslint-disable-next-line
-  return `/${res.resource}${
-    res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`
-  }`;
+  return `/${res.resource}${res.query ? `?${res.query}=${data[res.uses]}` : `/${data[res.uses]}`}`;
 };
 
 const typeToString: Function = (val: any): any => {
@@ -125,19 +119,19 @@ const typeToString: Function = (val: any): any => {
 };
 
 const getProcessObjectLink: Function = (prcs: Object) => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   switch (prcs.type) {
     case 'qdsp':
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
       return `/remote?paneId=${prcs.client_id}`;
     case 'qwf':
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'wfid' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'wfid' does not exist on type 'Object'.
       return `/workflows?paneId=${prcs.wfid}&paneTab=detail`;
     case 'qsvc':
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'svcid' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'svcid' does not exist on type 'Object'.
       return `/services?paneId=${prcs.svcid}&paneTab=detail`;
     case 'qjob':
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobid' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'jobid' does not exist on type 'Object'.
       return `/jobs?paneId=${prcs.jobid}&paneTab=detail`;
     default:
       return null;
@@ -145,7 +139,7 @@ const getProcessObjectLink: Function = (prcs: Object) => {
 };
 
 const getProcessObjectType: Function = (prcs: Object) => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   switch (prcs.type) {
     case 'qdsp':
       return 'remote';
@@ -161,7 +155,7 @@ const getProcessObjectType: Function = (prcs: Object) => {
 };
 
 const getProcessObjectInterface: Function = (prcs: Object) => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   switch (prcs.type) {
     case 'qdsp':
       return 'remotes';
@@ -177,7 +171,7 @@ const getProcessObjectInterface: Function = (prcs: Object) => {
 };
 
 const getProcessObjectInterfaceId: Function = (prcs: Object) => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   switch (prcs.type) {
     case 'qdsp':
       return 'client_id';
@@ -209,8 +203,8 @@ const calculateMemory: Function = (
   return `${returnNumber ? round(mem, 2) : ''} ${returnUnit ? unit : ''}`;
 };
 
-// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const getSlicedRemotes: Function = (remotes): ?Array<Object> => {
+// @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+const getSlicedRemotes: Function = (remotes): Array<Object> => {
   const remotesLen: number = remotes ? remotes.length : 0;
 
   if (remotesLen < 1) {
@@ -228,10 +222,7 @@ const getLineCount: Function = (value: string): number => {
   }
 };
 
-const transformMenu: Function = (
-  menu: Object,
-  plugins: Array<string>
-): Object => {
+const transformMenu: Function = (menu: Object, plugins: Array<string>): Object => {
   let newMenu: Object = { ...menu };
 
   if (size(plugins)) {

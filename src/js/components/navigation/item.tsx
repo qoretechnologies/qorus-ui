@@ -1,13 +1,13 @@
 /* @flow */
+import classNames from 'classnames';
 import React from 'react';
 import { Link } from 'react-router';
-import classNames from 'classnames';
 
 type Props = {
-  url: string,
-  name: string,
-  icon?: string,
-  active?: boolean,
+  url: string;
+  name: string;
+  icon?: string;
+  active?: boolean;
 };
 
 const Item = ({
@@ -15,8 +15,8 @@ const Item = ({
   name,
   icon,
   active = false,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <li
     role="presentation"
     className={classNames({

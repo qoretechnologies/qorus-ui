@@ -1,17 +1,9 @@
 /* @flow */
-import { createAction } from 'redux-actions';
-import isArray from 'lodash/isArray';
 import jsyaml from 'js-yaml';
-
-import {
-  fetchJson,
-  fetchYaml,
-  fetchWithNotifications,
-  post,
-  get,
-  put,
-} from '../../../utils';
+import isArray from 'lodash/isArray';
+import { createAction } from 'redux-actions';
 import settings from '../../../../../settings';
+import { fetchJson, fetchWithNotifications, fetchYaml, get, post, put } from '../../../utils';
 
 const fetchOrders = createAction(
   'ORDERS_FETCHORDERS',
@@ -25,28 +17,28 @@ const fetchOrders = createAction(
     sortDir: boolean,
     sort: string,
     searchData: Object
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   ): Object => {
     let url: string;
     const status: string = !filter || filter === 'filter' ? '' : filter;
 
-    // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
     if (!id || id === 'id') {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'maxDate' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'maxDate' does not exist on type 'Object'... Remove this comment to see the full error message
       const maxDate: string = searchData.maxDate || '29991231';
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'.
       const sendDate: boolean = !(searchData.ids || searchData.keyValue);
 
       url =
         `${settings.REST_BASE_URL}/orders?` +
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'.
         `ids=${searchData.ids || ''}&` +
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'minDate' does not exist on type 'Object'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'minDate' does not exist on type 'Object'... Remove this comment to see the full error message
         `date=${!sendDate ? '' : searchData.minDate}&` +
         `maxmodified=${!sendDate ? '' : maxDate}&` +
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'keyName' does not exist on type 'Object'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'keyName' does not exist on type 'Object'... Remove this comment to see the full error message
         `keyname=${searchData.keyName || ''}&` +
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'keyValue' does not exist on type 'Object... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'keyValue' does not exist on type 'Object... Remove this comment to see the full error message
         `keyvalue=${searchData.keyValue || ''}&` +
         `status=${status}&` +
         `sort=${sort}&` +
@@ -65,7 +57,7 @@ const fetchOrders = createAction(
         `limit=${limit}`;
     }
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
     const orders: Array<Object> = await fetchJson('GET', url, null, true);
 
     return { orders, fetchMore };
@@ -86,45 +78,34 @@ const selectNone = createAction('ORDERS_SELECTNONE');
 const selectInvert = createAction('ORDERS_SELECTINVERT');
 const unselectAll = createAction('ORDERS_UNSELECTALL');
 
-const addOrder: Function = createAction(
-  'ORDERS_ADDORDER',
-  (events: Array<Object>) => ({ events })
-);
+const addOrder: Function = createAction('ORDERS_ADDORDER', (events: Array<Object>) => ({ events }));
 
-const modifyOrder: Function = createAction(
-  'ORDERS_MODIFYORDER',
-  (events: Array<Object>) => ({ events })
-);
+const modifyOrder: Function = createAction('ORDERS_MODIFYORDER', (events: Array<Object>) => ({
+  events,
+}));
 
 const addNoteWebsocket: Function = createAction(
   'ORDERS_ADDNOTEWEBSOCKET',
   (events: Array<Object>) => ({ events })
 );
 
-const updateHierarchy: Function = createAction(
-  'ORDERS_UPDATEHIERARCHY',
-  async (id: number) => {
-    const hierarchy: Object = await get(
-      `${settings.REST_BASE_URL}/orders/${id}/HierarchyInfo`
-    );
+const updateHierarchy: Function = createAction('ORDERS_UPDATEHIERARCHY', async (id: number) => {
+  const hierarchy: Object = await get(`${settings.REST_BASE_URL}/orders/${id}/HierarchyInfo`);
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
-    if (hierarchy.err) {
-      return { error: true };
-    }
-
-    return { id, hierarchy };
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+  if (hierarchy.err) {
+    return { error: true };
   }
-);
+
+  return { id, hierarchy };
+});
 
 const updateStepInstances: Function = createAction(
   'ORDERS_UPDATESTEPINSTANCES',
   async (id: number) => {
-    const steps: Object = await get(
-      `${settings.REST_BASE_URL}/orders/${id}/StepInstances`
-    );
+    const steps: Object = await get(`${settings.REST_BASE_URL}/orders/${id}/StepInstances`);
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
     if (steps.err) {
       return { error: true };
     }
@@ -133,8 +114,8 @@ const updateStepInstances: Function = createAction(
   }
 );
 
-const updateErrors: Function = createAction('ORDERS_UPDATEERRORS', async id => {
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
+const updateErrors: Function = createAction('ORDERS_UPDATEERRORS', async (id) => {
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
   const errors = await fetchJson(
     'GET',
     `${settings.REST_BASE_URL}/orders/${id}/ErrorInstances`,
@@ -147,44 +128,30 @@ const updateErrors: Function = createAction('ORDERS_UPDATEERRORS', async id => {
 
 const updateDone = createAction('ORDERS_UPDATEDONE', (id: number) => ({ id }));
 
-const fetchData = createAction(
-  'ORDERS_FETCHDATA',
-  async (id: number, type: string) => {
-    const data =
-      type === 'dynamic'
-        ? 'dynamicdata'
-        : type === 'sensitive'
-          ? 'sensitive_data'
-          : type;
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-    const newData = await fetchJson(
-      'GET',
-      `${settings.REST_BASE_URL}/orders/${id}/${data}`
-    );
+const fetchData = createAction('ORDERS_FETCHDATA', async (id: number, type: string) => {
+  const data = type === 'dynamic' ? 'dynamicdata' : type === 'sensitive' ? 'sensitive_data' : type;
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+  const newData = await fetchJson('GET', `${settings.REST_BASE_URL}/orders/${id}/${data}`);
 
-    return {
-      id,
-      type: data,
-      data: newData,
-    };
-  }
-);
+  return {
+    id,
+    type: data,
+    data: newData,
+  };
+});
 
 const action: Function = createAction(
   'ORDERS_ORDERACTION',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  async (actn: string, id: any, dispatch: Function): ?Object => {
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
+  async (actn: string, id: any, dispatch: Function): Object => {
     if (!dispatch) return { ids: id, action: actn };
 
     const ids: string = isArray(id) ? id.join(',') : id;
 
     const result = await fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-        await fetchJson(
-          'PUT',
-          `${settings.REST_BASE_URL}/orders?ids=${ids}&action=${actn}`
-        ),
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        await fetchJson('PUT', `${settings.REST_BASE_URL}/orders?ids=${ids}&action=${actn}`),
       `Executing ${actn} for order(s) ${ids}`,
       `${actn} executed on order(s) for ${ids}`,
       dispatch
@@ -204,18 +171,16 @@ const schedule: Function = createAction(
     date: string,
     origStatus: string,
     dispatch: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   ): Object => {
     if (!dispatch) return { id, date };
 
     await fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
         await fetchJson(
           'PUT',
-          `${
-            settings.REST_BASE_URL
-          }/orders/${id}?action=reschedule&date=${date}`
+          `${settings.REST_BASE_URL}/orders/${id}?action=reschedule&date=${date}`
         ),
       `Rescheduling order ${id}`,
       `Order ${id} rescheduled`,
@@ -232,18 +197,16 @@ const schedule: Function = createAction(
 
 const setPriority: Function = createAction(
   'ORDERS_SETPRIORITY',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   async (id: number, priority: number, dispatch: Function): Object => {
     if (!dispatch) return { id, priority };
 
     await fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
         await fetchJson(
           'PUT',
-          `${
-            settings.REST_BASE_URL
-          }/orders/${id}?action=setPriority&priority=${priority}`
+          `${settings.REST_BASE_URL}/orders/${id}?action=setPriority&priority=${priority}`
         ),
       `Setting priority for order ${id}`,
       `Priority set for order ${id}`,
@@ -257,7 +220,7 @@ const setPriority: Function = createAction(
   }
 );
 
-const lockWs: Function = createAction('ORDERS_LOCKWS', events => ({ events }));
+const lockWs: Function = createAction('ORDERS_LOCKWS', (events) => ({ events }));
 const lock: Function = createAction(
   'ORDERS_LOCK',
   (
@@ -266,11 +229,11 @@ const lock: Function = createAction(
     note: string,
     type: string,
     dispatch: Function
-  // @ts-expect-error ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
   ): Object => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
         await fetchJson('PUT', `${settings.REST_BASE_URL}/orders/${id}`, {
           body: JSON.stringify({
             action: type,
@@ -287,16 +250,10 @@ const lock: Function = createAction(
 
 const skipStep: Function = createAction(
   'ORDERS_SKIPSTEP',
-  (
-    orderId: number,
-    stepid: number,
-    ind: string,
-    noretry: boolean,
-    dispatch: Function
-  ): Object => {
+  (orderId: number, stepid: number, ind: string, noretry: boolean, dispatch: Function): Object => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
         await fetchJson('PUT', `${settings.REST_BASE_URL}/orders/${orderId}`, {
           body: JSON.stringify({
             action: 'skipStep',
@@ -316,50 +273,32 @@ const skipStep: Function = createAction(
 
 const updateData: Function = createAction(
   'ORDERS_UPDATEDATA',
-  (
-    type: string,
-    newdata: string,
-    id: number,
-    skey: string,
-    svalue: string
-  ): void => {
+  (type: string, newdata: string, id: number, skey: string, svalue: string): void => {
     if (type === 'Keys') {
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
-      fetchJson(
-        'PUT',
-        `${settings.REST_BASE_URL}/orders/${id}?action=updateKeys`,
-        {
-          body: JSON.stringify({
-            orderkeys: JSON.parse(newdata),
-          }),
-        }
-      );
+      // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+      fetchJson('PUT', `${settings.REST_BASE_URL}/orders/${id}?action=updateKeys`, {
+        body: JSON.stringify({
+          orderkeys: JSON.parse(newdata),
+        }),
+      });
     } else if (type === 'Sensitive') {
       const parsedData = JSON.parse(newdata);
 
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
-      fetchJson(
-        'PUT',
-        `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`,
-        {
-          body: JSON.stringify({
-            skey,
-            svalue,
-            ...parsedData,
-          }),
-        }
-      );
+      // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+      fetchJson('PUT', `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`, {
+        body: JSON.stringify({
+          skey,
+          svalue,
+          ...parsedData,
+        }),
+      });
     } else {
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
-      fetchYaml(
-        'PUT',
-        `${settings.REST_BASE_URL}/orders/${id}?action=yaml${type}Data`,
-        {
-          body: JSON.stringify({
-            newdata,
-          }),
-        }
-      );
+      // @ts-ignore ts-migrate(2554) FIXME: Expected 6 arguments, but got 3.
+      fetchYaml('PUT', `${settings.REST_BASE_URL}/orders/${id}?action=yaml${type}Data`, {
+        body: JSON.stringify({
+          newdata,
+        }),
+      });
     }
   }
 );
@@ -373,22 +312,19 @@ const updateSensitiveData: Function = createAction(
     svalue: string,
     onSuccess: Function,
     dispatch: Function
-  // @ts-expect-error ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
   ): Object => {
     const parsedData = jsyaml.safeLoad(newdata);
 
     fetchWithNotifications(
       async () => {
-        const res = await put(
-          `${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`,
-          {
-            body: JSON.stringify({
-              skey,
-              svalue,
-              ...parsedData,
-            }),
-          }
-        );
+        const res = await put(`${settings.REST_BASE_URL}/orders/${id}?action=yamlSensitiveData`, {
+          body: JSON.stringify({
+            skey,
+            svalue,
+            ...parsedData,
+          }),
+        });
 
         if (!res.err) {
           onSuccess();
@@ -405,13 +341,11 @@ const updateSensitiveData: Function = createAction(
 
 const fetchStepData: Function = createAction(
   'ORDERS_FETCHSTEPDATA',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   async (id: number): Object => {
-    const stepData: Object = await get(
-      `${settings.REST_BASE_URL}/orders/${id}/stepdata`
-    );
+    const stepData: Object = await get(`${settings.REST_BASE_URL}/orders/${id}/stepdata`);
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
     if (stepData.err) {
       return {
         stepData: null,
@@ -427,7 +361,7 @@ const fetchStepData: Function = createAction(
 
 const fetchYamlAction: Function = createAction(
   'ORDERS_FETCHYAMLACTION',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   async (type: string, id: number): Object => {
     const result: Object = await fetchYaml(
       'GET',
@@ -446,11 +380,11 @@ const fetchYamlAction: Function = createAction(
   }
 );
 
-const fetchYamlData: Function = (type: string, id: number): Function => (
-  dispatch: Function
-): void => {
-  dispatch(fetchYamlAction(type, id, dispatch));
-};
+const fetchYamlData: Function =
+  (type: string, id: number): Function =>
+  (dispatch: Function): void => {
+    dispatch(fetchYamlAction(type, id, dispatch));
+  };
 
 const addNote: Function = createAction(
   'ORDERS_ADDNOTE',

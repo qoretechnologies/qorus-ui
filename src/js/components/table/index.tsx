@@ -1,10 +1,9 @@
 import React from 'react';
 import mapProps from 'recompose/mapProps';
-
-import Section from './section';
-import Row from './row';
 import Cell from './cell';
 import EditableCell from './editable_cell';
+import Row from './row';
+import Section from './section';
 
 /**
  * Table supporting static and dynamic sections.
@@ -22,14 +21,14 @@ import EditableCell from './editable_cell';
  * are defined.
  *
  * @param {!{
- *   sections: ?function,
+ *   sections: function,
  *   data: *,
  *   children: ReactNode,
  * }} props
  * @return {!ReactElement}
  */
 export default function Table(props: Object) {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'sections' does not exist on type 'Object... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'sections' does not exist on type 'Object... Remove this comment to see the full error message
   const { sections, data, children, ...restProps } = props;
 
   return React.createElement(
@@ -39,9 +38,9 @@ export default function Table(props: Object) {
   );
 }
 
-const Th = mapProps(props => ({ ...props, tag: 'th' }))(Cell);
+const Th = mapProps((props) => ({ ...props, tag: 'th' }))(Cell);
 Th.displayName = 'Th';
-const Td = mapProps(props => ({ ...props, tag: 'td' }))(Cell);
+const Td = mapProps((props) => ({ ...props, tag: 'td' }))(Cell);
 Td.displayName = 'Td';
 
 export { Section, Row, Cell, EditableCell, Th, Td };

@@ -11,23 +11,20 @@ import Flex from '../../components/Flex';
 import Headbar from '../../components/Headbar';
 import Modal from '../../components/modal';
 import Tree from '../../components/tree';
-import {
-  StyledFieldsWrapper,
-  StyledMapperWrapper,
-} from '../../containers/mappers/new_diagram';
+import { StyledFieldsWrapper, StyledMapperWrapper } from '../../containers/mappers/new_diagram';
 import MapperInput from '../../containers/mappers/new_diagram/input';
 import { flattenFields, getLastChildIndex } from '../../helpers/mapper';
 import modal from '../../hocomponents/modal';
 import { get } from '../../store/api/utils';
 
 type Props = {
-  sync: boolean,
-  loading: boolean,
-  collection: Object,
-  dispatch: Function,
+  sync: boolean;
+  loading: boolean;
+  collection: Object;
+  dispatch: Function;
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'openModal' does not exist on type '{ chi... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2339) FIXME: Property 'openModal' does not exist on type '{ chi... Remove this comment to see the full error message
 const DataProviderTypes = memo(({ openModal, closeModal }) => {
   const [val, setVal] = React.useState('');
   // Save the field detail
@@ -69,9 +66,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
           background: `url(${`${TinyGrid}`}`,
         }}
       >
-        <StyledMapperWrapper
-          style={{ justifyContent: 'center', paddingTop: '10px' }}
-        >
+        <StyledMapperWrapper style={{ justifyContent: 'center', paddingTop: '10px' }}>
           <StyledFieldsWrapper style={{ flex: '0 1 auto' }}>
             {size(flattenedFields) !== 0 ? (
               map(flattenedFields, (input, index) => (
@@ -82,15 +77,11 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
                   {...input}
                   field={input}
                   id={index + 1}
-                  lastChildIndex={
-                    getLastChildIndex(input, flattenedFields) - index
-                  }
+                  lastChildIndex={getLastChildIndex(input, flattenedFields) - index}
                   onClick={() => {
                     openModal(
                       <Modal width="600px">
-                        <Modal.Header onClose={() => closeModal()}>
-                          Type Field Detail
-                        </Modal.Header>
+                        <Modal.Header onClose={() => closeModal()}>Type Field Detail</Modal.Header>
                         <Modal.Body>
                           <Box top>
                             <h4>Field description</h4>
@@ -99,7 +90,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
                             <br />
 
                             <h4>Field data</h4>
-                            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Tree data={input} />
                           </Box>
                         </Modal.Body>
@@ -110,10 +101,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
                 />
               ))
             ) : (
-              <Callout intent="warning">
-                {' '}
-                There are no fields for this type{' '}
-              </Callout>
+              <Callout intent="warning"> There are no fields for this type </Callout>
             )}
           </StyledFieldsWrapper>
         </StyledMapperWrapper>
@@ -131,7 +119,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
       <Box top fill>
         <Suggest
           defaultItems={value}
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ defaultItems: any; value: any; selected: a... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2322) FIXME: Type '{ defaultItems: any; value: any; selected: a... Remove this comment to see the full error message
           value={type || val}
           selected={type}
           name="path"

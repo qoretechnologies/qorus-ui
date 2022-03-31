@@ -1,48 +1,36 @@
 // @flow
+import isObject from 'lodash/isObject';
+import upperFirst from 'lodash/upperFirst';
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import upperFirst from 'lodash/upperFirst';
-import isObject from 'lodash/isObject';
-
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  FixedRow,
-} from '../../../components/new_table';
+import ContentByType from '../../../components/ContentByType';
+import type { EnhancedTableProps } from '../../../components/EnhancedTable';
+import EnhancedTable from '../../../components/EnhancedTable';
+import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../../components/new_table';
 import NoDataIf from '../../../components/NoDataIf';
 import PaneItem from '../../../components/pane_item';
-import {
-  normalizeItem,
-  buildLinkToInterfaceId,
-} from '../../../helpers/interfaces';
-import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
-import ContentByType from '../../../components/ContentByType';
-import EnhancedTable from '../../../components/EnhancedTable';
-import type { EnhancedTableProps } from '../../../components/EnhancedTable';
 import { sortDefaults } from '../../../constants/sort';
+import { buildLinkToInterfaceId, normalizeItem } from '../../../helpers/interfaces';
 
 type Props = {
-  data: Array<Object>,
-  columns: Array<string>,
-  type: string,
+  data: Array<Object>;
+  columns: Array<string>;
+  type: string;
 };
 
 const GroupDetailTable: Function = ({
   data,
   columns = [],
   type,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => {
   const renderColumns: Function = (item: Object) => [
     <NameColumn
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       name={isObject(item) ? item.name : item}
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       link={buildLinkToInterfaceId(type, item.id)}
       type={type}
     />,
@@ -76,7 +64,7 @@ const GroupDetailTable: Function = ({
                 </Thead>
                 <Tbody>
                   {collection.map(
-                    // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                    // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                     (item: Object, index: number): React.Element<Tr> => (
                       <Tr key={index} first={index === 0}>
                         {renderColumns(normalizeItem(item))}

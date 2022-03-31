@@ -1,39 +1,29 @@
 // @flow
 import React from 'react';
-import compose from 'recompose/compose';
-import pure from 'recompose/onlyUpdateForKeys';
-import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
-
-import Modal from '../../../components/modal';
-import Text from '../../../components/text';
-import Date from '../../../components/date';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
 import AutoComp from '../../../components/autocomponent';
-import {
-  Table,
-  Thead,
-  Tbody,
-  FixedRow,
-  Tr,
-  Th,
-  Td,
-} from '../../../components/new_table';
-import queryControl from '../../../hocomponents/queryControl';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control as Button } from '../../../components/controls';
 import Box from '../../../components/box';
-import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
-import ButtonGroup from '../../../components/controls/controls';
 import ContentByType from '../../../components/ContentByType';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control as Button } from '../../../components/controls';
+import ButtonGroup from '../../../components/controls/controls';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import Modal from '../../../components/modal';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../../components/new_table';
+import Text from '../../../components/text';
+import queryControl from '../../../hocomponents/queryControl';
 
 type Props = {
-  history: Array<string>,
-  type: string,
-  storage: Object,
-  onClose: Function,
-  data: string,
-  changeAllQuery: Function,
-  first?: boolean,
+  history: Array<string>;
+  type: string;
+  storage: Object;
+  onClose: Function;
+  data: string;
+  changeAllQuery: Function;
+  first?: boolean;
 };
 
 let SearchHistoryRow: Function = ({
@@ -42,8 +32,8 @@ let SearchHistoryRow: Function = ({
   changeAllQuery,
   onClose,
   first,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => {
   const item: Object = JSON.parse(data);
   const handleClick: Function = () => {
     changeAllQuery(item);
@@ -53,49 +43,49 @@ let SearchHistoryRow: Function = ({
   return (
     <Tr first={first}>
       <Td className="text medium">
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'. */}
         <Text text={item.ids} />
       </Td>
       <Td className="text medium">
         {type === 'ordersSearch' ? (
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'keyname' does not exist on type 'Object'... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'keyname' does not exist on type 'Object'... Remove this comment to see the full error message
           <Text text={item.keyname} />
         ) : (
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           <Text text={item.name} />
         )}
       </Td>
       <Td className="text medium">
         {type === 'ordersSearch' ? (
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'keyvalue' does not exist on type 'Object... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'keyvalue' does not exist on type 'Object... Remove this comment to see the full error message
           <Text text={item.keyvalue} />
         ) : (
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
           <Text text={item.error} />
         )}
       </Td>
       <Td className="text big">
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mindate' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mindate' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <ContentByType content={item.mindate} />
       </Td>
       <Td className="text big">
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'maxdate' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'maxdate' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <ContentByType content={item.maxdate} />
       </Td>
       {type !== 'ordersSearch' && (
         <Td className="narrow">
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'retry' does not exist on type 'Object'. */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'retry' does not exist on type 'Object'. */}
           <AutoComp>{item.retry && item.retry !== ''}</AutoComp>
         </Td>
       )}
       {type !== 'ordersSearch' && (
         <Td className="narrow">
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'busErr' does not exist on type 'Object'. */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'busErr' does not exist on type 'Object'. */}
           <AutoComp>{item.busErr && item.busErr !== ''}</AutoComp>
         </Td>
       )}
       <Td className="text">
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'filter' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'filter' does not exist on type 'Object'. */}
         <Text text={item.filter} />
       </Td>
       <Td className="narrow">
@@ -107,15 +97,15 @@ let SearchHistoryRow: Function = ({
   );
 };
 
-// @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 0.
+// @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 0.
 SearchHistoryRow = queryControl()(SearchHistoryRow);
 
 const SearchHistory: Function = ({
   history,
   type,
   onClose,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Modal size="lg" width="90vw">
     <Modal.Header titleId="historysearch" onClose={onClose}>
       Search history
@@ -126,12 +116,8 @@ const SearchHistory: Function = ({
           <Thead>
             <FixedRow>
               <Th className="text medium">IDs</Th>
-              <Th className="text medium">
-                {type === 'ordersSearch' ? 'Keyname' : 'Name'}
-              </Th>
-              <Th className="text medium">
-                {type === 'ordersSearch' ? 'Keyvalue' : 'Error'}
-              </Th>
+              <Th className="text medium">{type === 'ordersSearch' ? 'Keyname' : 'Name'}</Th>
+              <Th className="text medium">{type === 'ordersSearch' ? 'Keyvalue' : 'Error'}</Th>
               <Th className="big">Min. Date</Th>
               <Th className="big">Max. Date</Th>
               {type !== 'ordersSearch' && <Th className="narrow">Retry</Th>}
@@ -140,14 +126,11 @@ const SearchHistory: Function = ({
               <Th className="narrow">-</Th>
             </FixedRow>
           </Thead>
-          <DataOrEmptyTable
-            condition={history.length === 0}
-            cols={type === 'ordersSearch' ? 7 : 9}
-          >
-            {props => (
+          <DataOrEmptyTable condition={history.length === 0} cols={type === 'ordersSearch' ? 7 : 9}>
+            {(props) => (
               <Tbody {...props}>
                 {history.map(
-                  // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                   (data: string, key: number): React.Element<any> => (
                     <SearchHistoryRow
                       first={key === 0}
@@ -170,14 +153,13 @@ const SearchHistory: Function = ({
 export default compose(
   connect(
     (state: Object): Object => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       storage: state.api.currentUser.data.storage,
     })
   ),
   mapProps(
     ({ storage, type, ...rest }: Props): Props => ({
-      history:
-        storage[type] && storage[type].searches ? storage[type].searches : [],
+      history: storage[type] && storage[type].searches ? storage[type].searches : [],
       storage,
       type,
       ...rest,

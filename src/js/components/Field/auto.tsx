@@ -12,7 +12,7 @@ import SelectField from './select';
 import StringField from './string';
 import { getTypeFromValue, getValueOrDefaultValue, maybeParseYaml } from './validations';
 
-// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'FunctionComponent'.
+// @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'FunctionComponent'.
 const AutoField: FunctionComponent<IField & IFieldChange> = ({
   name,
   onChange,
@@ -128,7 +128,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
     // If this field is set to null
     if (isSetToNull) {
       // Render a readonly field with null
-      // @ts-expect-error ts-migrate(2739) FIXME: Type '{ name: any; value: null; onChange: (name: s... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2739) FIXME: Type '{ name: any; value: null; onChange: (name: s... Remove this comment to see the full error message
       return <StringField name={name} value={null} onChange={handleChange} read_only canBeNull />;
     }
     if (!currentType) {
@@ -155,7 +155,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             name={name}
             onChange={handleChange}
             value={value}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             type={currentType}
           />
         );
@@ -165,7 +165,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
           <BooleanField
             fill
             {...rest}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             name={name}
             onChange={handleChange}
             value={value}
@@ -180,7 +180,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             name={name}
             onChange={handleChange}
             value={value}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             type={currentType}
           />
         );
@@ -197,7 +197,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             onChange={handleChange}
             value={value}
             fill
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             type={currentType}
             noWrap
             placeholder={t('Yaml')}
@@ -208,7 +208,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
       case 'float':
       case 'softfloat':
         return (
-          // @ts-expect-error ts-migrate(2741) FIXME: Property 'default_value' is missing in type '{ nam... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2741) FIXME: Property 'default_value' is missing in type '{ nam... Remove this comment to see the full error message
           <NumberField
             {...rest}
             name={name}
@@ -225,7 +225,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             name={name}
             onChange={handleChange}
             value={value || undefined}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             fill
             type={currentType}
           />
@@ -237,7 +237,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             value={value}
             name={name}
             onChange={handleChange}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ defaultItems: any; value: any; name: any; ... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ defaultItems: any; value: any; name: any; ... Remove this comment to see the full error message
             type={currentType}
           />
         );
@@ -249,13 +249,13 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
       case 'value-map':
       case 'connection': {
         return (
-          // @ts-expect-error ts-migrate(2741) FIXME: Property 'default_value' is missing in type '{ typ... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2741) FIXME: Property 'default_value' is missing in type '{ typ... Remove this comment to see the full error message
           <InterfaceSelector type={currentType} name={name} value={value} onChange={handleChange} />
         );
       }
       case 'data-provider': {
         return (
-          // @ts-expect-error ts-migrate(2739) FIXME: Type '{ value: any; isInitialEditing: boolean; nam... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2739) FIXME: Type '{ value: any; isInitialEditing: boolean; nam... Remove this comment to see the full error message
           <ConnectorField
             value={value}
             isInitialEditing={!!default_value}
@@ -315,7 +315,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
     <>
       <ControlGroup fill>
         {showPicker && (
-          // @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; defaultItems: { name: string... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2740) FIXME: Type '{ name: string; defaultItems: { name: string... Remove this comment to see the full error message
           <SelectField
             name="type"
             defaultItems={types}
@@ -331,7 +331,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
         {canBeNull() && (
           <Button
             intent={isSetToNull ? 'warning' : 'none'}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '"" | "cross"' is not assignable to type 'Ico... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '"" | "cross"' is not assignable to type 'Ico... Remove this comment to see the full error message
             icon={isSetToNull && 'cross'}
             onClick={handleNullToggle}
           >

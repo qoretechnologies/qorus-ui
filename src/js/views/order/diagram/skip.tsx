@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control, Controls } from '../../../components/controls';
 import Modal from '../../../components/modal';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Controls, Control } from '../../../components/controls';
 
 export default class extends Component {
   props: {
-    onClose: Function,
-    onSubmit: Function,
-    steps: Array<Object>,
+    onClose: Function;
+    onSubmit: Function;
+    steps: Array<Object>;
   } = this.props;
 
   componentWillMount() {
@@ -18,7 +17,7 @@ export default class extends Component {
     });
   }
 
-  handleInputChange = event => {
+  handleInputChange = (event) => {
     this.setState({
       value: event.target.value,
     });
@@ -32,25 +31,25 @@ export default class extends Component {
     this.skipStep(false);
   };
 
-  handleFormSubmit = event => {
+  handleFormSubmit = (event) => {
     event.preventDefault();
   };
 
-  skipStep = type => {
+  skipStep = (type) => {
     let corr = true;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
     const vals = this.state.value.split(',');
     const regexVal = /^[0-9]+$/;
     const regexRange = /^[0-9]+-[0-9]+$/;
 
-    vals.forEach(val => {
+    vals.forEach((val) => {
       if (!regexVal.test(val) && !regexRange.test(val)) {
         corr = false;
       }
     });
 
     if (corr) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
       this.props.onSubmit(this.state.value, type);
 
       this.props.onClose();
@@ -75,9 +74,9 @@ export default class extends Component {
             <p> - index ranges (1, 3, 5-10)</p>
             <input
               type="text"
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
               value={this.state.value}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message
               className={`form-control ${this.state.error ? 'form-error' : ''}`}
               onChange={this.handleInputChange}
             />

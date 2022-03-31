@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import classNames from 'classnames';
+import React, { Component } from 'react';
 import { pureRender } from '../utils';
 
 /**
@@ -8,14 +8,14 @@ import { pureRender } from '../utils';
 @pureRender
 export default class Cell extends Component {
   props: {
-    tag: any,
-    children: any,
-    onSortChange: Function,
-    name: string,
-    className: string,
-    sortData: Object,
-    colspan: number,
-    onClick: Function,
+    tag: any;
+    children: any;
+    onSortChange: Function;
+    name: string;
+    className: string;
+    sortData: Object;
+    colspan: number;
+    onClick: Function;
   } = this.props;
 
   static defaultProps = {
@@ -39,13 +39,11 @@ export default class Cell extends Component {
     const Tag = this.props.tag;
     let sortCss;
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sortBy' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sortBy' does not exist on type 'Object'.
     if (this.props.sortData && this.props.sortData.sortBy === this.props.name) {
       sortCss =
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'sortByKey' does not exist on type 'Objec... Remove this comment to see the full error message
-        this.props.sortData.sortByKey.direction > 0
-          ? 'sort sort-asc'
-          : 'sort sort-desc';
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'sortByKey' does not exist on type 'Objec... Remove this comment to see the full error message
+        this.props.sortData.sortByKey.direction > 0 ? 'sort sort-asc' : 'sort sort-desc';
     }
 
     return (

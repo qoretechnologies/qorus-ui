@@ -1,38 +1,33 @@
 // @flow
+import includes from 'lodash/includes';
 import React from 'react';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import mapProps from 'recompose/mapProps';
-import includes from 'lodash/includes';
-
-import withModal from '../../../../hocomponents/modal';
-import actions from '../../../../store/api/actions';
+import { Control as Button, Controls as ButtonGroup } from '../../../../components/controls';
 import { ORDER_ACTIONS } from '../../../../constants/orders';
-import Schedule from './modals/schedule';
+import withModal from '../../../../hocomponents/modal';
 import withDispatch from '../../../../hocomponents/withDispatch';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../../components/controls';
+import actions from '../../../../store/api/actions';
+import Schedule from './modals/schedule';
 
 type Props = {
-  optimisticDispatch: Function,
-  openModal: Function,
-  closeModal: Function,
-  workflowstatus: string,
-  id: number,
-  handleActionClick: Function,
-  compact: boolean,
-  availableActions: Array<string>,
+  optimisticDispatch: Function;
+  openModal: Function;
+  closeModal: Function;
+  workflowstatus: string;
+  id: number;
+  handleActionClick: Function;
+  compact: boolean;
+  availableActions: Array<string>;
 };
 
 type ControlProps = {
-  action: string,
-  onActionClick: Function,
-  compact: boolean,
-  availableActions: Array<string>,
+  action: string;
+  onActionClick: Function;
+  compact: boolean;
+  availableActions: Array<string>;
 };
 
 const ActionButton: Function = ({
@@ -40,10 +35,15 @@ const ActionButton: Function = ({
   onActionClick,
   compact,
   availableActions,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: ControlProps): React.Element<Button> => {
-  const { name, action: actionName, icon, intent } = ORDER_ACTIONS.ALL.find(
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'action' does not exist on type 'Object'.
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+ControlProps): React.Element<Button> => {
+  const {
+    name,
+    action: actionName,
+    icon,
+    intent,
+  } = ORDER_ACTIONS.ALL.find(
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'action' does not exist on type 'Object'.
     (item: Object): boolean => item.action === action
   );
   const disabled: boolean = !includes(availableActions, action);
@@ -68,8 +68,8 @@ const OrderControls: Function = ({
   handleActionClick,
   compact,
   availableActions,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <ButtonGroup>
     <ActionButton
       action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
@@ -109,27 +109,23 @@ export default compose(
     })
   ),
   withHandlers({
-    handleActionClick: ({
-      optimisticDispatch,
-      openModal,
-      closeModal,
-      id,
-      workflowstatus,
-    }: Props): Function => (actionType: string): void => {
-      if (actionType === 'schedule') {
-        openModal(
-          <Schedule
-            onClose={closeModal}
-            action={optimisticDispatch}
-            id={id}
-            status={workflowstatus}
-          />
-        );
-      } else {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
-        optimisticDispatch(actions.orders.action, actionType, id);
-      }
-    },
+    handleActionClick:
+      ({ optimisticDispatch, openModal, closeModal, id, workflowstatus }: Props): Function =>
+      (actionType: string): void => {
+        if (actionType === 'schedule') {
+          openModal(
+            <Schedule
+              onClose={closeModal}
+              action={optimisticDispatch}
+              id={id}
+              status={workflowstatus}
+            />
+          );
+        } else {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
+          optimisticDispatch(actions.orders.action, actionType, id);
+        }
+      },
   }),
   pure(['workflowstatus'])
 )(OrderControls);

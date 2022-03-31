@@ -1,26 +1,22 @@
 /* @flow */
-import { createAction } from 'redux-actions';
 import pickBy from 'lodash/pickBy';
-
-import { fetchJson, fetchWithNotifications, put, get } from '../../utils';
-import settings from '../../../../settings';
-import { attrsSelector } from '../../../../helpers/remotes';
+import { createAction } from 'redux-actions';
 import { CONN_MAP_REVERSE } from '../../../../constants/remotes';
+import { attrsSelector } from '../../../../helpers/remotes';
+import settings from '../../../../settings';
 import {
-  fetchLoggerAction,
-  deleteLoggerAction,
-  addUpdateLoggerAction,
   addAppenderAction,
-  editAppenderAction,
+  addUpdateLoggerAction,
   deleteAppenderAction,
+  deleteLoggerAction,
+  editAppenderAction,
+  fetchLoggerAction,
 } from '../../common/actions';
+import { fetchJson, fetchWithNotifications, get, put } from '../../utils';
 
 const ping: Function = (model: string, type: string, dispatch: Function) =>
   fetchWithNotifications(
-    async () =>
-      await put(
-        `${settings.REST_BASE_URL}/remote/${type}/${model}?action=ping`
-      ),
+    async () => await put(`${settings.REST_BASE_URL}/remote/${type}/${model}?action=ping`),
     `Requesting ping for ${model}...`,
     `Successfuly requested ping for ${model}`,
     dispatch
@@ -28,55 +24,49 @@ const ping: Function = (model: string, type: string, dispatch: Function) =>
 
 const pingRemote = createAction('REMOTES_PINGREMOTE', ping);
 
-const connectionChange = createAction('REMOTES_CONNECTIONCHANGE', events => ({
+const connectionChange = createAction('REMOTES_CONNECTIONCHANGE', (events) => ({
   events,
 }));
 
-const debugChange = createAction('REMOTES_DEBUGCHANGE', events => ({
+const debugChange = createAction('REMOTES_DEBUGCHANGE', (events) => ({
   events,
 }));
 
-const enabledChange = createAction('REMOTES_ENABLEDCHANGE', events => ({
+const enabledChange = createAction('REMOTES_ENABLEDCHANGE', (events) => ({
   events,
 }));
 
-const addConnection = createAction('REMOTES_ADDCONNECTION', events => ({
+const addConnection = createAction('REMOTES_ADDCONNECTION', (events) => ({
   events,
 }));
-const updateConnection = createAction(
-  'REMOTES_UPDATECONNECTION',
-  async events => {
-    let models: Array<Object> = events;
+const updateConnection = createAction('REMOTES_UPDATECONNECTION', async (events) => {
+  let models: Array<Object> = events;
 
-    //! If we are on HTTPS, fetch the connection with password
-    if (!settings.IS_HTTP) {
-      models = await Promise.all(
-        models.map(async (model: Object) => {
-          const safeUrl: string = await get(
-            `${settings.REST_BASE_URL}/remote/${
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
-              CONN_MAP_REVERSE[model.conntype]
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-            }/${model.name}/url?with_password=true`
-          );
+  //! If we are on HTTPS, fetch the connection with password
+  if (!settings.IS_HTTP) {
+    models = await Promise.all(
+      models.map(async (model: Object) => {
+        const safeUrl: string = await get(
+          `${settings.REST_BASE_URL}/remote/${
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
+            CONN_MAP_REVERSE[model.conntype]
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          }/${model.name}/url?with_password=true`
+        );
 
-          return {
-            ...model,
-            safeUrl,
-          };
-        })
-      );
-    }
-
-    return { models };
+        return {
+          ...model,
+          safeUrl,
+        };
+      })
+    );
   }
-);
-const removeConnectionWS = createAction(
-  'REMOTES_REMOVECONNECTIONWS',
-  events => ({
-    events,
-  })
-);
+
+  return { models };
+});
+const removeConnectionWS = createAction('REMOTES_REMOVECONNECTIONWS', (events) => ({
+  events,
+}));
 
 const updateDone: Function = createAction(
   'REMOTES_UPDATEDONE',
@@ -85,13 +75,11 @@ const updateDone: Function = createAction(
 
 const fetchPass: Function = createAction(
   'REMOTES_FETCHPASS',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   async (remoteType: string, name: string, dispatch: Function): Object => {
     const safeUrl = await fetchWithNotifications(
       async () =>
-        get(
-          `${settings.REST_BASE_URL}/remote/${remoteType}/${name}/url?with_password=true`
-        ),
+        get(`${settings.REST_BASE_URL}/remote/${remoteType}/${name}/url?with_password=true`),
       null,
       null,
       dispatch
@@ -101,34 +89,24 @@ const fetchPass: Function = createAction(
   }
 );
 
-const addAlert = createAction('REMOTES_ADDALERT', events => ({ events }));
+const addAlert = createAction('REMOTES_ADDALERT', (events) => ({ events }));
 
-const clearAlert = createAction('REMOTES_CLEARALERT', events => ({ events }));
+const clearAlert = createAction('REMOTES_CLEARALERT', (events) => ({ events }));
 
 const manageConnection: Function = createAction(
   'REMOTES_MANAGECONNECTION',
-  (
-    remoteType: string,
-    data: Object,
-    name: string,
-    onSuccess: Function,
-    dispatch: Function
-  ) => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 2.
+  (remoteType: string, data: Object, name: string, onSuccess: Function, dispatch: Function) => {
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 0 arguments, but got 2.
     const { editable } = attrsSelector(null, { remoteType });
     let newData = data;
 
     if (!name) {
       fetchWithNotifications(
         async () => {
-          // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
-          const res = await fetchJson(
-            'POST',
-            `${settings.REST_BASE_URL}/remote/${remoteType}`,
-            {
-              body: JSON.stringify(newData),
-            }
-          );
+          // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+          const res = await fetchJson('POST', `${settings.REST_BASE_URL}/remote/${remoteType}`, {
+            body: JSON.stringify(newData),
+          });
 
           if (!res.err && onSuccess) {
             onSuccess();
@@ -136,9 +114,9 @@ const manageConnection: Function = createAction(
 
           return res;
         },
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         `Creating ${data.name}...`,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         `${data.name} successfuly created`,
         dispatch
       );
@@ -147,7 +125,7 @@ const manageConnection: Function = createAction(
 
       fetchWithNotifications(
         async () => {
-          // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+          // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
           const res = await fetchJson(
             'PUT',
             `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
@@ -172,11 +150,11 @@ const manageConnection: Function = createAction(
 
 const deleteConnection: Function = createAction(
   'REMOTES_DELETECONNECTION',
-  // @ts-expect-error ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
-  (remoteType: string, name: string, dispatch): ?Object => {
+  // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
+  (remoteType: string, name: string, dispatch): Object => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
         await fetchJson(
           'DELETE',
           `${settings.REST_BASE_URL}/remote/${remoteType}/${name}`,
@@ -192,15 +170,10 @@ const deleteConnection: Function = createAction(
 
 const toggleConnection: Function = createAction(
   'REMOTES_TOGGLECONNECTION',
-  (
-    name: string,
-    value: boolean,
-    remoteType: string,
-    dispatch: Function
-  ): void => {
+  (name: string, value: boolean, remoteType: string, dispatch: Function): void => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
         await fetchJson(
           'PUT',
           `${settings.REST_BASE_URL}/remote/${remoteType}/${name}?action=${
@@ -216,15 +189,10 @@ const toggleConnection: Function = createAction(
 
 const toggleDebug: Function = createAction(
   'REMOTES_TOGGLEDEBUG',
-  (
-    name: string,
-    value: boolean,
-    remoteType: string,
-    dispatch: Function
-  ): void => {
+  (name: string, value: boolean, remoteType: string, dispatch: Function): void => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
         await fetchJson(
           'PUT',
           `${settings.REST_BASE_URL}/remote/${remoteType}/${name}?action=${
@@ -243,7 +211,7 @@ const resetConnection: Function = createAction(
   (remoteType: string, name: string, dispatch: Function): void => {
     fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
         await fetchJson(
           'PUT',
           `${settings.REST_BASE_URL}/remote/${remoteType}/${name}?action=reset`

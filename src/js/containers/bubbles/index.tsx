@@ -1,10 +1,9 @@
 /* @flow */
 import React from 'react';
 import { connect } from 'react-redux';
-
 import BubbleItem from './item';
 
-// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
 export const Bubbles = ({ bubbleList }: { bubbleList: Array<*> }) => {
   if (bubbleList.length === 0) {
     return null;
@@ -16,7 +15,7 @@ export const Bubbles = ({ bubbleList }: { bubbleList: Array<*> }) => {
       "
     >
       <span>
-        {bubbleList.map(item => (
+        {bubbleList.map((item) => (
           <BubbleItem key={`bubble_${item.id}`} bubble={item} />
         ))}
       </span>
@@ -24,6 +23,6 @@ export const Bubbles = ({ bubbleList }: { bubbleList: Array<*> }) => {
   );
 };
 
-export default connect(state => ({
+export default connect((state) => ({
   bubbleList: state.ui.bubbles.list || [],
 }))(Bubbles);

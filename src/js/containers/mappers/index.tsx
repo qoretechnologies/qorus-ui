@@ -1,35 +1,25 @@
 /* @flow */
 import React from 'react';
-import { Link } from 'react-router';
+import { FormattedMessage } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import {
-  Table,
-  Tbody,
-  Thead,
-  Tr,
-  Th,
-  Td,
-  FixedRow,
-} from '../../components/new_table';
-import { sortDefaults } from '../../constants/sort';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
-import EnhancedTable from '../../components/EnhancedTable';
-import Pull from '../../components/Pull';
-import LoadMore from '../../components/LoadMore';
-import Search from '../../containers/search';
 import type { EnhancedTableProps } from '../../components/EnhancedTable';
+import EnhancedTable from '../../components/EnhancedTable';
 import { IdColumn, IdColumnHeader } from '../../components/IdColumn';
+import LoadMore from '../../components/LoadMore';
 import NameColumn, { NameColumnHeader } from '../../components/NameColumn';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../components/new_table';
+import Pull from '../../components/Pull';
 import { normalizeName } from '../../components/utils';
-import { FormattedMessage } from 'react-intl';
+import { sortDefaults } from '../../constants/sort';
+import Search from '../../containers/search';
 
 const MappersTable = ({
   mappers,
 }: {
-  mappers: Array<Object>,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  mappers: Array<Object>;
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 }): React.Element<any> => (
   <EnhancedTable
     collection={mappers}
@@ -62,10 +52,7 @@ const MappersTable = ({
                   total={loadMoreTotal}
                   limit={limit}
                 />
-                <Search
-                  onSearchUpdate={handleSearchChange}
-                  resource="mappers"
-                />
+                <Search onSearchUpdate={handleSearchChange} resource="mappers" />
               </Pull>
             </Th>
           </FixedRow>
@@ -73,27 +60,27 @@ const MappersTable = ({
             <IdColumnHeader name="mapperid" />
             <NameColumnHeader />
             <Th className="text" name="type" icon="info-sign">
-              <FormattedMessage id='table.type' />
+              <FormattedMessage id="table.type" />
             </Th>
           </FixedRow>
         </Thead>
         <DataOrEmptyTable condition={!mappers || mappers.length === 0} cols={3}>
-          {props => (
+          {(props) => (
             <Tbody {...props}>
               {collection.map(
-                // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                 (item: Object, index: number): React.Element<any> => (
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message
                   <Tr key={item.mapperid} first={index === 0}>
-                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message */ }
+                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message */}
                     <IdColumn>{item.mapperid}</IdColumn>
                     <NameColumn
                       name={normalizeName(item)}
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message
+                      // @ts-ignore ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message
                       link={`/mappers/${item.mapperid}`}
                       type="mapper"
                     />
-                    { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
+                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                     <Td className="text">{item.type}</Td>
                   </Tr>
                 )
@@ -106,6 +93,4 @@ const MappersTable = ({
   </EnhancedTable>
 );
 
-export default compose(
-  pure(['mappers'])
-)(MappersTable);
+export default compose(pure(['mappers']))(MappersTable);

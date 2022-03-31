@@ -1,22 +1,21 @@
 /* @flow */
+import { ButtonGroup, ControlGroup, InputGroup } from '@blueprintjs/core';
 import React from 'react';
 import compose from 'recompose/compose';
-import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
-
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import withState from 'recompose/withState';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control as Button } from '../../../../components/controls';
-import { ButtonGroup, ControlGroup, InputGroup } from '@blueprintjs/core';
 
 type Props = {
-  keyValue: string,
-  value: string,
-  onKeyChange: Function,
-  onValueChange: Function,
-  onEnabledClick: Function,
-  onFormSubmit: Function,
-  enabled: boolean,
+  keyValue: string;
+  value: string;
+  onKeyChange: Function;
+  onValueChange: Function;
+  onEnabledClick: Function;
+  onFormSubmit: Function;
+  enabled: boolean;
 };
 
 const AddValue: Function = ({
@@ -27,16 +26,16 @@ const AddValue: Function = ({
   onEnabledClick,
   enabled,
   onFormSubmit,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
-  // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
+  // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
   <form className="form-inline new-value" onSubmit={onFormSubmit}>
     <ControlGroup>
       <InputGroup
         type="text"
         placeholder="Key"
         value={keyValue}
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
         onChange={onKeyChange}
         name="value-key"
       />
@@ -44,7 +43,7 @@ const AddValue: Function = ({
         type="text"
         placeholder="Value"
         value={value}
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
         onChange={onValueChange}
         name="value-value"
       />
@@ -68,23 +67,25 @@ export default compose(
   withState('value', 'valueUpdater', ''),
   withState('enabled', 'enabledUpdater', true),
   mapProps(({ keyUpdater, valueUpdater, enabledUpdater, ...rest }) => ({
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
     onKeyChange: (event: EventHandler) => keyUpdater(event.target.value),
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
     onValueChange: (event: EventHandler) => valueUpdater(event.target.value),
-    onEnabledClick: () => enabledUpdater(enabled => !enabled),
+    onEnabledClick: () => enabledUpdater((enabled) => !enabled),
     ...rest,
   })),
   withHandlers({
-    onFormSubmit: ({ keyValue, value, add, enabled }): Function => (
-      // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-      event: EventHandler
-    ): void => {
-      event.preventDefault();
+    onFormSubmit:
+      ({ keyValue, value, add, enabled }): Function =>
+      (
+        // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+        event: EventHandler
+      ): void => {
+        event.preventDefault();
 
-      if (keyValue !== '' && value !== '') {
-        add(keyValue, value, enabled);
-      }
-    },
+        if (keyValue !== '' && value !== '') {
+          add(keyValue, value, enabled);
+        }
+      },
   })
 )(AddValue);

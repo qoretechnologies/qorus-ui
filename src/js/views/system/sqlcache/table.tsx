@@ -2,36 +2,29 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import {
-  Table,
-  Tbody,
-  Thead,
-  Th,
-  FixedRow,
-} from '../../../components/new_table';
-import CacheRow from './row';
-import Pull from '../../../components/Pull';
-import ExpandableItem from '../../../components/ExpandableItem';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control as Button } from '../../../components/controls';
-import { NameColumnHeader } from '../../../components/NameColumn';
 import { ActionColumnHeader } from '../../../components/ActionColumn';
-import EnhancedTable from '../../../components/EnhancedTable';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control as Button } from '../../../components/controls';
 import type { EnhancedTableProps } from '../../../components/EnhancedTable';
-import { sortDefaults } from '../../../constants/sort';
+import EnhancedTable from '../../../components/EnhancedTable';
+import ExpandableItem from '../../../components/ExpandableItem';
 import LoadMore from '../../../components/LoadMore';
+import { NameColumnHeader } from '../../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../../components/new_table';
+import Pull from '../../../components/Pull';
+import { sortDefaults } from '../../../constants/sort';
 import Search from '../../../containers/search';
+import CacheRow from './row';
 
 type Props = {
-  name: string,
-  data: Object,
-  dataLen: number,
-  onClick: Function,
-  onSingleClick: Function,
-  expanded: boolean,
-  handleExpandClick: Function,
-  setExpanded: Function,
+  name: string;
+  data: Object;
+  dataLen: number;
+  onClick: Function;
+  onSingleClick: Function;
+  expanded: boolean;
+  handleExpandClick: Function;
+  setExpanded: Function;
 };
 
 const SQLCacheTable: Function = ({
@@ -39,8 +32,8 @@ const SQLCacheTable: Function = ({
   data,
   onClick,
   onSingleClick,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => {
   const handleClick: Function = (): void => {
     onClick(name);
   };
@@ -87,10 +80,7 @@ const SQLCacheTable: Function = ({
                       total={loadMoreTotal}
                       canLoadMore={canLoadMore}
                     />
-                    <Search
-                      resource="sqlcache"
-                      onSearchUpdate={handleSearchChange}
-                    />
+                    <Search resource="sqlcache" onSearchUpdate={handleSearchChange} />
                   </Pull>
                 </FixedRow>
                 <FixedRow {...{ onSortChange, sortData }}>
@@ -108,14 +98,14 @@ const SQLCacheTable: Function = ({
                 {collection.map((cache, index) => (
                   <CacheRow
                     first={index === 0}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     key={cache.name}
                     datasource={name}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     name={cache.name}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'count' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'count' does not exist on type 'Object'.
                     count={cache.count}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message
                     created={cache.created}
                     onClick={onSingleClick}
                   />

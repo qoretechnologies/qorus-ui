@@ -1,46 +1,39 @@
 // @flow
 import React from 'react';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import {
-  Table,
-  Tbody,
-  Thead,
-  Th,
-  FixedRow,
-} from '../../../components/new_table';
-import withSort from '../../../hocomponents/sort';
-import withLoadMore from '../../../hocomponents/loadMore';
-import withPane from '../../../hocomponents/pane';
+import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
+import Flex from '../../../components/Flex';
+import LoadMore from '../../../components/LoadMore';
+import { NameColumnHeader } from '../../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../../components/new_table';
+import Pull from '../../../components/Pull';
 import { sortDefaults } from '../../../constants/sort';
 import { findBy } from '../../../helpers/search';
+import withLoadMore from '../../../hocomponents/loadMore';
+import withPane from '../../../hocomponents/pane';
+import withSort from '../../../hocomponents/sort';
+import titleManager from '../../../hocomponents/TitleManager';
 import AlertsPane from './pane';
 import AlertRow from './row';
-import LoadMore from '../../../components/LoadMore';
-import titleManager from '../../../hocomponents/TitleManager';
-import Pull from '../../../components/Pull';
-import { NameColumnHeader } from '../../../components/NameColumn';
-import mapProps from 'recompose/mapProps';
-import Flex from '../../../components/Flex';
-import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 
 type Props = {
-  params: Object,
-  sortData: Object,
-  onSortChange: Function,
-  alerts: Array<Object>,
-  canLoadMore?: boolean,
-  handleLoadMore: Function,
-  handleLoadAll: Function,
-  loadMoreCurrent: number,
-  loadMoreTotal: number,
-  openPane: Function,
-  closePane: Function,
-  paneId: string,
-  location: Object,
-  limit: number,
-  query: string,
+  params: Object;
+  sortData: Object;
+  onSortChange: Function;
+  alerts: Array<Object>;
+  canLoadMore?: boolean;
+  handleLoadMore: Function;
+  handleLoadAll: Function;
+  loadMoreCurrent: number;
+  loadMoreTotal: number;
+  openPane: Function;
+  closePane: Function;
+  paneId: string;
+  location: Object;
+  limit: number;
+  query: string;
 };
 
 const AlertsTable: Function = ({
@@ -56,8 +49,8 @@ const AlertsTable: Function = ({
   closePane,
   paneId,
   limit,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Flex>
     <Table fixed hover striped condensed>
       <Thead>
@@ -81,11 +74,7 @@ const AlertsTable: Function = ({
           <Th icon="numbered-list" name="alertid">
             ID
           </Th>
-          <NameColumnHeader
-            name="name"
-            title="Object name"
-            icon="intersection"
-          />
+          <NameColumnHeader name="name" title="Object name" icon="intersection" />
           <Th className="text" name="type" icon="application">
             Interface
           </Th>
@@ -98,18 +87,18 @@ const AlertsTable: Function = ({
         </FixedRow>
       </Thead>
       <DataOrEmptyTable condition={!alerts || alerts.length === 0} cols={5}>
-        {props => (
+        {(props) => (
           <Tbody {...props}>
             {alerts.map(
-              // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
               (alert: Object, index: number): React.Element<any> => (
                 <AlertRow
                   first={index === 0}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'alertid' does not exist on type 'Object'... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'alertid' does not exist on type 'Object'... Remove this comment to see the full error message
                   key={alert.alertid}
                   openPane={openPane}
                   closePane={closePane}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'alertid' does not exist on type 'Object'... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'alertid' does not exist on type 'Object'... Remove this comment to see the full error message
                   isActive={parseInt(paneId, 10) === alert.alertid}
                   {...alert}
                 />
@@ -130,12 +119,12 @@ export default compose(
       ...rest,
     })
   ),
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Props'.
   withSort(({ type }: Props): string => type, 'alerts', sortDefaults.alerts),
   withLoadMore('alerts', 'alerts', true, 50),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
   withPane(AlertsPane, null, null, 'alerts'),
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   titleManager(({ type }): string => `Alerts ${type}`),
   pure(['alerts', 'location', 'paneId', 'canLoadMore', 'sortData'])
 )(AlertsTable);

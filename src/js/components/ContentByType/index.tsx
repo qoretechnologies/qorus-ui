@@ -11,9 +11,9 @@ import { getType } from '../../helpers/functions';
 import Flex from '../Flex';
 
 type ContentByTypeProps = {
-  content: any,
-  inTable?: boolean,
-  noMarkdown?: Boolean,
+  content: any;
+  inTable?: boolean;
+  noMarkdown?: Boolean;
 };
 
 const emptyTypeToString: Object = {
@@ -24,15 +24,15 @@ const emptyTypeToString: Object = {
 const ContentByType: Function = ({
   content,
   inTable,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'noControls' does not exist on type 'Cont... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'noControls' does not exist on type 'Cont... Remove this comment to see the full error message
   noControls,
   noMarkdown,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'inline' does not exist on type 'ContentB... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'inline' does not exist on type 'ContentB... Remove this comment to see the full error message
   inline,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'baseType' does not exist on type 'Conten... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'baseType' does not exist on type 'Conten... Remove this comment to see the full error message
   baseType,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: ContentByTypeProps): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+ContentByTypeProps): React.Element<any> => {
   const type: string = baseType || getType(content);
   const className: string = `content-by-type ${type} ${inline ? 'inline' : ''}`;
 

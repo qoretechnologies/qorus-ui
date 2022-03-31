@@ -1,8 +1,7 @@
 // @flow
-import React, { Component } from 'react';
-import classNames from 'classnames';
-
 import { Icon } from '@blueprintjs/core';
+import classNames from 'classnames';
+import React, { Component } from 'react';
 
 /**
  * Top handle position.
@@ -41,15 +40,15 @@ const LEFT = 0b1000;
  */
 export default class Handle extends Component {
   props: {
-    minCurrent: boolean,
-    min: Object,
-    top: boolean,
-    right: boolean,
-    bottom: boolean,
-    left: boolean,
-    onStart: Function,
-    onStop: Function,
-    children: any,
+    minCurrent: boolean;
+    min: Object;
+    top: boolean;
+    right: boolean;
+    bottom: boolean;
+    left: boolean;
+    onStart: Function;
+    onStop: Function;
+    children: any;
   } = this.props;
 
   static defaultProps = {
@@ -69,20 +68,20 @@ export default class Handle extends Component {
    *
    * @param {Object} props
    */
-  constructor (props) {
+  constructor(props) {
     super(props);
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
     this._handle = null;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     this._position = 0;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
     this._min = null;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
     this._resizeListener = null;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
     this._stopListener = null;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_originalCursor' does not exist on type ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_originalCursor' does not exist on type ... Remove this comment to see the full error message
     this._originalCursor = null;
   }
 
@@ -91,8 +90,8 @@ export default class Handle extends Component {
    *
    * @see getDirection
    */
-  componentWillMount () {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+  componentWillMount() {
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     this._position = this.getDirection(this.props);
   }
 
@@ -101,8 +100,8 @@ export default class Handle extends Component {
    *
    * @see getMinimalDimensions
    */
-  componentDidMount () {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+  componentDidMount() {
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
     this._min = this.getMinimalDimensions(this.props);
   }
 
@@ -113,10 +112,10 @@ export default class Handle extends Component {
    * @see getDirection
    * @see getMinimalDimensions
    */
-  componentWillReceiveProps (nextProps) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+  componentWillReceiveProps(nextProps) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     this._position = this.getDirection(nextProps);
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
     this._min = this.getMinimalDimensions(nextProps);
   }
 
@@ -125,7 +124,7 @@ export default class Handle extends Component {
    *
    * @see stop
    */
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.stop(null);
   }
 
@@ -139,11 +138,9 @@ export default class Handle extends Component {
    * @see BOTTOM
    * @see LEFT
    */
-  getDirection (props) {
+  getDirection(props) {
     if (!props.top && !props.right && !props.bottom && !props.left) {
-      throw new Error(
-        'Must set at least one of top, right, bottom or left props'
-      );
+      throw new Error('Must set at least one of top, right, bottom or left props');
     }
     if (props.top && props.bottom) {
       throw new Error('Cannot set both top and bottom props');
@@ -167,7 +164,7 @@ export default class Handle extends Component {
    * @param {object} props
    * @return {DOMRect|object}
    */
-  getMinimalDimensions (props: any) {
+  getMinimalDimensions(props: any) {
     let min;
 
     if (props.minCurrent) {
@@ -189,13 +186,13 @@ export default class Handle extends Component {
    *
    * @return {DOMRect|null}
    */
-  getParentRect () {
+  getParentRect() {
     return (
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
       this._handle &&
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
       this._handle.parentElement &&
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
       this._handle.parentElement.getBoundingClientRect()
     );
   }
@@ -209,24 +206,24 @@ export default class Handle extends Component {
    *
    * @return {boolean}
    */
-  isMin () {
+  isMin() {
     const rect = this.getParentRect();
     if (!rect && this.props.minCurrent) return true;
 
     let is = false;
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
     if (rect && this._min.height && this._position & (TOP | BOTTOM)) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
       is = this._min.height >= rect.height;
     }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
     if (rect && this._min.width && this._position & (LEFT | RIGHT)) {
       is = is
-        // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
-        ? is && this._min.width >= rect.width
-        // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
-        : this._min.width >= rect.width;
+        ? // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+          is && this._min.width >= rect.width
+        : // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+          this._min.width >= rect.width;
     }
 
     return is;
@@ -242,30 +239,30 @@ export default class Handle extends Component {
    *
    * @param {MouseEvent} ev
    */
-  start = ev => {
+  start = (ev) => {
     ev.preventDefault();
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
     this._resizeListener = this.resize;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
     this._handle.ownerDocument.addEventListener(
       'mousemove',
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
       this._resizeListener,
       false
     );
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
     this._stopListener = this.stop;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
     this._handle.ownerDocument.addEventListener(
       'mouseup',
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
       this._stopListener,
       false
     );
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_originalCursor' does not exist on type ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_originalCursor' does not exist on type ... Remove this comment to see the full error message
     this._originalCursor = this._handle.ownerDocument.body.style.cursor;
   };
 
@@ -286,39 +283,39 @@ export default class Handle extends Component {
    *
    * @param {MouseEvent} ev
    */
-  resize = ev => {
+  resize = (ev) => {
     ev.preventDefault();
 
     const style = this.computeNewStyle(ev);
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
     if (this._min.height > style.height) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'height' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'height' does not exist on type '{}'.
       style.height = this._min.height;
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_min' does not exist on type 'Handle'.
     if (this._min.width > style.width) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'width' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'width' does not exist on type '{}'.
       style.width = this._min.width;
     }
 
-    Object.keys(style).forEach(cssProp => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+    Object.keys(style).forEach((cssProp) => {
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
       this._handle.parentElement.style[cssProp] = `${style[cssProp]}px`;
     });
 
     if (this.isMin()) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
       this._handle.classList.add('min');
     } else {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
       this._handle.classList.remove('min');
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
     this._handle.ownerDocument.body.style.cursor = window.getComputedStyle(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
       this._handle
     ).cursor;
   };
@@ -334,27 +331,27 @@ export default class Handle extends Component {
    * @param {MouseEvent} ev
    * @return {object}
    */
-  computeNewStyle (ev) {
+  computeNewStyle(ev) {
     const style = {};
     const rect = this.getParentRect();
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     if (this._position & TOP) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'height' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'height' does not exist on type '{}'.
       style.height = rect.top - ev.clientY + rect.height;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     } else if (this._position & BOTTOM) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'height' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'height' does not exist on type '{}'.
       style.height = ev.clientY - rect.top;
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     if (this._position & LEFT) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'width' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'width' does not exist on type '{}'.
       style.width = rect.left - ev.clientX + rect.width;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     } else if (this._position & RIGHT) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'width' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'width' does not exist on type '{}'.
       style.width = ev.clientX - rect.left;
     }
 
@@ -366,39 +363,39 @@ export default class Handle extends Component {
    *
    * @param {?MouseEvent} ev
    */
-  stop = ev => {
+  stop = (ev) => {
     if (ev) ev.preventDefault();
 
     if (this.props.onStop) {
       this.props.onStop(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
         this._handle.parentElement.offsetWidth,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
         this._handle.parentElement.offsetHeight
       );
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
     this._handle.ownerDocument.body.style.cursor = this._originalCursor;
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
     this._handle.ownerDocument.removeEventListener(
       'mousemove',
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
       this._resizeListener,
       false
     );
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_resizeListener' does not exist on type ... Remove this comment to see the full error message
     this._resizeListener = null;
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
     this._handle.ownerDocument.removeEventListener(
       'mouseup',
-      // @ts-expect-error ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
       this._stopListener,
       false
     );
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_stopListener' does not exist on type 'H... Remove this comment to see the full error message
     this._stopListener = null;
   };
 
@@ -407,8 +404,8 @@ export default class Handle extends Component {
    *
    * @param {HTMLElement} el
    */
-  refHandle = el => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
+  refHandle = (el) => {
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_handle' does not exist on type 'Handle'... Remove this comment to see the full error message
     this._handle = el;
   };
 
@@ -417,14 +414,14 @@ export default class Handle extends Component {
    *
    * @return {ReactElement}
    */
-  render () {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+  render() {
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     const top = this._position & TOP;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     const right = this._position & RIGHT;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     const bottom = this._position & BOTTOM;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_position' does not exist on type 'Handl... Remove this comment to see the full error message
     const left = this._position & LEFT;
 
     return (
@@ -442,7 +439,7 @@ export default class Handle extends Component {
         aria-hidden="true"
       >
         <Icon
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
           icon={`drag-handle-${left || right ? 'vertical' : 'horizontal'}`}
         />
         {this.props.children}

@@ -1,53 +1,49 @@
 /* @flow */
-import React, { Component } from 'react';
-import compose from 'recompose/compose';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import flowRight from 'lodash/flowRight';
-
-import sync from '../../../../hocomponents/sync';
-import modal from '../../../../hocomponents/modal';
-import withDispatch from '../../../../hocomponents/withDispatch';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import { createSelector } from 'reselect';
 import ConfirmDialog from '../../../../components/confirm_dialog';
 import { findBy } from '../../../../helpers/search';
 import { hasPermission } from '../../../../helpers/user';
+import modal from '../../../../hocomponents/modal';
+import sync from '../../../../hocomponents/sync';
+import withDispatch from '../../../../hocomponents/withDispatch';
+import actions from '../../../../store/api/actions';
 import Modal from './modal';
 import Table from './table';
-import actions from '../../../../store/api/actions';
 
 const currentUserSelector: Function = (state: Object): Object =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.currentUser;
 const optionsSelector: Function = (state: Object): Object =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.systemOptions;
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+// @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
 const usersSelector: Function = (state: Object): Object => state.api.users;
-// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const querySelector: Function = (state: Object, props: Object): ?string =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+const querySelector: Function = (state: Object, props: Object): string =>
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
   props.location.query.search;
-// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const filterData: Function = (query: ?string): Function => (
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  collection: Array<*>
-) => findBy(['name', 'username'], query, collection);
+// @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+const filterData: Function =
+  (query: string): Function =>
+  (
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    collection: Array<*>
+  ) =>
+    findBy(['name', 'username'], query, collection);
 
 const collectionSelector: Function = createSelector(
-  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [usersSelector, querySelector],
   (collection, query) => flowRight(filterData(query))(collection.data)
 );
 
 const viewSelector: Function = createSelector(
-  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-  [
-    currentUserSelector,
-    usersSelector,
-    querySelector,
-    collectionSelector,
-    optionsSelector,
-  ],
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+  [currentUserSelector, usersSelector, querySelector, collectionSelector, optionsSelector],
   (currentUser, users, query, collection, options) => ({
     user: currentUser.data,
     options: options.data,
@@ -59,7 +55,7 @@ const viewSelector: Function = createSelector(
 
 @compose(
   connect(viewSelector, {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
     load: actions.users.fetch,
   }),
   withDispatch(),
@@ -68,19 +64,19 @@ const viewSelector: Function = createSelector(
 )
 export default class RBACUsers extends Component {
   props: {
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    usersModel: Array<*>,
-    user: Object,
-    openModal: Function,
-    closeModal: Function,
-    optimisticDispatch: Function,
-    options: Array<Object>,
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    usersModel: Array<*>;
+    user: Object;
+    openModal: Function;
+    closeModal: Function;
+    optimisticDispatch: Function;
+    options: Array<Object>;
   } = this.props;
 
   isRbacExternal: Function = () => {
     const { options } = this.props;
     const rbacExternal: any = options.find(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       (option: Object): boolean => option.name === 'rbac-external'
     );
 
@@ -117,10 +113,10 @@ export default class RBACUsers extends Component {
     username: string,
     password: string,
     roles: Array<string>
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   ): Promise<*> => {
     await this.props.optimisticDispatch(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
       actions.users.create,
       name,
       username,
@@ -136,10 +132,10 @@ export default class RBACUsers extends Component {
     username: string,
     pass: string,
     roles: Array<string>
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   ): Promise<*> => {
     await this.props.optimisticDispatch(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
       actions.users.update,
       name,
       username,
@@ -158,7 +154,7 @@ export default class RBACUsers extends Component {
 
   handleRemoveUserClick: Function = (username): void => {
     const handleConfirm: Function = (): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
       this.props.optimisticDispatch(actions.users.remove, username);
       this.props.closeModal();
     };
@@ -171,24 +167,12 @@ export default class RBACUsers extends Component {
   };
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
     const { permissions } = this.props.user;
-    const canEdit = hasPermission(
-      permissions,
-      ['USER-CONTROL', 'MODIFY-USER'],
-      'or'
-    );
-    const canDelete = hasPermission(
-      permissions,
-      ['USER-CONTROL', 'DELETE-USER'],
-      'or'
-    );
+    const canEdit = hasPermission(permissions, ['USER-CONTROL', 'MODIFY-USER'], 'or');
+    const canDelete = hasPermission(permissions, ['USER-CONTROL', 'DELETE-USER'], 'or');
 
-    const canAdd = hasPermission(
-      permissions,
-      ['USER-CONTROL', 'ADD-USER'],
-      'or'
-    );
+    const canAdd = hasPermission(permissions, ['USER-CONTROL', 'ADD-USER'], 'or');
 
     return (
       <Table

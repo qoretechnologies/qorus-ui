@@ -1,17 +1,17 @@
 // @flow
+import size from 'lodash/size';
 import { handleActions } from 'redux-actions';
 import ACTIONS from './types';
-import size from 'lodash/size';
 
 export type State = {
-  data: Array<Object>,
-  count: number,
+  data: Array<Object>;
+  count: number;
 };
 
 const initialState: State = {
   data: [],
   count: 0,
-  // @ts-expect-error ts-migrate(2322) FIXME: Type '{ data: undefined[]; count: number; read: bo... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2322) FIXME: Type '{ data: undefined[]; count: number; read: bo... Remove this comment to see the full error message
   read: true,
 };
 
@@ -30,19 +30,17 @@ export default handleActions(
     },
     [ACTIONS.READ]: (state: State) => ({ ...state, ...{ read: true } }),
     [ACTIONS.DISMISS]: (state: State, { payload: { id } }) => {
-      const data: Array<Object> = [...state.data].map(
-        (datum: Object): Object => {
-          const newDatum: Object = { ...datum };
+      const data: Array<Object> = [...state.data].map((datum: Object): Object => {
+        const newDatum: Object = { ...datum };
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'alert' does not exist on type 'Object'.
-          if (datum.alert === id || id === 'all') {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'read' does not exist on type 'Object'.
-            newDatum.read = true;
-          }
-
-          return newDatum;
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'alert' does not exist on type 'Object'.
+        if (datum.alert === id || id === 'all') {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'read' does not exist on type 'Object'.
+          newDatum.read = true;
         }
-      );
+
+        return newDatum;
+      });
 
       return { ...state, ...{ data } };
     },

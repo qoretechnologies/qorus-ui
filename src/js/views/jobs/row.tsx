@@ -17,41 +17,41 @@ import { SelectColumn } from '../../components/SelectColumn';
 import JobControls from './controls';
 
 type Props = {
-  openPane: Function,
-  closePane: Function,
-  isActive?: boolean,
-  updateDone: Function,
-  select: Function,
-  _updated?: boolean,
-  has_alerts?: boolean,
-  handleHighlightEnd: Function,
-  handleCheckboxClick: Function,
-  handleDetailClick: Function,
-  _selected?: boolean,
-  id: number,
-  type?: string,
-  name: string,
-  desc: string,
-  enabled: boolean,
-  active: boolean,
-  last_executed: string,
-  next: string,
-  expiry_date: string,
-  COMPLETE?: number,
-  ERROR?: number,
-  PROGRESS?: number,
-  CRASHED?: number,
-  date: string,
-  minute: string,
-  hour: string,
-  day: string,
-  month: string,
-  wday: string,
-  normalizedName: string,
-  isTablet: boolean,
-  first: boolean,
-  remote: boolean,
-  onExpiryChange: Function,
+  openPane: Function;
+  closePane: Function;
+  isActive?: boolean;
+  updateDone: Function;
+  select: Function;
+  _updated?: boolean;
+  has_alerts?: boolean;
+  handleHighlightEnd: Function;
+  handleCheckboxClick: Function;
+  handleDetailClick: Function;
+  _selected?: boolean;
+  id: number;
+  type?: string;
+  name: string;
+  desc: string;
+  enabled: boolean;
+  active: boolean;
+  last_executed: string;
+  next: string;
+  expiry_date: string;
+  COMPLETE?: number;
+  ERROR?: number;
+  PROGRESS?: number;
+  CRASHED?: number;
+  date: string;
+  minute: string;
+  hour: string;
+  day: string;
+  month: string;
+  wday: string;
+  normalizedName: string;
+  isTablet: boolean;
+  first: boolean;
+  remote: boolean;
+  onExpiryChange: Function;
 };
 
 const ServiceRow: Function = ({
@@ -84,8 +84,8 @@ const ServiceRow: Function = ({
   onExpiryChange,
   isTablet,
   ...rest
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Tr
     first={first}
     highlight={_updated}
@@ -102,12 +102,9 @@ const ServiceRow: Function = ({
     <NameColumn
       popoverContent={
         <Box top>
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type '{ o... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type '{ o... Remove this comment to see the full error message */}
           <PaneItem title={normalizedName}>{rest.description}</PaneItem>
-          <ProcessSummary
-            model={{ enabled, remote, active, expiry, ...rest }}
-            type="job"
-          />
+          <ProcessSummary model={{ enabled, remote, active, expiry, ...rest }} type="job" />
         </Box>
       }
       link={`/job/${id}?date=${date}`}
@@ -170,24 +167,25 @@ const ServiceRow: Function = ({
 
 export default compose(
   withHandlers({
-    handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
-      select(id);
-    },
-    handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
-      updateDone(id);
-    },
-    handleDetailClick: ({
-      openPane,
-      id,
-      closePane,
-      isActive,
-    }: Props): Function => (): void => {
-      if (isActive) {
-        closePane();
-      } else {
-        openPane(id);
-      }
-    },
+    handleCheckboxClick:
+      ({ select, id }: Props): Function =>
+      (): void => {
+        select(id);
+      },
+    handleHighlightEnd:
+      ({ updateDone, id }: Props): Function =>
+      (): void => {
+        updateDone(id);
+      },
+    handleDetailClick:
+      ({ openPane, id, closePane, isActive }: Props): Function =>
+      (): void => {
+        if (isActive) {
+          closePane();
+        } else {
+          openPane(id);
+        }
+      },
   }),
   pure([
     'isActive',

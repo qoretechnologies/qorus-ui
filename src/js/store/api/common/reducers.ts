@@ -1,10 +1,6 @@
 import isArray from 'lodash/isArray';
 import { formatAppender } from '../../../helpers/logger';
-import {
-  setUpdatedToNull,
-  updateItemWithId,
-  updateItemWithName,
-} from '../utils';
+import { setUpdatedToNull, updateItemWithId, updateItemWithName } from '../utils';
 
 const updateConfigItemWsCommon = {
   next(state, { payload: { events } }) {
@@ -13,61 +9,61 @@ const updateConfigItemWsCommon = {
     let newData = newState.data;
 
     events.forEach((dt: Object) => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       if (dt.id) {
         newData = [...newData];
 
         const intrf: Object = newData.find(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           (datum: Object): boolean => datum.id === dt.id
         );
 
         if (intrf) {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
           const { config } = intrf;
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
           if (dt.stepid) {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
             const step: Object = intrf.stepinfo.find(
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
               (stp: Object) => stp.stepid === dt.stepid
             );
 
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
             step.config[dt.name].value = dt.value;
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
             step.config[dt.name].level = dt.level;
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
             step.config[dt.name].is_set = dt.is_set;
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
             step.config[dt.name].currentType = dt.currentType;
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
             step.config[dt.name].is_templated_string = dt.is_templated_string;
           } else {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             config[dt.name].value = dt.value;
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             config[dt.name].level = dt.level;
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             config[dt.name].currentType = dt.currentType;
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             config[dt.name].is_set = dt.is_set;
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             config[dt.name].is_templated_string = dt.is_templated_string;
           }
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           newData = updateItemWithId(dt.id, { _updated: true }, newData);
           newState = { ...newState, ...{ data: newData } };
         }
       } else {
         const globalConfig = updateItemWithName(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           dt.name,
           {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
             value: dt.value,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'is_set' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'is_set' does not exist on type 'Object'.
             is_set: dt.is_set,
           },
           newState.globalConfig,
@@ -91,11 +87,7 @@ const processStartedReducer = {
       let newData = updatedData;
 
       events.forEach((dt) => {
-        newData = updateItemWithId(
-          dt.id,
-          { process: dt.info, _updated: true },
-          newData
-        );
+        newData = updateItemWithId(dt.id, { process: dt.info, _updated: true }, newData);
       });
 
       return { ...state, ...{ data: newData } };
@@ -113,11 +105,7 @@ const processStoppedReducer = {
       let newData = updatedData;
 
       events.forEach((dt) => {
-        newData = updateItemWithId(
-          dt.id,
-          { process: null, _updated: true },
-          newData
-        );
+        newData = updateItemWithId(dt.id, { process: null, _updated: true }, newData);
       });
 
       return { ...state, ...{ data: newData } };
@@ -135,11 +123,7 @@ const basicDataUpdatedReducer = {
       let newData = updatedData;
 
       events.forEach((dt) => {
-        newData = updateItemWithId(
-          dt.id,
-          { ...dt.info, _updated: true },
-          newData
-        );
+        newData = updateItemWithId(dt.id, { ...dt.info, _updated: true }, newData);
       });
 
       return { ...state, ...{ data: newData } };
@@ -163,10 +147,7 @@ const loggerReducer = {
       };
     } else {
       const flattenedAppenders = appenders.reduce(
-        (cur: Array<Object>, appender: Object) => [
-          ...cur,
-          formatAppender(appender),
-        ],
+        (cur: Array<Object>, appender: Object) => [...cur, formatAppender(appender)],
         []
       );
 
@@ -179,11 +160,7 @@ const loggerReducer = {
       };
     }
 
-    data = updateItemWithId(
-      id,
-      editedData,
-      isSystem ? [...state.logs] : [...state.data]
-    );
+    data = updateItemWithId(id, editedData, isSystem ? [...state.logs] : [...state.data]);
 
     if (isSystem) {
       return { ...state, ...{ logs: data } };
@@ -306,7 +283,7 @@ const addAppenderReducer = {
       events.forEach((dt) => {
         // Get the interface loggerData
         const { loggerData } = newData.find(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           (datum: Object) => datum.id === dt.id
         );
         // Add the new appender to the loggerData
@@ -342,7 +319,7 @@ const editAppenderReducer = {
       events.forEach((dt) => {
         // Get the interface loggerData
         const { loggerData } = newData.find(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           (datum: Object) => datum.id === dt.id
         );
         // Add the new appender to the loggerData
@@ -385,7 +362,7 @@ const deleteAppenderReducer = {
       events.forEach((dt) => {
         // Get the interface loggerData
         const { loggerData } = newData.find(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           (datum: Object) => datum.id === dt.id
         );
         // Remove the appender

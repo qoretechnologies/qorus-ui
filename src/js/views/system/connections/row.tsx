@@ -16,38 +16,36 @@ import withDispatch from '../../../hocomponents/withDispatch';
 import actions from '../../../store/api/actions';
 import RemoteControls from './controls';
 
-
-
 type Props = {
-  name: string,
-  isActive?: boolean,
-  hasAlerts?: boolean,
-  _updated?: boolean,
-  handleHighlightEnd: Function,
-  handleDetailClick: Function,
-  handlePingClick: Function,
-  handleDeleteClick: Function,
-  updateDone: Function,
-  type: string,
-  remoteType: string,
-  openModal: Function,
-  closeModal: Function,
-  openPane: Function,
-  closePane: Function,
-  dispatchAction: Function,
-  handleToggleClick: Function,
-  enabled: boolean,
-  up?: boolean,
-  safe_url?: string,
-  url?: string,
-  desc?: string,
-  opts: Object,
-  canDelete: boolean,
-  first: boolean,
-  loopback: boolean,
-  handleResetClick: Function,
-  locked: boolean,
-  canEdit: boolean,
+  name: string;
+  isActive?: boolean;
+  hasAlerts?: boolean;
+  _updated?: boolean;
+  handleHighlightEnd: Function;
+  handleDetailClick: Function;
+  handlePingClick: Function;
+  handleDeleteClick: Function;
+  updateDone: Function;
+  type: string;
+  remoteType: string;
+  openModal: Function;
+  closeModal: Function;
+  openPane: Function;
+  closePane: Function;
+  dispatchAction: Function;
+  handleToggleClick: Function;
+  enabled: boolean;
+  up?: boolean;
+  safe_url?: string;
+  url?: string;
+  desc?: string;
+  opts: Object;
+  canDelete: boolean;
+  first: boolean;
+  loopback: boolean;
+  handleResetClick: Function;
+  locked: boolean;
+  canEdit: boolean;
 };
 
 const ConnectionRow: Function = ({
@@ -73,21 +71,21 @@ const ConnectionRow: Function = ({
   handleToggleClick,
   handleResetClick,
   locked,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'handleDebugClick' does not exist on type... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleDebugClick' does not exist on type... Remove this comment to see the full error message
   handleDebugClick,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'debug_data' does not exist on type 'Prop... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'debug_data' does not exist on type 'Prop... Remove this comment to see the full error message
   debug_data,
   openModal,
   closeModal,
   openPane,
   closePane,
   dispatchAction,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'connectionid' does not exist on type 'Pr... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'connectionid' does not exist on type 'Pr... Remove this comment to see the full error message
   connectionid,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Tr
     first={first}
     className={classnames({
@@ -95,7 +93,7 @@ const ConnectionRow: Function = ({
       'row-active': isActive,
     })}
     highlight={_updated}
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
     handleHighlightEnd={handleHighlightEnd}
   >
     <Td className={classnames('normal')}>
@@ -145,37 +143,26 @@ const ConnectionRow: Function = ({
 
 export default compose(
   connect(null, {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
     updateDone: actions.remotes.updateDone,
   }),
   withDispatch(),
   withHandlers({
-    handleHighlightEnd: ({ name, updateDone }: Props): Function => (): void => {
-      updateDone(name);
-    },
-    handleDetailClick: ({
-      name,
-      openPane,
-      isActive,
-      closePane,
-    }): Function => (): void => {
-      if (isActive) {
-        closePane();
-      } else {
-        openPane(name);
-      }
-    },
+    handleHighlightEnd:
+      ({ name, updateDone }: Props): Function =>
+      (): void => {
+        updateDone(name);
+      },
+    handleDetailClick:
+      ({ name, openPane, isActive, closePane }): Function =>
+      (): void => {
+        if (isActive) {
+          closePane();
+        } else {
+          openPane(name);
+        }
+      },
   }),
-  pure([
-    'hasAlerts',
-    'isActive',
-    '_updated',
-    'lockec',
-    'up',
-    'opts',
-    'desc',
-    'safe_url',
-    'url',
-  ]),
+  pure(['hasAlerts', 'isActive', '_updated', 'lockec', 'up', 'opts', 'desc', 'safe_url', 'url']),
   injectIntl
 )(ConnectionRow);

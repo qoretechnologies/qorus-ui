@@ -2,16 +2,16 @@
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import React, { Component, useState } from 'react';
 import styled from 'styled-components';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control as Button, Controls } from '../../../components/controls';
 import settings from '../../../settings';
 import { get } from '../../../store/api/utils';
 
 type Props = {
-  data?: Object,
-  onSave: Function,
-  canEdit: boolean,
-  urlProtocol: string,
+  data?: Object;
+  onSave: Function;
+  canEdit: boolean;
+  urlProtocol: string;
 };
 
 const StyledSensitive = styled.span`
@@ -22,20 +22,20 @@ const StyledSensitive = styled.span`
 `;
 
 const Option: Function = ({
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'objKey' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'objKey' does not exist on type 'Object'.
   objKey,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
   value,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'onEdit' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'onEdit' does not exist on type 'Object'.
   onEdit,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'onDelete' does not exist on type 'Object... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'onDelete' does not exist on type 'Object... Remove this comment to see the full error message
   onDelete,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'canEdit' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'canEdit' does not exist on type 'Object'... Remove this comment to see the full error message
   canEdit,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'sensitive' does not exist on type 'Objec... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'sensitive' does not exist on type 'Objec... Remove this comment to see the full error message
   sensitive,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Object): React.Element<any> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Object): React.Element<any> => {
   const [isShown, setIsShown] = useState(false);
 
   const handleEditClick: Function = (): void => {
@@ -62,11 +62,7 @@ const Option: Function = ({
         <div className="pull-right">
           <Controls grouped>
             <Button icon="edit" btnStyle="warning" onClick={handleEditClick} />
-            <Button
-              icon="cross"
-              btnStyle="danger"
-              onClick={handleDeleteClick}
-            />
+            <Button icon="cross" btnStyle="danger" onClick={handleDeleteClick} />
           </Controls>
         </div>
       )}
@@ -78,16 +74,16 @@ export default class ConnectionOptions extends Component {
   props: Props = this.props;
 
   state: {
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    key: ?string,
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    value: ?string,
-    options: Object,
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    key: string;
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    value: string;
+    options: Object;
   } = {
     key: '',
     value: '',
     options: this.props.data || {},
-    // @ts-expect-error ts-migrate(2322) FIXME: Type '{ key: string; value: string; options: Objec... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2322) FIXME: Type '{ key: string; value: string; options: Objec... Remove this comment to see the full error message
     optionsData: null,
   };
 
@@ -112,12 +108,12 @@ export default class ConnectionOptions extends Component {
     }
   }
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleKeyChange: Function = (ev: EventHandler): void => {
     this.changeData('key', ev.target.value);
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleValueChange: Function = (ev: EventHandler): void => {
     this.changeData('value', ev.target.value);
   };
@@ -156,7 +152,7 @@ export default class ConnectionOptions extends Component {
   render() {
     const opts: Array<string> = Object.keys(this.state.options);
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'optionsData' does not exist on type '{ k... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'optionsData' does not exist on type '{ k... Remove this comment to see the full error message
     if (!this.state.optionsData) {
       return <p> Loading ... </p>;
     }
@@ -168,23 +164,21 @@ export default class ConnectionOptions extends Component {
             <div className="col-sm-12">
               <pre>
                 {opts.map(
-                  // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                  (opt: string): React.Element<any> =>
-                    (
-                      <Option
-                        canEdit={this.props.canEdit}
-                        sensitive={
-                          // @ts-expect-error ts-migrate(2339) FIXME: Property 'optionsData' does not exist on type '{ k... Remove this comment to see the full error message
-                          this.state.optionsData[this.props.urlProtocol]?.[opt]
-                            ?.sensitive
-                        }
-                        key={opt}
-                        objKey={opt}
-                        value={this.state.options[opt]}
-                        onEdit={this.changeData}
-                        onDelete={this.handleDelete}
-                      />
-                    )
+                  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                  (opt: string): React.Element<any> => (
+                    <Option
+                      canEdit={this.props.canEdit}
+                      sensitive={
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'optionsData' does not exist on type '{ k... Remove this comment to see the full error message
+                        this.state.optionsData[this.props.urlProtocol]?.[opt]?.sensitive
+                      }
+                      key={opt}
+                      objKey={opt}
+                      value={this.state.options[opt]}
+                      onEdit={this.changeData}
+                      onDelete={this.handleDelete}
+                    />
+                  )
                 )}
               </pre>
             </div>
@@ -196,14 +190,14 @@ export default class ConnectionOptions extends Component {
               placeholder="Key..."
               type="text"
               value={this.state.key}
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleKeyChange}
             />
             <InputGroup
               placeholder="Value..."
               type="text"
               value={this.state.value}
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleValueChange}
             />
             <Controls>

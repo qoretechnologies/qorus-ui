@@ -1,12 +1,11 @@
-import { ORDER_GROUPS } from '../constants/orders';
-import { max, flatten, range, values, round, takeRight } from 'lodash';
-import { DATASETS, SLADATASETS, DOUGH_LABELS } from '../constants/orders';
+import { flatten, max, range, round, takeRight, values } from 'lodash';
 import moment from 'moment';
+import { DATASETS, DOUGH_LABELS, ORDER_GROUPS, SLADATASETS } from '../constants/orders';
 
-const groupOrders = data => {
+const groupOrders = (data) => {
   let result = Object.keys(ORDER_GROUPS);
 
-  result = result.map(o =>
+  result = result.map((o) =>
     ORDER_GROUPS[o].reduce((total, g) => {
       const v = data[g] || 0;
       return total + v;
@@ -16,10 +15,10 @@ const groupOrders = data => {
   return result;
 };
 
-const getMaxValue = data => {
-  const dataset = data.map(d => d.data);
+const getMaxValue = (data) => {
+  const dataset = data.map((d) => d.data);
 
-  return max(flatten(dataset), set => set);
+  return max(flatten(dataset), (set) => set);
 };
 
 const getStepSize = (data, isNotTime) => {
@@ -37,10 +36,10 @@ const scaleData = (data, isNotTime) => {
 
   const maxValue = getMaxValue(data);
 
-  return data.map(dataset => {
+  return data.map((dataset) => {
     const set = dataset;
 
-    set.data = set.data.map(value => {
+    set.data = set.data.map((value) => {
       let val = value;
 
       if (maxValue >= 3600) {
@@ -61,17 +60,13 @@ const createLineDatasets = (data, days) => {
   const type = days > 1 ? 'days' : 'hours';
   const format = days > 1 ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH';
 
-  let labels = rng.map(r =>
-    moment()
-      .add(-r, type)
-      .format(format)
-  );
+  let labels = rng.map((r) => moment().add(-r, type).format(format));
   const dt = [];
 
-  labels.forEach(l => {
-    const m = data.find(d => d.grouping === l);
+  labels.forEach((l) => {
+    const m = data.find((d) => d.grouping === l);
 
-    Object.keys(DATASETS).forEach(ds => {
+    Object.keys(DATASETS).forEach((ds) => {
       dt[ds] = dt[ds] || {
         data: [],
         label: ds,
@@ -88,7 +83,7 @@ const createLineDatasets = (data, days) => {
     });
   });
 
-  labels = labels.map(lb => lb.slice(-2)).reverse();
+  labels = labels.map((lb) => lb.slice(-2)).reverse();
 
   return {
     labels,
@@ -97,14 +92,14 @@ const createLineDatasets = (data, days) => {
 };
 
 const createPerfLineDatasets = (data, type, chartType) => {
-  const labels = data.map(datum => datum.grouping);
+  const labels = data.map((datum) => datum.grouping);
   const dt = [];
 
-  labels.forEach(l => {
-    const m = data.find(d => d.grouping === l);
+  labels.forEach((l) => {
+    const m = data.find((d) => d.grouping === l);
 
     if (chartType === 'count') {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'count' does not exist on type 'any[]'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'count' does not exist on type 'any[]'.
       dt.count = dt.count || {
         data: [],
         label: 'Count',
@@ -114,14 +109,14 @@ const createPerfLineDatasets = (data, type, chartType) => {
       };
 
       if (m) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'count' does not exist on type 'any[]'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'count' does not exist on type 'any[]'.
         dt.count.data.push(m.count);
       } else {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'count' does not exist on type 'any[]'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'count' does not exist on type 'any[]'.
         dt.count.data.push(0);
       }
     } else if (chartType === 'success') {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'success' does not exist on type 'any[]'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'success' does not exist on type 'any[]'.
       dt.success = dt.success || {
         data: [],
         label: 'Success rate',
@@ -131,14 +126,14 @@ const createPerfLineDatasets = (data, type, chartType) => {
       };
 
       if (m) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'success' does not exist on type 'any[]'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'success' does not exist on type 'any[]'.
         dt.success.data.push(m.successratio * 100);
       } else {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'success' does not exist on type 'any[]'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'success' does not exist on type 'any[]'.
         dt.success.data.push(0);
       }
     } else {
-      Object.keys(SLADATASETS).forEach(ds => {
+      Object.keys(SLADATASETS).forEach((ds) => {
         dt[ds] = dt[ds] || {
           data: [],
           label: SLADATASETS[ds].label,
@@ -164,7 +159,7 @@ const createPerfLineDatasets = (data, type, chartType) => {
   };
 };
 
-const createDoughDatasets = data => {
+const createDoughDatasets = (data) => {
   const labels = Object.keys(DOUGH_LABELS);
   const dt = [
     {
@@ -179,7 +174,7 @@ const createDoughDatasets = data => {
   };
 };
 
-const getUnit = val => {
+const getUnit = (val) => {
   if (val >= 3600) {
     return 'h';
   } else if (val >= 60) {
@@ -204,11 +199,11 @@ const getFormattedValue: Function = (val: number, data) => {
 
 const getStatsCount: Function = (inSla: boolean, data: any): any => {
   if (inSla) {
-    const val = data.sla.find(datum => datum.in_sla);
+    const val = data.sla.find((datum) => datum.in_sla);
 
     return val ? val.count : 0;
   } else {
-    const val = data.sla.find(datum => datum.in_sla === false);
+    const val = data.sla.find((datum) => datum.in_sla === false);
 
     return val ? val.count : 0;
   }
@@ -216,11 +211,11 @@ const getStatsCount: Function = (inSla: boolean, data: any): any => {
 
 const getStatsPct: Function = (inSla: boolean, data: any): any => {
   if (inSla) {
-    const val = data.sla.find(datum => datum.in_sla);
+    const val = data.sla.find((datum) => datum.in_sla);
 
     return val ? val.pct : 0;
   } else {
-    const val = data.sla.find(datum => datum.in_sla === false);
+    const val = data.sla.find((datum) => datum.in_sla === false);
 
     return val ? val.pct : 0;
   }
@@ -229,22 +224,20 @@ const getStatsPct: Function = (inSla: boolean, data: any): any => {
 const prepareHistory: Function = (history: Array<Object>): Array<Object> => {
   let newHistory = takeRight([...history], 15);
 
-  newHistory = newHistory.map(
-    (hist: Object, idx: number): Object => {
-      const newHist = { ...hist };
+  newHistory = newHistory.map((hist: Object, idx: number): Object => {
+    const newHist = { ...hist };
 
-      if (idx === 0) {
-        return newHist;
-      }
-
-      if (idx % 3 !== 0) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'timestamp' does not exist on type '{ con... Remove this comment to see the full error message
-        newHist.timestamp = null;
-      }
-
+    if (idx === 0) {
       return newHist;
     }
-  );
+
+    if (idx % 3 !== 0) {
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'timestamp' does not exist on type '{ con... Remove this comment to see the full error message
+      newHist.timestamp = null;
+    }
+
+    return newHist;
+  });
 
   if (newHistory.length < 15) {
     const sub = 15 - newHistory.length;
@@ -264,7 +257,7 @@ const prepareHistory: Function = (history: Array<Object>): Array<Object> => {
 
 const formatChartTime: Function = (timestamp: string): string => {
   if (timestamp) {
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string'.
+    // @ts-ignore ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'string'.
     const seconds: string = moment(timestamp).diff(moment(), 's');
 
     return `${seconds.toString().replace('-', '')}s`;

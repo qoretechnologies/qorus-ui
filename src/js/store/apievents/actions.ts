@@ -9,10 +9,7 @@ import { INTERFACE_IDS } from '../../constants/interfaces';
 import { ALERT_NOTIFICATION_TYPES } from '../../constants/notifications';
 import { pipeline } from '../../helpers/apievents';
 import { getLoggerIntfcType } from '../../helpers/logger';
-import {
-  getProcessObjectInterface,
-  getProcessObjectInterfaceId,
-} from '../../helpers/system';
+import { getProcessObjectInterface, getProcessObjectInterfaceId } from '../../helpers/system';
 import * as alerts from '../api/resources/alerts/actions';
 import * as fsms from '../api/resources/fsms/actions';
 import * as groups from '../api/resources/groups/actions';
@@ -50,13 +47,11 @@ const handleEvent = (url, data, dispatch, state) => {
     state.api[interfaceType].data.find((item: Object) =>
       customComparator
         ? customComparator(item)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        : item[idKey] == id || item.name === id
+        : // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          item[idKey] == id || item.name === id
     );
   const loggerInterfaces: string[] =
-    state.api.system?.data?.loggerParams?.configurable_systems?.map(
-      (logData) => logData.logger
-    );
+    state.api.system?.data?.loggerParams?.configurable_systems?.map((logData) => logData.logger);
 
   dt.forEach(async (d) => {
     const { info, eventstr, classstr, caller } = d;
@@ -70,12 +65,7 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'NODE_INFO':
         if (state.api.system.sync) {
-          pipeline(
-            eventstr,
-            system.updateNodeInfo,
-            { ...info, timestamp: d.time },
-            dispatch
-          );
+          pipeline(eventstr, system.updateNodeInfo, { ...info, timestamp: d.time }, dispatch);
         }
         break;
       case 'WORKFLOW_STATS_UPDATED':
@@ -87,16 +77,11 @@ const handleEvent = (url, data, dispatch, state) => {
           if (
             state.api.workflows.sync &&
             state.api.workflows.data.find(
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
               (workflow: Object) => workflow.id === parseInt(info.tag, 10)
             )
           ) {
-            pipeline(
-              `${eventstr}_WORKFLOW`,
-              workflows.updateStats,
-              info,
-              dispatch
-            );
+            pipeline(`${eventstr}_WORKFLOW`, workflows.updateStats, info, dispatch);
           }
         }
         break;
@@ -280,8 +265,7 @@ const handleEvent = (url, data, dispatch, state) => {
                 alerttype: 'ONGOING',
                 notificationType: ALERT_NOTIFICATION_TYPES[info.type],
                 notificationId: shortid.generate(),
-                read: !state.api.currentUser.data.storage.settings
-                  .notificationsEnabled,
+                read: !state.api.currentUser.data.storage.settings.notificationsEnabled,
               },
             },
             dispatch
@@ -438,12 +422,7 @@ const handleEvent = (url, data, dispatch, state) => {
         }
 
         if (state.api.alerts.sync) {
-          pipeline(
-            'ALERT_OPERATION',
-            alerts.cleared,
-            { id: info.alertid },
-            dispatch
-          );
+          pipeline('ALERT_OPERATION', alerts.cleared, { id: info.alertid }, dispatch);
         }
 
         break;
@@ -489,9 +468,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'SERVICE_START':
         if (state.api.services.sync) {
-          const service = state.api.services.data.find(
-            (srv) => srv.id === info.serviceid
-          );
+          const service = state.api.services.data.find((srv) => srv.id === info.serviceid);
 
           if (service) {
             pipeline(
@@ -523,9 +500,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'WORKFLOW_START':
         if (state.api.workflows.sync) {
-          const workflow = state.api.workflows.data.find(
-            (wf) => wf.id === info.workflowid
-          );
+          const workflow = state.api.workflows.data.find((wf) => wf.id === info.workflowid);
 
           if (workflow) {
             pipeline(
@@ -551,8 +526,7 @@ const handleEvent = (url, data, dispatch, state) => {
             {
               id: info.workflow_instanceid,
               note: info.note,
-              username:
-                eventstr === 'WORKFLOW_DATA_LOCKED' ? caller.user : null,
+              username: eventstr === 'WORKFLOW_DATA_LOCKED' ? caller.user : null,
             },
             dispatch
           );
@@ -572,19 +546,12 @@ const handleEvent = (url, data, dispatch, state) => {
           }
         }
 
-        const workflow = state.api.workflows.data.find(
-          (wf) => wf.id === info.workflowid
-        );
+        const workflow = state.api.workflows.data.find((wf) => wf.id === info.workflowid);
 
         if (state.api.orders.sync && workflow) {
           // Add new orders only if we aren't on the order page detail
           if (!startsWith(window.location.pathname, '/order')) {
-            pipeline(
-              `${eventstr}_ORDER`,
-              orders.addOrder,
-              { info, time: d.time },
-              dispatch
-            );
+            pipeline(`${eventstr}_ORDER`, orders.addOrder, { info, time: d.time }, dispatch);
           }
         }
 
@@ -603,9 +570,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'WORKFLOW_RECOVERED': {
-        const workflow = state.api.workflows.data.find(
-          (wf) => wf.id === info.workflowid
-        );
+        const workflow = state.api.workflows.data.find((wf) => wf.id === info.workflowid);
 
         if (state.api.workflows.sync && workflow) {
           pipeline(
@@ -623,9 +588,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'WORKFLOW_STATUS_CHANGED': {
-        const workflow = state.api.workflows.data.find(
-          (wf) => wf.id === info.workflowid
-        );
+        const workflow = state.api.workflows.data.find((wf) => wf.id === info.workflowid);
 
         if (state.api.orders.sync) {
           const order = state.api.orders.data.find(
@@ -694,9 +657,7 @@ const handleEvent = (url, data, dispatch, state) => {
         }
         break;
       case 'WORKFLOW_DATA_UPDATED': {
-        const order = state.api.orders.data.find(
-          (ord) => ord.id === info.workflow_instanceid
-        );
+        const order = state.api.orders.data.find((ord) => ord.id === info.workflow_instanceid);
 
         if (order && state.api.orders.sync) {
           dispatch(orders.fetchData(info.workflow_instanceid, info.datatype));
@@ -705,10 +666,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'WORKFLOW_STEP_DATA_UPDATED': {
-        const isLoaded: boolean = isInterfaceLoaded(
-          'orders',
-          info.workflow_instanceid
-        );
+        const isLoaded: boolean = isInterfaceLoaded('orders', info.workflow_instanceid);
 
         if (isLoaded) {
           dispatch(orders.fetchStepData(info.workflow_instanceid));
@@ -719,8 +677,7 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'CONFIG_ITEM_CHANGED': {
         let isLoaded;
         let interfaceId;
-        const interfaceType =
-          info.interfaceType === 'step' ? 'workflow' : info.interfaceType;
+        const interfaceType = info.interfaceType === 'step' ? 'workflow' : info.interfaceType;
         let interfaceName;
 
         if (interfaceType === 'global') {
@@ -777,24 +734,15 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'JOB_STOP': {
-        const job = state.api.jobs.data.find(
-          (jb) => jb.id === parseInt(info.jobid, 10)
-        );
+        const job = state.api.jobs.data.find((jb) => jb.id === parseInt(info.jobid, 10));
 
         if (job) {
-          pipeline(
-            eventstr,
-            jobs.setActive,
-            { id: info.jobid, value: false },
-            dispatch
-          );
+          pipeline(eventstr, jobs.setActive, { id: info.jobid, value: false }, dispatch);
         }
         break;
       }
       case 'JOB_START': {
-        const job = state.api.jobs.data.find(
-          (jb) => jb.id === parseInt(info.jobid, 10)
-        );
+        const job = state.api.jobs.data.find((jb) => jb.id === parseInt(info.jobid, 10));
 
         if (job) {
           pipeline(
@@ -911,7 +859,7 @@ const handleEvent = (url, data, dispatch, state) => {
             'remotes',
             null,
             null,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             (item: Object) => item.name === info.name && item.type === info.type
           )
         ) {
@@ -992,9 +940,7 @@ const handleEvent = (url, data, dispatch, state) => {
               break;
             }
             case 'job': {
-              const job = state.api.jobs.data.find(
-                (jb) => jb.id === parseInt(info.id, 10)
-              );
+              const job = state.api.jobs.data.find((jb) => jb.id === parseInt(info.id, 10));
 
               if (job) {
                 pipeline(
@@ -1030,50 +976,38 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'LOGGER_CREATED':
       case 'LOGGER_UPDATED': {
         const newInfo: Object = { ...info };
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
         newInfo.interface =
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
           newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
-        const reversedLevels: Object = invert(
-          state.api.system.data.loggerParams.logger_levels
-        );
+        const reversedLevels: Object = invert(state.api.system.data.loggerParams.logger_levels);
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
         newInfo.params.level = { [reversedLevels[info.params.level]]: true };
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'isNew' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'isNew' does not exist on type 'Object'.
         newInfo.isNew = eventstr === 'LOGGER_CREATED';
 
         // We are updating / adding default logger
         if (info.isDefault) {
-          pipeline(
-            'LOGGER_ACTIONS',
-            system.addUpdateDefaultLogger,
-            newInfo,
-            dispatch
-          );
+          pipeline('LOGGER_ACTIONS', system.addUpdateDefaultLogger, newInfo, dispatch);
         } else {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if the interface we are updating is loaded
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
           const intfc = getLoggerIntfcType(loggerInterfaces, newInfo.interface);
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'interfaceid' does not exist on type 'Obj... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'interfaceid' does not exist on type 'Obj... Remove this comment to see the full error message
           const isLoaded = newInfo.interfaceid
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
-            ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
+            ? // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
+              isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
               state.api.system.logs.find(
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 (item: Object) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
-            pipeline(
-              'LOGGER_ACTIONS',
-              interfaceActions[intfc].addUpdateLogger,
-              newInfo,
-              dispatch
-            );
+            pipeline('LOGGER_ACTIONS', interfaceActions[intfc].addUpdateLogger, newInfo, dispatch);
           }
         }
         break;
@@ -1081,31 +1015,26 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'LOGGER_DELETED': {
         // Modify the levels
         const newInfo: Object = { ...info };
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
         newInfo.interface =
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
           newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Check if default logger was deleted
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'isDefault' does not exist on type 'Objec... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'isDefault' does not exist on type 'Objec... Remove this comment to see the full error message
         if (newInfo.isDefault) {
-          pipeline(
-            'LOGGER_ACTIONS',
-            system.deleteDefaultLogger,
-            newInfo,
-            dispatch
-          );
+          pipeline('LOGGER_ACTIONS', system.deleteDefaultLogger, newInfo, dispatch);
         } else {
           // We are deleting concrete logger
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if this interface is loaded
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'interfaceid' does not exist on type 'Obj... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'interfaceid' does not exist on type 'Obj... Remove this comment to see the full error message
           const isLoaded = newInfo.interfaceid
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
-            ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
+            ? // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
+              isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
               state.api.system.logs.find(
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 (item: Object) => item.id === newInfo.interface
               );
           // If the interface is loaded
@@ -1114,32 +1043,21 @@ const handleEvent = (url, data, dispatch, state) => {
             // set the interface to system
             const intfc = getLoggerIntfcType(
               loggerInterfaces,
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
               newInfo.interface
             );
             // Delete the log
-            pipeline(
-              'LOGGER_ACTIONS',
-              interfaceActions[intfc].deleteLogger,
-              newInfo,
-              dispatch
-            );
+            pipeline('LOGGER_ACTIONS', interfaceActions[intfc].deleteLogger, newInfo, dispatch);
           }
         }
         break;
       }
       case 'APPENDER_CREATED': {
         const newInfo = { ...info };
-        newInfo.interface =
-          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
+        newInfo.interface = newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Create default appender
         if (info.isDefault) {
-          pipeline(
-            'APPENDER_ACTIONS',
-            system.addDefaultAppender,
-            newInfo,
-            dispatch
-          );
+          pipeline('APPENDER_ACTIONS', system.addDefaultAppender, newInfo, dispatch);
         } else {
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if this interface is loaded
@@ -1147,37 +1065,23 @@ const handleEvent = (url, data, dispatch, state) => {
             ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
               state.api.system.logs.find(
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 (item: Object) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
-            const intfc: string = getLoggerIntfcType(
-              loggerInterfaces,
-              newInfo.interface
-            );
-            pipeline(
-              'APPENDER_ACTIONS',
-              interfaceActions[intfc].addAppender,
-              newInfo,
-              dispatch
-            );
+            const intfc: string = getLoggerIntfcType(loggerInterfaces, newInfo.interface);
+            pipeline('APPENDER_ACTIONS', interfaceActions[intfc].addAppender, newInfo, dispatch);
           }
         }
         break;
       }
       case 'APPENDER_UPDATED': {
         const newInfo = { ...info };
-        newInfo.interface =
-          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
+        newInfo.interface = newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Create default appender
         if (info.isDefault) {
-          pipeline(
-            'APPENDER_ACTIONS',
-            system.editDefaultAppender,
-            newInfo,
-            dispatch
-          );
+          pipeline('APPENDER_ACTIONS', system.editDefaultAppender, newInfo, dispatch);
         } else {
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if this interface is loaded
@@ -1185,38 +1089,24 @@ const handleEvent = (url, data, dispatch, state) => {
             ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
               state.api.system.logs.find(
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 (item: Object) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
-            const intfc: string = getLoggerIntfcType(
-              loggerInterfaces,
-              newInfo.interface
-            );
-            pipeline(
-              'APPENDER_ACTIONS',
-              interfaceActions[intfc].editAppender,
-              newInfo,
-              dispatch
-            );
+            const intfc: string = getLoggerIntfcType(loggerInterfaces, newInfo.interface);
+            pipeline('APPENDER_ACTIONS', interfaceActions[intfc].editAppender, newInfo, dispatch);
           }
         }
         break;
       }
       case 'APPENDER_DELETED': {
         const newInfo = { ...info };
-        newInfo.interface =
-          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
+        newInfo.interface = newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
 
         // Create default appender
         if (newInfo.isDefault) {
-          pipeline(
-            'APPENDER_ACTIONS',
-            system.deleteDefaultAppender,
-            newInfo,
-            dispatch
-          );
+          pipeline('APPENDER_ACTIONS', system.deleteDefaultAppender, newInfo, dispatch);
         } else {
           newInfo.id = newInfo.interfaceid || newInfo.interface;
           // Check if this interface is loaded
@@ -1224,23 +1114,15 @@ const handleEvent = (url, data, dispatch, state) => {
             ? isInterfaceLoaded(newInfo.interface, newInfo.interfaceid)
             : state.api.system.sync &&
               state.api.system.logs.find(
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 (item: Object) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
             // Get the interface
-            const intfc = getLoggerIntfcType(
-              loggerInterfaces,
-              newInfo.interface
-            );
+            const intfc = getLoggerIntfcType(loggerInterfaces, newInfo.interface);
             // Send the action to the pipeline
-            pipeline(
-              'APPENDER_ACTIONS',
-              interfaceActions[intfc].deleteAppender,
-              newInfo,
-              dispatch
-            );
+            pipeline('APPENDER_ACTIONS', interfaceActions[intfc].deleteAppender, newInfo, dispatch);
           }
         }
         break;
@@ -1253,12 +1135,11 @@ const handleEvent = (url, data, dispatch, state) => {
 
 const messageAction = createAction('APIEVENTS_MESSAGE', handleEvent);
 
-const message =
-  (url: string, data: Object) => (dispatch: Function, getState: Function) => {
-    if (data !== 'pong') {
-      dispatch(messageAction(url, data, dispatch, getState()));
-    }
-  };
+const message = (url: string, data: Object) => (dispatch: Function, getState: Function) => {
+  if (data !== 'pong') {
+    dispatch(messageAction(url, data, dispatch, getState()));
+  }
+};
 
 const disconnect = () => () => {
   const { pathname, search } = window.location;

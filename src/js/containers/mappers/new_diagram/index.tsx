@@ -7,9 +7,7 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import styled, { css } from 'styled-components';
-import {
-  getStaticDataFieldname, hasStaticDataField
-} from '../../../helpers/mapper';
+import { getStaticDataFieldname, hasStaticDataField } from '../../../helpers/mapper';
 import MapperInput from './input';
 import MapperOutput from './output';
 
@@ -54,142 +52,140 @@ export const StyledConnectionsWrapper = styled.div`
 `;
 
 export const StyledMapperField = styled.div`
-    width: ${({ isChild, level }) =>
-    isChild ? `${300 - level * 15}px` : '300px'};
+  width: ${({ isChild, level }) => (isChild ? `${300 - level * 15}px` : '300px')};
 
-    ${({ input, isChild, level }) =>
+  ${({ input, isChild, level }) =>
     input &&
-      css`
-        margin-left: ${isChild ? `${level * 15}px` : '0'};
-      `}
-
-    height: ${({ isInputHash }) =>
-    isInputHash ? '55px' : `${FIELD_HEIGHT}px`};
-    border: 1px solid #d7d7d7;
-    border-radius: 3px;
-    margin-bottom: ${FIELD_MARGIN}px;
-    transition: all 0.3s;
-    background-color: #fff;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.04);
-    position: relative;
-    cursor: ${({ isDisabled }) => (isDisabled ? 'initial' : 'pointer')};
-
-    .field-manage {
-        display: none;
-    }
-
-    ${({ isDisabled }) =>
     css`
-        &:hover {
-          border-color: ${isDisabled ? '#d7d7d7' : '#137cbd'};
+      margin-left: ${isChild ? `${level * 15}px` : '0'};
+    `}
 
-          .field-manage {
-            display: unset;
-          }
+  height: ${({ isInputHash }) => (isInputHash ? '55px' : `${FIELD_HEIGHT}px`)};
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+  margin-bottom: ${FIELD_MARGIN}px;
+  transition: all 0.3s;
+  background-color: #fff;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.04);
+  position: relative;
+  cursor: ${({ isDisabled }) => (isDisabled ? 'initial' : 'pointer')};
+
+  .field-manage {
+    display: none;
+  }
+
+  ${({ isDisabled }) =>
+    css`
+      &:hover {
+        border-color: ${isDisabled ? '#d7d7d7' : '#137cbd'};
+
+        .field-manage {
+          display: unset;
         }
-      `};
+      }
+    `};
 
-    ${({ childrenCount, isDragging }) =>
+  ${({ childrenCount, isDragging }) =>
     childrenCount !== 0 && !isDragging
       ? css`
-            &:after {
-              content: '';
-              display: table;
-              position: absolute;
-              width: 1px;
-              ${({ input }) =>
-    input
-      ? css`
-                      left: -1px;
-                    `
-      : css`
-                      right: -1px;
-                    `};
-              top: ${FIELD_HEIGHT / 2}px;
-              height: ${childrenCount * (FIELD_HEIGHT + FIELD_MARGIN)}px;
-              background-color: #d7d7d7;
-              z-index: 0;
-            }
-          `
+          &:after {
+            content: '';
+            display: table;
+            position: absolute;
+            width: 1px;
+            ${({ input }) =>
+              input
+                ? css`
+                    left: -1px;
+                  `
+                : css`
+                    right: -1px;
+                  `};
+            top: ${FIELD_HEIGHT / 2}px;
+            height: ${childrenCount * (FIELD_HEIGHT + FIELD_MARGIN)}px;
+            background-color: #d7d7d7;
+            z-index: 0;
+          }
+        `
       : null}
 
-    ${({ isChild, isDragging }) =>
+  ${({ isChild, isDragging }) =>
     isChild && !isDragging
       ? css`
-            &:before {
-              content: '';
-              display: table;
-              position: absolute;
-              width: 15px;
-              height: 1px;
-              ${({ input }) =>
-    input
-      ? css`
-                      left: -15px;
-                    `
-      : css`
-                      right: -15px;
-                    `};
-              top: ${FIELD_HEIGHT / 2}px;
-              background-color: #d7d7d7;
-              z-index: 0;
-            }
-          `
+          &:before {
+            content: '';
+            display: table;
+            position: absolute;
+            width: 15px;
+            height: 1px;
+            ${({ input }) =>
+              input
+                ? css`
+                    left: -15px;
+                  `
+                : css`
+                    right: -15px;
+                  `};
+            top: ${FIELD_HEIGHT / 2}px;
+            background-color: #d7d7d7;
+            z-index: 0;
+          }
+        `
       : null}
 
     h4 {
-        text-align: center;
-        font-size: 14px;
-        line-height: 34px;
-        margin: 0;
-        padding: 0;
-    }
+    text-align: center;
+    font-size: 14px;
+    line-height: 34px;
+    margin: 0;
+    padding: 0;
+  }
 
-    p.type {
-        background-color: #d7d7d7;
+  p.type {
+    background-color: #d7d7d7;
 
-        &.string {
-            background-color: ${TYPE_COLORS.string};
-        }
-        &.int {
-            background-color: ${TYPE_COLORS.int};
-        }
-        &.number {
-            background-color: ${TYPE_COLORS.number};
-        }
-        &.float {
-            background-color: ${TYPE_COLORS.float};
-        }
-        &.date {
-            background-color: ${TYPE_COLORS.date};
-        }
-        &.listauto {
-            background-color: ${TYPE_COLORS.listauto};
-        }
-        &.hashauto {
-            background-color: ${TYPE_COLORS.hashauto};
-        }
-        &.binary {
-            background-color: ${TYPE_COLORS.binary};
-        }
-        &.bool {
-            background-color: ${TYPE_COLORS.bool};
-        }
-        &.any {
-            background-color: ${TYPE_COLORS.any};
-        }
-        border-radius: 3px;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        text-align: center;
-        font-size: 10px;
-        line-height: 14px;
-        top: -8px;
-        margin: 0;
-        padding: 0 3px;
-        color: #fff;
+    &.string {
+      background-color: ${TYPE_COLORS.string};
     }
+    &.int {
+      background-color: ${TYPE_COLORS.int};
+    }
+    &.number {
+      background-color: ${TYPE_COLORS.number};
+    }
+    &.float {
+      background-color: ${TYPE_COLORS.float};
+    }
+    &.date {
+      background-color: ${TYPE_COLORS.date};
+    }
+    &.listauto {
+      background-color: ${TYPE_COLORS.listauto};
+    }
+    &.hashauto {
+      background-color: ${TYPE_COLORS.hashauto};
+    }
+    &.binary {
+      background-color: ${TYPE_COLORS.binary};
+    }
+    &.bool {
+      background-color: ${TYPE_COLORS.bool};
+    }
+    &.any {
+      background-color: ${TYPE_COLORS.any};
+    }
+    border-radius: 3px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 10px;
+    line-height: 14px;
+    top: -8px;
+    margin: 0;
+    padding: 0 3px;
+    color: #fff;
+  }
 `;
 
 const StyledInfoMessage = styled.p`
@@ -241,13 +237,13 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
   outputs,
   relations,
   inputUrl,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'outputUrl' does not exist on type 'Props... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'outputUrl' does not exist on type 'Props... Remove this comment to see the full error message
   outputUrl,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'onInfoClick' does not exist on type 'Pro... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'onInfoClick' does not exist on type 'Pro... Remove this comment to see the full error message
   onInfoClick,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'staticData' does not exist on type 'Prop... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'staticData' does not exist on type 'Prop... Remove this comment to see the full error message
   staticData,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'PropsWithC... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'PropsWithC... Remove this comment to see the full error message
   intl,
 }) => {
   // This functions flattens the fields, by taking all the
@@ -278,10 +274,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
         // Check if this field has hierarchy
         if (size(field.type.fields)) {
           // Recursively add deep fields
-          res = [
-            ...res,
-            ...flattenFields(field.type.fields, true, name, level + 1, newPath),
-          ];
+          res = [...res, ...flattenFields(field.type.fields, true, name, level + 1, newPath)];
         }
         // Return the new fields
         return res;
@@ -308,12 +301,10 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
       context: flattenedContextInputs,
     };
     // Find the field
-    const field = fieldTypes[type].find(input => input.path === name);
+    const field = fieldTypes[type].find((input) => input.path === name);
     if (field) {
       // Return the color
-      return TYPE_COLORS[
-        field.type.types_returned[0].replace(/</g, '').replace(/>/g, '')
-      ];
+      return TYPE_COLORS[field.type.types_returned[0].replace(/</g, '').replace(/>/g, '')];
     }
     return null;
   };
@@ -328,16 +319,13 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
       );
       // Get the index of the last field in this
       // hierarchy based on the name
-      return findIndex(
-        fields,
-        curField => curField.path === `${field.path}.${name}`
-      );
+      return findIndex(fields, (curField) => curField.path === `${field.path}.${name}`);
     }
     // Return nothing
     return 0;
   };
 
-  const filterEmptyRelations: (relations: any) => any = relations => {
+  const filterEmptyRelations: (relations: any) => any = (relations) => {
     return reduce(
       relations,
       (newRel, rel, name) => {
@@ -353,7 +341,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
     );
   };
 
-  const getCustomFields: (type: string) => any[] = type => {
+  const getCustomFields: (type: string) => any[] = (type) => {
     if (type === 'inputs') {
       return flattenedInputs.reduce((newInputs, input) => {
         if (input.firstCustomInHierarchy) {
@@ -386,15 +374,13 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
           <StyledFieldsWrapper>
             <StyledFieldHeader>
               <MapperInput
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'string'.
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'string'.
                 name={
                   <>
                     <span> Input </span>
 
                     <Tooltip targetTagName="div" content={inputUrl}>
-                      <StyledUrlMessage
-                        style={{ height: '12px', lineHeight: '12px' }}
-                      >
+                      <StyledUrlMessage style={{ height: '12px', lineHeight: '12px' }}>
                         {inputUrl}
                       </StyledUrlMessage>
                     </Tooltip>
@@ -411,36 +397,28 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
             </StyledFieldHeader>
             {size(flattenedInputs) !== 0
               ? map(flattenedInputs, (input, index) => (
-                <MapperInput
-                  key={input.path}
-                  name={input.name}
-                  types={input.type.types_returned}
-                  {...input}
-                  field={input}
-                  id={index + 1}
-                  lastChildIndex={
-                    getLastChildIndex(input, flattenedInputs) - index
-                  }
-                />
-              ))
+                  <MapperInput
+                    key={input.path}
+                    name={input.name}
+                    types={input.type.types_returned}
+                    {...input}
+                    field={input}
+                    id={index + 1}
+                    lastChildIndex={getLastChildIndex(input, flattenedInputs) - index}
+                  />
+                ))
               : null}
             {size(flattenedInputs) === 0 ? (
-              <StyledInfoMessage>
-                {'This mapper has no input fields'}
-              </StyledInfoMessage>
+              <StyledInfoMessage>{'This mapper has no input fields'}</StyledInfoMessage>
             ) : null}
             {size(flattenedContextInputs) !== 0 && (
               <MapperInput
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'string'.
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'string'.
                 name={
                   <>
-                    <span>
-                      {intl.formatMessage({ id: 'mapper.staticData' })}
-                    </span>
+                    <span>{intl.formatMessage({ id: 'mapper.staticData' })}</span>
 
-                    <StyledUrlMessage
-                      style={{ height: '12px', lineHeight: '12px' }}
-                    >
+                    <StyledUrlMessage style={{ height: '12px', lineHeight: '12px' }}>
                       {intl.formatMessage({ id: 'mapper.staticDataDesc' })}
                     </StyledUrlMessage>
                   </>
@@ -457,19 +435,17 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
             )}
             {size(flattenedContextInputs) !== 0
               ? map(flattenedContextInputs, (input, index) => (
-                <MapperInput
-                  key={input.path}
-                  name={input.name}
-                  types={input.type.types_returned}
-                  {...input}
-                  field={input}
-                  id={(flattenedInputs?.length || 0) + (index + 1)}
-                  lastChildIndex={
-                    getLastChildIndex(input, flattenedContextInputs) - index
-                  }
-                  usesContext
-                />
-              ))
+                  <MapperInput
+                    key={input.path}
+                    name={input.name}
+                    types={input.type.types_returned}
+                    {...input}
+                    field={input}
+                    id={(flattenedInputs?.length || 0) + (index + 1)}
+                    lastChildIndex={getLastChildIndex(input, flattenedContextInputs) - index}
+                    usesContext
+                  />
+                ))
               : null}
           </StyledFieldsWrapper>
           <StyledConnectionsWrapper>
@@ -477,10 +453,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
               <svg
                 height={
                   Math.max(
-                    [
-                      ...(flattenedInputs || []),
-                      ...(flattenedContextInputs || []),
-                    ]?.length,
+                    [...(flattenedInputs || []), ...(flattenedContextInputs || [])]?.length,
                     flattenedOutputs?.length
                   ) *
                     (FIELD_HEIGHT + FIELD_MARGIN) +
@@ -496,9 +469,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             id={outputPath}
                             x1="0"
                             y1={
-                              (flattenedInputs.findIndex(
-                                input => input.path === relation.name
-                              ) +
+                              (flattenedInputs.findIndex((input) => input.path === relation.name) +
                                 1) *
                                 (FIELD_HEIGHT + FIELD_MARGIN) -
                               (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -507,9 +478,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             }
                             x2={0}
                             y2={
-                              (flattenedOutputs.findIndex(
-                                output => output.path === outputPath
-                              ) +
+                              (flattenedOutputs.findIndex((output) => output.path === outputPath) +
                                 1) *
                                 (FIELD_HEIGHT + FIELD_MARGIN) -
                               (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -519,17 +488,11 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             gradientUnits="userSpaceOnUse"
                           >
                             <stop
-                              stop-color={getFieldTypeColor(
-                                'inputs',
-                                relation.name
-                              )}
+                              stop-color={getFieldTypeColor('inputs', relation.name)}
                               offset="0"
                             />
                             <stop
-                              stop-color={getFieldTypeColor(
-                                'outputs',
-                                outputPath
-                              )}
+                              stop-color={getFieldTypeColor('outputs', outputPath)}
                               offset="1"
                             />
                           </linearGradient>
@@ -539,9 +502,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           stroke={`url(#${outputPath})`}
                           x1={0}
                           y1={
-                            (flattenedInputs.findIndex(
-                              input => input.path === relation.name
-                            ) +
+                            (flattenedInputs.findIndex((input) => input.path === relation.name) +
                               1) *
                               (FIELD_HEIGHT + FIELD_MARGIN) -
                             (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -550,9 +511,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           }
                           x2={300}
                           y2={
-                            (flattenedOutputs.findIndex(
-                              output => output.path === outputPath
-                            ) +
+                            (flattenedOutputs.findIndex((output) => output.path === outputPath) +
                               1) *
                               (FIELD_HEIGHT + FIELD_MARGIN) -
                             (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -571,9 +530,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             y1={27}
                             x2={0}
                             y2={
-                              (flattenedOutputs.findIndex(
-                                output => output.path === outputPath
-                              ) +
+                              (flattenedOutputs.findIndex((output) => output.path === outputPath) +
                                 1) *
                                 (FIELD_HEIGHT + FIELD_MARGIN) -
                               (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -583,16 +540,11 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             gradientUnits="userSpaceOnUse"
                           >
                             <stop
-                              stop-color={getFieldTypeColor('inputs', null, [
-                                'hash<auto>',
-                              ])}
+                              stop-color={getFieldTypeColor('inputs', null, ['hash<auto>'])}
                               offset="0"
                             />
                             <stop
-                              stop-color={getFieldTypeColor(
-                                'outputs',
-                                outputPath
-                              )}
+                              stop-color={getFieldTypeColor('outputs', outputPath)}
                               offset="1"
                             />
                           </linearGradient>
@@ -604,9 +556,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           y1={27}
                           x2={300}
                           y2={
-                            (flattenedOutputs.findIndex(
-                              output => output.path === outputPath
-                            ) +
+                            (flattenedOutputs.findIndex((output) => output.path === outputPath) +
                               1) *
                               (FIELD_HEIGHT + FIELD_MARGIN) -
                             (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -629,9 +579,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                               63 +
                               ((size(flattenedInputs) || 1) +
                                 flattenedContextInputs.findIndex(
-                                  input =>
-                                    input.path ===
-                                    getStaticDataFieldname(relation.context)
+                                  (input) => input.path === getStaticDataFieldname(relation.context)
                                 ) +
                                 1) *
                                 (FIELD_HEIGHT + FIELD_MARGIN) -
@@ -639,9 +587,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             }
                             x2={0}
                             y2={
-                              (flattenedOutputs.findIndex(
-                                output => output.path === outputPath
-                              ) +
+                              (flattenedOutputs.findIndex((output) => output.path === outputPath) +
                                 1) *
                                 (FIELD_HEIGHT + FIELD_MARGIN) -
                               (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -658,10 +604,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                               offset="0"
                             />
                             <stop
-                              stop-color={getFieldTypeColor(
-                                'outputs',
-                                outputPath
-                              )}
+                              stop-color={getFieldTypeColor('outputs', outputPath)}
                               offset="1"
                             />
                           </linearGradient>
@@ -675,9 +618,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             63 +
                             ((size(flattenedInputs) || 1) +
                               flattenedContextInputs.findIndex(
-                                input =>
-                                  input.path ===
-                                  getStaticDataFieldname(relation.context)
+                                (input) => input.path === getStaticDataFieldname(relation.context)
                               ) +
                               1) *
                               (FIELD_HEIGHT + FIELD_MARGIN) -
@@ -685,9 +626,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           }
                           x2={300}
                           y2={
-                            (flattenedOutputs.findIndex(
-                              output => output.path === outputPath
-                            ) +
+                            (flattenedOutputs.findIndex((output) => output.path === outputPath) +
                               1) *
                               (FIELD_HEIGHT + FIELD_MARGIN) -
                             (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -696,7 +635,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           }
                         />
                       </>
-                      ) : null}
+                    ) : null}
                     {!!relation.context &&
                     relation.context === '$static:*' &&
                     size(flattenedContextInputs) ? (
@@ -708,15 +647,12 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             y1={
                               63 +
                               63 +
-                              (size(flattenedInputs) || 1) *
-                                (FIELD_HEIGHT + FIELD_MARGIN) -
+                              (size(flattenedInputs) || 1) * (FIELD_HEIGHT + FIELD_MARGIN) -
                               31.5
                             }
                             x2={0}
                             y2={
-                              (flattenedOutputs.findIndex(
-                                output => output.path === outputPath
-                              ) +
+                              (flattenedOutputs.findIndex((output) => output.path === outputPath) +
                                 1) *
                                 (FIELD_HEIGHT + FIELD_MARGIN) -
                               (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -726,16 +662,11 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                             gradientUnits="userSpaceOnUse"
                           >
                             <stop
-                              stop-color={getFieldTypeColor('context', null, [
-                                'hash<auto>',
-                              ])}
+                              stop-color={getFieldTypeColor('context', null, ['hash<auto>'])}
                               offset="0"
                             />
                             <stop
-                              stop-color={getFieldTypeColor(
-                                'outputs',
-                                outputPath
-                              )}
+                              stop-color={getFieldTypeColor('outputs', outputPath)}
                               offset="1"
                             />
                           </linearGradient>
@@ -747,15 +678,12 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           y1={
                             63 +
                             63 +
-                            (size(flattenedInputs) || 1) *
-                              (FIELD_HEIGHT + FIELD_MARGIN) -
+                            (size(flattenedInputs) || 1) * (FIELD_HEIGHT + FIELD_MARGIN) -
                             31.5
                           }
                           x2={300}
                           y2={
-                            (flattenedOutputs.findIndex(
-                              output => output.path === outputPath
-                            ) +
+                            (flattenedOutputs.findIndex((output) => output.path === outputPath) +
                               1) *
                               (FIELD_HEIGHT + FIELD_MARGIN) -
                             (FIELD_HEIGHT / 2 + FIELD_MARGIN) +
@@ -764,7 +692,7 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
                           }
                         />
                       </>
-                      ) : null}
+                    ) : null}
                   </>
                 ))}
               </svg>
@@ -779,27 +707,23 @@ const MapperCreator: React.FC<IMapperCreatorProps> = ({
             </StyledFieldHeader>
             {size(flattenedOutputs) !== 0
               ? map(flattenedOutputs, (output, index) => (
-                <MapperOutput
-                  key={output.path}
-                  name={output.name}
-                  hasRelation={!!relations[output.path]}
-                  {...output}
-                  field={output}
-                  id={index + 1}
-                  onManageClick={() => {
-                    !!relations[output.path] && onInfoClick(output.path);
-                  }}
-                  accepts={output.type.types_accepted}
-                  lastChildIndex={
-                    getLastChildIndex(output, flattenedOutputs) - index
-                  }
-                />
-              ))
+                  <MapperOutput
+                    key={output.path}
+                    name={output.name}
+                    hasRelation={!!relations[output.path]}
+                    {...output}
+                    field={output}
+                    id={index + 1}
+                    onManageClick={() => {
+                      !!relations[output.path] && onInfoClick(output.path);
+                    }}
+                    accepts={output.type.types_accepted}
+                    lastChildIndex={getLastChildIndex(output, flattenedOutputs) - index}
+                  />
+                ))
               : null}
             {size(flattenedOutputs) === 0 ? (
-              <StyledInfoMessage>
-                {'This mapper has no output fields'}
-              </StyledInfoMessage>
+              <StyledInfoMessage>{'This mapper has no output fields'}</StyledInfoMessage>
             ) : null}
           </StyledFieldsWrapper>
         </StyledMapperWrapper>

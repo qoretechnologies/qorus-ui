@@ -1,12 +1,12 @@
 // @flow
-import { curry, assignIn } from 'lodash';
+import { assignIn, curry } from 'lodash';
 import { error, success } from '../../ui/bubbles/actions';
 
 export const normalizeId = curry((idAttribute, item) =>
   Object.assign({ id: item[idAttribute] }, item)
 );
 
-export const normalizeUnknownId = curry(item => {
+export const normalizeUnknownId = curry((item) => {
   if (item.classid) {
     return normalizeId('classid', item);
   }
@@ -26,12 +26,10 @@ export const normalizeUnknownId = curry(item => {
   return item;
 });
 
-export const extendDefaults = curry((defaults, item) =>
-  assignIn({}, defaults, item)
-);
+export const extendDefaults = curry((defaults, item) => assignIn({}, defaults, item));
 
 export const normalizeName = curry((item: Object, idKey: string = 'id') => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
   const { name, version, patch } = item;
   const id = item[idKey];
   const normalizedName = patch
@@ -41,7 +39,7 @@ export const normalizeName = curry((item: Object, idKey: string = 'id') => {
   return Object.assign({ normalizedName }, item);
 });
 
-export const checkAlerts = curry(item => {
+export const checkAlerts = curry((item) => {
   const { alerts } = item;
 
   const hasAlerts = alerts && alerts.length > 0;
@@ -49,36 +47,34 @@ export const checkAlerts = curry(item => {
   return Object.assign({ has_alerts: hasAlerts }, item);
 });
 
-export const normalizeWorkflowLib = curry(item => {
+export const normalizeWorkflowLib = curry((item) => {
   const { lib, wffuncs, stepinfo } = item;
 
-  const newLib = Object.assign(
-    {},
-    { 'WF Functions': wffuncs, 'Step code': stepinfo },
-    lib
-  );
+  const newLib = Object.assign({}, { 'WF Functions': wffuncs, 'Step code': stepinfo }, lib);
 
   return Object.assign({}, item, { lib: newLib });
 });
 
 export const findMissingBand: Function = (
   orderStats: Array<Object>
-// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
 ): Array<?string> => {
   const bands = ['1_hour_band', '4_hour_band', '24_hour_band'];
-  const findMissing = (band: string): Function => (stats: Object) =>
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
-    stats.label === band;
+  const findMissing =
+    (band: string): Function =>
+    (stats: Object) =>
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
+      stats.label === band;
 
   const missing = bands
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-    .map(band => (!orderStats.find(findMissing(band)) ? band : null))
-    .filter(band => band);
+    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+    .map((band) => (!orderStats.find(findMissing(band)) ? band : null))
+    .filter((band) => band);
 
   return missing;
 };
 
-export const addHasAlerts = curry(item => {
+export const addHasAlerts = curry((item) => {
   const { alerts } = item;
 
   return { ...item, ...{ has_alerts: alerts && alerts.length !== 0 } };
@@ -90,9 +86,9 @@ export const processRESTResponse = (
   successMsg: string,
   notificationId: string | number
 ): void => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
   if (resp && resp.err) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
     dispatch(error(resp.desc, notificationId));
   } else if (successMsg) {
     dispatch(success(successMsg, notificationId));
@@ -100,7 +96,7 @@ export const processRESTResponse = (
 };
 
 export const injectStorageDefaults = (currentUserData: Object): Object => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message
   let { storage } = currentUserData;
 
   if (!storage) {
@@ -126,7 +122,7 @@ export const injectStorageDefaults = (currentUserData: Object): Object => {
     ];
   }
 
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message
   currentUserData.storage = storage;
 
   return currentUserData;

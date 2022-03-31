@@ -1,116 +1,105 @@
 // @flow
+import { FormGroup, InputGroup } from '@blueprintjs/core';
+import includes from 'lodash/includes';
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import Box from '../../../components/box';
-import { FormGroup, InputGroup } from '@blueprintjs/core';
+import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import Alert from '../../../components/alert';
-import withHandlers from 'recompose/withHandlers';
-import includes from 'lodash/includes';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
-import { connect } from 'react-redux';
-import { fetchWithNotifications, post, put } from '../../../store/api/utils';
+import Box from '../../../components/box';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
 import settings from '../../../settings';
-import Dropdown, { Item, Control } from '../../../components/dropdown';
-import { injectIntl } from 'react-intl';
+import { fetchWithNotifications, post, put } from '../../../store/api/utils';
 
 type NewAppenderPopoverProps = {
-  error?: string,
-  name: string,
-  level?: string,
-  additivity: boolean,
-  handleNameChange: Function,
-  handleLevelChange: Function,
-  handleAdditivityChange: Function,
-  onCancel: Function,
-  loggerLevels: Object,
-  resource: string,
-  id: number | string,
-  changeError: Function,
-  handleSubmit: Function,
-  dispatch: Function,
-  changeAdding: Function,
-  isAdding: boolean,
-  data?: Object,
+  error?: string;
+  name: string;
+  level?: string;
+  additivity: boolean;
+  handleNameChange: Function;
+  handleLevelChange: Function;
+  handleAdditivityChange: Function;
+  onCancel: Function;
+  loggerLevels: Object;
+  resource: string;
+  id: number | string;
+  changeError: Function;
+  handleSubmit: Function;
+  dispatch: Function;
+  changeAdding: Function;
+  isAdding: boolean;
+  data?: Object;
 };
 
 const NewAppenderPopover: Function = ({
   error,
   name,
   handleNameChange,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'N... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'N... Remove this comment to see the full error message
   layoutPattern,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'handleLayoutPatternChange' does not exis... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleLayoutPatternChange' does not exis... Remove this comment to see the full error message
   handleLayoutPatternChange,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'NewApp... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'NewApp... Remove this comment to see the full error message
   filename,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'handleFilenameChange' does not exist on ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleFilenameChange' does not exist on ... Remove this comment to see the full error message
   handleFilenameChange,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'NewApp... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'NewApp... Remove this comment to see the full error message
   encoding,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'handleEncodingChange' does not exist on ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleEncodingChange' does not exist on ... Remove this comment to see the full error message
   handleEncodingChange,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'appenderType' does not exist on type 'Ne... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'appenderType' does not exist on type 'Ne... Remove this comment to see the full error message
   appenderType,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'handleAppenderTypeChange' does not exist... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleAppenderTypeChange' does not exist... Remove this comment to see the full error message
   handleAppenderTypeChange,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'N... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'N... Remove this comment to see the full error message
   rotationCount,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'handleRotationCountChange' does not exis... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleRotationCountChange' does not exis... Remove this comment to see the full error message
   handleRotationCountChange,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'archivePattern' does not exist on type '... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'archivePattern' does not exist on type '... Remove this comment to see the full error message
   archivePattern,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'handleArchivePatternChange' does not exi... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleArchivePatternChange' does not exi... Remove this comment to see the full error message
   handleArchivePatternChange,
   onCancel,
   handleSubmit,
   changeError,
   dispatch,
   isAdding,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'appendersTypes' does not exist on type '... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'appendersTypes' does not exist on type '... Remove this comment to see the full error message
   appendersTypes,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'appendersFields' does not exist on type ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'appendersFields' does not exist on type ... Remove this comment to see the full error message
   appendersFields,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'NewAppende... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'NewAppende... Remove this comment to see the full error message
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: NewAppenderPopoverProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+NewAppenderPopoverProps): React.Element<any> => (
   <Box fill top style={{ minWidth: '350px' }}>
     {error && <Alert bsStyle="danger">{error}</Alert>}
-    <FormGroup
-      label={intl.formatMessage({ id: 'logger.name' })}
-      labelFor="appender-name"
-    >
+    <FormGroup label={intl.formatMessage({ id: 'logger.name' })} labelFor="appender-name">
       <InputGroup
         name="appender-name"
         id="appender-name"
         value={name}
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
         onChange={handleNameChange}
       />
     </FormGroup>
 
     <FormGroup
       label={intl.formatMessage({ id: 'logger.appender-type' }) + ' '}
-      // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message
       requiredLabel
     >
-      { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
       <Dropdown>
-        { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
         <Control>{appenderType || intl.formatMessage({ id: 'dropdown.please-select' })}</Control>
         {appendersTypes.map((appType: string) => (
-          // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-          <Item
-            key={appType}
-            title={appType}
-            onClick={handleAppenderTypeChange}
-          />
+          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+          <Item key={appType} title={appType} onClick={handleAppenderTypeChange} />
         ))}
       </Dropdown>
     </FormGroup>
@@ -133,7 +122,7 @@ const NewAppenderPopover: Function = ({
       <FormGroup
         label={intl.formatMessage({ id: 'logger.filename' }) + ' '}
         labelFor="appender-filename"
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message
         requiredLabel
       >
         <InputGroup
@@ -146,10 +135,7 @@ const NewAppenderPopover: Function = ({
     )}
 
     {includes(appendersFields['encoding'], appenderType) && (
-      <FormGroup
-        label={intl.formatMessage({ id: 'logger.encoding' })}
-        labelFor="appender-encoding"
-      >
+      <FormGroup label={intl.formatMessage({ id: 'logger.encoding' })} labelFor="appender-encoding">
         <InputGroup
           name="appender-encoding"
           id="appender-encoding"
@@ -208,232 +194,202 @@ const NewAppenderPopover: Function = ({
 export default compose(
   connect(
     (state: Object): Object => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       appendersTypes: state.api.system.data.loggerParams.appenders_types,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       appendersFields: state.api.system.data.loggerParams.appenders_fields,
       appendersDefaults:
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
         state.api.system.data.loggerParams.default_appender_params,
     })
   ),
   withState('name', 'changeName', ({ data }) => data?.name || ''),
-  withState(
-    'layoutPattern',
-    'changeLayoutPattern',
-    ({ data }) => data?.layoutPattern
-  ),
+  withState('layoutPattern', 'changeLayoutPattern', ({ data }) => data?.layoutPattern),
   withState('filename', 'changeFilename', ({ data }) => data?.filename),
   withState('encoding', 'changeEncoding', ({ data }) => data?.encoding),
   withState('appenderType', 'changeAppenderType', ({ data }) => data?.type),
-  withState(
-    'rotationCount',
-    'changeRotationCount',
-    ({ data }) => data?.rotationCount || 0
-  ),
-  withState(
-    'archivePattern',
-    'changeArchivePattern',
-    ({ data }) => data?.archivePattern
-  ),
+  withState('rotationCount', 'changeRotationCount', ({ data }) => data?.rotationCount || 0),
+  withState('archivePattern', 'changeArchivePattern', ({ data }) => data?.archivePattern),
   withState('error', 'changeError', null),
   withState('isAdding', 'changeAdding', false),
   withHandlers({
-    handleNameChange: ({ changeName }): Function => (
-      event: Object,
-      value?: string
-    ): void => {
-      if (event) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
-        event.persist();
-      }
-
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
-      changeName(() => (event ? event.target.value : value));
-    },
-  }),
-  withHandlers({
-    handleLayoutPatternChange: ({ changeLayoutPattern }): Function => (
-      event: Object,
-      value?: string
-    ): void => {
-      if (event) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
-        event.persist();
-      }
-
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
-      changeLayoutPattern(() => (event ? event.target.value : value));
-    },
-  }),
-  withHandlers({
-    handleFilenameChange: ({ changeFilename }): Function => (
-      event: Object,
-      value?: string
-    ): void => {
-      if (event) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
-        event.persist();
-      }
-
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
-      changeFilename(() => (event ? event.target.value : value));
-    },
-  }),
-  withHandlers({
-    handleEncodingChange: ({ changeEncoding }): Function => (
-      event: Object,
-      value?: string
-    ): void => {
-      if (event) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
-        event.persist();
-      }
-
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
-      changeEncoding(() => (event ? event.target.value : value));
-    },
-  }),
-  withHandlers({
-    handleRotationCountChange: ({ changeRotationCount }): Function => (
-      event: Object,
-      value?: string
-    ): void => {
-      if (event) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
-        event.persist();
-      }
-
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
-      changeRotationCount(() => (event ? event.target.value : value));
-    },
-  }),
-  withHandlers({
-    handleArchivePatternChange: ({ changeArchivePattern }): Function => (
-      event: Object,
-      value?: string
-    ): void => {
-      if (event) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
-        event.persist();
-      }
-
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
-      changeArchivePattern(() => (event ? event.target.value : value));
-    },
-  }),
-  withHandlers({
-    handleAppenderTypeChange: ({
-      changeAppenderType,
-      appendersDefaults,
-      resource,
-      handleFilenameChange,
-      handleEncodingChange,
-      handleLayoutPatternChange,
-      handleArchivePatternChange,
-      handleRotationCountChange,
-      handleNameChange,
-      name,
-      data,
-    }): Function => (event: Object, appenderType: string): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
-      event.persist();
-
-      changeAppenderType(() => {
-        // Set the filename default
-        if (!data && appenderType !== 'LoggerAppenderStdOut') {
-          let defaultFilename: string;
-
-          switch (resource) {
-            case 'jobs':
-              defaultFilename = appendersDefaults[appenderType].filename.job;
-              break;
-            case 'services':
-              defaultFilename =
-                appendersDefaults[appenderType].filename.service;
-              break;
-            case 'workflows':
-              defaultFilename =
-                appendersDefaults[appenderType].filename.workflow;
-              break;
-            default:
-              defaultFilename = appendersDefaults[appenderType].filename.system;
-              break;
-          }
-
-          handleEncodingChange(null, appendersDefaults[appenderType].encoding);
-          handleLayoutPatternChange(
-            null,
-            appendersDefaults[appenderType].layoutPattern
-          );
-          handleFilenameChange(null, defaultFilename);
-
-          // Change also archive pattern and rotation count
-          // for FileRotate appenders
-          if (appenderType === 'LoggerAppenderFileRotate') {
-            handleArchivePatternChange(
-              null,
-              appendersDefaults[appenderType].archivePattern
-            );
-            handleRotationCountChange(
-              null,
-              appendersDefaults[appenderType].rotationCount
-            );
-          }
+    handleNameChange:
+      ({ changeName }): Function =>
+      (event: Object, value?: string): void => {
+        if (event) {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
+          event.persist();
         }
 
-        // Only change name if it hasn't been set
-        if (name === '') {
-          handleNameChange(null, appendersDefaults[appenderType].name);
-        }
-
-        return appenderType;
-      });
-    },
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
+        changeName(() => (event ? event.target.value : value));
+      },
   }),
   withHandlers({
-    handleSubmit: ({
-      name,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'N... Remove this comment to see the full error message
-      layoutPattern,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'NewApp... Remove this comment to see the full error message
-      filename,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'NewApp... Remove this comment to see the full error message
-      encoding,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'appenderType' does not exist on type 'Ne... Remove this comment to see the full error message
-      appenderType,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'N... Remove this comment to see the full error message
-      rotationCount,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'archivePattern' does not exist on type '... Remove this comment to see the full error message
-      archivePattern,
-      changeError,
-      id,
-      resource,
-      dispatch,
-      onCancel,
-      changeAdding,
-      data,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'url' does not exist on type 'NewAppender... Remove this comment to see the full error message
-      url,
-    // @ts-expect-error ts-migrate(1055) FIXME: Type 'any' is not a valid async function return ty... Remove this comment to see the full error message
-    }: NewAppenderPopoverProps): Function => async (): any => {
-      if (!appenderType) {
-        changeError(() => 'Appender Type field is required.');
-      } else if (
-        appenderType !== 'LoggerAppenderStdOut' &&
-        (!filename || filename === '')
-      ) {
-        changeError(() => 'Filename is required for this type of appender');
-      } else {
-        changeAdding(() => true);
+    handleLayoutPatternChange:
+      ({ changeLayoutPattern }): Function =>
+      (event: Object, value?: string): void => {
+        if (event) {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
+          event.persist();
+        }
 
-        const method = data ? put : post;
-        const appendersPath: string = '?action=defaultLoggerAppenders';
-        const fetchRes: Object = await fetchWithNotifications(
-          async () =>
-            method(
-              `${settings.REST_BASE_URL}/${url || resource}/${appendersPath}`,
-              {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
+        changeLayoutPattern(() => (event ? event.target.value : value));
+      },
+  }),
+  withHandlers({
+    handleFilenameChange:
+      ({ changeFilename }): Function =>
+      (event: Object, value?: string): void => {
+        if (event) {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
+          event.persist();
+        }
+
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
+        changeFilename(() => (event ? event.target.value : value));
+      },
+  }),
+  withHandlers({
+    handleEncodingChange:
+      ({ changeEncoding }): Function =>
+      (event: Object, value?: string): void => {
+        if (event) {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
+          event.persist();
+        }
+
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
+        changeEncoding(() => (event ? event.target.value : value));
+      },
+  }),
+  withHandlers({
+    handleRotationCountChange:
+      ({ changeRotationCount }): Function =>
+      (event: Object, value?: string): void => {
+        if (event) {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
+          event.persist();
+        }
+
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
+        changeRotationCount(() => (event ? event.target.value : value));
+      },
+  }),
+  withHandlers({
+    handleArchivePatternChange:
+      ({ changeArchivePattern }): Function =>
+      (event: Object, value?: string): void => {
+        if (event) {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
+          event.persist();
+        }
+
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
+        changeArchivePattern(() => (event ? event.target.value : value));
+      },
+  }),
+  withHandlers({
+    handleAppenderTypeChange:
+      ({
+        changeAppenderType,
+        appendersDefaults,
+        resource,
+        handleFilenameChange,
+        handleEncodingChange,
+        handleLayoutPatternChange,
+        handleArchivePatternChange,
+        handleRotationCountChange,
+        handleNameChange,
+        name,
+        data,
+      }): Function =>
+      (event: Object, appenderType: string): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
+        event.persist();
+
+        changeAppenderType(() => {
+          // Set the filename default
+          if (!data && appenderType !== 'LoggerAppenderStdOut') {
+            let defaultFilename: string;
+
+            switch (resource) {
+              case 'jobs':
+                defaultFilename = appendersDefaults[appenderType].filename.job;
+                break;
+              case 'services':
+                defaultFilename = appendersDefaults[appenderType].filename.service;
+                break;
+              case 'workflows':
+                defaultFilename = appendersDefaults[appenderType].filename.workflow;
+                break;
+              default:
+                defaultFilename = appendersDefaults[appenderType].filename.system;
+                break;
+            }
+
+            handleEncodingChange(null, appendersDefaults[appenderType].encoding);
+            handleLayoutPatternChange(null, appendersDefaults[appenderType].layoutPattern);
+            handleFilenameChange(null, defaultFilename);
+
+            // Change also archive pattern and rotation count
+            // for FileRotate appenders
+            if (appenderType === 'LoggerAppenderFileRotate') {
+              handleArchivePatternChange(null, appendersDefaults[appenderType].archivePattern);
+              handleRotationCountChange(null, appendersDefaults[appenderType].rotationCount);
+            }
+          }
+
+          // Only change name if it hasn't been set
+          if (name === '') {
+            handleNameChange(null, appendersDefaults[appenderType].name);
+          }
+
+          return appenderType;
+        });
+      },
+  }),
+  withHandlers({
+    handleSubmit:
+      ({
+        name,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'N... Remove this comment to see the full error message
+        layoutPattern,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'NewApp... Remove this comment to see the full error message
+        filename,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'NewApp... Remove this comment to see the full error message
+        encoding,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'appenderType' does not exist on type 'Ne... Remove this comment to see the full error message
+        appenderType,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'N... Remove this comment to see the full error message
+        rotationCount,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'archivePattern' does not exist on type '... Remove this comment to see the full error message
+        archivePattern,
+        changeError,
+        id,
+        resource,
+        dispatch,
+        onCancel,
+        changeAdding,
+        data,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'url' does not exist on type 'NewAppender... Remove this comment to see the full error message
+        url,
+      }: // @ts-ignore ts-migrate(1055) FIXME: Type 'any' is not a valid async function return ty... Remove this comment to see the full error message
+      NewAppenderPopoverProps): Function =>
+      async (): any => {
+        if (!appenderType) {
+          changeError(() => 'Appender Type field is required.');
+        } else if (appenderType !== 'LoggerAppenderStdOut' && (!filename || filename === '')) {
+          changeError(() => 'Filename is required for this type of appender');
+        } else {
+          changeAdding(() => true);
+
+          const method = data ? put : post;
+          const appendersPath: string = '?action=defaultLoggerAppenders';
+          const fetchRes: Object = await fetchWithNotifications(
+            async () =>
+              method(`${settings.REST_BASE_URL}/${url || resource}/${appendersPath}`, {
                 body: JSON.stringify({
                   name,
                   layoutPattern,
@@ -442,28 +398,25 @@ export default compose(
                   appenderType,
                   rotationCount,
                   archivePattern,
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                   id: data?.id,
                 }),
-              }
-            ),
-          data ? `Editing appender...` : `Adding new appender...`,
-          data
-            ? `Appender successfuly edited`
-            : `New appender successfuly added`,
-          dispatch
-        );
+              }),
+            data ? `Editing appender...` : `Adding new appender...`,
+            data ? `Appender successfuly edited` : `New appender successfuly added`,
+            dispatch
+          );
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
-        if (fetchRes.err) {
-          changeAdding(() => false);
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
-          changeError(() => fetchRes.desc);
-        } else {
-          onCancel();
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+          if (fetchRes.err) {
+            changeAdding(() => false);
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
+            changeError(() => fetchRes.desc);
+          } else {
+            onCancel();
+          }
         }
-      }
-    },
+      },
   }),
   onlyUpdateForKeys([
     'appendersTypes',

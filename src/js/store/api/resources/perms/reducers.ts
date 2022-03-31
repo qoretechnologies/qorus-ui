@@ -10,11 +10,11 @@ const initialState: Object = {
 
 const createPerm: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data: Array<Object> = state.data.slice();
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       const { name, desc } = action.payload;
 
       data.push({
@@ -35,13 +35,13 @@ const createPerm: Object = {
 
 const removePerm: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data: Array<Object> = state.data.slice();
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-      remove(data, p => p.name === action.payload.name);
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      remove(data, (p) => p.name === action.payload.name);
 
       return Object.assign({}, state, { data });
     }
@@ -54,19 +54,14 @@ const removePerm: Object = {
 
 const updatePerm: Object = {
   next(state: Object = initialState, action: Object): Object {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       const { name, desc } = action.payload;
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       let data: Array<Object> = state.data.slice();
 
-      data = updateItemWithId(
-        name,
-        { desc, permission_type: RBAC.PERMS_TYPE },
-        data,
-        'name'
-      );
+      data = updateItemWithId(name, { desc, permission_type: RBAC.PERMS_TYPE }, data, 'name');
 
       return Object.assign({}, state, { data });
     }
@@ -78,8 +73,4 @@ const updatePerm: Object = {
   },
 };
 
-export {
-  createPerm as CREATEPERM,
-  removePerm as REMOVEPERM,
-  updatePerm as UPDATEPERM,
-};
+export { createPerm as CREATEPERM, removePerm as REMOVEPERM, updatePerm as UPDATEPERM };

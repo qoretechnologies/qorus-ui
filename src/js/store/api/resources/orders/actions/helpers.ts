@@ -1,4 +1,4 @@
-// @ts-expect-error ts-migrate(2403) FIXME: Subsequent variable declarations must have the sam... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2403) FIXME: Subsequent variable declarations must have the sam... Remove this comment to see the full error message
 const moment = require('moment');
 const range = require('lodash').range;
 const includes = require('lodash').includes;
@@ -28,7 +28,7 @@ const addNote = (order, saved, username, note) => {
 
 const lockOrder = (order, note, username) => {
   const obj = addNote(order, true, username, note);
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'operator_lock' does not exist on type '{... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'operator_lock' does not exist on type '{... Remove this comment to see the full error message
   obj.operator_lock = username;
 
   return obj;
@@ -36,7 +36,7 @@ const lockOrder = (order, note, username) => {
 
 const unlockOrder = (order, note, username) => {
   const obj = addNote(order, true, username, note);
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'operator_lock' does not exist on type '{... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'operator_lock' does not exist on type '{... Remove this comment to see the full error message
   obj.operator_lock = null;
 
   return obj;
@@ -46,7 +46,7 @@ const skipIndexes = (order, stepid, value) => {
   const indexes = value.split(',');
   const steps = order.StepInstances.slice();
 
-  indexes.forEach(i => {
+  indexes.forEach((i) => {
     let ind = i;
 
     if (includes(i, '-')) {
@@ -54,7 +54,7 @@ const skipIndexes = (order, stepid, value) => {
       const rng = range(ind[0], ind[1]);
       rng.push(ind[1]);
 
-      rng.forEach(r => {
+      rng.forEach((r) => {
         steps.forEach((st, index) => {
           const skipped = st;
 

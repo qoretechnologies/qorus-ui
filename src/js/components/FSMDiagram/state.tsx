@@ -1,10 +1,8 @@
-import React from 'react';
-
 import size from 'lodash/size';
+import React from 'react';
 import styled, { css } from 'styled-components';
-
 import { getStateStyle } from '../PanElement/minimap';
-import { IF_STATE_SIZE, IFSMState, STATE_HEIGHT, STATE_WIDTH } from './';
+import { IFSMState, IF_STATE_SIZE, STATE_HEIGHT, STATE_WIDTH } from './';
 
 export interface IFSMStateProps extends IFSMState {
   selected?: boolean;
@@ -85,9 +83,9 @@ const StyledFSMState = styled.div`
 `;
 
 export const getStateType = ({ type, action, ...rest }: IFSMState) => {
-  // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
   if (type === 'block') {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'states' does not exist on type '{ positi... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'states' does not exist on type '{ positi... Remove this comment to see the full error message
     return `${rest['block-type'] || 'for'} block (${size(rest.states)})`;
   }
 
@@ -95,7 +93,7 @@ export const getStateType = ({ type, action, ...rest }: IFSMState) => {
     return `fsm`;
   }
 
-  // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
   if (type === 'if') {
     return `if statement`;
   }
@@ -105,10 +103,10 @@ export const getStateType = ({ type, action, ...rest }: IFSMState) => {
   }
 
   return `${
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'class' does not exist on type 'string | ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'class' does not exist on type 'string | ... Remove this comment to see the full error message
     action.value.class
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'class' does not exist on type 'string | ... Remove this comment to see the full error message
-      ? `${action.value.class}:${action.value.connector}`
+      ? // @ts-ignore ts-migrate(2339) FIXME: Property 'class' does not exist on type 'string | ... Remove this comment to see the full error message
+        `${action.value.class}:${action.value.connector}`
       : action.value
   } ${action.type}`;
 };
@@ -129,10 +127,10 @@ const FSMState: React.FC<IFSMStateProps> = ({
   onUpdate,
   selectedState,
   getTransitionByState,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'isIsolated' does not exist on type 'Prop... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'isIsolated' does not exist on type 'Prop... Remove this comment to see the full error message
   isIsolated,
-  // @ts-expect-error ts-migrate(1013) FIXME: A rest parameter or binding pattern may not have a... Remove this comment to see the full error message
-  ...rest,
+  // @ts-ignore ts-migrate(1013) FIXME: A rest parameter or binding pattern may not have a... Remove this comment to see the full error message
+  ...rest
 }) => {
   const calculateFontSize = (isAction) => {
     const len = name.length;
@@ -156,10 +154,8 @@ const FSMState: React.FC<IFSMStateProps> = ({
       type={action?.type || type}
     >
       <StyledStateTextWrapper>
-        { /* @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0. */ }
-        <StyledStateName style={{ fontSize: calculateFontSize() }}>
-          {name}
-        </StyledStateName>
+        {/* @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0. */}
+        <StyledStateName style={{ fontSize: calculateFontSize() }}>{name}</StyledStateName>
         <StyledStateAction style={{ fontSize: calculateFontSize(true) }}>
           {getStateType({ type, action, ...rest })}
         </StyledStateAction>

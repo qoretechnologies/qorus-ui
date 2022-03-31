@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import Tree from '../../../components/tree';
 import Loader from '../../../components/loader';
+import Tree from '../../../components/tree';
 import actions from '../../../store/api/actions';
 
 const dataObjects = {
@@ -13,21 +12,21 @@ const dataObjects = {
 };
 
 const TreeView = ({
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'order' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'order' does not exist on type 'Object'.
   order,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
   data,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'updateData' does not exist on type 'Obje... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'updateData' does not exist on type 'Obje... Remove this comment to see the full error message
   updateData,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'onEditClick' does not exist on type 'Obj... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'onEditClick' does not exist on type 'Obj... Remove this comment to see the full error message
   onEditClick,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'customEdit' does not exist on type 'Obje... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'customEdit' does not exist on type 'Obje... Remove this comment to see the full error message
   customEdit,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'editableKeys' does not exist on type 'Ob... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'editableKeys' does not exist on type 'Ob... Remove this comment to see the full error message
   editableKeys,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'onKeyEditClick' does not exist on type '... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'onKeyEditClick' does not exist on type '... Remove this comment to see the full error message
   onKeyEditClick,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'withEdit' does not exist on type 'Object... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'withEdit' does not exist on type 'Object... Remove this comment to see the full error message
   withEdit,
 }: Object) => {
   if (!order) return <Loader />;
@@ -37,7 +36,7 @@ const TreeView = ({
   };
 
   return (
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
     <Tree
       data={order[data]}
       withEdit={withEdit}
@@ -55,6 +54,6 @@ const TreeView = ({
 };
 
 export default connect(null, {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
   updateData: actions.orders.updateData,
 })(TreeView);

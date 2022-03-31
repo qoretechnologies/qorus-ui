@@ -1,10 +1,15 @@
 import _ from 'lodash';
-
 import settings from '../../../settings';
 import { DEFAULTS as servicesDefaults } from './services';
 import {
-  addHasAlerts, checkAlerts, extendDefaults, findMissingBand,
-  injectStorageDefaults, normalizeId, normalizeName, normalizeWorkflowLib
+  addHasAlerts,
+  checkAlerts,
+  extendDefaults,
+  findMissingBand,
+  injectStorageDefaults,
+  normalizeId,
+  normalizeName,
+  normalizeWorkflowLib,
 } from './utils';
 import { DEFAULTS as workflowDefaults } from './workflows';
 
@@ -71,8 +76,8 @@ export default [
         };
       }
 
-      // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-      const missingBands: ?Array<string> = findMissingBand(item.order_stats);
+      // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+      const missingBands: Array<string> = findMissingBand(item.order_stats);
 
       if (missingBands.length !== 0) {
         item.order_stats = [

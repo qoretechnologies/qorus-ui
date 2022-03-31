@@ -1,43 +1,42 @@
 // @flow
+import { ButtonGroup } from '@blueprintjs/core';
 import React from 'react';
 import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import queryControl from '../../../../../hocomponents/queryControl';
-import Dropdown, { Item, Control } from '../../../../../components/dropdown';
+import withHandlers from 'recompose/withHandlers';
+import Dropdown, { Control, Item } from '../../../../../components/dropdown';
 import { ORDER_STATES } from '../../../../../constants/orders';
-import { ButtonGroup } from '@blueprintjs/core';
+import queryControl from '../../../../../hocomponents/queryControl';
 
 type Props = {
-  filterQuery: string,
-  changeFilterQuery: Function,
-  handleFilterChange: Function,
-  items: Array<Object>,
+  filterQuery: string;
+  changeFilterQuery: Function;
+  handleFilterChange: Function;
+  items: Array<Object>;
 };
 
 const ToolbarFilters: Function = ({
   filterQuery,
   handleFilterChange,
   items = ORDER_STATES,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <ButtonGroup>
     <Dropdown
       id="filters"
       multi
       submitOnBlur
       def="All"
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
       onSubmit={handleFilterChange}
       selected={filterQuery ? filterQuery.split(',') : ['All']}
     >
-      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */ }
+      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */}
       <Control />
-      { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
       <Item title="All" />
       {items.map((o, k) => (
-        // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+        // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
         <Item key={k} title={o.title} />
       ))}
     </Dropdown>
@@ -45,18 +44,18 @@ const ToolbarFilters: Function = ({
 );
 
 export default compose(
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
   queryControl('filter'),
   withHandlers({
-    handleFilterChange: ({ changeFilterQuery }: Props): Function => (
-      filters: Array<string>
-    ): void => {
-      if (filters[0] === 'All') {
-        changeFilterQuery();
-      } else {
-        changeFilterQuery(filters.join(','));
-      }
-    },
+    handleFilterChange:
+      ({ changeFilterQuery }: Props): Function =>
+      (filters: Array<string>): void => {
+        if (filters[0] === 'All') {
+          changeFilterQuery();
+        } else {
+          changeFilterQuery(filters.join(','));
+        }
+      },
   }),
   pure(['filterQuery'])
 )(ToolbarFilters);

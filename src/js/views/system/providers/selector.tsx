@@ -1,14 +1,14 @@
-import React, { FC } from 'react';
-import { Button, ButtonGroup, Spinner, Intent } from '@blueprintjs/core';
+import { Button, ButtonGroup, Intent, Spinner } from '@blueprintjs/core';
 import map from 'lodash/map';
 import size from 'lodash/size';
-import { get } from '../../../store/api/utils';
+import React, { FC } from 'react';
+import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
-import settings from '../../../settings';
 import PaneItem from '../../../components/pane_item';
-import { injectIntl } from 'react-intl';
+import settings from '../../../settings';
+import { get } from '../../../store/api/utils';
 
 export interface IProviderProps {
   type: 'inputs' | 'outputs';
@@ -83,22 +83,22 @@ const DataProvider: FC<IProviderProps> = ({
   record,
   setRecord,
   setFields,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'setData' does not exist on type 'PropsWi... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'setData' does not exist on type 'PropsWi... Remove this comment to see the full error message
   setData,
   title,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'PropsWithC... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'PropsWithC... Remove this comment to see the full error message
   intl,
 }) => {
   const clear = () => {
     setRecord(null);
     setData(null);
   };
-  const handleProviderChange = provider => {
-    setProvider(current => {
+  const handleProviderChange = (provider) => {
+    setProvider((current) => {
       // Fetch the url of the provider
       (async () => {
         // Clear the data
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
         clear(true);
         // Set loading
         setIsLoading(true);
@@ -111,12 +111,12 @@ const DataProvider: FC<IProviderProps> = ({
         setIsLoading(false);
         // Filter unwanted data if needed
         if (filter) {
-          data = data.filter(datum => datum[filter]);
+          data = data.filter((datum) => datum[filter]);
         }
         // Add new child
         setChildren([
           {
-            values: data.map(child => ({
+            values: data.map((child) => ({
               name: child[providers[provider].namekey],
               desc: '',
               url,
@@ -138,18 +138,16 @@ const DataProvider: FC<IProviderProps> = ({
     suffix?: string
   ) => void = async (value, url, itemIndex, suffix) => {
     // Clear the data
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
     clear(true);
     // Set loading
     setIsLoading(true);
     // Fetch the data
-    const data = await get(
-      `${settings.REST_BASE_URL}/${url}/${value}${suffix}`
-    );
+    const data = await get(`${settings.REST_BASE_URL}/${url}/${value}${suffix}`);
     // Reset loading
     setIsLoading(false);
     // Add new child
-    setChildren(current => {
+    setChildren((current) => {
       // Update this item
       const newItems: any[] = current
         .map((item, index) => {
@@ -166,7 +164,7 @@ const DataProvider: FC<IProviderProps> = ({
           // Return the item
           return newItem;
         })
-        .filter(item => item);
+        .filter((item) => item);
       // If this provider has children
       if (size(data.children)) {
         // Return the updated items and add
@@ -174,7 +172,7 @@ const DataProvider: FC<IProviderProps> = ({
         return [
           ...newItems,
           {
-            values: data.children.map(child => ({
+            values: data.children.map((child) => ({
               name: child,
               desc: '',
               url: `${url}/${value}${suffix}`,
@@ -228,9 +226,7 @@ const DataProvider: FC<IProviderProps> = ({
             setIsLoading(false);
             // Set the record data
             setData(data);
-            setRecord(
-              !providers[provider].requiresRecord ? record.fields : record
-            );
+            setRecord(!providers[provider].requiresRecord ? record.fields : record);
             //
           })();
         }
@@ -250,14 +246,12 @@ const DataProvider: FC<IProviderProps> = ({
     >
       <PaneItem title={intl.formatMessage({ id: 'global.select-provider ' })}>
         <ButtonGroup>
-          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Dropdown disabled={isLoading}>
-            { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
-            <Control>
-              {provider || intl.formatMessage({ id: 'dropdown.please-select' })}
-            </Control>
-            {getDefaultItems.map(item => (
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
+            <Control>{provider || intl.formatMessage({ id: 'dropdown.please-select' })}</Control>
+            {getDefaultItems.map((item) => (
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               <Item
                 key={item.name}
                 title={item.name}
@@ -266,23 +260,20 @@ const DataProvider: FC<IProviderProps> = ({
             ))}
           </Dropdown>
           {nodes.map((child, index) => (
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             <Dropdown disabled={isLoading} key={title + index}>
-              { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
               <Control>
-                {child.value ||
-                  intl.formatMessage({ id: 'dropdown.please-select' })}
+                {child.value || intl.formatMessage({ id: 'dropdown.please-select' })}
               </Control>
-              {child.values.map(item => (
-                // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              {child.values.map((item) => (
+                // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                 <Item
                   key={item.name}
                   title={item.name}
                   onClick={() => {
                     // Get the child data
-                    const { url, suffix } = child.values.find(
-                      val => val.name === item.name
-                    );
+                    const { url, suffix } = child.values.find((val) => val.name === item.name);
                     // Change the child
                     handleChildFieldChange(item.name, url, index, suffix);
                   }}

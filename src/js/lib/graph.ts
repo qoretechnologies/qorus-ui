@@ -82,7 +82,7 @@ function normalize(deps) {
   function ensureSafeSet(map, id) {
     if (map.has(id)) return;
 
-    deps[id].forEach(dId => ensureSafeSet(map, dId));
+    deps[id].forEach((dId) => ensureSafeSet(map, dId));
     map.set(id, deps[id].slice());
   }
 
@@ -144,16 +144,14 @@ function setBalancedDepth(nodes) {
   const nodesAboveEql = (n, tmp, bId) =>
     n.above.length === tmp.get(bId).above.length &&
     n.above.every((na, i) => na === tmp.get(bId).above[i]);
-  const isKnown = (tmp, aId) => tmp.get(aId).below.some(bId => tmp.has(bId));
+  const isKnown = (tmp, aId) => tmp.get(aId).below.some((bId) => tmp.has(bId));
   const nextDepth = (tmp, d, bId) => Math.max(d, tmp.get(bId).depth + 1);
 
   for (const [id, n] of nodes) {
     let depth;
 
-    // @ts-expect-error ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
-    const commonId = [...balanced.keys()]
-      .reverse()
-      .find(nodesAboveEql.bind(null, n, balanced));
+    // @ts-ignore ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
+    const commonId = [...balanced.keys()].reverse().find(nodesAboveEql.bind(null, n, balanced));
     depth = balanced.has(commonId) && balanced.get(commonId).depth;
 
     if (!depth && !n.above.some(isKnown.bind(null, balanced))) {
@@ -161,7 +159,7 @@ function setBalancedDepth(nodes) {
     }
 
     if (!depth) {
-      // @ts-expect-error ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
       depth = [...balanced.keys()].reduce(nextDepth.bind(null, balanced), 0);
     }
 
@@ -242,7 +240,7 @@ function getWidth(node) {
 function getPosition(node) {
   const ref = findRef(node);
   const lvl = ref && ref.below.find(isRef.bind(null, ref));
-  const pos = lvl && lvl.findIndex(nb => nb === node);
+  const pos = lvl && lvl.findIndex((nb) => nb === node);
 
   return ref ? pos - (lvl.length - 1) / 2 : 0;
 }
@@ -263,12 +261,11 @@ function setBalancedWeight(nodes) {
   for (const [id, n] of [...nodes.entries()].reverse()) {
     balanced.set(id, Object.assign({}, n));
     for (const bId of balanced.get(id).below) {
-      balanced.get(id).weight +=
-        balanced.get(bId).weight / balanced.get(bId).above.length;
+      balanced.get(id).weight += balanced.get(bId).weight / balanced.get(bId).above.length;
     }
   }
 
-  // @ts-expect-error ts-migrate(2569) FIXME: Type 'IterableIterator<[any, any]>' is not an arra... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2569) FIXME: Type 'IterableIterator<[any, any]>' is not an arra... Remove this comment to see the full error message
   return new Map([...balanced.entries()].reverse());
 }
 
@@ -323,32 +320,26 @@ function setBalancedWidthAndPosition(nodes) {
   for (const [id, n] of nodes) {
     balanced.set(id, Object.assign({}, n));
 
-    balanced.get(id).above = centerNodes(
-      balanced.get(id).above.map(toExport.bind(null, balanced))
-    );
+    balanced.get(id).above = centerNodes(balanced.get(id).above.map(toExport.bind(null, balanced)));
 
-    balanced.get(id).below = n.below.reduce(
-      divideByDepth.bind(null, n, nodes),
-      []
-    );
+    balanced.get(id).below = n.below.reduce(divideByDepth.bind(null, n, nodes), []);
 
     balanced.get(id).width = 1;
   }
 
-  const belowToExport = (tmp, bIds) =>
-    centerNodes(bIds.map(toExport.bind(null, tmp)));
+  const belowToExport = (tmp, bIds) => centerNodes(bIds.map(toExport.bind(null, tmp)));
 
-  // @ts-expect-error ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
   for (const n of balanced.values()) {
     n.below = n.below.map(belowToExport.bind(null, balanced));
   }
 
-  // @ts-expect-error ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
   for (const n of [...balanced.values()].reverse()) {
     n.width = getWidth(n);
   }
 
-  // @ts-expect-error ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
   for (const n of balanced.values()) {
     n.position = getPosition(n);
   }
@@ -369,11 +360,7 @@ function setBalancedWidthAndPosition(nodes) {
  * @see setBalancedWidthAndPosition
  */
 function balance(nodes) {
-  return _.flow([
-    setBalancedDepth,
-    setBalancedWeight,
-    setBalancedWidthAndPosition,
-  ])(nodes);
+  return _.flow([setBalancedDepth, setBalancedWeight, setBalancedWidthAndPosition])(nodes);
 }
 
 /**
@@ -397,12 +384,12 @@ export function graph(deps) {
   const normalized = normalize(deps);
   const nodes = new Map();
 
-  // @ts-expect-error ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2569) FIXME: Type 'IterableIterator<any>' is not an array type ... Remove this comment to see the full error message
   for (const id of normalized.keys()) {
     nodes.set(id, create(id));
   }
 
-  // @ts-expect-error ts-migrate(2569) FIXME: Type 'Map<any, any>' is not an array type or a str... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2569) FIXME: Type 'Map<any, any>' is not an array type or a str... Remove this comment to see the full error message
   for (const [id, ds] of normalized) {
     for (const depId of ds) {
       const [above, below] = add(nodes.get(depId), nodes.get(id));

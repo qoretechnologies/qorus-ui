@@ -1,20 +1,17 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import map from 'lodash/map';
-
-import SidebarItem from './item';
-import showIfPassed from '../../hocomponents/show-if-passed';
 import size from 'lodash/size';
+import React from 'react';
+import showIfPassed from '../../hocomponents/show-if-passed';
+import SidebarItem from './item';
 
 type SidebarSectionProps = {
-  favoriteItems: Array<Object>,
-  sectionData: Array<Object>,
-  isCollapsed: boolean,
-  location: Object,
-  expandedSection: string,
-  onSectionToggle: Function,
+  favoriteItems: Array<Object>;
+  sectionData: Array<Object>;
+  isCollapsed: boolean;
+  location: Object;
+  expandedSection: string;
+  onSectionToggle: Function;
 };
 
 const SidebarSection: Function = ({
@@ -24,8 +21,8 @@ const SidebarSection: Function = ({
   expandedSection,
   onSectionToggle,
   favoriteItems,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: SidebarSectionProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+SidebarSectionProps): React.Element<any> => (
   <div className="sidebarSection">
     {map(sectionData, (itemData: Object, key: number) => (
       <SidebarItem
@@ -41,7 +38,5 @@ const SidebarSection: Function = ({
   </div>
 );
 
-// @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
-export default showIfPassed(({ sectionData }) => size(sectionData))(
-  SidebarSection
-);
+// @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+export default showIfPassed(({ sectionData }) => size(sectionData))(SidebarSection);

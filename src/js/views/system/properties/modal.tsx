@@ -1,40 +1,36 @@
 // @flow
-import React, { Component } from 'react';
 import includes from 'lodash/includes';
-
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Controls, Control } from '../../../components/controls';
-import Dropdown, {
-  Control as DControl,
-  Item as DItem,
-} from '../../../components/dropdown';
-import Modal from '../../../components/modal';
+import React, { Component } from 'react';
 import Box from '../../../components/box';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control, Controls } from '../../../components/controls';
+import Dropdown, { Control as DControl, Item as DItem } from '../../../components/dropdown';
+import Modal from '../../../components/modal';
 
 export default class extends Component {
   props: {
-    onMount: Function,
-    onClose: Function,
-    onSubmit: Function,
-    data: Object,
-    collection: Object,
+    onMount: Function;
+    onClose: Function;
+    onSubmit: Function;
+    data: Object;
+    collection: Object;
   } = this.props;
 
   state: {
-    domain: string,
-    key: string,
-    showDomains: boolean,
-    showKeys: boolean,
+    domain: string;
+    key: string;
+    showDomains: boolean;
+    showKeys: boolean;
   } = {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'domain' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'domain' does not exist on type 'Object'.
     domain: this.props.data ? this.props.data.domain : '',
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'.
     key: this.props.data ? this.props.data.key : '',
     showDomains: false,
     showKeys: false,
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleDomainChange = (event: EventHandler): void => {
     if (event.target.value === '') {
       this.setState({
@@ -51,7 +47,7 @@ export default class extends Component {
     }
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleKeyChange = (event: EventHandler): void => {
     const { collection } = this.props;
     const domain = collection[this.state.domain];
@@ -78,7 +74,7 @@ export default class extends Component {
   };
 
   handleDomainSelect: Function = (
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
     event: EventHandler,
     domain: string
   ): void => {
@@ -91,30 +87,30 @@ export default class extends Component {
     });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleKeySelect: Function = (event: EventHandler, key: string): void => {
     this.setState({ key });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleFormSubmit = (event: EventHandler): void => {
     event.preventDefault();
 
     const { domain, key, value } = this.refs;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
     let val = value.value;
 
     try {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
       val = JSON.parse(value.value);
     } catch (e) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
       val = value.value;
     } finally {
       this.props.onSubmit({
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
         domain: domain.value,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
         key: key.value,
         value: val,
       });
@@ -124,31 +120,29 @@ export default class extends Component {
   };
 
   getDomainList: Function = (value: string): Array<string> =>
-    Object.keys(this.props.collection).filter(
-      (domain: string): boolean => includes(domain, value)
-    );
+    Object.keys(this.props.collection).filter((domain: string): boolean => includes(domain, value));
 
   getKeyList: Function = (value: string): Array<string> =>
     this.props.collection[this.state.domain].filter(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       (item: Object): boolean => (value ? includes(item.name, value) : true)
     );
 
-  // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
   renderDomains: Function = (): Array<React.Element<any>> =>
     this.getDomainList(this.state.domain).map((domain: string, key: number) => (
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
       <DItem key={key} title={domain} action={this.handleDomainSelect} />
     ));
 
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderKeys: Function = (): ?Array<React.Element<any>> =>
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  renderKeys: Function = (): Array<React.Element<any>> =>
     this.getKeyList(this.state.key).map((item: Object, index: number) => (
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       <DItem key={index} title={item.name} action={this.handleKeySelect} />
     ));
 
-  render () {
+  render() {
     const { data, collection } = this.props;
 
     return (
@@ -168,14 +162,14 @@ export default class extends Component {
                       show={this.state.showDomains}
                       onHide={this.handleDomainClose}
                     >
-                      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */ }
+                      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
                       <DControl> Select </DControl>
                       {this.renderDomains()}
                     </Dropdown>
                   </div>
                 )}
                 <input
-                  // @ts-expect-error ts-migrate(2322) FIXME: Type 'Object' is not assignable to type 'boolean'.
+                  // @ts-ignore ts-migrate(2322) FIXME: Type 'Object' is not assignable to type 'boolean'.
                   readOnly={data}
                   ref="domain"
                   type="text"
@@ -190,29 +184,22 @@ export default class extends Component {
               <label htmlFor="key"> Key </label>
               <div
                 className={`form-group ${
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'.
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'.
                   !data || !data.key ? 'input-group' : ''
                 }`}
               >
-                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'. */ }
+                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'. */}
                 {(!data || !data.key) && (
                   <div className="input-group-btn">
-                    <Dropdown
-                      id="props"
-                      show={this.state.showKeys}
-                      onHide={this.handleKeysClose}
-                    >
-                      { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; disabled: boolean; }' ... Remove this comment to see the full error message */ }
-                      <DControl disabled={!collection[this.state.domain]}>
-                        {' '}
-                        Select{' '}
-                      </DControl>
+                    <Dropdown id="props" show={this.state.showKeys} onHide={this.handleKeysClose}>
+                      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; disabled: boolean; }' ... Remove this comment to see the full error message */}
+                      <DControl disabled={!collection[this.state.domain]}> Select </DControl>
                       {collection[this.state.domain] && this.renderKeys()}
                     </Dropdown>
                   </div>
                 )}
                 <input
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'.
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'.
                   readOnly={data && data.key}
                   ref="key"
                   type="text"
@@ -230,7 +217,7 @@ export default class extends Component {
                   <textarea
                     ref="value"
                     id="value"
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
                     defaultValue={data ? JSON.stringify(data.value) : ''}
                     className="bp3-input bp3-fill"
                   />

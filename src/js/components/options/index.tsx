@@ -1,14 +1,13 @@
 // @flow
-import React, { Component } from 'react';
 import { Button, Intent } from '@blueprintjs/core';
-
-import SystemOptions from './system_options';
-import Table, { Section, Row, Cell } from '../table';
+import React, { Component } from 'react';
+import { injectIntl } from 'react-intl';
+import NoData from '../nodata';
+import PaneItem from '../pane_item';
+import Table, { Cell, Row, Section } from '../table';
 import EditableCell from '../table/editable_cell';
 import { pureRender } from '../utils';
-import PaneItem from '../pane_item';
-import NoData from '../nodata';
-import { injectIntl } from 'react-intl';
+import SystemOptions from './system_options';
 
 /**
  * Editable key-value table component.
@@ -26,10 +25,10 @@ import { injectIntl } from 'react-intl';
 @injectIntl
 export default class Options extends Component {
   props: {
-    model: Object,
-    systemOptions: Array<Object>,
-    onSet: Function,
-    onDelete: Function,
+    model: Object;
+    systemOptions: Array<Object>;
+    onSet: Function;
+    onDelete: Function;
   } = this.props;
 
   /**
@@ -50,7 +49,7 @@ export default class Options extends Component {
    * Removes cached last option from state if it has been set.
    */
   componentWillReceiveProps() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'lastOptionSet' does not exist on type 'R... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'lastOptionSet' does not exist on type 'R... Remove this comment to see the full error message
     if (this.state.lastOptionSet) {
       this.setState({
         lastOption: null,
@@ -65,12 +64,12 @@ export default class Options extends Component {
    * @return {array}
    */
   getModelOptions() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
     const { model: { options = [] } = {} } = this.props;
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
     return this.state.lastOption
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
-      ? options.concat(this.state.lastOption)
+      ? // @ts-ignore ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
+        options.concat(this.state.lastOption)
       : options || [];
   }
 
@@ -80,13 +79,13 @@ export default class Options extends Component {
    * @return {array}
    */
   getUnusedSystemOptions() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
     const { systemOptions = [], model: { options = [] } = {} } = this.props;
     const opts = options || [];
 
     return systemOptions.filter(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-      sysOpt => opts.findIndex(mdlOpt => mdlOpt.name === sysOpt.name) < 0
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+      (sysOpt) => opts.findIndex((mdlOpt) => mdlOpt.name === sysOpt.name) < 0
     );
   }
 
@@ -101,7 +100,7 @@ export default class Options extends Component {
   setOption = (opt, value) => {
     this.props.onSet({ ...opt, value });
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
     if (opt === this.state.lastOption) {
       this.setState({ lastOptionSet: true });
     }
@@ -112,7 +111,7 @@ export default class Options extends Component {
    *
    * @param {object} opt
    */
-  addOption = opt => {
+  addOption = (opt) => {
     this.setState({
       lastOption: opt,
       lastOptionSet: false,
@@ -128,7 +127,7 @@ export default class Options extends Component {
    * @param {object} opt
    */
   cancelOptionEdit(opt) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
     if (opt === this.state.lastOption && !this.state.lastOptionSet) {
       this.setState({
         lastOption: null,
@@ -144,15 +143,15 @@ export default class Options extends Component {
    * @return {Generator<ReactElement>}
    */
   *renderTableCells(opt) {
-    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
     yield <Cell className="name">{opt.name}</Cell>;
 
-    const handleSave = value => this.setOption(opt, value);
+    const handleSave = (value) => this.setOption(opt, value);
     const handleCancel = () => this.cancelOptionEdit(opt);
     yield (
       <EditableCell
         value={opt.value || ''}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'lastOption' does not exist on type 'Read... Remove this comment to see the full error message
         startEdit={opt === this.state.lastOption}
         onSave={handleSave}
         onCancel={handleCancel}
@@ -162,7 +161,7 @@ export default class Options extends Component {
 
     const handleDelete = () => this.props.onDelete(opt);
     yield (
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
       <Cell>
         <Button
           title="Remove"
@@ -216,21 +215,18 @@ export default class Options extends Component {
    */
   render() {
     return (
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ model: O... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ model: O... Remove this comment to see the full error message
       <PaneItem title={this.props.intl.formatMessage({ id: 'component.options' })}>
         {!this.getModelOptions().length && <NoData />}
         {!!this.getModelOptions().length && (
           <Table
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ data: any; sections: (opts: any) => Genera... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ data: any; sections: (opts: any) => Genera... Remove this comment to see the full error message
             data={this.getModelOptions()}
             sections={this.renderTableSections}
             className="table table-condensed table-striped table--small"
           />
         )}
-        <SystemOptions
-          options={this.getUnusedSystemOptions()}
-          onAdd={this.addOption}
-        />
+        <SystemOptions options={this.getUnusedSystemOptions()} onAdd={this.addOption} />
       </PaneItem>
     );
   }

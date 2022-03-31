@@ -15,7 +15,7 @@ import {
   Popover,
   Position,
   Tag,
-  Tooltip
+  Tooltip,
 } from '@blueprintjs/core';
 import map from 'lodash/map';
 import React, { Component } from 'react';
@@ -28,7 +28,7 @@ import en from '../../../img/country_flags/us.png';
 import Kubernetes from '../../../img/kubernetes.png';
 import logo from '../../../img/qorus_engine_logo.png';
 import whiteLogo from '../../../img/qorus_engine_logo_white.png';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control } from '../../components/controls';
 import { HEALTH_KEYS } from '../../constants/dashboard';
 import Release from '../../containers/release';
@@ -76,31 +76,31 @@ const searchableViews = {
 };
 
 export type Props = {
-  info: Object,
-  health: Object,
-  currentUser: Object,
-  isTablet?: boolean,
-  onMenuToggle: () => void,
-  showMenu?: boolean,
-  openModal: Function,
-  closeModal: Function,
-  locale: string,
-  light: boolean,
-  onThemeClick: Function,
-  storeLocale: Function,
-  user: Object,
-  openPane: Function,
-  notificationStatus: boolean,
-  onMaximizeClick: Function,
+  info: Object;
+  health: Object;
+  currentUser: Object;
+  isTablet?: boolean;
+  onMenuToggle: () => void;
+  showMenu?: boolean;
+  openModal: Function;
+  closeModal: Function;
+  locale: string;
+  light: boolean;
+  onThemeClick: Function;
+  storeLocale: Function;
+  user: Object;
+  openPane: Function;
+  notificationStatus: boolean;
+  onMaximizeClick: Function;
 };
 
 @connect(
   (state: Object): Object => ({
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
     notificationStatus: state.ui.notifications.read,
   }),
   {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     storeLocale: actions.currentUser.storeLocale,
   }
 )
@@ -111,8 +111,8 @@ export default class Topbar extends Component {
   props: Props = this.props;
 
   state: {
-    quickSearchType: string,
-    quickSearchValue: string,
+    quickSearchType: string;
+    quickSearchValue: string;
   } = {
     quickSearchType: 'Orders by value',
     quickSearchValue: '',
@@ -123,15 +123,13 @@ export default class Topbar extends Component {
   };
 
   handleSubmit: Function = (e: Object): void => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
     e.preventDefault();
 
     const { quickSearchType, quickSearchValue } = this.state;
     const searchable = searchableViews[quickSearchType];
-    const link: string =
-      typeof searchable === 'object' ? searchable.link : searchable;
-    const queryName: string =
-      typeof searchable === 'object' ? searchable.queryName : 'search';
+    const link: string = typeof searchable === 'object' ? searchable.link : searchable;
+    const queryName: string = typeof searchable === 'object' ? searchable.queryName : 'search';
 
     browserHistory.push(`/${link}${queryName}=${quickSearchValue}`);
   };
@@ -144,14 +142,16 @@ export default class Topbar extends Component {
       <Popover
         content={
           <Menu>
-            { /* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */ }
-            {sortedInterfaces.map((key: string): React.Element<MenuItem> => (
-              <MenuItem
-                text={key}
-                key={key}
-                onClick={() => this.setState({ quickSearchType: key })}
-              />
-            ))}
+            {/* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
+            {sortedInterfaces.map(
+              (key: string): React.Element<MenuItem> => (
+                <MenuItem
+                  text={key}
+                  key={key}
+                  onClick={() => this.setState({ quickSearchType: key })}
+                />
+              )
+            )}
           </Menu>
         }
         popoverClassName="popover-dropdown"
@@ -159,17 +159,17 @@ export default class Topbar extends Component {
       >
         <Button
           className={Classes.MINIMAL}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
           text={this.props.intl.formatMessage(
             { id: 'system.global-search-type' },
             {
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
               type: this.props.intl.formatMessage({
                 id: this.state.quickSearchType,
               }),
             }
           )}
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ className: string; text: any; rightIconNam... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2322) FIXME: Type '{ className: string; text: any; rightIconNam... Remove this comment to see the full error message
           rightIconName="caret-down"
         />
       </Popover>
@@ -180,13 +180,13 @@ export default class Topbar extends Component {
     const {
       light,
       onThemeClick,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       health: { data },
       info,
       onMaximizeClick,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'sendWarning' does not exist on type 'Pro... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'sendWarning' does not exist on type 'Pro... Remove this comment to see the full error message
       sendWarning,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
       intl,
     } = this.props;
 
@@ -198,30 +198,30 @@ export default class Topbar extends Component {
           <NavbarHeading>
             <img src={light ? logo : whiteLogo} className="qore-small-logo" />
             <span className="topbar-instance-on">on</span>
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
             <span className="topbar-instance">{info.data['instance-key']}</span>
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
             {info.data.is_kubernetes && (
-              <Tag intent="primary" style={{ marginLeft: '15px', verticalAlign: 'sub' }}><img src={Kubernetes} style={{ width: '15px' }} /> IN KUBERNETES</Tag>
+              <Tag intent="primary" style={{ marginLeft: '15px', verticalAlign: 'sub' }}>
+                <img src={Kubernetes} style={{ width: '15px' }} /> IN KUBERNETES
+              </Tag>
             )}
           </NavbarHeading>
         </NavbarGroup>
         <NavbarGroup align="right">
-          { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
           <form onSubmit={this.handleSubmit} id="quickSearchForm">
             <ControlGroup>
               <InputGroup
                 id="quickSearch"
-                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ id: string; lefticonName: string; placehol... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type '{ id: string; lefticonName: string; placehol... Remove this comment to see the full error message
                 lefticonName="search"
                 placeholder={intl.formatMessage({
                   id: 'system.global-search',
                 })}
                 rightElement={this.renderSearchMenu()}
                 value={this.state.quickSearchValue}
-                onChange={(e) =>
-                  this.setState({ quickSearchValue: e.target.value })
-                }
+                onChange={(e) => this.setState({ quickSearchValue: e.target.value })}
               />
               <Control icon="search" type="submit" big />
             </ControlGroup>
@@ -231,20 +231,18 @@ export default class Topbar extends Component {
             <Button
               icon="git-push"
               onClick={() => {
-                this.props.openModal(
-                  <Release onClose={this.props.closeModal} />
-                );
+                this.props.openModal(<Release onClose={this.props.closeModal} />);
               }}
             />
           </ButtonGroup>
           <NavbarDivider />
           <Popover
             position={Position.BOTTOM}
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; position: "bottom"; use... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; position: "bottom"; use... Remove this comment to see the full error message
             useSmartPositioning
             content={
               <Menu>
-                { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                 <MenuDivider title={this.props.user.name} />
                 <MenuItem
                   text="My profile"
@@ -280,11 +278,7 @@ export default class Topbar extends Component {
               content={
                 <Menu>
                   <MenuDivider title="System health" />
-                  <MenuItem
-                    text="Status"
-                    label={data.health}
-                    intent={HEALTH_KEYS[data.health]}
-                  />
+                  <MenuItem text="Status" label={data.health} intent={HEALTH_KEYS[data.health]} />
                   <MenuItem text="Ongoing alerts" label={data.ongoing} />
                   <MenuItem text="Transient alerts" label={data.transient} />
                 </Menu>
@@ -302,11 +296,11 @@ export default class Topbar extends Component {
                     <MenuDivider title="Remote connections" />
                     {data.remote.map((remote: Object) => (
                       <MenuItem
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                         key={remote.name}
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                         text={`${remote.name} - ${remote.health}`}
-                        // @ts-expect-error ts-migrate(2339) FIXME: Property 'health' does not exist on type 'Object'.
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'health' does not exist on type 'Object'.
                         intent={HEALTH_KEYS[remote.health]}
                       />
                     ))}
@@ -320,10 +314,8 @@ export default class Topbar extends Component {
           <ButtonGroup minimal>
             <Button
               icon="notifications"
-              intent={
-                this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY
-              }
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
+              intent={this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY}
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
               onClick={this.handleNotificationsClick}
               id="notificationsToggle"
             />
@@ -340,30 +332,19 @@ export default class Topbar extends Component {
                       <MenuItem
                         key={lang}
                         text={lang}
-                        // @ts-expect-error ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'string'.
-                        label={
-                          <img
-                            src={flags[loc]}
-                            style={{ width: 16, height: 12 }}
-                          />
-                        }
+                        // @ts-ignore ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'string'.
+                        label={<img src={flags[loc]} style={{ width: 16, height: 12 }} />}
                         onClick={() => this.props.storeLocale(loc)}
                       />
                     )
                 )}
-                <MenuItem
-                  text="Use browser locale"
-                  onClick={() => this.props.storeLocale()}
-                />
+                <MenuItem text="Use browser locale" onClick={() => this.props.storeLocale()} />
               </Menu>
             }
           >
             <ButtonGroup minimal>
               <Button>
-                <img
-                  src={flags[this.props.locale]}
-                  style={{ width: 16, height: 12 }}
-                />
+                <img src={flags[this.props.locale]} style={{ width: 16, height: 12 }} />
               </Button>
             </ButtonGroup>
           </Popover>
@@ -371,10 +352,7 @@ export default class Topbar extends Component {
             <Button
               icon="maximize"
               onClick={() => {
-                sendWarning(
-                  'Full screen mode activated. Press [ESC] to leave.',
-                  'fullscreen'
-                );
+                sendWarning('Full screen mode activated. Press [ESC] to leave.', 'fullscreen');
                 onMaximizeClick();
               }}
               id="maximize"
@@ -383,7 +361,7 @@ export default class Topbar extends Component {
           <ButtonGroup minimal>
             <Button
               icon={light ? 'moon' : 'flash'}
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
               onClick={onThemeClick}
               id="themeToggle"
             />

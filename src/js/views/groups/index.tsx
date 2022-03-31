@@ -1,58 +1,57 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
-import withProps from 'recompose/withProps';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import pure from 'recompose/onlyUpdateForKeys';
 import size from 'lodash/size';
-
-import actions from '../../store/api/actions';
-import { querySelector, resourceSelector } from '../../selectors';
-import { findBy } from '../../helpers/search';
-import withSort from '../../hocomponents/sort';
-import loadMore from '../../hocomponents/loadMore';
-import patch from '../../hocomponents/patchFuncArgs';
-import sync from '../../hocomponents/sync';
-import selectable from '../../hocomponents/selectable';
-import withCSV from '../../hocomponents/csv';
-import withInfoBar from '../../hocomponents/withInfoBar';
-import { sortDefaults } from '../../constants/sort';
-import GroupsTable from './table';
-import GroupsDetail from './detail';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import pure from 'recompose/onlyUpdateForKeys';
+import withProps from 'recompose/withProps';
+import { createSelector } from 'reselect';
 import Box from '../../components/box';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
+import CsvControl from '../../components/CsvControl';
+import Flex from '../../components/Flex';
 import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
-import CsvControl from '../../components/CsvControl';
+import { sortDefaults } from '../../constants/sort';
 import Search from '../../containers/search';
-import queryControl from '../../hocomponents/queryControl';
-import Flex from '../../components/Flex';
-import Controls from './controls';
+import { findBy } from '../../helpers/search';
+import withCSV from '../../hocomponents/csv';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
-import { FormattedMessage } from 'react-intl';
+import loadMore from '../../hocomponents/loadMore';
+import patch from '../../hocomponents/patchFuncArgs';
+import queryControl from '../../hocomponents/queryControl';
+import selectable from '../../hocomponents/selectable';
+import withSort from '../../hocomponents/sort';
+import sync from '../../hocomponents/sync';
+import withInfoBar from '../../hocomponents/withInfoBar';
+import { querySelector, resourceSelector } from '../../selectors';
+import actions from '../../store/api/actions';
+import Controls from './controls';
+import GroupsDetail from './detail';
+import GroupsTable from './table';
 
 type Props = {
-  sortData: Object,
-  onSortChange: Function,
-  groups: Array<Object>,
-  selected: string,
-  selectedIds: Array<number>,
-  onCSVClick: Function,
-  location: Object,
-  group?: Object,
-  canLoadMore: boolean,
-  handleLoadMore: Function,
-  handleLoadAll: Function,
-  loadMoreCurrent: number,
-  loadMoreTotal: number,
-  limit: number,
-  isTablet: boolean,
-  infoTotalCount: number,
-  infoEnabled: number,
-  infoWithAlerts: number,
-  searchQuery: string,
-  changeSearchQuery: Function,
+  sortData: Object;
+  onSortChange: Function;
+  groups: Array<Object>;
+  selected: string;
+  selectedIds: Array<number>;
+  onCSVClick: Function;
+  location: Object;
+  group?: Object;
+  canLoadMore: boolean;
+  handleLoadMore: Function;
+  handleLoadAll: Function;
+  loadMoreCurrent: number;
+  loadMoreTotal: number;
+  limit: number;
+  isTablet: boolean;
+  infoTotalCount: number;
+  infoEnabled: number;
+  infoWithAlerts: number;
+  searchQuery: string;
+  changeSearchQuery: Function;
 };
 
 const GroupsView: Function = ({
@@ -72,8 +71,8 @@ const GroupsView: Function = ({
   isTablet,
   searchQuery,
   changeSearchQuery,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> =>
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> =>
   group ? (
     <Flex>
       <Headbar>
@@ -82,12 +81,12 @@ const GroupsView: Function = ({
             <FormattedMessage id="Groups" />
           </Crumb>
           <Crumb active>
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
             {group.name} ({group.id})
           </Crumb>
         </Breadcrumbs>
         <Pull right>
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message */}
           <Controls enabled={group.enabled} name={group.name} big />
         </Pull>
       </Headbar>
@@ -103,11 +102,7 @@ const GroupsView: Function = ({
         </Breadcrumbs>
         <Pull right>
           <CsvControl onClick={onCSVClick} disabled={size(groups) === 0} />
-          <Search
-            defaultValue={searchQuery}
-            onSearchUpdate={changeSearchQuery}
-            resource="groups"
-          />
+          <Search defaultValue={searchQuery} onSearchUpdate={changeSearchQuery} resource="groups" />
         </Pull>
       </Headbar>
       <Box top noPadding>
@@ -129,28 +124,31 @@ const GroupsView: Function = ({
     </Flex>
   );
 
-const filterGroups: Function = (search: string) => (
-  groups: Array<Object>
-): Array<Object> => findBy(['name', 'description'], search, groups);
+const filterGroups: Function =
+  (search: string) =>
+  (groups: Array<Object>): Array<Object> =>
+    findBy(['name', 'description'], search, groups);
 
 const transformGroups: Function = (groups: Array<Object>): Array<Object> =>
-  groups.map((group: Object): Object => ({
-    ...group,
-    ...{
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'workflows' does not exist on type 'Objec... Remove this comment to see the full error message
-      workflows_count: group.workflows.length,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type 'Object'.
-      jobs_count: group.jobs.length,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'services' does not exist on type 'Object... Remove this comment to see the full error message
-      services_count: group.services.length,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
-      vmaps_count: group.vmaps.length,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'roles' does not exist on type 'Object'.
-      roles_count: group.roles.length,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
-      mappers_count: group.mappers.length,
-    },
-  }));
+  groups.map(
+    (group: Object): Object => ({
+      ...group,
+      ...{
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type 'Objec... Remove this comment to see the full error message
+        workflows_count: group.workflows.length,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type 'Object'.
+        jobs_count: group.jobs.length,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type 'Object... Remove this comment to see the full error message
+        services_count: group.services.length,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+        vmaps_count: group.vmaps.length,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'roles' does not exist on type 'Object'.
+        roles_count: group.roles.length,
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+        mappers_count: group.mappers.length,
+      },
+    })
+  );
 
 const groupsSelector: Function = createSelector(
   [resourceSelector('groups'), querySelector('search')],
@@ -158,21 +156,21 @@ const groupsSelector: Function = createSelector(
     compose(
       filterGroups(search),
       transformGroups
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     )(groups.data)
 );
 
 const groupSelector: Function = createSelector(
   [resourceSelector('groups'), querySelector('group')],
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  (groups: Object, group: ?string) =>
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  (groups: Object, group: string) =>
     group
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-      ? groups.data.find((grp: Object): boolean => grp.name === group)
+      ? // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+        groups.data.find((grp: Object): boolean => grp.name === group)
       : null
 );
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
+// @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
 const settingsSelector = (state: Object): Object => state.ui.settings;
 
 const selector: Function = createSelector(
@@ -181,20 +179,17 @@ const selector: Function = createSelector(
     meta,
     groups,
     group,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'tablet' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'tablet' does not exist on type 'Object'.
     isTablet: settings.tablet,
   })
 );
 
 export default compose(
   hasInterfaceAccess('groups', 'Groups'),
-  connect(
-    selector,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type '{}'.
-      load: actions.groups.fetch,
-    }
-  ),
+  connect(selector, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'groups' does not exist on type '{}'.
+    load: actions.groups.fetch,
+  }),
   withInfoBar('groups'),
   withProps({
     fetchParams: { no_synthetic: true },
@@ -203,7 +198,7 @@ export default compose(
   sync('meta'),
   withSort('groups', 'groups', sortDefaults.groups),
   loadMore('groups', 'groups', true, 50),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
   queryControl('search'),
   selectable('groups'),
   withCSV('groups', 'groups'),

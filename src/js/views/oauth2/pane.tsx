@@ -1,28 +1,23 @@
-import Pane from '../../components/pane';
-
+import { Tag } from '@blueprintjs/core';
+import size from 'lodash/size';
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import Box from '../../components/box';
-import PaneItem from '../../components/pane_item';
-import size from 'lodash/size';
-import NoDataIf from '../../components/NoDataIf';
-import { Tag } from '@blueprintjs/core';
 import { createSelector } from 'reselect';
-import { connect } from 'react-redux';
+import Box from '../../components/box';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
+import NoDataIf from '../../components/NoDataIf';
+import Pane from '../../components/pane';
+import PaneItem from '../../components/pane_item';
 import { objectCollectionToArray } from '../../helpers/interfaces';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
 
 type ClientPaneProps = {
-  paneId: string,
-  onClose: Function,
-  handleUpdateClientClick: Function,
-  client: Object,
+  paneId: string;
+  onClose: Function;
+  handleUpdateClientClick: Function;
+  client: Object;
 };
 
 const ClientPane: Function = ({
@@ -30,8 +25,8 @@ const ClientPane: Function = ({
   onClose,
   client,
   handleUpdateClientClick,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: ClientPaneProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+ClientPaneProps): React.Element<any> => (
   <Pane title={paneId} onClose={onClose} width={600}>
     <Box fill top>
       <PaneItem
@@ -43,11 +38,11 @@ const ClientPane: Function = ({
               icon="edit"
               onClick={() => {
                 handleUpdateClientClick(
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
                   client.client_id,
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message
                   client.client_secret,
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
                   client.permissions
                 );
               }}
@@ -55,10 +50,10 @@ const ClientPane: Function = ({
           </ButtonGroup>
         }
       >
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message */}
         <NoDataIf condition={!size(client.permissions)}>
           {() =>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
             client.permissions.map((permission: string) => (
               <span>
                 <Tag className="tag-with-margin">{permission}</Tag>{' '}
@@ -73,21 +68,15 @@ const ClientPane: Function = ({
 
 const clientSelector: Function = (state: Object, props: Object): Object => {
   const clients: Array<Object> = objectCollectionToArray(
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
     state.api.clients.data
   );
 
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
   return clients.find((client: Object) => client.client_id === props.paneId);
 };
 
-// @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-const selector = createSelector(
-  [clientSelector],
-  client => ({ client })
-);
+// @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+const selector = createSelector([clientSelector], (client) => ({ client }));
 
-export default compose(
-  connect(selector),
-  onlyUpdateForKeys(['client', 'paneId'])
-)(ClientPane);
+export default compose(connect(selector), onlyUpdateForKeys(['client', 'paneId']))(ClientPane);

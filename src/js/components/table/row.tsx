@@ -1,20 +1,20 @@
 /* @flow */
-import React, { Component } from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
+import React, { Component } from 'react';
 
 export default class Row extends Component {
   props: {
-    cells?: Function,
-    data?: any,
-    children?: any,
-    highlight?: false,
-    onHighlightEnd?: Function,
+    cells?: Function;
+    data?: any;
+    children?: any;
+    highlight?: false;
+    onHighlightEnd?: Function;
   } = this.props;
 
   state: {
-    // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    highlight: ?boolean,
+    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    highlight: boolean;
   } = {
     highlight: this.props.highlight,
   };
@@ -24,14 +24,13 @@ export default class Row extends Component {
   }
 
   componentWillReceiveProps(nextProps: Object): void {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'highlight' does not exist on type 'Objec... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'highlight' does not exist on type 'Objec... Remove this comment to see the full error message
     this.startHighlight(nextProps.highlight);
   }
 
   componentWillUnmount() {
     clearTimeout(this._highlightTimeout);
-    if (this.props.onHighlightEnd && this.props.highlight)
-      this.props.onHighlightEnd();
+    if (this.props.onHighlightEnd && this.props.highlight) this.props.onHighlightEnd();
   }
 
   _highlightTimeout = null;
@@ -62,7 +61,7 @@ export default class Row extends Component {
     const { cells, data, children, ...restProps } = this.props;
     const className = classNames(
       { 'row-highlight': this.state.highlight },
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'className' does not exist on type '{ hig... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'className' does not exist on type '{ hig... Remove this comment to see the full error message
       restProps.className
     );
     const updatedProps = omit(restProps, ['highlight', 'onHighlightEnd']);

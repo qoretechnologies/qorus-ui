@@ -1,46 +1,35 @@
 // @flow
-import React, { Component } from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-
-import Toolbar from '../../../../../components/toolbar';
+import React, { Component } from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+import { ControlGroup, InputGroup } from '../../../../../../../node_modules/@blueprintjs/core';
+import { Control as Button, Controls } from '../../../../../components/controls';
 import Datepicker from '../../../../../components/datepicker';
-import {
-  Controls,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../../../components/controls';
-import Dropdown, {
-  Control as DropdownToggle,
-  Item,
-} from '../../../../../components/dropdown';
+import Dropdown, { Control as DropdownToggle, Item } from '../../../../../components/dropdown';
+import Toolbar from '../../../../../components/toolbar';
+import { DATE_FORMATS } from '../../../../../constants/dates';
 import { formatDate } from '../../../../../helpers/date';
 import { transformSuccess } from '../../../../../helpers/slas';
-import { DATE_FORMATS } from '../../../../../constants/dates';
-import {
-  InputGroup,
-  ControlGroup,
-} from '../../../../../../../node_modules/@blueprintjs/core';
 
 type Props = {
-  minDateQuery: string,
-  changeMinDateQuery: Function,
-  maxDateQuery: string,
-  changeMaxDateQuery: Function,
-  errQuery: string,
-  changeErrQuery: Function,
-  errDescQuery: string,
-  changeErrDescQuery: Function,
-  producerQuery: string,
-  changeProducerQuery: Function,
-  groupingQuery: string,
-  changeGroupingQuery: Function,
-  successQuery: string,
-  changeSuccessQuery: Function,
-  changeAllQuery: Function,
-  allQuery: string,
-  defaultDate: string,
+  minDateQuery: string;
+  changeMinDateQuery: Function;
+  maxDateQuery: string;
+  changeMaxDateQuery: Function;
+  errQuery: string;
+  changeErrQuery: Function;
+  errDescQuery: string;
+  changeErrDescQuery: Function;
+  producerQuery: string;
+  changeProducerQuery: Function;
+  groupingQuery: string;
+  changeGroupingQuery: Function;
+  successQuery: string;
+  changeSuccessQuery: Function;
+  changeAllQuery: Function;
+  allQuery: string;
+  defaultDate: string;
 };
 
 @pure([
@@ -56,13 +45,13 @@ export default class SearchToolbar extends Component {
   props: Props = this.props;
 
   state: {
-    minDate: string,
-    maxDate: string,
-    err: string,
-    errDesc: string,
-    producer: string,
-    grouping: string,
-    success: string,
+    minDate: string;
+    maxDate: string;
+    err: string;
+    errDesc: string;
+    producer: string;
+    grouping: string;
+    success: string;
   } = {
     minDate: this.props.minDateQuery || this.props.defaultDate,
     maxDate: this.props.maxDateQuery,
@@ -96,7 +85,7 @@ export default class SearchToolbar extends Component {
   _delayedSearch: Function = debounce((data: Object) => {
     const dt: Object = {
       ...data,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'success' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'success' does not exist on type 'Object'... Remove this comment to see the full error message
       ...{ success: transformSuccess(data.success) },
     };
 
@@ -125,23 +114,23 @@ export default class SearchToolbar extends Component {
     this.setState({ maxDate });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleErrChange: Function = (event: EventHandler): void => {
     this.setState({ err: event.target.value });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleErrDescChange: Function = (event: EventHandler): void => {
     this.setState({ errDesc: event.target.value });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleProducerChange: Function = (event: EventHandler): void => {
     this.setState({ producer: event.target.value });
   };
 
   handleGroupingChange: Function = (
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
     event: EventHandler,
     value: string
   ): void => {
@@ -149,7 +138,7 @@ export default class SearchToolbar extends Component {
   };
 
   handleSuccessChange: Function = (
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
     event: EventHandler,
     value: string
   ): void => {
@@ -161,23 +150,23 @@ export default class SearchToolbar extends Component {
       <Toolbar mb>
         <div className="pull-left">
           <ControlGroup>
-            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
             <Dropdown>
-              { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; }' is missing the foll... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; }' is missing the foll... Remove this comment to see the full error message */}
               <DropdownToggle>Grouping: {this.state.grouping}</DropdownToggle>
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="hourly" action={this.handleGroupingChange} />
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="daily" action={this.handleGroupingChange} />
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="monthly" action={this.handleGroupingChange} />
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="yearly" action={this.handleGroupingChange} />
             </Dropdown>
             <InputGroup
               type="text"
               placeholder="Error..."
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleErrChange}
               value={this.state.err || ''}
               id="error"
@@ -185,7 +174,7 @@ export default class SearchToolbar extends Component {
             <InputGroup
               type="text"
               placeholder="Error desc..."
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleErrDescChange}
               value={this.state.errDesc || ''}
               id="errDesc"
@@ -193,7 +182,7 @@ export default class SearchToolbar extends Component {
             <InputGroup
               type="text"
               placeholder="Producer..."
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleProducerChange}
               value={this.state.producer || ''}
               id="producer"
@@ -201,7 +190,7 @@ export default class SearchToolbar extends Component {
             <Datepicker
               placeholder="Min date..."
               date={this.state.minDate}
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               onApplyDate={this.handleMinDateChange}
               applyOnBlur
               id="mindate"
@@ -209,21 +198,21 @@ export default class SearchToolbar extends Component {
             <Datepicker
               placeholder="Max date..."
               date={this.state.maxDate}
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               onApplyDate={this.handleMaxDateChange}
               applyOnBlur
               noButtons
               id="maxdate"
             />
-            { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
             <Dropdown>
-              { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; }' is missing the foll... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; }' is missing the foll... Remove this comment to see the full error message */}
               <DropdownToggle>Success: {this.state.success}</DropdownToggle>
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="All" action={this.handleSuccessChange} />
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="Yes" action={this.handleSuccessChange} />
-              { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="No" action={this.handleSuccessChange} />
             </Dropdown>
           </ControlGroup>

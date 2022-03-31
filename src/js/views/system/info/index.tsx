@@ -1,15 +1,14 @@
 // @flow
 import React from 'react';
-import compose from 'recompose/compose';
 import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import InfoTable from '../../../components/info_table';
 import Box from '../../../components/box';
-import Headbar from '../../../components/Headbar';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
-import titleManager from '../../../hocomponents/TitleManager';
 import Flex from '../../../components/Flex';
+import Headbar from '../../../components/Headbar';
+import InfoTable from '../../../components/info_table';
+import titleManager from '../../../hocomponents/TitleManager';
 
 const SystemInfoTable: Function = ({ data }: { data: Object }) => (
   <Flex>
@@ -27,7 +26,7 @@ const SystemInfoTable: Function = ({ data }: { data: Object }) => (
 export default compose(
   connect(
     (state: Object): Object => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       data: state.api.system.data,
     })
   ),

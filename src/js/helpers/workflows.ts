@@ -1,6 +1,6 @@
 import { includes } from 'lodash';
-import { WORKFLOW_FILTERS } from '../constants/filters';
 import { DATES } from '../constants/dates';
+import { WORKFLOW_FILTERS } from '../constants/filters';
 import { formatDate } from '../helpers/date';
 
 /**
@@ -11,7 +11,7 @@ import { formatDate } from '../helpers/date';
  * @param {String} filter
  * @returns {Array}
  */
-const filterArray = filter => {
+const filterArray = (filter) => {
   if (typeof filter === 'undefined' || filter === '') {
     return [WORKFLOW_FILTERS.ALL];
   }
@@ -64,72 +64,66 @@ const getFetchParams = (filter, date = DATES.PREV_DAY) => {
   }
 
   if (date) {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'date' does not exist on type '{ deprecat... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'date' does not exist on type '{ deprecat... Remove this comment to see the full error message
     params.date = formatDate(date).format();
   }
 
   return params;
 };
 
-const buildOrderStatsDisposition = (
-  orderStats: Object,
-  band: string
-): Object => {
+const buildOrderStatsDisposition = (orderStats: Object, band: string): Object => {
   const stats: Object = {
     completed: orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .l.find(disp => disp.disposition === 'C').count,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .l.find((disp) => disp.disposition === 'C').count,
     automatically: orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .l.find(disp => disp.disposition === 'A').count,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .l.find((disp) => disp.disposition === 'A').count,
     manually: orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .l.find(disp => disp.disposition === 'M').count,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .l.find((disp) => disp.disposition === 'M').count,
     completedPct: orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .l.find(disp => disp.disposition === 'C').pct,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .l.find((disp) => disp.disposition === 'C').pct,
     automaticallyPct: orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .l.find(disp => disp.disposition === 'A').pct,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .l.find((disp) => disp.disposition === 'A').pct,
     manuallyPct: orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .l.find(disp => disp.disposition === 'M').pct,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .l.find((disp) => disp.disposition === 'M').pct,
   };
 
   return {
     ...stats,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'automatically' does not exist on type 'O... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'automatically' does not exist on type 'O... Remove this comment to see the full error message
     ...{ total: stats.automatically + stats.completed + stats.manually },
   };
 };
 
-const buildOrderStatsSLA: Function = (
-  orderStats: Object,
-  band: string
-): Object => {
+const buildOrderStatsSLA: Function = (orderStats: Object, band: string): Object => {
   const stats: Object = {
     'In SLA': orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .sla.find(sla => sla.in_sla).count,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .sla.find((sla) => sla.in_sla).count,
     'Out of SLA': orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .sla.find(sla => sla.in_sla === false).count,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .sla.find((sla) => sla.in_sla === false).count,
     'In SLA %': orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .sla.find(sla => sla.in_sla).pct,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .sla.find((sla) => sla.in_sla).pct,
     'Out of SLA %': orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
-      .find(stat => stat.label === band)
-      .sla.find(sla => sla.in_sla === false).pct,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
+      .find((stat) => stat.label === band)
+      .sla.find((sla) => sla.in_sla === false).pct,
   };
 
   return {

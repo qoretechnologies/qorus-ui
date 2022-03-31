@@ -1,42 +1,41 @@
 // @flow
+import size from 'lodash/size';
 import React from 'react';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import { connect } from 'react-redux';
-import size from 'lodash/size';
-
-import actions from '../../store/api/actions';
-import { Table, Thead, Tbody, FixedRow, Th } from '../../components/new_table';
-import Row from './row';
-import Selectors from './toolbar/selectors';
-import Actions from './toolbar/actions';
-import Pull from '../../components/Pull';
-import LoadMore from '../../components/LoadMore';
-import titleManager from '../../hocomponents/TitleManager';
-import DataOrEmptyTable from '../../components/DataOrEmptyTable';
-import { SelectColumnHeader } from '../../components/SelectColumn';
-import { IdColumnHeader } from '../../components/IdColumn';
-import { NameColumnHeader } from '../../components/NameColumn';
 import { ActionColumnHeader } from '../../components/ActionColumn';
+import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import { DescriptionColumnHeader } from '../../components/DescriptionColumn';
+import { IdColumnHeader } from '../../components/IdColumn';
+import LoadMore from '../../components/LoadMore';
+import { NameColumnHeader } from '../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../components/new_table';
+import Pull from '../../components/Pull';
+import { SelectColumnHeader } from '../../components/SelectColumn';
 import { INTERFACE_ICONS } from '../../constants/interfaces';
-import { injectIntl } from 'react-intl';
+import titleManager from '../../hocomponents/TitleManager';
+import actions from '../../store/api/actions';
+import Row from './row';
+import Actions from './toolbar/actions';
+import Selectors from './toolbar/selectors';
 
 type Props = {
-  sortData: Object,
-  onSortChange: Function,
-  collection: Array<Object>,
-  select: Function,
-  updateDone: Function,
-  canLoadMore: boolean,
-  isTablet: boolean,
-  selected: string,
-  selectedIds: Array<Number>,
-  handleLoadMore: Function,
-  handleLoadAll: Function,
-  loadMoreCurrent: number,
-  loadMoreTotal: number,
-  limit: number,
+  sortData: Object;
+  onSortChange: Function;
+  collection: Array<Object>;
+  select: Function;
+  updateDone: Function;
+  canLoadMore: boolean;
+  isTablet: boolean;
+  selected: string;
+  selectedIds: Array<Number>;
+  handleLoadMore: Function;
+  handleLoadAll: Function;
+  loadMoreCurrent: number;
+  loadMoreTotal: number;
+  limit: number;
 };
 
 const GroupsTable: Function = ({
@@ -54,10 +53,10 @@ const GroupsTable: Function = ({
   handleLoadAll,
   loadMoreCurrent,
   loadMoreTotal,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Table fixed hover condensed striped>
     <Thead>
       <FixedRow className="toolbar-row">
@@ -136,14 +135,14 @@ const GroupsTable: Function = ({
       </FixedRow>
     </Thead>
     <DataOrEmptyTable condition={size(collection) === 0} cols={11}>
-      {props => (
+      {(props) => (
         <Tbody {...props}>
           {collection.map(
-            // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
             (group: Object, index: number): React.Element<Row> => (
               <Row
                 first={index === 0}
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 key={group.id}
                 select={select}
                 updateDone={updateDone}
@@ -159,15 +158,12 @@ const GroupsTable: Function = ({
 );
 
 export default compose(
-  connect(
-    null,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type '{}'.
-      updateDone: actions.groups.updateDone,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type '{}'.
-      select: actions.groups.select,
-    }
-  ),
+  connect(null, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'groups' does not exist on type '{}'.
+    updateDone: actions.groups.updateDone,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'groups' does not exist on type '{}'.
+    select: actions.groups.select,
+  }),
   titleManager('Groups'),
   pure(['collection', 'sortData']),
   injectIntl

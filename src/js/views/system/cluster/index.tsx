@@ -1,29 +1,28 @@
 // @flow
-import React from 'react';
-import compose from 'recompose/compose';
-import { connect } from 'react-redux';
-import mapProps from 'recompose/mapProps';
 import { Tag } from '@blueprintjs/core';
-
-import Node from './node';
-import ClusterPane from './pane';
-import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import Box from '../../../components/box';
-import withPane from '../../../hocomponents/pane';
-import { calculateMemory } from '../../../helpers/system';
-import titleManager from '../../../hocomponents/TitleManager';
+import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
+import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
-import Flex from '../../../components/Flex';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { calculateMemory } from '../../../helpers/system';
+import withPane from '../../../hocomponents/pane';
+import titleManager from '../../../hocomponents/TitleManager';
+import Node from './node';
+import ClusterPane from './pane';
 
 type Props = {
-  nodes: Object,
-  nodesMemory: number,
-  processes: Object,
-  openPane: Function,
-  closePane: Function,
-  paneId: string,
+  nodes: Object;
+  nodesMemory: number;
+  processes: Object;
+  openPane: Function;
+  closePane: Function;
+  paneId: string;
 };
 
 const ClusterView: Function = ({
@@ -33,10 +32,10 @@ const ClusterView: Function = ({
   openPane,
   closePane,
   paneId,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -49,12 +48,10 @@ const ClusterView: Function = ({
           <FormattedMessage id="cluster.nodes" />: {Object.keys(nodes).length}
         </Tag>{' '}
         <Tag className="bp3-large">
-          <FormattedMessage id="cluster.processes" />:{' '}
-          {Object.keys(processes).length}
+          <FormattedMessage id="cluster.processes" />: {Object.keys(processes).length}
         </Tag>{' '}
         <Tag className="bp3-large">
-          <FormattedMessage id="cluster.cluster-memory" />:{' '}
-          {calculateMemory(nodesMemory)}
+          <FormattedMessage id="cluster.cluster-memory" />: {calculateMemory(nodesMemory)}
         </Tag>
       </Pull>
     </Headbar>
@@ -66,7 +63,7 @@ const ClusterView: Function = ({
 
             return [...cur, obj];
           }, [])
-          .filter(proc => proc.node === node);
+          .filter((proc) => proc.node === node);
 
         return (
           <Node
@@ -85,21 +82,22 @@ const ClusterView: Function = ({
 );
 
 export default compose(
-  connect((state: Object): Object => ({
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-    nodes: state.api.system.data.cluster_info,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-    processes: state.api.system.data.processes,
-  })),
-  mapProps(({ nodes, ...rest }: Props): Props => ({
-    nodesMemory: Object.keys(nodes).reduce(
-      (cur, node): number => cur + nodes[node].node_priv,
-      0
-    ),
-    nodes,
-    ...rest,
-  })),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+  connect(
+    (state: Object): Object => ({
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      nodes: state.api.system.data.cluster_info,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      processes: state.api.system.data.processes,
+    })
+  ),
+  mapProps(
+    ({ nodes, ...rest }: Props): Props => ({
+      nodesMemory: Object.keys(nodes).reduce((cur, node): number => cur + nodes[node].node_priv, 0),
+      nodes,
+      ...rest,
+    })
+  ),
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
   withPane(ClusterPane, ['processes']),
   titleManager('Cluster'),
   injectIntl

@@ -17,11 +17,7 @@ import {
   loggerReducer,
   updateConfigItemWsCommon,
 } from '../../common/reducers';
-import {
-  setUpdatedToNull,
-  updateItemWithId,
-  updateItemWithName,
-} from '../../utils';
+import { setUpdatedToNull, updateItemWithId, updateItemWithName } from '../../utils';
 import { normalizeId, normalizeName } from '../utils';
 
 const initialState = { data: [], sync: false, loading: false };
@@ -38,7 +34,7 @@ const initialState = { data: [], sync: false, loading: false };
 function getDataWithOption(data, serviceId, name, value) {
   const service = data.find((w) => w.id === serviceId);
   const options = Array.from(service.options);
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'unknown'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'unknown'.
   const optIdx = options.findIndex((o) => o.name === name);
 
   if (value !== '' && value !== null && optIdx < 0) {
@@ -78,7 +74,7 @@ const setOptions = {
     });
   },
   throw(state = initialState, action) {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
+    // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     const option = findOption(state.data, action.meta.option.name);
 
     return Object.assign({}, state, {
@@ -100,7 +96,7 @@ const updateBasicData = basicDataUpdatedReducer;
 const fetchLibSources = {
   next(state = initialState, action) {
     const service: Object = state.data.find(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       (datum: Object) => datum.id === parseInt(action.meta.serviceId, 10)
     );
 
@@ -186,11 +182,7 @@ const setEnabled = {
       let newData = updatedData;
 
       events.forEach((dt) => {
-        newData = updateItemWithId(
-          dt.id,
-          { enabled: dt.enabled, _updated: true },
-          newData
-        );
+        newData = updateItemWithId(dt.id, { enabled: dt.enabled, _updated: true }, newData);
       });
 
       return { ...state, ...{ data: newData } };
@@ -215,11 +207,7 @@ const setAutostart = {
       let newData = updatedData;
 
       events.forEach((dt) => {
-        newData = updateItemWithId(
-          dt.id,
-          { autostart: dt.autostart, _updated: true },
-          newData
-        );
+        newData = updateItemWithId(dt.id, { autostart: dt.autostart, _updated: true }, newData);
       });
 
       return { ...state, ...{ data: newData } };
@@ -384,8 +372,7 @@ const processStarted = {
       let newData = updatedData;
 
       events.forEach((dt) => {
-        let processes =
-          newData.find((service) => service.id === dt.id)?.processes || [];
+        let processes = newData.find((service) => service.id === dt.id)?.processes || [];
 
         if (dt.started) {
           processes.push(dt.info);
@@ -399,11 +386,7 @@ const processStarted = {
           }, []);
         }
 
-        newData = updateItemWithId(
-          dt.id,
-          { processes, _updated: true },
-          newData
-        );
+        newData = updateItemWithId(dt.id, { processes, _updated: true }, newData);
       });
 
       return { ...state, ...{ data: newData } };
@@ -421,8 +404,7 @@ const processStopped = {
       let newData = updatedData;
 
       events.forEach((dt) => {
-        let processes =
-          newData.find((service) => service.id === dt.id)?.processes || [];
+        let processes = newData.find((service) => service.id === dt.id)?.processes || [];
 
         processes = processes.reduce((newProc, prcs) => {
           if (prcs.pid === dt.info.pid) {
@@ -432,11 +414,7 @@ const processStopped = {
           return [...newProc, prcs];
         }, []);
 
-        newData = updateItemWithId(
-          dt.id,
-          { processes, _updated: true },
-          newData
-        );
+        newData = updateItemWithId(dt.id, { processes, _updated: true }, newData);
       });
 
       return { ...state, ...{ data: newData } };
@@ -461,8 +439,7 @@ const fetchAuthLabels = {
     const newData = updateItemWithId(
       id,
       {
-        authLabels:
-          authLabels === 'success' ? [] : objectCollectionToArray(authLabels),
+        authLabels: authLabels === 'success' ? [] : objectCollectionToArray(authLabels),
       },
       stateData
     );
@@ -475,12 +452,12 @@ const updateAuthLabel = {
   next(state, { payload: { name, value, id } }) {
     const data = [...state.data];
     const service: Object = data.find(
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       (srvc: Object): boolean => srvc.id === id
     );
 
     if (service) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'authLabels' does not exist on type 'Obje... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'authLabels' does not exist on type 'Obje... Remove this comment to see the full error message
       let { authLabels } = service;
 
       authLabels = updateItemWithName(name, { value }, authLabels);

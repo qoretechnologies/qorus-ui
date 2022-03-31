@@ -1,32 +1,31 @@
 /* @flow */
 import React from 'react';
-import compose from 'recompose/compose';
-
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
-import Users from './users';
-import Roles from './roles';
-import Permissions from './permissions';
-import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
-import Box from '../../../components/box';
-import Headbar from '../../../components/Headbar';
-import Search from '../../../containers/search';
-import titleManager from '../../../hocomponents/TitleManager';
-import withTabs from '../../../hocomponents/withTabs';
-import Pull from '../../../components/Pull';
-import queryControl from '../../../hocomponents/queryControl';
-import { connect } from 'react-redux';
-import Flex from '../../../components/Flex';
-import viewBehindPermission from '../../../hocomponents/viewBehindPermission';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
+import Box from '../../../components/box';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
+import Flex from '../../../components/Flex';
+import Headbar from '../../../components/Headbar';
+import Pull from '../../../components/Pull';
+import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
+import Search from '../../../containers/search';
+import queryControl from '../../../hocomponents/queryControl';
+import titleManager from '../../../hocomponents/TitleManager';
+import viewBehindPermission from '../../../hocomponents/viewBehindPermission';
+import withTabs from '../../../hocomponents/withTabs';
+import Permissions from './permissions';
+import Roles from './roles';
+import Users from './users';
 
 type Props = {
-  tabQuery: string,
-  location: Object,
-  changeSearchQuery: Function,
-  searchQuery?: string,
-  users: Array<string>,
-  roles: Array<string>,
-  perms: Array<string>,
+  tabQuery: string;
+  location: Object;
+  changeSearchQuery: Function;
+  searchQuery?: string;
+  users: Array<string>;
+  roles: Array<string>;
+  perms: Array<string>;
 };
 
 const RBAC: Function = ({
@@ -37,8 +36,8 @@ const RBAC: Function = ({
   users,
   roles,
   perms,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -54,25 +53,21 @@ const RBAC: Function = ({
         />
       </Breadcrumbs>
       <Pull right>
-        <Search
-          onSearchUpdate={changeSearchQuery}
-          defaultValue={searchQuery}
-          resource="rbac"
-        />
+        <Search onSearchUpdate={changeSearchQuery} defaultValue={searchQuery} resource="rbac" />
       </Pull>
     </Headbar>
     <Box top noPadding>
       <SimpleTabs activeTab={tabQuery}>
         <SimpleTab name="users">
-          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Users location={location} />
         </SimpleTab>
         <SimpleTab name="roles">
-          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Roles location={location} />
         </SimpleTab>
         <SimpleTab name="permissions">
-          { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
           <Permissions location={location} />
         </SimpleTab>
       </SimpleTabs>
@@ -81,19 +76,21 @@ const RBAC: Function = ({
 );
 
 export default compose(
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   viewBehindPermission(['USER-CONTROL']),
-  connect((state: Object): Object => ({
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-    users: state.api.users.data,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-    roles: state.api.roles.data,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-    perms: state.api.perms.data,
-  })),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
+  connect(
+    (state: Object): Object => ({
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      users: state.api.users.data,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      roles: state.api.roles.data,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      perms: state.api.perms.data,
+    })
+  ),
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   withTabs('users'),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
   queryControl('search'),
   titleManager('RBAC')
 )(RBAC);

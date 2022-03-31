@@ -1,15 +1,13 @@
 // @flow
-import React, { Component } from 'react';
-
-import Prism from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-qore';
-import 'prismjs/components/prism-java';
-import 'prismjs/plugins/line-numbers/prism-line-numbers';
-
 import classNames from 'classnames';
-import { pureRender } from '../utils';
+import 'prismjs/components/prism-clike';
+import Prism from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-qore';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import React, { Component } from 'react';
 import Flex from '../Flex';
+import { pureRender } from '../utils';
 
 /**
  * Source code uses Prism to format text.
@@ -24,11 +22,11 @@ import Flex from '../Flex';
 @pureRender
 export default class SourceCode extends Component {
   props: {
-    lineOffset: number,
-    children: any,
-    height: number,
-    handleRef: Function,
-    language: string,
+    lineOffset: number;
+    children: any;
+    height: number;
+    handleRef: Function;
+    language: string;
   } = this.props;
 
   static defaultProps = {
@@ -40,12 +38,12 @@ export default class SourceCode extends Component {
   };
 
   componentDidMount() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'SourceCode... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'SourceCode... Remove this comment to see the full error message
     Prism.highlightElement(this.code);
   }
 
   componentDidUpdate() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'SourceCode... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'SourceCode... Remove this comment to see the full error message
     Prism.highlightElement(this.code);
   }
 
@@ -56,8 +54,8 @@ export default class SourceCode extends Component {
     this.setState({ wrapLines: !this.state.wrapLines });
   };
 
-  bindCodeRef = code => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'SourceCode... Remove this comment to see the full error message
+  bindCodeRef = (code) => {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'SourceCode... Remove this comment to see the full error message
     this.code = code;
   };
 

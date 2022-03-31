@@ -1,15 +1,11 @@
 /* @flow */
+import { Button, Icon } from '@blueprintjs/core';
 import React from 'react';
 
-import {
-  Button,
-  Icon
-} from '@blueprintjs/core';
-
 type Props = {
-  titleId: string,
-  onClose?: Function,
-  children: any,
+  titleId: string;
+  onClose?: Function;
+  children: any;
 };
 
 /**
@@ -20,7 +16,7 @@ type Props = {
  *
  * @param {!{
  *   titleId: string,
- *   onClose: ?function,
+ *   onClose: function,
  *   children: ReactNode,
  * }} props
  * @return {!ReactElement}
@@ -38,7 +34,7 @@ export default function Header(props: Props) {
         <Button
           className="bp3-dialog-close-button bp3-button bp3-minimal"
           icon="cross"
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
           onClick={props.onClose}
         />
       )}

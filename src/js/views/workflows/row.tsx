@@ -18,49 +18,46 @@ import PaneItem from '../../components/pane_item';
 import ProcessSummary from '../../components/ProcessSummary';
 import { SelectColumn } from '../../components/SelectColumn';
 import { ORDER_STATES_ARRAY } from '../../constants/orders';
-import {
-  buildOrderStatsDisposition,
-  buildOrderStatsSLA,
-} from '../../helpers/workflows';
+import { buildOrderStatsDisposition, buildOrderStatsSLA } from '../../helpers/workflows';
 import withDispatch from '../../hocomponents/withDispatch';
 import AutoStart from './autostart';
 import WorkflowControls from './controls';
 
 type Props = {
-  isActive?: boolean,
-  date: string,
-  openPane: Function,
-  closePane: Function,
-  select: Function,
-  handleCheckboxClick: Function,
-  handleHighlightEnd: Function,
-  handleDetailClick: Function,
-  handleSlaBarClick: Function,
-  handleAutostartChange: Function,
-  updateDone: Function,
-  id: number,
-  _selected: boolean,
-  _updated: boolean,
-  enabled: boolean,
-  autostart: number,
-  exec_count: number,
-  has_alerts: boolean,
-  name: string,
-  version: string,
-  states: Object,
-  expanded: boolean,
-  deprecated: boolean,
-  showDeprecated: boolean,
-  isTablet?: boolean,
-  first?: boolean,
-  remote: boolean,
-  dispatchAction: Function,
-  order_stats?: Object,
-  orderStats?: Object,
-  slaStats?: Object,
-  totalOrderStats: number,
-  totalSlaStats: number,
-  band: string,
+  isActive?: boolean;
+  date: string;
+  openPane: Function;
+  closePane: Function;
+  select: Function;
+  handleCheckboxClick: Function;
+  handleHighlightEnd: Function;
+  handleDetailClick: Function;
+  handleSlaBarClick: Function;
+  handleAutostartChange: Function;
+  updateDone: Function;
+  id: number;
+  _selected: boolean;
+  _updated: boolean;
+  enabled: boolean;
+  autostart: number;
+  exec_count: number;
+  has_alerts: boolean;
+  name: string;
+  version: string;
+  states: Object;
+  expanded: boolean;
+  deprecated: boolean;
+  showDeprecated: boolean;
+  isTablet?: boolean;
+  first?: boolean;
+  remote: boolean;
+  dispatchAction: Function;
+  order_stats?: Object;
+  orderStats?: Object;
+  slaStats?: Object;
+  totalOrderStats: number;
+  totalSlaStats: number;
+  band: string;
 };
 
 const TableRow: Function = ({
@@ -87,11 +84,11 @@ const TableRow: Function = ({
   totalOrderStats,
   slaStats,
   totalSlaStats,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
   ...rest
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Tr
     first={first}
     className={classNames({
@@ -108,22 +105,19 @@ const TableRow: Function = ({
     <NameColumn
       popoverContent={
         <Box top>
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
           <PaneItem title={rest.normalizedName}>{rest.description}</PaneItem>
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
           {rest.TOTAL > 0 && (
             <PaneItem title={intl.formatMessage({ id: 'table.instances' })}>
               <InstancesChart width={400} states={states} instances={rest} />
             </PaneItem>
           )}
-          <ProcessSummary
-            model={{ enabled, remote, autostart, ...rest }}
-            type="workflow"
-          />
+          <ProcessSummary model={{ enabled, remote, autostart, ...rest }} type="workflow" />
         </Box>
       }
       link={`/workflow/${id}?date=${date}`}
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message
       name={rest.normalizedName}
       isActive={isActive}
       onDetailClick={handleDetailClick}
@@ -145,16 +139,16 @@ const TableRow: Function = ({
       <InstancesBar
         states={states}
         instances={rest}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message
         totalInstances={rest.TOTAL}
         id={id}
         date={date}
       />
     </Td>
     <Td className="narrow">
-      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */ }
+      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
       <Tooltip content={rest.TOTAL || 0} position={Position.TOP}>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
         <Link to={`/workflow/${id}?date=${date}`}>{rest.TOTAL || 0}</Link>
       </Tooltip>
     </Td>
@@ -193,56 +187,58 @@ const TableRow: Function = ({
 export default compose(
   withDispatch(),
   withHandlers({
-    handleCheckboxClick: ({ select, id }: Props): Function => (): void => {
-      select(id);
-    },
-    handleHighlightEnd: ({ updateDone, id }: Props): Function => (): void => {
-      updateDone(id);
-    },
-    handleDetailClick: ({
-      openPane,
-      id,
-      closePane,
-      isActive,
-    }: Props): Function => (): void => {
-      if (isActive) {
-        closePane(['globalErrQuery', 'workflowErrQuery']);
-      } else {
-        openPane(id);
-      }
-    },
-    handleSlaBarClick: ({
-      openPane,
-      id,
-      closePane,
-      isActive,
-    }: Props): Function => (event: Object): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'stopPropagation' does not exist on type ... Remove this comment to see the full error message
-      event.stopPropagation();
+    handleCheckboxClick:
+      ({ select, id }: Props): Function =>
+      (): void => {
+        select(id);
+      },
+    handleHighlightEnd:
+      ({ updateDone, id }: Props): Function =>
+      (): void => {
+        updateDone(id);
+      },
+    handleDetailClick:
+      ({ openPane, id, closePane, isActive }: Props): Function =>
+      (): void => {
+        if (isActive) {
+          closePane(['globalErrQuery', 'workflowErrQuery']);
+        } else {
+          openPane(id);
+        }
+      },
+    handleSlaBarClick:
+      ({ openPane, id, closePane, isActive }: Props): Function =>
+      (event: Object): void => {
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'stopPropagation' does not exist on type ... Remove this comment to see the full error message
+        event.stopPropagation();
 
-      if (isActive) {
-        closePane(['globalErrQuery', 'workflowErrQuery']);
-      } else {
-        openPane(id, 'order stats');
-      }
-    },
+        if (isActive) {
+          closePane(['globalErrQuery', 'workflowErrQuery']);
+        } else {
+          openPane(id, 'order stats');
+        }
+      },
   }),
-  // @ts-expect-error ts-migrate(2741) FIXME: Property 'band' is missing in type '{ isActive?: b... Remove this comment to see the full error message
-  mapProps(({ order_stats: orderStats, band, ...rest }: Props): Props => ({
-    orderStats: orderStats && buildOrderStatsDisposition(orderStats, band),
-    slaStats: orderStats && buildOrderStatsSLA(orderStats, band),
-    ...rest,
-  })),
-  mapProps(({ orderStats, slaStats, ...rest }: Props): Props => ({
-    totalOrderStats: orderStats
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message
-      ? orderStats.completed + orderStats.automatically + orderStats.manually
-      : 0,
-    totalSlaStats: slaStats ? slaStats['In SLA'] + slaStats['Out of SLA'] : 0,
-    orderStats,
-    slaStats,
-    ...rest,
-  })),
+  // @ts-ignore ts-migrate(2741) FIXME: Property 'band' is missing in type '{ isActive?: b... Remove this comment to see the full error message
+  mapProps(
+    ({ order_stats: orderStats, band, ...rest }: Props): Props => ({
+      orderStats: orderStats && buildOrderStatsDisposition(orderStats, band),
+      slaStats: orderStats && buildOrderStatsSLA(orderStats, band),
+      ...rest,
+    })
+  ),
+  mapProps(
+    ({ orderStats, slaStats, ...rest }: Props): Props => ({
+      totalOrderStats: orderStats
+        ? // @ts-ignore ts-migrate(2339) FIXME: Property 'completed' does not exist on type 'Objec... Remove this comment to see the full error message
+          orderStats.completed + orderStats.automatically + orderStats.manually
+        : 0,
+      totalSlaStats: slaStats ? slaStats['In SLA'] + slaStats['Out of SLA'] : 0,
+      orderStats,
+      slaStats,
+      ...rest,
+    })
+  ),
   pure([
     'isActive',
     'date',

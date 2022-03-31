@@ -1,55 +1,41 @@
 // @flow
-import React, { Component } from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-
-import Toolbar from '../../../../../components/toolbar';
+import React, { Component } from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
+import { ControlGroup, InputGroup } from '../../../../../../../node_modules/@blueprintjs/core';
+import { Control as Button, Controls } from '../../../../../components/controls';
 import Datepicker from '../../../../../components/datepicker';
-import {
-  Controls,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../../../components/controls';
-import { formatDate } from '../../../../../helpers/date';
+import Toolbar from '../../../../../components/toolbar';
 import { DATE_FORMATS } from '../../../../../constants/dates';
-import {
-  InputGroup,
-  ControlGroup,
-} from '../../../../../../../node_modules/@blueprintjs/core';
+import { formatDate } from '../../../../../helpers/date';
 
 type Props = {
-  minDateQuery: string,
-  changeMinDateQuery: Function,
-  maxDateQuery: string,
-  changeMaxDateQuery: Function,
-  errQuery: string,
-  changeErrQuery: Function,
-  errDescQuery: string,
-  changeErrDescQuery: Function,
-  producerQuery: string,
-  changeProducerQuery: Function,
-  changeAllQuery: Function,
-  allQuery: string,
-  defaultDate: string,
+  minDateQuery: string;
+  changeMinDateQuery: Function;
+  maxDateQuery: string;
+  changeMaxDateQuery: Function;
+  errQuery: string;
+  changeErrQuery: Function;
+  errDescQuery: string;
+  changeErrDescQuery: Function;
+  producerQuery: string;
+  changeProducerQuery: Function;
+  changeAllQuery: Function;
+  allQuery: string;
+  defaultDate: string;
 };
 
-@pure([
-  'minDateQuery',
-  'maxDateQuery',
-  'errQuery',
-  'errDescQuery',
-  'producerQuery',
-])
+@pure(['minDateQuery', 'maxDateQuery', 'errQuery', 'errDescQuery', 'producerQuery'])
 export default class SearchToolbar extends Component {
   props: Props = this.props;
 
   state: {
-    minDate: string,
-    maxDate: string,
-    err: string,
-    errDesc: string,
-    producer: string,
+    minDate: string;
+    maxDate: string;
+    err: string;
+    errDesc: string;
+    producer: string;
   } = {
     minDate: this.props.minDateQuery || this.props.defaultDate,
     maxDate: this.props.maxDateQuery,
@@ -100,17 +86,17 @@ export default class SearchToolbar extends Component {
     this.setState({ maxDate });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleErrChange: Function = (event: EventHandler): void => {
     this.setState({ err: event.target.value });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleErrDescChange: Function = (event: EventHandler): void => {
     this.setState({ errDesc: event.target.value });
   };
 
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleProducerChange: Function = (event: EventHandler): void => {
     this.setState({ producer: event.target.value });
   };
@@ -123,7 +109,7 @@ export default class SearchToolbar extends Component {
             <InputGroup
               type="text"
               placeholder="Error..."
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleErrChange}
               value={this.state.err || ''}
               id="error"
@@ -132,7 +118,7 @@ export default class SearchToolbar extends Component {
             <InputGroup
               type="text"
               placeholder="Error desc..."
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleErrDescChange}
               value={this.state.errDesc || ''}
               id="errDesc"
@@ -140,7 +126,7 @@ export default class SearchToolbar extends Component {
             <InputGroup
               type="text"
               placeholder="Producer..."
-              // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
               onChange={this.handleProducerChange}
               value={this.state.producer || ''}
               id="producer"
@@ -148,7 +134,7 @@ export default class SearchToolbar extends Component {
             <Datepicker
               placeholder="Min date..."
               date={this.state.minDate}
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               onApplyDate={this.handleMinDateChange}
               applyOnBlur
               id="mindate"
@@ -156,7 +142,7 @@ export default class SearchToolbar extends Component {
             <Datepicker
               placeholder="Max date..."
               date={this.state.maxDate}
-              // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
               onApplyDate={this.handleMaxDateChange}
               applyOnBlur
               noButtons

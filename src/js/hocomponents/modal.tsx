@@ -1,17 +1,14 @@
-import React, {
-  useContext, useEffect
-} from 'react';
-
+import React, { useContext, useEffect } from 'react';
 import { ModalContext } from '../context/modal';
 
 /**
  * A high-order component that provides an easy access to
  * opening and closing a modal
  */
-// @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
-export default (): Function => (Component: ReactClass<*>): ReactClass<*> => {
+// @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
+export default (): Function => (Component) => {
   const ComponentWithModal = (props) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'addModal' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'addModal' does not exist on type '{}'.
     const { addModal, removeModal, modals } = useContext(ModalContext);
 
     useEffect(() => {
@@ -36,13 +33,7 @@ export default (): Function => (Component: ReactClass<*>): ReactClass<*> => {
       addModal(Modal);
     };
 
-    return (
-      <Component
-        openModal={handleOpenModal}
-        closeModal={() => removeModal()}
-        {...props}
-      />
-    );
+    return <Component openModal={handleOpenModal} closeModal={() => removeModal()} {...props} />;
   };
 
   return ComponentWithModal;

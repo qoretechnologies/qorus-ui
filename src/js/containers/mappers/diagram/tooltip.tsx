@@ -1,18 +1,16 @@
 /* @flow */
 import React from 'react';
-
-import Autocomponent from '../../../components/autocomponent';
 import ContentByType from '../../../components/ContentByType';
 
 type Props = {
-  data: Object,
+  data: Object;
 };
 
-// @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const Tooltip: Function = ({ data }: Props): ?React.Element<any> => {
+// @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+const Tooltip: Function = ({ data }: Props): React.Element<any> => {
   if (!data) return null;
 
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'mand' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'mand' does not exist on type 'Object'.
   const { mand, type, desc, target, position } = data;
 
   return (

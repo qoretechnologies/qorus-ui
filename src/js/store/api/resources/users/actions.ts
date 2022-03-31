@@ -1,9 +1,9 @@
 /* @flow */
 import { createAction } from 'redux-actions';
-import { fetchJson, fetchWithNotifications } from '../../utils';
 import settings from '../../../../settings';
-import { unSyncCurrentUser } from '../currentUser/actions';
 import actions from '../../actions';
+import { fetchJson, fetchWithNotifications } from '../../utils';
+import { unSyncCurrentUser } from '../currentUser/actions';
 
 const create: Function = createAction(
   'USERS_CREATE',
@@ -13,7 +13,7 @@ const create: Function = createAction(
     pass: string,
     roles: Array<string>,
     dispatch: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
   ): Object => {
     if (!dispatch) {
       return {
@@ -26,7 +26,7 @@ const create: Function = createAction(
 
     await fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
         await fetchJson('POST', `${settings.REST_BASE_URL}/users/`, {
           body: JSON.stringify({
             name,
@@ -41,22 +41,22 @@ const create: Function = createAction(
     );
 
     dispatch(unSyncCurrentUser());
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     dispatch(actions.currentUser.fetch());
   }
 );
 
 const remove: Function = createAction(
   'USERS_REMOVE',
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  async (username: string, dispatch: Function): ?Object => {
+  // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
+  async (username: string, dispatch: Function): Object => {
     if (!dispatch) {
       return { username };
     }
 
     await fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
         await fetchJson(
           'DELETE',
           `${settings.REST_BASE_URL}/users/${encodeURIComponent(username)}`
@@ -67,7 +67,7 @@ const remove: Function = createAction(
     );
 
     dispatch(unSyncCurrentUser());
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     dispatch(actions.currentUser.fetch());
   }
 );
@@ -80,8 +80,8 @@ const update: Function = createAction(
     pass: string,
     roles: Array<string>,
     dispatch: Function
-  // @ts-expect-error ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  ): ?Object => {
+    // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
+  ): Object => {
     if (!dispatch && name) {
       return {
         name,
@@ -92,19 +92,15 @@ const update: Function = createAction(
 
     await fetchWithNotifications(
       async () =>
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
-        await fetchJson(
-          'PUT',
-          `${settings.REST_BASE_URL}/users/${encodeURIComponent(username)}`,
-          {
-            body: JSON.stringify({
-              name,
-              username,
-              pass,
-              roles,
-            }),
-          }
-        ),
+        // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
+        await fetchJson('PUT', `${settings.REST_BASE_URL}/users/${encodeURIComponent(username)}`, {
+          body: JSON.stringify({
+            name,
+            username,
+            pass,
+            roles,
+          }),
+        }),
       'Updating user...',
       'User successfuly updated',
       dispatch
@@ -112,7 +108,7 @@ const update: Function = createAction(
 
     if (!name) {
       dispatch(unSyncCurrentUser());
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       dispatch(actions.currentUser.fetch());
     }
   }

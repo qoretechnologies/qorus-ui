@@ -79,9 +79,7 @@ const getProviderUrl = (pipeline) => {
   // Get the rules for the given provider
   const { url, suffix, recordSuffix } = providers[type];
   // Build the URL based on the provider type
-  return `${url}/${name}${suffix}${path}${
-    recordSuffix && !subtype ? recordSuffix : ''
-  }`;
+  return `${url}/${name}${suffix}${path}${recordSuffix && !subtype ? recordSuffix : ''}`;
 };
 
 const NodeLabel = ({ nodeData, openModal, closeModal, id }) => {
@@ -99,9 +97,7 @@ const NodeLabel = ({ nodeData, openModal, closeModal, id }) => {
           );
         }}
       >
-        <span style={{ fontSize: calculateFontSize(nodeData.name) }}>
-          {nodeData.name}
-        </span>
+        <span style={{ fontSize: calculateFontSize(nodeData.name) }}>{nodeData.name}</span>
         {nodeData.type !== 'start' && (
           <span
             style={{ fontSize: calculateFontSize(nodeData.name, true) }}
@@ -115,13 +111,7 @@ const NodeLabel = ({ nodeData, openModal, closeModal, id }) => {
   );
 };
 
-const PipelineDiagram = ({
-  load,
-  pipeline,
-  pipeName,
-  openModal,
-  closeModal,
-}) => {
+const PipelineDiagram = ({ load, pipeline, pipeName, openModal, closeModal }) => {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -178,10 +168,7 @@ const PipelineDiagram = ({
       newItem.path = `${path}[${index}]`;
 
       if (item.children) {
-        newItem.children = transformNodeData(
-          newItem.children,
-          `${newItem.path}.children`
-        );
+        newItem.children = transformNodeData(newItem.children, `${newItem.path}.children`);
       }
 
       return [...newData, newItem];
@@ -200,13 +187,11 @@ const PipelineDiagram = ({
 
   return (
     <>
-      <StyledProviderUrl>
-        Provider: {getProviderUrl(pipeline)}
-      </StyledProviderUrl>
+      <StyledProviderUrl>Provider: {getProviderUrl(pipeline)}</StyledProviderUrl>
       <StyledDiagramWrapper ref={wrapperRef} id="pipeline-diagram">
         {wrapperRef.current && (
           <Tree
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ style: { height: string; }; data: any; ori... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ style: { height: string; }; data: any; ori... Remove this comment to see the full error message
             style={{ height: '100%' }}
             data={elements}
             orientation="vertical"
@@ -223,12 +208,8 @@ const PipelineDiagram = ({
             allowForeignObjects
             nodeLabelComponent={{
               render: (
-                // @ts-expect-error ts-migrate(2741) FIXME: Property 'nodeData' is missing in type '{ openModa... Remove this comment to see the full error message
-                <NodeLabel
-                  openModal={openModal}
-                  closeModal={closeModal}
-                  id={pipeline.id}
-                />
+                // @ts-ignore ts-migrate(2741) FIXME: Property 'nodeData' is missing in type '{ openModa... Remove this comment to see the full error message
+                <NodeLabel openModal={openModal} closeModal={closeModal} id={pipeline.id} />
               ),
               foreignObjectWrapper: {
                 width: '200px',
@@ -280,17 +261,17 @@ const PipelineDiagram = ({
 };
 
 const pipelineSelector: Function = (state: Object, props: Object): Object =>
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.pipelines.data.find((pipe: Object) => pipe.name === props.pipeName);
 
-// @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+// @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
 const selector = createSelector([pipelineSelector], (pipeline) => ({
   pipeline,
 }));
 
 export default compose(
   connect(selector, {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'pipelines' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'pipelines' does not exist on type '{}'.
     load: actions.pipelines.fetch,
   }),
   modal(),

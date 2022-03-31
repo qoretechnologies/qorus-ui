@@ -1,25 +1,21 @@
 /* @flow */
 import React from 'react';
-import compose from 'recompose/compose';
-import withHandlers from 'recompose/withHandlers';
-import pure from 'recompose/onlyUpdateForKeys';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
-import mapProps from 'recompose/mapProps';
 import { injectIntl } from 'react-intl';
+import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
+import pure from 'recompose/onlyUpdateForKeys';
+import withHandlers from 'recompose/withHandlers';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 
 type Props = {
-  autostart: number,
-  execCount: number,
-  onIncrementClick: Function,
-  handleIncrementClick: Function,
-  onDecrementClick: Function,
-  handleDecrementClick: Function,
-  btnStyle: string,
-  big?: boolean,
+  autostart: number;
+  execCount: number;
+  onIncrementClick: Function;
+  handleIncrementClick: Function;
+  onDecrementClick: Function;
+  handleDecrementClick: Function;
+  btnStyle: string;
+  big?: boolean;
 };
 
 const AutoStart = ({
@@ -29,10 +25,10 @@ const AutoStart = ({
   handleIncrementClick,
   handleDecrementClick,
   big,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <ButtonGroup marginRight={big ? 3 : 0}>
     <Button
       title={intl.formatMessage({ id: 'button.decrement-autostart' })}
@@ -40,11 +36,7 @@ const AutoStart = ({
       onClick={handleDecrementClick}
       big={big}
     />
-    <Button
-      big={big}
-      text={`${autostart} / ${execCount}`}
-      btnStyle={btnStyle}
-    />
+    <Button big={big} text={`${autostart} / ${execCount}`} btnStyle={btnStyle} />
     <Button
       big={big}
       title={intl.formatMessage({ id: 'button.increment-autostart' })}
@@ -57,9 +49,9 @@ const AutoStart = ({
 export default compose(
   mapProps(
     ({ autostart, execCount, ...rest }: Props): Props => ({
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
       autostart: autostart ? parseInt(autostart, 10) : 0,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
       execCount: execCount ? parseInt(execCount, 10) : 0,
       ...rest,
     })
@@ -70,32 +62,30 @@ export default compose(
         autostart === execCount && autostart > 0
           ? 'success'
           : autostart === 0 && execCount > 0
-            ? 'warning'
-            : '',
+          ? 'warning'
+          : '',
       autostart,
       execCount,
       ...rest,
     })
   ),
   withHandlers({
-    handleIncrementClick: ({
-      onIncrementClick,
-      autostart,
-    }: Props): Function => (e): void => {
-      e.stopPropagation();
+    handleIncrementClick:
+      ({ onIncrementClick, autostart }: Props): Function =>
+      (e): void => {
+        e.stopPropagation();
 
-      onIncrementClick(autostart + 1);
-    },
-    handleDecrementClick: ({
-      onDecrementClick,
-      autostart,
-    }: Props): Function => (e): void => {
-      e.stopPropagation();
+        onIncrementClick(autostart + 1);
+      },
+    handleDecrementClick:
+      ({ onDecrementClick, autostart }: Props): Function =>
+      (e): void => {
+        e.stopPropagation();
 
-      if (autostart - 1 >= 0) {
-        onDecrementClick(autostart - 1);
-      }
-    },
+        if (autostart - 1 >= 0) {
+          onDecrementClick(autostart - 1);
+        }
+      },
   }),
   pure(['autostart', 'execCount']),
   injectIntl

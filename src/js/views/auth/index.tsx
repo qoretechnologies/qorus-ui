@@ -10,11 +10,7 @@ import elementsLogo from '../../../img/elements.png';
 import logo from '../../../img/qorus_engine_logo.png';
 import Alert from '../../components/alert';
 import Box from '../../components/box';
-import {
-  Control as Button,
-  Controls as ButtonGroup,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import Flex from '../../components/Flex';
 import SystemInfo from '../../containers/system_info';
 import titleManager from '../../hocomponents/TitleManager';
@@ -22,29 +18,29 @@ import settings from '../../settings';
 import { post } from '../../store/api/utils';
 
 type Props = {
-  location: any,
-  info: Object,
-  handleFormSubmit: Function,
-  loginStatus: Object,
-  handleUsernameChange: Function,
-  handlePasswordChange: Function,
-  changePassword: Function,
-  changeUsername: Function,
-  username: string,
-  password: string,
+  location: any;
+  info: Object;
+  handleFormSubmit: Function;
+  loginStatus: Object;
+  handleUsernameChange: Function;
+  handlePasswordChange: Function;
+  changePassword: Function;
+  changeUsername: Function;
+  username: string;
+  password: string;
 };
 
 const Login: Function = ({
   info,
   handleFormSubmit,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message
   loginStatus: { loading, error, hasNext, hasLogout },
   handleUsernameChange,
   handlePasswordChange,
   username,
   password,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <div
     className="root"
     style={{
@@ -55,7 +51,7 @@ const Login: Function = ({
   >
     <Flex style={{ justifyContent: 'center', alignItems: 'center' }}>
       <img src={logo} style={{ width: 400 }} />
-      { /* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */ }
+      {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
       <form onSubmit={handleFormSubmit}>
         <Box top noPadding width={400}>
           <Flex
@@ -73,9 +69,7 @@ const Login: Function = ({
           <Flex flex="10 1 auto" className="authorize-content">
             {hasLogout && (
               <React.Fragment>
-                <Alert bsStyle="success">
-                  You have been successfuly logged out
-                </Alert>
+                <Alert bsStyle="success">You have been successfuly logged out</Alert>
                 <br />
               </React.Fragment>
             )}
@@ -91,19 +85,19 @@ const Login: Function = ({
                 <br />
               </React.Fragment>
             )}
-            { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */}
             <FormGroup label="Username" labelFor="username" required={true}>
               <InputGroup
                 id="username"
                 placeholder="Username"
                 required={true}
                 disabled={loading}
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
                 onChange={handleUsernameChange}
                 value={username}
               />
             </FormGroup>
-            { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */}
             <FormGroup label="Password" labelFor="password" required={true}>
               <InputGroup
                 required={true}
@@ -111,7 +105,7 @@ const Login: Function = ({
                 placeholder="Password"
                 type="password"
                 disabled={loading}
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
                 onChange={handlePasswordChange}
                 value={password}
               />
@@ -161,7 +155,7 @@ export default compose(
       },
     handleFormSubmit:
       ({ username, password, changeLoginStatus, location }): Function =>
-      // @ts-expect-error ts-migrate(1055) FIXME: Type 'void' is not a valid async function return t... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(1055) FIXME: Type 'void' is not a valid async function return t... Remove this comment to see the full error message
       async (e: any): void => {
         e.preventDefault();
 
@@ -171,27 +165,22 @@ export default compose(
           error: null,
         }));
 
-        const loginData: Object = await post(
-          `${settings.REST_BASE_URL}/public/login`,
-          {
-            body: JSON.stringify({ user: username, pass: password }),
-          }
-        );
+        const loginData: Object = await post(`${settings.REST_BASE_URL}/public/login`, {
+          body: JSON.stringify({ user: username, pass: password }),
+        });
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
         if (loginData.err) {
           changeLoginStatus((loginStatus) => ({
             ...loginStatus,
             loading: false,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
             error: loginData.desc,
           }));
         } else {
           const nextUrl =
-            !location.query.next || location.query.next === '/error'
-              ? '/'
-              : location.query.next;
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'token' does not exist on type 'Object'.
+            !location.query.next || location.query.next === '/error' ? '/' : location.query.next;
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'token' does not exist on type 'Object'.
           window.localStorage.setItem('token', loginData.token);
           window.location.href = decodeURIComponent(nextUrl);
         }

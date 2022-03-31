@@ -82,9 +82,7 @@ export const providers = {
 
 const getProviderUrl = (options, fieldType) => {
   // Get the mapper options data
-  const { type, name, path = '', subtype } = jsyaml.safeLoad(
-    options[`mapper-${fieldType}`]
-  );
+  const { type, name, path = '', subtype } = jsyaml.safeLoad(options[`mapper-${fieldType}`]);
   // Check if the type is factory
   if (type === 'factory') {
     // Return just the type
@@ -93,22 +91,20 @@ const getProviderUrl = (options, fieldType) => {
   // Get the rules for the given provider
   const { url, suffix, recordSuffix } = providers[type];
   // Build the URL based on the provider type
-  return `${url}/${name}${suffix}${path}${
-    recordSuffix && !subtype ? recordSuffix : ''
-  }`;
+  return `${url}/${name}${suffix}${path}${recordSuffix && !subtype ? recordSuffix : ''}`;
 };
 
 const MapperInfo = ({
   mapper,
   location,
   tabQuery,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'onInfoClick' does not exist on type '{ m... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'onInfoClick' does not exist on type '{ m... Remove this comment to see the full error message
   onInfoClick,
 }: {
-  mapper: Object,
-  onBackClick: Function,
-  location: Object,
-  tabQuery: string,
+  mapper: Object;
+  onBackClick: Function;
+  location: Object;
+  tabQuery: string;
 }) => {
   if (!mapper) return <Loader />;
 
@@ -118,7 +114,7 @@ const MapperInfo = ({
         <Breadcrumbs>
           <Crumb>Mappers</Crumb>
           <Crumb>
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
             {mapper.name} v{mapper.version} ({mapper.mapperid})
           </Crumb>
           <CrumbTabs tabs={['Diagram', 'Releases', 'Info']} />
@@ -128,31 +124,31 @@ const MapperInfo = ({
         <SimpleTabs activeTab={tabQuery}>
           <SimpleTab name="diagram">
             <Flex scrollY>
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'valid' does not exist on type 'Object'. */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'valid' does not exist on type 'Object'. */}
               {!mapper.valid ? (
                 <Alert
                   bsStyle="danger"
                   title="Warning: This mapper contains an error and can not be
                     rendered!"
                 >
-                  { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */ }
+                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
                   {mapper.error}
                 </Alert>
               ) : (
                 <MapperCreator
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
                   inputs={mapper.options.input || {}}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
                   outputs={mapper.options.output || {}}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
                   staticData={mapper.options?.context?.staticdata?.fields || {}}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'fields' does not exist on type 'Object'.
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'fields' does not exist on type 'Object'.
                   relations={mapper.fields}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'option_source' does not exist on type 'O... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'option_source' does not exist on type 'O... Remove this comment to see the full error message
                   inputUrl={getProviderUrl(mapper.option_source, 'input')}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'option_source' does not exist on type 'O... Remove this comment to see the full error message
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'option_source' does not exist on type 'O... Remove this comment to see the full error message
                   outputUrl={getProviderUrl(mapper.option_source, 'output')}
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'fields' does not exist on type 'Object'.
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'fields' does not exist on type 'Object'.
                   onInfoClick={(name) => onInfoClick(mapper.fields[name])}
                 />
               )}
@@ -162,21 +158,21 @@ const MapperInfo = ({
             <Author model={mapper} />
             <InfoTable
               object={{
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
                 type: mapper.type,
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'.
                 description: mapper.desc,
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'options' does not exist on type 'Object'... Remove this comment to see the full error message
                 options: mapper.options,
               }}
             />
           </SimpleTab>
           <SimpleTab name="releases">
             <Releases
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
               component={mapper.name}
               location={location}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
               key={mapper.name}
               compact
             />
@@ -187,27 +183,21 @@ const MapperInfo = ({
   );
 };
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+// @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
 const metaSelector = (state: Object): Object => state.api.mappers;
 const stateSelector = (state, { mapperId }) =>
-  state.api.mappers.data.find(
-    (item) => item.mapperid === parseInt(mapperId, 10)
-  );
+  state.api.mappers.data.find((item) => item.mapperid === parseInt(mapperId, 10));
 
-const mapperInfoSelector = createSelector(
-  stateSelector,
-  metaSelector,
-  (mapper, meta) => ({
-    mappers: meta,
-    mapper,
-  })
-);
+const mapperInfoSelector = createSelector(stateSelector, metaSelector, (mapper, meta) => ({
+  mappers: meta,
+  mapper,
+}));
 
 export default compose(
   hasInterfaceAccess('mappers', 'Mappers'),
   pure,
   connect(mapperInfoSelector, {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type '{}'.
     load: actions.mappers.fetch,
   }),
   modal(),
@@ -219,16 +209,20 @@ export default compose(
     },
   }),
   withHandlers({
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-    onBackClick: (): Function => (ev: EventHandler): void => {
-      ev.preventDefault();
+    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
+    onBackClick:
+      (): Function =>
+      (ev: EventHandler): void => {
+        ev.preventDefault();
 
-      history.go(-1);
-    },
-    onInfoClick: ({ openModal, closeModal }) => (data) => {
-      openModal(<DetailModal detail={data} onClose={closeModal} />);
-    },
+        history.go(-1);
+      },
+    onInfoClick:
+      ({ openModal, closeModal }) =>
+      (data) => {
+        openModal(<DetailModal detail={data} onClose={closeModal} />);
+      },
   }),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   withTabs('diagram')
 )(MapperInfo);

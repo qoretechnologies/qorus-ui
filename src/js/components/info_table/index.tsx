@@ -1,27 +1,23 @@
 // @flow
+import lodashOmit from 'lodash/omit';
 import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import Tree from '../tree';
-import lodashOmit from 'lodash/omit';
 
 type InfoTableProps = {
-  omit?: Array<string>,
-  object: Object,
+  omit?: Array<string>;
+  object: Object;
 };
 
 const InfoTable: Function = ({
   omit,
   object,
   ...rest
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: InfoTableProps): React.Element<any> => (
-  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-  <Tree
-    data={omit ? lodashOmit(object, omit) : object}
-    {...rest}
-    contentInline
-  />
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+InfoTableProps): React.Element<any> => (
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+  <Tree data={omit ? lodashOmit(object, omit) : object} {...rest} contentInline />
 );
 
 export default compose(onlyUpdateForKeys(['object', 'omit']))(InfoTable);

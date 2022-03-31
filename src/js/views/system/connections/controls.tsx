@@ -3,13 +3,13 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../../../../../server_config' ... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2307) FIXME: Cannot find module '../../../../../server_config' ... Remove this comment to see the full error message
 import { WEB_IDE_URL } from '../../../../../server_config';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import {
   Control as Button,
-  Controls as ButtonGroup
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+  Controls as ButtonGroup,
+  // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 } from '../../../components/controls';
 import withModal from '../../../hocomponents/modal';
 import actions from '../../../store/api/actions';
@@ -109,15 +109,13 @@ export default compose(
     handlePingClick:
       ({ name, remoteType, openModal, closeModal }): Function =>
       (): void => {
-        openModal(
-          <PingModal name={name} onClose={closeModal} type={remoteType} />
-        );
+        openModal(<PingModal name={name} onClose={closeModal} type={remoteType} />);
       },
     handleToggleClick:
       ({ name, enabled, remoteType, dispatchAction }): Function =>
       (): void => {
         dispatchAction(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
           actions.remotes.toggleConnection,
           name,
           !enabled,
@@ -128,29 +126,28 @@ export default compose(
       ({ dispatchAction, name, remoteType, openModal, closeModal }): Function =>
       (): void => {
         const handleConfirm: Function = (): void => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
           dispatchAction(actions.remotes.deleteConnection, remoteType, name);
           closeModal();
         };
 
         openModal(
           <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
-            Are you sure you want to delete the {remoteType} connection {' '}
-            <strong>{name}</strong> ?
+            Are you sure you want to delete the {remoteType} connection <strong>{name}</strong> ?
           </ConfirmDialog>
         );
       },
     handleResetClick:
       ({ dispatchAction, name, remoteType }): Function =>
       (): void => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
         dispatchAction(actions.remotes.resetConnection, remoteType, name);
       },
     handleDebugClick:
       ({ dispatchAction, name, debug_data, remoteType }): Function =>
       (): void => {
         dispatchAction(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
           actions.remotes.toggleDebug,
           name,
           !debug_data,

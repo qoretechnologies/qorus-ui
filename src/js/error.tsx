@@ -28,7 +28,7 @@ export default compose(
   mapProps(
     ({
       location: {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'query' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'query' does not exist on type 'Object'.
         query: { next },
       },
     }: Props) => ({

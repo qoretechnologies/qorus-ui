@@ -1,11 +1,11 @@
+import { assignIn, includes, isArray, omit } from 'lodash';
+// @ts-ignore ts-migrate(2307) FIXME: Cannot find module 'redux' or its corresponding ty... Remove this comment to see the full error message
+import { combineReducers } from 'redux';
+import { handleActions } from 'redux-actions';
 import ACTIONS from './actions';
 import RESOURCES from './resources';
 import * as specialReducers from './resources/reducers';
 import { updateItemWithId, updateItemWithName } from './utils';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module 'redux' or its corresponding ty... Remove this comment to see the full error message
-import { combineReducers } from 'redux';
-import { handleActions } from 'redux-actions';
-import { omit, assignIn, isArray, includes } from 'lodash';
 
 const initialState = {
   data: [],
@@ -13,31 +13,26 @@ const initialState = {
   loading: false,
 };
 
-function getResourceByName (resources, name) {
-  return resources.find(r => r.name === name);
+function getResourceByName(resources, name) {
+  return resources.find((r) => r.name === name);
 }
 
-export function createResourceReducers (
-  actions,
-  resources = [],
-  iniState = initialState
-) {
+export function createResourceReducers(actions, resources = [], iniState = initialState) {
   const reducers = {};
 
-  Object.keys(actions).forEach(resource => {
+  Object.keys(actions).forEach((resource) => {
     const resourceOrigin = getResourceByName(resources, resource);
 
     reducers[resource] = {};
     const handlers = {};
 
-    Object.keys(actions[resource]).forEach(actn => {
+    Object.keys(actions[resource]).forEach((actn) => {
       const name = `${resource}_${actn}`.toUpperCase();
       const isSpecialReducer =
-        specialReducers[resource] &&
-        specialReducers[resource][actn.toUpperCase()];
+        specialReducers[resource] && specialReducers[resource][actn.toUpperCase()];
 
       handlers[name] = {
-        next (state, action) {
+        next(state, action) {
           let data;
 
           if (action.payload) {
@@ -75,7 +70,7 @@ export function createResourceReducers (
               }
 
               const item = state.data.find(
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                 (datum: Object) => datum.id === parseInt(action.meta.id, 10)
               );
 
@@ -98,8 +93,8 @@ export function createResourceReducers (
               const params = action.meta.params;
               const ids = action.meta.ids.split(',');
 
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{}'.
-              newState.data = stateData.map(w => {
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type '{}'.
+              newState.data = stateData.map((w) => {
                 let key = 'id';
 
                 /**
@@ -124,11 +119,7 @@ export function createResourceReducers (
               data = state.data.slice().concat(data);
             }
 
-            if (
-              action.meta.params &&
-              action.meta.params.update &&
-              action.meta.params.update.data
-            ) {
+            if (action.meta.params && action.meta.params.update && action.meta.params.update.data) {
               data = Object.assign(data, action.meta.params.update.data);
             }
           }
@@ -142,15 +133,9 @@ export function createResourceReducers (
             loading: false,
           };
         },
-        throw (state, action) {
-          if (
-            isSpecialReducer &&
-            specialReducers[resource][actn.toUpperCase()].throw
-          ) {
-            return specialReducers[resource][actn.toUpperCase()].throw(
-              state,
-              action
-            );
+        throw(state, action) {
+          if (isSpecialReducer && specialReducers[resource][actn.toUpperCase()].throw) {
+            return specialReducers[resource][actn.toUpperCase()].throw(state, action);
           }
 
           return {
@@ -167,7 +152,7 @@ export function createResourceReducers (
 
     if (resource === 'errors') {
       initState = {
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ global: { data: undefined[]; loading: bool... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type '{ global: { data: undefined[]; loading: bool... Remove this comment to see the full error message
         global: {
           data: [],
           loading: false,
@@ -179,16 +164,12 @@ export function createResourceReducers (
           sync: false,
         },
       };
-    } else if (
-      resource === 'orders' ||
-      resource === 'orderErrors' ||
-      resource === 'instances'
-    ) {
+    } else if (resource === 'orders' || resource === 'orderErrors' || resource === 'instances') {
       initState = {
         data: [],
         sync: false,
         loading: false,
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ data: undefined[]; sync: false; loading: f... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type '{ data: undefined[]; sync: false; loading: f... Remove this comment to see the full error message
         offset: 0,
         limit: 50,
         sort: 'started',
@@ -199,7 +180,7 @@ export function createResourceReducers (
         data: [],
         sync: false,
         loading: false,
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ data: undefined[]; sync: false; loading: f... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type '{ data: undefined[]; sync: false; loading: f... Remove this comment to see the full error message
         offset: 0,
         limit: 50,
         sort: 'Name',
@@ -210,7 +191,7 @@ export function createResourceReducers (
         data: [],
         sync: false,
         loading: false,
-        // @ts-expect-error ts-migrate(2322) FIXME: Type '{ data: undefined[]; sync: false; loading: f... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2322) FIXME: Type '{ data: undefined[]; sync: false; loading: f... Remove this comment to see the full error message
         offset: 0,
         limit: 50,
         sort: 'sla_eventid',
@@ -218,7 +199,7 @@ export function createResourceReducers (
       };
     } else if (resource === 'system') {
       initState = {
-        // @ts-expect-error ts-migrate(2740) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2740) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message
         data: {},
         sync: false,
         loading: false,

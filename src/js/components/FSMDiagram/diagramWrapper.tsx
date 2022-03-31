@@ -3,7 +3,7 @@ import { ElementPan } from '../PanElement';
 
 export interface IFSMDiagramWrapperProps {
   isHoldingShiftKey?: boolean;
-  wrapperDimensions: { width: number, height: number };
+  wrapperDimensions: { width: number; height: number };
   setPan: (x: number, y: number) => void;
   children: any;
   zoom: number;
@@ -15,15 +15,15 @@ const FSMDiagramWrapper: React.FC<IFSMDiagramWrapperProps> = ({
   children,
   setPan,
   zoom,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'items' does not exist on type 'PropsWith... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'items' does not exist on type 'PropsWith... Remove this comment to see the full error message
   items,
 }) => {
   return (
     <ElementPan
       key={JSON.stringify(wrapperDimensions)}
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
+      // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
       width="100%"
-      // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
+      // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
       height="100%"
       startX={0}
       startY={0}

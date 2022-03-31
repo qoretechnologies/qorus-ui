@@ -1,34 +1,33 @@
 /* @flow */
 import React from 'react';
-import compose from 'recompose/compose';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import { findBy } from '../../../helpers/search';
-import sync from '../../../hocomponents/sync';
-import search from '../../../hocomponents/search';
-import withPane from '../../../hocomponents/pane';
-import { resourceSelector, querySelector } from '../../../selectors';
-import actions from '../../../store/api/actions';
+import { createSelector } from 'reselect';
 import Box from '../../../components/box';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
-import Search from '../../../containers/search';
-import ValueMapsContainer from '../../../containers/valuemaps';
-import Pane from './detail';
-import titleManager from '../../../hocomponents/TitleManager';
+import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
-import Flex from '../../../components/Flex';
+import Search from '../../../containers/search';
+import ValueMapsContainer from '../../../containers/valuemaps';
+import { findBy } from '../../../helpers/search';
 import hasInterfaceAccess from '../../../hocomponents/hasInterfaceAccess';
+import withPane from '../../../hocomponents/pane';
+import search from '../../../hocomponents/search';
+import sync from '../../../hocomponents/sync';
+import titleManager from '../../../hocomponents/TitleManager';
+import { querySelector, resourceSelector } from '../../../selectors';
+import actions from '../../../store/api/actions';
+import Pane from './detail';
 
 type Props = {
-  onSearchChange: Function,
-  defaultSearchValue: string,
-  collection: Array<Object>,
-  openPane: Function,
-  closePane: Function,
-  paneId: number,
+  onSearchChange: Function;
+  defaultSearchValue: string;
+  collection: Array<Object>;
+  openPane: Function;
+  closePane: Function;
+  paneId: number;
 };
 
 const ValueMaps: Function = ({
@@ -38,8 +37,8 @@ const ValueMaps: Function = ({
   openPane,
   closePane,
   paneId,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -65,10 +64,10 @@ const ValueMaps: Function = ({
   </Flex>
 );
 
-const filterData = (query: string): Function => (
-  collection: Array<Object>
-): Array<Object> =>
-  findBy(['name', 'desc', 'author', 'valuetype', 'mapsize'], query, collection);
+const filterData =
+  (query: string): Function =>
+  (collection: Array<Object>): Array<Object> =>
+    findBy(['name', 'desc', 'author', 'valuetype', 'mapsize'], query, collection);
 
 const dataSelector: Function = createSelector(
   [resourceSelector('valuemaps'), querySelector('q')],
@@ -86,17 +85,14 @@ const state = createSelector(
 
 export default compose(
   hasInterfaceAccess('vmaps', 'Value maps'),
-  connect(
-    state,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'valuemaps' does not exist on type '{}'.
-      load: actions.valuemaps.fetch,
-    }
-  ),
+  connect(state, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'valuemaps' does not exist on type '{}'.
+    load: actions.valuemaps.fetch,
+  }),
   sync('valuemaps'),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
   search(),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
   withPane(Pane, ['valuemaps', 'location', 'isTablet'], null, 'valuemaps'),
   titleManager('Valuemaps'),
   pure(['collection', 'location'])

@@ -1,30 +1,16 @@
 // @flow
 import React from 'react';
-
-import {
-  Table,
-  Thead,
-  Tbody,
-  Th,
-  Tr,
-  Td,
-  FixedRow,
-} from '../../../../../components/new_table';
-import {
-  ProgressBar,
-  Intent,
-} from '../../../../../../../node_modules/@blueprintjs/core';
+import { Intent, ProgressBar } from '../../../../../../../node_modules/@blueprintjs/core';
+import NameColumn, { NameColumnHeader } from '../../../../../components/NameColumn';
+import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../../../../components/new_table';
 import { orderStatsPct } from '../../../../../helpers/orders';
-import NameColumn, {
-  NameColumnHeader,
-} from '../../../../../components/NameColumn';
 
 type Props = {
-  workflows: Array<Object>,
-  totalOrderStats: number,
-  sortData: Object,
-  onSortChange: Function,
-  local: boolean,
+  workflows: Array<Object>;
+  totalOrderStats: number;
+  sortData: Object;
+  onSortChange: Function;
+  local: boolean;
 };
 
 const GlobalModalTable: Function = ({
@@ -39,48 +25,46 @@ const GlobalModalTable: Function = ({
       <FixedRow {...{ sortData, onSortChange }}>
         <NameColumnHeader />
         <Th name={local ? 'inSlaLocalPct' : 'inSlaTotalPct'}>In SLA</Th>
-        <Th name={local ? 'outOfSlaLocalPct' : 'outOfSlaTotalPct'}>
-          Out of SLA
-        </Th>
+        <Th name={local ? 'outOfSlaLocalPct' : 'outOfSlaTotalPct'}>Out of SLA</Th>
       </FixedRow>
     </Thead>
     <Tbody>
       {workflows.map((workflow: Object, index: number) => {
         const totalStats: number = local
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'inSla' does not exist on type 'Object'.
-          ? workflow.inSla + workflow.outOfSla
+          ? // @ts-ignore ts-migrate(2339) FIXME: Property 'inSla' does not exist on type 'Object'.
+            workflow.inSla + workflow.outOfSla
           : totalOrderStats;
 
         return (
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           <Tr key={workflow.id} first={index === 0}>
             <NameColumn
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
               name={workflow.name}
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
               link={`/workflows?paneId=${workflow.id}&paneTab=order stats`}
               type="workflow"
             />
             <Td>
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'inSla' does not exist on type 'Object'. */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'inSla' does not exist on type 'Object'. */}
               {workflow.inSla} ({orderStatsPct(workflow.inSla, totalStats)}
               %)
               <ProgressBar
                 intent={Intent.SUCCESS}
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'inSla' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'inSla' does not exist on type 'Object'.
                 value={orderStatsPct(workflow.inSla, totalStats) / 100}
                 className="bp3-no-animation"
               />
             </Td>
             <Td>
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message */}
               {workflow.outOfSla} (
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message */}
               {orderStatsPct(workflow.outOfSla, totalStats)}
               %)
               <ProgressBar
                 intent={Intent.DANGER}
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'outOfSla' does not exist on type 'Object... Remove this comment to see the full error message
                 value={orderStatsPct(workflow.outOfSla, totalStats) / 100}
                 className="bp3-no-animation"
               />

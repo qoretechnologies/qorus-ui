@@ -2,33 +2,32 @@
 import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-
 import Box from '../../../components/box';
-import DetailTab from './detail';
-import ResourceTab from './resources';
-import MethodsTab from './methods';
 import Code from '../../../components/code';
-import MappersTable from '../../../containers/mappers';
-import Valuemaps from '../../../containers/valuemaps';
-import LogContainer from '../../../containers/log';
-import Releases from '../../../containers/releases';
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';
+import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
 import InfoTable from '../../../components/info_table';
 import ProcessTable from '../../../components/ProcessTable';
+import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
 import AuthLabels from '../../../containers/AuthLabels';
+import LogContainer from '../../../containers/log';
+import MappersTable from '../../../containers/mappers';
+import Releases from '../../../containers/releases';
+import Valuemaps from '../../../containers/valuemaps';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
-import GlobalConfigItemsTable from '../../../components/GlobalConfigItemsTable';
+import DetailTab from './detail';
+import MethodsTab from './methods';
+import ResourceTab from './resources';
 
 type ServiceTabsProps = {
-  service: Object,
-  codeData: Object,
-  activeTab: string,
-  location: Object,
-  methods: Array<Object>,
-  configItems: Object,
-  systemOptions: Array<Object>,
-  isPane?: boolean,
+  service: Object;
+  codeData: Object;
+  activeTab: string;
+  location: Object;
+  methods: Array<Object>;
+  configItems: Object;
+  systemOptions: Array<Object>;
+  isPane?: boolean;
 };
 
 const ServiceTabs: Function = ({
@@ -40,14 +39,14 @@ const ServiceTabs: Function = ({
   configItems,
   systemOptions,
   isPane,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: ServiceTabsProps): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+ServiceTabsProps): React.Element<any> => (
   <SimpleTabs activeTab={activeTab}>
     {isPane && (
       <SimpleTab name="detail">
-        { /* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */ }
+        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
         <DetailTab
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           key={service.name}
           service={service}
           systemOptions={systemOptions}
@@ -65,10 +64,10 @@ const ServiceTabs: Function = ({
     <SimpleTab name="log">
       <Box top fill>
         <LogContainer
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           id={service.id}
           intfc="services"
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           resource={`services/${service.id}`}
           location={location}
         />
@@ -76,13 +75,13 @@ const ServiceTabs: Function = ({
     </SimpleTab>
     <SimpleTab name="mappers">
       <Box top fill noPadding>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <MappersTable mappers={service.mappers} />
       </Box>
     </SimpleTab>
     <SimpleTab name="value maps">
       <Box top fill noPadding>
-        { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */ }
+        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
         <Valuemaps vmaps={service.vmaps} />
       </Box>
     </SimpleTab>
@@ -94,11 +93,11 @@ const ServiceTabs: Function = ({
     <SimpleTab name="resources">
       <Box top fill>
         <ResourceTab
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           id={service.id}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'resources' does not exist on type 'Objec... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'resources' does not exist on type 'Objec... Remove this comment to see the full error message
           resources={service.resources}
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'resource_files' does not exist on type '... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'resource_files' does not exist on type '... Remove this comment to see the full error message
           resourceFiles={service.resource_files}
         />
       </Box>
@@ -111,10 +110,10 @@ const ServiceTabs: Function = ({
     <SimpleTab name="releases">
       <Box top fill>
         <Releases
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           component={service.name}
           compact
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           key={service.name}
           location={location}
         />
@@ -123,14 +122,14 @@ const ServiceTabs: Function = ({
     <SimpleTab name="config">
       <Box top fill scrollY>
         <GlobalConfigItemsTable
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'global_config' does not exist on type 'O... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'global_config' does not exist on type 'O... Remove this comment to see the full error message
           globalItems={service.global_config}
           intrf="system"
         />
         <ConfigItemsTable
           items={rebuildConfigHash(service)}
           intrf="services"
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           intrfId={service.id}
         />
       </Box>

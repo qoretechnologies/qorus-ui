@@ -1,33 +1,28 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-
-import Skip from './skip';
-import { Table, Td, Th, Tr, Tbody } from '../../../components/new_table';
-import Dropdown, { Control, Item } from '../../../components/dropdown';
-import {
-  Controls as ButtonGroup,
-  Control as Button,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
-import { pureRender } from '../../../components/utils';
-import { groupInstances, canSkip } from '../../../helpers/orders';
-import Toolbar from '../../../components/toolbar';
 import ContentByType from '../../../components/ContentByType';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
+import { DateColumn, DateColumnHeader } from '../../../components/DateColumn';
+import Dropdown, { Control, Item } from '../../../components/dropdown';
+import { IdColumn, IdColumnHeader } from '../../../components/IdColumn';
 import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
-import { DateColumnHeader, DateColumn } from '../../../components/DateColumn';
-import { INTERFACE_ICONS } from '../../../constants/interfaces';
-import { IdColumnHeader, IdColumn } from '../../../components/IdColumn';
+import { Table, Tbody, Td, Th, Tr } from '../../../components/new_table';
 import PaneItem from '../../../components/pane_item';
+import Toolbar from '../../../components/toolbar';
+import { pureRender } from '../../../components/utils';
+import { INTERFACE_ICONS } from '../../../constants/interfaces';
+import { canSkip, groupInstances } from '../../../helpers/orders';
 import Errors from '../errors';
+import Skip from './skip';
 
 @pureRender
 export default class StepDetailTable extends Component {
   props: {
-    step: string,
-    instances: Array<any>,
-    steps: Object,
-    onSkipSubmit: Function,
-    order: Object,
+    step: string;
+    instances: Array<any>;
+    steps: Object;
+    onSkipSubmit: Function;
+    order: Object;
   } = this.props;
 
   static contextTypes = {
@@ -40,10 +35,7 @@ export default class StepDetailTable extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.step !== nextProps.step ||
-      this.props.instances !== nextProps.instances
-    ) {
+    if (this.props.step !== nextProps.step || this.props.instances !== nextProps.instances) {
       this.setup(nextProps);
     }
   }
@@ -67,41 +59,41 @@ export default class StepDetailTable extends Component {
   }
 
   handleSkipSubmit = (value, noretry) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message
     this.props.onSkipSubmit(this.state.currentStep, value, noretry);
   };
 
   handleSkipClick = () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
     this._modal = (
       <Skip
         onClose={this.handleModalClose}
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
         steps={this.state.steps}
         onSubmit={this.handleSkipSubmit}
       />
     );
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
     this.context.openModal(this._modal);
   };
 
   handleModalClose = () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
     this.context.closeModal(this._modal);
   };
 
-  handleDropdownItemClick = ind => () => {
+  handleDropdownItemClick = (ind) => () => {
     this.setState({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
-      currentStep: this.state.steps.find(s => s.ind === ind),
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
+      currentStep: this.state.steps.find((s) => s.ind === ind),
     });
   };
 
   renderDropdownItems() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
     return this.state.steps.map((step, index) => (
-      // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+      // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
       <Item
         key={index}
         title={`${step.ind} - ${step.stepname}`}
@@ -111,14 +103,14 @@ export default class StepDetailTable extends Component {
   }
 
   renderDropdown() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
     if (this.state.steps.length === 1) return undefined;
 
     return (
       <Dropdown id="steps">
-        { /* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */ }
+        {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
         <Control>
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message */}
           {`${this.state.currentStep.ind} - ${this.state.currentStep.stepname}`}
         </Control>
         {this.renderDropdownItems()}
@@ -127,7 +119,7 @@ export default class StepDetailTable extends Component {
   }
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message
     const { ...data } = this.state.currentStep;
     const { order } = this.props;
 
@@ -142,9 +134,7 @@ export default class StepDetailTable extends Component {
                 <NameColumn name={data.stepname} />
                 <Th icon="info-sign">Status</Th>
                 <Td>
-                  <span
-                    className={`label status-${data.stepstatus.toLowerCase()}`}
-                  >
+                  <span className={`label status-${data.stepstatus.toLowerCase()}`}>
                     {data.stepstatus}
                   </span>
                 </Td>
@@ -185,12 +175,7 @@ export default class StepDetailTable extends Component {
           </Table>
         </PaneItem>
         <PaneItem title="Errors for this step">
-          <Errors
-            order={order}
-            filterByStepId={data.stepid}
-            tableId="stepErrors"
-            compact
-          />
+          <Errors order={order} filterByStepId={data.stepid} tableId="stepErrors" compact />
         </PaneItem>
       </div>
     );

@@ -1,44 +1,31 @@
 /* @flow */
+import size from 'lodash/size';
 import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import size from 'lodash/size';
-
-import UsersRow from './row';
-import {
-  Table,
-  Tbody,
-  Thead,
-  FixedRow,
-  Th,
-} from '../../../../components/new_table';
-import { sortDefaults } from '../../../../constants/sort';
-import Pull from '../../../../components/Pull';
-import {
-  Control as Button,
-  Controls as ButtonGroup,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../../components/controls';
-import LoadMore from '../../../../components/LoadMore';
-import EnhancedTable from '../../../../components/EnhancedTable';
-import type { EnhancedTableProps } from '../../../../components/EnhancedTable';
 import { ActionColumnHeader } from '../../../../components/ActionColumn';
-import { NameColumnHeader } from '../../../../components/NameColumn';
+import { Control as Button, Controls as ButtonGroup } from '../../../../components/controls';
 import DataOrEmptyTable from '../../../../components/DataOrEmptyTable';
-import Alert from '../../../../components/alert';
-import { Icon } from '@blueprintjs/core';
+import type { EnhancedTableProps } from '../../../../components/EnhancedTable';
+import EnhancedTable from '../../../../components/EnhancedTable';
+import LoadMore from '../../../../components/LoadMore';
+import { NameColumnHeader } from '../../../../components/NameColumn';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../../../components/new_table';
+import Pull from '../../../../components/Pull';
+import { sortDefaults } from '../../../../constants/sort';
+import UsersRow from './row';
 
 type Props = {
-  users: Array<Object>,
-  onEditClick: Function,
-  canEdit: boolean,
-  onDeleteClick: Function,
-  onSortChange: Function,
-  sortData: Object,
-  canDelete: boolean,
-  onAddUserClick: Function,
-  canAdd: boolean,
-  rbacExternal: Array<Object>,
+  users: Array<Object>;
+  onEditClick: Function;
+  canEdit: boolean;
+  onDeleteClick: Function;
+  onSortChange: Function;
+  sortData: Object;
+  canDelete: boolean;
+  onAddUserClick: Function;
+  canAdd: boolean;
+  rbacExternal: Array<Object>;
 };
 
 const UsersTable: Function = ({
@@ -50,13 +37,9 @@ const UsersTable: Function = ({
   onAddUserClick,
   canAdd,
   rbacExternal,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<Table> => (
-  <EnhancedTable
-    collection={users}
-    sortDefault={sortDefaults.rbacUsers}
-    tableId="rbacUsers"
-  >
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<Table> => (
+  <EnhancedTable collection={users} sortDefault={sortDefaults.rbacUsers} tableId="rbacUsers">
     {({
       canLoadMore,
       handleLoadAll,
@@ -120,14 +103,14 @@ const UsersTable: Function = ({
           </FixedRow>
         </Thead>
         <DataOrEmptyTable condition={size(collection) === 0} cols={4}>
-          {props => (
+          {(props) => (
             <Tbody {...props}>
               {collection.map(
-                // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                 (user: Object, index: number): React.Element<any> => (
                   <UsersRow
                     first={index === 0}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                     key={user.name}
                     model={user}
                     canEdit={canEdit}

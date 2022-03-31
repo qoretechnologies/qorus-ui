@@ -10,7 +10,7 @@ export interface ISuggestField {
   fill?: boolean;
   disabled?: boolean;
   position?: any;
-  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'IField'.
+  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'IField'.
   requestFieldData: (name: string, key: string) => IField;
   messageData: any;
   warningMessageOnEmpty?: string;
@@ -18,32 +18,32 @@ export interface ISuggestField {
 }
 
 const SuggestField: FunctionComponent<ISuggestField> = ({
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'get_message' does not exist on type 'Pro... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'get_message' does not exist on type 'Pro... Remove this comment to see the full error message
   get_message,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'return_message' does not exist on type '... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'return_message' does not exist on type '... Remove this comment to see the full error message
   return_message,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'addMessageListener' does not exist on ty... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'addMessageListener' does not exist on ty... Remove this comment to see the full error message
   addMessageListener,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'postMessage' does not exist on type 'Pro... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'postMessage' does not exist on type 'Pro... Remove this comment to see the full error message
   postMessage,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'PropsWithC... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'PropsWithC... Remove this comment to see the full error message
   name,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'onChange' does not exist on type 'PropsW... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'onChange' does not exist on type 'PropsW... Remove this comment to see the full error message
   onChange,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'PropsWith... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'PropsWith... Remove this comment to see the full error message
   value,
   defaultItems,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 't' does not exist on type 'PropsWithChil... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 't' does not exist on type 'PropsWithChil... Remove this comment to see the full error message
   t,
   predicate,
   placeholder,
   fill,
   disabled,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'selected' does not exist on type 'PropsW... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'selected' does not exist on type 'PropsW... Remove this comment to see the full error message
   selected,
   requestFieldData,
   warningMessageOnEmpty,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'onSelect' does not exist on type 'PropsW... Remove this comment to see the full error message
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'onSelect' does not exist on type 'PropsW... Remove this comment to see the full error message
   onSelect,
   autoSelect,
 }) => {

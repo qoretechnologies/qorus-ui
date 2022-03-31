@@ -52,7 +52,7 @@ export const InterfaceSelector = ({ name, onChange, value, default_value, type }
   }
 
   return (
-    // @ts-expect-error ts-migrate(2740) FIXME: Type '{ defaultItems: any; value: any; name: any; ... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2740) FIXME: Type '{ defaultItems: any; value: any; name: any; ... Remove this comment to see the full error message
     <SelectField
       defaultItems={interfaces.map((i) => ({ name: i }))}
       value={value || default_value}

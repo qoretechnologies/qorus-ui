@@ -1,5 +1,3 @@
-import { updateItemWithId } from '../../utils';
-
 const initialState: Object = {
   data: [],
   loading: false,
@@ -7,19 +5,19 @@ const initialState: Object = {
 };
 
 const unSync: Object = {
-  next (state: Object = initialState): Object {
+  next(state: Object = initialState): Object {
     return Object.assign({}, state, initialState);
   },
-  throw (state: Object = initialState): Object {
+  throw(state: Object = initialState): Object {
     return state;
   },
 };
 
 const createClient: Object = {
-  next (
+  next(
     state: Object = initialState,
     {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { clientId, clientSecret, username, permissions, noop },
     }: Object
   ): Object {
@@ -28,7 +26,7 @@ const createClient: Object = {
     }
 
     const data = {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       ...state.data,
       [clientId]: {
         client_id: clientId,
@@ -43,10 +41,10 @@ const createClient: Object = {
 };
 
 const updateClient: Object = {
-  next (
+  next(
     state: Object = initialState,
     {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { clientId, clientSecret, permissions, noop },
     }: Object
   ): Object {
@@ -54,7 +52,7 @@ const updateClient: Object = {
       return state;
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
     data[clientId].client_secret = clientSecret;
@@ -65,10 +63,10 @@ const updateClient: Object = {
 };
 
 const deleteClient: Object = {
-  next (
+  next(
     state: Object = initialState,
     {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { clientId, noop },
     }: Object
   ): Object {
@@ -76,7 +74,7 @@ const deleteClient: Object = {
       return state;
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
     delete data[clientId];

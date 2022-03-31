@@ -52,16 +52,12 @@ const User = Loadable({
 });
 
 const Extensions = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "extensions" */ './views/extensions'),
+  loader: () => import(/* webpackChunkName: "extensions" */ './views/extensions'),
   loading: Loader,
 });
 
 const ExtensionDetail = Loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "extension-detail" */ './views/extensions/detail'
-    ),
+  loader: () => import(/* webpackChunkName: "extension-detail" */ './views/extensions/detail'),
   loading: Loader,
 });
 
@@ -81,8 +77,7 @@ const Order = Loadable({
 });
 
 const Service = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "service" */ './views/services/detail'),
+  loader: () => import(/* webpackChunkName: "service" */ './views/services/detail'),
   loading: Loader,
 });
 
@@ -92,8 +87,7 @@ const Search = Loadable({
 });
 
 const Workflow = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "workflow" */ './views/workflows/detail'),
+  loader: () => import(/* webpackChunkName: "workflow" */ './views/workflows/detail'),
   loading: Loader,
 });
 
@@ -108,8 +102,7 @@ const Workflows = Loadable({
 });
 
 const Sla = Loadable({
-  loader: () =>
-    import(/* webpackChunkName: "sla" */ './views/system/slas/detail'),
+  loader: () => import(/* webpackChunkName: "sla" */ './views/system/slas/detail'),
   loading: Loader,
 });
 
@@ -124,36 +117,32 @@ const OAuth2View: any = Loadable({
 });
 
 const AuthorizeView: any = Loadable({
-  loader: () =>
-    import(
-      /* webpackChunkName: "oauth2-authorize" */ './views/oauth2/authorize'
-    ),
+  loader: () => import(/* webpackChunkName: "oauth2-authorize" */ './views/oauth2/authorize'),
   loading: Loader,
 });
 
 let AuthenticateCodeView;
 if (process.env.NODE_ENV === 'development') {
   AuthenticateCodeView = Loadable({
-    loader: () =>
-      import(/* webpackChunkName: "oauth2Code" */ './views/oauth2/mock/code'),
+    loader: () => import(/* webpackChunkName: "oauth2Code" */ './views/oauth2/mock/code'),
     loading: Loader,
   });
 }
 
 class AppInfo extends React.Component {
   props: {
-    info: Object,
-    logout: Function,
-    routerProps: Object,
+    info: Object;
+    logout: Function;
+    routerProps: Object;
   } = this.props;
 
   componentDidMount() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const { noauth } = this.props.info.data;
     const token = window.localStorage.getItem('token');
 
     if (token || noauth) {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'loadSystem' does not exist on type '{ in... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'loadSystem' does not exist on type '{ in... Remove this comment to see the full error message
       this.props.loadSystem();
     }
   }
@@ -166,7 +155,7 @@ class AppInfo extends React.Component {
   requireAnonymous = (nextState, replace) => {
     const {
       info: {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
         data: { noauth },
       },
     } = this.props;
@@ -183,15 +172,13 @@ class AppInfo extends React.Component {
    * @param  {Function} replace change state function
    */
   requireAuthenticated = (nextState, replace) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const { noauth } = this.props.info.data;
     const token = window.localStorage.getItem('token');
 
     if (!token && !noauth) {
       replace(
-        `/login?next=${nextState.location.pathname}${encodeURIComponent(
-          nextState.location.search
-        )}`
+        `/login?next=${nextState.location.pathname}${encodeURIComponent(nextState.location.search)}`
       );
     }
   };
@@ -203,11 +190,11 @@ class AppInfo extends React.Component {
   };
 
   render() {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'plugins' does not exist on type '{ info:... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'plugins' does not exist on type '{ info:... Remove this comment to see the full error message
     let { info, plugins, routerProps, systemSync } = this.props;
     const token: string = window.localStorage.getItem('token');
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
     if (info.error) {
       return (
         <Router {...this.props.routerProps}>
@@ -216,15 +203,11 @@ class AppInfo extends React.Component {
       );
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     if (!token && !info.data.noauth) {
       return (
         <Router {...routerProps}>
-          <Route
-            path="/login"
-            component={Login}
-            onEnter={this.requireAnonymous}
-          />
+          <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
           <Route path="*" onEnter={this.requireAuthenticated} />
         </Router>
       );
@@ -235,52 +218,48 @@ class AppInfo extends React.Component {
         <Router {...this.props.routerProps}>
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
             <IndexRedirect to="/dashboard" />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
             <Route path="/dashboard" component={System.Dashboard} />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Connections' does not exist on type 'Fun... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Connections' does not exist on type 'Fun... Remove this comment to see the full error message */}
             <Route path="/remote" component={System.Connections} />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Slas' does not exist on type 'Function'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Slas' does not exist on type 'Function'. */}
             <Route path="/slas" component={System.Slas} />
             <Route path="/sla/:id" component={Sla} />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Valuemaps' does not exist on type 'Funct... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Valuemaps' does not exist on type 'Funct... Remove this comment to see the full error message */}
             <Route path="/valuemaps" component={System.Valuemaps} />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Info' does not exist on type 'Function'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Info' does not exist on type 'Function'. */}
             <Route path="/info" component={System.Info} />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Logs' does not exist on type 'Function'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Logs' does not exist on type 'Function'. */}
             <Route path="/logs" component={System.Logs} />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'RBAC' does not exist on type 'Function'. */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'RBAC' does not exist on type 'Function'. */}
             <Route path="/rbac" component={System.RBAC} />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Errors' does not exist on type 'Function... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Errors' does not exist on type 'Function... Remove this comment to see the full error message */}
             <Route path="/errors" component={System.Errors} />
-            { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Releases' does not exist on type 'Functi... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Releases' does not exist on type 'Functi... Remove this comment to see the full error message */}
             <Route path="/releases" component={System.Releases} />
             {hasPlugin('oauth2', plugins) ? (
               <Route path="/plugins/oauth2" component={OAuth2View} />
             ) : null}
-            {hasPlugin('oauth2', plugins) &&
-            process.env.NODE_ENV === 'development' ? (
-              <Route
-                path="/plugins/oauth2/code"
-                component={AuthenticateCodeView}
-              />
+            {hasPlugin('oauth2', plugins) && process.env.NODE_ENV === 'development' ? (
+              <Route path="/plugins/oauth2/code" component={AuthenticateCodeView} />
             ) : null}
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
               <Route path="alerts" component={System.Alerts} />
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Options' does not exist on type 'Functio... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Options' does not exist on type 'Functio... Remove this comment to see the full error message */}
               <Route path="options" component={System.Options} />
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Properties' does not exist on type 'Func... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Properties' does not exist on type 'Func... Remove this comment to see the full error message */}
               <Route path="props" component={System.Properties} />
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'SqlCache' does not exist on type 'Functi... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'SqlCache' does not exist on type 'Functi... Remove this comment to see the full error message */}
               <Route path="sqlcache" component={System.SqlCache} />
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'HttpServices' does not exist on type 'Fu... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'HttpServices' does not exist on type 'Fu... Remove this comment to see the full error message */}
               <Route path="http" component={System.HttpServices} />
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'Cluster' does not exist on type 'Functio... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Cluster' does not exist on type 'Functio... Remove this comment to see the full error message */}
               <Route path="cluster" component={System.Cluster} />
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'OrderStats' does not exist on type 'Func... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'OrderStats' does not exist on type 'Func... Remove this comment to see the full error message */}
               <Route path="orderStats" component={System.OrderStats} />
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'ConfigItems' does not exist on type 'Fun... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'ConfigItems' does not exist on type 'Fun... Remove this comment to see the full error message */}
               <Route path="config-items" component={System.ConfigItems} />
               {/* <Route path="providers" component={System.Providers} /> */}
             </Route>
@@ -306,7 +285,7 @@ class AppInfo extends React.Component {
               onEnter={this.requireAuthenticated}
               path="/plugins/oauth2/authorize"
               component={AuthorizeView}
-              // @ts-expect-error ts-migrate(17001) FIXME: JSX elements cannot have multiple attributes with ... Remove this comment to see the full error message
+              // @ts-ignore ts-migrate(17001) FIXME: JSX elements cannot have multiple attributes with ... Remove this comment to see the full error message
               onEnter={this.requireAuthenticated}
             />
           ) : null}
@@ -329,11 +308,11 @@ export default compose(
       systemSync: state.api.system.sync,
     }),
     {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'info' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'info' does not exist on type '{}'.
       load: actions.info.fetch,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'system' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'system' does not exist on type '{}'.
       loadSystem: actions.system.fetch,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'logout' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'logout' does not exist on type '{}'.
       logout: actions.logout.logout,
       message: events.message,
       close: events.disconnect,

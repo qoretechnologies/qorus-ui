@@ -7,8 +7,8 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import {
   Control as Button,
-  Controls as ButtonGroup
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+  Controls as ButtonGroup,
+  // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 } from '../../components/controls';
 import withProcessKill from '../../hocomponents/withProcessKill';
 import Alert from '../alert';
@@ -16,50 +16,48 @@ import NoData from '../nodata';
 import PaneItem from '../pane_item';
 
 type Props = {
-  model: Object,
-  handleKillClick: Function,
+  model: Object;
+  handleKillClick: Function;
 };
 
 const ProcessSummary: Function = ({
   model: {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
     enabled,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
     process: prcs,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'processes' does not exist on type 'Objec... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'processes' does not exist on type 'Objec... Remove this comment to see the full error message
     processes,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
     remote,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'autostart' does not exist on type 'Objec... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'autostart' does not exist on type 'Objec... Remove this comment to see the full error message
     autostart,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'active' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'active' does not exist on type 'Object'.
     active,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'loaded' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'loaded' does not exist on type 'Object'.
     loaded,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'expiry_date' does not exist on type 'Obj... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'expiry_date' does not exist on type 'Obj... Remove this comment to see the full error message
     expiry_date: expiry,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobid' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'jobid' does not exist on type 'Object'.
     jobid,
-    // @ts-expect-error ts-migrate(1013) FIXME: A rest parameter or binding pattern may not have a... Remove this comment to see the full error message
-    ...rest,
+    // @ts-ignore ts-migrate(1013) FIXME: A rest parameter or binding pattern may not have a... Remove this comment to see the full error message
+    ...rest
   },
   handleKillClick,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Props'.
   type,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<PaneItem> => {
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<PaneItem> => {
   const processKey = type === 'service' ? processes : prcs;
-  const processData = processKey ? isArray(processKey) ? processKey : [processKey] : null;
+  const processData = processKey ? (isArray(processKey) ? processKey : [processKey]) : null;
 
   if (enabled) {
     if (remote) {
       if (size(processData)) {
         return (
-          <PaneItem
-            title={intl.formatMessage({ id: 'summary.process-summary' })}
-          >
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
             {processData.map((p) => (
               <div key={p.pid} style={{ clear: 'both' }}>
                 <div style={{ float: 'left' }}>
@@ -80,7 +78,7 @@ const ProcessSummary: Function = ({
                     <FormattedMessage id="cluster.memory" />: {p.priv_str}
                   </Tag>{' '}
                 </div>
-                { /* @ts-expect-error ts-migrate(2322) FIXME: Type '"right "' is not assignable to type 'Float'. */ }
+                {/* @ts-expect-error ts-migrate(2322) FIXME: Type '"right "' is not assignable to type 'Float'. */}
                 <div style={{ float: 'right ' }}>
                   <ButtonGroup>
                     <Button
@@ -103,9 +101,7 @@ const ProcessSummary: Function = ({
       // Service not running
       if (autostart === false) {
         return (
-          <PaneItem
-            title={intl.formatMessage({ id: 'summary.process-summary' })}
-          >
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
             <Alert
               title={intl.formatMessage({ id: 'summary.process-not-running' })}
               bsStyle="warning"
@@ -119,9 +115,7 @@ const ProcessSummary: Function = ({
       // Workflow not running
       if (autostart === 0) {
         return (
-          <PaneItem
-            title={intl.formatMessage({ id: 'summary.process-summary' })}
-          >
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
             <Alert
               title={intl.formatMessage({ id: 'summary.process-not-running' })}
               bsStyle="warning"
@@ -135,9 +129,7 @@ const ProcessSummary: Function = ({
       // Job not active
       if (jobid && !active) {
         return (
-          <PaneItem
-            title={intl.formatMessage({ id: 'summary.process-summary' })}
-          >
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
             <Alert
               title={intl.formatMessage({ id: 'summary.process-not-running' })}
               bsStyle="warning"
@@ -151,9 +143,7 @@ const ProcessSummary: Function = ({
       // Job expired
       if (jobid && moment(expiry).isBefore(moment())) {
         return (
-          <PaneItem
-            title={intl.formatMessage({ id: 'summary.process-summary' })}
-          >
+          <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
             <Alert
               title={intl.formatMessage({ id: 'summary.process-not-running' })}
               bsStyle="warning"
@@ -187,9 +177,7 @@ const ProcessSummary: Function = ({
             <FormattedMessage id="summary.service-not-loaded" />
           </Alert>
         ) : (
-          <NoData
-            title={intl.formatMessage({ id: 'summary.running-in-core' })}
-          />
+          <NoData title={intl.formatMessage({ id: 'summary.running-in-core' })} />
         )}
       </PaneItem>
     );
@@ -197,18 +185,11 @@ const ProcessSummary: Function = ({
 
   return (
     <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
-      <Alert
-        title={intl.formatMessage({ id: 'summary.not-running' })}
-        bsStyle="danger"
-      >
+      <Alert title={intl.formatMessage({ id: 'summary.not-running' })} bsStyle="danger">
         <FormattedMessage id="summary.interface-disabled" />
       </Alert>
     </PaneItem>
   );
 };
 
-export default compose(
-  withProcessKill,
-  onlyUpdateForKeys(['model']),
-  injectIntl
-)(ProcessSummary);
+export default compose(withProcessKill, onlyUpdateForKeys(['model']), injectIntl)(ProcessSummary);

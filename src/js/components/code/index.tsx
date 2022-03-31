@@ -7,7 +7,7 @@ import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../../../../server_config' or ... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2307) FIXME: Cannot find module '../../../../server_config' or ... Remove this comment to see the full error message
 import { WEB_IDE_URL } from '../../../../server_config';
 import ReleasesTab from '../../containers/releases';
 import Alert from '../alert';
@@ -19,12 +19,12 @@ import DependenciesList from './dependencies';
 import Section from './section';
 
 type Props = {
-  data: Object,
-  selected: Object,
-  onItemClick: Function,
-  handleItemClick: Function,
-  setSelected: Function,
-  location: Object,
+  data: Object;
+  selected: Object;
+  onItemClick: Function;
+  handleItemClick: Function;
+  setSelected: Function;
+  location: Object;
 };
 
 const Code: Function = ({
@@ -32,14 +32,14 @@ const Code: Function = ({
   handleItemClick,
   selected,
   location,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Flex className="code" flexFlow="row">
     <Flex className="code-list" scrollY>
       {Object.keys(data).map(
-        // @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
         (name: string, index: number): React.Element<any> => (
           <Section
             key={name}
@@ -54,21 +54,21 @@ const Code: Function = ({
     <Flex className="code-source">
       {selected ? (
         <Flex>
-          { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */ }
+          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
           {selected.type &&
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
           selected.type !== 'code' &&
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
           selected.type !== 'methods' ? (
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             <Tabs
               active="code"
               rightElement={
-                // @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
                 selected.type === 'classes' && selected.item ? (
                   <AnchorButton
                     icon="code-block"
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                     href={`${WEB_IDE_URL}new/class/${selected.item.id}?origin=${window.location.href}`}
                   >
                     <FormattedMessage id="button.edit-class" />
@@ -76,48 +76,48 @@ const Code: Function = ({
                 ) : undefined
               }
             >
-              { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
               <Pane name="Code">
                 <CodeTab selected={selected} />
               </Pane>
-              { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
               <Pane name="Info">
                 <InfoTable
                   object={{
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                     author: selected.item.author,
                     source:
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                      // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                       selected.item.source &&
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                      // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                       `${selected.item.source}:${selected.item.offset || ''}`,
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                     description: selected.item.description,
                     tags:
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                      // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                       selected.item.tags &&
-                      // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                      // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                       Object.keys(selected.item.tags).length,
                   }}
                 />
               </Pane>
-              { /* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
               <Pane name="Releases">
                 <ReleasesTab
-                  // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                   component={selected.item.name}
                   location={location}
                   compact
                 />
               </Pane>
-              { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'. */ }
+              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'. */}
               {selected.item.requires && selected.item.requires.length > 0 ? (
-                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+                // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
                 <Pane name="Dependencies">
                   <DependenciesList
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'classes' does not exist on type 'Object'... Remove this comment to see the full error message
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'classes' does not exist on type 'Object'... Remove this comment to see the full error message
                     classes={data.classes}
-                    // @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
                     dependenciesList={selected.item.requires}
                   />
                 </Pane>
@@ -142,13 +142,7 @@ export default compose(
   withHandlers({
     handleItemClick:
       ({ setSelected, onItemClick }: Props): Function =>
-      (
-        name: string,
-        code: string,
-        type: string,
-        id: number,
-        item: Object
-      ): void => {
+      (name: string, code: string, type: string, id: number, item: Object): void => {
         if (onItemClick && !code) {
           onItemClick(name, code, type, id);
           setSelected(() => ({
@@ -178,7 +172,7 @@ export default compose(
           if (!selected || !nextProps.data[selected.type]) return null;
 
           const item = nextProps.data[selected.type].find(
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
             (itm: Object) => itm.id === selected.id
           );
 

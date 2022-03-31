@@ -6,13 +6,9 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../../../../server_config' or ... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2307) FIXME: Cannot find module '../../../../server_config' or ... Remove this comment to see the full error message
 import { WEB_IDE_URL } from '../../../../server_config';
-import {
-  Control as Button,
-  Controls as ButtonGroup,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import withModal from '../../hocomponents/modal';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
@@ -20,32 +16,32 @@ import SetExpiryModal from './modals/expiry';
 import RescheduleModal from './modals/reschedule';
 
 type Props = {
-  handleEnableClick: Function,
-  handleActivateClick: Function,
-  handleResetClick: Function,
-  handleRunClick: Function,
-  handleScheduleClick: Function,
-  handleExpiryClick: Function,
-  handleRemoteClick: Function,
-  enabled?: boolean,
-  active?: boolean,
-  dispatchAction: Function,
-  optimisticDispatch: Function,
-  id: number,
-  openModal: Function,
-  closeModal: Function,
-  minute: string,
-  hour: string,
-  day: string,
-  month: string,
-  week: string,
-  scheduleOnly?: boolean,
-  schedText: string,
-  remote: boolean,
-  big: boolean,
-  onExpiryChange: Function,
-  expiry: string,
-  compact: boolean,
+  handleEnableClick: Function;
+  handleActivateClick: Function;
+  handleResetClick: Function;
+  handleRunClick: Function;
+  handleScheduleClick: Function;
+  handleExpiryClick: Function;
+  handleRemoteClick: Function;
+  enabled?: boolean;
+  active?: boolean;
+  dispatchAction: Function;
+  optimisticDispatch: Function;
+  id: number;
+  openModal: Function;
+  closeModal: Function;
+  minute: string;
+  hour: string;
+  day: string;
+  month: string;
+  week: string;
+  scheduleOnly?: boolean;
+  schedText: string;
+  remote: boolean;
+  big: boolean;
+  onExpiryChange: Function;
+  expiry: string;
+  compact: boolean;
 };
 
 const JobControls: Function = ({
@@ -64,11 +60,11 @@ const JobControls: Function = ({
   remote,
   expiry,
   compact,
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
   id,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> =>
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> =>
   scheduleOnly ? (
     <div>
       <span>{schedText}</span>{' '}
@@ -156,7 +152,7 @@ const JobControls: Function = ({
 
 export default compose(
   connect(null, {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
     activate: actions.jobs.activate,
   }),
   withDispatch(),
@@ -166,7 +162,7 @@ export default compose(
       ({ enabled, dispatchAction, id }: Props): Function =>
       (): void => {
         dispatchAction(
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
           actions.jobs.jobsAction,
           enabled ? 'disable' : 'enable',
           id
@@ -175,25 +171,25 @@ export default compose(
     handleActivateClick:
       ({ active, dispatchAction, id }: Props): Function =>
       (): void => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
         dispatchAction(actions.jobs.activate, id, active);
       },
     handleRunClick:
       ({ dispatchAction, id }: Props): Function =>
       (): void => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
         dispatchAction(actions.jobs.run, id);
       },
     handleResetClick:
       ({ dispatchAction, id }: Props): Function =>
       (): void => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
         dispatchAction(actions.jobs.jobsAction, 'reset', id);
       },
     handleRemoteClick:
       ({ dispatchAction, id, remote }: Props): Function =>
       (): void => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
         dispatchAction(actions.jobs.setRemote, id, !remote);
       },
     handleScheduleClick:
@@ -223,13 +219,7 @@ export default compose(
         );
       },
     handleExpiryClick:
-      ({
-        onExpiryChange,
-        openModal,
-        closeModal,
-        expiry,
-        id,
-      }: Props): Function =>
+      ({ onExpiryChange, openModal, closeModal, expiry, id }: Props): Function =>
       (): void => {
         openModal(
           <SetExpiryModal

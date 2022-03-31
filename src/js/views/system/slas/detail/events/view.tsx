@@ -1,41 +1,40 @@
 // @flow
 import React from 'react';
-import compose from 'recompose/compose';
 import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
-import { createSelector } from 'reselect';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
-
-import { resourceSelector } from '../../../../../selectors';
-import actions from '../../../../../store/api/actions';
-import withSort from '../../../../../hocomponents/sort';
+import { createSelector } from 'reselect';
+// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { Control as Button } from '../../../../../components/controls';
+import Flex from '../../../../../components/Flex';
+import NoData from '../../../../../components/nodata';
+import { sortDefaults } from '../../../../../constants/sort';
 import loadMore from '../../../../../hocomponents/loadMore';
 import patch from '../../../../../hocomponents/patchFuncArgs';
+import withSort from '../../../../../hocomponents/sort';
 import sync from '../../../../../hocomponents/sync';
 import unsync from '../../../../../hocomponents/unsync';
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control as Button } from '../../../../../components/controls';
-import { sortDefaults } from '../../../../../constants/sort';
+import { resourceSelector } from '../../../../../selectors';
+import actions from '../../../../../store/api/actions';
 import EventsTable from './table';
-import NoData from '../../../../../components/nodata';
-import Flex from '../../../../../components/Flex';
 
 type Props = {
-  location: Object,
-  params: Object,
-  id: number,
-  searchData: Object,
-  sort: string,
-  sortDir: string,
-  offset: number,
-  limit: number,
-  canLoadMore: boolean,
-  handleLoadMore: Function,
-  sortData: Object,
-  onSortChange: Function,
-  collection: Array<Object>,
-  defaultDate: string,
+  location: Object;
+  params: Object;
+  id: number;
+  searchData: Object;
+  sort: string;
+  sortDir: string;
+  offset: number;
+  limit: number;
+  canLoadMore: boolean;
+  handleLoadMore: Function;
+  sortData: Object;
+  onSortChange: Function;
+  collection: Array<Object>;
+  defaultDate: string;
 };
 
 const EventsView: Function = ({
@@ -45,8 +44,8 @@ const EventsView: Function = ({
   sortData,
   onSortChange,
   collection,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Flex display="initial">
     {collection.length ? (
       <EventsTable
@@ -59,12 +58,7 @@ const EventsView: Function = ({
       <NoData />
     )}
     {canLoadMore && (
-      <Button
-        label={`Load ${limit} more...`}
-        btnStyle="success"
-        big
-        onClick={handleLoadMore}
-      />
+      <Button label={`Load ${limit} more...`} btnStyle="success" big onClick={handleLoadMore} />
     )}
   </Flex>
 );
@@ -73,70 +67,51 @@ const viewSelector: Function = createSelector(
   [resourceSelector('slaevents')],
   (meta: Object): Object => ({
     meta,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     collection: meta.data,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Object'.
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Object'.
     sort: meta.sort,
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'sortDir' does not exist on type 'Object'... Remove this comment to see the full error message
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sortDir' does not exist on type 'Object'... Remove this comment to see the full error message
     sortDir: meta.sortDir,
   })
 );
 
 export default compose(
-  connect(
-    viewSelector,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'slaevents' does not exist on type '{}'.
-      load: actions.slaevents.fetchEvents,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'slaevents' does not exist on type '{}'.
-      fetch: actions.slaevents.fetchEvents,
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'slaevents' does not exist on type '{}'.
-      unsync: actions.slaevents.unsync,
-    }
-  ),
+  connect(viewSelector, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'slaevents' does not exist on type '{}'.
+    load: actions.slaevents.fetchEvents,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'slaevents' does not exist on type '{}'.
+    fetch: actions.slaevents.fetchEvents,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'slaevents' does not exist on type '{}'.
+    unsync: actions.slaevents.unsync,
+  }),
   mapProps(
     ({ params, ...rest }: Props): Props => ({
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       id: params.id,
       params,
       ...rest,
     })
   ),
   withSort('slaevents', 'collection', sortDefaults.slaevents),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 2.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 4 arguments, but got 2.
   loadMore('collection', 'slaevents'),
-  patch('load', [
-    'id',
-    false,
-    'offset',
-    'limit',
-    'sortDir',
-    'sort',
-    'searchData',
-  ]),
+  patch('load', ['id', false, 'offset', 'limit', 'sortDir', 'sort', 'searchData']),
   sync('meta'),
   lifecycle({
     componentWillReceiveProps(nextProps: Props) {
-      const {
-        sort,
-        sortDir,
-        id,
-        changeOffset,
-        offset,
-        searchData,
-        fetch,
-      } = this.props;
+      const { sort, sortDir, id, changeOffset, offset, searchData, fetch } = this.props;
 
       if (
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
         (searchData.err !== nextProps.searchData.err ||
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'errDesc' does not exist on type 'Object'... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'errDesc' does not exist on type 'Object'... Remove this comment to see the full error message
           searchData.errDesc !== nextProps.searchData.errDesc ||
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'producer' does not exist on type 'Object... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'producer' does not exist on type 'Object... Remove this comment to see the full error message
           searchData.producer !== nextProps.searchData.producer ||
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'minDate' does not exist on type 'Object'... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'minDate' does not exist on type 'Object'... Remove this comment to see the full error message
           searchData.minDate !== nextProps.searchData.minDate ||
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'maxDate' does not exist on type 'Object'... Remove this comment to see the full error message
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'maxDate' does not exist on type 'Object'... Remove this comment to see the full error message
           searchData.maxDate !== nextProps.searchData.maxDate) &&
         nextProps.offset !== 0
       ) {
@@ -145,15 +120,15 @@ export default compose(
         sort !== nextProps.sort ||
         sortDir !== nextProps.sortDir ||
         offset !== nextProps.offset ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
         searchData.err !== nextProps.searchData.err ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'errDesc' does not exist on type 'Object'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'errDesc' does not exist on type 'Object'... Remove this comment to see the full error message
         searchData.errDesc !== nextProps.searchData.errDesc ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'producer' does not exist on type 'Object... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'producer' does not exist on type 'Object... Remove this comment to see the full error message
         searchData.producer !== nextProps.searchData.producer ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'minDate' does not exist on type 'Object'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'minDate' does not exist on type 'Object'... Remove this comment to see the full error message
         searchData.minDate !== nextProps.searchData.minDate ||
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'maxDate' does not exist on type 'Object'... Remove this comment to see the full error message
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'maxDate' does not exist on type 'Object'... Remove this comment to see the full error message
         searchData.maxDate !== nextProps.searchData.maxDate
       ) {
         fetch(
@@ -169,14 +144,5 @@ export default compose(
     },
   }),
   unsync(),
-  pure([
-    'sortData',
-    'searchData',
-    'offset',
-    'limit',
-    'sort',
-    'sortDir',
-    'collection',
-    'id',
-  ])
+  pure(['sortData', 'searchData', 'offset', 'limit', 'sort', 'sortDir', 'collection', 'id'])
 )(EventsView);

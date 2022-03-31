@@ -1,14 +1,12 @@
 // @flow
 import React from 'react';
-
 import { connect } from 'react-redux';
-import OrderStats from '../../components/OrderStats';
-import Box from '../../components/box';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
-import Headbar from '../../components/Headbar';
 import Flex from '../../components/Flex';
+import Headbar from '../../components/Headbar';
+import OrderStats from '../../components/OrderStats';
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'orderStats' does not exist on type 'Obje... Remove this comment to see the full error message
+// @ts-ignore ts-migrate(2339) FIXME: Property 'orderStats' does not exist on type 'Obje... Remove this comment to see the full error message
 const OrderStatsView = ({ orderStats }: Object): any => (
   <Flex>
     <Headbar>
@@ -21,6 +19,6 @@ const OrderStatsView = ({ orderStats }: Object): any => (
 );
 
 export default connect((state: Object) => ({
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   orderStats: state.api.system.data.order_stats,
 }))(OrderStatsView);

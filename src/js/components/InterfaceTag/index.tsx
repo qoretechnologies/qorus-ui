@@ -1,18 +1,18 @@
 // @flow
+import { Icon } from '@blueprintjs/core';
 import React from 'react';
+import { Link } from 'react-router';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import { Link } from 'react-router';
-import { Icon } from '@blueprintjs/core';
 import { INTERFACE_ICONS } from '../../constants/interfaces';
 import Flex from '../Flex';
 
 type InterfaceTagProps = {
-  title: string,
-  type: string,
-  link?: string,
-  flex: string,
-  className?: string,
+  title: string;
+  type: string;
+  link?: string;
+  flex: string;
+  className?: string;
 };
 
 const InterfaceTag: Function = ({
@@ -21,22 +21,13 @@ const InterfaceTag: Function = ({
   type,
   className,
   flex = '1 1 auto',
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: InterfaceTagProps): React.Element<any> => (
-  <Flex
-    flexFlow="row"
-    flex={flex}
-    className={`interface-tag ${className || ''}`}
-    title={title}
-  >
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+InterfaceTagProps): React.Element<any> => (
+  <Flex flexFlow="row" flex={flex} className={`interface-tag ${className || ''}`} title={title}>
     <Icon iconSize={12} icon={INTERFACE_ICONS[type.toLowerCase()]} />
     <Flex flexFlow="row" className="interface-tag-content">
       {link ? (
-        <Link
-          to={link}
-          className="resource-name-link"
-          onClick={e => e.stopPropagation()}
-        >
+        <Link to={link} className="resource-name-link" onClick={(e) => e.stopPropagation()}>
           {title}
         </Link>
       ) : (
@@ -46,6 +37,4 @@ const InterfaceTag: Function = ({
   </Flex>
 );
 
-export default compose(
-  onlyUpdateForKeys(['title', 'link', 'type', 'className'])
-)(InterfaceTag);
+export default compose(onlyUpdateForKeys(['title', 'link', 'type', 'className']))(InterfaceTag);

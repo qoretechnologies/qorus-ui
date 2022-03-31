@@ -1,32 +1,27 @@
 /* @flow */
-import React, { Component } from 'react';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module 'redux' or its corresponding ty... Remove this comment to see the full error message
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
-import { map } from 'lodash';
 import { Intent } from '@blueprintjs/core';
-
-import Headbar from '../../../components/Headbar';
+import { map } from 'lodash';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+// @ts-ignore ts-migrate(2307) FIXME: Cannot find module 'redux' or its corresponding ty... Remove this comment to see the full error message
+import { compose } from 'redux';
+import { createSelector } from 'reselect';
 import Box from '../../../components/box';
-import ConfirmDialog from '../../../components/confirm_dialog';
-import withDispatch from '../../../hocomponents/withDispatch';
-import sync from '../../../hocomponents/sync';
-import withModal from '../../../hocomponents/modal';
-import Table from './table';
-import actions from '../../../store/api/actions';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
-import titleManager from '../../../hocomponents/TitleManager';
-import {
-  Control as Button,
-  Controls as ButtonGroup,
-// @ts-expect-error ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
-import Pull from '../../../components/Pull';
+import ConfirmDialog from '../../../components/confirm_dialog';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import Flex from '../../../components/Flex';
+import Headbar from '../../../components/Headbar';
 import NoDataIf from '../../../components/NoDataIf';
+import Pull from '../../../components/Pull';
+import withModal from '../../../hocomponents/modal';
+import sync from '../../../hocomponents/sync';
+import titleManager from '../../../hocomponents/TitleManager';
+import withDispatch from '../../../hocomponents/withDispatch';
+import actions from '../../../store/api/actions';
+import Table from './table';
 
-// @ts-expect-error ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+// @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
 const sqlcacheSelector: Function = (state: Object) => state.api.sqlcache;
 const formatData: Function = (): Function => (collection: Object) =>
   Object.keys(collection).reduce((result: Object, key: string): Object => {
@@ -39,14 +34,11 @@ const formatData: Function = (): Function => (collection: Object) =>
     return { ...result, ...{ [key]: newCollection } };
   }, {});
 
-// @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-const collectionSelector = createSelector(
-  [sqlcacheSelector],
-  model => formatData()(model.data)
-);
+// @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+const collectionSelector = createSelector([sqlcacheSelector], (model) => formatData()(model.data));
 
 const viewSelector = createSelector(
-  // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [sqlcacheSelector, collectionSelector],
   (sqlcache: Object, collection: Object): Object => ({
     sqlcache,
@@ -56,16 +48,16 @@ const viewSelector = createSelector(
 
 class SQLCache extends Component {
   props: {
-    location: Object,
-    collection: Object,
-    optimisticDispatch: Function,
-    openModal: Function,
-    closeModal: Function,
+    location: Object;
+    collection: Object;
+    optimisticDispatch: Function;
+    openModal: Function;
+    closeModal: Function;
   } = this.props;
 
   handleClearAllClick: Function = (): void => {
     const confirmFunc: Function = (): void => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'sqlcache' does not exist on type '{}'.
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'sqlcache' does not exist on type '{}'.
       this.props.optimisticDispatch(actions.sqlcache.clearCache, null, null);
       this.props.closeModal();
     };
@@ -80,7 +72,7 @@ class SQLCache extends Component {
   handleClearDatasourceClick: Function = (datasource): void => {
     const confirmFunc: Function = (): void => {
       this.props.optimisticDispatch(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'sqlcache' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'sqlcache' does not exist on type '{}'.
         actions.sqlcache.clearCache,
         datasource,
         null
@@ -90,8 +82,7 @@ class SQLCache extends Component {
 
     this.props.openModal(
       <ConfirmDialog onClose={this.props.closeModal} onConfirm={confirmFunc}>
-        Are you sure you want to clear cache of datasource{' '}
-        <strong>{datasource}</strong>?
+        Are you sure you want to clear cache of datasource <strong>{datasource}</strong>?
       </ConfirmDialog>
     );
   };
@@ -99,7 +90,7 @@ class SQLCache extends Component {
   handleClearSingleClick: Function = (datasource, name): void => {
     const confirmFunc: Function = (): void => {
       this.props.optimisticDispatch(
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'sqlcache' does not exist on type '{}'.
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'sqlcache' does not exist on type '{}'.
         actions.sqlcache.clearCache,
         datasource,
         name
@@ -109,8 +100,7 @@ class SQLCache extends Component {
 
     this.props.openModal(
       <ConfirmDialog onClose={this.props.closeModal} onConfirm={confirmFunc}>
-        Are you sure you want to clear cache <strong>{name}</strong> of
-        datasource {datasource}?
+        Are you sure you want to clear cache <strong>{name}</strong> of datasource {datasource}?
       </ConfirmDialog>
     );
   };
@@ -159,13 +149,10 @@ class SQLCache extends Component {
 }
 
 export default compose(
-  connect(
-    viewSelector,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'sqlcache' does not exist on type '{}'.
-      load: actions.sqlcache.fetch,
-    }
-  ),
+  connect(viewSelector, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sqlcache' does not exist on type '{}'.
+    load: actions.sqlcache.fetch,
+  }),
   withDispatch(),
   sync('sqlcache'),
   withModal(),

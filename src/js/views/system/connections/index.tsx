@@ -1,39 +1,38 @@
 /* @flow */
 import React from 'react';
-import compose from 'recompose/compose';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { createSelector } from 'reselect';
+import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
-
-import sync from '../../../hocomponents/sync';
-import patch from '../../../hocomponents/patchFuncArgs';
-import actions from '../../../store/api/actions';
-import { SimpleTabs, SimpleTab } from '../../../components/SimpleTabs';
+import mapProps from 'recompose/mapProps';
+import { createSelector } from 'reselect';
 import Box from '../../../components/box';
 import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
-import queryControl from '../../../hocomponents/queryControl';
-import ConnectionsTable from './table';
-import withTabs from '../../../hocomponents/withTabs';
+import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
-import Search from '../../../containers/search';
-import { resourceSelector } from '../../../selectors';
+import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
 import { CONN_MAP } from '../../../constants/remotes';
-import mapProps from 'recompose/mapProps';
-import Flex from '../../../components/Flex';
-import { FormattedMessage } from 'react-intl';
+import Search from '../../../containers/search';
+import patch from '../../../hocomponents/patchFuncArgs';
+import queryControl from '../../../hocomponents/queryControl';
+import sync from '../../../hocomponents/sync';
+import withTabs from '../../../hocomponents/withTabs';
+import { resourceSelector } from '../../../selectors';
+import actions from '../../../store/api/actions';
+import ConnectionsTable from './table';
 
 type Props = {
-  tabQuery?: string,
-  location: Object,
-  // @ts-expect-error ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  searchQuery: ?string,
-  changeSearchQuery: Function,
-  remotes: Array<Object>,
-  datasources: Array<Object>,
-  qorus: Array<Object>,
-  users: Array<Object>,
-  perms: Array<string>,
+  tabQuery?: string;
+  location: Object;
+  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+  searchQuery: string;
+  changeSearchQuery: Function;
+  remotes: Array<Object>;
+  datasources: Array<Object>;
+  qorus: Array<Object>;
+  users: Array<Object>;
+  perms: Array<string>;
 };
 
 const Connections: Function = ({
@@ -45,8 +44,8 @@ const Connections: Function = ({
   qorus,
   users,
   perms,
-// @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}: Props): React.Element<any> => (
+}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+Props): React.Element<any> => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -64,11 +63,7 @@ const Connections: Function = ({
         />
       </Breadcrumbs>
       <Pull right>
-        <Search
-          onSearchUpdate={changeSearchQuery}
-          defaultValue={searchQuery}
-          resource={tabQuery}
-        />
+        <Search onSearchUpdate={changeSearchQuery} defaultValue={searchQuery} resource={tabQuery} />
       </Pull>
     </Headbar>
     <Box top noPadding>
@@ -82,20 +77,10 @@ const Connections: Function = ({
           />
         </SimpleTab>
         <SimpleTab name="qorus">
-          <ConnectionsTable
-            type="qorus"
-            location={location}
-            remotes={qorus}
-            perms={perms}
-          />
+          <ConnectionsTable type="qorus" location={location} remotes={qorus} perms={perms} />
         </SimpleTab>
         <SimpleTab name="user">
-          <ConnectionsTable
-            type="user"
-            location={location}
-            remotes={users}
-            perms={perms}
-          />
+          <ConnectionsTable type="user" location={location} remotes={users} perms={perms} />
         </SimpleTab>
       </SimpleTabs>
     </Box>
@@ -112,37 +97,36 @@ const viewSelector: Function = createSelector(
 );
 
 export default compose(
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   withTabs('datasources'),
   defaultProps({ query: { action: 'all' } }),
-  connect(
-    viewSelector,
-    {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
-      load: actions.remotes.fetch,
-    }
-  ),
+  connect(viewSelector, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
+    load: actions.remotes.fetch,
+  }),
   patch('load', ['query']),
   sync('meta'),
-  mapProps(({ remotes, ...rest }: Props): Props => ({
-    datasources: remotes.filter(
-      (remote: Object): boolean =>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
-        remote.conntype.toLowerCase() === CONN_MAP.datasources.toLowerCase()
-    ),
-    users: remotes.filter(
-      (remote: Object): boolean =>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
-        remote.conntype.toLowerCase() === CONN_MAP.user.toLowerCase()
-    ),
-    qorus: remotes.filter(
-      (remote: Object): boolean =>
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
-        remote.conntype.toLowerCase() === CONN_MAP.qorus.toLowerCase()
-    ),
-    remotes,
-    ...rest,
-  })),
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
+  mapProps(
+    ({ remotes, ...rest }: Props): Props => ({
+      datasources: remotes.filter(
+        (remote: Object): boolean =>
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
+          remote.conntype.toLowerCase() === CONN_MAP.datasources.toLowerCase()
+      ),
+      users: remotes.filter(
+        (remote: Object): boolean =>
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
+          remote.conntype.toLowerCase() === CONN_MAP.user.toLowerCase()
+      ),
+      qorus: remotes.filter(
+        (remote: Object): boolean =>
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
+          remote.conntype.toLowerCase() === CONN_MAP.qorus.toLowerCase()
+      ),
+      remotes,
+      ...rest,
+    })
+  ),
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
   queryControl('search')
 )(Connections);
