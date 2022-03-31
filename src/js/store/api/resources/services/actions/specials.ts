@@ -118,7 +118,7 @@ const serviceAction = createAction('SERVICES_ACTION', async (action, ids, autost
 const setSLAMethod = createAction(
   'SERVICES_SETMETHOD',
   // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
-  (service, method, sla, dispatch): Object => {
+  (service, method, sla, dispatch): any => {
     fetchWithNotifications(
       async () =>
         // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
@@ -136,7 +136,7 @@ const setSLAMethod = createAction(
 const removeSLAMethod = createAction(
   'SERVICES_REMOVEMETHOD',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  async (service, method, sla, dispatch): Object => {
+  async (service, method, sla, dispatch): any => {
     const url = `${settings.REST_BASE_URL}/slas/${sla}?`;
     const args = `action=removeMethod&service=${service}&method=${method}`;
 
@@ -201,7 +201,7 @@ const updateAuthLabel = createAction(
     originalValue: string,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) {
       return {
         name,
@@ -210,7 +210,7 @@ const updateAuthLabel = createAction(
       };
     }
 
-    const result: Object = await fetchWithNotifications(
+    const result: any = await fetchWithNotifications(
       async () =>
         put(`${settings.REST_BASE_URL}/services/${id}/authlabels`, {
           body: JSON.stringify({

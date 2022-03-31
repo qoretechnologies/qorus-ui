@@ -9,10 +9,10 @@ type Props = {
   tag?: string;
   Tag: string;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  children: React.Element<any>;
+  children;
   className?: string;
   handleRef: Function;
-  style?: Object;
+  style?: any;
 };
 
 const Pull: Function = ({
@@ -23,7 +23,7 @@ const Pull: Function = ({
   handleRef,
   style,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<HTMLElement> => (
+Props) => (
   // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: any; className: string; ref: Fun... Remove this comment to see the full error message
   <Tag
     className={classnames(className, `pull-${right ? 'right' : 'left'}`)}

@@ -52,13 +52,13 @@ const ErrorsContainer: Function = ({
   id,
   height,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
-  const handleFormSubmit: Function = (data: Object) => {
+Props) => {
+  const handleFormSubmit: Function = (data: any) => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'errors' does not exist on type '{}'.
     dispatchAction(actions.errors.createOrUpdate, type, id, data, closeModal);
   };
 
-  const handleModalOpen: Function = (data: Object) => {
+  const handleModalOpen: Function = (data: any) => {
     openModal(<ErrorModal onClose={closeModal} onSubmit={handleFormSubmit} data={data} id={id} />);
   };
 
@@ -131,7 +131,7 @@ Props): React.Element<any> => {
   );
 };
 
-const metaSelector: Function = (state: Object, props: Object): Object => ({
+const metaSelector: Function = (state: any, props: any): any => ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   data: state.api.errors[props.type].data,
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
@@ -140,7 +140,7 @@ const metaSelector: Function = (state: Object, props: Object): Object => ({
   loading: state.api.errors[props.type].loading,
 });
 
-const querySelector: Function = (state: Object, props: Object): string =>
+const querySelector: Function = (state: any, props: any): string =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
   props.location.query[`${props.type}ErrQuery`];
 
@@ -153,13 +153,13 @@ const errorsSelector: Function = createSelector(
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [metaSelector, querySelector],
   // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-  (meta: Object, query: string): Array<Object> => filterErrors(query)(meta.data)
+  (meta: any, query: string): Array<Object> => filterErrors(query)(meta.data)
 );
 
 const selector: Function = createSelector(
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [metaSelector, errorsSelector],
-  (meta: Object, errors: Array<Object>): Object => ({
+  (meta: any, errors: Array<Object>): any => ({
     meta,
     errors,
   })
@@ -180,7 +180,7 @@ export default compose(
   withDispatch(),
   withModal(),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
-  withSearch((props: Object) => `${props.type}ErrQuery`),
+  withSearch((props: any) => `${props.type}ErrQuery`),
   unsync(),
   pure(['query', 'errors', 'compact', 'id', 'fixed', 'height'])
 )(ErrorsContainer);

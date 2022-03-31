@@ -7,7 +7,7 @@ import showIfPassed from './show-if-passed';
 export default (
     condition: Function,
     // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-    noDataElement: React.Element<*> = <NoData />
+    noDataElement = <NoData />
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
   ): Function =>
   (Component) => {

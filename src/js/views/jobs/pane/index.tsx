@@ -24,18 +24,18 @@ const Detail = ({
   isTablet,
   configItems,
 }: {
-  location: Object;
+  location: any;
   paneTab: string;
-  model: Object;
+  model: any;
   onClose: Function;
   paneId: string | number;
-  lib: Object;
+  lib: any;
   width: number;
   onResize: Function;
   isTablet: boolean;
   configItems: Array<Object>;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<*> => (
+}) => (
   <Pane
     width={width || 600}
     onResize={onResize}
@@ -91,13 +91,13 @@ const fetchLibSourceOnMountAndOnChange = lifecycle({
 
 export default compose(
   connect(
-    (state: Object, props: Object): Object => ({
+    (state: any, props: any): any => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       jobsLoaded: state.api.jobs.sync,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       model: state.api.jobs.data.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-        (job: Object): boolean => job.id === parseInt(props.paneId, 10)
+        (job: any): boolean => job.id === parseInt(props.paneId, 10)
       ),
     }),
     {
@@ -108,28 +108,26 @@ export default compose(
     }
   ),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
-  show((props: Object) => props.jobsLoaded),
+  show((props: any) => props.jobsLoaded),
   fetchLibSourceOnMountAndOnChange,
-  mapProps(
-    (props: Object): Object => ({
-      ...props,
-      lib: {
-        ...{
-          code: [
-            {
-              name: 'Job code',
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
-              body: props.model.code,
-            },
-          ],
-        },
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
-        ...props.model.lib,
+  mapProps((props: any): any => ({
+    ...props,
+    lib: {
+      ...{
+        code: [
+          {
+            name: 'Job code',
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
+            body: props.model.code,
+          },
+        ],
       },
       // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
-      configItems: rebuildConfigHash(props.model),
-    })
-  ),
+      ...props.model.lib,
+    },
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
+    configItems: rebuildConfigHash(props.model),
+  })),
   // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
   titleManager(({ model }): string => model.name, 'Jobs', 'prefix')
 )(Detail);

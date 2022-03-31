@@ -6,7 +6,7 @@ import middlewares from '../middlewares';
 import reducers from './reducers';
 
 const configureStore: Function = () => {
-  const store = createStore(reducers, applyMiddleware(thunk, promise, ...middlewares));
+  const store = createStore(reducers, applyMiddleware(thunk, promise, ...(middlewares as any)));
 
   // @ts-ignore ts-migrate(2339) FIXME: Property 'hot' does not exist on type 'NodeModule'... Remove this comment to see the full error message
   if (module.hot) {

@@ -38,7 +38,7 @@ const AddClientModal: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'AddClientM... Remove this comment to see the full error message
   data,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-AddClientModalProps): React.Element<any> => (
+AddClientModalProps) => (
   <form onSubmit={handleFormSubmit}>
     <Modal hasFooter>
       <Modal.Header onClose={onClose}>Add new client</Modal.Header>
@@ -86,7 +86,7 @@ AddClientModalProps): React.Element<any> => (
                   onSubmit={handlePermissionsChange}
                   selected={permissions}
                 >
-                  {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */}
+                  {/* @ts-ignore ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */}
                   <Control />
                   {userPermissions.map((perm: string, index: number) => (
                     // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
@@ -118,7 +118,7 @@ export default compose(
   withHandlers({
     handleClientIdChange:
       ({ changeClientId }): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
         const { value } = event.target;
 
@@ -126,7 +126,7 @@ export default compose(
       },
     handleClientSecretChange:
       ({ changeClientSecret }): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
         const { value } = event.target;
 
@@ -139,7 +139,7 @@ export default compose(
       },
     handleFormSubmit:
       ({ clientId, clientSecret, permissions, onSubmit }): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
         event.preventDefault();
 

@@ -11,7 +11,7 @@ import { getLineCount } from '../../helpers/system';
 import InterfaceTag from '../InterfaceTag';
 
 type AlertsTableItemProps = {
-  item: Object;
+  item: any;
   handleExpandClick: () => void;
   expanded: boolean;
   noTag?: boolean;
@@ -25,7 +25,7 @@ const AlertsTableItem: Function = ({
   handleExpandClick,
   noTag,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-AlertsTableItemProps): React.Element<any> => (
+AlertsTableItemProps) => (
   <div className="alerts-table-item">
     {!noTag && (
       <InterfaceTag
@@ -45,7 +45,7 @@ AlertsTableItemProps): React.Element<any> => (
         isExpandable,
       })}
     >
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */}
       {item.reason}
     </div>
     {isExpandable && (

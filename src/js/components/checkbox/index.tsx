@@ -21,7 +21,7 @@ const CheckboxElement: Function = ({
   checked,
   intent,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Checkbox
     indeterminate={checked === 'HALFCHECKED'}
     checked={checked === 'CHECKED'}
@@ -36,7 +36,7 @@ export default compose(
   withHandlers({
     handleClick:
       ({ action, setChecked }: Props): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
         event.persist();
 

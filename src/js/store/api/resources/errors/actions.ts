@@ -6,7 +6,7 @@ import { fetchJson, fetchWithNotifications } from '../../utils';
 const fetch: Function = createAction(
   'ERRORS_FETCH',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  async (type: string, id: number | string): Object => {
+  async (type: string, id: number | string): any => {
     // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
     const errors = await fetchJson(
       'GET',
@@ -22,11 +22,11 @@ const createOrUpdate: Function = createAction(
   async (
     type: string,
     id: number | string,
-    data: Object,
+    data: any,
     onSuccess: Function,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     const dt = type === 'workflow' ? { ...data, ...{ forceworkflow: true } } : data;
 
     const result = await fetchWithNotifications(
@@ -67,7 +67,7 @@ const removeError: Function = createAction(
     name: string,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) {
       return { type, name };
     }

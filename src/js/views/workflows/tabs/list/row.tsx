@@ -46,7 +46,7 @@ type Props = {
   isTablet: boolean;
   searchPage?: boolean;
   workflowid: number;
-  allQuery: Object;
+  allQuery: any;
   target: string;
   first: boolean;
 };
@@ -75,7 +75,7 @@ const TableRow: Function = ({
   target,
   first,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr
     first={first}
     onHighlightEnd={handleHighlightEnd}
@@ -131,7 +131,7 @@ export default compose(
     ({ workflowstatus, ...rest }): Props => ({
       label: ALL_ORDER_STATES.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        (state: Object): boolean => state.name === workflowstatus
+        (state: any): boolean => state.name === workflowstatus
       ).label,
       workflowstatus,
       target: rest.searchPage ? '/search' : `/workflow/${rest.workflowid}`,

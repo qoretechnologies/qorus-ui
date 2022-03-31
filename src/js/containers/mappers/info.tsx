@@ -4,7 +4,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
-import pure from 'recompose/pure';
 import withHandlers from 'recompose/withHandlers';
 import { createSelector } from 'reselect';
 import Alert from '../../components/alert';
@@ -101,9 +100,9 @@ const MapperInfo = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'onInfoClick' does not exist on type '{ m... Remove this comment to see the full error message
   onInfoClick,
 }: {
-  mapper: Object;
+  mapper: any;
   onBackClick: Function;
-  location: Object;
+  location: any;
   tabQuery: string;
 }) => {
   if (!mapper) return <Loader />;
@@ -114,7 +113,7 @@ const MapperInfo = ({
         <Breadcrumbs>
           <Crumb>Mappers</Crumb>
           <Crumb>
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
             {mapper.name} v{mapper.version} ({mapper.mapperid})
           </Crumb>
           <CrumbTabs tabs={['Diagram', 'Releases', 'Info']} />
@@ -124,14 +123,14 @@ const MapperInfo = ({
         <SimpleTabs activeTab={tabQuery}>
           <SimpleTab name="diagram">
             <Flex scrollY>
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'valid' does not exist on type 'Object'. */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'valid' does not exist on type 'Object'. */}
               {!mapper.valid ? (
                 <Alert
                   bsStyle="danger"
                   title="Warning: This mapper contains an error and can not be
                     rendered!"
                 >
-                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
+                  {/* @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
                   {mapper.error}
                 </Alert>
               ) : (
@@ -184,7 +183,7 @@ const MapperInfo = ({
 };
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const metaSelector = (state: Object): Object => state.api.mappers;
+const metaSelector = (state: any): any => state.api.mappers;
 const stateSelector = (state, { mapperId }) =>
   state.api.mappers.data.find((item) => item.mapperid === parseInt(mapperId, 10));
 
@@ -195,7 +194,6 @@ const mapperInfoSelector = createSelector(stateSelector, metaSelector, (mapper, 
 
 export default compose(
   hasInterfaceAccess('mappers', 'Mappers'),
-  pure,
   connect(mapperInfoSelector, {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type '{}'.
     load: actions.mappers.fetch,
@@ -212,10 +210,10 @@ export default compose(
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
     onBackClick:
       (): Function =>
-      (ev: EventHandler): void => {
+      (ev: any): void => {
         ev.preventDefault();
 
-        history.go(-1);
+        window.history.go(-1);
       },
     onInfoClick:
       ({ openModal, closeModal }) =>

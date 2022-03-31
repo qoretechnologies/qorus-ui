@@ -19,8 +19,8 @@ import ModalCode from './modal_code';
 import ModalRun from './modal_run';
 
 type Props = {
-  method: Object;
-  service: Object;
+  method: any;
+  service: any;
   openModal: Function;
   closeModal: Function;
   slavalue: string;
@@ -49,10 +49,10 @@ const MethodsRow: Function = ({
   handleSLARemove,
   first,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   // @ts-ignore ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message
   <Tr title={method.description} first={first}>
-    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
     <NameColumn name={method.name} />
     <ActionColumn>
       <Controls>
@@ -61,19 +61,19 @@ Props): React.Element<any> => (
       </Controls>
     </ActionColumn>
     <Td className="narrow">
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'locktype' does not exist on type 'Object... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'locktype' does not exist on type 'Object... Remove this comment to see the full error message */}
       <ContentByType content={method.locktype} />
     </Td>
     <Td className="tiny">
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'internal' does not exist on type 'Object... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'internal' does not exist on type 'Object... Remove this comment to see the full error message */}
       <ContentByType content={method.internal} />
     </Td>
     <Td className="tiny">
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'write' does not exist on type 'Object'. */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'write' does not exist on type 'Object'. */}
       <ContentByType content={method.write} />
     </Td>
     <Td className="text">
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
       {service.type === 'user' && (
         <SLAControl
           canModify={canModify}

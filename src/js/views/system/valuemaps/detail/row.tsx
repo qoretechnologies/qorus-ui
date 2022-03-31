@@ -8,7 +8,7 @@ import withDispatch from '../../../../hocomponents/withDispatch';
 import { deleteValue, updateValue } from '../../../../store/api/resources/valuemaps/actions';
 
 type Props = {
-  data: Object;
+  data: any;
   id: number;
   name: string;
   dispatchAction: Function;
@@ -23,7 +23,7 @@ const RowDetail: Function = ({
   dispatchAction,
   first,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   const handleEnableClick: Function = (): void => {
     dispatchAction(updateValue, id, name, value, !enabled);
   };
@@ -50,7 +50,7 @@ Props): React.Element<any> => {
           <Button icon="cross" btnStyle="danger" onClick={handleRemoveClick} title="Remove value" />
         </ButtonGroup>
       </ActionColumn>
-      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ value: any; onSave: (newValue: string | nu... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ value: any; onSave: (newValue: string | nu... Remove this comment to see the full error message */}
       <EditableCell value={value} onSave={handleValueChange} />
     </Tr>
   );

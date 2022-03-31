@@ -35,7 +35,7 @@ const ErrorsTable: Function = ({
   onCreateClick,
   height,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <EnhancedTable
     collection={data}
     tableId="globalErrors"
@@ -109,7 +109,7 @@ Props): React.Element<any> => (
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (error: Object, index: number): React.Element<ErrorRow> => (
+                (error: any, index: number) => (
                   <ErrorRow
                     first={index === 0}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.

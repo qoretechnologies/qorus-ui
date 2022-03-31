@@ -10,8 +10,6 @@ require('@blueprintjs/core/lib/css/blueprint.css');
 require('../fonts/Roboto.ttf');
 require('../fonts/Roboto-Regular.ttf');
 require('../fonts/NeoLight.ttf');
-require('../favicon.ico');
-require('bootstrap-sass/assets/stylesheets/_bootstrap.scss');
 require('../css/app.scss');
 
 const App: Function = () => (

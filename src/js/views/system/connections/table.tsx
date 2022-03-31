@@ -30,7 +30,7 @@ import ConnectionPane from './pane';
 import ConnectionRow from './row';
 
 type Props = {
-  location: Object;
+  location: any;
   load: Function;
   remotes: Array<Object>;
   updateDone: Function;
@@ -38,9 +38,9 @@ type Props = {
   paneId: string;
   openPane: Function;
   closePane: Function;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
-  params: Object;
+  params: any;
   type: string;
   canLoadMore?: boolean;
   handleLoadMore: Function;
@@ -81,7 +81,7 @@ const ConnectionTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table fixed striped>
     <Thead>
       <FixedRow className="toolbar-row">
@@ -132,26 +132,24 @@ Props): React.Element<any> => (
     <DataOrEmptyTable condition={!remotes || size(remotes) === 0} cols={7}>
       {(props) => (
         <Tbody {...props}>
-          {/* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
-          {remotes.map(
-            (remote: Object, index: number): React.Element<any> => (
-              <ConnectionRow
-                first={index === 0}
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-                key={remote.name}
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-                isActive={remote.name === paneId}
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'.
-                hasAlerts={remote.alerts.length > 0}
-                openPane={openPane}
-                closePane={closePane}
-                remoteType={type}
-                canDelete={canDelete}
-                canEdit={canEdit}
-                {...remote}
-              />
-            )
-          )}
+          {/* @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
+          {remotes.map((remote: any, index: number) => (
+            <ConnectionRow
+              first={index === 0}
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+              key={remote.name}
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+              isActive={remote.name === paneId}
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'.
+              hasAlerts={remote.alerts.length > 0}
+              openPane={openPane}
+              closePane={closePane}
+              remoteType={type}
+              canDelete={canDelete}
+              canEdit={canEdit}
+              {...remote}
+            />
+          ))}
         </Tbody>
       )}
     </DataOrEmptyTable>

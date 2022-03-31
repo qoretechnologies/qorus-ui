@@ -14,7 +14,7 @@ type Props = {
   handleSearchUpdate: Function;
   defaultValue?: string;
   resource?: string;
-  storage: Object;
+  storage: any;
   username: string;
   storeSearch: Function;
 };
@@ -23,11 +23,11 @@ const SearchContainer: Function = ({
   handleSearchUpdate,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => <Search {...rest} onSearchUpdate={handleSearchUpdate} />;
+Props) => <Search {...rest} onSearchUpdate={handleSearchUpdate} />;
 
 export default compose(
   connect(
-    (state: Object): Object => ({
+    (state: any): any => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       username: state.api.currentUser.data.username,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.

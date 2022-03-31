@@ -20,7 +20,7 @@ import actions from '../../../store/api/actions';
 import AlertsTable from './table';
 
 type Props = {
-  location: Object;
+  location: any;
   tabQuery: string;
   handleTabChange: Function;
   ongoingAlerts: Array<Object>;
@@ -34,7 +34,7 @@ const Alerts: Function = ({
   transientAlerts,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -83,7 +83,7 @@ const filterCollection: Function =
   (alerts: Array<Object>): Array<Object> =>
     alerts.filter(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'alerttype' does not exist on type 'Objec... Remove this comment to see the full error message
-      (alert: Object): boolean => alert.alerttype.toLowerCase() === type
+      (alert: any): boolean => alert.alerttype.toLowerCase() === type
     );
 
 const ongiongCollectionSelector = createSelector([resourceSelector('alerts')], (alerts) =>

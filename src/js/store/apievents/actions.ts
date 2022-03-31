@@ -24,7 +24,7 @@ import * as system from '../api/resources/system/actions';
 import * as workflows from '../api/resources/workflows/actions/specials';
 import { notifications } from '../ui/actions';
 
-const interfaceActions: Object = {
+const interfaceActions: any = {
   workflows,
   services,
   jobs,
@@ -44,7 +44,7 @@ const handleEvent = (url, data, dispatch, state) => {
     customComparator?: Function
   ): boolean =>
     state.api[interfaceType].sync &&
-    state.api[interfaceType].data.find((item: Object) =>
+    state.api[interfaceType].data.find((item: any) =>
       customComparator
         ? customComparator(item)
         : // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
@@ -78,7 +78,7 @@ const handleEvent = (url, data, dispatch, state) => {
             state.api.workflows.sync &&
             state.api.workflows.data.find(
               // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-              (workflow: Object) => workflow.id === parseInt(info.tag, 10)
+              (workflow: any) => workflow.id === parseInt(info.tag, 10)
             )
           ) {
             pipeline(`${eventstr}_WORKFLOW`, workflows.updateStats, info, dispatch);
@@ -860,7 +860,7 @@ const handleEvent = (url, data, dispatch, state) => {
             null,
             null,
             // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-            (item: Object) => item.name === info.name && item.type === info.type
+            (item: any) => item.name === info.name && item.type === info.type
           )
         ) {
           pipeline(
@@ -975,12 +975,12 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'LOGGER_CREATED':
       case 'LOGGER_UPDATED': {
-        const newInfo: Object = { ...info };
+        const newInfo: any = { ...info };
         // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
         newInfo.interface =
           // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
           newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
-        const reversedLevels: Object = invert(state.api.system.data.loggerParams.logger_levels);
+        const reversedLevels: any = invert(state.api.system.data.loggerParams.logger_levels);
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
         newInfo.params.level = { [reversedLevels[info.params.level]]: true };
@@ -1003,7 +1003,7 @@ const handleEvent = (url, data, dispatch, state) => {
             : state.api.system.sync &&
               state.api.system.logs.find(
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                (item: Object) => item.id === newInfo.interface
+                (item: any) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
@@ -1014,7 +1014,7 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'LOGGER_DELETED': {
         // Modify the levels
-        const newInfo: Object = { ...info };
+        const newInfo: any = { ...info };
         // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
         newInfo.interface =
           // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
@@ -1035,7 +1035,7 @@ const handleEvent = (url, data, dispatch, state) => {
             : state.api.system.sync &&
               state.api.system.logs.find(
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                (item: Object) => item.id === newInfo.interface
+                (item: any) => item.id === newInfo.interface
               );
           // If the interface is loaded
           if (isLoaded) {
@@ -1066,7 +1066,7 @@ const handleEvent = (url, data, dispatch, state) => {
             : state.api.system.sync &&
               state.api.system.logs.find(
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                (item: Object) => item.id === newInfo.interface
+                (item: any) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
@@ -1090,7 +1090,7 @@ const handleEvent = (url, data, dispatch, state) => {
             : state.api.system.sync &&
               state.api.system.logs.find(
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                (item: Object) => item.id === newInfo.interface
+                (item: any) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
@@ -1115,7 +1115,7 @@ const handleEvent = (url, data, dispatch, state) => {
             : state.api.system.sync &&
               state.api.system.logs.find(
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                (item: Object) => item.id === newInfo.interface
+                (item: any) => item.id === newInfo.interface
               );
 
           if (isLoaded) {
@@ -1135,7 +1135,7 @@ const handleEvent = (url, data, dispatch, state) => {
 
 const messageAction = createAction('APIEVENTS_MESSAGE', handleEvent);
 
-const message = (url: string, data: Object) => (dispatch: Function, getState: Function) => {
+const message = (url: string, data: any) => (dispatch: Function, getState: Function) => {
   if (data !== 'pong') {
     dispatch(messageAction(url, data, dispatch, getState()));
   }

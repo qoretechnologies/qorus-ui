@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 
 export default (
-    newTitle: ((props: Object) => string) | string,
+    newTitle: ((props: any) => string) | string,
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     prevTitle: string = null,
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -12,12 +12,10 @@ export default (
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
   ): Function =>
   (Component) => {
-    @connect(
-      (state: Object): Object => ({
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-        instance: state?.api?.system?.data?.['instance-key'],
-      })
-    )
+    @connect((state: any): any => ({
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+      instance: state?.api?.system?.data?.['instance-key'],
+    }))
     class WrappedComponent extends React.Component {
       props: {
         instance: string;
@@ -39,7 +37,7 @@ export default (
         }
       }
 
-      changeTitle: Function = (props: Object): void => {
+      changeTitle: Function = (props: any): void => {
         const { instance } = this.props;
         // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
         let changedTitle: string;

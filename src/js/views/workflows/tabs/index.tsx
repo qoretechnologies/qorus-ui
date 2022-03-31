@@ -22,12 +22,12 @@ import List from './list';
 import Performance from './performance';
 
 type WorkflowDetailTabsProps = {
-  workflow: Object;
+  workflow: any;
   activeTab: string;
-  systemOptions?: Object;
+  systemOptions?: any;
   band?: string;
   isPane: boolean;
-  location: Object;
+  location: any;
   date?: string;
   linkDate?: string;
 };
@@ -44,7 +44,7 @@ const WorkflowDetailTabs: Function = ({
   date,
   linkDate,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-WorkflowDetailTabsProps): React.Element<any> => (
+WorkflowDetailTabsProps) => (
   <SimpleTabs activeTab={activeTab}>
     {!isPane && (
       <SimpleTab name="orders">
@@ -75,7 +75,7 @@ WorkflowDetailTabsProps): React.Element<any> => (
     </SimpleTab>
     <SimpleTab name="steps">
       <Box top fill>
-        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
         <StepsTab workflow={workflow} />
       </Box>
     </SimpleTab>
@@ -98,13 +98,13 @@ WorkflowDetailTabsProps): React.Element<any> => (
     </SimpleTab>
     <SimpleTab name="mappers">
       <Box top fill noPadding>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <MappersTable mappers={workflow.mappers} />
       </Box>
     </SimpleTab>
     <SimpleTab name="value maps">
       <Box top fill noPadding>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
         <Valuemaps vmaps={workflow.vmaps} />
       </Box>
     </SimpleTab>
@@ -151,7 +151,7 @@ WorkflowDetailTabsProps): React.Element<any> => (
     </SimpleTab>
     <SimpleTab name="order stats">
       <Box top fill scrollY>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message */}
         <OrderStats renderRows orderStats={workflow.order_stats} />
       </Box>
     </SimpleTab>

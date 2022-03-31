@@ -20,12 +20,12 @@ import MethodsTab from './methods';
 import ResourceTab from './resources';
 
 type ServiceTabsProps = {
-  service: Object;
-  codeData: Object;
+  service: any;
+  codeData: any;
   activeTab: string;
-  location: Object;
+  location: any;
   methods: Array<Object>;
-  configItems: Object;
+  configItems: any;
   systemOptions: Array<Object>;
   isPane?: boolean;
 };
@@ -40,11 +40,11 @@ const ServiceTabs: Function = ({
   systemOptions,
   isPane,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ServiceTabsProps): React.Element<any> => (
+ServiceTabsProps) => (
   <SimpleTabs activeTab={activeTab}>
     {isPane && (
       <SimpleTab name="detail">
-        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
         <DetailTab
           // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           key={service.name}
@@ -75,13 +75,13 @@ ServiceTabsProps): React.Element<any> => (
     </SimpleTab>
     <SimpleTab name="mappers">
       <Box top fill noPadding>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <MappersTable mappers={service.mappers} />
       </Box>
     </SimpleTab>
     <SimpleTab name="value maps">
       <Box top fill noPadding>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
         <Valuemaps vmaps={service.vmaps} />
       </Box>
     </SimpleTab>

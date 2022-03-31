@@ -10,12 +10,12 @@ import { bubbles } from '../store/ui/actions';
  * send "Server error" bubble.
  * If payload hasn`t got response then do nothing.
  */
-export default (store: Object) =>
+export default (store: any) =>
   (next: Function) =>
   async (
-    action: Object
+    action: any
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     const newAction = { ...action };
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.

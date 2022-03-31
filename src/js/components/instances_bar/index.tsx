@@ -5,7 +5,7 @@ import { calculateInstanceBarWidths, formatCount } from '../../helpers/orders';
 
 type Props = {
   states: Array<Object>;
-  instances: Object;
+  instances: any;
   totalInstances: number;
   id: number;
   date: string;
@@ -32,14 +32,14 @@ const InstancesBar: Function = ({
   big,
   onClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <div
     className={`instances-bar-wrapper ${big ? 'instances-bar-big' : ''}`}
     style={{ width: wrapperWidth }}
   >
     {totalInstances !== 0 ? (
       calculateInstanceBarWidths(states, instances, totalInstances, minWidth).map(
-        (state: Object, index: number) =>
+        (state: any, index: number) =>
           // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           instances[state.name] && instances[state.name] !== 0 ? (
             <Tooltip
@@ -67,7 +67,7 @@ Props): React.Element<any> => (
                   // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
                   onClick={onClick}
                 >
-                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */}
+                  {/* @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */}
                   <div className={`instance-bar-value bar-${state.label}`}>
                     {showPct
                       ? // @ts-ignore ts-migrate(2339) FIXME: Property 'pct' does not exist on type 'Object'.

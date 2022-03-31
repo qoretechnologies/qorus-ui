@@ -1,6 +1,4 @@
 // @flow
-const HELP_DATA: Object = {};
+const HELP_DATA: any = {};
 
-export {
-  HELP_DATA,
-};
+export { HELP_DATA };

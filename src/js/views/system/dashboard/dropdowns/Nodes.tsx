@@ -17,10 +17,10 @@ const NodesDropdown: Function = ({
   onNodeTabChange,
   nodes,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-NodesDropdownProps): React.Element<any> => (
+NodesDropdownProps) => (
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown position={Position.LEFT}>
-    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; small: true; }' is missi... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; small: true; }' is missi... Remove this comment to see the full error message */}
     <Control small>{nodeTab}</Control>
     {map(nodes, (nodeName: string) => (
       <Item

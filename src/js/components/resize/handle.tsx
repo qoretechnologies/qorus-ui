@@ -41,7 +41,7 @@ const LEFT = 0b1000;
 export default class Handle extends Component {
   props: {
     minCurrent: boolean;
-    min: Object;
+    min: any;
     top: boolean;
     right: boolean;
     bottom: boolean;

@@ -20,7 +20,7 @@ import Users from './users';
 
 type Props = {
   tabQuery: string;
-  location: Object;
+  location: any;
   changeSearchQuery: Function;
   searchQuery?: string;
   users: Array<string>;
@@ -37,7 +37,7 @@ const RBAC: Function = ({
   roles,
   perms,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -59,15 +59,15 @@ Props): React.Element<any> => (
     <Box top noPadding>
       <SimpleTabs activeTab={tabQuery}>
         <SimpleTab name="users">
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <Users location={location} />
         </SimpleTab>
         <SimpleTab name="roles">
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <Roles location={location} />
         </SimpleTab>
         <SimpleTab name="permissions">
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <Permissions location={location} />
         </SimpleTab>
       </SimpleTabs>
@@ -78,16 +78,14 @@ Props): React.Element<any> => (
 export default compose(
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   viewBehindPermission(['USER-CONTROL']),
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      users: state.api.users.data,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      roles: state.api.roles.data,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      perms: state.api.perms.data,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    users: state.api.users.data,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    roles: state.api.roles.data,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    perms: state.api.perms.data,
+  })),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   withTabs('users'),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.

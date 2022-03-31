@@ -15,7 +15,7 @@ const DataOrEmptyTable: Function = ({
   children: Function;
   small: boolean;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<Tbody> =>
+}) =>
   condition ? (
     <Tbody {...rest} className="tbody-empty-table">
       <Tr first className="placeholder-row">

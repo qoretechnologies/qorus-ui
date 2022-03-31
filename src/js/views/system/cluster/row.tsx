@@ -33,7 +33,7 @@ type Props = {
   onKillClick: Function;
 };
 
-const typeNames: Object = {
+const typeNames: any = {
   'qorus-master': 'Qorus node master process controlling process start / stop on each node',
   'qorus-core':
     'Qorus core process providing global integration services to the application cluster',
@@ -59,7 +59,7 @@ const ProcessRow: Function = ({
   first,
   handleKillClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr highlight={_updated} onHighlightEnd={updateDone} first={first}>
     <Td className="big text">{node}</Td>
     <NameColumn

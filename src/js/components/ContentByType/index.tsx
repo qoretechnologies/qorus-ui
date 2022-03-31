@@ -16,7 +16,7 @@ type ContentByTypeProps = {
   noMarkdown?: Boolean;
 };
 
-const emptyTypeToString: Object = {
+const emptyTypeToString: any = {
   object: '{ }',
   array: '[ ]',
 };
@@ -32,7 +32,7 @@ const ContentByType: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'baseType' does not exist on type 'Conten... Remove this comment to see the full error message
   baseType,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ContentByTypeProps): React.Element<any> => {
+ContentByTypeProps) => {
   const type: string = baseType || getType(content);
   const className: string = `content-by-type ${type} ${inline ? 'inline' : ''}`;
 

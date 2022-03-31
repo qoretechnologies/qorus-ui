@@ -13,9 +13,9 @@ import OrdersView from '../../workflows/tabs/list';
 import SearchToolbar from './toolbar';
 
 type Props = {
-  location: Object;
+  location: any;
   mindateQuery: string;
-  searchData: Object;
+  searchData: any;
   changeMindateQuery: Function;
   maxdateQuery: string;
   changeMaxdateQuery: Function;
@@ -42,7 +42,7 @@ const SearchView: Function = ({
   searchData,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <OrdersView location={location} linkDate={mindateQuery} searchData={searchData} searchPage>
     <SearchToolbar mindateQuery={mindateQuery} {...rest} />
   </OrdersView>
@@ -50,7 +50,7 @@ Props): React.Element<any> => (
 
 export default compose(
   connect(
-    (state: Object): Object => ({
+    (state: any): any => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       username: state.api.currentUser.data.username,
     }),

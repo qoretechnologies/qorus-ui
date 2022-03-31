@@ -212,7 +212,7 @@ export const sortKeys = {
     Version: 'version',
     ID: 'id',
     ...ORDER_STATES_ARRAY.reduce(
-      (states: Object, state: string): Object => ({
+      (states: any, state: string): any => ({
         ...states,
         [state]: state,
       }),

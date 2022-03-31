@@ -23,7 +23,7 @@ type NewAppenderPopoverProps = {
   handleLevelChange: Function;
   handleAdditivityChange: Function;
   onCancel: Function;
-  loggerLevels: Object;
+  loggerLevels: any;
   resource: string;
   id: number | string;
   changeError: Function;
@@ -31,7 +31,7 @@ type NewAppenderPopoverProps = {
   dispatch: Function;
   changeAdding: Function;
   isAdding: boolean;
-  data?: Object;
+  data?: any;
 };
 
 const NewAppenderPopover: Function = ({
@@ -72,7 +72,7 @@ const NewAppenderPopover: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'appendersFields' does not exist on type ... Remove this comment to see the full error message
   appendersFields,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-NewAppenderPopoverProps): React.Element<any> => (
+NewAppenderPopoverProps) => (
   <Box fill top style={{ minWidth: '350px' }}>
     {error && <Alert bsStyle="danger">{error}</Alert>}
     <FormGroup label="Name " labelFor="appender-name">
@@ -85,11 +85,11 @@ NewAppenderPopoverProps): React.Element<any> => (
       />
     </FormGroup>
 
-    {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message */}
     <FormGroup label="Appender type " requiredLabel>
-      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
       <Dropdown>
-        {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
         <Control>{appenderType || 'Please select'}</Control>
         {appendersTypes.map((appType: string) => (
           // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
@@ -168,17 +168,15 @@ NewAppenderPopoverProps): React.Element<any> => (
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    appendersTypes: state.api.system.data.loggerParams.appenders_types,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    appendersFields: state.api.system.data.loggerParams.appenders_fields,
+    appendersDefaults:
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      appendersTypes: state.api.system.data.loggerParams.appenders_types,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      appendersFields: state.api.system.data.loggerParams.appenders_fields,
-      appendersDefaults:
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-        state.api.system.data.loggerParams.default_appender_params,
-    })
-  ),
+      state.api.system.data.loggerParams.default_appender_params,
+  })),
   withState('name', 'changeName', ({ data }) => data?.name || ''),
   withState('layoutPattern', 'changeLayoutPattern', ({ data }) => data?.layoutPattern),
   withState('filename', 'changeFilename', ({ data }) => data?.filename),
@@ -191,7 +189,7 @@ export default compose(
   withHandlers({
     handleNameChange:
       ({ changeName }): Function =>
-      (event: Object, value?: string): void => {
+      (event: any, value?: string): void => {
         if (event) {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
           event.persist();
@@ -204,7 +202,7 @@ export default compose(
   withHandlers({
     handleLayoutPatternChange:
       ({ changeLayoutPattern }): Function =>
-      (event: Object, value?: string): void => {
+      (event: any, value?: string): void => {
         if (event) {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
           event.persist();
@@ -217,7 +215,7 @@ export default compose(
   withHandlers({
     handleFilenameChange:
       ({ changeFilename }): Function =>
-      (event: Object, value?: string): void => {
+      (event: any, value?: string): void => {
         if (event) {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
           event.persist();
@@ -230,7 +228,7 @@ export default compose(
   withHandlers({
     handleEncodingChange:
       ({ changeEncoding }): Function =>
-      (event: Object, value?: string): void => {
+      (event: any, value?: string): void => {
         if (event) {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
           event.persist();
@@ -243,7 +241,7 @@ export default compose(
   withHandlers({
     handleRotationCountChange:
       ({ changeRotationCount }): Function =>
-      (event: Object, value?: string): void => {
+      (event: any, value?: string): void => {
         if (event) {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
           event.persist();
@@ -256,7 +254,7 @@ export default compose(
   withHandlers({
     handleArchivePatternChange:
       ({ changeArchivePattern }): Function =>
-      (event: Object, value?: string): void => {
+      (event: any, value?: string): void => {
         if (event) {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
           event.persist();
@@ -281,7 +279,7 @@ export default compose(
         handleNameChange,
         name,
       }): Function =>
-      (event: Object, appenderType: string): void => {
+      (event: any, appenderType: string): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
         event.persist();
 
@@ -353,7 +351,7 @@ export default compose(
         data,
       }: // @ts-ignore ts-migrate(1055) FIXME: Type 'any' is not a valid async function return ty... Remove this comment to see the full error message
       NewAppenderPopoverProps): Function =>
-      async (): any => {
+      async (): Promise<any> => {
         if (!appenderType) {
           changeError(() => 'Appender Type field is required.');
         } else if (appenderType !== 'LoggerAppenderStdOut' && (!filename || filename === '')) {
@@ -365,7 +363,7 @@ export default compose(
           const appendersPath: string = id
             ? `${typeof id === 'string' ? id.toLowerCase() : id}/logger/appenders`
             : 'logger/appenders';
-          const fetchRes: Object = await fetchWithNotifications(
+          const fetchRes: any = await fetchWithNotifications(
             async () =>
               method(`${settings.REST_BASE_URL}/${url || resource}/${appendersPath}`, {
                 body: JSON.stringify({

@@ -17,7 +17,7 @@ type Props = {
 type ItemProps = {
   classes: Array<Object>;
   dependency: string;
-  classItem: Object;
+  classItem: any;
   show: boolean;
 };
 
@@ -25,14 +25,14 @@ let CodeDependencyItem: Function = ({
   classItem,
   show,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ItemProps): React.Element<ExpandableItem> => (
+ItemProps) => (
   <NoDataIf condition={!classItem}>
     {() => (
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       <ExpandableItem title={classItem.name} show={show}>
-        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
         <SourceCode height={400} language={classItem.language}>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'body' does not exist on type 'Object'. */}
           {classItem.body}
         </SourceCode>
       </ExpandableItem>
@@ -45,7 +45,7 @@ const fetchBodyIfMissing: Function =
   (Component): Function => {
     class WrappedComponent extends React.Component {
       props: {
-        classItem: Object;
+        classItem: any;
         fetch: Function;
       } = this.props;
 
@@ -81,7 +81,7 @@ CodeDependencyItem = compose(
   mapProps(
     ({ dependency, classes, ...rest }: ItemProps): ItemProps => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'classid' does not exist on type 'Object'... Remove this comment to see the full error message
-      classItem: classes.find((cls: Object) => cls.classid === dependency),
+      classItem: classes.find((cls: any) => cls.classid === dependency),
       dependency,
       classes,
       ...rest,
@@ -95,11 +95,11 @@ const CodeDependencies: Function = ({
   classes,
   dependenciesList,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <div>
     {dependenciesList.map(
       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-      (dependency: string): React.Element<CodeDependencyItem> => (
+      (dependency: string) => (
         <CodeDependencyItem
           key={dependency}
           dependency={dependency}

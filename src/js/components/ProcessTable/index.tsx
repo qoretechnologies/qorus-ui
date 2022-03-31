@@ -11,7 +11,7 @@ import PaneItem from '../pane_item';
 import Tree from '../tree';
 
 type ProcessTableProps = {
-  model: Object;
+  model: any;
   handleKillClick: Function;
 };
 
@@ -19,7 +19,7 @@ const ProcessTable: Function = ({
   model,
   handleKillClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ProcessTableProps): React.Element<any> => (
+ProcessTableProps) => (
   <NoDataIf
     // @ts-ignore ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
     condition={!model || !model.process}
@@ -45,7 +45,7 @@ ProcessTableProps): React.Element<any> => (
             </ButtonGroup>
           }
         />
-        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
         <Tree
           data={{
             // @ts-ignore ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message

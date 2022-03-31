@@ -11,7 +11,7 @@ import { Td, Tr } from '../../../../components/new_table';
 import Text from '../../../../components/text';
 
 type Props = {
-  model: Object;
+  model: any;
   onEditClick: Function;
   onDeleteClick: Function;
   onCloneClick: Function;
@@ -34,9 +34,9 @@ const RolesRow: Function = ({
   canCreate,
   first,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr first={first}>
-    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'role' does not exist on type 'Object'. */}
+    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'role' does not exist on type 'Object'. */}
     <NameColumn name={model.role} />
     <ActionColumn className="medium">
       <ButtonGroup>
@@ -71,10 +71,10 @@ Props): React.Element<any> => (
       </ButtonGroup>
     </ActionColumn>
     <Td className="text">
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'provider' does not exist on type 'Object... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'provider' does not exist on type 'Object... Remove this comment to see the full error message */}
       <Text text={model.provider} />
     </Td>
-    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
+    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
     <DescriptionColumn>{model.desc}</DescriptionColumn>
   </Tr>
 );

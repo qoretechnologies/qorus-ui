@@ -224,7 +224,7 @@ const getStatsPct: Function = (inSla: boolean, data: any): any => {
 const prepareHistory: Function = (history: Array<Object>): Array<Object> => {
   let newHistory = takeRight([...history], 15);
 
-  newHistory = newHistory.map((hist: Object, idx: number): Object => {
+  newHistory = newHistory.map((hist: any, idx: number): any => {
     const newHist = { ...hist };
 
     if (idx === 0) {

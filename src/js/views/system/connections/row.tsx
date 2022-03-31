@@ -39,7 +39,7 @@ type Props = {
   safe_url?: string;
   url?: string;
   desc?: string;
-  opts: Object;
+  opts: any;
   canDelete: boolean;
   first: boolean;
   loopback: boolean;
@@ -85,7 +85,7 @@ const ConnectionRow: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'connectionid' does not exist on type 'Pr... Remove this comment to see the full error message
   connectionid,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr
     first={first}
     className={classnames({

@@ -27,7 +27,7 @@ const LoadMore: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<Toolbar> =>
+Props) =>
   canLoadMore && (
     <Controls>
       <Control

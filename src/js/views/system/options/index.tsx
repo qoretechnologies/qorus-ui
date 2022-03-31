@@ -28,10 +28,10 @@ import OptionRow from './row';
 type Props = {
   load: Function;
   collection: Array<Object>;
-  params: Object;
-  sortData: Object;
+  params: any;
+  sortData: any;
   onSortChange: Function;
-  user: Object;
+  user: any;
   setOption: Function;
   changeSearchQuery: Function;
   searchQuery: Function;
@@ -51,7 +51,7 @@ const OptionsView: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -82,7 +82,7 @@ Props): React.Element<any> => (
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (option: Object, index: number): React.Element<any> => (
+                (option: any, index: number) => (
                   <OptionRow
                     first={index === 0}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
@@ -109,7 +109,7 @@ const collectionSelector = createSelector(
 
 const viewSelector = createSelector(
   [resourceSelector('systemOptions'), collectionSelector],
-  (options: Object, collection: Array<Object>): Object => ({
+  (options: any, collection: Array<Object>): any => ({
     collection,
     options,
   })

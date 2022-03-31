@@ -17,9 +17,9 @@ import Node from './node';
 import ClusterPane from './pane';
 
 type Props = {
-  nodes: Object;
+  nodes: any;
   nodesMemory: number;
-  processes: Object;
+  processes: any;
   openPane: Function;
   closePane: Function;
   paneId: string;
@@ -35,7 +35,7 @@ const ClusterView: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -82,14 +82,12 @@ Props): React.Element<any> => (
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      nodes: state.api.system.data.cluster_info,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      processes: state.api.system.data.processes,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    nodes: state.api.system.data.cluster_info,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    processes: state.api.system.data.processes,
+  })),
   mapProps(
     ({ nodes, ...rest }: Props): Props => ({
       nodesMemory: Object.keys(nodes).reduce((cur, node): number => cur + nodes[node].node_priv, 0),

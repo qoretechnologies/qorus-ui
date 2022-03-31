@@ -17,7 +17,7 @@ const SelectColumn: Function = compose(onlyUpdateForKeys(['children', 'checked']
     checked,
     className = 'tiny',
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  SelectColumnProps): React.Element<any> => (
+  SelectColumnProps) => (
     <Td className={className}>
       <Checkbox action={onClick} checked={checked ? 'CHECKED' : 'UNCHECKED'} />
     </Td>
@@ -36,7 +36,7 @@ const SelectColumnHeader: Function = compose(onlyUpdateForKeys(['children', 'sor
     icon = 'small-tick',
     ...rest
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  SelectColumnHeaderProps): React.Element<any> => <Th name={name} icon={icon} {...rest} />
+  SelectColumnHeaderProps) => <Th name={name} icon={icon} {...rest} />
 );
 
 export { SelectColumn, SelectColumnHeader };

@@ -22,14 +22,14 @@ import actions from '../../../store/api/actions';
 import Table from './table';
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const sqlcacheSelector: Function = (state: Object) => state.api.sqlcache;
-const formatData: Function = (): Function => (collection: Object) =>
-  Object.keys(collection).reduce((result: Object, key: string): Object => {
+const sqlcacheSelector: Function = (state: any) => state.api.sqlcache;
+const formatData: Function = (): Function => (collection: any) =>
+  Object.keys(collection).reduce((result: any, key: string): any => {
     const coll = collection[key].tables;
-    const newCollection: Array<Object> = map(
-      coll,
-      (propData, propKey): Object => ({ name: propKey, ...propData })
-    );
+    const newCollection: Array<Object> = map(coll, (propData, propKey): any => ({
+      name: propKey,
+      ...propData,
+    }));
 
     return { ...result, ...{ [key]: newCollection } };
   }, {});
@@ -40,7 +40,7 @@ const collectionSelector = createSelector([sqlcacheSelector], (model) => formatD
 const viewSelector = createSelector(
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   [sqlcacheSelector, collectionSelector],
-  (sqlcache: Object, collection: Object): Object => ({
+  (sqlcache: any, collection: any): any => ({
     sqlcache,
     collection,
   })
@@ -48,8 +48,8 @@ const viewSelector = createSelector(
 
 class SQLCache extends Component {
   props: {
-    location: Object;
-    collection: Object;
+    location: any;
+    collection: any;
     optimisticDispatch: Function;
     openModal: Function;
     closeModal: Function;

@@ -14,7 +14,7 @@ import { Modules } from '../../../constants/settings';
 import actions from '../../../store/api/actions';
 
 type Props = {
-  storage: Object;
+  storage: any;
   notificationsEnabled: boolean;
   notificationsSound: boolean;
   soundCheckboxDisabled: boolean;

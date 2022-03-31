@@ -31,13 +31,13 @@ import ServicesDetail from './pane';
 import ServicesTable from './table';
 
 type Props = {
-  sortData: Object;
-  sortKeysObj: Object;
+  sortData: any;
+  sortKeysObj: any;
   onSortChange: Function;
   onCSVClick: Function;
   selected: string;
   selectedIds: Array<number>;
-  location: Object;
+  location: any;
   services: Array<Object>;
   paneId: number | string;
   openPane: Function;
@@ -74,7 +74,7 @@ const Services: Function = ({
   limit,
   sortKeysObj,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -125,15 +125,15 @@ const servicesSelector: Function = createSelector(
   (services, search) => filterSearch(search)(services.data)
 );
 
-const systemOptionsSelector: Function = (state: Object): Array<Object> =>
+const systemOptionsSelector: Function = (state: any): Array<Object> =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.systemOptions.data.filter(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
-    (option: Object): boolean => option.service
+    (option: any): boolean => option.service
   );
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-const settingsSelector: Function = (state: Object): Object => state.ui.settings;
+const settingsSelector: Function = (state: any): any => state.ui.settings;
 
 const selector: Function = createSelector(
   [servicesSelector, systemOptionsSelector, resourceSelector('services'), settingsSelector],

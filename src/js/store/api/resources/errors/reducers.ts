@@ -2,7 +2,7 @@
 import remove from 'lodash/remove';
 import { updateItemWithName } from '../../utils';
 
-const initialState: Object = {
+const initialState: any = {
   global: {
     data: [],
     loading: false,
@@ -15,10 +15,10 @@ const initialState: Object = {
   },
 };
 
-const fetch: Object = {
+const fetch: any = {
   next(
-    state: Object = initialState,
-    { payload: { errors, type } }: { payload: { errors: Object; type: string } }
+    state: any = initialState,
+    { payload: { errors, type } }: { payload: { errors: any; type: string } }
   ) {
     return {
       ...state,
@@ -27,15 +27,15 @@ const fetch: Object = {
   },
 };
 
-const createOrUpdate: Object = {
+const createOrUpdate: any = {
   next(
-    state: Object = initialState,
-    { payload: { id, data, type } }: { payload: { id: number; data: Object; type: string } }
+    state: any = initialState,
+    { payload: { id, data, type } }: { payload: { id: number; data: any; type: string } }
   ) {
     if (data) {
       const exists = state[type].data.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
-        (obj: Object): boolean => obj.error === data.error
+        (obj: any): boolean => obj.error === data.error
       );
       let newData;
 
@@ -64,16 +64,16 @@ const createOrUpdate: Object = {
   },
 };
 
-const removeError: Object = {
+const removeError: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     { payload: { name, type } }: { payload: { name: string; type: string } }
   ) {
     if (name) {
       const data = [...state[type].data];
 
       // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
-      remove(data, (error: Object) => error.error === name);
+      remove(data, (error: any) => error.error === name);
 
       return { ...state, ...{ [type]: { ...state[type], data } } };
     }
@@ -82,7 +82,7 @@ const removeError: Object = {
   },
 };
 
-const unsync: Object = {
+const unsync: any = {
   next() {
     return { ...initialState };
   },

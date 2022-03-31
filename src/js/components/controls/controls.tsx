@@ -23,7 +23,7 @@ const Controls: Function = ({
   className,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ButtonGroup className={className} style={{ marginRight }} {...rest}>
     {children}
   </ButtonGroup>

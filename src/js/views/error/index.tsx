@@ -7,8 +7,6 @@ import { CenterWrapper } from '../../components/layout';
 type Props = {};
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const ErrorView: Function = ({}: Props): React.Element<any> => (
-  <CenterWrapper>Error vid</CenterWrapper>
-);
+const ErrorView: Function = ({}: Props) => <CenterWrapper>Error vid</CenterWrapper>;
 
 export default pure(['children'])(ErrorView);

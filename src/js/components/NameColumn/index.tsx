@@ -15,7 +15,7 @@ import Text from '../text';
 
 type NameColumnProps = {
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  popoverContent?: React.Element<any>;
+  popoverContent?;
   name: string;
   link?: string;
   onDetailClick?: Function;
@@ -63,7 +63,7 @@ const NameColumn: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'NameColumn... Remove this comment to see the full error message
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-NameColumnProps): React.Element<any> => (
+NameColumnProps) => (
   <Td className={`name ${hasAlerts ? 'table-name-has-alerts' : ''} ${className}`}>
     <Flex flexFlow="row">
       {onDetailClick && (
@@ -138,7 +138,7 @@ const NameColumnHeader: Function = ({
   intl,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-NameColumnHeaderProps): React.Element<any> => (
+NameColumnHeaderProps) => (
   <Th className="name" name={name} icon={icon} {...rest}>
     {title || intl.formatMessage({ id: 'table.name' })}
   </Th>

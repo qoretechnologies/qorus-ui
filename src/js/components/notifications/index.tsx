@@ -46,7 +46,7 @@ const Notifications: Function = ({ width, onClose, onResize, paneTab, collection
       </SimpleTab>
       {NOTIFICATION_TYPES.map(
         // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-        (notificationType: string): React.Element<SimpleTab> => (
+        (notificationType: string) => (
           <SimpleTab key={notificationType} name={notificationType}>
             <NotificationList collection={collection} paneTab={paneTab} />
           </SimpleTab>
@@ -58,7 +58,7 @@ const Notifications: Function = ({ width, onClose, onResize, paneTab, collection
 
 export default compose(
   connect(
-    (state: Object): Object => ({
+    (state: any): any => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
       collection: state.ui.notifications.data,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.

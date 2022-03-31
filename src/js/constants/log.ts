@@ -1,24 +1,20 @@
 /* @flow */
 import keyMirror from 'keymirror';
 
-const ACTIONS: Object = keyMirror({
+const ACTIONS: any = keyMirror({
   LOG_MESSAGE: null,
   LOG_INIT: null,
   LOG_CLEAR: null,
 });
 
-const DEFAULTSTATE: Object = {
+const DEFAULTSTATE: any = {
   messages: ['-- READY TO RECEIVE DATA --'],
 };
 
-const LABELS: Object = {
+const LABELS: any = {
   paused: '-- PAUSED --',
   resumed: '-- RESUMED --',
   cleared: '-- LOG CLEARED --',
 };
 
-export {
-  ACTIONS,
-  DEFAULTSTATE,
-  LABELS,
-};
+export { ACTIONS, DEFAULTSTATE, LABELS };

@@ -2,10 +2,10 @@
 import { select, selectAll, selectInvert, selectNone } from '../../../../helpers/resources';
 import { setUpdatedToNull, updateItemWithName } from '../../utils';
 
-const initialState: Object = { data: [], sync: false, loading: false };
+const initialState: any = { data: [], sync: false, loading: false };
 
-const setEnabled: Object = {
-  next(state: Object = initialState, { payload: { events } }): Object {
+const setEnabled: any = {
+  next(state: any = initialState, { payload: { events } }): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -13,7 +13,7 @@ const setEnabled: Object = {
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach((dt: Object): void => {
+      events.forEach((dt: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         newData = updateItemWithName(dt.name, { enabled: dt.enabled, _updated: true }, newData);
       });
@@ -27,7 +27,7 @@ const setEnabled: Object = {
 
 const updateDone = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-  next(state: Object, { payload: { name } }: { payload: Object; name: string }) {
+  next(state: any, { payload: { name } }: { payload: any; name: string }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -39,7 +39,7 @@ const updateDone = {
 
     return state;
   },
-  throw(state: Object, action: Object) {
+  throw(state: any, action: any) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -50,32 +50,32 @@ const updateDone = {
 };
 
 const groupAction = {
-  next(state: Object = initialState) {
+  next(state: any = initialState) {
     return state;
   },
 };
 
 const selectGroup = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-  next(state: Object = initialState, { payload: { id } }: { payload: Object; id: string }) {
+  next(state: any = initialState, { payload: { id } }: { payload: any; id: string }) {
     return select(state, id);
   },
 };
 
 const selectAllGroups = {
-  next(state: Object = initialState) {
+  next(state: any = initialState) {
     return selectAll(state);
   },
 };
 
 const selectNoneGroups = {
-  next(state: Object = initialState) {
+  next(state: any = initialState) {
     return selectNone(state);
   },
 };
 
 const invertSelection = {
-  next(state: Object = initialState) {
+  next(state: any = initialState) {
     return selectInvert(state);
   },
 };

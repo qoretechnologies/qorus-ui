@@ -13,10 +13,10 @@ const renderChildren: Function = (
   children: any,
   path: string
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-): React.Element<any> => React.Children.map(children, (c) => <c.type {...c.props} path={path} />);
+) => React.Children.map(children, (c) => <c.type {...c.props} path={path} />);
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const Nav: Function = ({ children, path }: Props): React.Element<any> => (
+const Nav: Function = ({ children, path }: Props) => (
   <div className="bp3-tabs">
     <ul className="bp3-tab-list" role="tablist">
       {renderChildren(children, path)}

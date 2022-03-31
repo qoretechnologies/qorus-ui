@@ -14,16 +14,16 @@ import actions from '../../../../store/api/actions';
 import Modal from './modal';
 import Table from './table';
 
-const currentUserSelector: Function = (state: Object): Object =>
+const currentUserSelector: Function = (state: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.currentUser;
-const optionsSelector: Function = (state: Object): Object =>
+const optionsSelector: Function = (state: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.systemOptions;
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const usersSelector: Function = (state: Object): Object => state.api.users;
+const usersSelector: Function = (state: any): any => state.api.users;
 // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const querySelector: Function = (state: Object, props: Object): string =>
+const querySelector: Function = (state: any, props: any): string =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
   props.location.query.search;
 // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -31,7 +31,7 @@ const filterData: Function =
   (query: string): Function =>
   (
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    collection: Array<*>
+    collection: Array<any>
   ) =>
     findBy(['name', 'username'], query, collection);
 
@@ -65,8 +65,8 @@ const viewSelector: Function = createSelector(
 export default class RBACUsers extends Component {
   props: {
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    usersModel: Array<*>;
-    user: Object;
+    usersModel: Array<any>;
+    user: any;
     openModal: Function;
     closeModal: Function;
     optimisticDispatch: Function;
@@ -77,7 +77,7 @@ export default class RBACUsers extends Component {
     const { options } = this.props;
     const rbacExternal: any = options.find(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-      (option: Object): boolean => option.name === 'rbac-external'
+      (option: any): boolean => option.name === 'rbac-external'
     );
 
     return rbacExternal?.value;
@@ -114,7 +114,7 @@ export default class RBACUsers extends Component {
     password: string,
     roles: Array<string>
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  ): Promise<*> => {
+  ): Promise<any> => {
     await this.props.optimisticDispatch(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
       actions.users.create,
@@ -133,7 +133,7 @@ export default class RBACUsers extends Component {
     pass: string,
     roles: Array<string>
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  ): Promise<*> => {
+  ): Promise<any> => {
     await this.props.optimisticDispatch(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'users' does not exist on type '{}'.
       actions.users.update,

@@ -21,7 +21,7 @@ import Actions from './toolbar/actions';
 import Selector from './toolbar/selector';
 
 type Props = {
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   collection: Array<Object>;
   paneId: string | number;
@@ -37,7 +37,7 @@ type Props = {
   loadMoreCurrent: number;
   loadMoreTotal: number;
   limit: number;
-  sortKeys: Object;
+  sortKeys: any;
 };
 
 const ServicesTable: Function = ({
@@ -61,7 +61,7 @@ const ServicesTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table fixed hover condensed striped className="resource-table" key={collection.length}>
     <Thead>
       <FixedRow className="toolbar-row">
@@ -106,7 +106,7 @@ Props): React.Element<any> => (
         <Tbody {...props}>
           {collection.map(
             // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (service: Object, index: number): React.Element<Row> => (
+            (service: any, index: number) => (
               <Row
                 first={index === 0}
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.

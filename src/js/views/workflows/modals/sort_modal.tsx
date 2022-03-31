@@ -7,7 +7,7 @@ import { ORDER_STATES } from '../../../constants/orders';
 
 type Props = {
   closeModal: Function;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   handleSortClick: Function;
 };
@@ -19,7 +19,7 @@ const SortModal: Function = ({ closeModal, sortData, handleSortClick }: Props): 
     </Modal.Header>
     <Modal.Body>
       <Controls className="bp3-vertical">
-        {ORDER_STATES.map((state: Object): any => (
+        {ORDER_STATES.map((state: any): any => (
           <Control
             // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             onClick={() => handleSortClick(state.name)}

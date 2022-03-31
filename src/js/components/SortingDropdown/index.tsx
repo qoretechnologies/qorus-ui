@@ -10,9 +10,9 @@ import Dropdown, { Control, Item } from '../dropdown';
 
 type Props = {
   handleSortChange: Function;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
-  sortKeys: Object;
+  sortKeys: any;
 };
 
 const SortingDropdown: Function = ({
@@ -23,28 +23,25 @@ const SortingDropdown: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<ButtonGroup> => (
+Props) => (
   <ButtonGroup>
     <Button
       icon={sortByKey.direction < 0 ? 'sort-alphabetical-desc' : 'sort-alphabetical'}
       onClick={(e: any) => handleSortChange(e, sortBy)}
     />
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <Dropdown key={`${sortBy}_${sortByKey.direction}`}>
-      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
       <Control>{intl.formatMessage({ id: sortBy })}</Control>
-      {/* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
-      {map(
-        sortKeys,
-        (column: string, name: string): React.Element<Item> => (
-          <Item
-            title={name}
-            key={column}
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            onClick={(e) => handleSortChange(e, column)}
-          />
-        )
-      )}
+      {/* @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
+      {map(sortKeys, (column: string, name: string) => (
+        <Item
+          title={name}
+          key={column}
+          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+          onClick={(e) => handleSortChange(e, column)}
+        />
+      ))}
     </Dropdown>
   </ButtonGroup>
 );

@@ -261,7 +261,7 @@ table.table--data {
       > th,
       > td {
         /* [1] */
-        border-right: 1px solid $table-border-color;
+        border-right: 1px solid #333;
 
         &:last-child {
           border-right: 0;

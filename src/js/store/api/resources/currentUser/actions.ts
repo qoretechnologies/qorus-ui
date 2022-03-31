@@ -9,7 +9,7 @@ const unSyncCurrentUser: Function = createAction('CURRENTUSER_UNSYNCCURRENTUSER'
 
 const updateStorage: Function = createAction(
   'CURRENTUSER_UPDATESTORAGE',
-  (storage: Object, username: string): Object => {
+  (storage: any, username: string): any => {
     // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
     fetchJson('PUT', `${settings.REST_BASE_URL}/users/${username}`, {
       body: JSON.stringify({
@@ -22,7 +22,7 @@ const updateStorage: Function = createAction(
 );
 
 const storeSortChange: Function =
-  (table: string, sortData: Object): Function =>
+  (table: string, sortData: any): Function =>
   (dispatch: Function, getState: Function): void => {
     const {
       ui: { sort },
@@ -38,7 +38,7 @@ const storeSortChange: Function =
       },
     } = getState();
 
-    const newSort: Object = buildSorting(sortData, table, sort);
+    const newSort: any = buildSorting(sortData, table, sort);
 
     storage[table] = storage[table] || {};
     storage[table].sort = newSort;
@@ -47,7 +47,7 @@ const storeSortChange: Function =
   };
 
 const storePaneSize: Function =
-  (type: string, width: number, username: Object): Function =>
+  (type: string, width: number, username: any): Function =>
   (dispatch: Function, getState: Function): void => {
     const storage = getState().api.currentUser.data.storage || {};
 
@@ -58,7 +58,7 @@ const storePaneSize: Function =
   };
 
 const storeSearch: Function =
-  (type: string, query: string, username: Object): Function =>
+  (type: string, query: string, username: any): Function =>
   (dispatch: Function, getState: Function): void => {
     const storage = getState().api.currentUser.data.storage || {};
 

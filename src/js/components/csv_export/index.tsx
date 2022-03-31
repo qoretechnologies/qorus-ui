@@ -17,7 +17,7 @@ class CsvExport extends React.Component {
   } = this.props;
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'React$Element'.
-  _modal: React$Element<*>;
+  _modal: React$Element<any>;
 
   handleCsvOpen = () => {
     const { collection, type, closeModal } = this.props;

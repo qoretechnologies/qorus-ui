@@ -9,7 +9,7 @@ type Props = {
   noTransition: boolean;
   children: any;
   column: number;
-  style?: Object;
+  style?: any;
   width: string | number;
   scrollX?: boolean;
   scrollY?: boolean;
@@ -28,7 +28,7 @@ const Box: Function = ({
   fill,
   width = 'initial',
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> =>
+Props) =>
   noTransition ? (
     <div
       className="white-box"

@@ -10,9 +10,9 @@ type Props = {
   applyOnBlur?: boolean;
   inputDate: string;
   onApplyDate: () => void;
-  onInputChange: (event: Object) => void;
-  onKeyUp: (event: Object) => void;
-  onInputClick: (event: Object) => void;
+  onInputChange: (event: any) => void;
+  onKeyUp: (event: any) => void;
+  onInputClick: (event: any) => void;
   id?: string;
   name?: string;
   className?: string;
@@ -38,7 +38,7 @@ const Input = (props: Props) => (
 const addKeyUpHandler = withHandlers({
   onKeyUp:
     ({ onApplyDate }: { onApplyDate: Function }): Function =>
-    (e: Object) => {
+    (e: any) => {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'keyCode' does not exist on type 'Object'... Remove this comment to see the full error message
       if (e.keyCode === 13) {
         onApplyDate();

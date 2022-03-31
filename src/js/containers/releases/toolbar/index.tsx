@@ -29,11 +29,11 @@ const ReleasesToolbar: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Toolbar marginBottom>
     <div className="pull-left clear">
       <Dropdown id="release-sort">
-        {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any[]; }' is missing the followi... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any[]; }' is missing the followi... Remove this comment to see the full error message */}
         <Control>
           <FormattedMessage id="dropdown.sort-by" />:{' '}
           {sort === 'Name'
@@ -54,7 +54,7 @@ Props): React.Element<any> => (
         />
       </Dropdown>{' '}
       <Dropdown id="release-sortDir">
-        {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any[]; }' is missing the followi... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any[]; }' is missing the followi... Remove this comment to see the full error message */}
         <Control>
           <FormattedMessage id="dropdown.sort-direction" />:{' '}
           {
@@ -93,12 +93,12 @@ export default compose(
   withHandlers({
     handleSortChange:
       ({ changeSort }: Props): Function =>
-      (event: Object, value: string): void => {
+      (event: any, value: string): void => {
         changeSort(value);
       },
     handleSortDirChange:
       ({ changeSortDir }: Props): Function =>
-      (event: Object, value: string): void => {
+      (event: any, value: string): void => {
         changeSortDir(value);
       },
   }),

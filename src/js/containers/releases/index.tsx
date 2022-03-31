@@ -22,7 +22,7 @@ import actions from '../../store/api/actions';
 import ReleasesToolbar from './toolbar';
 
 type Props = {
-  data: Object;
+  data: any;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   fileName: string;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -48,7 +48,7 @@ const Releases: Function = ({
   sortDir,
   compact,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     {!compact && (
       <Headbar>
@@ -61,7 +61,7 @@ Props): React.Element<any> => (
       [
         <ReleasesToolbar sort={sort} sortDir={sortDir} compact key="release-toolbar" />,
         <Flex key="release-content">
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <Tree data={data} />
         </Flex>,
       ]
@@ -69,7 +69,7 @@ Props): React.Element<any> => (
       <Box top>
         <ReleasesToolbar sort={sort} sortDir={sortDir} />
         <Flex>
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <Tree data={data} />
         </Flex>
       </Box>
@@ -87,27 +87,27 @@ Props): React.Element<any> => (
 
 const formatReleases: Function =
   (): Function =>
-  (data: Array<Object>): Object => {
+  (data: Array<Object>): any => {
     if (!data.length) return {};
 
-    const res: Object = data.reduce((newData: Object, current: Object): Object => {
-      const copy: Object = { ...current };
+    const res: any = data.reduce((newData: any, current: any): any => {
+      const copy: any = { ...current };
       // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-      let files: Object = null;
+      let files: any = null;
 
       // @ts-ignore ts-migrate(2339) FIXME: Property 'files' does not exist on type 'Object'.
       if (copy.files && copy.files.length) {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'files' does not exist on type 'Object'.
-        files = copy.files.reduce((newFiles: Object, curFile: Object): Object => {
-          const fileCopy: Object = { ...curFile };
+        files = copy.files.reduce((newFiles: any, curFile: any): any => {
+          const fileCopy: any = { ...curFile };
           // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-          let components: Object = null;
+          let components: any = null;
 
           // @ts-ignore ts-migrate(2339) FIXME: Property 'components' does not exist on type 'Obje... Remove this comment to see the full error message
           if (fileCopy.components && fileCopy.components.length) {
             // @ts-ignore ts-migrate(2339) FIXME: Property 'components' does not exist on type 'Obje... Remove this comment to see the full error message
-            components = fileCopy.components.reduce((newComps: Object, curComp: Object): Object => {
-              const compCopy: Object = { ...curComp };
+            components = fileCopy.components.reduce((newComps: any, curComp: any): any => {
+              const compCopy: any = { ...curComp };
 
               // @ts-ignore ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message
               const createdComp: string = moment(compCopy.created).format('YYYY-MM-DD HH:mm:ss');
@@ -187,21 +187,19 @@ const sortReleases: Function =
         })
       : [];
 
-const releaseSelector: Function = createSelector(
-  [resourceSelector('releases')],
-  (releases: Object) =>
-    compose(
-      formatReleases(),
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Object'.
-      sortReleases(releases.sort, releases.sortDir)
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    )(releases.data)
+const releaseSelector: Function = createSelector([resourceSelector('releases')], (releases: any) =>
+  compose(
+    formatReleases(),
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Object'.
+    sortReleases(releases.sort, releases.sortDir)
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+  )(releases.data)
 );
 
 const componentSelector = (
-  state: Object,
+  state: any,
   // @ts-ignore ts-migrate(2339) FIXME: Property 'compact' does not exist on type 'Object'... Remove this comment to see the full error message
-  { compact, location, component }: Object
+  { compact, location, component }: any
 ): string => (compact ? component : location.query.component);
 
 const viewSelector: Function = createSelector(
@@ -214,8 +212,8 @@ const viewSelector: Function = createSelector(
     querySelector('mindate'),
   ],
   (
-    releases: Object,
-    data: Object,
+    releases: any,
+    data: any,
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     fileName: string,
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -224,7 +222,7 @@ const viewSelector: Function = createSelector(
     maxdate: string,
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     mindate: string
-  ): Object => ({
+  ): any => ({
     meta: releases,
     data,
     fileName,

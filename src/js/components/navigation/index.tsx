@@ -18,7 +18,7 @@ export default class Navigation extends Component {
   };
 
   props: {
-    location: Object;
+    location: any;
     mainItems: Array<any>;
     extraItems: Array<any>;
   } = this.props;
@@ -45,7 +45,7 @@ export default class Navigation extends Component {
    * @return {ReactElement}
    */
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  renderItem: Function = (item: Object): React.Element<any> => (
+  renderItem: Function = (item: any) => (
     <Item
       // @ts-ignore ts-migrate(2339) FIXME: Property 'url' does not exist on type 'Object'.
       key={item.url}
@@ -66,15 +66,15 @@ export default class Navigation extends Component {
    * @return {ReactElement}
    */
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     return (
       <nav className="side-menu pull-left">
         <ul className="nav nav-pills nav-stacked side-menu__main">
-          {/* @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'Function' is not assignable to p... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2345) FIXME: Argument of type 'Function' is not assignable to p... Remove this comment to see the full error message */}
           {this.props.mainItems.map(this.renderItem)}
         </ul>
         <ul className="side-menu__extra">
-          {/* @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'Function' is not assignable to p... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2345) FIXME: Argument of type 'Function' is not assignable to p... Remove this comment to see the full error message */}
           {this.props.extraItems.map(this.renderItem)}
         </ul>
       </nav>

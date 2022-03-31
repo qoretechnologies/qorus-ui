@@ -154,7 +154,7 @@ const FSMState: React.FC<IFSMStateProps> = ({
       type={action?.type || type}
     >
       <StyledStateTextWrapper>
-        {/* @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0. */}
+        {/* @ts-ignore ts-migrate(2554) FIXME: Expected 1 arguments, but got 0. */}
         <StyledStateName style={{ fontSize: calculateFontSize() }}>{name}</StyledStateName>
         <StyledStateAction style={{ fontSize: calculateFontSize(true) }}>
           {getStateType({ type, action, ...rest })}

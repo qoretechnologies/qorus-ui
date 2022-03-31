@@ -20,7 +20,7 @@ import { get } from '../../store/api/utils';
 type Props = {
   sync: boolean;
   loading: boolean;
-  collection: Object;
+  collection: any;
   dispatch: Function;
 };
 
@@ -90,7 +90,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
                             <br />
 
                             <h4>Field data</h4>
-                            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                             <Tree data={input} />
                           </Box>
                         </Modal.Body>

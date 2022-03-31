@@ -15,7 +15,7 @@ import NoDataIf from '../NoDataIf';
 import Table from './table';
 
 type ConfigItemsContainerProps = {
-  items: Object;
+  items: any;
   dispatchAction: Function;
   intrf: string;
   openModal: Function;
@@ -95,7 +95,7 @@ const ConfigItemsContainer: Function = ({
   intrfId,
   stepId,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ConfigItemsContainerProps): React.Element<any> => {
+ConfigItemsContainerProps) => {
   const saveValue = (item, newValue, onSuccess, newStepId?) => {
     dispatchAction(
       actions[intrf].updateConfigItem,
@@ -112,7 +112,7 @@ ConfigItemsContainerProps): React.Element<any> => {
       {() => (
         <React.Fragment>
           {map(items, (configItems: Array<Object>, belongsTo: string) => (
-            // @ts-ignore ts-migrate(2739) FIXME: Type '{ configItems: Object[]; belongsTo: string; ... Remove this comment to see the full error message
+            // @ts-ignore ts-migrate(2739) FIXME: Type '{ configItems: any[]; belongsTo: string; ... Remove this comment to see the full error message
             <ExpandableConfigWrapper
               configItems={configItems}
               belongsTo={belongsTo}

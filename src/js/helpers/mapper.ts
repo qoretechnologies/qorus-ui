@@ -3,25 +3,18 @@ import { findIndex, omit, reduce, size } from 'lodash';
 import trimEnd from 'lodash/trimEnd';
 import trimStart from 'lodash/trimStart';
 
-const formatFieldSource: Function = (fieldSource: string): Object => {
+const formatFieldSource: Function = (fieldSource: string): any => {
   let newSource = fieldSource;
   newSource = trimStart(newSource, '(');
   newSource = trimEnd(newSource, ') ');
 
-  if (
-    newSource.indexOf('runtime') !== -1 &&
-    newSource !== '{}' &&
-    newSource !== '{},'
-  ) {
+  if (newSource.indexOf('runtime') !== -1 && newSource !== '{}' && newSource !== '{},') {
     newSource = trimStart(newSource, '{');
     newSource = trimEnd(newSource, '}');
   }
 
   // Check if there is any code in the fieldsource
-  const code = newSource.substring(
-    newSource.lastIndexOf('"code"'),
-    newSource.lastIndexOf('}') + 1
-  );
+  const code = newSource.substring(newSource.lastIndexOf('"code"'), newSource.lastIndexOf('}') + 1);
 
   // Pull it out if there is
   if (code !== '' && code !== '{}') {
@@ -107,10 +100,7 @@ export const flattenFields: (
       // Check if this field has hierarchy
       if (size(field.type?.fields)) {
         // Recursively add deep fields
-        res = [
-          ...res,
-          ...flattenFields(field.type?.fields, true, name, level + 1, newPath),
-        ];
+        res = [...res, ...flattenFields(field.type?.fields, true, name, level + 1, newPath)];
       }
       // Return the new fields
       return res;
@@ -128,10 +118,7 @@ export const getLastChildIndex = (field: any, fields: any[]) => {
     );
     // Get the index of the last field in this
     // hierarchy based on the name
-    return findIndex(
-      fields,
-      (curField) => curField.path === `${field.path}.${name}`
-    );
+    return findIndex(fields, (curField) => curField.path === `${field.path}.${name}`);
   }
   // Return nothing
   return 0;

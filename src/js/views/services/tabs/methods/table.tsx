@@ -23,7 +23,7 @@ import SLARow from './row';
 type Props = {
   methods: Array<Object>;
   slas: Array<Object>;
-  service: Object;
+  service: any;
   perms: Array<string>;
   setMethod: Function;
   removeMethod: Function;
@@ -37,7 +37,7 @@ const MethodsTable: Function = ({
   setMethod,
   removeMethod,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <EnhancedTable
     collection={methods}
     searchBy={['name']}
@@ -87,7 +87,7 @@ Props): React.Element<any> => (
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (method: Object, index: number): React.Element<any> => (
+                (method: any, index: number) => (
                   <SLARow
                     first={index === 0}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'service_methodid' does not exist on type... Remove this comment to see the full error message
@@ -111,7 +111,7 @@ Props): React.Element<any> => (
 
 const viewSelector: Function = createSelector(
   [resourceSelector('slas'), resourceSelector('currentUser')],
-  (meta: Object, user: Object): Object => ({
+  (meta: any, user: any): any => ({
     meta,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     slas: meta.data,

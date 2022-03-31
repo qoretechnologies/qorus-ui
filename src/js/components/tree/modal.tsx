@@ -32,7 +32,7 @@ export default class SenstiveYamlEditModal extends Component {
   async componentWillMount(): any {
     const { id, skey, svalue }: Props = this.props;
     const urlAction: string = `action=yamlSensitiveData&skey=${skey}&svalue=${svalue}`;
-    const data: Object = await fetchJson(
+    const data: any = await fetchJson(
       'GET',
       `${settings.REST_BASE_URL}/orders/${id}?${urlAction}`,
       null,

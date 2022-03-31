@@ -17,11 +17,11 @@ import withSort from '../../../../../hocomponents/sort';
 import { querySelector } from '../../../../../selectors';
 
 type Props = {
-  sla: Object;
+  sla: any;
   methods: Array<Object>;
   changeSearchQuery: Function;
   searchQuery?: string;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
 };
 
@@ -32,7 +32,7 @@ const SLAMethods: Function = ({
   sortData,
   onSortChange,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Toolbar mb>
       <Search
@@ -63,10 +63,10 @@ Props): React.Element<any> => (
           {methods.map(
             (
               // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-              { id, resource, type, name }: Object,
+              { id, resource, type, name }: any,
               idx: number
               // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            ): React.Element<any> => (
+            ) => (
               <Tr key={`${type}${id}`} first={idx === 0}>
                 <Td className="narrow">{id}</Td>
                 <Td className="name">
@@ -91,7 +91,7 @@ Props): React.Element<any> => (
 );
 
 const selectMethods: Function = (
-  state: Object,
+  state: any,
   { sla }: Props
 ): // @ts-ignore ts-migrate(2339) FIXME: Property 'methods' does not exist on type 'Object'... Remove this comment to see the full error message
 Array<Object> => [...(sla.methods || []), ...(sla.jobs || [])];
@@ -99,8 +99,8 @@ Array<Object> => [...(sla.methods || []), ...(sla.jobs || [])];
 const normalizeMethods: Function =
   (): Function =>
   (methods: Array<Object>): Array<Object> =>
-    methods.map((method: Object): Object => {
-      const mapped: Object = { ...method };
+    methods.map((method: any): any => {
+      const mapped: any = { ...method };
 
       // @ts-ignore ts-migrate(2339) FIXME: Property 'serviceid' does not exist on type 'Objec... Remove this comment to see the full error message
       if (mapped.serviceid) {
@@ -131,17 +131,14 @@ const filterMethods: Function =
 
 const methodsSelector: Function = createSelector(
   [querySelector('search'), selectMethods],
-  (search: string, methods: Array<Object>): Object =>
+  (search: string, methods: Array<Object>): any =>
     compose(normalizeMethods(), filterMethods(search))(methods)
 );
 
 // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-const viewSelector: Function = createSelector(
-  [methodsSelector],
-  (methods: Array<Object>): Object => ({
-    methods,
-  })
-);
+const viewSelector: Function = createSelector([methodsSelector], (methods: Array<Object>): any => ({
+  methods,
+}));
 
 export default compose(
   connect(viewSelector),

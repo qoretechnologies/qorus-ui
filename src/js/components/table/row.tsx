@@ -23,7 +23,7 @@ export default class Row extends Component {
     this.startHighlight(this.props.highlight);
   }
 
-  componentWillReceiveProps(nextProps: Object): void {
+  componentWillReceiveProps(nextProps: any): void {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'highlight' does not exist on type 'Objec... Remove this comment to see the full error message
     this.startHighlight(nextProps.highlight);
   }

@@ -1,4 +1,4 @@
-import { InputGroup, Menu, Popover, Position } from '@blueprintjs/core';
+import { InputGroup, Menu, Popover, PopoverPosition, Position } from '@blueprintjs/core';
 import { includes, remove, xor } from 'lodash';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -22,13 +22,13 @@ type Props = {
   onSelect?: () => Array<string>;
   submitLabel?: string;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  selected?: Array<?string>;
+  selected?: string[];
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   show?: boolean;
   className?: string;
   disabled?: boolean;
   onHide?: Function;
-  position?: string;
+  position?: PopoverPosition;
   alwaysShowSelectedCount?: boolean;
 };
 
@@ -47,7 +47,7 @@ export default class Dropdown extends Component {
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     showDropdown: boolean;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    selected: Array<*>;
+    selected: Array<any>;
     marked: number;
     filterValue: string;
   };
@@ -125,7 +125,7 @@ export default class Dropdown extends Component {
    */
   toggleItem: Function = (item: string): void => {
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    let selected: Array<?string> = this.state.selected.slice();
+    let selected: string[] = this.state.selected.slice();
 
     if (item !== this.props.def) {
       remove(selected, (v) => v === this.props.def);
@@ -178,7 +178,7 @@ export default class Dropdown extends Component {
    *
    * @param {Event} event
    */
-  handleToggleClick: Function = (event: Object): void => {
+  handleToggleClick: Function = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'defaultPrevented' does not exist on type... Remove this comment to see the full error message
     if (!event.defaultPrevented) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
@@ -209,7 +209,7 @@ export default class Dropdown extends Component {
     }
   };
 
-  handleFilterChange: Function = (event: Object): void => {
+  handleFilterChange: Function = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
     const { value } = event.target;
 
@@ -236,7 +236,7 @@ export default class Dropdown extends Component {
    * Renders the seleciton dropdown to the component
    */
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderDropdown(): React.Element<any> {
+  renderDropdown() {
     const { filterValue } = this.state;
 
     if (!this.props.disabled && React.Children.toArray(this.props.children).length > 1) {
@@ -272,7 +272,7 @@ export default class Dropdown extends Component {
   }
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderDropdownList(): React.Element<any> {
+  renderDropdownList() {
     return React.Children.map(this.props.children, (c, index) => {
       if (!c || c.type.displayName === 'DropdownControl') return null;
 
@@ -314,7 +314,7 @@ export default class Dropdown extends Component {
   }
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderDropdownControl(): React.Element<any> {
+  renderDropdownControl() {
     return React.Children.map(this.props.children, (c) => {
       if (!c || c.type.displayName !== 'DropdownControl') return undefined;
 
@@ -333,7 +333,7 @@ export default class Dropdown extends Component {
   }
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderSubmit(): React.Element<Button> {
+  renderSubmit() {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'submitOnBlur' does not exist on type 'Pr... Remove this comment to see the full error message
     if (this.props.multi && this.props.onSubmit && !this.props.submitOnBlur) {
       return <Button text={this.props.submitLabel} onClick={this.handleSubmit} />;
@@ -343,7 +343,7 @@ export default class Dropdown extends Component {
   }
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'submitOnBlur' does not exist on type 'Pr... Remove this comment to see the full error message
     const { onSubmit, submitOnBlur } = this.props;
 
@@ -353,9 +353,9 @@ export default class Dropdown extends Component {
         style={{ verticalAlign: 'top' }}
       >
         <Popover
-          // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'PopoverPo... Remove this comment to see the full error message
           position={this.props.position || Position.BOTTOM}
-          content={this.renderDropdown()}
+          content={this.renderDropdown() as any}
+          // @ts-ignore FIXME
           popoverDidOpen={this.handleOpen}
           isOpen={this.state.showDropdown}
           enforceFocus={false}

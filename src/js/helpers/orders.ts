@@ -70,11 +70,11 @@ const instancePctOfTotal: Function = (instanceCount: number, totalInstances: num
 
 const calculateInstanceBarWidths: Function = (
   states: Array<Object>,
-  instances: Object,
+  instances: any,
   totalInstances: number,
   minWidth: number = MIN_INSTANCEBAR_WIDTH
-): Object => {
-  const statesWithWidths = states.map((state: Object) => ({
+): any => {
+  const statesWithWidths = states.map((state: any) => ({
     ...state,
     ...{
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
@@ -84,16 +84,16 @@ const calculateInstanceBarWidths: Function = (
     },
   }));
 
-  const modifiedStates = statesWithWidths.reduce((cur: Array<Object>, next: Object) => {
+  const modifiedStates = statesWithWidths.reduce((cur: Array<Object>, next: any) => {
     const newCur: Array<Object> = [...cur];
     // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-    const newNext: Object = find(newCur, (state) => state.name === next.name);
+    const newNext: any = find(newCur, (state) => state.name === next.name);
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'width' does not exist on type 'Object'.
     if (next.width < minWidth && next.width > 0) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'width' does not exist on type 'Object'.
       const diff: number = minWidth - next.width;
-      const max: Object = maxBy(statesWithWidths, 'width');
+      const max: any = maxBy(statesWithWidths, 'width');
 
       // @ts-ignore ts-migrate(2339) FIXME: Property 'width' does not exist on type 'Object'.
       newNext.width = minWidth;

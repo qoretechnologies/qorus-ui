@@ -4,7 +4,6 @@ const initialState = {
   loading: false,
 };
 
-
 function handleError(state = initialState, action) {
   return Object.assign({}, state, {
     data: Object.assign({}, state.data, {
@@ -15,7 +14,6 @@ function handleError(state = initialState, action) {
     error: action.payload,
   });
 }
-
 
 const fetch = {
   next(state = initialState, action) {
@@ -30,7 +28,4 @@ const fetch = {
   throw: handleError,
 };
 
-
-export {
-  fetch as FETCH,
-};
+export { fetch as FETCH };

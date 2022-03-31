@@ -9,7 +9,7 @@ type SidebarSectionProps = {
   favoriteItems: Array<Object>;
   sectionData: Array<Object>;
   isCollapsed: boolean;
-  location: Object;
+  location: any;
   expandedSection: string;
   onSectionToggle: Function;
 };
@@ -22,9 +22,9 @@ const SidebarSection: Function = ({
   onSectionToggle,
   favoriteItems,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-SidebarSectionProps): React.Element<any> => (
+SidebarSectionProps) => (
   <div className="sidebarSection">
-    {map(sectionData, (itemData: Object, key: number) => (
+    {map(sectionData, (itemData: any, key: number) => (
       <SidebarItem
         itemData={itemData}
         key={key}

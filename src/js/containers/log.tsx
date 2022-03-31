@@ -12,7 +12,7 @@ import websocket from '../hocomponents/websocket';
 import * as actions from '../store/log/actions';
 import Logger from './Logger';
 
-const dataSelector: Function = (state: Object, props: Object): Object =>
+const dataSelector: Function = (state: any, props: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'log' does not exist on type 'Object'.
   state.log.data[props.url] || DEFAULTSTATE;
 
@@ -22,13 +22,11 @@ const containerSelector: Function = createSelector([dataSelector], ({ messages }
 }));
 
 const LogArea = compose(
-  mapProps(
-    (props: Object): Object => ({
-      ...props,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'resource' does not exist on type 'Object... Remove this comment to see the full error message
-      url: `log/${props.resource}`,
-    })
-  ),
+  mapProps((props: any): any => ({
+    ...props,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'resource' does not exist on type 'Object... Remove this comment to see the full error message
+    url: `log/${props.resource}`,
+  })),
   connect(containerSelector, {
     update: actions.onMessage,
     init: actions.init,
@@ -42,7 +40,7 @@ const LogArea = compose(
   }),
   withHandlers({
     onClearClick:
-      (props: Object): Function =>
+      (props: any): Function =>
       (): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'clear' does not exist on type 'Object'.
         props.clear(props.url);
@@ -55,7 +53,7 @@ const LogArea = compose(
 const LogContainer = (props) => (
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   <Tabs active="log">
-    {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
     <Pane name="Log">
       <LogArea {...props} />
     </Pane>

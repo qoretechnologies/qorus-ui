@@ -13,7 +13,7 @@ const Toolbar: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'children' does not exist on type 'Object... Remove this comment to see the full error message
   children,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Object): React.Element<any> => (
+Object) => (
   <div
     className={`${className} ${(marginBottom || mb) && 'margin-bottom'} ${
       mt && 'margin-top'

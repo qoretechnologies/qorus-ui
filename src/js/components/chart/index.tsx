@@ -1,10 +1,10 @@
 /* @flow */
+import { NonIdealState } from '@blueprintjs/core';
 import Chart from 'chart.js';
 import round from 'lodash/round';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { injectIntl } from 'react-intl';
-import { NonIdealState } from '../../../../node_modules/@blueprintjs/core';
 import { getMaxValue, getStepSize, getUnit, scaleData } from '../../helpers/chart';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/la... Remove this comment to see the full error message
 import { CenterWrapper } from '../layout';
@@ -41,7 +41,7 @@ export default class ChartComponent extends Component {
   } = this.props;
 
   state: {
-    chart: Object;
+    chart: any;
   };
 
   // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'state'.
@@ -53,7 +53,7 @@ export default class ChartComponent extends Component {
     this.renderChart(this.props);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
     if (this.props.id !== nextProps.id) {
       this.renderChart(nextProps);
@@ -105,7 +105,7 @@ export default class ChartComponent extends Component {
     }
   }
 
-  getOptionsData(data: Array<Object>, props = this.props): Object {
+  getOptionsData(data: Array<Object>, props = this.props): any {
     const unit: string = props.unit || getUnit(getMaxValue(data));
     const stepSize: number = props.stepSize || getStepSize(data, props.isNotTime);
 
@@ -123,7 +123,7 @@ export default class ChartComponent extends Component {
     const max = yMax ? yMax + yMax / 10 : null;
 
     // stepSize: number, unit: string
-    const options: Object = {
+    const options: any = {
       legend: {
         display: false,
       },
@@ -190,12 +190,12 @@ export default class ChartComponent extends Component {
     }
   }
 
-  renderChart: Function = (props: Object): void => {
-    const el: Object = ReactDOM.findDOMNode(this.refs.chart);
-    const options: Object = this.getOptions(props);
+  renderChart: Function = (props: any): void => {
+    const el: any = ReactDOM.findDOMNode(this.refs.chart);
+    const options: any = this.getOptions(props);
     // @ts-ignore ts-migrate(2339) FIXME: Property 'datasets' does not exist on type 'Object... Remove this comment to see the full error message
     const datasets: Array<Object> = scaleData(props.datasets, props.isNotTime);
-    const chart: Object = new Chart(el, {
+    const chart: any = new Chart(el, {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
       type: props.type,
       data: {
@@ -234,7 +234,7 @@ export default class ChartComponent extends Component {
               // @ts-ignore ts-migrate(2339) FIXME: Property 'backgroundColor' does not exist on type ... Remove this comment to see the full error message
               style={{ backgroundColor: d.backgroundColor || '#d7d7d7' }}
             />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */}
             {d.label}
           </li>
         ));
@@ -260,7 +260,7 @@ export default class ChartComponent extends Component {
                     this.props.datasets[0].backgroundColor[key] || '#d7d7d7',
               }}
             />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
             {`${d} (${this.props.datasets[0].data[key]}${this.props.unit ? this.props.unit : ''})`}
           </li>
         ));
@@ -268,7 +268,7 @@ export default class ChartComponent extends Component {
   };
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     return (
       <div className={`chart-wrapper ${this.props.type === 'doughnut' ? 'pie' : ''}`}>
         {this.props.title && <p>{this.props.title}</p>}

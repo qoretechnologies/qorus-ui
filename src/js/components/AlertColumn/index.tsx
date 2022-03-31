@@ -17,7 +17,7 @@ let AlertColumn: Function = ({
   hasAlerts,
   onClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-AlertColumnProps): React.Element<any> => (
+AlertColumnProps) => (
   <Td className="tiny">
     {hasAlerts && (
       <ButtonGroup>
@@ -30,7 +30,7 @@ AlertColumnProps): React.Element<any> => (
 const AlertColumnHeader: Function = ({
   ...props
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-AlertColumnProps): React.Element<any> => (
+AlertColumnProps) => (
   <Th className="tiny" {...props}>
     <Icon icon="error" />
   </Th>

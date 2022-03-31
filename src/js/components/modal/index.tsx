@@ -83,7 +83,7 @@ export default class Modal extends Component {
    * @return {Header|null}
    */
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  getHeader(): React.Element<any> {
+  getHeader(): any {
     return (
       React.Children.toArray(this.props.children).filter(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'ReactChild... Remove this comment to see the full error message
@@ -105,7 +105,7 @@ export default class Modal extends Component {
    *
    * @param {HTMLElement} el
    */
-  refModal: Function = (el: Object): void => {
+  refModal: Function = (el: any): void => {
     this._modal = el;
 
     if (this._modal) {
@@ -115,7 +115,7 @@ export default class Modal extends Component {
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   calculateHeight: Function = (): number => {
-    const header: Object = document.querySelectorAll('.bp3-dialog-header')[0];
+    const header: any = document.querySelectorAll('.bp3-dialog-header')[0];
 
     if (header) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'offsetHeight' does not exist on type 'Ob... Remove this comment to see the full error message
@@ -151,7 +151,7 @@ export default class Modal extends Component {
    * @return {ReactElement}
    */
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     return (
       <div
         className={`bp3-dialog-container ${this.props.hasFooter ? 'has-footer' : ''}`}
@@ -176,15 +176,15 @@ export default class Modal extends Component {
             }}
           >
             {this.props.children}
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ left: true; onStop: Function; }' is missin... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ left: true; onStop: Function; }' is missin... Remove this comment to see the full error message */}
             <ResizeHandle left onStop={this.handleStop} />
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ right: true; onStop: Function; }' is missi... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ right: true; onStop: Function; }' is missi... Remove this comment to see the full error message */}
             <ResizeHandle right onStop={this.handleStop} />
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ bottom: true; onStop: Function; }' is miss... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ bottom: true; onStop: Function; }' is miss... Remove this comment to see the full error message */}
             <ResizeHandle bottom onStop={this.handleStop} />
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ left: true; bottom: true; onStop: Function... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ left: true; bottom: true; onStop: Function... Remove this comment to see the full error message */}
             <ResizeHandle left bottom onStop={this.handleStop} />
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ right: true; bottom: true; onStop: Functio... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ right: true; bottom: true; onStop: Functio... Remove this comment to see the full error message */}
             <ResizeHandle right bottom onStop={this.handleStop} />
           </div>
         </Draggable>

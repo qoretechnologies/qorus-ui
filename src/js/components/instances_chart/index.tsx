@@ -4,7 +4,7 @@ import ChartComponent from '../chart';
 
 type Props = {
   states: Array<Object>;
-  instances: Object;
+  instances: any;
   width: number | string;
 };
 
@@ -18,13 +18,13 @@ const InstancesChart: Function = ({ states, instances, width }: Props) => (
     unit=" "
     type="bar"
     // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-    labels={states.map((state: Object): string => state.name)}
+    labels={states.map((state: any): string => state.name)}
     datasets={[
       {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        data: states.map((state: Object): number => instances[state.name]),
+        data: states.map((state: any): number => instances[state.name]),
         // @ts-ignore ts-migrate(2339) FIXME: Property 'color' does not exist on type 'Object'.
-        backgroundColor: states.map((state: Object): string => state.color),
+        backgroundColor: states.map((state: any): string => state.color),
         fill: false,
       },
     ]}

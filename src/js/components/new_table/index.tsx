@@ -40,13 +40,13 @@ let Table: Function = ({
   info,
   width,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> =>
+Props) =>
   fixed ? (
     <Flex className="table-wrapper">
       {React.Children.map(
         children,
         // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-        (child: Object): React.Element<any> =>
+        (child: any) =>
           // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           React.cloneElement(child, {
             fixed,
@@ -84,7 +84,7 @@ Props): React.Element<any> =>
       {React.Children.map(
         children,
         // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-        (child: Object): React.Element<any> =>
+        (child: any) =>
           // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           React.cloneElement(child, { fixed })
       )}

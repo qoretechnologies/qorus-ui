@@ -3,14 +3,9 @@ import React from 'react';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
-// @ts-ignore ts-migrate(2307) FIXME: Cannot find module '../../../../../server_config' ... Remove this comment to see the full error message
-import { WEB_IDE_URL } from '../../../../../server_config';
+import { WEB_IDE_URL } from '../../../../server_config';
 import ConfirmDialog from '../../../components/confirm_dialog';
-import {
-  Control as Button,
-  Controls as ButtonGroup,
-  // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import withModal from '../../../hocomponents/modal';
 import actions from '../../../store/api/actions';
 import PingModal from './modals/ping';

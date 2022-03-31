@@ -28,7 +28,7 @@ const TreeView = ({
   onKeyEditClick,
   // @ts-ignore ts-migrate(2339) FIXME: Property 'withEdit' does not exist on type 'Object... Remove this comment to see the full error message
   withEdit,
-}: Object) => {
+}: any) => {
   if (!order) return <Loader />;
 
   const handleUpdateClick: Function = (obj: string): void => {

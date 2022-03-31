@@ -32,7 +32,7 @@ import AddClientModal from './modals/add';
 import ClientsPane from './pane';
 
 type ClientsViewProps = {
-  clients: Object | Array<Object>;
+  clients: any | Array<Object>;
   handleAddClientClick: Function;
   handleUpdateClientClick: Function;
   handleDeleteClientClick: Function;
@@ -48,7 +48,7 @@ const ClientsView: Function = ({
   openPane,
   paneId,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ClientsViewProps): React.Element<any> => (
+ClientsViewProps) => (
   <Flex>
     <Header />
     <Box top noPadding>
@@ -109,7 +109,7 @@ ClientsViewProps): React.Element<any> => (
                 <Tbody {...props}>
                   {collection.map(
                     // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                    (client: Object, index: number): React.Element<Tr> => (
+                    (client: any, index: number) => (
                       <Tr
                         key={index}
                         first={index === 0}
@@ -153,9 +153,9 @@ ClientsViewProps): React.Element<any> => (
                             />
                           </ButtonGroup>
                         </ActionColumn>
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message */}
                         <Td className="text">{client.client_secret}</Td>
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */}
                         <AuthorColumn>{client.username}</AuthorColumn>
                       </Tr>
                     )
@@ -172,7 +172,7 @@ ClientsViewProps): React.Element<any> => (
 
 export default compose(
   connect(
-    (state: Object): Object => ({
+    (state: any): any => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       meta: state.api.clients,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.

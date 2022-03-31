@@ -34,7 +34,7 @@ export default (
     };
 
     // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-    const WrappedComponent: Function = (props: Props): React.Element<any> => {
+    const WrappedComponent: Function = (props: Props) => {
       const length = isArray(props[collectionProp])
         ? props[collectionProp].length
         : Object.keys(props[collectionProp]).length;
@@ -53,7 +53,7 @@ export default (
 
     return compose(
       connect(
-        (state: Object) => ({
+        (state: any) => ({
           // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
           offset: resource ? state.api[resource].offset : null,
           // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.

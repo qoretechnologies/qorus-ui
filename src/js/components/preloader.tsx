@@ -1,9 +1,8 @@
 // @flow
 import React from 'react';
-import pure from 'recompose/pure';
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const Preloader: Function = (): React.Element<any> => (
+const Preloader: Function = () => (
   <div className="center-wrapper default-wrapper">
     <svg className="preloader" width="40" height="40" viewBox="0 0 40 40">
       <polygon points="0 0 0 40 40 40 40 0" className="preloader-rect" />
@@ -16,4 +15,4 @@ const Preloader: Function = (): React.Element<any> => (
   </div>
 );
 
-export default pure(Preloader);
+export default Preloader;

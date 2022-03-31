@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import { connect } from '../../../../../../../node_modules/react-redux';
-import mapProps from '../../../../../../../node_modules/recompose/mapProps';
 import Alert from '../../../../../components/alert';
 import Box from '../../../../../components/box';
 import Modal from '../../../../../components/modal';
@@ -24,7 +24,7 @@ type Props = {
   disposition: string;
   workflows: Array<Object>;
   totalOrderStats: number;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   orderStats: Array<Object>;
 };
@@ -53,7 +53,7 @@ const StatsModal: Function = ({
           noContainer
           rightElement={<Band band={band} onChange={handleBandChange} />}
         >
-          {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
           <Pane name="Local">
             <GlobalTable
               workflows={workflows}
@@ -63,7 +63,7 @@ const StatsModal: Function = ({
               local
             />
           </Pane>
-          {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
           <Pane name="Global">
             <GlobalTable
               workflows={workflows}
@@ -116,7 +116,7 @@ export default compose(
           order_stats &&
           order_stats.find(
             // @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
-            (stat: Object) => stat.label === band.replace(/ /g, '_')
+            (stat: any) => stat.label === band.replace(/ /g, '_')
           )
       ),
       orderStats,

@@ -85,7 +85,7 @@ export const DEFAULT_ACTIONS = {
   },
 };
 
-const actions = createApiActions(
+const actions: any = createApiActions(
   combineResourceActions(
     // @ts-ignore ts-migrate(2345) FIXME: Argument of type '{ FETCH: { action: (url: any) =>... Remove this comment to see the full error message
     createResourceActions(RESOURCES, DEFAULT_ACTIONS),

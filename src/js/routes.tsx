@@ -131,9 +131,9 @@ if (process.env.NODE_ENV === 'development') {
 
 class AppInfo extends React.Component {
   props: {
-    info: Object;
+    info: any;
     logout: Function;
-    routerProps: Object;
+    routerProps: any;
   } = this.props;
 
   componentDidMount() {
@@ -218,24 +218,24 @@ class AppInfo extends React.Component {
         <Router {...this.props.routerProps}>
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
             <IndexRedirect to="/dashboard" />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
             <Route path="/dashboard" component={System.Dashboard} />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Connections' does not exist on type 'Fun... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Connections' does not exist on type 'Fun... Remove this comment to see the full error message */}
             <Route path="/remote" component={System.Connections} />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Slas' does not exist on type 'Function'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Slas' does not exist on type 'Function'. */}
             <Route path="/slas" component={System.Slas} />
             <Route path="/sla/:id" component={Sla} />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Valuemaps' does not exist on type 'Funct... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Valuemaps' does not exist on type 'Funct... Remove this comment to see the full error message */}
             <Route path="/valuemaps" component={System.Valuemaps} />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Info' does not exist on type 'Function'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Info' does not exist on type 'Function'. */}
             <Route path="/info" component={System.Info} />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Logs' does not exist on type 'Function'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Logs' does not exist on type 'Function'. */}
             <Route path="/logs" component={System.Logs} />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'RBAC' does not exist on type 'Function'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'RBAC' does not exist on type 'Function'. */}
             <Route path="/rbac" component={System.RBAC} />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Errors' does not exist on type 'Function... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Errors' does not exist on type 'Function... Remove this comment to see the full error message */}
             <Route path="/errors" component={System.Errors} />
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Releases' does not exist on type 'Functi... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Releases' does not exist on type 'Functi... Remove this comment to see the full error message */}
             <Route path="/releases" component={System.Releases} />
             {hasPlugin('oauth2', plugins) ? (
               <Route path="/plugins/oauth2" component={OAuth2View} />
@@ -245,21 +245,21 @@ class AppInfo extends React.Component {
             ) : null}
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
               <Route path="alerts" component={System.Alerts} />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Options' does not exist on type 'Functio... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Options' does not exist on type 'Functio... Remove this comment to see the full error message */}
               <Route path="options" component={System.Options} />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Properties' does not exist on type 'Func... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Properties' does not exist on type 'Func... Remove this comment to see the full error message */}
               <Route path="props" component={System.Properties} />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'SqlCache' does not exist on type 'Functi... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'SqlCache' does not exist on type 'Functi... Remove this comment to see the full error message */}
               <Route path="sqlcache" component={System.SqlCache} />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'HttpServices' does not exist on type 'Fu... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'HttpServices' does not exist on type 'Fu... Remove this comment to see the full error message */}
               <Route path="http" component={System.HttpServices} />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'Cluster' does not exist on type 'Functio... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Cluster' does not exist on type 'Functio... Remove this comment to see the full error message */}
               <Route path="cluster" component={System.Cluster} />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'OrderStats' does not exist on type 'Func... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'OrderStats' does not exist on type 'Func... Remove this comment to see the full error message */}
               <Route path="orderStats" component={System.OrderStats} />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'ConfigItems' does not exist on type 'Fun... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'ConfigItems' does not exist on type 'Fun... Remove this comment to see the full error message */}
               <Route path="config-items" component={System.ConfigItems} />
               {/* <Route path="providers" component={System.Providers} /> */}
             </Route>

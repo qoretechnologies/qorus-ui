@@ -110,33 +110,31 @@ const optionsSelector = (state) => state.api.systemOptions;
     saveFavoriteItems: actions.currentUser.storeFavoriteMenuItem,
   }
 )
-@mapProps(
-  ({ currentUser, ...rest }): Object => ({
-    sidebarOpen: currentUser.sync && currentUser.data.storage.sidebarOpen,
-    currentUser,
-    ...rest,
-  })
-)
+@mapProps(({ currentUser, ...rest }): any => ({
+  sidebarOpen: currentUser.sync && currentUser.data.storage.sidebarOpen,
+  currentUser,
+  ...rest,
+}))
 export default class Root extends Component {
   props: {
     children: any;
-    info: Object;
+    info: any;
     fetchSystem: Function;
     saveDimensions: Function;
     fetchSystemOptions: Function;
     fetchCurrentUser: Function;
-    location: Object;
-    currentUser: Object;
-    health: Object;
+    location: any;
+    currentUser: any;
+    health: any;
     isTablet: boolean;
     sidebarOpen: boolean;
     storeSidebar: Function;
     fetchHealth: Function;
-    options: Object;
+    options: any;
     storeTheme: Function;
     sendSuccess: Function;
     sendWarning: Function;
-    menu: Object;
+    menu: any;
   } = this.props;
 
   state = {
@@ -231,7 +229,7 @@ export default class Root extends Component {
     }
   }
 
-  delayedResize: Function = debounce((data: Object): void => {
+  delayedResize: Function = debounce((data: any): void => {
     this.props.saveDimensions(data);
   }, 100);
 
@@ -372,7 +370,7 @@ export default class Root extends Component {
               <div className="root__center">
                 {!isMaximized && (
                   <ReqoreSidebar
-                    isDefaultCollapsed={!this.props.sidebarOpen}
+                    isCollapsed={!this.props.sidebarOpen}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message
                     path={this.props.location.pathname}
                     items={menuWithPlugins}
@@ -387,7 +385,7 @@ export default class Root extends Component {
                   <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
                 </Flex>
               </div>
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message */}
               {!isMaximized && <Footer path={this.props.location.pathname} info={info.data} />}
               <ModalManager />
               <Notifications />

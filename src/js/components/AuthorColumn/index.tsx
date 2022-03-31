@@ -16,7 +16,7 @@ const AuthorColumn: Function = compose(onlyUpdateForKeys(['children']))(
     children,
     className = 'text',
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  AuthorColumnProps): React.Element<any> => (
+  AuthorColumnProps) => (
     <Td className={className}>
       <Text text={children || '-'} />
     </Td>
@@ -41,7 +41,7 @@ const AuthorColumnHeader: Function = compose(
     intl,
     ...rest
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  AuthorColumnHeaderProps): React.Element<any> => (
+  AuthorColumnHeaderProps) => (
     <Th icon={icon} name={name} className="text" {...rest}>
       {children || intl.formatMessage({ id: 'table.author' })}
     </Th>

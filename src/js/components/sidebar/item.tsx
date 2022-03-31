@@ -17,7 +17,7 @@ import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
 
 type SidebarItemProps = {
-  itemData: Object;
+  itemData: any;
   isCollapsed: boolean;
   // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'isExpanded'.
   isExpanded: boolean;
@@ -27,7 +27,7 @@ type SidebarItemProps = {
   // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'isExpanded'.
   isExpanded: boolean;
   isActive: boolean;
-  location: Object;
+  location: any;
   tooltip: string;
   children: any;
   expandedSection: string;
@@ -44,7 +44,7 @@ const SidebarItemTooltip: Function = ({
   tooltip,
   children,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-SidebarItemProps): React.Element<any> =>
+SidebarItemProps) =>
   isCollapsed ? (
     <Tooltip content={tooltip} position={Position.RIGHT}>
       {children}
@@ -68,7 +68,7 @@ let SidebarItem: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'SidebarIte... Remove this comment to see the full error message
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-SidebarItemProps): React.Element<any> =>
+SidebarItemProps) =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'link' does not exist on type 'Object'.
   itemData.link ? (
     // @ts-ignore ts-migrate(2339) FIXME: Property 'link' does not exist on type 'Object'.
@@ -90,14 +90,14 @@ SidebarItemProps): React.Element<any> =>
           // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
           onMouseLeave={handleMouseLeave}
         >
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'icon' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'icon' does not exist on type 'Object'. */}
           <Icon icon={itemData.icon} />{' '}
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
           {!isCollapsed && intl.formatMessage({ id: itemData.name })}
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'isFavorite' does not exist on type 'Obje... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'isFavorite' does not exist on type 'Obje... Remove this comment to see the full error message */}
           {(isHovered || itemData.isFavorite) && !isCollapsed && (
             <ButtonGroup className="bp3-minimal sidebarFavorite">
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'isFavorite' does not exist on type 'Obje... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'isFavorite' does not exist on type 'Obje... Remove this comment to see the full error message */}
               {itemData.isFavorite ? (
                 <Tooltip content="Remove from favorites">
                   <Button btnStyle="success" icon="star" onClick={handleUnfavoriteClick} />
@@ -127,9 +127,9 @@ SidebarItemProps): React.Element<any> =>
         // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
         onClick={onExpandClick}
       >
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'icon' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'icon' does not exist on type 'Object'. */}
         <Icon icon={itemData.icon} />{' '}
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
         {!isCollapsed && intl.formatMessage({ id: itemData.name })}
         {onExpandClick && (
           <Icon icon={isExpanded ? 'caret-up' : 'caret-down'} className="submenuExpand" />
@@ -154,7 +154,7 @@ SidebarItem = compose(
       },
     handleFavoriteClick:
       ({ itemData, dispatchAction }): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'stopPropagation' does not exist on type ... Remove this comment to see the full error message
         event.stopPropagation();
 
@@ -167,7 +167,7 @@ SidebarItem = compose(
       },
     handleUnfavoriteClick:
       ({ itemData, dispatchAction }): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'stopPropagation' does not exist on type ... Remove this comment to see the full error message
         event.stopPropagation();
 
@@ -199,7 +199,7 @@ const SidebarItemWrapper: Function = ({
   location,
   favoriteItems,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-SidebarItemProps): React.Element<any> => (
+SidebarItemProps) => (
   <React.Fragment>
     <SidebarItem
       itemData={itemData}
@@ -212,7 +212,7 @@ SidebarItemProps): React.Element<any> => (
     />
     {isExpanded &&
       // @ts-ignore ts-migrate(2339) FIXME: Property 'submenu' does not exist on type 'Object'... Remove this comment to see the full error message
-      map(itemData.submenu, (subItemData: Object, key: number) => (
+      map(itemData.submenu, (subItemData: any, key: number) => (
         <SidebarItem
           itemData={subItemData}
           key={key}

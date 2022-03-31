@@ -11,9 +11,9 @@ const fetchEvents = createAction(
     limit: number,
     sortDir: boolean,
     sort: string,
-    searchData: Object
+    searchData: any
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     const url =
       `${settings.REST_BASE_URL}/slas/${id}?action=events&` +
       // @ts-ignore ts-migrate(2339) FIXME: Property 'minDate' does not exist on type 'Object'... Remove this comment to see the full error message
@@ -38,14 +38,12 @@ const fetchEvents = createAction(
   }
 );
 
-const changeOffset = createAction(
-  'SLAEVENTS_CHANGEOFFSET',
-  (newOffset: number): Object => ({ newOffset })
-);
-const changeServerSort = createAction(
-  'SLAEVENTS_CHANGESERVERSORT',
-  (sort: string): Object => ({ sort })
-);
+const changeOffset = createAction('SLAEVENTS_CHANGEOFFSET', (newOffset: number): any => ({
+  newOffset,
+}));
+const changeServerSort = createAction('SLAEVENTS_CHANGESERVERSORT', (sort: string): any => ({
+  sort,
+}));
 
 const unsync = createAction('SLAEVENTS_UNSYNC');
 

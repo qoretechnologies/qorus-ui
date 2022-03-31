@@ -24,10 +24,10 @@ import Sources from './methods';
 import Perf from './perf';
 
 type Props = {
-  location: Object;
-  params: Object;
+  location: any;
+  params: any;
   children: any;
-  sla: Object;
+  sla: any;
   data: Array<Object>;
   minDate: string;
   maxDate: string;
@@ -45,13 +45,13 @@ const SLADetail: Function = ({
   maxDate,
   tabQuery,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
         <Crumb link="/slas"> SLAs </Crumb>
         <Crumb>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
           {sla.name} <small>({sla.slaid})</small>
         </Crumb>
         <CrumbTabs tabs={['Events', 'Sources', 'Performance']} defaultTab="events" />
@@ -85,14 +85,11 @@ Props): React.Element<any> => (
   </Flex>
 );
 
-const viewSelector: Function = createSelector(
-  [resourceSelector('slas')],
-  (meta: Object): Object => ({
-    meta,
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    data: meta.data,
-  })
-);
+const viewSelector: Function = createSelector([resourceSelector('slas')], (meta: any): any => ({
+  meta,
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+  data: meta.data,
+}));
 
 export default compose(
   connect(viewSelector, {
@@ -107,7 +104,7 @@ export default compose(
   queryControl('maxDate'),
   mapProps(
     ({ params, data, minDateQuery, maxDateQuery, ...rest }: Props): Props => ({
-      // @ts-ignore ts-migrate(2322) FIXME: Type '{ location: Object; children: any; sla: Obje... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2322) FIXME: Type '{ location: any; children: any; sla: Obje... Remove this comment to see the full error message
       id: params.id,
       params,
       fetchParams: null,

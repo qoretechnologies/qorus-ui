@@ -20,7 +20,7 @@ export default handleActions(
     [ACTIONS.ADD]: (state: State, { payload: { events } }) => {
       const data: Array<Object> = [...state.data];
 
-      events.forEach((event: Object) => {
+      events.forEach((event: any) => {
         data.unshift(event);
       });
 
@@ -30,8 +30,8 @@ export default handleActions(
     },
     [ACTIONS.READ]: (state: State) => ({ ...state, ...{ read: true } }),
     [ACTIONS.DISMISS]: (state: State, { payload: { id } }) => {
-      const data: Array<Object> = [...state.data].map((datum: Object): Object => {
-        const newDatum: Object = { ...datum };
+      const data: Array<Object> = [...state.data].map((datum: any): any => {
+        const newDatum: any = { ...datum };
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'alert' does not exist on type 'Object'.
         if (datum.alert === id || id === 'all') {

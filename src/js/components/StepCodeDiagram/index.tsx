@@ -93,8 +93,8 @@ const DIAGRAM_MIN_COLUMNS = 1;
 @injectIntl
 export default class StepsTab extends Component {
   props: {
-    workflow: Object;
-    order: Object;
+    workflow: any;
+    order: any;
     onStepClick: Function;
     onSkipSubmit: Function;
     openModal: Function;
@@ -638,21 +638,21 @@ export default class StepsTab extends Component {
   };
 
   handleMoveChange: Function = () => {
-    this.setState((state: Object) => ({
+    this.setState((state: any) => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'useDrag' does not exist on type 'Object'... Remove this comment to see the full error message
       useDrag: !state.useDrag,
     }));
   };
 
   handleZoomIn: Function = () => {
-    this.setState((state: Object) => ({
+    this.setState((state: any) => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'diagramScale' does not exist on type 'Ob... Remove this comment to see the full error message
       diagramScale: state.diagramScale + 0.1,
     }));
   };
 
   handleZoomOut: Function = () => {
-    this.setState((state: Object) => ({
+    this.setState((state: any) => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'diagramScale' does not exist on type 'Ob... Remove this comment to see the full error message
       diagramScale: state.diagramScale - 0.1 < 0 ? 0 : state.diagramScale - 0.1,
     }));
@@ -1059,7 +1059,7 @@ export default class StepsTab extends Component {
       <Flex>
         <Headbar>
           <Breadcrumbs collapsed>
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
             <Crumb>{workflow.normalizedName}</Crumb>
           </Breadcrumbs>
           <Pull right>

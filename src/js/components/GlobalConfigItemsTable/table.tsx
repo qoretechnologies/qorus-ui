@@ -21,7 +21,7 @@ import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../new_table';
 import Pull from '../Pull';
 
 type ConfigItemsTableProps = {
-  items: Object;
+  items: any;
   dispatchAction: Function;
   // @ts-ignore ts-migrate(2300) FIXME: Duplicate identifier 'intrf'.
   intrf: string;
@@ -51,7 +51,7 @@ const ConfigItemsTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'ConfigItem... Remove this comment to see the full error message
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ConfigItemsTableProps): React.Element<any> => (
+ConfigItemsTableProps) => (
   <>
     {configItems.data && configItems.data.length ? (
       <EnhancedTable
@@ -122,11 +122,11 @@ ConfigItemsTableProps): React.Element<any> => (
             <DataOrEmptyTable condition={!collection || collection.length === 0} cols={4} small>
               {(props) => (
                 <Tbody {...props}>
-                  {collection.map((item: Object, index: number) => (
+                  {collection.map((item: any, index: number) => (
                     <React.Fragment>
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                       <Tr key={item.name} first={index === 0}>
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                         <NameColumn name={item.name} />
                         <ActionColumn>
                           <ButtonGroup>
@@ -172,11 +172,11 @@ ConfigItemsTableProps): React.Element<any> => (
                             item.level === 'global'
                           }`}
                         >
-                          {/* @ts-expect-error ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message */}
                           <Value item={item} />
                         </Td>
                         <Td className="narrow">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                           <code>{item.type}</code>
                         </Td>
                       </Tr>

@@ -11,7 +11,7 @@ import actions from '../../../store/api/actions';
 import TreeView from './tree';
 
 type Props = {
-  order: Object;
+  order: any;
   perms: Array<string>;
   isSecure: boolean;
   hasPerms: boolean;
@@ -40,7 +40,7 @@ const SensitiveView: Function = ({ order, isSecure, hasPerms, handleEditClick }:
 
 export default compose(
   connect(
-    (state: Object): Object => ({
+    (state: any): any => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       perms: state.api.currentUser.data.permissions,
     }),

@@ -18,10 +18,10 @@ type SidebarProps = {
   isCollapsed: boolean;
   isLight: boolean;
   toggleMenu: Function;
-  location: Object;
+  location: any;
   expandedSection: string;
   handleSectionToggle: Function;
-  menu: Object;
+  menu: any;
   favoriteItems: Array<Object>;
   plugins: Array<string>;
 };
@@ -39,7 +39,7 @@ const Sidebar: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'SidebarPro... Remove this comment to see the full error message
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-SidebarProps): React.Element<any> => (
+SidebarProps) => (
   <div
     className={classnames('sidebar', isLight ? 'light' : 'dark', {
       expanded: !isCollapsed,
@@ -59,7 +59,7 @@ SidebarProps): React.Element<any> => (
       ))}
     </Scroll>
     <div className="sidebarSection" id="menuCollapse">
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
       <div className="sidebarItem" onClick={toggleMenu}>
         <Icon icon={isCollapsed ? 'double-chevron-right' : 'double-chevron-left'} />{' '}
         {!isCollapsed && intl.formatMessage({ id: 'global.collapse' })}

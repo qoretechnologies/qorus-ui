@@ -12,13 +12,13 @@ type ScheduleTextProps = {
 const ScheduleText: Function = ({
   cron,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ScheduleTextProps): React.Element<any> => {
+ScheduleTextProps) => {
   let message: string = '';
   let isError = false;
 
   try {
     message = cronstrue.toString(cron);
-  } catch (e) {
+  } catch (e: any) {
     message = e;
     isError = true;
   }

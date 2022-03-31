@@ -1,26 +1,26 @@
-const initialState: Object = {
+const initialState: any = {
   data: [],
   loading: false,
   sync: false,
 };
 
-const unSync: Object = {
-  next(state: Object = initialState): Object {
+const unSync: any = {
+  next(state: any = initialState): any {
     return Object.assign({}, state, initialState);
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
-const createClient: Object = {
+const createClient: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { clientId, clientSecret, username, permissions, noop },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     if (noop) {
       return state;
     }
@@ -40,14 +40,14 @@ const createClient: Object = {
   },
 };
 
-const updateClient: Object = {
+const updateClient: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { clientId, clientSecret, permissions, noop },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     if (noop) {
       return state;
     }
@@ -62,14 +62,14 @@ const updateClient: Object = {
   },
 };
 
-const deleteClient: Object = {
+const deleteClient: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { clientId, noop },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     if (noop) {
       return state;
     }

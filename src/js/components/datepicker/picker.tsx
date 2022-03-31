@@ -35,7 +35,7 @@ export default class Picker extends Component {
     document.removeEventListener('click', this.handleOutsideClick);
   }
 
-  handleOutsideClick: Function = (event: Object): void => {
+  handleOutsideClick: Function = (event: any): void => {
     const el = ReactDOM.findDOMNode(this.refs.datepicker);
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
@@ -46,7 +46,7 @@ export default class Picker extends Component {
   };
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderControls(): React.Element<Controls> {
+  renderControls() {
     if (this.props.futureOnly) return undefined;
 
     return (
@@ -68,7 +68,7 @@ export default class Picker extends Component {
   }
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     return (
       <div className="datepicker" ref="datepicker">
         {this.props.children}

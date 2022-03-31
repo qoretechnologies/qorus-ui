@@ -38,7 +38,7 @@ export default class Editable extends Component {
     }
   }
 
-  handleFormSubmit: Function = (event: Object): void => {
+  handleFormSubmit: Function = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
     event.preventDefault();
 
@@ -72,7 +72,7 @@ export default class Editable extends Component {
     });
   };
 
-  handleInputChange: Function = (event: Object): void => {
+  handleInputChange: Function = (event: any): void => {
     this.setState({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
       value: event.target.value,
@@ -80,7 +80,7 @@ export default class Editable extends Component {
   };
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     const css: string = classNames('form-control', this.state.error ? 'form-error' : '');
 
     if (!this.state.editing) {

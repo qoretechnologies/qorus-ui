@@ -20,7 +20,7 @@ const Badge: Function = ({
   className,
   bypass,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   const renderValue: Function = () => (
     <span
       title={title}

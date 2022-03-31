@@ -18,7 +18,7 @@ const NDC: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <div className={`no-data-element ${big ? '' : 'no-data-small'}`}>
     <h5>{title || intl.formatMessage({ id: 'component.no-data' })}</h5>
     {big && <div>{content || intl.formatMessage({ id: 'component.there-are-no-data' })}</div>}
@@ -27,7 +27,7 @@ Props): React.Element<any> => (
 const NoDataContent = injectIntl(NDC);
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-const NoData: Function = ({ inBox, intl, ...rest }: Props): React.Element<any> =>
+const NoData: Function = ({ inBox, intl, ...rest }: Props) =>
   inBox ? (
     <Box {...rest}>
       <NoDataContent {...rest} />

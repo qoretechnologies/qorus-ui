@@ -9,11 +9,11 @@ import { processRESTResponse } from './resources/utils';
 
 export const updateItemWithId: Function = (
   id: string | number,
-  props: Object,
+  props: any,
   data: Array<Object>,
   idkey: string = 'id'
 ) =>
-  data.reduce((newData: Array<Object>, datum: Object): Array<Object> => {
+  data.reduce((newData: Array<Object>, datum: any): Array<Object> => {
     // eslint-disable-next-line
     if (datum[idkey] == id) {
       return [...newData, { ...datum, ...props }];
@@ -150,7 +150,7 @@ function checkResponse(res, currentPath, redirectOnError = true, notificationId)
  */
 export async function fetchData(method, url, opts, dontCheck, redirectOnError, yaml) {
   const currentPath = window.location.pathname;
-  const fetchOpts: Object = omit(opts, ['notificationId']);
+  const fetchOpts: any = omit(opts, ['notificationId']);
   // @ts-ignore ts-migrate(2339) FIXME: Property 'headers' does not exist on type 'Object'... Remove this comment to see the full error message
   const { headers } = fetchOpts;
 
@@ -245,7 +245,7 @@ export async function fetchWithNotifications(
       dispatch(warning(notificationBefore, notificationId));
     }
 
-    const res: Object = await fetchFunc();
+    const res: any = await fetchFunc();
 
     processRESTResponse(res, dispatch, notificationSuccess, notificationId);
 

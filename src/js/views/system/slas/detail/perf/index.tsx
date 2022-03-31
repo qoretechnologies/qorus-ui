@@ -11,7 +11,7 @@ import EventsToolbar from './toolbar';
 import PerfView from './view';
 
 type Props = {
-  location: Object;
+  location: any;
   minDateQuery: string;
   maxDateQuery: string;
   errQuery: string;
@@ -32,7 +32,7 @@ type Props = {
 };
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const SLAPerf: Function = ({ ...rest }: Props): React.Element<any> => (
+const SLAPerf: Function = ({ ...rest }: Props) => (
   <Flex>
     <EventsToolbar {...rest} />
     <PerfView {...rest} />
@@ -68,7 +68,7 @@ export default compose(
       ...rest
     }: Props): Props => ({
       defaultDate: moment().add(-1, 'weeks').format(DATE_FORMATS.URL_FORMAT),
-      // @ts-ignore ts-migrate(2322) FIXME: Type '{ location: Object; allQuery: string; change... Remove this comment to see the full error message
+      // @ts-ignore ts-migrate(2322) FIXME: Type '{ location: any; allQuery: string; change... Remove this comment to see the full error message
       searchData: {
         minDate:
           !minDateQuery || minDateQuery === ''

@@ -12,7 +12,7 @@ import titleManager from '../../../hocomponents/TitleManager';
 
 type Props = {
   onClose: Function;
-  processes: Object;
+  processes: any;
   paneId: string;
   process?: string;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -24,12 +24,12 @@ const ClusterPane: Function = ({
   urls,
   process,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Pane onClose={onClose} width={600} title="Node item detail">
     <Box top>
       {process ? (
         <PaneItem title={process}>
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <Tree data={urls} />
         </PaneItem>
       ) : (

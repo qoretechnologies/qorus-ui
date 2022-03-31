@@ -1,7 +1,6 @@
 /* @flow */
 import React from 'react';
 import compose from 'recompose/compose';
-import pure from 'recompose/pure';
 import { formatFieldSource } from '../../../helpers/mapper';
 import showIfPassed from '../../../hocomponents/show-if-passed';
 
@@ -16,7 +15,7 @@ const FieldDetail = ({
   fieldSource,
   onShowAll,
 }: // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   if (!fieldSource) return null;
 
   const { data, code } = formatFieldSource(fieldSource);
@@ -38,7 +37,7 @@ Props): React.Element<any> => {
       {data.length > 1 || (code !== '' && code !== '(') ? (
         <div>
           <div className="grad" />
-          {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
           <div className="field-detail__showall" onClick={handleShowAllClick}>
             <a> SHOW DETAILS </a>
           </div>
@@ -49,7 +48,6 @@ Props): React.Element<any> => {
 };
 
 export default compose(
-  pure,
   // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   showIfPassed(({ name }: { name: string }): boolean => !!name)
 )(FieldDetail);

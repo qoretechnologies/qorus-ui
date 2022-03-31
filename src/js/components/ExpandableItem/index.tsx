@@ -24,7 +24,7 @@ const ExpandableItem: Function = ({
   title,
   label,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<HTMLDivElement> => (
+Props) => (
   <div className="expandable-item">
     <div>
       <div

@@ -26,8 +26,8 @@ import Actions from './toolbar/actions';
 import Selector from './toolbar/selector';
 
 type Props = {
-  sortData: Object;
-  sortKeys: Object;
+  sortData: any;
+  sortKeys: any;
   onSortChange: Function;
   collection: Array<Object>;
   paneId?: number;
@@ -77,7 +77,7 @@ const JobsTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
@@ -103,7 +103,7 @@ Props): React.Element<any> => (
           </Pull>
         </Th>
         <Th className="separated-cell">
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <DatePicker date={dateQuery || '24h'} onApplyDate={changeDateQuery} />
         </Th>
       </FixedRow>
@@ -131,27 +131,25 @@ Props): React.Element<any> => (
     <DataOrEmptyTable condition={size(collection) === 0} cols={isTablet ? 7 : 8}>
       {(props) => (
         <Tbody {...props}>
-          {/* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
-          {collection.map(
-            (job: Object, index: number): React.Element<Row> => (
-              <Row
-                first={index === 0}
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                key={`job_${job.id}`}
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                isActive={job.id === parseInt(paneId, 10)}
-                openPane={openPane}
-                closePane={closePane}
-                date={date}
-                select={select}
-                updateDone={updateDone}
-                PROGRESS={job['IN-PROGRESS']}
-                isTablet={isTablet}
-                onExpiryChange={handleExpiryChange}
-                {...job}
-              />
-            )
-          )}
+          {/* @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
+          {collection.map((job: any, index: number) => (
+            <Row
+              first={index === 0}
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+              key={`job_${job.id}`}
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+              isActive={job.id === parseInt(paneId, 10)}
+              openPane={openPane}
+              closePane={closePane}
+              date={date}
+              select={select}
+              updateDone={updateDone}
+              PROGRESS={job['IN-PROGRESS']}
+              isTablet={isTablet}
+              onExpiryChange={handleExpiryChange}
+              {...job}
+            />
+          ))}
         </Tbody>
       )}
     </DataOrEmptyTable>
@@ -169,7 +167,7 @@ export default compose(
   withHandlers({
     handleExpiryChange:
       ({ dispatchAction }: Props): Function =>
-      (date: Object, id: number, onClose: Function): void => {
+      (date: any, id: number, onClose: Function): void => {
         const formatedDate: string = moment(date, DATE_FORMATS.PROP).format(DATE_FORMATS.PROP);
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.

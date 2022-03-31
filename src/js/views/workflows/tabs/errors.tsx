@@ -5,19 +5,19 @@ import Tabs, { Pane } from '../../../components/tabs';
 import ErrorsContainer from '../../../containers/errors';
 
 type Props = {
-  workflow: Object;
-  location: Object;
+  workflow: any;
+  location: any;
 };
 
 const ErrorsTab: Function = ({
   workflow,
   location,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <Tabs active="workflow">
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
       <Pane name="Workflow">
         <ErrorsContainer
           type="workflow"
@@ -27,7 +27,7 @@ Props): React.Element<any> => (
           location={location}
         />
       </Pane>
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
       <Pane name="Global">
         <ErrorsContainer type="global" compact location={location} />
       </Pane>

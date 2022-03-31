@@ -1,9 +1,9 @@
 // @flow
+import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
 import React, { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ControlGroup, InputGroup } from '../../../../../../../node_modules/@blueprintjs/core';
 import { Control as Button, Controls } from '../../../../../components/controls';
 import Datepicker from '../../../../../components/datepicker';
 import Dropdown, { Control as DropdownToggle, Item } from '../../../../../components/dropdown';
@@ -76,14 +76,14 @@ export default class SearchToolbar extends Component {
     }
   }
 
-  componentDidUpdate(prevProps: Object, prevState: Object) {
+  componentDidUpdate(prevProps: any, prevState: any) {
     if (prevState !== this.state) {
       this._delayedSearch(this.state);
     }
   }
 
-  _delayedSearch: Function = debounce((data: Object) => {
-    const dt: Object = {
+  _delayedSearch: Function = debounce((data: any) => {
+    const dt: any = {
       ...data,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'success' does not exist on type 'Object'... Remove this comment to see the full error message
       ...{ success: transformSuccess(data.success) },
@@ -150,17 +150,17 @@ export default class SearchToolbar extends Component {
       <Toolbar mb>
         <div className="pull-left">
           <ControlGroup>
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <Dropdown>
-              {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; }' is missing the foll... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string[]; }' is missing the foll... Remove this comment to see the full error message */}
               <DropdownToggle>Grouping: {this.state.grouping}</DropdownToggle>
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="hourly" action={this.handleGroupingChange} />
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="daily" action={this.handleGroupingChange} />
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="monthly" action={this.handleGroupingChange} />
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="yearly" action={this.handleGroupingChange} />
             </Dropdown>
             <InputGroup
@@ -204,15 +204,15 @@ export default class SearchToolbar extends Component {
               noButtons
               id="maxdate"
             />
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <Dropdown>
-              {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; }' is missing the foll... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string[]; }' is missing the foll... Remove this comment to see the full error message */}
               <DropdownToggle>Success: {this.state.success}</DropdownToggle>
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="All" action={this.handleSuccessChange} />
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="Yes" action={this.handleSuccessChange} />
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Item title="No" action={this.handleSuccessChange} />
             </Dropdown>
           </ControlGroup>

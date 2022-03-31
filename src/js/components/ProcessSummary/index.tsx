@@ -5,18 +5,14 @@ import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import {
-  Control as Button,
-  Controls as ButtonGroup,
-  // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../components/controls';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import withProcessKill from '../../hocomponents/withProcessKill';
 import Alert from '../alert';
 import NoData from '../nodata';
 import PaneItem from '../pane_item';
 
 type Props = {
-  model: Object;
+  model: any;
   handleKillClick: Function;
 };
 
@@ -49,7 +45,7 @@ const ProcessSummary: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Props'.
   type,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<PaneItem> => {
+Props) => {
   const processKey = type === 'service' ? processes : prcs;
   const processData = processKey ? (isArray(processKey) ? processKey : [processKey]) : null;
 
@@ -78,7 +74,7 @@ Props): React.Element<PaneItem> => {
                     <FormattedMessage id="cluster.memory" />: {p.priv_str}
                   </Tag>{' '}
                 </div>
-                {/* @ts-expect-error ts-migrate(2322) FIXME: Type '"right "' is not assignable to type 'Float'. */}
+                {/* @ts-ignore ts-migrate(2322) FIXME: Type '"right "' is not assignable to type 'Float'. */}
                 <div style={{ float: 'right ' }}>
                   <ButtonGroup>
                     <Button

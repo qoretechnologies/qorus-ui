@@ -6,7 +6,7 @@ import { fetchJson, fetchWithNotifications } from '../../utils';
 const fetchValues = createAction(
   'VALUEMAPS_FETCHVALUES',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  async (id: number): Object => {
+  async (id: number): any => {
     // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
     const values = await fetchJson('GET', `${settings.REST_BASE_URL}/valuemaps/${id}/values`);
 
@@ -17,7 +17,7 @@ const fetchValues = createAction(
 const getDump = createAction(
   'VALUEMAPS_GETDUMP',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  async (id: number): Object => {
+  async (id: number): any => {
     // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
     const dump = await fetchJson('GET', `${settings.REST_BASE_URL}/valuemaps/${id}?action=dump`);
 
@@ -36,7 +36,7 @@ const updateValue = createAction(
     enabled: boolean,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     fetchWithNotifications(
       async () =>
         // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
@@ -64,7 +64,7 @@ const updateValue = createAction(
 
 const deleteValue = createAction(
   'VALUEMAPS_DELETEVALUE',
-  (id: number, key: string, dispatch: Function): Object => {
+  (id: number, key: string, dispatch: Function): any => {
     fetchWithNotifications(
       async () =>
         // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
@@ -88,7 +88,7 @@ const deleteValue = createAction(
 
 const addValue = createAction(
   'VALUEMAPS_ADDVALUE',
-  (id: number, key: string, value: string, enabled: boolean, dispatch: Function): Object => {
+  (id: number, key: string, value: string, enabled: boolean, dispatch: Function): any => {
     fetchWithNotifications(
       async () =>
         // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.

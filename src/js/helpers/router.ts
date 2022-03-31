@@ -1,4 +1,4 @@
-const changeQuery = (router: Object, location: Object, change: Object, merge: boolean = true) => {
+const changeQuery = (router: any, location: any, change: any, merge: boolean = true) => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message
   const { pathname, query } = location;
   let newQuery = merge ? Object.assign(query, change) : change;
@@ -17,7 +17,7 @@ const changeQuery = (router: Object, location: Object, change: Object, merge: bo
 
 const buildPageLinkWithQueries: Function =
   (queryIdentifier: string, tabId: string): Function =>
-  (location: Object): Object => {
+  (location: any): any => {
     if (queryIdentifier === 'tab') {
       return {
         ...location,
@@ -38,7 +38,7 @@ const buildPageLinkWithQueries: Function =
   };
 
 const isActive = (to, location) => location.startsWith(to);
-const isActiveMulti: Function = (to: Array<string>, location: Object) => {
+const isActiveMulti: Function = (to: Array<string>, location: any) => {
   let active: boolean = false;
 
   to.forEach((path: string) => {

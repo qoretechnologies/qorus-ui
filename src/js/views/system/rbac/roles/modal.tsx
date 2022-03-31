@@ -21,14 +21,14 @@ import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const usersSelector: Function = (state: Object): Object => state.api.users;
-const permissionsSelector: Function = (state: Object): Object =>
+const usersSelector: Function = (state: any): any => state.api.users;
+const permissionsSelector: Function = (state: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.perms;
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const groupsSelector: Function = (state: Object): Object => state.api.groups;
+const groupsSelector: Function = (state: any): any => state.api.groups;
 // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const roleNameSelector: Function = (state: Object, props: Object): string => {
+const roleNameSelector: Function = (state: any, props: any): string => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
   if (!props.model) return null;
 
@@ -91,7 +91,7 @@ export default class AddRoleModal extends Component {
     roles?: Array<Object>;
     onClose: Function;
     onSave: Function;
-    model?: Object;
+    model?: any;
     usersModel?: Array<Object>;
     title: string;
   } = this.props;
@@ -229,7 +229,7 @@ export default class AddRoleModal extends Component {
                   // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type '{ p... Remove this comment to see the full error message
                   selected={model ? this.state.permissions : null}
                 >
-                  {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
+                  {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
                   <DropControl> Select permissions </DropControl>
                   {this.renderPerms()}
                 </Dropdown>
@@ -248,7 +248,7 @@ export default class AddRoleModal extends Component {
                   onSelect={this.handleGroupsSelect}
                   selected={model ? this.state.groups : null}
                 >
-                  {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
+                  {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
                   <DropControl> Select groups </DropControl>
                   {this.renderGroups()}
                 </Dropdown>

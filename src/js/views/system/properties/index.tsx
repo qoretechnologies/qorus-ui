@@ -24,10 +24,10 @@ import Modal from './modal';
 import Prop from './prop';
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const dataSelector: Function = (state: Object): Object => state.api.props;
+const dataSelector: Function = (state: any): any => state.api.props;
 const filterProperties: Function =
   (query: string): Function =>
-  (collection: Object): Object => {
+  (collection: any): any => {
     if (!query) return collection;
 
     return Object.keys(collection).reduce((n, k) => {
@@ -53,13 +53,13 @@ const filterProperties: Function =
 
 const formatData =
   (): Function =>
-  (collection: Object): Object =>
-    Object.keys(collection).reduce((result: Object, key: string): Object => {
+  (collection: any): any =>
+    Object.keys(collection).reduce((result: any, key: string): any => {
       const coll = collection[key];
-      const newCollection: Array<Object> = map(
-        coll,
-        (propData, propKey): Object => ({ name: propKey, prop: propData })
-      );
+      const newCollection: Array<Object> = map(coll, (propData, propKey): any => ({
+        name: propKey,
+        prop: propData,
+      }));
 
       return { ...result, ...{ [key]: newCollection } };
     }, {});
@@ -93,8 +93,8 @@ const viewSelector = createSelector(
 @queryControl('search')
 export default class PropertiesView extends Component {
   props: {
-    collection: Object;
-    user: Object;
+    collection: any;
+    user: any;
     openModal: Function;
     closeModal: Function;
     optimisicDispatch: Function;
@@ -103,7 +103,7 @@ export default class PropertiesView extends Component {
   } = this.props;
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-  handleAddClick = (event: EventHandler, data: Object) => {
+  handleAddClick = (event: EventHandler, data: any) => {
     const onSubmit = data ? this.handleEditFormSubmit : this.handleAddFormSubmit;
     const collection = omit(this.props.collection, 'omq');
 
@@ -118,17 +118,17 @@ export default class PropertiesView extends Component {
     );
   };
 
-  handleAddFormSubmit = (data: Object) => {
+  handleAddFormSubmit = (data: any) => {
     // @ts-ignore ts-migrate(2551) FIXME: Property 'optimisticDispatch' does not exist on ty... Remove this comment to see the full error message
     this.props.optimisticDispatch(actions.props.manageProp, data);
   };
 
-  handleEditFormSubmit = (data: Object) => {
+  handleEditFormSubmit = (data: any) => {
     // @ts-ignore ts-migrate(2551) FIXME: Property 'optimisticDispatch' does not exist on ty... Remove this comment to see the full error message
     this.props.optimisticDispatch(actions.props.manageProp, data);
   };
 
-  handleDeleteClick = (prop: Object) => {
+  handleDeleteClick = (prop: any) => {
     // @ts-ignore ts-migrate(2551) FIXME: Property 'optimisticDispatch' does not exist on ty... Remove this comment to see the full error message
     this.props.optimisticDispatch(actions.props.removeProp, prop);
   };
@@ -169,7 +169,7 @@ export default class PropertiesView extends Component {
         <NoDataIf condition={size(collection) === 0} big inBox>
           {() => (
             <Box top scrollY>
-              {map(collection, (data: Object, name: string) => (
+              {map(collection, (data: any, name: string) => (
                 <Prop
                   data={data}
                   title={name}

@@ -20,7 +20,7 @@ import HistoryModal from './modals/history';
 import Orders from './orders';
 
 type Props = {
-  location: Object;
+  location: any;
   tabQuery: string;
   handleTabChange: Function;
   onSaveClick: Function;
@@ -34,7 +34,7 @@ const Search: Function = ({
   onSaveClick,
   onHistoryClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -65,7 +65,7 @@ export default compose(
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   withTabs('orders'),
   connect(
-    (state: Object) => ({
+    (state: any) => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       username: state.api.currentUser.data.username,
     }),

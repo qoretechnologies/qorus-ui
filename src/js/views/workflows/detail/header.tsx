@@ -24,7 +24,7 @@ type Props = {
   handleAlertClick: Function;
   searchQuery?: string;
   tab: string;
-  workflow: Object;
+  workflow: any;
 };
 
 const WorkflowHeader: Function = ({
@@ -34,14 +34,14 @@ const WorkflowHeader: Function = ({
   tab,
   handleAlertClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Headbar>
     <Breadcrumbs>
       <Crumb link="/workflows">
         {' '}
         <FormattedMessage id="Workflows" />{' '}
       </Crumb>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
       <Crumb>{workflow.normalizedName}</Crumb>
       <CrumbTabs
         tabs={[
@@ -75,7 +75,7 @@ Props): React.Element<any> => (
       />
     </Breadcrumbs>
     <Pull right>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'hasAlerts' does not exist on type 'Objec... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'hasAlerts' does not exist on type 'Objec... Remove this comment to see the full error message */}
       {workflow.hasAlerts && (
         <ButtonGroup>
           <Button
@@ -85,7 +85,7 @@ Props): React.Element<any> => (
             onClick={handleAlertClick}
             title="This workflow has alerts raised against it which may prevent it from working properly"
           >
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */}
             {workflow.alerts.length}
           </Button>
         </ButtonGroup>

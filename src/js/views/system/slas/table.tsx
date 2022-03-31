@@ -15,7 +15,7 @@ import SLARow from './row';
 
 type Props = {
   collection: Array<Object>;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   openModal: Function;
   closeModal: Function;
@@ -32,7 +32,7 @@ const SLATable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table striped condensed fixed>
     <Thead>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
@@ -50,7 +50,7 @@ Props): React.Element<any> => (
         <Tbody {...props}>
           {collection.map(
             // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (sla: Object, idx: number): React.Element<any> => (
+            (sla: any, idx: number) => (
               <SLARow
                 first={idx === 0}
                 perms={perms}

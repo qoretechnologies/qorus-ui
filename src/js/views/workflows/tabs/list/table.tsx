@@ -29,7 +29,7 @@ import Filters from './toolbar/filters';
 import Selector from './toolbar/selector';
 
 type Props = {
-  sortData: Object;
+  sortData: any;
   sort: Function;
   handleHeaderClick: Function;
   onSortChange: Function;
@@ -43,12 +43,12 @@ type Props = {
   isTablet: boolean;
   searchPage?: boolean;
   onCSVClick: Function;
-  workflow: Object;
+  workflow: any;
   selected: string;
   selectedIds: Array<number>;
   dateQuery: string;
   changeDateQuery: Function;
-  location: Object;
+  location: any;
   limit: number;
   children?: any;
 };
@@ -78,7 +78,7 @@ const WorkflowTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table striped condensed fixed hover>
     <Thead>
       {children && (
@@ -181,7 +181,7 @@ Props): React.Element<any> => (
         <Tbody {...props}>
           {collection.map(
             // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (order: Object, index: number): React.Element<Row> => (
+            (order: any, index: number) => (
               <Row
                 first={index === 0}
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.

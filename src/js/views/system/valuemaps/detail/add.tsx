@@ -27,7 +27,7 @@ const AddValue: Function = ({
   enabled,
   onFormSubmit,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
   <form className="form-inline new-value" onSubmit={onFormSubmit}>
     <ControlGroup>

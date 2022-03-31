@@ -21,7 +21,7 @@ type ValueMapsRowProps = {
   dump?: Function;
   remove?: Function;
   isActive?: boolean;
-  data: Object;
+  data: any;
   compact: boolean;
 };
 
@@ -78,7 +78,7 @@ class ValueMapsRow extends Component {
     const { first, isActive, compact, data } = this.props;
     return (
       <Tr first={first} className={isActive ? 'row-active' : ''}>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'. */}
         <IdColumn>{data.id}</IdColumn>
         <NameColumn
           isActive={isActive}
@@ -93,7 +93,7 @@ class ValueMapsRow extends Component {
           <Td className="narrow">
             <ButtonGroup>
               <Button icon="download" onClick={this.handleDumpClick} />
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'dump' does not exist on type 'Object'. */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'dump' does not exist on type 'Object'. */}
               {data.dump && (
                 <a
                   ref="download"
@@ -110,23 +110,23 @@ class ValueMapsRow extends Component {
             </ButtonGroup>
           </Td>
         )}
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mapsize' does not exist on type 'Object'... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'mapsize' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <Td className="medium">{data.mapsize}</Td>
         <Td className="medium">
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'throws_exception' does not exist on type... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'throws_exception' does not exist on type... Remove this comment to see the full error message */}
           <ContentByType content={data.throws_exception} />
         </Td>
         <Td className="medium">
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'valuetype' does not exist on type 'Objec... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'valuetype' does not exist on type 'Objec... Remove this comment to see the full error message */}
           <code>{data.valuetype}</code>
         </Td>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'author' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'author' does not exist on type 'Object'. */}
         {!compact && <AuthorColumn>{data.author}</AuthorColumn>}
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */}
         {!compact && <DateColumn>{data.created}</DateColumn>}
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'modified' does not exist on type 'Object... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'modified' does not exist on type 'Object... Remove this comment to see the full error message */}
         {!compact && <DateColumn>{data.modified}</DateColumn>}
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
         {!compact && <DescriptionColumn>{data.description}</DescriptionColumn>}
       </Tr>
     );

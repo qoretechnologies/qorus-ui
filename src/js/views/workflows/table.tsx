@@ -27,9 +27,9 @@ import Filters from './toolbar/filters';
 import Selector from './toolbar/selector';
 
 type Props = {
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
-  states: Object;
+  states: any;
   deprecated?: boolean;
   collection: Array<Object>;
   paneId?: number;
@@ -41,7 +41,7 @@ type Props = {
   expanded: boolean;
   canLoadMore: boolean;
   isTablet: boolean;
-  totalInstances: Object;
+  totalInstances: any;
   setRemote: Function;
   openModal: Function;
   closeModal: Function;
@@ -53,13 +53,13 @@ type Props = {
   handleDispositionChange: Function;
   selected: string;
   selectedIds: Array<number>;
-  location: Object;
+  location: any;
   handleLoadMore: Function;
   handleLoadAll: Function;
   loadMoreCurrent: number;
   loadMoreTotal: number;
   limit: number;
-  sortKeysObj: Object;
+  sortKeysObj: any;
   band: string;
 };
 
@@ -96,7 +96,7 @@ const WorkflowsTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table striped hover condensed fixed>
     <Thead>
       <FixedRow className="toolbar-row">
@@ -170,7 +170,7 @@ Props): React.Element<any> => (
         <Tbody {...props}>
           {collection.map(
             // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (workflow: Object, index: number): React.Element<Row> => (
+            (workflow: any, index: number) => (
               <Row
                 first={index === 0}
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.

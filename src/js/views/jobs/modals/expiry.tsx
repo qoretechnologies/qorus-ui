@@ -23,7 +23,7 @@ const Schedule: Function = ({
   onClose,
   handleExpiryChange,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Modal>
     <Modal.Header onClose={onClose} titleId="reschedule-modal">
       Set expiration date for a job
@@ -45,8 +45,8 @@ export default compose(
   withHandlers({
     // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
     handleExpiryChange:
-      ({ dispatchAction }: Props): Function =>
-      (date: Object, id: number, onClose: Function): void => {
+      ({ dispatchAction }: any): Function =>
+      (date: any, id: number, onClose: Function): void => {
         const formatedDate: string = moment(date, DATE_FORMATS.PROP).format(DATE_FORMATS.PROP);
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.

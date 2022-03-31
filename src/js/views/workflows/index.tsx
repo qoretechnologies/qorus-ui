@@ -85,15 +85,15 @@ const filterDeprecated: Function =
       : // @ts-ignore ts-migrate(2339) FIXME: Property 'deprecated' does not exist on type 'Obje... Remove this comment to see the full error message
         workflows.filter((w) => !w.deprecated);
 
-const systemOptionsSelector: Function = (state: Object): Array<Object> =>
+const systemOptionsSelector: Function = (state: any): Array<Object> =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-  state.api.systemOptions.data.filter((opt: Object): boolean => opt.workflow);
+  state.api.systemOptions.data.filter((opt: any): boolean => opt.workflow);
 
 const groupStatuses: Function =
   (isTablet: boolean): Function =>
   (workflows: Array<Object>): Array<Object> =>
-    workflows.map((workflow: Object): Object => {
-      const newWf: Object = { ...workflow };
+    workflows.map((workflow: any): any => {
+      const newWf: any = { ...workflow };
       const obj = isTablet ? ORDER_GROUPS_COMPACT : ORDER_GROUPS;
 
       Object.keys(obj).forEach((group: string): void => {
@@ -108,14 +108,14 @@ const groupStatuses: Function =
 
 const countInstances: Function =
   (isTablet: boolean): Function =>
-  (workflows: Array<Object>): Object => {
-    const count: Object = { total: 0 };
+  (workflows: Array<Object>): any => {
+    const count: any = { total: 0 };
     const addCount: Function = (group, addPrefix) => {
       const grp = addPrefix ? `GROUPED_${group}` : group;
 
       if (!count[grp]) count[grp] = 0;
 
-      workflows.forEach((workflow: Object): void => {
+      workflows.forEach((workflow: any): void => {
         count[grp] += workflow[grp];
       });
 
@@ -131,7 +131,7 @@ const countInstances: Function =
       Object.keys(ORDER_GROUPS).forEach((group) => addCount(group, true));
     }
 
-    ORDER_STATES.forEach((state: Object): void => {
+    ORDER_STATES.forEach((state: any): void => {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       addCount(state.name);
     });
@@ -143,7 +143,7 @@ const countInstances: Function =
   };
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-const settingsSelector = (state: Object): Object => state.ui.settings;
+const settingsSelector = (state: any): any => state.ui.settings;
 
 const collectionSelector: Function = createSelector(
   [
@@ -191,7 +191,7 @@ const viewSelector = createSelector(
     date,
     settings,
     totalInstances
-  ): Object => ({
+  ): any => ({
     meta: workflows,
     user,
     workflows: collection,
@@ -207,7 +207,7 @@ const viewSelector = createSelector(
 type Props = {
   workflows: Array<Object>;
   systemOptions: Array<Object>;
-  location: Object;
+  location: any;
   selected: string;
   onCSVClick: Function;
   paneId: string | number;
@@ -221,7 +221,7 @@ type Props = {
   expanded: boolean;
   handleExpandClick: Function;
   toggleExpand: Function;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   canLoadMore: boolean;
   handleLoadMore: Function;
@@ -230,15 +230,15 @@ type Props = {
   loadMoreTotal: number;
   limit: number;
   isTablet: boolean;
-  groupedStates: Object;
+  groupedStates: any;
   infoTotalCount: number;
   infoEnabled: number;
   infoWithAlerts: number;
-  totalInstances: Object;
-  user: Object;
+  totalInstances: any;
+  user: any;
   searchQuery: string;
   changeSearchQuery: Function;
-  sortKeysObj: Object;
+  sortKeysObj: any;
   band: string;
   changeDispositionQuery: Function;
 };
@@ -271,7 +271,7 @@ const Workflows: Function = ({
   band,
   changeDispositionQuery,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -333,23 +333,19 @@ export default compose(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
     unselectAll: actions.workflows.unselectAll,
   }),
-  mapProps(
-    ({ date, isTablet, user, ...rest }: Props): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-      isTablet: isTablet || user.data.storage.sidebarOpen,
-      date: date || DATES.PREV_DAY,
-      user,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ date, deprecated, ...rest }: Props): Object => ({
-      fetchParams: { deprecated, date: formatDate(date).format() },
-      date,
-      deprecated,
-      ...rest,
-    })
-  ),
+  mapProps(({ date, isTablet, user, ...rest }: Props): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    isTablet: isTablet || user.data.storage.sidebarOpen,
+    date: date || DATES.PREV_DAY,
+    user,
+    ...rest,
+  })),
+  mapProps(({ date, deprecated, ...rest }: Props): any => ({
+    fetchParams: { deprecated, date: formatDate(date).format() },
+    date,
+    deprecated,
+    ...rest,
+  })),
   patch('load', ['fetchParams']),
   sync('meta'),
   withInfoBar('workflows'),
@@ -369,7 +365,7 @@ export default compose(
   withHandlers({
     // @ts-ignore ts-migrate(2339) FIXME: Property 'onToggleExpand' does not exist on type '... Remove this comment to see the full error message
     handleExpandClick:
-      ({ onToggleExpand }: Object): Function =>
+      ({ onToggleExpand }: any): Function =>
       (): void => {
         onToggleExpand();
       },

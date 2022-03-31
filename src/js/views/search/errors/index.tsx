@@ -15,9 +15,9 @@ import ErrorsTable from './table';
 import SearchToolbar from './toolbar';
 
 type Props = {
-  location: Object;
+  location: any;
   mindateQuery: string;
-  searchData: Object;
+  searchData: any;
   changeMindateQuery: Function;
   maxdateQuery: string;
   changeMaxdateQuery: Function;
@@ -49,7 +49,7 @@ const SearchView: Function = ({
   searchData,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ErrorsTable location={location} linkDate={mindateQuery} searchData={searchData} searchPage>
     <SearchToolbar mindateQuery={mindateQuery} {...rest} />
   </ErrorsTable>
@@ -57,7 +57,7 @@ Props): React.Element<any> => (
 
 export default compose(
   connect(
-    (state: Object) => ({
+    (state: any) => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       meta: state.api.workflows,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.

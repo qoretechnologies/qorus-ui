@@ -5,11 +5,11 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 
 type Props = {
-  links: Object;
+  links: any;
 };
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const CollapsedCrumb: Function = ({ links }: Props): React.Element<any> => (
+const CollapsedCrumb: Function = ({ links }: Props) => (
   <li>
     <Popover
       position={Position.BOTTOM_LEFT}

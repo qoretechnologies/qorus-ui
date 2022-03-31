@@ -18,8 +18,8 @@ import Lock from '../workflows/tabs/list/lock';
 @queryControl('prevQuery')
 export default class OrderHeader extends Component {
   props: {
-    data: Object;
-    workflow: Object;
+    data: any;
+    workflow: any;
     username: string;
     linkDate: string;
     targetQuery: string;
@@ -51,7 +51,7 @@ export default class OrderHeader extends Component {
     const workflowName: string = normalizeName(this.props.workflow);
     const label = ALL_ORDER_STATES.find(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-      (state: Object): boolean => state.name === this.props.data.workflowstatus
+      (state: any): boolean => state.name === this.props.data.workflowstatus
     ).label;
 
     return (
@@ -59,10 +59,10 @@ export default class OrderHeader extends Component {
         <Breadcrumbs>
           <CollapsedCrumb links={{ Workflows: '/workflows' }} />
           <Crumb link={backQueriesStr}>
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'. */}
             {workflowName} <strong>#{this.props.data.id}</strong>{' '}
             <span className={`label status-${label}`}>
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'workflowstatus' does not exist on type '... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'workflowstatus' does not exist on type '... Remove this comment to see the full error message */}
               {this.props.data.workflowstatus}
             </span>
           </Crumb>

@@ -1,10 +1,7 @@
 // @flow
 import { CONN_MAP } from '../constants/remotes';
 
-const buildRemoteHash: Function = (
-  remoteType: string,
-  data: Object
-): Object => ({
+const buildRemoteHash: Function = (remoteType: string, data: any): any => ({
   ...{
     conntype: CONN_MAP[remoteType],
     alerts: [],

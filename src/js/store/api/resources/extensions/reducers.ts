@@ -1,5 +1,5 @@
 const unsync = {
-  next(): Object {
+  next(): any {
     return {
       data: [],
       sync: false,
@@ -8,6 +8,4 @@ const unsync = {
   },
 };
 
-export {
-  unsync as UNSYNC,
-};
+export { unsync as UNSYNC };

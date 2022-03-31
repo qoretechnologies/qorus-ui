@@ -10,7 +10,7 @@ type Props = {
 };
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const PermControl: Function = ({ perms, reqPerms, ...other }: Props): React.Element<any> => (
+const PermControl: Function = ({ perms, reqPerms, ...other }: Props) => (
   <ConditionButton condition={() => hasPermission(perms, reqPerms, 'or')} {...other} />
 );
 

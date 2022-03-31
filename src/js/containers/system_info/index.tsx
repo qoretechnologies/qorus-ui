@@ -1,7 +1,7 @@
 /* @flow */
 import React from 'react';
 
-const SystemInfo = ({ info }: { info: Object }) => (
+const SystemInfo = ({ info }: { info: any }) => (
   <div className="login-footer">
     <span>
       <strong>Schema information:</strong> {info['omq-schema']}

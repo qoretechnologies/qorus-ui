@@ -430,9 +430,9 @@ const FSMView: React.FC<IFSMViewProps> = ({
   );
 };
 
-const fsmSelector: Function = (state: Object, props: Object): Object =>
+const fsmSelector: Function = (state: any, props: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-  state.api.fsms.data.find((fsm: Object) => fsm.name === props.fsmName);
+  state.api.fsms.data.find((fsm: any) => fsm.name === props.fsmName);
 
 // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
 const selector = createSelector([fsmSelector], (fsm) => ({

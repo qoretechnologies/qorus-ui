@@ -12,7 +12,7 @@ type Props = {
   open: boolean;
   items: Array<Object>;
   onItemClick: Function;
-  selected: Object;
+  selected: any;
 };
 
 const CodeSection: Function = ({
@@ -21,7 +21,7 @@ const CodeSection: Function = ({
   onItemClick,
   selected,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ExpandableItem title={name.toUpperCase()} show={items.length > 0}>
     {() => (
       <div className="code-section__list">
@@ -29,7 +29,7 @@ Props): React.Element<any> => (
           {items.length ? (
             items.map(
               // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-              (item: Object, index: number): React.Element<any> => (
+              (item: any, index: number) => (
                 <CodeItem
                   type={name}
                   // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.

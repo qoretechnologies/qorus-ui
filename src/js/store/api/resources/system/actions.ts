@@ -1,6 +1,5 @@
 /* @flow */
 import { createAction } from 'redux-actions';
-
 import settings from '../../../../settings';
 import {
   addAppenderAction,
@@ -11,65 +10,58 @@ import {
   editAppenderAction,
   fetchLoggerAction,
   updateConfigItemAction,
-  updateConfigItemWsCommon
+  updateConfigItemWsCommon,
 } from '../../common/actions';
-import {
-  fetchWithNotifications,
-  get,
-  post
-} from '../../utils';
+import { fetchWithNotifications, get, post } from '../../utils';
 
 const init: Function = createAction('SYSTEM_INIT');
 const unsync: Function = createAction('SYSTEM_UNSYNC');
 
-const addProcess: Function = createAction(
-  'SYSTEM_ADDPROCESS',
-  (events: Array<Object>): Object => ({ events })
-);
+const addProcess: Function = createAction('SYSTEM_ADDPROCESS', (events: Array<Object>): any => ({
+  events,
+}));
 
 const removeProcess: Function = createAction(
   'SYSTEM_REMOVEPROCESS',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 
 const processMemoryChanged: Function = createAction(
   'SYSTEM_PROCESSMEMORYCHANGED',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 
 const incrementItems: Function = createAction(
   'SYSTEM_INCREMENTITEMS',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 
 const decrementItems: Function = createAction(
   'SYSTEM_DECREMENTITEMS',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 
-const updateStats: Function = createAction(
-  'SYSTEM_UPDATESTATS',
-  (events: Array<Object>): Object => ({ events })
-);
+const updateStats: Function = createAction('SYSTEM_UPDATESTATS', (events: Array<Object>): any => ({
+  events,
+}));
 
 const updateNodeInfo: Function = createAction(
   'SYSTEM_UPDATENODEINFO',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 
-const removeNode: Function = createAction(
-  'SYSTEM_REMOVENODE',
-  (events: Array<Object>): Object => ({ events })
-);
+const removeNode: Function = createAction('SYSTEM_REMOVENODE', (events: Array<Object>): any => ({
+  events,
+}));
 
 const healthChanged: Function = createAction(
   'SYSTEM_HEALTHCHANGED',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 
 const remoteHealthChanged: Function = createAction(
   'SYSTEM_REMOTEHEALTHCHANGED',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 
 const killProcess: Function = createAction(
@@ -95,14 +87,11 @@ const killProcess: Function = createAction(
 );
 
 // Config items
-const fetchGlobalConfig: Function = createAction(
-  'SYSTEM_FETCHGLOBALCONFIG',
-  async () => {
-    const globalConfig = await get(`${settings.REST_BASE_URL}/system/config`);
+const fetchGlobalConfig: Function = createAction('SYSTEM_FETCHGLOBALCONFIG', async () => {
+  const globalConfig = await get(`${settings.REST_BASE_URL}/system/config`);
 
-    return { globalConfig };
-  }
-);
+  return { globalConfig };
+});
 
 const updateConfigItemWs: Function = updateConfigItemWsCommon('SYSTEM');
 const updateConfigItem: Function = updateConfigItemAction('SYSTEM');
@@ -117,11 +106,7 @@ const fetchDefaultLogger = createAction(
   async (intfc, url?: string) => {
     const [logger, appenders] = await Promise.all([
       get(`${settings.REST_BASE_URL}/${url || intfc}?action=defaultLogger`),
-      get(
-        `${settings.REST_BASE_URL}/${
-          url || intfc
-        }?action=defaultLoggerAppenders`
-      ),
+      get(`${settings.REST_BASE_URL}/${url || intfc}?action=defaultLoggerAppenders`),
     ]);
 
     return {
@@ -135,28 +120,28 @@ const fetchDefaultLogger = createAction(
 const addUpdateLogger = addUpdateLoggerAction('system');
 const addUpdateDefaultLogger = createAction(
   'SYSTEM_ADDUPDATEDEFAULTLOGGER',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 // Deleting loggers
 const deleteLogger = deleteLoggerAction('system');
 const deleteDefaultLogger = createAction(
   'SYSTEM_DELETEDEFAULTLOGGER',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 const addAppender = addAppenderAction('system');
 const editAppender = editAppenderAction('system');
 const addDefaultAppender = createAction(
   'SYSTEM_ADDDEFAULTAPPENDER',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 const editDefaultAppender = createAction(
   'SYSTEM_EDITDEFAULTAPPENDER',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 const deleteAppender = deleteAppenderAction('system');
 const deleteDefaultAppender = createAction(
   'SYSTEM_DELETEDEFAULTAPPENDER',
-  (events: Array<Object>): Object => ({ events })
+  (events: Array<Object>): any => ({ events })
 );
 
 export {
@@ -189,5 +174,5 @@ export {
   updateConfigItemWs,
   updateDone,
   updateNodeInfo,
-  updateStats
+  updateStats,
 };

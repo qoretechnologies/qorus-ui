@@ -7,6 +7,6 @@ type Props = {
 };
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const LogTab: Function = (props: Props): React.Element<any> => <LogContainer {...props} />;
+const LogTab: Function = (props: Props) => <LogContainer {...props} />;
 
 export default LogTab;

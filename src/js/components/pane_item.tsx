@@ -5,7 +5,7 @@ import pure from 'recompose/onlyUpdateForKeys';
 type Props = {
   title?: string;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  label?: React.Element<any>;
+  label?;
   children?: any;
   id?: string;
 };
@@ -16,7 +16,7 @@ const PaneItem: Function = ({
   label,
   id,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <div className="pane-item" id={id}>
     {(title || label) && (
       <div className="pane-item-header">

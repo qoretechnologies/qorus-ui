@@ -10,12 +10,12 @@ import Modal from '../modal';
 import PaneItem from '../pane_item';
 
 type Props = {
-  info: Object;
+  info: any;
   path: string;
   openModal: Function;
   closeModal: Function;
   onClose: Function;
-  helpData: Object;
+  helpData: any;
 };
 
 const HelpModal: Function = ({
@@ -23,21 +23,21 @@ const HelpModal: Function = ({
   helpData,
   path,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Modal>
     <Modal.Header titleId="help" onClose={onClose}>
       Help for "{path.replace('/', '')}" page
     </Modal.Header>
     <Modal.Body>
       <Box top>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'overview' does not exist on type 'Object... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'overview' does not exist on type 'Object... Remove this comment to see the full error message */}
         {helpData.overview && <p className="lead">{helpData.overview}</p>}
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
         {Object.keys(helpData.data).map(
           // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-          (header: string): React.Element<any> => (
+          (header: string) => (
             <PaneItem title={header} key={header}>
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
               {helpData.data[header]}
             </PaneItem>
           )

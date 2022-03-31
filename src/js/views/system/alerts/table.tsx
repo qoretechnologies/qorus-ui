@@ -19,8 +19,8 @@ import AlertsPane from './pane';
 import AlertRow from './row';
 
 type Props = {
-  params: Object;
-  sortData: Object;
+  params: any;
+  sortData: any;
   onSortChange: Function;
   alerts: Array<Object>;
   canLoadMore?: boolean;
@@ -31,7 +31,7 @@ type Props = {
   openPane: Function;
   closePane: Function;
   paneId: string;
-  location: Object;
+  location: any;
   limit: number;
   query: string;
 };
@@ -50,7 +50,7 @@ const AlertsTable: Function = ({
   paneId,
   limit,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Table fixed hover striped condensed>
       <Thead>
@@ -91,7 +91,7 @@ Props): React.Element<any> => (
           <Tbody {...props}>
             {alerts.map(
               // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-              (alert: Object, index: number): React.Element<any> => (
+              (alert: any, index: number) => (
                 <AlertRow
                   first={index === 0}
                   // @ts-ignore ts-migrate(2339) FIXME: Property 'alertid' does not exist on type 'Object'... Remove this comment to see the full error message

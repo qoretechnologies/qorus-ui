@@ -47,7 +47,7 @@ const viewSelector = createSelector(
     resourceSelector('constants'),
     constantsSelector,
   ],
-  (metaFunctions, functions, metaClasses, classes, metaConstants, constants): Object => ({
+  (metaFunctions, functions, metaClasses, classes, metaConstants, constants): any => ({
     metaFunctions,
     functions,
     metaClasses,
@@ -67,7 +67,7 @@ type Props = {
   fetchConstants: Function;
   qQuery: string;
   changeQQuery: Function;
-  location: Object;
+  location: any;
   handleHeight: Function;
   handleRowClick: Function;
 };
@@ -82,7 +82,7 @@ const LibraryView: Function = ({
   classes,
   constants,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -130,7 +130,7 @@ export default compose(
     handleRowClick:
       (props: Props): Function =>
       (name: string, body: string, type: string, id: number): void => {
-        const item: Object = props[type.toLowerCase()].find((d) => d.id === id);
+        const item: any = props[type.toLowerCase()].find((d) => d.id === id);
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'body' does not exist on type 'Object'.
         if (!item.body) {

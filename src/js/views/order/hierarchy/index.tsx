@@ -20,11 +20,11 @@ import Search from '../../../containers/search';
 import HierarchyRow from './row';
 
 type Props = {
-  hierarchy: Object;
+  hierarchy: any;
   hierarchyKeys: Array<string | number>;
   compact?: boolean;
-  expanded: Object;
-  order: Object;
+  expanded: any;
+  order: any;
   toggleRow: Function;
   handleExpandClick: Function;
   canLoadMore: boolean;
@@ -41,7 +41,7 @@ const HierarchyTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <EnhancedTable
     collection={hierarchy}
     tableId="hierarchy"
@@ -144,7 +144,7 @@ Props): React.Element<any> => (
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-                (item: Object, index: number): React.Element<any> => (
+                (item: any, index: number) => (
                   <HierarchyRow
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                     key={item.id}
@@ -167,19 +167,17 @@ Props): React.Element<any> => (
 );
 
 export default compose(
-  mapProps(
-    ({ order, ...rest }: Props): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'HierarchyInfo' does not exist on type 'O... Remove this comment to see the full error message
-      hierarchy: order.HierarchyInfo
-        ? // @ts-ignore ts-migrate(2339) FIXME: Property 'HierarchyInfo' does not exist on type 'O... Remove this comment to see the full error message
-          map(order.HierarchyInfo, (hierarchy: Object, id: number) => ({
-            ...hierarchy,
-            id,
-          }))
-        : [],
-      ...rest,
-    })
-  ),
+  mapProps(({ order, ...rest }: Props): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'HierarchyInfo' does not exist on type 'O... Remove this comment to see the full error message
+    hierarchy: order.HierarchyInfo
+      ? // @ts-ignore ts-migrate(2339) FIXME: Property 'HierarchyInfo' does not exist on type 'O... Remove this comment to see the full error message
+        map(order.HierarchyInfo, (hierarchy: any, id: number) => ({
+          ...hierarchy,
+          id,
+        }))
+      : [],
+    ...rest,
+  })),
   pure(['hierarchy', 'isTablet']),
   injectIntl
 )(HierarchyTable);

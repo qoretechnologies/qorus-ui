@@ -16,12 +16,12 @@ import settings from '../../settings';
 import { fetchWithNotifications, get } from '../../store/api/utils';
 
 type AuthenticateViewProps = {
-  allQueryObj: Object;
+  allQueryObj: any;
   hasDenied: boolean;
   handleApproveClick: Function;
   handleUndoClick: Function;
   handleDenyClick: Function;
-  info: Object;
+  info: any;
 };
 
 const AuthenticateView: Function = ({
@@ -32,7 +32,7 @@ const AuthenticateView: Function = ({
   handleUndoClick,
   handleDenyClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-AuthenticateViewProps): React.Element<any> => (
+AuthenticateViewProps) => (
   <div
     className="root"
     style={{
@@ -54,7 +54,7 @@ AuthenticateViewProps): React.Element<any> => (
             {hasDenied && [<Icon icon="disable" />, <span>Authorization denied</span>]}
             {!hasDenied && [<Icon icon="confirm" />, <span>Authorization required</span>]}
           </span>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
           <span style={{ color: '#aaa' }}>{info.data['instance-key']}</span>
         </Flex>
         <Flex
@@ -65,7 +65,7 @@ AuthenticateViewProps): React.Element<any> => (
           {hasDenied && (
             <div>
               You have <strong>denied</strong> the authorization request for
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message */}
               <div className="client-id">{allQueryObj.client_id} </div>
               If this was a mistake, select "Undo".
             </div>
@@ -73,7 +73,7 @@ AuthenticateViewProps): React.Element<any> => (
           {!hasDenied && (
             <div>
               The following client is requesting authorization
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message */}
               <div className="client-id">{allQueryObj.client_id} </div>
               By authorizing this request, the client will have access to your resources and
               information. Select "Deny" if you do not wish to allow this.
@@ -129,7 +129,7 @@ export default compose(
         dispatch,
         // @ts-ignore ts-migrate(1055) FIXME: Type 'void' is not a valid async function return t... Remove this comment to see the full error message
       }): Function =>
-      async (): void => {
+      async (): Promise<void> => {
         const res = await fetchWithNotifications(
           async () =>
             get(`${settings.OAUTH_URL}/code?type=code&client_id=${allQueryObj.client_id}`),

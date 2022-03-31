@@ -3,17 +3,17 @@ import { updateItemWithName } from '../../utils';
 
 const removeSla = {
   next(
-    state: Object = {},
+    state: any = {},
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { id },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'slaid' does not exist on type 'Object'.
-    remove(data, (sla: Object): boolean => sla.slaid === id);
+    remove(data, (sla: any): boolean => sla.slaid === id);
 
     return { ...state, ...{ data } };
   },
@@ -21,18 +21,18 @@ const removeSla = {
 
 const createSla = {
   next(
-    state: Object = {},
+    state: any = {},
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { slaid, name, description, units, error },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let data = [...state.data];
 
     if (error) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-      remove(data, (sla: Object): boolean => sla.name === name);
+      remove(data, (sla: any): boolean => sla.name === name);
     } else if (!slaid) {
       data = [...data, { name, description, units, slaid: '?' }];
     } else {

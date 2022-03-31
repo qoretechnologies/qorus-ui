@@ -21,15 +21,15 @@ import actions from '../../store/api/actions';
 type Props = {
   sync: boolean;
   loading: boolean;
-  collection: Object;
+  collection: any;
   dispatch: Function;
 };
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const ocmdSelector: Function = (state: Object): Object => state.api.ocmd;
+const ocmdSelector: Function = (state: any): any => state.api.ocmd;
 
 // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-const viewSelector: Function = createSelector([ocmdSelector], (ocmd: Object) => ({
+const viewSelector: Function = createSelector([ocmdSelector], (ocmd: any) => ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
   collection: ocmd.data,
   // @ts-ignore ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message
@@ -46,12 +46,12 @@ export default class OCMDView extends Component {
   state: {
     value: string;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    collection: Object;
+    collection: any;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    output: Object | ?string;
+    output: any;
     showDropdown: boolean;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    filtered: Object;
+    filtered: any;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     lastCommand: string;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -101,7 +101,7 @@ export default class OCMDView extends Component {
     }
   }
 
-  handleDropdownItemClick: Function = (event: Object, value: string): void => {
+  handleDropdownItemClick: Function = (event: any, value: string): void => {
     this.setState({
       value,
       showDropdown: false,
@@ -114,7 +114,7 @@ export default class OCMDView extends Component {
     const showDropdown: boolean = !(value === '');
     const historySelected: number =
       value === '' ? size(this.state.history) : this.state.historySelected;
-    const filtered: Object = {};
+    const filtered: any = {};
 
     Object.keys(this.state.collection).forEach((c) => {
       if (includes(c, value)) {
@@ -197,12 +197,11 @@ export default class OCMDView extends Component {
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
   renderCommands: Function = (): Array<React.Element<Item>> => {
-    const data: Object =
-      size(this.state.filtered) !== 0 ? this.state.filtered : this.state.collection;
+    const data: any = size(this.state.filtered) !== 0 ? this.state.filtered : this.state.collection;
 
     return Object.keys(data).map(
       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-      (c, index): React.Element<Item> => (
+      (c, index) => (
         <Item
           key={c}
           title={c}
@@ -215,7 +214,7 @@ export default class OCMDView extends Component {
   };
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  renderOutput: Function = (): React.Element<any> => {
+  renderOutput: Function = () => {
     const { output } = this.state;
 
     if (isObject(output)) {
@@ -223,7 +222,7 @@ export default class OCMDView extends Component {
       if (output.err) {
         return (
           <Alert bsStyle="danger" title="Error">
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'string | O... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'string | O... Remove this comment to see the full error message */}
             {output.desc}
           </Alert>
         );
@@ -249,12 +248,12 @@ export default class OCMDView extends Component {
             <Crumb active>OCMD</Crumb>
             <Crumb>
               <Pull>
-                {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
+                {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
                 <form onSubmit={this.handleFormSubmit}>
                   <ButtonGroup>
-                    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                     <Dropdown show={this.state.showDropdown}>
-                      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
+                      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
                       <Control icon="list">Command list</Control>
                       {size(this.state.filtered) !== 0 || this.state.value === ''
                         ? this.renderCommands()

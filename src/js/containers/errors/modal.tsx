@@ -10,11 +10,11 @@ import { Control as Button, Controls } from '../../components/controls';
 import Modal from '../../components/modal';
 
 type Props = {
-  data: Object;
+  data: any;
   onClose: Function;
   onSave: Function;
   handleSubmit: Function;
-  fields: Object;
+  fields: any;
   id: number;
 };
 
@@ -40,12 +40,12 @@ const ErrorsModal: Function = ({
     forceworkflow,
   },
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
   <form className="form-horizontal" onSubmit={handleSubmit}>
     <Modal hasFooter>
       <Modal.Header titleId="errors_modal" onClose={onClose}>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
         {data.error || 'Add new error'}
       </Modal.Header>
       <Modal.Body>
@@ -128,7 +128,7 @@ Props): React.Element<any> => (
               />
             </div>
           </div>
-          {/* @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message */}
           {id !== 'omit' && (
             <div className="form-group">
               <label htmlFor="errors_modal_force" className="col-sm-4 control-label">
@@ -157,11 +157,9 @@ Props): React.Element<any> => (
 );
 
 export default compose(
-  connect(
-    (state: Object, { data }): Object => ({
-      initialValues: { ...data },
-    })
-  ),
+  connect((state: any, { data }): any => ({
+    initialValues: { ...data },
+  })),
   reduxForm({
     form: 'simpleForm',
     fields: [

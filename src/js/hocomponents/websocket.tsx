@@ -9,7 +9,7 @@ import Alert from '../components/alert';
 import { DEFAULTSTATE } from '../constants/websockets';
 import * as actions from '../store/websockets/actions';
 
-const connectionSelector: Function = (state: Object, props: Object): Object => {
+const connectionSelector: Function = (state: any, props: any): any => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'ws' does not exist on type 'Object'.
   const { data } = state.ws;
 
@@ -23,7 +23,7 @@ const connectionSelector: Function = (state: Object, props: Object): Object => {
 };
 
 // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-const selector: Function = createSelector([connectionSelector], (conn: Object) => ({
+const selector: Function = createSelector([connectionSelector], (conn: any) => ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'connected' does not exist on type 'Objec... Remove this comment to see the full error message
   connected: conn.connected,
   // @ts-ignore ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message
@@ -39,7 +39,7 @@ const selector: Function = createSelector([connectionSelector], (conn: Object) =
  * websockets
  */
 export default (
-    funcs: Object,
+    funcs: any,
     showLoading: boolean = true,
     showError: boolean = true,
     showDisconnect: boolean = true
@@ -56,7 +56,7 @@ export default (
       props: {
         connected: boolean;
         loading: boolean;
-        error: Object;
+        error: any;
         paused: boolean;
         connect: Function;
         disconnect: Function;
@@ -80,7 +80,7 @@ export default (
 
       // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
       getFunc: Function =
-        (props: Object): Function =>
+        (props: any): Function =>
         (funcName): string => {
           if (!funcs[funcName]) return null;
 
@@ -90,7 +90,7 @@ export default (
         };
 
       handleConnect: Function =
-        (props: Object = this.props): Function =>
+        (props: any = this.props): Function =>
         (resume: boolean = false): void => {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'connected' does not exist on type 'Objec... Remove this comment to see the full error message
           const { connected, loading, url, connect } = props;
@@ -109,7 +109,7 @@ export default (
         };
 
       handleDisconnect: Function =
-        (props: Object = this.props): Function =>
+        (props: any = this.props): Function =>
         (pause: boolean = false): void => {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'disconnect' does not exist on type 'Obje... Remove this comment to see the full error message
           const { disconnect, connected, url } = props;
@@ -118,13 +118,13 @@ export default (
         };
 
       handlePause: Function =
-        (props: Object): Function =>
+        (props: any): Function =>
         (): void => {
           this.handleDisconnect(props)(true);
         };
 
       handleResume: Function =
-        (props: Object): Function =>
+        (props: any): Function =>
         (): void => {
           this.handleConnect(props)(true);
         };

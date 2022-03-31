@@ -40,10 +40,10 @@ const ToolbarActions: Function = ({
   intl,
   selectedIds,
 }: // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ButtonGroup>
     <Dropdown id="hidden">
-      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
       <DropdownControl icon="cog">With selected</DropdownControl>
       <DropdownItem
         title={intl.formatMessage({ id: 'order.retry' })}

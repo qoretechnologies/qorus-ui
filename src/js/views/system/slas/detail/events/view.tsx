@@ -21,17 +21,17 @@ import actions from '../../../../../store/api/actions';
 import EventsTable from './table';
 
 type Props = {
-  location: Object;
-  params: Object;
+  location: any;
+  params: any;
   id: number;
-  searchData: Object;
+  searchData: any;
   sort: string;
   sortDir: string;
   offset: number;
   limit: number;
   canLoadMore: boolean;
   handleLoadMore: Function;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   collection: Array<Object>;
   defaultDate: string;
@@ -45,7 +45,7 @@ const EventsView: Function = ({
   onSortChange,
   collection,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex display="initial">
     {collection.length ? (
       <EventsTable
@@ -65,7 +65,7 @@ Props): React.Element<any> => (
 
 const viewSelector: Function = createSelector(
   [resourceSelector('slaevents')],
-  (meta: Object): Object => ({
+  (meta: any): any => ({
     meta,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     collection: meta.data,

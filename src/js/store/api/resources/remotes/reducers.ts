@@ -17,61 +17,61 @@ const initialState = {
 };
 
 const pingRemote = {
-  next(state: Object = initialState): Object {
+  next(state: any = initialState): any {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const toggleConnection = {
-  next(state: Object = initialState): Object {
+  next(state: any = initialState): any {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const toggleDebug = {
-  next(state: Object = initialState): Object {
+  next(state: any = initialState): any {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const resetConnection = {
-  next(state: Object = initialState): Object {
+  next(state: any = initialState): any {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const deleteConnection = {
-  next(state: Object = initialState): Object {
+  next(state: any = initialState): any {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const manageConnection = {
-  next(state: Object = initialState): Object {
+  next(state: any = initialState): any {
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const connectionChange = {
-  next(state: Object = initialState, { payload: { events } }): Object {
+  next(state: any = initialState, { payload: { events } }): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -79,7 +79,7 @@ const connectionChange = {
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach((dt: Object) => {
+      events.forEach((dt: any) => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
         const exists = state.data.find((conn) => conn.name === dt.name);
 
@@ -99,13 +99,13 @@ const connectionChange = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const debugChange = {
-  next(state: Object = initialState, { payload: { events } }): Object {
+  next(state: any = initialState, { payload: { events } }): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -113,7 +113,7 @@ const debugChange = {
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach((dt: Object) => {
+      events.forEach((dt: any) => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
         const exists = state.data.find((conn) => conn.name === dt.name);
 
@@ -133,13 +133,13 @@ const debugChange = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const enabledChange = {
-  next(state: Object = initialState, { payload: { events } }): Object {
+  next(state: any = initialState, { payload: { events } }): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -147,7 +147,7 @@ const enabledChange = {
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach((dt: Object) => {
+      events.forEach((dt: any) => {
         newData = updateItemWithName(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           dt.name,
@@ -162,7 +162,7 @@ const enabledChange = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
@@ -288,7 +288,7 @@ const clearAlert = {
 
 const updateConnection = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object = initialState, { payload: { models } }: Object): Object {
+  next(state: any = initialState, { payload: { models } }: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let newData = [...state.data];
 
@@ -302,14 +302,14 @@ const updateConnection = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const addConnection = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object = initialState, { payload: { events } }: Object): Object {
+  next(state: any = initialState, { payload: { events } }: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let newData = [...state.data];
 
@@ -325,21 +325,21 @@ const addConnection = {
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
 const removeConnectionWs = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object = initialState, { payload: { events } }: Object): Object {
+  next(state: any = initialState, { payload: { events } }: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
 
     events.forEach((dt) => {
       remove(
         data,
-        (remote: Object): boolean =>
+        (remote: any): boolean =>
           // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           remote.name === dt.name && remote.conntype === dt.type
       );

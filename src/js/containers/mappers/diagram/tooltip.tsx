@@ -3,11 +3,11 @@ import React from 'react';
 import ContentByType from '../../../components/ContentByType';
 
 type Props = {
-  data: Object;
+  data: any;
 };
 
 // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const Tooltip: Function = ({ data }: Props): React.Element<any> => {
+const Tooltip: Function = ({ data }: Props) => {
   if (!data) return null;
 
   // @ts-ignore ts-migrate(2339) FIXME: Property 'mand' does not exist on type 'Object'.

@@ -30,12 +30,7 @@ const StyledSubFieldDesc = styled.p`
   }
 `;
 
-const SubField: React.FC<ISubFieldProps> = ({
-  title,
-  desc,
-  children,
-  onRemove,
-}) => (
+const SubField: React.FC<ISubFieldProps> = ({ title, desc, children, onRemove }) => (
   <>
     {title && (
       <StyledSubFieldTitle>
@@ -55,13 +50,9 @@ const SubField: React.FC<ISubFieldProps> = ({
     )}
     {desc && (
       <StyledSubFieldDesc>
-        <Icon
-          icon="info-sign"
-          iconSize={12.5}
-          style={{ display: 'inline-block' }}
-        />{' '}
+        <Icon icon="info-sign" iconSize={12.5} style={{ display: 'inline-block' }} />{' '}
         <div style={{ display: 'inline-block' }}>
-          <ReactMarkdown source={desc} />
+          <ReactMarkdown>{desc}</ReactMarkdown>
         </div>
       </StyledSubFieldDesc>
     )}

@@ -97,7 +97,7 @@ const ValueMapsTable = ({
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (item: Object, index: number): React.Element<any> => (
+                (item: any, index: number) => (
                   <ValueMapsRow
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                     key={item.id}

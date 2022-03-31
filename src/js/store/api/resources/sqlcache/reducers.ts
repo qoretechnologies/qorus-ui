@@ -1,5 +1,5 @@
 const clearCache = {
-  next(state: Object = {}, action: Object): Object {
+  next(state: any = {}, action: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let data = Object.assign({}, state.data);
     // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
@@ -15,7 +15,7 @@ const clearCache = {
 
     return Object.assign({}, state, { data });
   },
-  throw(state: Object = {}): Object {
+  throw(state: any = {}): any {
     return state;
   },
 };

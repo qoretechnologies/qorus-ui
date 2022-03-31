@@ -29,21 +29,21 @@ const ToolbarSelector: Function = ({
   selectAlerts,
   disabled,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ButtonGroup>
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <Dropdown disabled={disabled}>
-      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: (string | number | Element)[]; }... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: (string | number | Element)[]; }... Remove this comment to see the full error message */}
       <Control>
         <Checkbox checked={CHECKBOX_STATES[selected]} /> {selectedCount || null}
       </Control>
-      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
       <Item action={selectAll} title="All" />
-      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
       <Item action={selectNone} title="None" />
-      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
       <Item action={selectInvert} title="Invert" />
-      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
       <Item action={selectAlerts} title="With alerts" />
     </Dropdown>
   </ButtonGroup>

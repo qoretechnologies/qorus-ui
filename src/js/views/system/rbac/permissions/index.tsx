@@ -14,13 +14,13 @@ import actions from '../../../../store/api/actions';
 import Modal from './modal';
 import Table from './table';
 
-const currentUserSelector: Function = (state: Object): Object =>
+const currentUserSelector: Function = (state: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.currentUser;
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const permsSelector: Function = (state: Object): Object => state.api.perms;
+const permsSelector: Function = (state: any): any => state.api.perms;
 // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-const querySelector: Function = (state: Object, props: Object): string =>
+const querySelector: Function = (state: any, props: any): string =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
   props.location.query.search;
 // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -28,7 +28,7 @@ const filterData: Function =
   (query: string): Function =>
   (
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    collection: Array<*>
+    collection: Array<any>
   ) =>
     findBy(['type', 'name', 'desc'], query, collection);
 
@@ -61,11 +61,11 @@ const viewSelector: Function = createSelector(
 export default class RBACPerms extends Component {
   props: {
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    permsModel: Array<*>;
+    permsModel: Array<any>;
     openModal: Function;
     closeModal: Function;
     optimisticDispatch: Function;
-    user: Object;
+    user: any;
   } = this.props;
 
   handleAddPermClick: Function = (): void => {
@@ -95,7 +95,7 @@ export default class RBACPerms extends Component {
     name: string,
     desc: string
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  ): Promise<*> => {
+  ): Promise<any> => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'perms' does not exist on type '{}'.
     await this.props.optimisticDispatch(actions.perms.createPerm, name, desc);
 
@@ -106,7 +106,7 @@ export default class RBACPerms extends Component {
     name: string,
     desc: string
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  ): Promise<*> => {
+  ): Promise<any> => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'perms' does not exist on type '{}'.
     await this.props.optimisticDispatch(actions.perms.updatePerm, name, desc);
 

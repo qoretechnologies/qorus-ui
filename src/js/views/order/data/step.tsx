@@ -25,10 +25,10 @@ Object): Array<React.Element<Tree>> => (
     {() =>
       stepdata.map(
         // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-        (step: Object): React.Element<Tree> => (
+        (step: any) => (
           // @ts-ignore ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
           <PaneItem title={`Step: ${normalizeName(step)} (${step.stepid})`}>
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <Tree
               // @ts-ignore ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
               key={step.stepid}
@@ -59,11 +59,11 @@ export default compose(
   withHandlers({
     // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatch' does not exist on type 'Object... Remove this comment to see the full error message
     handleStepDataSave:
-      ({ dispatch, closeModal, order }: Object) =>
+      ({ dispatch, closeModal, order }: any) =>
       (stepid: number, ind: number, newData: string): void => {
         fetchWithNotifications(
           async () => {
-            const res: Object = await put(
+            const res: any = await put(
               `${settings.REST_BASE_URL}/orders/${order.id}?action=yamlStepData`,
               {
                 body: JSON.stringify({
@@ -98,7 +98,7 @@ export default compose(
         order,
         // @ts-ignore ts-migrate(2339) FIXME: Property 'handleStepDataSave' does not exist on ty... Remove this comment to see the full error message
         handleStepDataSave,
-      }: Object): Function =>
+      }: any): Function =>
       (data: string, stepId: number, index: number): void => {
         openModal(
           <StepdataEdit

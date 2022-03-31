@@ -9,10 +9,7 @@ const Groups: Function = ({
   children,
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ children... Remove this comment to see the full error message
   intl,
-}: {
-  children: any;
-  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> | any =>
+}: any) =>
   React.Children.count(children) !== 0 && (
     <PaneItem title={intl.formatMessage({ id: 'component.groups' })}>{children}</PaneItem>
   );

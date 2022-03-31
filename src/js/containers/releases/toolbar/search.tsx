@@ -54,24 +54,24 @@ class ReleasesSearch extends Component {
     }
   }
 
-  componentDidUpdate(prevProps: Object, prevState: Object) {
+  componentDidUpdate(prevProps: any, prevState: any) {
     if (prevState !== this.state) {
       this._delayedSearch(this.state);
     }
   }
 
-  _delayedSearch: Function = debounce((data: Object) => {
+  _delayedSearch: Function = debounce((data: any) => {
     this.props.changeAllQuery(data);
   }, 280);
 
-  handleFileChange: Function = (event: Object): void => {
+  handleFileChange: Function = (event: any): void => {
     this.setState({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
       fileName: event.target.value,
     });
   };
 
-  handleCompChange: Function = (event: Object): void => {
+  handleCompChange: Function = (event: any): void => {
     this.setState({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
       component: event.target.value,

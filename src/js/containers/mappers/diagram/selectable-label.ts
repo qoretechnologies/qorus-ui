@@ -10,9 +10,8 @@ export default withHandlers({
     ({ onInputUnselected }) =>
     () =>
       onInputUnselected(),
-  // @ts-ignore ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
   onClick:
-    ({ children, setActive = () => {} }) =>
+    ({ children, setActive = (children?: any) => {} }) =>
     () =>
       setActive(children),
 })(Label);

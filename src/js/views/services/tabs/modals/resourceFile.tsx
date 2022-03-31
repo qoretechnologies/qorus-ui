@@ -22,14 +22,14 @@ const ResourceFileModal: Function = ({
   onClose,
   contents,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ResourceFileModalProps): React.Element<any> => (
+ResourceFileModalProps) => (
   <Modal width="80vw">
     <Modal.Header titleId="resourceFile" onClose={onClose}>
       <FormattedMessage id="dialog.contents" />: {name}
     </Modal.Header>
     <Modal.Body>
       <Box top fill>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'string'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'string'. */}
         {contents ? <pre>{contents.data}</pre> : <Loader />}
       </Box>
     </Modal.Body>

@@ -16,9 +16,9 @@ const fetchOrders = createAction(
     limit: number,
     sortDir: boolean,
     sort: string,
-    searchData: Object
+    searchData: any
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     let url: string;
     const status: string = !filter || filter === 'filter' ? '' : filter;
 
@@ -64,14 +64,10 @@ const fetchOrders = createAction(
   }
 );
 
-const changeOffset = createAction(
-  'ORDERS_CHANGEOFFSET',
-  (newOffset: number): Object => ({ newOffset })
-);
-const changeServerSort = createAction(
-  'ORDERS_CHANGESERVERSORT',
-  (sort: string): Object => ({ sort })
-);
+const changeOffset = createAction('ORDERS_CHANGEOFFSET', (newOffset: number): any => ({
+  newOffset,
+}));
+const changeServerSort = createAction('ORDERS_CHANGESERVERSORT', (sort: string): any => ({ sort }));
 const select = createAction('ORDERS_SELECT', (id: number) => ({ id }));
 const selectAll = createAction('ORDERS_SELECTALL');
 const selectNone = createAction('ORDERS_SELECTNONE');
@@ -90,7 +86,7 @@ const addNoteWebsocket: Function = createAction(
 );
 
 const updateHierarchy: Function = createAction('ORDERS_UPDATEHIERARCHY', async (id: number) => {
-  const hierarchy: Object = await get(`${settings.REST_BASE_URL}/orders/${id}/HierarchyInfo`);
+  const hierarchy: any = await get(`${settings.REST_BASE_URL}/orders/${id}/HierarchyInfo`);
 
   // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
   if (hierarchy.err) {
@@ -103,7 +99,7 @@ const updateHierarchy: Function = createAction('ORDERS_UPDATEHIERARCHY', async (
 const updateStepInstances: Function = createAction(
   'ORDERS_UPDATESTEPINSTANCES',
   async (id: number) => {
-    const steps: Object = await get(`${settings.REST_BASE_URL}/orders/${id}/StepInstances`);
+    const steps: any = await get(`${settings.REST_BASE_URL}/orders/${id}/StepInstances`);
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
     if (steps.err) {
@@ -143,7 +139,7 @@ const fetchData = createAction('ORDERS_FETCHDATA', async (id: number, type: stri
 const action: Function = createAction(
   'ORDERS_ORDERACTION',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  async (actn: string, id: any, dispatch: Function): Object => {
+  async (actn: string, id: any, dispatch: Function): any => {
     if (!dispatch) return { ids: id, action: actn };
 
     const ids: string = isArray(id) ? id.join(',') : id;
@@ -172,7 +168,7 @@ const schedule: Function = createAction(
     origStatus: string,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) return { id, date };
 
     await fetchWithNotifications(
@@ -198,7 +194,7 @@ const schedule: Function = createAction(
 const setPriority: Function = createAction(
   'ORDERS_SETPRIORITY',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  async (id: number, priority: number, dispatch: Function): Object => {
+  async (id: number, priority: number, dispatch: Function): any => {
     if (!dispatch) return { id, priority };
 
     await fetchWithNotifications(
@@ -230,7 +226,7 @@ const lock: Function = createAction(
     type: string,
     dispatch: Function
     // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     fetchWithNotifications(
       async () =>
         // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
@@ -250,7 +246,7 @@ const lock: Function = createAction(
 
 const skipStep: Function = createAction(
   'ORDERS_SKIPSTEP',
-  (orderId: number, stepid: number, ind: string, noretry: boolean, dispatch: Function): Object => {
+  (orderId: number, stepid: number, ind: string, noretry: boolean, dispatch: Function): any => {
     fetchWithNotifications(
       async () =>
         // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
@@ -313,7 +309,7 @@ const updateSensitiveData: Function = createAction(
     onSuccess: Function,
     dispatch: Function
     // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     const parsedData = jsyaml.safeLoad(newdata);
 
     fetchWithNotifications(
@@ -342,8 +338,8 @@ const updateSensitiveData: Function = createAction(
 const fetchStepData: Function = createAction(
   'ORDERS_FETCHSTEPDATA',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  async (id: number): Object => {
-    const stepData: Object = await get(`${settings.REST_BASE_URL}/orders/${id}/stepdata`);
+  async (id: number): any => {
+    const stepData: any = await get(`${settings.REST_BASE_URL}/orders/${id}/stepdata`);
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'err' does not exist on type 'Object'.
     if (stepData.err) {
@@ -362,8 +358,8 @@ const fetchStepData: Function = createAction(
 const fetchYamlAction: Function = createAction(
   'ORDERS_FETCHYAMLACTION',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  async (type: string, id: number): Object => {
-    const result: Object = await fetchYaml(
+  async (type: string, id: number): any => {
+    const result: any = await fetchYaml(
       'GET',
       `${settings.REST_BASE_URL}/orders/${id}?action=yaml${type}Data`,
       null,

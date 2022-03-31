@@ -12,15 +12,15 @@ import { sort } from '../store/ui/actions';
 type Props = {
   changeSort: Function;
   initSort: Function;
-  sortData: Object;
-  storage: Object;
+  sortData: any;
+  storage: any;
 };
 
 export default (
     tableName: string | Function,
     collectionProp: string,
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    defaultSortData: Object | Function
+    defaultSortData: any | Function
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
   ) =>
   (Component) => {

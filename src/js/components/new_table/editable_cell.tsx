@@ -20,7 +20,7 @@ import Text from '../text';
  * must trigger app state change.
  */
 @onlyUpdateForKeys(['value', 'className'])
-export default class EditableCell extends Component {
+export default class EditableCell extends Component<any, any> {
   props: {
     value: string | number;
     startEdit: boolean;
@@ -290,7 +290,7 @@ export default class EditableCell extends Component {
           </form>
         ) : (
           <React.Fragment>
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message */}
             <Text text={this.state.value} noMarkdown={this.props.noMarkdown} />
             <Control title="Edit" icon="edit" className="editable-button" onClick={this.start} />
           </React.Fragment>

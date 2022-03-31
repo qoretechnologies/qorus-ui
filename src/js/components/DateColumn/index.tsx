@@ -21,7 +21,7 @@ const DateColumn: Function = compose(onlyUpdateForKeys(['children']))(
     editable,
     onDateChange,
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  DateColumnProps): React.Element<any> => (
+  DateColumnProps) => (
     <Td className={editable ? 'big' : className}>
       {editable ? (
         <DatePicker
@@ -60,7 +60,7 @@ const DateColumnHeader: Function = compose(
     intl,
     ...rest
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  DateColumnHeaderProps): React.Element<any> => (
+  DateColumnHeaderProps) => (
     <Th icon={icon} name={name} {...rest}>
       {children || intl.formatMessage({ id: 'table.created' })}
     </Th>

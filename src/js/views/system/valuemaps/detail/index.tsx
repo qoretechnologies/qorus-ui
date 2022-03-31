@@ -19,11 +19,11 @@ import Table from './table';
 type Props = {
   onClose: Function;
   paneId: number;
-  valuemap: Object;
+  valuemap: any;
   onSearchChange: Function;
   defaultSearchValue: string;
   onSaveClick: Function;
-  location: Object;
+  location: any;
   width: number;
   onResize: Function;
   isTablet: boolean;
@@ -40,7 +40,7 @@ const ValuemapsPane: Function = ({
   width,
   onResize,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Pane
     name="valuemaps"
     width={width}
@@ -51,11 +51,11 @@ Props): React.Element<any> => (
     <Box top fill scrollY>
       <InfoHeader model={valuemap} />
       <PaneItem title="Type">
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'valuetype' does not exist on type 'Objec... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'valuetype' does not exist on type 'Objec... Remove this comment to see the full error message */}
         <code>{valuemap.valuetype}</code>
       </PaneItem>
       <PaneItem title="Throws exception">
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'throws_exception' does not exist on type... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'throws_exception' does not exist on type... Remove this comment to see the full error message */}
         <ContentByType content={valuemap.throws_exception} />
       </PaneItem>
       <Table
@@ -76,16 +76,14 @@ const selector = createSelector([querySelector('values')], (query) => ({
 export default compose(
   connect(selector),
   withDispatch(),
-  mapProps(
-    ({ valuemaps, paneId, ...rest }): Object => ({
-      valuemap: valuemaps.data.find(
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-        (vm: Object): boolean => vm.id === parseInt(paneId, 10)
-      ),
-      paneId,
-      ...rest,
-    })
-  ),
+  mapProps(({ valuemaps, paneId, ...rest }): any => ({
+    valuemap: valuemaps.data.find(
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+      (vm: any): boolean => vm.id === parseInt(paneId, 10)
+    ),
+    paneId,
+    ...rest,
+  })),
   withHandlers({
     onSaveClick:
       ({ toggleAdding, paneId, dispatchAction }): Function =>

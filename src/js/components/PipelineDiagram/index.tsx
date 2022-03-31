@@ -260,9 +260,9 @@ const PipelineDiagram = ({ load, pipeline, pipeName, openModal, closeModal }) =>
   );
 };
 
-const pipelineSelector: Function = (state: Object, props: Object): Object =>
+const pipelineSelector: Function = (state: any, props: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-  state.api.pipelines.data.find((pipe: Object) => pipe.name === props.pipeName);
+  state.api.pipelines.data.find((pipe: any) => pipe.name === props.pipeName);
 
 // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
 const selector = createSelector([pipelineSelector], (pipeline) => ({

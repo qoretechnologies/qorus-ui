@@ -18,8 +18,8 @@ import SLATable from './table';
 import SLAToolbar from './toolbar';
 
 type Props = {
-  location: Object;
-  sortData: Object;
+  location: any;
+  sortData: any;
   collection: Array<Object>;
   onSortChange: Function;
   create: Function;
@@ -34,7 +34,7 @@ const Slas: Function = ({
   create,
   perms,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <SLAToolbar location={location} onCreate={create} perms={perms} />
     <Box top noPadding>
@@ -55,14 +55,14 @@ const filterSearch: Function =
 
 const collectionSelector: Function = createSelector(
   [querySelector('search'), resourceSelector('slas')],
-  (search: string, slas: Object): Array<Object> =>
+  (search: string, slas: any): Array<Object> =>
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     filterSearch(search)(slas.data)
 );
 
 const viewSelector: Function = createSelector(
   [resourceSelector('slas'), resourceSelector('currentUser'), collectionSelector],
-  (slas, user, collection): Object => ({
+  (slas, user, collection): any => ({
     meta: slas,
     perms: user.data.permissions,
     collection,

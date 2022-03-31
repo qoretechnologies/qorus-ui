@@ -175,7 +175,7 @@ const expire = createAction('JOBS_EXPIRE', async (id, date, onFinish, dispatch) 
   fetchWithNotifications(
     async () => {
       // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-      const res: Object = await fetchJson(
+      const res: any = await fetchJson(
         'PUT',
         `${settings.REST_BASE_URL}/jobs/${id}?action=setExpiry&date=${date}`
       );
@@ -233,7 +233,7 @@ const run = createAction('JOBS_RUN', (id, dispatch) => {
 const setSLAJob = createAction(
   'JOBS_SETSLAJOB',
   // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
-  (job, sla, dispatch): Object => {
+  (job, sla, dispatch): any => {
     fetchWithNotifications(
       async () =>
         // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
@@ -248,7 +248,7 @@ const setSLAJob = createAction(
 const removeSLAJob = createAction(
   'JOBS_REMOVESLAJOB',
   // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
-  (job, sla, dispatch): Object => {
+  (job, sla, dispatch): any => {
     const url = `${settings.REST_BASE_URL}/slas/${sla}?`;
     const args = `action=removeJob&job=${job}`;
 

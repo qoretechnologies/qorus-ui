@@ -15,7 +15,7 @@ const create: Function = createAction(
     groups: Array<string>,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) {
       return {
         role,
@@ -51,7 +51,7 @@ const create: Function = createAction(
 const remove: Function = createAction(
   'ROLES_REMOVE',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  async (role: string, dispatch: Function): Object => {
+  async (role: string, dispatch: Function): any => {
     if (!dispatch) {
       return { role };
     }
@@ -81,7 +81,7 @@ const update: Function = createAction(
     groups: Array<string>,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) {
       return {
         desc,

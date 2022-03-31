@@ -25,10 +25,10 @@ import JobControls from '../../controls';
 import Options from './options';
 
 type Props = {
-  model: Object;
+  model: any;
   handleSetSLAChange: Function;
   handleRemoveSLAChange: Function;
-  perms: Object;
+  perms: any;
   slas: Array<Object>;
   isTablet: boolean;
 };
@@ -87,10 +87,10 @@ const DetailTab = ({
         />
       </PaneItem>
       <ProcessSummary model={model} type="job" />
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'. */}
       <AlertsTable alerts={model.alerts} />
       <Groups>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'groups' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'groups' does not exist on type 'Object'. */}
         {(model.groups || []).map((g) => (
           <Group
             key={g.name}

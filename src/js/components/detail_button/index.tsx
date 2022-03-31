@@ -20,7 +20,7 @@ const DetailButton: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Button
     title={intl.formatMessage({ id: 'button.opens-side-pane' })}
     intent={active ? Intent.PRIMARY : Intent.NONE}
@@ -33,7 +33,7 @@ export default compose(
   withHandlers({
     handleClick:
       ({ onClick }: Props): Function =>
-      (e: Object): void => {
+      (e: any): void => {
         if (e) {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'stopPropagation' does not exist on type ... Remove this comment to see the full error message
           e.stopPropagation();

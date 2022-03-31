@@ -59,14 +59,14 @@ export const whenDefaultEnabled =
   (ev, ...rest) =>
     !ev.defaultPrevented && fn.apply(this, [ev, ...rest]);
 
-export const countArrayItemsInObject: Function = (obj: Object): number =>
+export const countArrayItemsInObject: Function = (obj: any): number =>
   reduce(obj, (count: number, items: Array<Object>) => count + items.length, 0);
 
-export const countConfigItems: Function = (obj: Object): number =>
+export const countConfigItems: Function = (obj: any): number =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-  reduce(obj, (count: number, items: Object) => count + items.data.length, 0);
+  reduce(obj, (count: number, items: any) => count + items.data.length, 0);
 
-export const flattenObject = (obj: Object): Object =>
+export const flattenObject = (obj: any): any =>
   Object.assign(
     {},
     ...(function _flatten(o) {

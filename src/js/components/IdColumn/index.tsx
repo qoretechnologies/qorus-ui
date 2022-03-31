@@ -14,7 +14,7 @@ const IdColumn: Function = compose(onlyUpdateForKeys(['children']))(
     children,
     className = 'tiny',
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  IdColumnProps): React.Element<any> => <Td className={className}>{children}</Td>
+  IdColumnProps) => <Td className={className}>{children}</Td>
 );
 
 type IdColumnHeaderProps = {
@@ -30,7 +30,7 @@ const IdColumnHeader: Function = compose(onlyUpdateForKeys(['children', 'sortDat
     icon = 'numbered-list',
     ...rest
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  IdColumnHeaderProps): React.Element<any> => (
+  IdColumnHeaderProps) => (
     <Th icon={icon} name={name} {...rest}>
       {children}
     </Th>

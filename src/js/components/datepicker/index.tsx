@@ -36,9 +36,9 @@ export default class DatePicker extends Component {
   props: Props = this.props;
 
   state: {
-    date: Object;
+    date: any;
     inputDate: string;
-    activeDate: Object;
+    activeDate: any;
     hours: string;
     defaultHours: string;
     minutes: string;
@@ -59,7 +59,7 @@ export default class DatePicker extends Component {
   setupDate = (props: Props): void => {
     this.hideDatepicker();
 
-    const date: Object = props.date ? formatDate(props.date) : moment();
+    const date: any = props.date ? formatDate(props.date) : moment();
     const inputDate: string = props.date
       ? // @ts-ignore ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'.
         date.format(DATE_FORMATS.DISPLAY)
@@ -81,13 +81,13 @@ export default class DatePicker extends Component {
     });
   };
 
-  setDate: Function = (date: Object): void => {
+  setDate: Function = (date: any): void => {
     this.setState({
       date,
     });
   };
 
-  setActiveDate: Function = (activeDate: Object): void => {
+  setActiveDate: Function = (activeDate: any): void => {
     const { hours, minutes } = this.state;
     const { futureOnly } = this.props;
     const potentialDate = activeDate;
@@ -122,10 +122,10 @@ export default class DatePicker extends Component {
     });
   };
 
-  handleHoursChange: Function = (event: Object): void => {
+  handleHoursChange: Function = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
     const hours: string = event.target.value;
-    const activeDate: Object = this.state.activeDate;
+    const activeDate: any = this.state.activeDate;
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'hours' does not exist on type 'Object'.
     activeDate.hours(hours);
@@ -136,10 +136,10 @@ export default class DatePicker extends Component {
     });
   };
 
-  handleMinutesChange: Function = (event: Object): void => {
+  handleMinutesChange: Function = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
     const minutes: string = event.target.value;
-    const activeDate: Object = this.state.activeDate;
+    const activeDate: any = this.state.activeDate;
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'minutes' does not exist on type 'Object'... Remove this comment to see the full error message
     activeDate.minutes(minutes);
@@ -192,7 +192,7 @@ export default class DatePicker extends Component {
     this.applyDate(DATES.TODAY);
   };
 
-  handleInputChange: Function = (event: Object): void => {
+  handleInputChange: Function = (event: any): void => {
     this.setState({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
       inputDate: event.target.value,
@@ -203,7 +203,7 @@ export default class DatePicker extends Component {
     if (this.state.inputDate === '') {
       this.applyDate('');
     } else {
-      const date: Object = new Date(this.state.inputDate);
+      const date: any = new Date(this.state.inputDate);
 
       if (moment(date).isValid()) {
         this.applyDate(moment(date).format(DATE_FORMATS.URL_FORMAT));
@@ -212,12 +212,12 @@ export default class DatePicker extends Component {
   };
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderDatepicker(): React.Element<any> {
+  renderDatepicker() {
     if (!this.state.showDatepicker) return null;
   }
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderControls(): React.Element<Controls> {
+  renderControls() {
     if (this.props.futureOnly || this.props.noButtons) return null;
 
     return (
@@ -230,7 +230,7 @@ export default class DatePicker extends Component {
           action={this.handleAllClick}
         />
         <Dropdown id="date-selection">
-          {/* @ts-expect-error ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ btnStyle:... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ btnStyle:... Remove this comment to see the full error message */}
           <DropdownControl btnStyle="default" />
           <DropdownItem
             // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
@@ -274,7 +274,7 @@ export default class DatePicker extends Component {
   }
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     const { futureOnly, noButtons, small, className, icon, disabled } = this.props;
 
     return (
@@ -302,7 +302,7 @@ export default class DatePicker extends Component {
               hideDatepicker={this.hideDatepicker}
               futureOnly={this.props.futureOnly}
             >
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Calendar
                 futureOnly={this.props.futureOnly}
                 date={this.state.date}
@@ -339,7 +339,7 @@ export default class DatePicker extends Component {
         {!futureOnly && !noButtons && (
           // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           <Dropdown disabled={disabled}>
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ small: boolean; }' is missing the followin... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ small: boolean; }' is missing the followin... Remove this comment to see the full error message */}
             <DropdownControl small={small} />
             <DropdownItem
               // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.

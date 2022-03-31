@@ -6,7 +6,7 @@ const withMutationObserver: Function =
     element: string | Function
     // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
   ): Function =>
-  (Component: React.Element<any>): React.Element<any> => {
+  (Component) => {
     class WrappedComponent extends React.Component {
       props: {
         first?: boolean;

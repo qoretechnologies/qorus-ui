@@ -95,9 +95,9 @@ const updateBasicData = basicDataUpdatedReducer;
 
 const fetchLibSources = {
   next(state = initialState, action) {
-    const service: Object = state.data.find(
+    const service: any = state.data.find(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-      (datum: Object) => datum.id === parseInt(action.meta.serviceId, 10)
+      (datum: any) => datum.id === parseInt(action.meta.serviceId, 10)
     );
 
     return Object.assign({}, state, {
@@ -451,9 +451,9 @@ const fetchAuthLabels = {
 const updateAuthLabel = {
   next(state, { payload: { name, value, id } }) {
     const data = [...state.data];
-    const service: Object = data.find(
+    const service: any = data.find(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-      (srvc: Object): boolean => srvc.id === id
+      (srvc: any): boolean => srvc.id === id
     );
 
     if (service) {

@@ -16,7 +16,7 @@ const statusHealth: Function = (health: string): string =>
 
 const utf8ToB64: Function = (str: string): string => window.btoa(encodeURIComponent(str));
 
-const alertTypeToResource: Object = {
+const alertTypeToResource: any = {
   WORKFLOW: {
     resource: 'workflows',
     uses: 'id',
@@ -59,7 +59,7 @@ const alertTypeToResource: Object = {
   },
 };
 
-const interfaceTypeToResource: Object = {
+const interfaceTypeToResource: any = {
   WORKFLOW: {
     resource: 'workflows',
     uses: 'workflowid',
@@ -82,7 +82,7 @@ const interfaceTypeToResource: Object = {
   },
 };
 
-const getAlertObjectLink: Function = (type: string, data: Object): string => {
+const getAlertObjectLink: Function = (type: string, data: any): string => {
   const res = alertTypeToResource[type];
 
   if (!res) {
@@ -95,7 +95,7 @@ const getAlertObjectLink: Function = (type: string, data: Object): string => {
   }`;
 };
 
-const getDependencyObjectLink: Function = (type: string, data: Object): string => {
+const getDependencyObjectLink: Function = (type: string, data: any): string => {
   const res = interfaceTypeToResource[type];
 
   if (!res) {
@@ -118,7 +118,7 @@ const typeToString: Function = (val: any): any => {
   return val;
 };
 
-const getProcessObjectLink: Function = (prcs: Object) => {
+const getProcessObjectLink: Function = (prcs: any) => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   switch (prcs.type) {
     case 'qdsp':
@@ -138,7 +138,7 @@ const getProcessObjectLink: Function = (prcs: Object) => {
   }
 };
 
-const getProcessObjectType: Function = (prcs: Object) => {
+const getProcessObjectType: Function = (prcs: any) => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   switch (prcs.type) {
     case 'qdsp':
@@ -154,7 +154,7 @@ const getProcessObjectType: Function = (prcs: Object) => {
   }
 };
 
-const getProcessObjectInterface: Function = (prcs: Object) => {
+const getProcessObjectInterface: Function = (prcs: any) => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   switch (prcs.type) {
     case 'qdsp':
@@ -170,7 +170,7 @@ const getProcessObjectInterface: Function = (prcs: Object) => {
   }
 };
 
-const getProcessObjectInterfaceId: Function = (prcs: Object) => {
+const getProcessObjectInterfaceId: Function = (prcs: any) => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
   switch (prcs.type) {
     case 'qdsp':
@@ -222,8 +222,8 @@ const getLineCount: Function = (value: string): number => {
   }
 };
 
-const transformMenu: Function = (menu: Object, plugins: Array<string>): Object => {
-  let newMenu: Object = { ...menu };
+const transformMenu: Function = (menu: any, plugins: Array<string>): any => {
+  let newMenu: any = { ...menu };
 
   if (size(plugins)) {
     newMenu = {

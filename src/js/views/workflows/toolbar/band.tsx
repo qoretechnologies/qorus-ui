@@ -18,10 +18,10 @@ const BandDropdown: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'BandDropdo... Remove this comment to see the full error message
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-BandDropdownProps): React.Element<any> => (
+BandDropdownProps) => (
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; icon: string; }' is missing... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; icon: string; }' is missing... Remove this comment to see the full error message */}
     <Control icon="time">{intl.formatMessage({ id: band })}</Control>
     {bands.map((band) => (
       <Item

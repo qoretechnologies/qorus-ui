@@ -10,17 +10,17 @@ const OptionsModal: Function = ({
   onSave,
   onClose,
 }: {
-  data: Object;
+  data: any;
   onSave: Function;
   onClose: Function;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> => (
+}) => (
   <Modal hasFooter>
     <Modal.Header titleId="options" onClose={onClose}>
       Edit options
     </Modal.Header>
     <Modal.Body>
-      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
       <Options data={data} onSave={onSave} />
     </Modal.Body>
     <Modal.Footer>

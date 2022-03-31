@@ -20,8 +20,8 @@ import Keys from './keys';
 @injectIntl
 export default class DiagramView extends Component {
   props: {
-    order: Object;
-    workflow: Object;
+    order: any;
+    workflow: any;
     isTablet: boolean;
     dispatchAction: Function;
   } = this.props;
@@ -44,7 +44,7 @@ export default class DiagramView extends Component {
     return [
       <MasonryPanel>
         <Box top key="diagram">
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <StepCodeDiagram
             workflow={this.props.workflow}
             order={this.props.order}
@@ -59,7 +59,7 @@ export default class DiagramView extends Component {
       </MasonryPanel>,
       <MasonryPanel>
         <Box top={top} key="keys">
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'keys' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'keys' does not exist on type 'Object'. */}
           <Keys data={this.props.order.keys} />
         </Box>
       </MasonryPanel>,

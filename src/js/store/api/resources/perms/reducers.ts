@@ -2,14 +2,14 @@ import remove from 'lodash/remove';
 import RBAC from '../../../../constants/rbac';
 import { updateItemWithId } from '../../utils';
 
-const initialState: Object = {
+const initialState: any = {
   data: [],
   loading: false,
   sync: false,
 };
 
-const createPerm: Object = {
-  next(state: Object = initialState, action: Object): Object {
+const createPerm: any = {
+  next(state: any = initialState, action: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -28,13 +28,13 @@ const createPerm: Object = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
-const removePerm: Object = {
-  next(state: Object = initialState, action: Object): Object {
+const removePerm: any = {
+  next(state: any = initialState, action: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -47,13 +47,13 @@ const removePerm: Object = {
     }
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
-const updatePerm: Object = {
-  next(state: Object = initialState, action: Object): Object {
+const updatePerm: any = {
+  next(state: any = initialState, action: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
@@ -68,7 +68,7 @@ const updatePerm: Object = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };

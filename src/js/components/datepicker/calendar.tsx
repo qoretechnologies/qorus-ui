@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 
 const chunk = (arr: Array<Object>, unit: number): Array<any> => {
-  const res: Object = {};
+  const res: any = {};
 
   arr.forEach((k, index) => {
     // @ts-ignore ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
@@ -25,9 +25,9 @@ const chunk = (arr: Array<Object>, unit: number): Array<any> => {
 @pure(['date', 'activeDate'])
 export default class Calendar extends Component {
   props: {
-    date: Object;
-    setDate: (date: Object) => void;
-    activeDate: Object;
+    date: any;
+    setDate: (date: any) => void;
+    activeDate: any;
     setActiveDate: () => void;
     futureOnly: boolean;
   } = this.props;
@@ -38,25 +38,25 @@ export default class Calendar extends Component {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'year' does not exist on type 'Object'.
     const year: number = this.props.date.year();
     // @ts-ignore ts-migrate(2345) FIXME: Argument of type '"isoweek"' is not assignable to ... Remove this comment to see the full error message
-    const start: Object = moment([year, month]).startOf('isoweek');
-    const end: Object = start
+    const start: any = moment([year, month]).startOf('isoweek');
+    const end: any = start
       // @ts-ignore ts-migrate(2339) FIXME: Property 'clone' does not exist on type 'Object'.
       .clone()
       .add(5, 'weeks')
       .add(-1, 'days');
     const days: Array<Object> = [];
-    const date: Object = this.props.date;
-    const activeDate: Object = this.props.activeDate;
+    const date: any = this.props.date;
+    const activeDate: any = this.props.activeDate;
 
     while (start.valueOf() <= end.valueOf()) {
-      const dDate: Object = moment(start)
+      const dDate: any = moment(start)
         // @ts-ignore ts-migrate(2339) FIXME: Property 'hours' does not exist on type 'Object'.
         .hours(date.hours())
         // @ts-ignore ts-migrate(2339) FIXME: Property 'minutes' does not exist on type 'Object'... Remove this comment to see the full error message
         .minutes(date.minutes())
         // @ts-ignore ts-migrate(2339) FIXME: Property 'seconds' does not exist on type 'Object'... Remove this comment to see the full error message
         .seconds(date.seconds());
-      const day: Object = {
+      const day: any = {
         date: dDate,
         // @ts-ignore ts-migrate(2339) FIXME: Property 'date' does not exist on type 'Object'.
         day: start.date(),
@@ -113,23 +113,23 @@ export default class Calendar extends Component {
     return days;
   }
 
-  setDate: Function = (date: Object): void => {
+  setDate: Function = (date: any): void => {
     this.props.setDate(date);
   };
 
-  setActiveDate: Function = (date: Object): void => {
+  setActiveDate: Function = (date: any): void => {
     // @ts-ignore ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
     this.props.setActiveDate(date);
   };
 
   nextMonth: Function = (): void => {
-    const date: Object = moment(this.props.date);
+    const date: any = moment(this.props.date);
     // @ts-ignore ts-migrate(2339) FIXME: Property 'add' does not exist on type 'Object'.
     this.setDate(date.add(1, 'months'));
   };
 
   prevMonth: Function = (): void => {
-    const date: Object = moment(this.props.date);
+    const date: any = moment(this.props.date);
     // @ts-ignore ts-migrate(2339) FIXME: Property 'add' does not exist on type 'Object'.
     this.setDate(date.add(-1, 'months'));
   };
@@ -161,18 +161,18 @@ export default class Calendar extends Component {
   };
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     return (
       <table className="table table-condensed">
         <thead>
           <tr>
-            {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
             <th className="month" onClick={this.prevMonth}>
               <Icon icon="chevron-left" />
             </th>
-            {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'. */}
+            {/* @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'. */}
             <th colSpan="5">{this.renderYearAndMonth()}</th>
-            {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message */}
             <th className="month" onClick={this.nextMonth}>
               <Icon icon="chevron-right" />
             </th>

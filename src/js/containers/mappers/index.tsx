@@ -20,7 +20,7 @@ const MappersTable = ({
 }: {
   mappers: Array<Object>;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> => (
+}) => (
   <EnhancedTable
     collection={mappers}
     searchBy={['mapperid', 'name', 'version', 'type']}
@@ -69,10 +69,10 @@ const MappersTable = ({
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (item: Object, index: number): React.Element<any> => (
+                (item: any, index: number) => (
                   // @ts-ignore ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message
                   <Tr key={item.mapperid} first={index === 0}>
-                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message */}
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'mapperid' does not exist on type 'Object... Remove this comment to see the full error message */}
                     <IdColumn>{item.mapperid}</IdColumn>
                     <NameColumn
                       name={normalizeName(item)}
@@ -80,7 +80,7 @@ const MappersTable = ({
                       link={`/mappers/${item.mapperid}`}
                       type="mapper"
                     />
-                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                     <Td className="text">{item.type}</Td>
                   </Tr>
                 )

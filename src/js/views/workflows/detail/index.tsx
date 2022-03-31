@@ -23,14 +23,14 @@ import WorkflowDetailTabs from '../tabs';
 import Header from './header';
 
 type Props = {
-  workflow: Object;
+  workflow: any;
   date: string;
   linkDate: string;
-  fetchParams: Object;
+  fetchParams: any;
   id: number;
   unselectAll: Function;
   fetch: Function;
-  location: Object;
+  location: any;
   children: any;
   tabQuery: string;
   searchQuery: string;
@@ -48,7 +48,7 @@ const Workflow: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'lib' does not exist on type 'Props'.
   lib,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Header
       workflow={workflow}
@@ -69,15 +69,15 @@ Props): React.Element<any> => (
   </Flex>
 );
 
-const workflowSelector: Function = (state: Object, props: Object): Object =>
+const workflowSelector: Function = (state: any, props: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.workflows.data.find(
-    (workflow: Object) =>
+    (workflow: any) =>
       // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
       parseInt(props.params.id, 10) === parseInt(workflow.id, 10)
   );
 
-const selector: Object = createSelector(
+const selector: any = createSelector(
   [resourceSelector('workflows'), workflowSelector, querySelector('date'), paramSelector('id')],
   (meta, workflow, date, id) => ({
     meta,
@@ -98,50 +98,45 @@ export default compose(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type '{}'.
     unselectAll: actions.orders.unselectAll,
   }),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      date: date || DATES.PREV_DAY,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      fetchParams: { lib_source: true, date: formatDate(date).format() },
-      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
-      date,
-      ...rest,
-    })
-  ),
+  mapProps(({ date, ...rest }: Props): any => ({
+    date: date || DATES.PREV_DAY,
+    ...rest,
+  })),
+  mapProps(({ date, ...rest }: Props): any => ({
+    fetchParams: { lib_source: true, date: formatDate(date).format() },
+    linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+    date,
+    ...rest,
+  })),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   showIfPassed(({ workflow }) => workflow, <Loader />),
-  mapProps(
-    (props: Object): Object =>
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-      props.workflow.code
-        ? {
-            ...props,
-            lib: {
-              ...{
-                code: [
-                  {
-                    name: 'Workflow code',
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-                    body: props.workflow.code,
-                  },
-                ],
-              },
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-              ...props.workflow.lib,
+  mapProps((props: any): any =>
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
+    props.workflow.code
+      ? {
+          ...props,
+          lib: {
+            ...{
+              code: [
+                {
+                  name: 'Workflow code',
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
+                  body: props.workflow.code,
+                },
+              ],
             },
-          }
-        : {
-            ...props,
-            lib: {
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-              ...props.workflow.lib,
-            },
-          }
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
+            ...props.workflow.lib,
+          },
+        }
+      : {
+          ...props,
+          lib: {
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
+            ...props.workflow.lib,
+          },
+        }
   ),
   lifecycle({
     componentWillReceiveProps(nextProps: Props) {

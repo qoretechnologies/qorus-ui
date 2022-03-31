@@ -27,7 +27,7 @@ import Section from './section';
  * }} props
  * @return {!ReactElement}
  */
-export default function Table(props: Object) {
+export default function Table(props: any) {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'sections' does not exist on type 'Object... Remove this comment to see the full error message
   const { sections, data, children, ...restProps } = props;
 

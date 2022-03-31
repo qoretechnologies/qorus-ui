@@ -7,10 +7,10 @@ const initialState = {};
 
 type Action = {
   type: string;
-  payload: Object;
+  payload: any;
 };
 
-function addBubble(state: Object, action: Action): Object {
+function addBubble(state: any, action: Action): any {
   const { payload } = action;
   // @ts-ignore ts-migrate(2339) FIXME: Property 'list' does not exist on type 'Object'.
   let newList = state.list || [];
@@ -18,7 +18,7 @@ function addBubble(state: Object, action: Action): Object {
   // * Check if the notification already exists for this ID
   const notification = newList.find(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-    (listItem: Object): boolean => listItem.id === payload.id
+    (listItem: any): boolean => listItem.id === payload.id
   );
 
   if (notification) {
@@ -31,7 +31,7 @@ function addBubble(state: Object, action: Action): Object {
   return Object.assign({}, state, { list: newList });
 }
 
-function deleteBubble(state: Object, action: Action): Object {
+function deleteBubble(state: any, action: Action): any {
   const { payload: removeId } = action;
   // @ts-ignore ts-migrate(2339) FIXME: Property 'list' does not exist on type 'Object'.
   const list = state.list || [];

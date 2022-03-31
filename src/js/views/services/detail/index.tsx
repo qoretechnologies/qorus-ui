@@ -22,15 +22,15 @@ import { countConfigItems } from '../../../utils';
 import ServiceControls from '../controls';
 import ServiceTabs from '../tabs';
 
-const serviceSelector: Function = (state: Object, props: Object): Object =>
+const serviceSelector: Function = (state: any, props: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.services.data.find(
-    (service: Object) =>
+    (service: any) =>
       // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
       parseInt(props.params.id, 10) === parseInt(service.id, 10)
   );
 
-const selector: Object = createSelector(
+const selector: any = createSelector(
   [resourceSelector('services'), serviceSelector, paramSelector('id')],
   (meta, service, id) => ({
     meta,
@@ -40,12 +40,12 @@ const selector: Object = createSelector(
 );
 
 type Props = {
-  service: Object;
+  service: any;
   tabQuery: string;
   methods: Array<Object>;
-  location: Object;
-  data: Object;
-  configItems: Object;
+  location: any;
+  data: any;
+  configItems: any;
 };
 
 const ServicesDetail: Function = ({
@@ -60,7 +60,7 @@ const ServicesDetail: Function = ({
     <Headbar>
       <Breadcrumbs>
         <Crumb link="/services"> Services </Crumb>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
         <Crumb>{service.normalizedName}</Crumb>
         <CrumbTabs
           tabs={[
@@ -134,52 +134,44 @@ export default compose(
     },
   }),
   // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
-  mapProps(
-    ({ service, ...rest }: Object): Object => ({
-      methods: service.lib
-        ? service.class_based
-          ? service.methods.map(
-              (method: Object): Object => ({
-                ...method,
-                ...{ body: service.class_source },
-              })
-            )
-          : service.methods
-        : [],
-      service,
-      ...rest,
-    })
-  ),
+  mapProps(({ service, ...rest }: any): any => ({
+    methods: service.lib
+      ? service.class_based
+        ? service.methods.map((method: any): any => ({
+            ...method,
+            ...{ body: service.class_source },
+          }))
+        : service.methods
+      : [],
+    service,
+    ...rest,
+  })),
   // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
-  mapProps(
-    ({ service, methods, ...rest }: Object): Object => ({
-      data: service.lib ? Object.assign(service.lib, { methods }) : {},
-      service,
-      methods,
-      ...rest,
-    })
-  ),
+  mapProps(({ service, methods, ...rest }: any): any => ({
+    data: service.lib ? Object.assign(service.lib, { methods }) : {},
+    service,
+    methods,
+    ...rest,
+  })),
   // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-  mapProps(
-    ({ data, service, ...rest }: Object): Object => ({
-      data: service.class_based
-        ? {
-            ...{
-              code: [
-                {
-                  name: 'Service code',
-                  body: service.class_source,
-                },
-              ],
-            },
-            ...data,
-          }
-        : data,
-      configItems: rebuildConfigHash(service),
-      service,
-      ...rest,
-    })
-  ),
+  mapProps(({ data, service, ...rest }: any): any => ({
+    data: service.class_based
+      ? {
+          ...{
+            code: [
+              {
+                name: 'Service code',
+                body: service.class_source,
+              },
+            ],
+          },
+          ...data,
+        }
+      : data,
+    configItems: rebuildConfigHash(service),
+    service,
+    ...rest,
+  })),
   // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
   titleManager(({ service }): string => service.name, 'Services', 'prefix'),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.

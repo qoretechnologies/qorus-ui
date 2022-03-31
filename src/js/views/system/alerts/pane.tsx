@@ -20,7 +20,7 @@ const viewSelector = createSelector([alertSelector], (alert) => ({
 }));
 
 type Props = {
-  alert: Object;
+  alert: any;
   onClose: Function;
   width: number;
   onResize: Function;
@@ -36,7 +36,7 @@ const AlertPane: Function = ({ width, onResize, alert, onClose }: Props) => {
   return (
     <Pane width={width || 550} onClose={onClose} onResize={onResize} title="Alert detail">
       <Box top fill scrollY>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
         {alert.type !== 'RBAC' && !(alert.type === 'GROUP' && alert.id < 1) && (
           <Toolbar mb>
             <InterfaceTag

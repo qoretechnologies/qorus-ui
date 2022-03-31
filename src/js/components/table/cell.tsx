@@ -13,7 +13,7 @@ export default class Cell extends Component {
     onSortChange: Function;
     name: string;
     className: string;
-    sortData: Object;
+    sortData: any;
     colspan: number;
     onClick: Function;
   } = this.props;

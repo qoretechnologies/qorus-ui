@@ -18,7 +18,7 @@ const LoggerContainer: Function = ({
   isUsingDefaultLogger,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-LoggerContainerProps): React.Element<any> =>
+LoggerContainerProps) =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'loggerFetched' does not exist on type '{... Remove this comment to see the full error message
   !rest.loggerFetched ? (
     <Loader />
@@ -31,10 +31,10 @@ LoggerContainerProps): React.Element<any> =>
 export default compose(
   connect((state, ownProps) => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'isUsingDefaultLogger' does not exist on ... Remove this comment to see the full error message
-    const { isUsingDefaultLogger }: Object = state.api[ownProps.resource][
+    const { isUsingDefaultLogger }: any = state.api[ownProps.resource][
       ownProps.resource === 'system' ? 'logs' : 'data'
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-    ].find((res: Object): boolean => res.id === ownProps.id);
+    ].find((res: any): boolean => res.id === ownProps.id);
 
     return {
       isUsingDefaultLogger,

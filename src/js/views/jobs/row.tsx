@@ -85,7 +85,7 @@ const ServiceRow: Function = ({
   isTablet,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr
     first={first}
     highlight={_updated}
@@ -102,7 +102,7 @@ Props): React.Element<any> => (
     <NameColumn
       popoverContent={
         <Box top>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type '{ o... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'description' does not exist on type '{ o... Remove this comment to see the full error message */}
           <PaneItem title={normalizedName}>{rest.description}</PaneItem>
           <ProcessSummary model={{ enabled, remote, active, expiry, ...rest }} type="job" />
         </Box>

@@ -49,7 +49,7 @@ const ErrorsTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<Table> => (
+Props) => (
   <EnhancedTable
     collection={errors}
     tableId={tableId}
@@ -91,19 +91,19 @@ Props): React.Element<Table> => (
                   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                   onSubmit={onFilterChange}
                 >
-                  {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
+                  {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
                   <Control icon="filter" />
-                  {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                  {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                   <Item title="ALL" />
-                  {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                  {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                   <Item title="FATAL" />
-                  {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                  {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                   <Item title="MAJOR" />
-                  {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                  {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                   <Item title="WARNING" />
-                  {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                  {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                   <Item title="INFO" />
-                  {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                  {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                   <Item title="NONE" />
                 </Dropdown>
                 <ButtonGroup>
@@ -191,30 +191,30 @@ Props): React.Element<Table> => (
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (error: Object, index: number): React.Element<any> => (
+                (error: any, index: number) => (
                   <>
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'error_instanceid' does not exist
                     on type... Remove this comment to see the full error message
                     <Tr key={error.error_instanceid} first={index === 0}>
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
                       <NameColumn name={error.error} />
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'step_name' does not exist on type 'Objec... Remove this comment to see the full error message */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'step_name' does not exist on type 'Objec... Remove this comment to see the full error message */}
                       {!compact && <NameColumn name={error.step_name} />}
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'severity' does not exist on type 'Object... Remove this comment to see the full error message */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'severity' does not exist on type 'Object... Remove this comment to see the full error message */}
                       <Td className="medium">{error.severity}</Td>
                       <Td className="medium">
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'business_error' does not exist on type '... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'business_error' does not exist on type '... Remove this comment to see the full error message */}
                         <ContentByType content={error.business_error} />
                       </Td>
                       {!compact && (
                         // @ts-ignore ts-migrate(2339) FIXME: Property 'error_type' does not exist on type 'Obje... Remove this comment to see the full error message
                         <Td className="medium">{error.error_type}</Td>
                       )}
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'retry' does not exist on type 'Object'. */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'retry' does not exist on type 'Object'. */}
                       {!compact && <Td className="medium">{error.retry}</Td>}
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'ind' does not exist on type 'Object'. */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'ind' does not exist on type 'Object'. */}
                       {!compact && <Td className="narrow">{error.ind}</Td>}
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'created' does not exist on type 'Object'... Remove this comment to see the full error message */}
                       <DateColumn>{error.created}</DateColumn>
                     </Tr>
                     {expanded && (
@@ -222,14 +222,14 @@ Props): React.Element<Table> => (
                         <Tr>
                           <Td className="text" colspan={!compact ? 8 : 4}>
                             <Icon icon="info-sign" /> <strong>Error description:</strong>{' '}
-                            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
                             {error.description || '-'}
                           </Td>
                         </Tr>
                         <Tr>
                           <Td className="text" colspan={!compact ? 8 : 4}>
                             <Icon icon="info-sign" /> <strong>Info:</strong>{' '}
-                            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'info' does not exist on type 'Object'. */}
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'info' does not exist on type 'Object'. */}
                             {error.info}
                           </Td>
                         </Tr>

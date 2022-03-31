@@ -10,7 +10,7 @@ type Props = {
   children?: string;
   link?: string;
   handleClick: Function;
-  router: Object;
+  router: any;
   title?: string;
 };
 
@@ -21,7 +21,7 @@ const DashboardSection: Function = ({
   handleClick,
   title,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
   <div className="subtitle" title={title} onClick={link ? handleClick : null}>
     {icon && <Icon icon={icon} />} {children} {link && <Icon icon="angle-right" />}

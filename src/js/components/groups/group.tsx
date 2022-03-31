@@ -1,7 +1,7 @@
 /* @flow */
+import { Intent, Tag } from '@blueprintjs/core';
 import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { Intent, Tag } from '../../../../node_modules/@blueprintjs/core';
 
 type Props = {
   name: string;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const Group: Function = ({ name, size }: Props): React.Element<any> => (
+const Group: Function = ({ name, size }: Props) => (
   <Tag intent={Intent.PRIMARY} className="bp3-miminal">
     {name} {size}
   </Tag>

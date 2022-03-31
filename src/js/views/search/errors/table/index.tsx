@@ -20,16 +20,16 @@ import Table from './table';
 type Props = {
   onCSVClick: Function;
   fetch: Function;
-  location: Object;
+  location: any;
   orderErrors: Array<Object>;
   changeOffset: Function;
   limit: number;
-  searchData?: Object;
+  searchData?: any;
   searchPage?: boolean;
   canLoadMore: boolean;
   handleLoadMore: Function;
   loadMoreCurrent: number;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   filter: string;
   children: any;
@@ -46,7 +46,7 @@ const WorkflowOrders: Function = ({
   sortData,
   onSortChange,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table
     collection={orderErrors}
     sortData={sortData}

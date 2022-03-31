@@ -17,7 +17,7 @@ export default (
       };
 
       props: {
-        location: Object;
+        location: any;
         query: string;
       } = this.props;
 

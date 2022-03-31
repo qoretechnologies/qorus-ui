@@ -1,29 +1,15 @@
 /* @flow */
 import { createAction } from 'redux-actions';
 
-const init: Object = createAction(
-  'LOG_INIT',
-  (url: string): Object => ({ url })
-);
+const init: any = createAction('LOG_INIT', (url: string): any => ({ url }));
 
-const onMessage: Object = createAction(
-  'LOG_MESSAGE',
-  (url: string, msg: string): Object => ({ url, msg })
-);
+const onMessage: any = createAction('LOG_MESSAGE', (url: string, msg: string): any => ({
+  url,
+  msg,
+}));
 
-const clear: Object = createAction(
-  'LOG_CLEAR',
-  (url: string): Object => ({ url })
-);
+const clear: any = createAction('LOG_CLEAR', (url: string): any => ({ url }));
 
-const onDisconnect: Object = createAction(
-  'LOG_DISCONNECT',
-  (url: string): Object => ({ url })
-);
+const onDisconnect: any = createAction('LOG_DISCONNECT', (url: string): any => ({ url }));
 
-export {
-  onMessage,
-  init,
-  onDisconnect,
-  clear,
-};
+export { onMessage, init, onDisconnect, clear };

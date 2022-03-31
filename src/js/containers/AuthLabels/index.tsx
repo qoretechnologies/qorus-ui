@@ -23,7 +23,7 @@ import actions from '../../store/api/actions';
 import Search from '../search';
 
 type AuthLabelsContainerProps = {
-  service: Object;
+  service: any;
   optimisticDispatch: Function;
   authLabelValues: Array<string>;
 };
@@ -32,10 +32,10 @@ const AuthLabelsDropdown: Function = compose(
   withDispatch(),
   onlyUpdateForKeys(['label', 'id'])
   // @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
-)(({ label, id, optimisticDispatch, values }: Object) => (
+)(({ label, id, optimisticDispatch, values }: any) => (
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; small: true; }' is missing ... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; small: true; }' is missing ... Remove this comment to see the full error message */}
     <Control small>{label.value}</Control>
     {values.map((val: string) => (
       <Item
@@ -61,7 +61,7 @@ const AuthLabelsContainer: Function = ({
   optimisticDispatch,
   authLabelValues,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-AuthLabelsContainerProps): React.Element<any> => (
+AuthLabelsContainerProps) => (
   <Flex>
     <EnhancedTable
       // @ts-ignore ts-migrate(2339) FIXME: Property 'authLabels' does not exist on type 'Obje... Remove this comment to see the full error message
@@ -109,9 +109,9 @@ AuthLabelsContainerProps): React.Element<any> => (
           <DataOrEmptyTable condition={size(collection) === 0} cols={2}>
             {(props) => (
               <Tbody {...props}>
-                {collection.map((label: Object, index: number) => (
+                {collection.map((label: any, index: number) => (
                   <Tr first={index === 0} key={index}>
-                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                     <NameColumn name={label.name} />
                     <Td className="text">
                       <AuthLabelsDropdown
@@ -134,7 +134,7 @@ AuthLabelsContainerProps): React.Element<any> => (
 
 export default compose(
   connect(
-    (state: Object): Object => ({
+    (state: any): any => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       authLabelValues: state.api.system.data.auth_label_values || [],
     }),

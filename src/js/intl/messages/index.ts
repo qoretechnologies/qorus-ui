@@ -23,7 +23,7 @@ const LANGS = {
   JP: 'ja-JP',
 };
 
-export default function (locale: string): Object {
+export default function (locale: string): any {
   return {
     ...buttonMessages[locale],
     ...clusterMessages[locale],

@@ -8,9 +8,7 @@ type Props = {
 };
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-let InfoBar: Function = ({ children }: Props): React.Element<any> => (
-  <div className="infobar">{children}</div>
-);
+let InfoBar: Function = ({ children }: Props) => <div className="infobar">{children}</div>;
 
 InfoBar = pure(['children'])(InfoBar);
 

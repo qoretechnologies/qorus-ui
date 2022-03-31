@@ -22,7 +22,7 @@ import modal from '../../../hocomponents/modal';
 import ResourceFileModal from './modals/resourceFile';
 
 type Props = {
-  resources: Object;
+  resources: any;
   resourceFiles: Array<Object>;
   openModal: Function;
   closeModal: Function;
@@ -38,10 +38,10 @@ const ResourceTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   <Tabs active="resources">
-    {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; suffix: a... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; suffix: a... Remove this comment to see the full error message */}
     <Pane name="Resources" suffix={size(resources)}>
       <EnhancedTable
         collection={objectCollectionToArray(resources)}
@@ -70,7 +70,7 @@ Props): React.Element<any> => (
           canLoadMore,
           // @ts-ignore ts-migrate(2339) FIXME: Property 'limit' does not exist on type 'Object'.
           limit,
-        }: Object) => (
+        }: any) => (
           <Table fixed condensed striped>
             <Thead>
               <FixedRow className="toolbar-row">
@@ -104,18 +104,18 @@ Props): React.Element<any> => (
                 <Tbody {...props}>
                   {collection.map(
                     // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                    (item: Object, key: number): React.Element<any> => (
+                    (item: any, key: number) => (
                       <Tr key={key} first={key === 0}>
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                         <NameColumn name={item.name} />
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
                         <DescriptionColumn>{item.desc}</DescriptionColumn>
                         <Td className="text">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                           <Text text={item.type} />
                         </Td>
                         <Td className="text">
-                          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                           <Tree compact data={item.info} />
                         </Td>
                       </Tr>
@@ -128,7 +128,7 @@ Props): React.Element<any> => (
         )}
       </EnhancedTable>
     </Pane>
-    {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; suffix: a... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; suffix: a... Remove this comment to see the full error message */}
     <Pane name="Resource files" suffix={size(resourceFiles)}>
       <EnhancedTable
         collection={resourceFiles}
@@ -157,7 +157,7 @@ Props): React.Element<any> => (
           loadMoreTotal,
           // @ts-ignore ts-migrate(2339) FIXME: Property 'limit' does not exist on type 'Object'.
           limit,
-        }: Object) => (
+        }: any) => (
           <Table fixed condensed striped>
             <Thead>
               <FixedRow className="toolbar-row">
@@ -191,10 +191,10 @@ Props): React.Element<any> => (
                   {collection.map(
                     (
                       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-                      { name, type }: Object,
+                      { name, type }: any,
                       key: number
                       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                    ): React.Element<any> => (
+                    ) => (
                       <Tr key={key} first={key === 0}>
                         <NameColumn name={name} />
                         <Td className="narrow">{type}</Td>

@@ -118,7 +118,7 @@ class CrumbTabs extends React.Component {
 
     const leftoverTabSelected = leftoverTabs.find(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'tabId' does not exist on type 'Object'.
-      (tab: Object): boolean => tab.tabId === capitalize(tabQuery)
+      (tab: any): boolean => tab.tabId === capitalize(tabQuery)
     );
 
     return (
@@ -126,7 +126,7 @@ class CrumbTabs extends React.Component {
         {showTabs && [
           newTabs.map(
             // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (tab: Object): React.Element<CrumbTab> => (
+            (tab: any) => (
               <CrumbTab
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
                 key={tab.title}
@@ -153,13 +153,13 @@ class CrumbTabs extends React.Component {
                 <Menu>
                   {leftoverTabs
                     .filter(
-                      (tab: Object): boolean =>
+                      (tab: any): boolean =>
                         // @ts-ignore ts-migrate(2339) FIXME: Property 'tabId' does not exist on type 'Object'.
                         tab.tabId.toLowerCase() !== tabQuery
                     )
                     .map(
                       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                      (tab: Object): React.Element<MenuItem> =>
+                      (tab: any) =>
                         local ? (
                           <MenuItem
                             // @ts-ignore ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
@@ -180,7 +180,7 @@ class CrumbTabs extends React.Component {
                             )}
                             className="non-decorated-link"
                           >
-                            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'. */}
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'. */}
                             <MenuItem key={tab.title} text={tab.title} />
                           </Link>
                         )
@@ -206,27 +206,24 @@ class CrumbTabs extends React.Component {
 
 export default compose(
   injectIntl,
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-      windowWidth: state.ui.settings.width,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      language: state.api.currentUser.data.storage.locale,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
+    windowWidth: state.ui.settings.width,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    language: state.api.currentUser.data.storage.locale,
+  })),
   mapProps(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'windowWidth' does not exist on type 'Pro... Remove this comment to see the full error message
     ({ tabs, width, windowWidth, intl, ...rest }: Props): Props => ({
-      tabs: tabs.map(
-        (tab: any): Object =>
-          isString(tab)
-            ? { title: intl.formatMessage({ id: tab }), tabId: tab }
-            : {
-                title: `${intl.formatMessage({ id: tab.title })}${
-                  tab.suffix ? ` ${tab.suffix}` : ''
-                }`,
-                tabId: tab.title,
-              }
+      tabs: tabs.map((tab: any): any =>
+        isString(tab)
+          ? { title: intl.formatMessage({ id: tab }), tabId: tab }
+          : {
+              title: `${intl.formatMessage({ id: tab.title })}${
+                tab.suffix ? ` ${tab.suffix}` : ''
+              }`,
+              tabId: tab.title,
+            }
       ),
       width: width || windowWidth,
       ...rest,

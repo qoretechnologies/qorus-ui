@@ -23,7 +23,7 @@ type NewLoggerPopoverProps = {
   handleLevelChange: Function;
   handleAdditivityChange: Function;
   onCancel: Function;
-  loggerLevels: Object;
+  loggerLevels: any;
   resource: string;
   id: number | string;
   changeError: Function;
@@ -31,7 +31,7 @@ type NewLoggerPopoverProps = {
   dispatch: Function;
   changeAdding: Function;
   isAdding: boolean;
-  data?: Object;
+  data?: any;
 };
 
 const NewLoggerPopover: Function = ({
@@ -50,7 +50,7 @@ const NewLoggerPopover: Function = ({
   isAdding,
   data,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-NewLoggerPopoverProps): React.Element<any> => (
+NewLoggerPopoverProps) => (
   <Box fill top style={{ minWidth: '350px' }}>
     {error && <Alert bsStyle="danger">{error}</Alert>}
     <FormGroup label="Name " labelFor="logger-name">
@@ -62,11 +62,11 @@ NewLoggerPopoverProps): React.Element<any> => (
         onChange={handleNameChange}
       />
     </FormGroup>
-    {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; required... Remove this comment to see the full error message */}
     <FormGroup label="Level " requiredLabel>
-      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
       <Dropdown>
-        {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
         <Control>{level || 'Please select'}</Control>
         {Object.keys(loggerLevels).map((loggerLevel: string) => (
           <Item
@@ -95,12 +95,10 @@ NewLoggerPopoverProps): React.Element<any> => (
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      loggerLevels: state.api.system.data.loggerParams.logger_levels,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    loggerLevels: state.api.system.data.loggerParams.logger_levels,
+  })),
   withState('name', 'changeName', ({ data }) => data?.name || 'MyCustomLogger'),
   withState('level', 'changeLevel', ({ data }) => data && Object.keys(data.level)[0]),
   withState('additivity', 'changeAdditivity', ({ data }) => data?.additivity || false),
@@ -109,7 +107,7 @@ export default compose(
   withHandlers({
     handleNameChange:
       ({ changeName }): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
         event.persist();
 
@@ -118,7 +116,7 @@ export default compose(
       },
     handleLevelChange:
       ({ changeLevel }): Function =>
-      (event: Object, level: string): void => {
+      (event: any, level: string): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
         event.persist();
 
@@ -147,13 +145,13 @@ export default compose(
         url,
       }: // @ts-ignore ts-migrate(1055) FIXME: Type 'any' is not a valid async function return ty... Remove this comment to see the full error message
       NewLoggerPopoverProps): Function =>
-      async (): any => {
+      async (): Promise<any> => {
         if (!level) {
           changeError(() => 'Level field is required.');
         } else {
           changeAdding(() => true);
 
-          const fetchRes: Object = await fetchWithNotifications(
+          const fetchRes: any = await fetchWithNotifications(
             async () => {
               const apiMethod: Function = data ? put : post;
               let loggerPath: string;

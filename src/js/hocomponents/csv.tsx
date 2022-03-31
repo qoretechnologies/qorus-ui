@@ -20,7 +20,7 @@ export default (collection: string, name: string): Function =>
       } = this.props;
 
       handleModalMount: Function = (): void => {
-        const el: Object = document.querySelector('#CSV-modal-text');
+        const el: any = document.querySelector('#CSV-modal-text');
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'select' does not exist on type 'Object'.
         if (el) el.select();

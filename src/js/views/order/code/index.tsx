@@ -1,18 +1,11 @@
 import React from 'react';
-
-import Code from '../../../components/code';
 import Box from '../../../components/box';
+import Code from '../../../components/code';
 
-const LibraryView = ({
-  workflow,
-  location,
-}: {
-  workflow: Object,
-  location: Object,
-}) => {
+const LibraryView = ({ workflow, location }: { workflow: any; location: any }) => {
   return (
     <Box top>
-      { /* @ts-expect-error ts-migrate(2339) FIXME: Property 'lib' does not exist on type 'Object'. */ }
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'lib' does not exist on type 'Object'. */}
       <Code data={workflow.lib} location={location} />
     </Box>
   );

@@ -9,7 +9,7 @@ import { fetchResponse } from './store/api/utils';
 
 type Props = {
   next: string;
-  location: Object;
+  location: any;
 };
 
 const ErrorView: Function = ({ next }: Props) => (

@@ -27,10 +27,10 @@ const ToolbarFilters: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: (string | Element)[]; intent: "p... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: (string | Element)[]; intent: "p... Remove this comment to see the full error message */}
     <Control
       intent={deprecatedQuery || runningQuery || latestQuery ? Intent.PRIMARY : Intent.NONE}
       icon="filter-list"

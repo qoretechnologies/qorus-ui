@@ -30,7 +30,7 @@ type Props = {
   handleExpandClick: Function;
   processes: Array<Object>;
   hostname: string;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   openPane: Function;
   closePane: Function;
@@ -55,7 +55,7 @@ const ClusterNode: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ExpandableItem show title={node}>
     <EnhancedTable
       tableId={node}
@@ -130,7 +130,7 @@ Props): React.Element<any> => (
           <Tbody>
             {collection.map(
               // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-              (process: Object, index: number): React.Element<any> => (
+              (process: any, index: number) => (
                 <ProcessRow
                   first={index === 0}
                   openPane={openPane}

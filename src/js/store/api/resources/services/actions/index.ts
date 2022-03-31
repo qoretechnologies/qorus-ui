@@ -1,2 +1,4 @@
-export * as delegates from './delegates.js';
-export * as specials from './specials.js';
+import * as delegates from './delegates';
+import * as specials from './specials';
+
+export { delegates, specials };

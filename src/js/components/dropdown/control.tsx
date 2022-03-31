@@ -4,7 +4,7 @@ import React from 'react';
 
 type Props = {
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  children?: React.Element<any>;
+  children?;
   btnStyle: string;
   small?: boolean;
   noCaret?: boolean;

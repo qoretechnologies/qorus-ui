@@ -20,7 +20,7 @@ import SqlCache from './sqlcache';
 import Valuemaps from './valuemaps';
 
 type Props = {
-  location: Object;
+  location: any;
   children: any;
 };
 
@@ -28,12 +28,10 @@ const System: Function = ({
   location,
   children,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
-    {/* @ts-expect-error ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
-    {React.Children.map(children, (child: React.Element<any>) =>
-      React.cloneElement(child, { location })
-    )}
+    {/* @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
+    {React.Children.map(children, (child) => React.cloneElement(child, { location }))}
   </Flex>
 );
 

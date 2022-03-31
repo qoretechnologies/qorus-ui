@@ -23,7 +23,7 @@ const Text: Function = ({
   noControls,
   noMarkdown,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> =>
+Props) =>
   text && typeof text === 'object' ? (
     // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
     <Tree data={text} noControls={noControls} caseSensitive={caseSensitiveTree} />

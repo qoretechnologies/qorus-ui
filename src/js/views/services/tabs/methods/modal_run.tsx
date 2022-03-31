@@ -13,9 +13,9 @@ import { fetchJson, fetchWithNotifications } from '../../../../store/api/utils';
 @connect()
 export default class ModalRun extends Component {
   props: {
-    method: Object;
-    service: Object;
-    response: Object;
+    method: any;
+    service: any;
+    response: any;
     onClose: Function;
     dispatch: Function;
   } = this.props;
@@ -81,17 +81,17 @@ export default class ModalRun extends Component {
     }
   };
 
-  handleMethodChange = (ev: Object, methodName: string): void => {
+  handleMethodChange = (ev: any, methodName: string): void => {
     this.setState({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'methods' does not exist on type 'Object'... Remove this comment to see the full error message
       activeMethod: this.props.service.methods.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        (method: Object): boolean => method.name === methodName
+        (method: any): boolean => method.name === methodName
       ),
     });
   };
 
-  handleResponseTypeChange = (ev: Object, responseType: string): void => {
+  handleResponseTypeChange = (ev: any, responseType: string): void => {
     this.setState({
       responseType,
     });
@@ -138,7 +138,7 @@ export default class ModalRun extends Component {
     return (
       <Modal hasFooter onResizeStop={this.handleModalResize}>
         <Modal.Header titleId="errorsTableModalLabel" onClose={this.handleCancel}>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
           Method execution for {service.name} service
         </Modal.Header>
         <Modal.Body>
@@ -149,12 +149,12 @@ export default class ModalRun extends Component {
                 label={
                   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                   <Dropdown>
-                    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; small: true; }' is missing ... Remove this comment to see the full error message */}
+                    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; small: true; }' is missing ... Remove this comment to see the full error message */}
                     <Control small>{activeMethod.name}</Control>
-                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'methods' does not exist on type 'Object'... Remove this comment to see the full error message */}
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'methods' does not exist on type 'Object'... Remove this comment to see the full error message */}
                     {service.methods.map(
                       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                      (method: Object): React.Element<Item> => (
+                      (method: any) => (
                         <Item
                           // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                           key={method.name}
@@ -168,11 +168,11 @@ export default class ModalRun extends Component {
                   </Dropdown>
                 }
               >
-                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
                 <p className="text-muted">{activeMethod.description}</p>
               </PaneItem>
 
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'textWrapRef' does not exist on type 'Mod... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'textWrapRef' does not exist on type 'Mod... Remove this comment to see the full error message */}
               <div ref={this.textWrapRef}>
                 <div style={{ overflow: 'hidden' }}>
                   <PaneItem title="Arguments">
@@ -195,7 +195,7 @@ export default class ModalRun extends Component {
                   label={
                     // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
                     <Dropdown>
-                      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; small: true; }' is missi... Remove this comment to see the full error message */}
+                      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; small: true; }' is missi... Remove this comment to see the full error message */}
                       <Control small>{responseType}</Control>
                       <Item
                         title="YAML"

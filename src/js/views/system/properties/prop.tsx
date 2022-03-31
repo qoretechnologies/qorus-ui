@@ -33,7 +33,7 @@ const Property: Function = ({
   openModal,
   closeModal,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   const handlePropDeleteClick = (): void => {
     const confirmFunc = () => {
       onDelete({ domain: title });
@@ -136,13 +136,13 @@ Props): React.Element<any> => {
               </FixedRow>
             </Thead>
             <Tbody>
-              {collection.map((datum: Object, key: number) => (
+              {collection.map((datum: any, key: number) => (
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                 <Tr key={datum.name} first={key === 0}>
-                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                  {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                   <Td className="name">{datum.name}</Td>
                   <Td className="text">
-                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'prop' does not exist on type 'Object'. */}
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'prop' does not exist on type 'Object'. */}
                     <Text text={datum.prop} renderTree caseSensitiveTree />
                   </Td>
                   <Td className="normal">

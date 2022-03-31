@@ -24,16 +24,16 @@ const ToolbarActions: Function = ({
   handleDisableClick,
   handleResetClick,
 }: // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
     <Control icon="cog">With selected</Control>
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <Item title="Enable" icon="power" onClick={handleEnableClick} />
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <Item title="Disable" icon="power" onClick={handleDisableClick} />
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <Item title="Reset" icon="refresh" onClick={handleResetClick} />
   </Dropdown>
 );

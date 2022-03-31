@@ -20,64 +20,56 @@ import ServiceTabs from '../tabs';
   }
 )
 // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
-@mapProps(
-  ({ service, ...rest }: Object): Object => ({
-    methods: service.lib
-      ? service.class_based
-        ? service.methods.map(
-            (method: Object): Object => ({
-              ...method,
-              ...{ body: service.class_source },
-            })
-          )
-        : service.methods
-      : [],
-    service,
-    ...rest,
-  })
-)
+@mapProps(({ service, ...rest }: any): any => ({
+  methods: service.lib
+    ? service.class_based
+      ? service.methods.map((method: any): any => ({
+          ...method,
+          ...{ body: service.class_source },
+        }))
+      : service.methods
+    : [],
+  service,
+  ...rest,
+}))
 // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
-@mapProps(
-  ({ service, methods, ...rest }: Object): Object => ({
-    data: service.lib ? Object.assign(service.lib, { methods }) : {},
-    service,
-    methods,
-    ...rest,
-  })
-)
+@mapProps(({ service, methods, ...rest }: any): any => ({
+  data: service.lib ? Object.assign(service.lib, { methods }) : {},
+  service,
+  methods,
+  ...rest,
+}))
 // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-@mapProps(
-  ({ data, service, ...rest }: Object): Object => ({
-    data: service.class_based
-      ? {
-          ...{
-            code: [
-              {
-                name: 'Service code',
-                body: service.class_source,
-              },
-            ],
-          },
-          ...data,
-        }
-      : data,
-    service,
-    ...rest,
-  })
-)
+@mapProps(({ data, service, ...rest }: any): any => ({
+  data: service.class_based
+    ? {
+        ...{
+          code: [
+            {
+              name: 'Service code',
+              body: service.class_source,
+            },
+          ],
+        },
+        ...data,
+      }
+    : data,
+  service,
+  ...rest,
+}))
 // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
 @titleManager(({ service }): string => service.name, 'Services', 'prefix')
 export default class ServicesDetail extends Component {
   props: {
-    service: Object;
+    service: any;
     systemOptions: Array<Object>;
     paneTab: string;
     paneId: number;
     onClose: Function;
-    location: Object;
+    location: any;
     width: number;
     onResize: Function;
-    data: Object;
+    data: any;
   } = this.props;
 
   componentWillMount() {
@@ -85,7 +77,7 @@ export default class ServicesDetail extends Component {
     this.props.load(this.props.paneId);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
     if (this.props.paneId !== nextProps.paneId) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'load' does not exist on type '{ service:... Remove this comment to see the full error message

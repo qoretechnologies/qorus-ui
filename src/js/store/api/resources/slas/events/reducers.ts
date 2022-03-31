@@ -1,6 +1,6 @@
-const fetchEvents: Object = {
+const fetchEvents: any = {
   next(
-    state: Object,
+    state: any,
     {
       payload: {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'events' does not exist on type 'Object'.
@@ -9,11 +9,11 @@ const fetchEvents: Object = {
         fetchMore,
       },
     }: {
-      payload: Object;
+      payload: any;
       events: Array<Object>;
       fetchMore: boolean;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = fetchMore ? [...data, ...events] : events;
@@ -22,9 +22,9 @@ const fetchEvents: Object = {
   },
 };
 
-const changeOffset: Object = {
+const changeOffset: any = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object = {}, { payload: { newOffset } }: Object): Object {
+  next(state: any = {}, { payload: { newOffset } }: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Object'.
     const offset = newOffset || newOffset === 0 ? newOffset : state.offset + 50;
 
@@ -32,9 +32,9 @@ const changeOffset: Object = {
   },
 };
 
-const changeServerSort: Object = {
+const changeServerSort: any = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object = {}, { payload: { sort } }: Object): Object {
+  next(state: any = {}, { payload: { sort } }: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Object'.
     const sortDir = state.sort === sort ? !state.sortDir : state.sortDir;
 
@@ -42,8 +42,8 @@ const changeServerSort: Object = {
   },
 };
 
-const unsync: Object = {
-  next(): Object {
+const unsync: any = {
+  next(): any {
     return {
       data: [],
       sync: false,

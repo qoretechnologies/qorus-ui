@@ -36,7 +36,7 @@ const ActionButton: Function = ({
   compact,
   availableActions,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ControlProps): React.Element<Button> => {
+ControlProps) => {
   const {
     name,
     action: actionName,
@@ -44,7 +44,7 @@ ControlProps): React.Element<Button> => {
     intent,
   } = ORDER_ACTIONS.ALL.find(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'action' does not exist on type 'Object'.
-    (item: Object): boolean => item.action === action
+    (item: any): boolean => item.action === action
   );
   const disabled: boolean = !includes(availableActions, action);
   const handleClick: Function = (): void => {
@@ -69,7 +69,7 @@ const OrderControls: Function = ({
   compact,
   availableActions,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ButtonGroup>
     <ActionButton
       action={workflowstatus === 'BLOCKED' ? 'unblock' : 'block'}
@@ -101,13 +101,11 @@ Props): React.Element<any> => (
 export default compose(
   withDispatch(),
   withModal(),
-  mapProps(
-    ({ workflowstatus, ...rest }): Object => ({
-      availableActions: ORDER_ACTIONS[workflowstatus],
-      workflowstatus,
-      ...rest,
-    })
-  ),
+  mapProps(({ workflowstatus, ...rest }): any => ({
+    availableActions: ORDER_ACTIONS[workflowstatus],
+    workflowstatus,
+    ...rest,
+  })),
   withHandlers({
     handleActionClick:
       ({ optimisticDispatch, openModal, closeModal, id, workflowstatus }: Props): Function =>

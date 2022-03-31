@@ -18,7 +18,7 @@ const Icon: Function = ({
   tooltip,
   fontSize,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <i
     className={classNames('fa', icon || iconName ? `fa-${iconName || icon}` : '', className)}
     title={tooltip}

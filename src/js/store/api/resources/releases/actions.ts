@@ -28,7 +28,7 @@ const fetchReleases: Function = createAction(
     }
 
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    const releases: Promise<*> = await fetchJson('GET', url, null, true);
+    const releases: Promise<any> = await fetchJson('GET', url, null, true);
 
     return {
       releases,
@@ -37,19 +37,17 @@ const fetchReleases: Function = createAction(
   }
 );
 
-const changeOffset: Function = createAction(
-  'RELEASES_CHANGEOFFSET',
-  (newOffset: number): Object => ({ newOffset })
-);
+const changeOffset: Function = createAction('RELEASES_CHANGEOFFSET', (newOffset: number): any => ({
+  newOffset,
+}));
 
-const changeSort: Function = createAction(
-  'RELEASES_CHANGESORT',
-  (newSort: string): Object => ({ newSort })
-);
+const changeSort: Function = createAction('RELEASES_CHANGESORT', (newSort: string): any => ({
+  newSort,
+}));
 
 const changeSortDir: Function = createAction(
   'RELEASES_CHANGESORTDIR',
-  (newSortDir: string): Object => ({ newSortDir })
+  (newSortDir: string): any => ({ newSortDir })
 );
 
 const unsync: Function = createAction('RELEASES_UNSYNC');

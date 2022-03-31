@@ -19,7 +19,7 @@ import { get } from '../../../../store/api/utils';
 type StepDataEditModalProps = {
   onClose: Function;
   onSave: Function;
-  data: Object;
+  data: any;
   orderId: number;
   ind: number;
   stepId: number;
@@ -35,7 +35,7 @@ const StepDataEditModal: Function = ({
   ind,
   stepId,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-StepDataEditModalProps): React.Element<any> => (
+StepDataEditModalProps) => (
   <Modal hasFooter height={400}>
     <Modal.Header titleId="stepDataEdit" onClose={onClose}>
       Edit step {stepId} data for index {ind}
@@ -70,7 +70,7 @@ export default compose(
   lifecycle({
     async componentDidMount() {
       const { orderId, changeData, stepId, ind } = this.props;
-      const yamlData: Object = await get(
+      const yamlData: any = await get(
         `${settings.REST_BASE_URL}/orders/${orderId}?action=yamlStepData&stepid=${stepId}&ind=${ind}`
       );
 
@@ -80,8 +80,8 @@ export default compose(
   withHandlers({
     // @ts-ignore ts-migrate(2339) FIXME: Property 'changeData' does not exist on type 'Step... Remove this comment to see the full error message
     handleDataChange:
-      ({ changeData }: StepDataEditModalProps): Function =>
-      (event: Object): void => {
+      ({ changeData }: any): Function =>
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'persist' does not exist on type 'Object'... Remove this comment to see the full error message
         event.persist();
 

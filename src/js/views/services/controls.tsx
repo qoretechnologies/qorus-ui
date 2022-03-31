@@ -43,7 +43,7 @@ const ServiceControls: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ButtonGroup>
     <Button
       title={intl.formatMessage({ id: enabled ? 'button.disable' : 'button.enable' })}
@@ -86,12 +86,10 @@ Props): React.Element<any> => (
 
 export default compose(
   withDispatch(),
-  mapProps(
-    ({ status, ...rest }: Props): Object => ({
-      loaded: status !== 'unloaded',
-      ...rest,
-    })
-  ),
+  mapProps(({ status, ...rest }: Props): any => ({
+    loaded: status !== 'unloaded',
+    ...rest,
+  })),
   withHandlers({
     handleEnableClick:
       ({ enabled, dispatchAction, id }: Props): Function =>

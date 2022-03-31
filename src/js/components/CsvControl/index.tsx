@@ -1,7 +1,6 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
-import pure from 'recompose/pure';
 import { Control, Controls } from '../controls';
 
 type Props = {
@@ -15,7 +14,7 @@ const CsvControl: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<Controls> => (
+Props) => (
   <Controls>
     <Control
       big
@@ -28,4 +27,4 @@ Props): React.Element<Controls> => (
   </Controls>
 );
 
-export default compose(pure, injectIntl)(CsvControl);
+export default compose(injectIntl)(CsvControl);

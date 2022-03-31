@@ -7,7 +7,7 @@ import showIfPassed from '../../hocomponents/show-if-passed';
 
 type Props = {
   children: any;
-  sortData?: Object;
+  sortData?: any;
   onSortChange?: Function;
   className?: string;
 };
@@ -18,7 +18,7 @@ const FixedRow: Function = ({
   onSortChange,
   className,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <div className={classnames('table-fixed-row', className)}>
     {React.Children.map(
       children,

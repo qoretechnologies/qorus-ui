@@ -18,7 +18,7 @@ import titleManager from '../../../hocomponents/TitleManager';
 import actions from '../../../store/api/actions';
 
 type Props = {
-  collection: Object;
+  collection: any;
 };
 
 const UserHttp: Function = ({ collection }: Props): any => (
@@ -35,7 +35,7 @@ const UserHttp: Function = ({ collection }: Props): any => (
           httpServices: Array<Object>,
           groupName: string
           // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-        ): React.Element<Box> => (
+        ) => (
           <Box>
             <PaneItem title={groupName}>
               <Table condensed striped hover>
@@ -51,19 +51,19 @@ const UserHttp: Function = ({ collection }: Props): any => (
                 <Tbody>
                   {httpServices.map(
                     // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                    (httpService: Object, idx: number): React.Element<any> => (
+                    (httpService: any, idx: number) => (
                       <Tr key={idx}>
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'. */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'. */}
                         <Td className="text name">{httpService.title}</Td>
                         <Td className="text">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'URL' does not exist on type 'Object'. */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'URL' does not exist on type 'Object'. */}
                           <Link to={httpService.URL}>{httpService.url}</Link>
                         </Td>
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message */}
                         <Td className="text">{httpService.service}</Td>
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'version' does not exist on type 'Object'... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'version' does not exist on type 'Object'... Remove this comment to see the full error message */}
                         <Td className="narrow">{httpService.version}</Td>
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'serviceid' does not exist on type 'Objec... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'serviceid' does not exist on type 'Objec... Remove this comment to see the full error message */}
                         <Td className="narrow">{httpService.serviceid}</Td>
                       </Tr>
                     )
@@ -80,7 +80,7 @@ const UserHttp: Function = ({ collection }: Props): any => (
   </Flex>
 );
 
-const userHttpMetaSelector = (state: Object): Object => {
+const userHttpMetaSelector = (state: any): any => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   if (state.api.userhttp) {
     return {
@@ -94,13 +94,13 @@ const userHttpMetaSelector = (state: Object): Object => {
   return { sync: false, loading: false };
 };
 
-const userHttpSelector = (state: Object): Array<Object> =>
+const userHttpSelector = (state: any): Array<Object> =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.userhttp.data;
 
 const viewSelector = createSelector(
   [userHttpSelector, userHttpMetaSelector],
-  (userhttp: Array<Object>, meta: Object) => ({
+  (userhttp: Array<Object>, meta: any) => ({
     meta,
     collection: userhttp,
   })

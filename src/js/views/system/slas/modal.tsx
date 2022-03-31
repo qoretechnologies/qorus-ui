@@ -15,7 +15,7 @@ type Props = {
 export default class SLACreateModal extends Component {
   props: Props = this.props;
 
-  handleFormSubmit: Function = (event: Object): void => {
+  handleFormSubmit: Function = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
     event.preventDefault();
 

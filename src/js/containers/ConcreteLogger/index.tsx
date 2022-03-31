@@ -24,7 +24,7 @@ import NewAppenderPopover from './popovers/appender';
 import NewLoggerPopover from './popovers/logger';
 
 type LoggerContainerProps = {
-  logger: Object;
+  logger: any;
   appenders: Array<Object>;
   id: number;
   resource: string;
@@ -56,7 +56,7 @@ const LoggerContainer: Function = ({
   handleLoggerDuplicateClick,
   url,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-LoggerContainerProps): React.Element<any> => (
+LoggerContainerProps) => (
   <Flex>
     {logger === 'empty' && (
       <Alert bsStyle="danger">
@@ -113,12 +113,12 @@ LoggerContainerProps): React.Element<any> => (
             </Thead>
             <Tbody>
               <Tr first>
-                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                 <NameColumn name={logger.name} />
-                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */}
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */}
                 <Td>{Object.keys(logger.level)[0]}</Td>
                 <Td>
-                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'additivity' does not exist on type 'Obje... Remove this comment to see the full error message */}
+                  {/* @ts-ignore ts-migrate(2339) FIXME: Property 'additivity' does not exist on type 'Obje... Remove this comment to see the full error message */}
                   <ContentByType content={logger.additivity} />
                 </Td>
               </Tr>
@@ -173,31 +173,31 @@ LoggerContainerProps): React.Element<any> => (
               </FixedRow>
             </Thead>
             <DataOrEmptyTable condition={size(appenders) === 0} cols={7}>
-              {(props: Object) => (
+              {(props: any) => (
                 <Tbody {...props}>
-                  {appenders.map((appender: Object, index: number): any => (
+                  {appenders.map((appender: any, index: number): any => (
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
                     <Tr first={index === 0} key={appender.id}>
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                       <NameColumn name={appender.name} />
                       <Td className="text">
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                         <ContentByType content={appender.type} />
                       </Td>
                       <Td className="text">
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'Object... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'Object... Remove this comment to see the full error message */}
                         <ContentByType content={appender.filename} />
                       </Td>
                       <Td className="text">
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'Object... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'Object... Remove this comment to see the full error message */}
                         <ContentByType content={appender.encoding} />
                       </Td>
                       <Td className="text">
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'O... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'O... Remove this comment to see the full error message */}
                         <ContentByType content={appender.layoutPattern} />
                       </Td>
                       <Td className="narrow">
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'O... Remove this comment to see the full error message */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'O... Remove this comment to see the full error message */}
                         <ContentByType content={appender.rotationCount} />
                       </Td>
                       <Td className="narrow">
@@ -248,10 +248,10 @@ LoggerContainerProps): React.Element<any> => (
 export default compose(
   connect((state, ownProps) => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'loggerData' does not exist on type 'Obje... Remove this comment to see the full error message
-    const { loggerData }: Object = state.api[ownProps.resource][
+    const { loggerData }: any = state.api[ownProps.resource][
       ownProps.resource === 'system' ? 'logs' : 'data'
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-    ].find((res: Object): boolean => res.id === ownProps.id);
+    ].find((res: any): boolean => res.id === ownProps.id);
 
     return {
       update: Date.now(),

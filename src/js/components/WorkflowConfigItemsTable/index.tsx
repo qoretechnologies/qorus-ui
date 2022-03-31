@@ -16,11 +16,11 @@ import NoDataIf from '../NoDataIf';
 import Table from './table';
 
 type GlobalConfigItemsContainerProps = {
-  items: Object;
+  items: any;
   dispatchAction: Function;
   intrf: string;
   openModal: Function;
-  globalItems: Object;
+  globalItems: any;
 };
 
 const WorkflowConfigItemsContainer: Function = ({
@@ -38,7 +38,7 @@ const WorkflowConfigItemsContainer: Function = ({
   globalConfig,
   globalItems,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-GlobalConfigItemsContainerProps): React.Element<any> => {
+GlobalConfigItemsContainerProps) => {
   const saveValue = (item, newValue, onSuccess, stepId?) => {
     dispatchAction(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.

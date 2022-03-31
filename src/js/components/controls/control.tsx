@@ -30,11 +30,11 @@ type Props = {
   disabled?: boolean;
   big?: boolean;
   type?: string;
-  css?: Object;
+  css?: any;
   id?: string;
   className?: string;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  children?: React.Element<*> | Array<React.Element<*>>;
+  children?: any;
   intent?: string;
   text?: any;
   isTablet?: boolean;
@@ -56,7 +56,7 @@ const Control: Function = ({
   loading,
   big,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Button
     id={id}
     className={className}
@@ -77,12 +77,10 @@ Props): React.Element<any> => (
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-      isTablet: state.ui.settings.tablet,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
+    isTablet: state.ui.settings.tablet,
+  })),
   mapProps(
     ({
       className,
@@ -111,7 +109,7 @@ export default compose(
   withHandlers({
     handleClick:
       ({ action, onClick, stopPropagation }: Props): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         const act: Function = action || onClick;
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'stopPropagation' does not exist on type ... Remove this comment to see the full error message

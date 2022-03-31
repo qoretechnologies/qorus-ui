@@ -2,7 +2,7 @@ import { createAction } from 'redux-actions';
 import settings from '../../../../settings';
 import { fetchJson, fetchWithNotifications } from '../../utils';
 
-const manageProp = createAction('PROPS_MANAGEPROP', async (prop: Object, dispatch: Function) => {
+const manageProp = createAction('PROPS_MANAGEPROP', async (prop: any, dispatch: Function) => {
   if (dispatch) {
     await fetchWithNotifications(
       async () =>
@@ -36,7 +36,7 @@ const manageProp = createAction('PROPS_MANAGEPROP', async (prop: Object, dispatc
 const removeProp = createAction(
   'PROPS_REMOVEPROP',
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  async (prop: Object, dispatch: Function): Promise<*> => {
+  async (prop: any, dispatch: Function): Promise<any> => {
     if (!dispatch) {
       return { prop };
     }

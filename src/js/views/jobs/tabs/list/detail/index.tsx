@@ -24,7 +24,7 @@ const ResultDetail = ({
   handleCloseClick,
   sidebarOpen,
 }: {
-  result: Object;
+  result: any;
   handleCloseClick: Function;
   sidebarOpen: boolean;
 }) => {
@@ -32,7 +32,7 @@ const ResultDetail = ({
     <Headbar key="job-detail-header">
       <Pull>
         <Breadcrumbs icon="list-detail-view">
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'job_instanceid' does not exist on type '... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'job_instanceid' does not exist on type '... Remove this comment to see the full error message */}
           <Crumb active>{result.job_instanceid}</Crumb>
         </Breadcrumbs>
       </Pull>
@@ -47,7 +47,7 @@ const ResultDetail = ({
 
   return (
     <Flex className={`job-result-info ${sidebarOpen ? 'sidebar-open' : ''}`}>
-      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ top: true; }' is missing the following pro... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ top: true; }' is missing the following pro... Remove this comment to see the full error message */}
       <Resize top />
       {result ? renderResult() : <Loader />}
     </Flex>
@@ -67,7 +67,7 @@ const jobResultSelector = (state, props) => {
   return { result, sidebarOpen };
 };
 
-const prepareRequestParams = mapProps((props: Object) => ({
+const prepareRequestParams = mapProps((props: any) => ({
   ...props,
   queryParams: {},
   // @ts-ignore ts-migrate(2339) FIXME: Property 'location' does not exist on type 'Object... Remove this comment to see the full error message
@@ -103,7 +103,7 @@ export default compose(
   withHandlers({
     // @ts-ignore ts-migrate(2339) FIXME: Property 'changeJobQuery' does not exist on type '... Remove this comment to see the full error message
     handleCloseClick:
-      ({ changeJobQuery }: Object) =>
+      ({ changeJobQuery }: any) =>
       (): void => {
         changeJobQuery('');
       },

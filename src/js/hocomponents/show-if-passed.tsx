@@ -10,14 +10,14 @@ import React from 'react';
 export default (
     condition: Function,
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    otherElement: React.Element<*>
+    otherElement
   ): Function =>
   (
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
     Component
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
   ) =>
-  (props: Object) => {
+  (props: any) => {
     if (condition(props)) {
       return <Component {...props} />;
     }

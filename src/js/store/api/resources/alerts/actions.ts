@@ -8,16 +8,12 @@ const markAllAsRead: Function = createAction(
   (type: string = null) => ({ type })
 );
 
-const raised: Function = createAction(
-  actions.RAISED,
-  (events: Array<Object>): Object => ({ events })
-);
+const raised: Function = createAction(actions.RAISED, (events: Array<Object>): any => ({ events }));
 
-const updateDone: Function = createAction(actions.UPDATEDONE, (id: number): Object => ({ id }));
+const updateDone: Function = createAction(actions.UPDATEDONE, (id: number): any => ({ id }));
 
-const cleared: Function = createAction(
-  actions.CLEARED,
-  (events: Array<Object>): Object => ({ events })
-);
+const cleared: Function = createAction(actions.CLEARED, (events: Array<Object>): any => ({
+  events,
+}));
 
 export { markAllAsRead, raised, cleared, updateDone };

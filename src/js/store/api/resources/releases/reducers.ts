@@ -1,7 +1,7 @@
 // @flow
-const fetchReleases: Object = {
+const fetchReleases: any = {
   next(
-    state: Object,
+    state: any,
     {
       payload: {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'releases' does not exist on type 'Object... Remove this comment to see the full error message
@@ -10,11 +10,11 @@ const fetchReleases: Object = {
         fetchMore,
       },
     }: {
-      payload: Object;
+      payload: any;
       releases: Array<Object>;
       fetchMore: boolean;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = fetchMore ? [...data, ...releases] : releases;
@@ -23,9 +23,9 @@ const fetchReleases: Object = {
   },
 };
 
-const changeOffset: Object = {
+const changeOffset: any = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object, { payload: { newOffset } }: Object): Object {
+  next(state: any, { payload: { newOffset } }: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Object'.
     const offset = newOffset || newOffset === 0 ? newOffset : state.offset + 50;
 
@@ -33,16 +33,16 @@ const changeOffset: Object = {
   },
 };
 
-const changeSort: Object = {
+const changeSort: any = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object, { payload: { newSort } }: Object): Object {
+  next(state: any, { payload: { newSort } }: any): any {
     return { ...state, ...{ sort: newSort } };
   },
 };
 
-const changeSortDir: Object = {
+const changeSortDir: any = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object, { payload: { newSortDir } }: Object): Object {
+  next(state: any, { payload: { newSortDir } }: any): any {
     return { ...state, ...{ sortDir: newSortDir } };
   },
 };

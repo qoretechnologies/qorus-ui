@@ -6,11 +6,7 @@ import { browserHistory } from 'react-router';
 import { createSelector } from 'reselect';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import ChartComponent from '../../../components/chart';
-import {
-  Control as Button,
-  Controls as ButtonGroup,
-  // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-} from '../../../components/controls';
+import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import DashboardModule from '../../../components/dashboard_module/index';
 import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
@@ -46,13 +42,13 @@ const viewSelector = createSelector(
 
 type Props = {
   children: any;
-  route?: Object;
-  health: Object;
+  route?: any;
+  health: any;
   dispatch: Function;
-  location: Object;
-  system: Object;
+  location: any;
+  system: any;
   isTablet: boolean;
-  currentUser: Object;
+  currentUser: any;
   openModal: Function;
   closeModal: Function;
 };
@@ -145,11 +141,11 @@ export default class Dashboard extends Component {
     const currentNodeData = system.cluster_info[this.state.nodeTab];
     const history = prepareHistory(currentNodeData.mem_history);
     const procHistory = prepareHistory(currentNodeData.process_history);
-    const flattenedHistory = history.map((hist: Object): number =>
+    const flattenedHistory = history.map((hist: any): number =>
       // @ts-ignore ts-migrate(2339) FIXME: Property 'node_priv' does not exist on type 'Objec... Remove this comment to see the full error message
       parseFloat(calculateMemory(hist.node_priv, null, false), 10)
     );
-    const flattenedInUseHistory = history.map((hist: Object): number =>
+    const flattenedInUseHistory = history.map((hist: any): number =>
       // @ts-ignore ts-migrate(2339) FIXME: Property 'node_ram_in_use' does not exist on type ... Remove this comment to see the full error message
       parseFloat(calculateMemory(hist.node_ram_in_use, null, false), 10)
     );
@@ -181,7 +177,7 @@ export default class Dashboard extends Component {
     }
 
     const nodeChart = {
-      data: history.map((hist: Object): number =>
+      data: history.map((hist: any): number =>
         // @ts-ignore ts-migrate(2339) FIXME: Property 'node_priv' does not exist on type 'Objec... Remove this comment to see the full error message
         calculateMemory(hist.node_priv, null, false)
       ),
@@ -198,7 +194,7 @@ export default class Dashboard extends Component {
     };
 
     const nodeInUseChart = {
-      data: history.map((hist: Object): number =>
+      data: history.map((hist: any): number =>
         // @ts-ignore ts-migrate(2339) FIXME: Property 'node_ram_in_use' does not exist on type ... Remove this comment to see the full error message
         calculateMemory(hist.node_ram_in_use, null, false)
       ),
@@ -214,7 +210,7 @@ export default class Dashboard extends Component {
 
     const nodeProcChart = {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'count' does not exist on type 'Object'.
-      data: procHistory.map((hist: Object): number => hist.count),
+      data: procHistory.map((hist: any): number => hist.count),
       // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
       label: this.props.intl.formatMessage({
         id: 'dashboard.running-processes',
@@ -229,7 +225,7 @@ export default class Dashboard extends Component {
 
     const nodeCPUChart = {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'node_load_pct' does not exist on type 'O... Remove this comment to see the full error message
-      data: history.map((hist: Object): number => round(hist.node_load_pct, 2)),
+      data: history.map((hist: any): number => round(hist.node_load_pct, 2)),
       // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
       label: this.props.intl.formatMessage({ id: 'dashboard.cpu-load' }),
       backgroundColor: COLORS.cobalt,
@@ -263,7 +259,7 @@ export default class Dashboard extends Component {
         </Headbar>
         <Flex scrollY>
           <MasonryLayout columns={this.getModulesCount() < 4 ? 1 : isTablet ? 2 : 3}>
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message */}
             {this.hasModule('orderStats') && system.order_stats && (
               <MasonryPanel>
                 <DashboardModule>
@@ -322,7 +318,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/workflows')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'workflow_total' does not exist on type '... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'workflow_total' does not exist on type '... Remove this comment to see the full error message */}
                           {system.workflow_total}
                         </div>
                         <div className="db-data-label">
@@ -338,7 +334,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/workflows?search=has_alerts:true')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'workflow_alerts' does not exist on type ... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'workflow_alerts' does not exist on type ... Remove this comment to see the full error message */}
                           {system.workflow_alerts}
                         </div>
                         <div className="db-data-label">
@@ -360,7 +356,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/services')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'service_total' does not exist on type 'O... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'service_total' does not exist on type 'O... Remove this comment to see the full error message */}
                           {system.service_total}
                         </div>
                         <div className="db-data-label">
@@ -376,7 +372,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/services?search=has_alerts:true')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'service_alerts' does not exist on type '... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'service_alerts' does not exist on type '... Remove this comment to see the full error message */}
                           {system.service_alerts}
                         </div>
                         <div className="db-data-label">
@@ -398,7 +394,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/jobs')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'job_total' does not exist on type 'Objec... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'job_total' does not exist on type 'Objec... Remove this comment to see the full error message */}
                           {system.job_total}
                         </div>
                         <div className="db-data-label">
@@ -414,7 +410,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/jobs?search=has_alerts:true')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'job_alerts' does not exist on type 'Obje... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'job_alerts' does not exist on type 'Obje... Remove this comment to see the full error message */}
                           {system.job_alerts}
                         </div>
                         <div className="db-data-label">
@@ -448,7 +444,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/remote?tab=qorus')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'remote_total' does not exist on type 'Ob... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'remote_total' does not exist on type 'Ob... Remove this comment to see the full error message */}
                           {system.remote_total}
                         </div>
                         <div className="db-data-label">
@@ -466,7 +462,7 @@ export default class Dashboard extends Component {
                         }
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'remote_alerts' does not exist on type 'O... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'remote_alerts' does not exist on type 'O... Remove this comment to see the full error message */}
                           {system.remote_alerts}
                         </div>
                         <div className="db-data-label">
@@ -487,7 +483,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/remote')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'datasource_total' does not exist on type... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'datasource_total' does not exist on type... Remove this comment to see the full error message */}
                           {system.datasource_total}
                         </div>
                         <div className="db-data-label">
@@ -503,7 +499,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/remote?search=has_alerts:true')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'datasource_alerts' does not exist on typ... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'datasource_alerts' does not exist on typ... Remove this comment to see the full error message */}
                           {system.datasource_alerts}
                         </div>
                         <div className="db-data-label">
@@ -524,7 +520,7 @@ export default class Dashboard extends Component {
                         onClick={() => this.handleModuleClick('/remote?tab=user')}
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'user_total' does not exist on type 'Obje... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'user_total' does not exist on type 'Obje... Remove this comment to see the full error message */}
                           {system.user_total}
                         </div>
                         <div className="db-data-label">
@@ -542,7 +538,7 @@ export default class Dashboard extends Component {
                         }
                       >
                         <div className="db-data-content">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'user_alerts' does not exist on type 'Obj... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'user_alerts' does not exist on type 'Obj... Remove this comment to see the full error message */}
                           {system.user_alerts}
                         </div>
                         <div className="db-data-label">
@@ -573,7 +569,7 @@ export default class Dashboard extends Component {
                       </div>
                       <div className="dashboard-module-small">
                         <div className="top">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'cluster_info' does not exist on type 'Ob... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'cluster_info' does not exist on type 'Ob... Remove this comment to see the full error message */}
                           {Object.keys(system.cluster_info).length}
                         </div>
                         <div className="bottom">
@@ -582,7 +578,7 @@ export default class Dashboard extends Component {
                       </div>
                       <div className="dashboard-module-small">
                         <div className="top">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'processes' does not exist on type 'Objec... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'processes' does not exist on type 'Objec... Remove this comment to see the full error message */}
                           {Object.keys(system.processes).length}
                         </div>
                         <div className="bottom">
@@ -590,7 +586,7 @@ export default class Dashboard extends Component {
                         </div>
                       </div>
                     </div>
-                    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'cluster_info' does not exist on type 'Ob... Remove this comment to see the full error message */}
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'cluster_info' does not exist on type 'Ob... Remove this comment to see the full error message */}
                     {Object.keys(system.cluster_info).map((node: string) => {
                       const memory: string = calculateMemory(
                         // @ts-ignore ts-migrate(2339) FIXME: Property 'cluster_info' does not exist on type 'Ob... Remove this comment to see the full error message
@@ -674,7 +670,7 @@ export default class Dashboard extends Component {
                   >
                     <div className="dashboard-module-overview">
                       <div className="module overview-module">
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
                         <div>{health.data['instance-key']}</div>
                         <div>
                           <FormattedMessage id="dashboard.instance" />
@@ -686,7 +682,7 @@ export default class Dashboard extends Component {
                           health.data.health
                         )}`}
                       >
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
                         <div>{health.data.health}</div>
                         <div>
                           <FormattedMessage id="dashboard.health" />
@@ -730,7 +726,7 @@ export default class Dashboard extends Component {
                       id: 'dashboard.remote-instances',
                     })}
                   >
-                    {remotes.map((remote: Object) => (
+                    {remotes.map((remote: any) => (
                       <div
                         className="dashboard-module-wide has-link"
                         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
@@ -748,7 +744,7 @@ export default class Dashboard extends Component {
                             remote.health
                           )}`}
                         >
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                           {remote.name}
                         </div>
                         <div
@@ -774,7 +770,7 @@ export default class Dashboard extends Component {
                               opacity: remote.health === 'UNKNOWN' ? 0.4 : 1,
                             }}
                           >
-                            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'health' does not exist on type 'Object'. */}
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'health' does not exist on type 'Object'. */}
                             <div className="top">{remote.health}</div>
                             <div className="bottom">
                               <FormattedMessage id="dashboard.health" />
@@ -822,7 +818,7 @@ export default class Dashboard extends Component {
                       />
                     }
                   >
-                    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                     <ChartComponent
                       id={this.state.nodeTab}
                       title={
@@ -840,7 +836,7 @@ export default class Dashboard extends Component {
                       unit=" GiB"
                       yMax={yMax}
                       empty={currentNodeData.mem_history.length === 0}
-                      labels={history.map((hist: Object): string =>
+                      labels={history.map((hist: any): string =>
                         // @ts-ignore ts-migrate(2339) FIXME: Property 'timestamp' does not exist on type 'Objec... Remove this comment to see the full error message
                         formatChartTime(hist.timestamp)
                       )}
@@ -857,7 +853,7 @@ export default class Dashboard extends Component {
                       id: 'dashboard.node-cpu-load',
                     })}
                   >
-                    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                     <ChartComponent
                       id={this.state.nodeTab}
                       title={
@@ -873,7 +869,7 @@ export default class Dashboard extends Component {
                       isNotTime
                       unit="%"
                       empty={currentNodeData.mem_history.length === 0}
-                      labels={procHistory.map((hist: Object): string =>
+                      labels={procHistory.map((hist: any): string =>
                         // @ts-ignore ts-migrate(2339) FIXME: Property 'timestamp' does not exist on type 'Objec... Remove this comment to see the full error message
                         formatChartTime(hist.timestamp)
                       )}
@@ -886,7 +882,7 @@ export default class Dashboard extends Component {
                       id: 'dashboard.node-process-count-history',
                     })}
                   >
-                    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                     <ChartComponent
                       id={this.state.nodeTab}
                       title={
@@ -906,7 +902,7 @@ export default class Dashboard extends Component {
                       unit=" "
                       stepSize={20}
                       empty={procHistory.length === 0}
-                      labels={procHistory.map((hist: Object): string =>
+                      labels={procHistory.map((hist: any): string =>
                         // @ts-ignore ts-migrate(2339) FIXME: Property 'timestamp' does not exist on type 'Objec... Remove this comment to see the full error message
                         formatChartTime(hist.timestamp)
                       )}

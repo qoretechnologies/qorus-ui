@@ -71,8 +71,8 @@ const getFetchParams = (filter, date = DATES.PREV_DAY) => {
   return params;
 };
 
-const buildOrderStatsDisposition = (orderStats: Object, band: string): Object => {
-  const stats: Object = {
+const buildOrderStatsDisposition = (orderStats: any, band: string): any => {
+  const stats: any = {
     completed: orderStats
       // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
       .find((stat) => stat.label === band)
@@ -106,8 +106,8 @@ const buildOrderStatsDisposition = (orderStats: Object, band: string): Object =>
   };
 };
 
-const buildOrderStatsSLA: Function = (orderStats: Object, band: string): Object => {
-  const stats: Object = {
+const buildOrderStatsSLA: Function = (orderStats: any, band: string): any => {
+  const stats: any = {
     'In SLA': orderStats
       // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
       .find((stat) => stat.label === band)

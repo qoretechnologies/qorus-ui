@@ -9,7 +9,7 @@ const NOTIFICATION_TYPES: Array<string> = [
   'orders',
 ];
 
-const ALERT_NOTIFICATION_TYPES: Object = {
+const ALERT_NOTIFICATION_TYPES: any = {
   WORKFLOW: 'workflows',
   SERVICE: 'services',
   JOB: 'jobs',

@@ -21,7 +21,7 @@ const Breadcrumbs: Function = ({
   icon,
   collapsed = false,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ul className={`bp3-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
     {!collapsed && (
       // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message

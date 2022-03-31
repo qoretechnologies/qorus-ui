@@ -34,7 +34,7 @@ const qorusTypeMapper = {
 @injectIntl
 export default class Tree extends Component {
   props: {
-    data: Object | Array<any>;
+    data: any | Array<any>;
     withEdit: boolean;
     onUpdateClick: Function;
     noControls: boolean;
@@ -64,7 +64,7 @@ export default class Tree extends Component {
     showTypes: this.props.settings.treeDefaultDataTypes || false,
   };
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'forceEdit' does not exist on type 'Objec... Remove this comment to see the full error message
     if (nextProps.forceEdit) {
       this.setState({
@@ -352,7 +352,7 @@ export default class Tree extends Component {
         )}
         {this.state.mode === 'normal' && (
           <Flex scrollY className="tree-wrapper">
-            {/* @ts-expect-error ts-migrate(2554) FIXME: Expected 4-5 arguments, but got 2. */}
+            {/* @ts-ignore ts-migrate(2554) FIXME: Expected 4-5 arguments, but got 2. */}
             {this.renderTree(this.props.data, true)}
           </Flex>
         )}

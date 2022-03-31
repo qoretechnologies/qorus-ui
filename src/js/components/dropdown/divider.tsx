@@ -13,6 +13,6 @@ const DropdownDivider: Function = ({
   title,
   className,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-DropdownDividerProps): React.Element<any> => <MenuDivider title={title} className={className} />;
+DropdownDividerProps) => <MenuDivider title={title} className={className} />;
 
 export default compose(onlyUpdateForKeys(['title', 'className']))(DropdownDivider);

@@ -17,8 +17,8 @@ type Props = {
   type: string;
   slavalue: string;
   handleSlaChange: Function;
-  model: Object;
-  method: Object;
+  model: any;
+  method: any;
   setSla: Function;
   removeSla: Function;
   openModal: Function;
@@ -33,18 +33,18 @@ const SLAControl: Function = ({
   slavalue,
   handleSlaChange,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   if (canModify) {
     return (
       <ControlGroup>
         {slas.length > 0 ? (
           // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           <Dropdown>
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; small: true; }' is missi... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; small: true; }' is missi... Remove this comment to see the full error message */}
             <Toggle small>{slavalue || 'None'}</Toggle>
             {slas.map(
               // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-              (sla: Object): React.Element<any> => (
+              (sla: any) => (
                 <Item
                   // @ts-ignore ts-migrate(2339) FIXME: Property 'slaid' does not exist on type 'Object'.
                   key={sla.slaid}
@@ -84,7 +84,7 @@ export default compose(
   withHandlers({
     handleSlaChange:
       ({ changeSlaValue, model, method, setSla, type }: Props): Function =>
-      (ev: Object, sla: string): void => {
+      (ev: any, sla: string): void => {
         changeSlaValue(() => sla);
 
         if (type === 'service') {

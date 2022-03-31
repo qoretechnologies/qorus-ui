@@ -10,9 +10,9 @@ import { unSyncUsers } from '../users/actions';
 const createPerm: Function = createAction(
   'PERMS_CREATEPERM',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  async (name: string, desc: string, dispatch: Function): Object => {
+  async (name: string, desc: string, dispatch: Function): any => {
     if (dispatch) {
-      const res: Object = await fetchWithNotifications(
+      const res: any = await fetchWithNotifications(
         async () =>
           // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
           await fetchJson('POST', `${settings.REST_BASE_URL}/perms/`, {
@@ -73,7 +73,7 @@ const removePerm: Function = createAction(
 const updatePerm: Function = createAction(
   'PERMS_UPDATEPERM',
   // @ts-ignore ts-migrate(1055) FIXME: Type 'Object' is not a valid async function return... Remove this comment to see the full error message
-  async (name: string, desc: string, dispatch: Function): Object => {
+  async (name: string, desc: string, dispatch: Function): any => {
     if (dispatch) {
       await fetchWithNotifications(
         async () =>

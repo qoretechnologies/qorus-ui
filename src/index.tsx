@@ -1,17 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './css/app.scss';
 import App from './js/app';
 import reportWebVitals from './reportWebVitals';
 
 global.env = process.env;
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App env={process.env} />
-  </React.StrictMode>,
-  document.body.firstElementChild
-);
+ReactDOM.render(<App env={process.env} />, document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

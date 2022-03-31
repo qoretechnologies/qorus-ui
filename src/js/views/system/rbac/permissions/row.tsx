@@ -10,7 +10,7 @@ import NameColumn from '../../../../components/NameColumn';
 import { Td, Tr } from '../../../../components/new_table';
 
 type Props = {
-  model: Object;
+  model: any;
   onEditClick: Function;
   handleEditClick: Function;
   onDeleteClick: Function;
@@ -28,9 +28,9 @@ const PermsRow: Function = ({
   canDelete,
   first,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr first={first}>
-    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
     <NameColumn name={model.name} />
     <ActionColumn>
       <ButtonGroup>
@@ -55,9 +55,9 @@ Props): React.Element<any> => (
         />
       </ButtonGroup>
     </ActionColumn>
-    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'permission_type' does not exist on type ... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'permission_type' does not exist on type ... Remove this comment to see the full error message */}
     <Td className="text normal">{model.permission_type}</Td>
-    {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
+    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
     <DescriptionColumn>{model.desc}</DescriptionColumn>
   </Tr>
 );

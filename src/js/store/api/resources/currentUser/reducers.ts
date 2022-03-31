@@ -1,23 +1,23 @@
-const initialState: Object = {
+const initialState: any = {
   data: {},
   loading: false,
   sync: false,
 };
 
-const unSync: Object = {
-  next(state: Object = initialState): Object {
+const unSync: any = {
+  next(state: any = initialState): any {
     return Object.assign({}, state, initialState);
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
-const updateStorage: Object = {
+const updateStorage: any = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-  next(state: Object = initialState, { payload: { storage } }: Object): Object {
+  next(state: any = initialState, { payload: { storage } }: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    const data: Object = { ...state.data, ...{ storage } };
+    const data: any = { ...state.data, ...{ storage } };
 
     return { ...state, ...{ data } };
   },

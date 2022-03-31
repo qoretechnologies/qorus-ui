@@ -28,7 +28,7 @@ const RolesTable: Function = ({
   onAddRoleClick,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<Table> => (
+Props) => (
   <EnhancedTable collection={roles} tableId="rbacRoles" sortDefault={sortDefaults.rbacRoles}>
     {({
       canLoadMore,
@@ -80,7 +80,7 @@ Props): React.Element<Table> => (
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (role: Object, index: number): React.Element<RolesRow> => (
+                (role: any, index: number) => (
                   <RolesRow
                     first={index === 0}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.

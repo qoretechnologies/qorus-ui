@@ -1,5 +1,4 @@
-// @ts-ignore ts-migrate(2307) FIXME: Cannot find module '../../server_config' or its co... Remove this comment to see the full error message
-import { API_URL, API_WS_URL } from '../../server_config';
+import { API_URL, API_WS_URL } from '../server_config';
 
 const location =
   window && window.location

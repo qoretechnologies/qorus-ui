@@ -22,7 +22,7 @@ const InterfaceTag: Function = ({
   className,
   flex = '1 1 auto',
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-InterfaceTagProps): React.Element<any> => (
+InterfaceTagProps) => (
   <Flex flexFlow="row" flex={flex} className={`interface-tag ${className || ''}`} title={title}>
     <Icon iconSize={12} icon={INTERFACE_ICONS[type.toLowerCase()]} />
     <Flex flexFlow="row" className="interface-tag-content">

@@ -25,7 +25,7 @@ import SystemOptions from './system_options';
 @injectIntl
 export default class Options extends Component {
   props: {
-    model: Object;
+    model: any;
     systemOptions: Array<Object>;
     onSet: Function;
     onDelete: Function;

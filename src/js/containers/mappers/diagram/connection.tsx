@@ -1,12 +1,11 @@
 /* @flow */
 import React from 'react';
-import pure from 'recompose/pure';
 
 type Props = {
-  item: Object;
+  item: any;
   type: string;
-  inputMap: Object;
-  outputMap: Object;
+  inputMap: any;
+  outputMap: any;
   rectWidth: number;
   inputOffsetY: number;
   outputOffsetY: number;
@@ -35,9 +34,9 @@ const DiagramConnection: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'isSelected' does not exist on type 'Prop... Remove this comment to see the full error message
   isSelected,
 }: // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   const polySize = 5;
-  const [[outputValue, inputValue]] = Object.entries(item);
+  const [[outputValue, inputValue]]: any = Object.entries(item);
   const inputPosition = inputMap[inputValue];
   const outputPosition = outputMap[outputValue];
 
@@ -82,4 +81,4 @@ Props): React.Element<any> => {
   }
 };
 
-export default pure(DiagramConnection);
+export default DiagramConnection;

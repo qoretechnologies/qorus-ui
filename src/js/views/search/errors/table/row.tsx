@@ -37,7 +37,7 @@ const TableRow: Function = ({
   severity,
   error_instanceid: errorId,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr first={first}>
     <IdColumn>{errorId}</IdColumn>
     <NameColumn name={error} type="error" link={`/order/${id}/24h?tab=errors`} />
@@ -62,7 +62,7 @@ export default compose(
     ({ workflowstatus, ...rest }): Props => ({
       label: ALL_ORDER_STATES.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        (state: Object): boolean => state.name === workflowstatus
+        (state: any): boolean => state.name === workflowstatus
       ).label,
       workflowstatus,
       ...rest,

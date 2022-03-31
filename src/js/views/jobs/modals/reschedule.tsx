@@ -47,7 +47,7 @@ const Schedule: Function = ({
   month,
   week,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   const cron = `${minute} ${hour} ${day} ${month} ${week}`;
 
   let isError = false;
@@ -63,7 +63,7 @@ Props): React.Element<any> => {
       <Modal.Header onClose={onClose} titleId="reschedule-modal">
         Reschedule job
       </Modal.Header>
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
       <form onSubmit={handleFormSubmit}>
         <Modal.Body>
           <div>
@@ -124,7 +124,7 @@ export default compose(
   withHandlers({
     handleChange:
       (props: Props): Function =>
-      (type: string, event: Object): void => {
+      (type: string, event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
         const { value } = event.target;
         const fun = props[`change${type}`];
@@ -185,7 +185,7 @@ export default compose(
         week,
       }: // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
       Props): Function =>
-      (event: EventHandler): void => {
+      (event: any): void => {
         event.preventDefault();
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.

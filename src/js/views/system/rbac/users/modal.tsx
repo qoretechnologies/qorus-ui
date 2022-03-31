@@ -16,7 +16,7 @@ import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-const rolesSelector: Function = (state: Object): Object => state.api.roles;
+const rolesSelector: Function = (state: any): any => state.api.roles;
 
 // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
 const viewSelector: Function = createSelector([rolesSelector], (roles) => ({
@@ -37,7 +37,7 @@ export default class AddUserModal extends Component {
     users: Array<Object>;
     onClose: Function;
     onSave: Function;
-    model?: Object;
+    model?: any;
     title: string;
     rbacExternal: any;
   } = this.props;
@@ -235,7 +235,7 @@ export default class AddUserModal extends Component {
                     onSelect={this.handleRoleSelect}
                     selected={model ? this.state.roles : null}
                   >
-                    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
+                    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
                     <DropControl> Select roles </DropControl>
                     {this.renderRoles()}
                   </Dropdown>

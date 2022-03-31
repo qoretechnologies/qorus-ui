@@ -3,7 +3,6 @@ import map from 'lodash/map';
 import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import pure from 'recompose/pure';
 import withProps from 'recompose/withProps';
 import withState from 'recompose/withState';
 import Flex from '../../../components/Flex';
@@ -14,7 +13,7 @@ import DetailModal from './modals/DetailModal';
 import SelectableLabel from './selectable-label';
 import Tooltip from './tooltip';
 
-const getRelations = (fields: Object, inputs: Object): Array<Object> =>
+const getRelations = (fields: any, inputs: any): Array<Object> =>
   map(fields, (outputData, outputName): any => {
     if (typeof outputData === 'string') {
       return { [outputName]: outputData };
@@ -89,24 +88,24 @@ export const Diagramm = ({
   lineColor: string;
   selectedInput: string;
   selectedOutput: string;
-  inputMap: Object;
-  outputMap: Object;
-  relations: Object;
+  inputMap: any;
+  outputMap: any;
+  relations: any;
   handleInputSelected: Function;
   handleInputUnselected: Function;
   handleOutputSelected: Function;
   handleOutputUnselected: Function;
-  mapper: Object;
+  mapper: any;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  selectedDetail: Object;
+  selectedDetail: any;
   handleDetailSelection: Function;
-  opts: Object;
+  opts: any;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  tooltip: Object;
+  tooltip: any;
   toggleTooltip: Function;
   fields: any;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> => (
+}) => (
   <Flex className="mapper-wrapper" scrollY>
     <Tooltip data={tooltip} />
     <div id={id} className="svg-diagram">
@@ -120,7 +119,7 @@ export const Diagramm = ({
           headerHeight={headerHeight}
         />
 
-        {Object.entries(inputMap).map(([name, position]) => (
+        {Object.entries(inputMap).map(([name, position]: any) => (
           <SelectableLabel
             key={`input_${name}`}
             x={1}
@@ -147,7 +146,7 @@ export const Diagramm = ({
           </SelectableLabel>
         ))}
 
-        {Object.entries(outputMap).map(([name, position]) => (
+        {Object.entries(outputMap).map(([name, position]: any) => (
           <SelectableLabel
             key={`output_${name}`}
             x={rectWidth + rectWidth / 2 + 1}
@@ -336,6 +335,5 @@ export default compose(
   addInputSelection,
   addOutputSelection,
   setDetail,
-  toggleTooltip,
-  pure
+  toggleTooltip
 )(Diagramm);

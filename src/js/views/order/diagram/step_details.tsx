@@ -20,9 +20,9 @@ export default class StepDetailTable extends Component {
   props: {
     step: string;
     instances: Array<any>;
-    steps: Object;
+    steps: any;
     onSkipSubmit: Function;
-    order: Object;
+    order: any;
   } = this.props;
 
   static contextTypes = {
@@ -108,9 +108,9 @@ export default class StepDetailTable extends Component {
 
     return (
       <Dropdown id="steps">
-        {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
         <Control>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message */}
           {`${this.state.currentStep.ind} - ${this.state.currentStep.stepname}`}
         </Control>
         {this.renderDropdownItems()}

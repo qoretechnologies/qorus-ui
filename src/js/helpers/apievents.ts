@@ -1,13 +1,9 @@
 // @flow
-const timeOuts: Object = {};
-const intervals: Object = {};
-const container: Object = {};
+const timeOuts: any = {};
+const intervals: any = {};
+const container: any = {};
 
-const eventAction: Function = (
-  ev: string,
-  func: Function,
-  dispatch: Function
-): void => {
+const eventAction: Function = (ev: string, func: Function, dispatch: Function): void => {
   if (container[ev].length) {
     setTimeout(() => {
       dispatch(func(container[ev]));
@@ -21,12 +17,7 @@ const eventAction: Function = (
   }
 };
 
-const pipeline: Function = (
-  ev: string,
-  func: Function,
-  data: Object,
-  dispatch: Function
-): void => {
+const pipeline: Function = (ev: string, func: Function, data: any, dispatch: Function): void => {
   if (timeOuts[ev]) clearTimeout(timeOuts[ev]);
   if (!container[ev]) container[ev] = [];
 

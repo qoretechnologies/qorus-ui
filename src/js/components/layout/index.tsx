@@ -1,2 +1,3 @@
-// @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'CenterWrapper'.
-export CenterWrapper from './center';
+import CenterWrapper from './center';
+
+export { CenterWrapper };

@@ -15,22 +15,22 @@ import { resourceSelector } from '../../../../../selectors';
 import actions from '../../../../../store/api/actions';
 
 type Props = {
-  params: Object;
+  params: any;
   id: number;
-  searchData: Object;
+  searchData: any;
   sort: string;
   sortDir: string;
   offset: number;
   limit: number;
   canLoadMore: boolean;
   handleLoadMore: Function;
-  chartData: Object;
-  countChartData: Object;
-  settings: Object;
+  chartData: any;
+  countChartData: any;
+  settings: any;
   width: number;
   collection: Array<Object>;
   groupingQuery: string;
-  successChartData: Object;
+  successChartData: any;
 };
 
 const PerfView: Function = ({
@@ -40,7 +40,7 @@ const PerfView: Function = ({
   width,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex display="initial" scrollY>
     <div className="chart-view">
       <Chart
@@ -93,8 +93,8 @@ Props): React.Element<any> => (
 
 const viewSelector: Function = createSelector(
   // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-  [resourceSelector('slaperf'), (state: Object): Object => state.ui.settings],
-  (meta: Object, settings: Object): Object => ({
+  [resourceSelector('slaperf'), (state: any): any => state.ui.settings],
+  (meta: any, settings: any): any => ({
     meta,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     collection: meta.data,

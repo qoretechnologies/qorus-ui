@@ -52,7 +52,7 @@ const DiagramInfoTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <PaneItem title={intl.formatMessage({ id: 'order.info' })}>
     <Table bordered condensed className="text-table">
       <Tbody>
@@ -86,7 +86,7 @@ Props): React.Element<any> => (
           <Th icon="warning-sign">
             <FormattedMessage id="table.priority" />
           </Th>
-          {/* @ts-expect-error ts-migrate(2741) FIXME: Property 'className' is missing in type '{ value: ... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2741) FIXME: Property 'className' is missing in type '{ value: ... Remove this comment to see the full error message */}
           <EditableCell
             value={priority}
             type="number"
@@ -116,7 +116,7 @@ Props): React.Element<any> => (
           )}
           <Th icon="refresh"> Synchronous </Th>
           <Td>
-            {/* @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'true' since the... Remove this comment to see the full error message */}
             <ContentByType content={synchronous !== 0} />
           </Td>
         </Tr>
@@ -146,7 +146,7 @@ export default compose(
     ({ workflowstatus, ...rest }): Props => ({
       label: ALL_ORDER_STATES.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        (state: Object): boolean => state.name === workflowstatus
+        (state: any): boolean => state.name === workflowstatus
       ).label,
       workflowstatus,
       ...rest,

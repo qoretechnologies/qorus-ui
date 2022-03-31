@@ -14,16 +14,14 @@ export default (
   (Component: any): Function =>
     compose(
       queryControl((props) => functionOrStringExp(queryName, props), null, false, mergeQueries),
-      mapProps(
-        (props): Object => ({
-          tabQuery: props[`${functionOrStringExp(queryName, props)}Query`],
-          changeTabQuery: props[`change${upperFirst(functionOrStringExp(queryName, props))}Query`],
-          ...props,
-        })
-      ),
+      mapProps((props): any => ({
+        tabQuery: props[`${functionOrStringExp(queryName, props)}Query`],
+        changeTabQuery: props[`change${upperFirst(functionOrStringExp(queryName, props))}Query`],
+        ...props,
+      })),
       mapProps(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'tabQuery' does not exist on type 'Object... Remove this comment to see the full error message
-        ({ tabQuery, ...rest }: Object): Object => ({
+        ({ tabQuery, ...rest }: any): any => ({
           tabQuery: tabQuery || functionOrStringExp(defaultTab, rest),
           ...rest,
         })

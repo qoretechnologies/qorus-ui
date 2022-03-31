@@ -18,10 +18,10 @@ const ChartBandDropdown: Function = ({
   onChartTabChange,
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ChartBandDropdownProps): React.Element<any> => (
+ChartBandDropdownProps) => (
   // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
   <Dropdown>
-    {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: any; small: true; icon: string; ... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; small: true; icon: string; ... Remove this comment to see the full error message */}
     <Control small icon="time">
       {intl.formatMessage({ id: chartTab })}
     </Control>

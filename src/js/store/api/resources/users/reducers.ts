@@ -1,13 +1,13 @@
 import remove from 'lodash/remove';
 
-const initialState: Object = {
+const initialState: any = {
   data: [],
   loading: false,
   sync: false,
 };
 
-const create: Object = {
-  next(state: Object = initialState, action: Object): Object {
+const create: any = {
+  next(state: any = initialState, action: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -26,13 +26,13 @@ const create: Object = {
     }
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
-const removeRole: Object = {
-  next(state: Object = initialState, action: Object): Object {
+const removeRole: any = {
+  next(state: any = initialState, action: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -46,13 +46,13 @@ const removeRole: Object = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
-const update: Object = {
-  next(state: Object = initialState, action: Object): Object {
+const update: any = {
+  next(state: any = initialState, action: any): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
     if (action.payload) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
@@ -60,7 +60,7 @@ const update: Object = {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data: Array<Object> = state.data.slice();
       // @ts-ignore ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message
-      const match: Object = data.find((user) => user.username === username);
+      const match: any = data.find((user) => user.username === username);
 
       Object.assign(match, {
         name,
@@ -72,16 +72,16 @@ const update: Object = {
 
     return state;
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };
 
-const unSyncUsers: Object = {
-  next(state: Object = initialState): Object {
+const unSyncUsers: any = {
+  next(state: any = initialState): any {
     return Object.assign({}, state, initialState);
   },
-  throw(state: Object = initialState): Object {
+  throw(state: any = initialState): any {
     return state;
   },
 };

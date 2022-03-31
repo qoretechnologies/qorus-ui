@@ -24,8 +24,8 @@ import Detail from './detail';
 import Table from './table';
 
 type Props = {
-  job: Object;
-  location: Object;
+  job: any;
+  location: any;
   onLoadMore: Function;
   jobQuery: string | number;
   changeJobQuery: Function;
@@ -35,7 +35,7 @@ type Props = {
   canLoadMore: Function;
   handleLoadMore: Function;
   loadMoreCurrent: number;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   isTablet: boolean;
   onCSVClick: Function;
@@ -90,7 +90,7 @@ const filterInstances: Function =
   (instances: Array<Object>): Array<Object> =>
     id
       ? // @ts-ignore ts-migrate(2339) FIXME: Property 'jobid' does not exist on type 'Object'.
-        instances.filter((instance: Object): boolean => instance.jobid === id)
+        instances.filter((instance: any): boolean => instance.jobid === id)
       : instances;
 
 const filterSearch: Function =
@@ -102,7 +102,7 @@ const idSelector: Function = (state, props) => (props.job ? props.job.id : null)
 
 const collectionSelector: Function = createSelector(
   [querySelector('search'), resourceSelector('instances'), idSelector],
-  (search: string, instances: Object, id: number) =>
+  (search: string, instances: any, id: number) =>
     flowRight(
       filterSearch(search),
       filterInstances(id)
@@ -111,7 +111,7 @@ const collectionSelector: Function = createSelector(
 );
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-const settingsSelector = (state: Object): Object => state.ui.settings;
+const settingsSelector = (state: any): any => state.ui.settings;
 
 const viewSelector: Function = createSelector(
   [
@@ -145,14 +145,12 @@ export default compose(
   withSort('instances', 'instances', sortDefaults.instances),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 4 arguments, but got 2.
   loadMore('instances', 'instances'),
-  mapProps(
-    ({ job, ...rest }: Props): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-      id: job.id,
-      job,
-      ...rest,
-    })
-  ),
+  mapProps(({ job, ...rest }: Props): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+    id: job.id,
+    job,
+    ...rest,
+  })),
   patch('load', ['id', false, 'offset', 'linkDate', 'filter', 'limit', 'sortDir', 'sort']),
   sync('meta'),
   lifecycle({

@@ -26,7 +26,7 @@ export const connectCall: Function = (
   onPause: Function,
   // @ts-ignore ts-migrate(1015) FIXME: Parameter cannot have question mark and initialize... Remove this comment to see the full error message
   useHeartbeat?: boolean = true
-): Object => {
+): any => {
   const token = localStorage.getItem('token');
 
   connections[url] = new WebSocket(

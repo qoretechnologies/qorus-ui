@@ -57,7 +57,7 @@ const OptionRow: Function = ({
   canEdit,
   first,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr first={first}>
     <Td className="narrow">
       {status === 'locked' && (
@@ -113,12 +113,10 @@ Props): React.Element<any> => (
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      permissions: state.api.currentUser.data.permissions,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    permissions: state.api.currentUser.data.permissions,
+  })),
   withDispatch(),
   mapProps(
     ({ permissions, status, default: def, value, ...rest }: Props): Props => ({
@@ -136,7 +134,7 @@ export default compose(
   withHandlers({
     handleOptionSave:
       ({ dispatchAction, closeModal, name }: Props): Function =>
-      (model: Object, value: any): void => {
+      (model: any, value: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'systemOptions' does not exist on type '{... Remove this comment to see the full error message
         dispatchAction(actions.systemOptions.setOption, name, value, closeModal);
       },

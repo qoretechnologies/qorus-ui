@@ -30,10 +30,10 @@ import Controls from '../controls';
 import JobsDetailTabs from '../tabs';
 
 type Props = {
-  job: Object;
-  location: Object;
+  job: any;
+  location: any;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  children: Object;
+  children: any;
   tabQuery: string;
   searchQuery?: string;
   changeSearchQuery: Function;
@@ -41,9 +41,9 @@ type Props = {
   linkDate: string;
   fetch: Function;
   id: number;
-  fetchParams: Object;
-  lib: Object;
-  configItems: Object;
+  fetchParams: any;
+  lib: any;
+  configItems: any;
 };
 
 const JobPage = ({
@@ -85,7 +85,7 @@ const JobPage = ({
         />
       </Breadcrumbs>
       <Pull right>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'. */}
         <Controls {...job} week={job.wday} expiry={job.expiry_date} big />
         {tabQuery === 'instances' && (
           <Search defaultValue={searchQuery} onSearchUpdate={changeSearchQuery} resource="job" />
@@ -103,14 +103,14 @@ const JobPage = ({
   </Flex>
 );
 
-const jobSelector: Function = (state: Object, props: Object): Object =>
+const jobSelector: Function = (state: any, props: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.jobs.data.find(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
-    (job: Object) => parseInt(props.params.id, 10) === parseInt(job.id, 10)
+    (job: any) => parseInt(props.params.id, 10) === parseInt(job.id, 10)
   );
 
-const selector: Object = createSelector(
+const selector: any = createSelector(
   [resourceSelector('jobs'), jobSelector, querySelector('date'), paramSelector('id')],
   (meta, job, date, id) => ({
     meta,
@@ -129,20 +129,16 @@ export default compose(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type '{}'.
     unsync: actions.jobs.unsync,
   }),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      date: date || DATES.PREV_DAY,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      fetchParams: { lib_source: true, date: formatDate(date).format() },
-      linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
-      date,
-      ...rest,
-    })
-  ),
+  mapProps(({ date, ...rest }: Props): any => ({
+    date: date || DATES.PREV_DAY,
+    ...rest,
+  })),
+  mapProps(({ date, ...rest }: Props): any => ({
+    fetchParams: { lib_source: true, date: formatDate(date).format() },
+    linkDate: formatDate(date).format(DATE_FORMATS.URL_FORMAT),
+    date,
+    ...rest,
+  })),
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   lifecycle({
@@ -154,26 +150,24 @@ export default compose(
       }
     },
   }),
-  mapProps(
-    (props: Object): Object => ({
-      ...props,
-      lib: {
-        ...{
-          code: [
-            {
-              name: 'Job code',
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
-              body: props.job.code,
-            },
-          ],
-        },
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
-        ...props.job.lib,
+  mapProps((props: any): any => ({
+    ...props,
+    lib: {
+      ...{
+        code: [
+          {
+            name: 'Job code',
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
+            body: props.job.code,
+          },
+        ],
       },
       // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
-      configItems: rebuildConfigHash(props.job),
-    })
-  ),
+      ...props.job.lib,
+    },
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
+    configItems: rebuildConfigHash(props.job),
+  })),
   // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
   titleManager(({ job }): string => job.name),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.

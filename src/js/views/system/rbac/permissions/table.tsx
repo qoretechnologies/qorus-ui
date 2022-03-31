@@ -33,7 +33,7 @@ const PermsTable: Function = ({
   onAddPermClick,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<Table> => (
+Props) => (
   <EnhancedTable collection={perms} tableId="rbacPerms" sortDefault={sortDefaults.rbacPerms}>
     {({
       canLoadMore,
@@ -85,7 +85,7 @@ Props): React.Element<Table> => (
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (role: Object, index: number): React.Element<PermsRow> => (
+                (role: any, index: number) => (
                   <PermsRow
                     first={index === 0}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.

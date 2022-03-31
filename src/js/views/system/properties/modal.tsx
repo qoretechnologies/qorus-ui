@@ -12,8 +12,8 @@ export default class extends Component {
     onMount: Function;
     onClose: Function;
     onSubmit: Function;
-    data: Object;
-    collection: Object;
+    data: any;
+    collection: any;
   } = this.props;
 
   state: {
@@ -125,7 +125,7 @@ export default class extends Component {
   getKeyList: Function = (value: string): Array<string> =>
     this.props.collection[this.state.domain].filter(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-      (item: Object): boolean => (value ? includes(item.name, value) : true)
+      (item: any): boolean => (value ? includes(item.name, value) : true)
     );
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
@@ -137,7 +137,7 @@ export default class extends Component {
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   renderKeys: Function = (): Array<React.Element<any>> =>
-    this.getKeyList(this.state.key).map((item: Object, index: number) => (
+    this.getKeyList(this.state.key).map((item: any, index: number) => (
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       <DItem key={index} title={item.name} action={this.handleKeySelect} />
     ));
@@ -162,7 +162,7 @@ export default class extends Component {
                       show={this.state.showDomains}
                       onHide={this.handleDomainClose}
                     >
-                      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
+                      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
                       <DControl> Select </DControl>
                       {this.renderDomains()}
                     </Dropdown>
@@ -188,11 +188,11 @@ export default class extends Component {
                   !data || !data.key ? 'input-group' : ''
                 }`}
               >
-                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'. */}
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'key' does not exist on type 'Object'. */}
                 {(!data || !data.key) && (
                   <div className="input-group-btn">
                     <Dropdown id="props" show={this.state.showKeys} onHide={this.handleKeysClose}>
-                      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string[]; disabled: boolean; }' ... Remove this comment to see the full error message */}
+                      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string[]; disabled: boolean; }' ... Remove this comment to see the full error message */}
                       <DControl disabled={!collection[this.state.domain]}> Select </DControl>
                       {collection[this.state.domain] && this.renderKeys()}
                     </Dropdown>

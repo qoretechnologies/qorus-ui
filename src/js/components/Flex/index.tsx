@@ -8,7 +8,7 @@ type FlexProps = {
   flex?: string;
   height?: any;
   className?: string;
-  style?: Object;
+  style?: any;
   scrollX?: boolean;
   scrollY?: boolean;
   flexRef?: Function;
@@ -30,7 +30,7 @@ const Flex: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'title' does not exist on type 'FlexProps... Remove this comment to see the full error message
   title,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-FlexProps): React.Element<any> => (
+FlexProps) => (
   <div
     title={title}
     style={{

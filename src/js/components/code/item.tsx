@@ -11,7 +11,7 @@ import { normalizeName } from '../utils';
 
 type Props = {
   type: string;
-  item: Object;
+  item: any;
   onClick: Function;
   selected: string;
 };
@@ -22,7 +22,7 @@ let Item: Function = ({
   selected,
   type,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   const newItem = normalizeUnknownId(item);
 
   const handleClick: Function = (): void => {
@@ -65,7 +65,7 @@ const CodeItem: Function = ({
   selected,
   type,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
   if (item.code || item.body || (!item.functions && !item.class)) {
     return <Item type={type} item={item} onClick={onClick} selected={selected} />;
@@ -73,14 +73,14 @@ Props): React.Element<any> => {
 
   return (
     <div>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
       <p className="code-item-header">{item.name}</p>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'functions' does not exist on type 'Objec... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'functions' does not exist on type 'Objec... Remove this comment to see the full error message */}
       {item.functions ? (
         // @ts-ignore ts-migrate(2339) FIXME: Property 'functions' does not exist on type 'Objec... Remove this comment to see the full error message
         item.functions.map(
           // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-          (func: Object, index: number): React.Element<any> => (
+          (func: any, index: number) => (
             <Item
               type={type}
               // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.

@@ -43,7 +43,7 @@ const viewSelector = createSelector([remoteSelector, attrsSelector], (remote, at
 }))
 export default class ConnectionsPane extends Component {
   props: {
-    remote: Object;
+    remote: any;
     onClose: Function;
     attrs: Array<string>;
     editable: Array<string>;
@@ -81,7 +81,7 @@ export default class ConnectionsPane extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
     if (this.props.paneId !== nextProps.paneId && !settings.IS_HTTP) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
@@ -203,7 +203,7 @@ export default class ConnectionsPane extends Component {
                   <Tbody>
                     {this.getData().map(
                       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                      (val: Object, key: number): React.Element<any> => (
+                      (val: any, key: number) => (
                         <Tr key={key}>
                           <Th className="name">
                             {upperFirst(
@@ -211,7 +211,7 @@ export default class ConnectionsPane extends Component {
                               attrsMapper(val.attr).replace(/_/g, ' ')
                             )}
                           </Th>
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'editable' does not exist on type 'Object... Remove this comment to see the full error message */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'editable' does not exist on type 'Object... Remove this comment to see the full error message */}
                           {val.editable &&
                           canEdit &&
                           // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
@@ -230,7 +230,7 @@ export default class ConnectionsPane extends Component {
                             />
                           ) : (
                             <Td className="text">
-                              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'. */}
+                              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'. */}
                               {val.attr === 'options' || val.attr === 'opts' ? (
                                 <Options
                                   urlProtocol={url_hash?.protocol}
@@ -263,7 +263,7 @@ export default class ConnectionsPane extends Component {
                     <Tbody>
                       {deps.map(
                         // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                        (dep: Object, index: number): React.Element<any> => (
+                        (dep: any, index: number) => (
                           <Tr key={index}>
                             <NameColumn
                               // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.

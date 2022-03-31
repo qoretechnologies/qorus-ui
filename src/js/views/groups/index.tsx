@@ -32,14 +32,14 @@ import GroupsDetail from './detail';
 import GroupsTable from './table';
 
 type Props = {
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   groups: Array<Object>;
   selected: string;
   selectedIds: Array<number>;
   onCSVClick: Function;
-  location: Object;
-  group?: Object;
+  location: any;
+  group?: any;
   canLoadMore: boolean;
   handleLoadMore: Function;
   handleLoadAll: Function;
@@ -72,7 +72,7 @@ const GroupsView: Function = ({
   searchQuery,
   changeSearchQuery,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> =>
+Props) =>
   group ? (
     <Flex>
       <Headbar>
@@ -81,12 +81,12 @@ Props): React.Element<any> =>
             <FormattedMessage id="Groups" />
           </Crumb>
           <Crumb active>
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
             {group.name} ({group.id})
           </Crumb>
         </Breadcrumbs>
         <Pull right>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message */}
           <Controls enabled={group.enabled} name={group.name} big />
         </Pull>
       </Headbar>
@@ -130,29 +130,27 @@ const filterGroups: Function =
     findBy(['name', 'description'], search, groups);
 
 const transformGroups: Function = (groups: Array<Object>): Array<Object> =>
-  groups.map(
-    (group: Object): Object => ({
-      ...group,
-      ...{
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type 'Objec... Remove this comment to see the full error message
-        workflows_count: group.workflows.length,
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type 'Object'.
-        jobs_count: group.jobs.length,
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type 'Object... Remove this comment to see the full error message
-        services_count: group.services.length,
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
-        vmaps_count: group.vmaps.length,
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'roles' does not exist on type 'Object'.
-        roles_count: group.roles.length,
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
-        mappers_count: group.mappers.length,
-      },
-    })
-  );
+  groups.map((group: any): any => ({
+    ...group,
+    ...{
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type 'Objec... Remove this comment to see the full error message
+      workflows_count: group.workflows.length,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'jobs' does not exist on type 'Object'.
+      jobs_count: group.jobs.length,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type 'Object... Remove this comment to see the full error message
+      services_count: group.services.length,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+      vmaps_count: group.vmaps.length,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'roles' does not exist on type 'Object'.
+      roles_count: group.roles.length,
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+      mappers_count: group.mappers.length,
+    },
+  }));
 
 const groupsSelector: Function = createSelector(
   [resourceSelector('groups'), querySelector('search')],
-  (groups: Object, search: string) =>
+  (groups: any, search: string) =>
     compose(
       filterGroups(search),
       transformGroups
@@ -163,19 +161,19 @@ const groupsSelector: Function = createSelector(
 const groupSelector: Function = createSelector(
   [resourceSelector('groups'), querySelector('group')],
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  (groups: Object, group: string) =>
+  (groups: any, group: string) =>
     group
       ? // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-        groups.data.find((grp: Object): boolean => grp.name === group)
+        groups.data.find((grp: any): boolean => grp.name === group)
       : null
 );
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-const settingsSelector = (state: Object): Object => state.ui.settings;
+const settingsSelector = (state: any): any => state.ui.settings;
 
 const selector: Function = createSelector(
   [resourceSelector('groups'), groupSelector, groupsSelector, settingsSelector],
-  (meta: Object, group: string, groups: Array<Object>, settings): Object => ({
+  (meta: any, group: string, groups: Array<Object>, settings): any => ({
     meta,
     groups,
     group,

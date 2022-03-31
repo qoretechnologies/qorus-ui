@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import withHandlers from 'recompose/withHandlers';
@@ -21,7 +20,7 @@ export type EnhancedTableProps = {
   search: string;
   changeSearch: Function;
   canLoadMore: boolean;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
 };
 
@@ -29,7 +28,7 @@ const EnhancedTable: Function = ({
   children,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-EnhancedTableProps): React.Element<any> => children(rest);
+EnhancedTableProps) => children(rest);
 
 export default compose(
   mapProps(

@@ -25,14 +25,14 @@ type Props = {
   charset?: string;
   host?: string;
   port?: string;
-  options?: Object;
-  opts?: Object;
+  options?: any;
+  opts?: any;
   remotes?: Array<Object>;
   desc?: string;
   url?: string;
 };
 
-@connect((state: Object) => ({
+@connect((state: any) => ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   remotes: state.api.remotes.data,
 }))
@@ -57,7 +57,7 @@ class ManageModal extends Component {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
     const { dispatchAction, remoteType, remotes, onClose, edit } = this.props;
     const data = Object.keys(this.refs).reduce(
-      (cur: Object, ref: string): Object => ({
+      (cur: any, ref: string): any => ({
         ...cur,
         // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
         ...{ [ref]: this.refs[ref].value },
@@ -84,7 +84,7 @@ class ManageModal extends Component {
       const exists: Array<Object> =
         remotes &&
         remotes.find(
-          (remote: Object): boolean =>
+          (remote: any): boolean =>
             // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
             remote.name === data.name &&
             // @ts-ignore ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
@@ -106,7 +106,7 @@ class ManageModal extends Component {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'opts' does not exist on type 'Object'.
           Object.keys(data.opts).forEach(
             // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
-            (key: string): Object => {
+            (key: string): any => {
               // @ts-ignore ts-migrate(2339) FIXME: Property 'opts' does not exist on type 'Object'.
               proceed = typeof data.opts[key] === 'object' ? false : proceed;
             }
@@ -131,7 +131,7 @@ class ManageModal extends Component {
     }
   };
 
-  handleOptionsSave: Function = (options: Object) => {
+  handleOptionsSave: Function = (options: any) => {
     this.setState({ options });
   };
 
@@ -143,7 +143,7 @@ class ManageModal extends Component {
         <Modal.Header titleId="manage" onClose={onClose}>
           {edit ? 'Edit connection' : 'Add connection'}
         </Modal.Header>
-        {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
         <form onSubmit={this.handleFormSubmit} className="form-horizontal">
           <Modal.Body>
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
@@ -206,7 +206,7 @@ class ManageModal extends Component {
                   Options *
                 </label>
                 <div className="col-lg-6">
-                  {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+                  {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                   <Options canEdit data={opts} onSave={this.handleOptionsSave} />
                 </div>
               </div>

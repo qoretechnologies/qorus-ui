@@ -14,7 +14,7 @@ const fetchInstances = createAction(
     sortDir: boolean,
     sort: string
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     const status: string = !filter || filter === 'filter' ? '' : `statuses=${filter}&`;
 
     const url =
@@ -41,14 +41,12 @@ const modifyInstance = createAction('INSTANCES_MODIFYINSTANCE', (events) => ({
   events,
 }));
 
-const changeOffset = createAction(
-  'INSTANCES_CHANGEOFFSET',
-  (newOffset: number): Object => ({ newOffset })
-);
-const changeServerSort = createAction(
-  'INSTANCES_CHANGESERVERSORT',
-  (sort: string): Object => ({ sort })
-);
+const changeOffset = createAction('INSTANCES_CHANGEOFFSET', (newOffset: number): any => ({
+  newOffset,
+}));
+const changeServerSort = createAction('INSTANCES_CHANGESERVERSORT', (sort: string): any => ({
+  sort,
+}));
 
 const unsync = createAction('INSTANCES_UNSYNC');
 

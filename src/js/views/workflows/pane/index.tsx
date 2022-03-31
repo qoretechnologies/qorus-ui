@@ -12,11 +12,11 @@ import actions from '../../../store/api/actions';
 import { countConfigItems } from '../../../utils';
 import WorkflowDetailTabs from '../tabs';
 
-const workflowSelector: Function = (state: Object, props: Object): Object =>
+const workflowSelector: Function = (state: any, props: any): any =>
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   state.api.workflows.data.find(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-    (wf: Object) => wf.id === parseInt(props.paneId, 10)
+    (wf: any) => wf.id === parseInt(props.paneId, 10)
   );
 
 // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
@@ -32,37 +32,36 @@ const selector = createSelector([workflowSelector], (workflow) => ({
 )
 @titleManager(
   // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-  (props: Object): string => props.workflow.normalizedName,
+  (props: any): string => props.workflow.normalizedName,
   'Workflows',
   'prefix'
 )
-@mapProps(
-  (props: Object): Object =>
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-    props.workflow.code
-      ? {
-          ...props,
-          lib: {
-            ...{
-              code: [
-                {
-                  name: 'Workflow code',
-                  // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-                  body: props.workflow.code,
-                },
-              ],
-            },
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-            ...props.workflow.lib,
+@mapProps((props: any): any =>
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
+  props.workflow.code
+    ? {
+        ...props,
+        lib: {
+          ...{
+            code: [
+              {
+                name: 'Workflow code',
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
+                body: props.workflow.code,
+              },
+            ],
           },
-        }
-      : {
-          ...props,
-          lib: {
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
-            ...props.workflow.lib,
-          },
-        }
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
+          ...props.workflow.lib,
+        },
+      }
+    : {
+        ...props,
+        lib: {
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow' does not exist on type 'Object... Remove this comment to see the full error message
+          ...props.workflow.lib,
+        },
+      }
 )
 export default class WorkflowsDetail extends Component {
   props: {
@@ -72,14 +71,14 @@ export default class WorkflowsDetail extends Component {
     paneId: string | number;
     query: string;
     changePaneTab: Function;
-    workflow: Object;
+    workflow: any;
     onClose: Function;
-    location: Object;
+    location: any;
     loadErrors: Function;
     load: Function;
     onResize: Function;
     width: number;
-    fetchParams: Object;
+    fetchParams: any;
     band: string;
   } = this.props;
 
@@ -88,7 +87,7 @@ export default class WorkflowsDetail extends Component {
     this.props.load(this.props.paneId, this.props.fetchParams.date);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
     if (this.props.paneId !== nextProps.paneId) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.

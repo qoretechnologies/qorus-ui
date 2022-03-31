@@ -1,10 +1,10 @@
 // @flow
+import { ProgressBar } from '@blueprintjs/core';
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import compose from 'recompose/compose';
-import { ProgressBar } from '../../../../../node_modules/@blueprintjs/core';
-import { connect } from '../../../../../node_modules/react-redux';
-import mapProps from '../../../../../node_modules/recompose/mapProps';
+import mapProps from 'recompose/mapProps';
 import Box from '../../../components/box';
 import Modal from '../../../components/modal';
 import { Table, Tbody, Td, Th, Thead, Tr } from '../../../components/new_table';
@@ -37,7 +37,7 @@ const StatsModal: Function = ({ onClose, text, band, workflows, disposition }: P
             </Tr>
           </Thead>
           <Tbody>
-            {workflows.map((workflow: Object) => {
+            {workflows.map((workflow: any) => {
               // @ts-ignore ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message
               const { count, pct } = workflow.order_stats
                 .find((stat) => stat.label === band.replace(/ /g, '_'))
@@ -54,7 +54,7 @@ const StatsModal: Function = ({ onClose, text, band, workflows, disposition }: P
                       }&paneTab=order+stats`}
                       onClick={onClose}
                     >
-                      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
                       {workflow.normalizedName}
                     </Link>
                   </Td>
@@ -100,7 +100,7 @@ export default compose(
   mapProps(
     ({ workflows, band, ...rest }: Props): Props => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message
-      workflows: workflows.filter((workflow: Object) => workflow.order_stats),
+      workflows: workflows.filter((workflow: any) => workflow.order_stats),
       band,
       ...rest,
     })
@@ -110,9 +110,9 @@ export default compose(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'order_stats' does not exist on type 'Obj... Remove this comment to see the full error message
       workflows: workflows.filter(({ order_stats }) => {
         // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-        const currentBand: Object = order_stats.find(
+        const currentBand: any = order_stats.find(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
-          (stat: Object): boolean => stat.label === band.replace(/ /g, '_')
+          (stat: any): boolean => stat.label === band.replace(/ /g, '_')
         );
 
         if (!currentBand) {
@@ -120,9 +120,9 @@ export default compose(
         }
 
         // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-        const dispo: Object = currentBand.l.find(
+        const dispo: any = currentBand.l.find(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'disposition' does not exist on type 'Obj... Remove this comment to see the full error message
-          (bandData: Object): boolean => bandData.disposition === disposition
+          (bandData: any): boolean => bandData.disposition === disposition
         );
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'count' does not exist on type 'Object'.

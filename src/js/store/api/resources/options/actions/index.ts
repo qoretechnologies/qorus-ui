@@ -11,7 +11,7 @@ const setOption: Function = createAction(
     onSuccess: Function,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     fetchWithNotifications(
       async () => {
         // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.

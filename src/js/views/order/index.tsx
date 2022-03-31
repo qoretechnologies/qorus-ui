@@ -45,7 +45,7 @@ const workflowSelector = (state, props) => {
 
 const userSelector = (state) => state.api.currentUser.data;
 // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-const settingsSelector = (state: Object): Object => state.ui.settings;
+const settingsSelector = (state: any): any => state.ui.settings;
 
 const selector = createSelector(
   [orderSelector, userSelector, workflowSelector, settingsSelector],
@@ -65,14 +65,14 @@ const selector = createSelector(
 @titleManager(({ order }): string => (order ? order.name : 'Order view'))
 export default class Order extends Component {
   props: {
-    order: Object;
-    workflow: Object;
+    order: any;
+    workflow: any;
     dispatch: Function;
-    params: Object;
-    route: Object;
-    location: Object;
+    params: any;
+    route: any;
+    location: any;
     children: any;
-    user: Object;
+    user: any;
     isTablet: boolean;
     tabQuery: string;
     handleTabChange: Function;
@@ -95,7 +95,7 @@ export default class Order extends Component {
     this.fetch(id);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
     const { id } = this.props.params;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
@@ -140,7 +140,7 @@ export default class Order extends Component {
 
     return (
       <Flex>
-        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
         <Header
           data={this.props.order}
           workflow={this.props.workflow}
@@ -151,7 +151,7 @@ export default class Order extends Component {
         />
         <SimpleTabs activeTab={this.props.tabQuery}>
           <SimpleTab name="overview">
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <DiagramView
               {...{
                 order: this.props.order,
@@ -243,12 +243,12 @@ export default class Order extends Component {
           </SimpleTab>
           <SimpleTab name="mappers">
             <Box top fill noPadding>
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
               <MappersTable mappers={this.props.workflow.mappers} />
             </Box>
           </SimpleTab>
           <SimpleTab name="notes">
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <NotesView
               {...{
                 order: this.props.order,
@@ -260,7 +260,7 @@ export default class Order extends Component {
             />
           </SimpleTab>
           <SimpleTab name="log">
-            {/* @ts-expect-error ts-migrate(2741) FIXME: Property 'location' is missing in type '{ order: O... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2741) FIXME: Property 'location' is missing in type '{ order: O... Remove this comment to see the full error message */}
             <LogView
               {...{
                 order: this.props.order,

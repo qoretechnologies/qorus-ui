@@ -3,7 +3,7 @@ import { createAction } from 'redux-actions';
 import settings from '../../../../settings';
 import { fetchJson, fetchWithNotifications } from '../../utils';
 
-const remove: Function = createAction('SLAS_REMOVE', (id: number, dispatch: Function): Object => {
+const remove: Function = createAction('SLAS_REMOVE', (id: number, dispatch: Function): any => {
   fetchWithNotifications(
     async () =>
       // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
@@ -24,7 +24,7 @@ const create: Function = createAction(
     units: string,
     dispatch: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) {
       return {
         name,

@@ -13,7 +13,7 @@ const updateDone: Function = createAction('GROUPS_UPDATEDONE', (name: string) =>
 const groupAction: Function = createAction(
   'GROUPS_GROUPACTION',
   // @ts-ignore ts-migrate(2355) FIXME: A function whose declared type is neither 'void' n... Remove this comment to see the full error message
-  (groups: any, action: string, dispatch: Function): Object => {
+  (groups: any, action: string, dispatch: Function): any => {
     const grps = isArray(groups) ? groups.join(',') : groups;
 
     fetchWithNotifications(
@@ -30,7 +30,7 @@ const groupAction: Function = createAction(
   }
 );
 
-const select = createAction('GROUPS_SELECT', (id: number): Object => ({ id }));
+const select = createAction('GROUPS_SELECT', (id: number): any => ({ id }));
 const selectAll = createAction('GROUPS_SELECTALL');
 const selectNone = createAction('GROUPS_SELECTNONE');
 const selectInvert = createAction('GROUPS_SELECTINVERT');

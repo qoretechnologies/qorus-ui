@@ -10,9 +10,9 @@ const fetchOrderErrors = createAction(
     offset: number,
     filter: string,
     limit: number,
-    searchData: Object
+    searchData: any
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     let url = `${settings.REST_BASE_URL}/orders?action=listErrors&`;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'ids' does not exist on type 'Object'.
     url += searchData.ids && searchData.ids !== '' ? `workflowid=${searchData.ids}&` : '';
@@ -48,10 +48,9 @@ const fetchOrderErrors = createAction(
   }
 );
 
-const changeOffset = createAction(
-  'ORDERERRORS_CHANGEOFFSET',
-  (newOffset: number): Object => ({ newOffset })
-);
+const changeOffset = createAction('ORDERERRORS_CHANGEOFFSET', (newOffset: number): any => ({
+  newOffset,
+}));
 
 const unsync = createAction('ORDERS_UNSYNC');
 

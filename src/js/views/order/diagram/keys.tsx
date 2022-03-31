@@ -13,9 +13,9 @@ const DiagramKeysTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ data?: O... Remove this comment to see the full error message
   intl,
 }: {
-  data?: Object;
+  data?: any;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> => (
+}) => (
   <PaneItem title={intl.formatMessage({ id: 'order.keys' })}>
     <NoDataIf condition={size(data) === 0}>
       {() => (

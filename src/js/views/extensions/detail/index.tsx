@@ -10,7 +10,7 @@ import unsync from '../../../hocomponents/unsync';
 import actions from '../../../store/api/actions';
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const ExtensionDetail = ({ extension }: { extension: Object }): React.Element<any> => (
+const ExtensionDetail = ({ extension }: { extension: any }) => (
   <div
     dangerouslySetInnerHTML={{
       // @ts-ignore ts-migrate(2339) FIXME: Property 'url' does not exist on type 'Object'.
@@ -25,7 +25,7 @@ const prepareToLoadExtension = mapProps((props) => ({
   extensionQuery: {},
 }));
 
-const extensionSelector = (state: Object, { extensionName }: { extensionName: string }) => {
+const extensionSelector = (state: any, { extensionName }: { extensionName: string }) => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   const extensionList = state.api.extensions.data;
 
@@ -44,6 +44,6 @@ export default compose(
   patch('load', ['extensionQuery', 'extensionName']),
   sync('extension', false),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
-  showIfPassed(({ extension }: { extension: Object }): boolean => !!extension.url),
+  showIfPassed(({ extension }: { extension: any }): boolean => !!extension.url),
   unsync()
 )(ExtensionDetail);

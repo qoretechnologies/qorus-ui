@@ -3,7 +3,7 @@ import Box from '../../../components/box';
 import Loader from '../../../components/loader';
 import Log from './log';
 
-const LogView = ({ workflow, location }: { workflow: Object; location: Object }) => {
+const LogView = ({ workflow, location }: { workflow: any; location: any }) => {
   if (!workflow) return <Loader />;
 
   return (

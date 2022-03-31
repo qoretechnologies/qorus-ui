@@ -65,9 +65,9 @@ const Label = ({
     onClick={onClick}
     className="mapper-label"
   >
-    {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'string | Number' is not assignable to type '... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2322) FIXME: Type 'string | Number' is not assignable to type '... Remove this comment to see the full error message */}
     <rect x="0" y="0" height={height} width={width} fill="#ffffff" />
-    {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'string | Number' is not assignable to type '... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2322) FIXME: Type 'string | Number' is not assignable to type '... Remove this comment to see the full error message */}
     <foreignObject width={width} height={height}>
       <div
         style={{
@@ -129,7 +129,7 @@ const Label = ({
 export default compose(
   withHandlers({
     handleMouseOver:
-      (props: Object): Function =>
+      (props: any): Function =>
       (
         // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
         event: EventHandler
@@ -138,7 +138,7 @@ export default compose(
         props.onMouseOver();
       },
     handleMouseOut:
-      (props: Object): Function =>
+      (props: any): Function =>
       () => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'onMouseOut' does not exist on type 'Obje... Remove this comment to see the full error message
         props.onMouseOut();

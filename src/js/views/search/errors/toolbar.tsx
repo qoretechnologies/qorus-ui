@@ -93,7 +93,7 @@ export default class SearchToolbar extends Component {
     this._delayedSearch(this.state);
   }
 
-  _delayedSearch: Function = debounce((data: Object) => {
+  _delayedSearch: Function = debounce((data: any) => {
     this.props.changeAllQuery(data);
   }, 280);
 
@@ -203,7 +203,7 @@ export default class SearchToolbar extends Component {
             onSubmit={this.handleIdsChange}
             selected={!this.state.ids || this.state.ids === '' ? [] : this.state.ids.split(',')}
           >
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
             <Control icon={INTERFACE_ICONS.workflow} />
             {this.props.workflows.map((o, k) => (
               // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
@@ -225,9 +225,9 @@ export default class SearchToolbar extends Component {
                 : this.state.filter.split(',')
             }
           >
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ icon: string; }' is missing the following ... Remove this comment to see the full error message */}
             <Control icon="info-sign" />
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <Item title="All" />
             {ORDER_STATES.map((o, k) => (
               // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.

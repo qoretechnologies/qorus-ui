@@ -22,9 +22,9 @@ import DetailRow from './row';
 
 type Props = {
   paneId: number;
-  data: Object;
+  data: any;
   onSortChange: Function;
-  sortData: Object;
+  sortData: any;
   update: Function;
   remove: Function;
   onSearchChange: Function;
@@ -39,7 +39,7 @@ const DetailTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'onSaveClick' does not exist on type 'Pro... Remove this comment to see the full error message
   onSaveClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table condensed striped fixed>
     <Thead>
       <FixedRow className="toolbar-row">
@@ -67,7 +67,7 @@ Props): React.Element<any> => (
         <Tbody {...props}>
           {Object.keys(data).map(
             // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (key: string, index: number): React.Element<any> => (
+            (key: string, index: number) => (
               <DetailRow key={index} id={paneId} name={key} first={index === 0} data={data[key]} />
             )
           )}
@@ -79,10 +79,10 @@ Props): React.Element<any> => (
 
 const findValuemap: Function =
   (id: number): Function =>
-  (data: Array<Object>): Object => {
+  (data: Array<Object>): any => {
     const vm = data.find(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-      (valuemap: Object): boolean => valuemap.id === parseInt(id, 10)
+      (valuemap: any): boolean => valuemap.id === parseInt(id, 10)
     );
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'vals' does not exist on type 'Object'.
@@ -91,13 +91,13 @@ const findValuemap: Function =
 
 const filterValues: Function =
   (query: string): Function =>
-  (data: Object): Object =>
+  (data: any): any =>
     pickBy(data, (value, key) =>
       query ? includes(key, query) || includes(value.value, query) : true
     );
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
-const valuemapId = (state: Object, props: Object): number => props.paneId;
+const valuemapId = (state: any, props: any): number => props.paneId;
 
 const collectionSelector = createSelector(
   [resourceSelector('valuemaps'), valuemapId],

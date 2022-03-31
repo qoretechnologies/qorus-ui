@@ -1,6 +1,6 @@
 import includes from 'lodash/includes';
 
-const formatAppender: Function = (appender: Object): Object => ({
+const formatAppender: Function = (appender: any): any => ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'appenderid' does not exist on type 'Obje... Remove this comment to see the full error message
   id: appender.appenderid || appender.logger_appenderid,
   // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.

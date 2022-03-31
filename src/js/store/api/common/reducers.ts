@@ -8,14 +8,14 @@ const updateConfigItemWsCommon = {
     let newState = { ...state };
     let newData = newState.data;
 
-    events.forEach((dt: Object) => {
+    events.forEach((dt: any) => {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       if (dt.id) {
         newData = [...newData];
 
-        const intrf: Object = newData.find(
+        const intrf: any = newData.find(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-          (datum: Object): boolean => datum.id === dt.id
+          (datum: any): boolean => datum.id === dt.id
         );
 
         if (intrf) {
@@ -24,9 +24,9 @@ const updateConfigItemWsCommon = {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
           if (dt.stepid) {
             // @ts-ignore ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
-            const step: Object = intrf.stepinfo.find(
+            const step: any = intrf.stepinfo.find(
               // @ts-ignore ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
-              (stp: Object) => stp.stepid === dt.stepid
+              (stp: any) => stp.stepid === dt.stepid
             );
 
             // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
@@ -147,7 +147,7 @@ const loggerReducer = {
       };
     } else {
       const flattenedAppenders = appenders.reduce(
-        (cur: Array<Object>, appender: Object) => [...cur, formatAppender(appender)],
+        (cur: Array<Object>, appender: any) => [...cur, formatAppender(appender)],
         []
       );
 
@@ -284,7 +284,7 @@ const addAppenderReducer = {
         // Get the interface loggerData
         const { loggerData } = newData.find(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-          (datum: Object) => datum.id === dt.id
+          (datum: any) => datum.id === dt.id
         );
         // Add the new appender to the loggerData
         loggerData.appenders.push(formatAppender(dt));
@@ -320,7 +320,7 @@ const editAppenderReducer = {
         // Get the interface loggerData
         const { loggerData } = newData.find(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-          (datum: Object) => datum.id === dt.id
+          (datum: any) => datum.id === dt.id
         );
         // Add the new appender to the loggerData
         loggerData.appenders = loggerData.appenders.map((appender) => {
@@ -363,7 +363,7 @@ const deleteAppenderReducer = {
         // Get the interface loggerData
         const { loggerData } = newData.find(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-          (datum: Object) => datum.id === dt.id
+          (datum: any) => datum.id === dt.id
         );
         // Remove the appender
         loggerData.appenders = loggerData.appenders.filter(

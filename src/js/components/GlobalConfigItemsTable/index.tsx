@@ -18,11 +18,11 @@ import NoDataIf from '../NoDataIf';
 import Table from './table';
 
 type GlobalConfigItemsContainerProps = {
-  items: Object;
+  items: any;
   dispatchAction: Function;
   intrf: string;
   openModal: Function;
-  globalItems: Object;
+  globalItems: any;
 };
 
 const GlobalConfigItemsContainer: Function = ({
@@ -42,7 +42,7 @@ const GlobalConfigItemsContainer: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'isGlobal' does not exist on type 'Global... Remove this comment to see the full error message
   isGlobal,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-GlobalConfigItemsContainerProps): React.Element<any> => {
+GlobalConfigItemsContainerProps) => {
   const saveValue = (item, newValue, onSuccess, stepId?) => {
     dispatchAction(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'system' does not exist on type '{}'.
@@ -118,7 +118,7 @@ GlobalConfigItemsContainerProps): React.Element<any> => {
 };
 
 export default compose(
-  connect((state: Object) => ({
+  connect((state: any) => ({
     // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
     globalConfig: state.api.system.globalConfig,
   })),

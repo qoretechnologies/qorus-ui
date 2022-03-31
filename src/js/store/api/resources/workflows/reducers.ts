@@ -356,8 +356,8 @@ const fixOrders = {
         const workflow = newData.find((d) => d.id === dt.id);
 
         // * Set all the statuses to 0 and create an object
-        const statusesBefore: Object = dt.old.reduce(
-          (cur: Object, status: string) => ({
+        const statusesBefore: any = dt.old.reduce(
+          (cur: any, status: string) => ({
             ...cur,
             [status]: 0,
           }),

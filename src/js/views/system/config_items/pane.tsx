@@ -11,7 +11,7 @@ export default class GlobalConfigDetail extends Component {
   } = this.props;
 
   state: {
-    data: Object;
+    data: any;
   } = {
     data: null,
   };
@@ -20,7 +20,7 @@ export default class GlobalConfigDetail extends Component {
     this.loadConfigItem(this.props.paneId);
   }
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'paneId' does not exist on type 'Object'.
     if (this.props.paneId !== nextProps.paneId) {
       this.setState({ data: null });

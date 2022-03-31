@@ -44,7 +44,7 @@ const UserView: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'onPasswordResetClick' does not exist on ... Remove this comment to see the full error message
   onPasswordResetClick,
 }: {
-  userData: Object;
+  userData: any;
   clearStorage: Function;
   tabQuery: string;
 }) => (
@@ -52,7 +52,7 @@ const UserView: Function = ({
     <Headbar>
       <Breadcrumbs>
         <Crumb>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
           {userData.name} <small>({userData.provider})</small>
         </Crumb>
         <CrumbTabs tabs={['Overview', 'Settings']} />
@@ -90,13 +90,11 @@ const UserView: Function = ({
                     return normalizeName(datum, INTERFACE_IDS[intrf]);
                   })
                   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                  .map(
-                    (datum: string): React.Element<Tag> => (
-                      <span>
-                        <Tag className="tag-with-margin">{datum}</Tag>{' '}
-                      </span>
-                    )
-                  )
+                  .map((datum: string) => (
+                    <span>
+                      <Tag className="tag-with-margin">{datum}</Tag>{' '}
+                    </span>
+                  ))
               ) : // @ts-ignore ts-migrate(2339) FIXME: Property 'has_default' does not exist on type 'Obj... Remove this comment to see the full error message
               userData.has_default ? (
                 <Alert bsStyle="warning" icon="info-sign">
@@ -109,13 +107,13 @@ const UserView: Function = ({
             </PaneItem>
           ))}
           <PaneItem title={intl.formatMessage({ id: 'user.storage-data' })}>
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <Tree data={userData.storage} />
           </PaneItem>
         </Box>
       </SimpleTab>
       <SimpleTab name="settings">
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <UserSettings {...userData.storage.settings} />
       </SimpleTab>
     </SimpleTabs>
@@ -124,7 +122,7 @@ const UserView: Function = ({
 
 export default compose(
   connect(
-    (state: Object) => ({
+    (state: any) => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
       storage: state.api.currentUser.data.storage,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.

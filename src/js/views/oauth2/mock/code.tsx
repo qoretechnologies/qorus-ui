@@ -11,7 +11,7 @@ import { post } from '../../../store/api/utils';
 import Header from '../header';
 
 type CodeReceivedViewProps = {
-  allQueryObj: Object;
+  allQueryObj: any;
 };
 
 const CodeReceivedView: Function = ({
@@ -20,7 +20,7 @@ const CodeReceivedView: Function = ({
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   token: string;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> => (
+}) => (
   <Flex>
     <Header />
 
@@ -50,7 +50,7 @@ export default compose(
     componentDidMount() {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'setToken' does not exist on type 'CodeRe... Remove this comment to see the full error message
       const { allQueryObj, setToken }: CodeReceivedViewProps = this.props;
-      const redirectUri = encodeURIComponent(`https://${location.host}/authenticate/token`);
+      const redirectUri = encodeURIComponent(`https://${window.location.host}/authenticate/token`);
 
       setTimeout(async () => {
         let url = `${settings.OAUTH_URL}/public/token`;

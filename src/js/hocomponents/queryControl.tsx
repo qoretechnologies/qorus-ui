@@ -7,14 +7,10 @@ import wrapDisplayName from 'recompose/wrapDisplayName';
 import { changeQuery } from '../helpers/router';
 
 export default (
-    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    queryName: string | ?Function,
-    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
+    queryName: any,
     customFunc: Function,
-    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     toggle: boolean,
     merge?: boolean | Function
-    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   ): Function =>
   (Component: any) => {
     @withRouter
@@ -25,14 +21,14 @@ export default (
       };
 
       props: {
-        location: Object;
+        location: any;
         query: string;
       } = this.props;
 
       getQueryName: Function = (qn: string | Function): string =>
         typeof qn === 'function' ? qn(this.props) : qn;
 
-      getLocation: Function = (): Object => this.props.location || this.context.location;
+      getLocation: Function = (): any => this.props.location || this.context.location;
 
       handleQueryChange: Function = (value: string): void => {
         const location = this.getLocation();
@@ -67,7 +63,7 @@ export default (
 
       render() {
         const func: Function = customFunc || this.handleQueryChange;
-        const location: Object = this.getLocation();
+        const location: any = this.getLocation();
         const qName: string = !queryName ? 'all' : this.getQueryName(queryName);
         const query: string = !queryName
           ? // @ts-ignore ts-migrate(2339) FIXME: Property 'query' does not exist on type 'Object'.

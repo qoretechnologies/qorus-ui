@@ -20,10 +20,10 @@ import Instances from './list';
 
 type JobsDetailTabsProps = {
   activeTab: string;
-  model: Object;
+  model: any;
   isTablet?: boolean;
-  lib: Object;
-  location: Object;
+  lib: any;
+  location: any;
   date?: string;
   linkDate?: string;
   isPane?: boolean;
@@ -39,11 +39,11 @@ const JobsDetailTabs: Function = ({
   linkDate,
   isPane,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-JobsDetailTabsProps): React.Element<any> => (
+JobsDetailTabsProps) => (
   <SimpleTabs activeTab={activeTab}>
     {isPane && (
       <SimpleTab name="detail">
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
         <DetailTab key={model.name} model={model} isTablet={isTablet} />
       </SimpleTab>
     )}
@@ -54,7 +54,7 @@ JobsDetailTabsProps): React.Element<any> => (
     )}
     <SimpleTab name="code">
       <Box top fill>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'. */}
         {model.code ? (
           <Code
             selected={{
@@ -95,13 +95,13 @@ JobsDetailTabsProps): React.Element<any> => (
     </SimpleTab>
     <SimpleTab name="mappers">
       <Box top fill noPadding>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message */}
         <Mappers mappers={model.mappers} />
       </Box>
     </SimpleTab>
     <SimpleTab name="value maps">
       <Box top fill noPadding>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'. */}
         <Valuemaps vmaps={model.vmaps} />
       </Box>
     </SimpleTab>

@@ -5,7 +5,7 @@ import Flex from '../Flex';
 import Loader from '../loader';
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const FullPageLoading: Function = (): React.Element<any> => (
+const FullPageLoading: Function = () => (
   <div className="root">
     <Navbar className="bp3-fixed-top bp3-dark topbar">
       <Flex flexFlow="row" height="100%">

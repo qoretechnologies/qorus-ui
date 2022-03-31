@@ -26,7 +26,7 @@ const OrderLock: Function = ({
   handleLockClick,
   big,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ButtonGroup>
     <Button
       disabled={lock && lock !== username}
@@ -40,12 +40,10 @@ Props): React.Element<any> => (
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      username: state.api.currentUser.data.username,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    username: state.api.currentUser.data.username,
+  })),
   withDispatch(),
   withModal(),
   withHandlers({

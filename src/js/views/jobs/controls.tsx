@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-// @ts-ignore ts-migrate(2307) FIXME: Cannot find module '../../../../server_config' or ... Remove this comment to see the full error message
-import { WEB_IDE_URL } from '../../../../server_config';
+import { WEB_IDE_URL } from '../../../server_config';
 import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import withModal from '../../hocomponents/modal';
 import withDispatch from '../../hocomponents/withDispatch';
@@ -64,7 +63,7 @@ const JobControls: Function = ({
   intl,
   id,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> =>
+Props) =>
   scheduleOnly ? (
     <div>
       <span>{schedText}</span>{' '}

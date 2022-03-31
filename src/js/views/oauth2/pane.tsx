@@ -17,7 +17,7 @@ type ClientPaneProps = {
   paneId: string;
   onClose: Function;
   handleUpdateClientClick: Function;
-  client: Object;
+  client: any;
 };
 
 const ClientPane: Function = ({
@@ -26,7 +26,7 @@ const ClientPane: Function = ({
   client,
   handleUpdateClientClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ClientPaneProps): React.Element<any> => (
+ClientPaneProps) => (
   <Pane title={paneId} onClose={onClose} width={600}>
     <Box fill top>
       <PaneItem
@@ -50,7 +50,7 @@ ClientPaneProps): React.Element<any> => (
           </ButtonGroup>
         }
       >
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message */}
         <NoDataIf condition={!size(client.permissions)}>
           {() =>
             // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
@@ -66,14 +66,14 @@ ClientPaneProps): React.Element<any> => (
   </Pane>
 );
 
-const clientSelector: Function = (state: Object, props: Object): Object => {
+const clientSelector: Function = (state: any, props: any): any => {
   const clients: Array<Object> = objectCollectionToArray(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
     state.api.clients.data
   );
 
   // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-  return clients.find((client: Object) => client.client_id === props.paneId);
+  return clients.find((client: any) => client.client_id === props.paneId);
 };
 
 // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.

@@ -21,7 +21,7 @@ type Props = {
   canEdit: boolean;
   onDeleteClick: Function;
   onSortChange: Function;
-  sortData: Object;
+  sortData: any;
   canDelete: boolean;
   onAddUserClick: Function;
   canAdd: boolean;
@@ -38,7 +38,7 @@ const UsersTable: Function = ({
   canAdd,
   rbacExternal,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<Table> => (
+Props) => (
   <EnhancedTable collection={users} sortDefault={sortDefaults.rbacUsers} tableId="rbacUsers">
     {({
       canLoadMore,
@@ -107,7 +107,7 @@ Props): React.Element<Table> => (
             <Tbody {...props}>
               {collection.map(
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                (user: Object, index: number): React.Element<any> => (
+                (user: any, index: number) => (
                   <UsersRow
                     first={index === 0}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.

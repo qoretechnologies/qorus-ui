@@ -5,12 +5,12 @@ import Icon from '../icon';
 import PaneItem from '../pane_item';
 
 type Props = {
-  model: Object;
+  model: any;
   author: string;
 };
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'author' does not exist on type 'Object'.
-const Author: Function = ({ model: { author } }: Props): React.Element<any> =>
+const Author: Function = ({ model: { author } }: Props) =>
   author ? (
     <PaneItem title="Author">
       <Icon icon="user" /> {author}

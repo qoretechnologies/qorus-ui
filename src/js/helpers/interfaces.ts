@@ -10,20 +10,20 @@ import { normalizeId } from '../store/api/resources/utils';
 
 const mapConfigToArray =
   (id: number, globalView: boolean): Function =>
-  (configItem: Object, configKey: string): Object => ({
+  (configItem: any, configKey: string): any => ({
     ...configItem,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
     name: globalView ? configItem.name : configKey,
     id: globalView ? null : id,
   });
 
-const pullConfigFromStepinfo: Function = (stepArray: Array<Object>, id: number): Object => {
-  const resultObj: Object = {};
+const pullConfigFromStepinfo: Function = (stepArray: Array<Object>, id: number): any => {
+  const resultObj: any = {};
 
   stepArray
     // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
-    .filter((step: Object): boolean => step.config)
-    .forEach((step: Object): void => {
+    .filter((step: any): boolean => step.config)
+    .forEach((step: any): void => {
       const newConfig: Array<Object> = map(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'config' does not exist on type 'Object'.
         step.config,
@@ -46,14 +46,14 @@ const pullConfigFromStepinfo: Function = (stepArray: Array<Object>, id: number):
 };
 
 const rebuildConfigHash: Function = (
-  model: Object,
+  model: any,
   pullConfigValues: boolean,
   isGlobal: Boolean,
   id
-): Object => {
+): any => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'stepinfo' does not exist on type 'Object... Remove this comment to see the full error message
   const configHash = pullConfigValues ? model.stepinfo : model.config || {};
-  const configObj: Object = pullConfigValues
+  const configObj: any = pullConfigValues
     ? // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       pullConfigFromStepinfo(configHash, id || model.id)
     : {
@@ -75,8 +75,8 @@ const rebuildConfigHash: Function = (
   return resultObj;
 };
 
-const normalizeItem: Function = (item: Object): Object => {
-  let normalized: Object = item;
+const normalizeItem: Function = (item: any): any => {
+  let normalized: any = item;
 
   //! Check if the item passed is actually object
   if (!isObject(normalized)) {
@@ -118,12 +118,12 @@ const buildLinkToInterfaceId: Function = (interFace: string, id: number | string
 };
 
 const objectCollectionToArray: Function = (
-  collection: Object,
+  collection: any,
   keyName: string = 'name'
 ): Array<Object> =>
   reduce(
     collection,
-    (newCollection: Array<Object>, datum: Object, key: string) => [
+    (newCollection: Array<Object>, datum: any, key: string) => [
       ...newCollection,
       { [keyName]: key, ...datum },
     ],
@@ -131,19 +131,19 @@ const objectCollectionToArray: Function = (
   );
 
 const arrayCollectionToObject: Function = (
-  collection: Object,
+  collection: any,
   keyName: string = 'name'
 ): Array<Object> =>
   reduce(
     collection,
-    (newCollection: Object, datum: Object, key: string) => ({
+    (newCollection: any, datum: any, key: string) => ({
       ...newCollection,
       [datum[keyName]]: datum,
     }),
     {}
   );
 
-const getInstancesCountByFilters = (filters: Array<string>, model: Object): number => {
+const getInstancesCountByFilters = (filters: Array<string>, model: any): number => {
   const transformedFilters: Array<string> = filters.map((filter: string) => filter.toLowerCase());
 
   return reduce(

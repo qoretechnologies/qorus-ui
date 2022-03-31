@@ -45,9 +45,9 @@ export default (
       };
 
       props: {
-        storage: Object;
+        storage: any;
         storePaneSize: Function;
-        location: Object;
+        location: any;
         username: string;
         width?: number;
         tabQuery?: string;
@@ -55,13 +55,13 @@ export default (
       } = this.props;
 
       handleClose: Function = (omitQueries: Array<String> | Object = []): void => {
-        const { query, pathname }: { query: Object; pathname: string } =
+        const { query, pathname }: { query: any; pathname: string } =
           this.props.location || this.context.location;
 
         // Event object can be received as the first parameter
         const omitQueriesArray = omitQueries && isArray(omitQueries) ? omitQueries : [];
 
-        const newQuery: Object = omit(query, [
+        const newQuery: any = omit(query, [
           paneTabQueryName,
           paneQueryName,
           // @ts-ignore ts-migrate(2461) FIXME: Type 'Object' is not an array type.
@@ -99,7 +99,7 @@ export default (
 
         if (!paneIdQuery || paneIdQuery === '') return undefined;
 
-        const props: Object = propNames
+        const props: any = propNames
           ? propNames.reduce((obj, cur) => Object.assign(obj, { [cur]: this.props[cur] }), {})
           : {};
 
@@ -142,7 +142,7 @@ export default (
 
     return compose(
       connect(
-        (state: Object) => ({
+        (state: any) => ({
           // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
           username: state.api.currentUser.data.username,
           // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
@@ -157,13 +157,10 @@ export default (
       withTabs(defaultTab, paneTabQueryName),
       // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
       queryControl(paneQueryName),
-      mapProps(
-        (props): Object => ({
-          paneIdQuery: props[`${functionOrStringExp(paneQuery, props)}Query`],
-          changePaneIdQuery:
-            props[`change${upperFirst(functionOrStringExp(paneQuery, props))}Query`],
-          ...props,
-        })
-      )
+      mapProps((props): any => ({
+        paneIdQuery: props[`${functionOrStringExp(paneQuery, props)}Query`],
+        changePaneIdQuery: props[`change${upperFirst(functionOrStringExp(paneQuery, props))}Query`],
+        ...props,
+      }))
     )(ComponentWithPanel);
   };

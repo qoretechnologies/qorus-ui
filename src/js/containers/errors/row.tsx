@@ -9,7 +9,7 @@ import NameColumn from '../../components/NameColumn';
 import { Td, Tr } from '../../components/new_table';
 
 type Props = {
-  data: Object;
+  data: any;
   compact: boolean;
   type: string;
   onEditClick: Function;
@@ -25,7 +25,7 @@ const ErrorsRow: Function = ({
   onDeleteClick,
   first,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   const handleEditClick: Function = () => {
     onEditClick(data);
   };
@@ -37,7 +37,7 @@ Props): React.Element<any> => {
 
   return (
     <Tr first={first}>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
       <NameColumn name={data.error} />
       <ActionColumn>
         <Controls grouped>
@@ -45,21 +45,21 @@ Props): React.Element<any> => {
           <Button onClick={handleDeleteClick} btnStyle="danger" icon="cross" title="Remove error" />
         </Controls>
       </ActionColumn>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
       {!compact && <DescriptionColumn>{data.description}</DescriptionColumn>}
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'severity' does not exist on type 'Object... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'severity' does not exist on type 'Object... Remove this comment to see the full error message */}
       <Td className="medium">{data.severity}</Td>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Object'. */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Object'. */}
       <Td className="medium">{data.status}</Td>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'retry_delay_secs' does not exist on type... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'retry_delay_secs' does not exist on type... Remove this comment to see the full error message */}
       <Td className="narrow">{data.retry_delay_secs}</Td>
       <Td className="medium">
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'business_flag' does not exist on type 'O... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'business_flag' does not exist on type 'O... Remove this comment to see the full error message */}
         <ContentByType content={data.business_flag} />
       </Td>
       {type === 'workflow' && (
         <Td className="medium">
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'manually_updated' does not exist on type... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'manually_updated' does not exist on type... Remove this comment to see the full error message */}
           <ContentByType content={data.manually_updated} />
         </Td>
       )}

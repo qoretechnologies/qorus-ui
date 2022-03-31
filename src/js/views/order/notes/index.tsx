@@ -29,11 +29,11 @@ const selector = createSelector([orderSelector, userSelector], (order, user) => 
 @withDispatch()
 export default class NotesView extends Component {
   props: {
-    params: Object;
+    params: any;
     notes: Array<Object>;
-    order: Object;
+    order: any;
     dispatchAction: Function;
-    user: Object;
+    user: any;
   } = this.props;
 
   componentWillMount() {
@@ -92,7 +92,7 @@ export default class NotesView extends Component {
     return (
       <Box top>
         <PaneItem title="New note">
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message */}
           {this.state.error && (
             <Callout intent={Intent.DANGER} icon="warning-sign" title="Note too short">
               Please type at least 3 characters

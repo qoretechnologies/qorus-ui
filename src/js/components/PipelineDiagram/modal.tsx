@@ -53,7 +53,7 @@ const PipeElementModal = ({ onClose, intl, pipelineId, elementId, elementName, p
       </Modal.Header>
       <Modal.Body>
         <Box top fill>
-          {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
           <Tabs active={element.type === 'processor' ? 'config' : 'info'}>
             {element.type === 'processor' && (
               // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
@@ -65,9 +65,9 @@ const PipeElementModal = ({ onClose, intl, pipelineId, elementId, elementName, p
                 />
               </Pane>
             )}
-            {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
             <Pane name="Info">
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <Tree data={element} />
             </Pane>
           </Tabs>

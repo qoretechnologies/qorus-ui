@@ -51,7 +51,7 @@ const transformErrors = (order, filter, stepId) => {
 
   if (stepId) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'stepid' does not exist on type 'Object'.
-    return res.filter((errInst: Object) => errInst.stepid === stepId);
+    return res.filter((errInst: any) => errInst.stepid === stepId);
   }
 
   return res;

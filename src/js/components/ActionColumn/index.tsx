@@ -14,7 +14,7 @@ const ActionColumn: Function = compose(onlyUpdateForKeys(['children']))(
     children,
     className = 'normal',
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  ActionColumnProps): React.Element<any> => <Td className={className}>{children || '-'}</Td>
+  ActionColumnProps) => <Td className={className}>{children || '-'}</Td>
 );
 
 type ActionColumnHeaderProps = {
@@ -34,7 +34,7 @@ const ActionColumnHeader: Function = compose(
     intl,
     ...rest
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  ActionColumnHeaderProps): React.Element<any> => (
+  ActionColumnHeaderProps) => (
     <Th icon={icon} {...rest}>
       {children || intl.formatMessage({ id: 'table.actions' })}
     </Th>

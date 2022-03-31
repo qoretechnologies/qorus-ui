@@ -8,7 +8,7 @@ import settings from '../../../settings';
 import { get } from '../../../store/api/utils';
 
 type Props = {
-  data?: Object;
+  data?: any;
   onSave: Function;
   canEdit: boolean;
   urlProtocol: string;
@@ -35,7 +35,7 @@ const Option: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'sensitive' does not exist on type 'Objec... Remove this comment to see the full error message
   sensitive,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Object): React.Element<any> => {
+Object) => {
   const [isShown, setIsShown] = useState(false);
 
   const handleEditClick: Function = (): void => {
@@ -78,7 +78,7 @@ export default class ConnectionOptions extends Component {
     key: string;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     value: string;
-    options: Object;
+    options: any;
   } = {
     key: '',
     value: '',
@@ -165,7 +165,7 @@ export default class ConnectionOptions extends Component {
               <pre>
                 {opts.map(
                   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                  (opt: string): React.Element<any> => (
+                  (opt: string) => (
                     <Option
                       canEdit={this.props.canEdit}
                       sensitive={

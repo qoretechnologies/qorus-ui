@@ -33,7 +33,7 @@ const Bubble = ({
   id?: any;
   notificationsSound: boolean;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> => (
+}) => (
   <div
     className={classnames('bp3-toast', 'bp3-overlay-content', {
       [`bp3-intent-${type}`]: type !== 'info',
@@ -49,13 +49,13 @@ const Bubble = ({
       <audio src={notificationSound} id={id && `audio_${id}`} autoPlay />
     )}
     {stack > 1 && <div className="toast-notification-count">{stack > 9 ? '9+' : stack}</div>}
-    {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message */}
+    {/* @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message */}
     <Icon icon={iconByType[type]} />
     <span className="bp3-toast-message">{children}</span>
     <ButtonGroup className="bp3-minimal">
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message */}
       {onViewClick && <Button text="View" onClick={onViewClick} />}
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message */}
       <Button icon="cross" onClick={onClick} />
     </ButtonGroup>
   </div>

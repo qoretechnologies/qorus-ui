@@ -11,7 +11,7 @@ export default class OptionModal extends Component {
   props: {
     onSave: Function;
     onClose: Function;
-    model: Object;
+    model: any;
   } = this.props;
 
   state: {
@@ -72,11 +72,11 @@ export default class OptionModal extends Component {
       case 'bool':
         return (
           <Dropdown id="option">
-            {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
+            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
             <DToggle>{this.state.value.toString()}</DToggle>
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <DItem title="true" action={this.handleDropdownItemClick} />
-            {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
             <DItem title="false" action={this.handleDropdownItemClick} />
           </Dropdown>
         );
@@ -134,27 +134,27 @@ export default class OptionModal extends Component {
       <form onSubmit={this.handleFormSubmit}>
         <Modal hasFooter>
           <Modal.Header titleId="option" onClose={onClose}>
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
             {model.name}
           </Modal.Header>
           <Modal.Body>
             <Box fill top scrollY>
               <PaneItem title="Description">
-                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
                 <p>{model.desc}</p>
               </PaneItem>
               <PaneItem title="Expects">
-                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'expects' does not exist on type 'Object'... Remove this comment to see the full error message */}
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'expects' does not exist on type 'Object'... Remove this comment to see the full error message */}
                 <code>{model.expects}</code>
               </PaneItem>
               <PaneItem title="Interval">
                 <p>
-                  {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'interval' does not exist on type 'Object... Remove this comment to see the full error message */}
+                  {/* @ts-ignore ts-migrate(2339) FIXME: Property 'interval' does not exist on type 'Object... Remove this comment to see the full error message */}
                   {model.interval ? JSON.stringify(model.interval) : 'No data'}
                 </p>
               </PaneItem>
               <PaneItem title="Default value">
-                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'default' does not exist on type 'Object'... Remove this comment to see the full error message */}
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'default' does not exist on type 'Object'... Remove this comment to see the full error message */}
                 <code>{model.default ? model.default.toString() : 'null'}</code>
               </PaneItem>
               <PaneItem title="Current value">{this.renderValue()}</PaneItem>

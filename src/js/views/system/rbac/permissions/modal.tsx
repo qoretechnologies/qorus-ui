@@ -10,7 +10,7 @@ export default class AddRoleModal extends Component {
   props: {
     onClose: Function;
     onSave: Function;
-    model?: Object;
+    model?: any;
     title: string;
     perms: Array<string>;
   } = this.props;
@@ -35,8 +35,8 @@ export default class AddRoleModal extends Component {
         error: 'Please fill all fields marked with *',
       });
     } else if (
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
       !this.props.model &&
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'ReactInst... Remove this comment to see the full error message
       find(this.props.perms, { name: name.value })
     ) {
       this.setState({

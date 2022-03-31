@@ -15,7 +15,7 @@ import { INTERFACE_ICONS } from '../../../../constants/interfaces';
 import Row from './row';
 
 type Props = {
-  sortData: Object;
+  sortData: any;
   sort: Function;
   onSortChange: Function;
   collection: Array<Object>;
@@ -40,7 +40,7 @@ const WorkflowTable: Function = ({
   limit,
   onCSVClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Box top noPadding>
     <Table striped condensed fixed>
       <Thead>
@@ -87,7 +87,7 @@ Props): React.Element<any> => (
           <Tbody {...props}>
             {collection.map(
               // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-              (error: Object, index: number): React.Element<Row> => (
+              (error: any, index: number) => (
                 <Row
                   first={index === 0}
                   // @ts-ignore ts-migrate(2339) FIXME: Property 'error_instanceid' does not exist on type... Remove this comment to see the full error message

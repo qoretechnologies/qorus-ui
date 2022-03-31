@@ -5,7 +5,7 @@ import { normalizeName } from '../utils';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/store/api/res... Remove this comment to see the full error message
 import { skipIndexes } from './actions/helpers';
 
-const initialState: Object = {
+const initialState: any = {
   data: [],
   sync: false,
   loading: false,
@@ -15,46 +15,42 @@ const initialState: Object = {
   sortDir: true,
 };
 
-const fetchOrders: Object = {
+const fetchOrders: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'orders' does not exist on type 'Object'.
       payload: { orders, fetchMore },
     }: {
-      payload: Object;
+      payload: any;
       orders: Array<Object>;
       fetchMore: boolean;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = fetchMore ? [...data, ...orders] : setUpdatedToNull(orders);
-    const normalizedIds = newData.map(
-      (order: Object): Object => ({
-        ...order,
-        ...{
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow_instanceid' does not exist on t... Remove this comment to see the full error message
-          id: order.workflow_instanceid,
-        },
-      })
-    );
-    const normalized = normalizedIds.map(
-      (order: Object): Object => normalizeName(order, 'workflowid')
-    );
+    const normalizedIds = newData.map((order: any): any => ({
+      ...order,
+      ...{
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'workflow_instanceid' does not exist on t... Remove this comment to see the full error message
+        id: order.workflow_instanceid,
+      },
+    }));
+    const normalized = normalizedIds.map((order: any): any => normalizeName(order, 'workflowid'));
 
     return { ...state, ...{ data: normalized, loading: false, sync: true } };
   },
 };
 
-const changeOffset: Object = {
+const changeOffset: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { newOffset },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Object'.
     const offset = newOffset || newOffset === 0 ? newOffset : state.offset + 50;
 
@@ -62,14 +58,14 @@ const changeOffset: Object = {
   },
 };
 
-const changeServerSort: Object = {
+const changeServerSort: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { sort },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Object'.
     const sortDir = state.sort === sort ? !state.sortDir : state.sortDir;
 
@@ -77,12 +73,12 @@ const changeServerSort: Object = {
   },
 };
 
-const selectOrder: Object = {
+const selectOrder: any = {
   next(state = initialState, { payload: { id } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const stateData = [...state.data];
     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-    const order = stateData.find((ord: Object) => ord.id === parseInt(id, 10));
+    const order = stateData.find((ord: any) => ord.id === parseInt(id, 10));
 
     if (order) {
       const newData = updateItemWithId(id, { _selected: !order._selected }, stateData);
@@ -95,7 +91,7 @@ const selectOrder: Object = {
 };
 
 const selectAll = {
-  next(state: Object = initialState) {
+  next(state: any = initialState) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = data.map((w) => ({ ...w, ...{ _selected: true } }));
@@ -105,7 +101,7 @@ const selectAll = {
 };
 
 const selectNone = {
-  next(state: Object = initialState) {
+  next(state: any = initialState) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = data.map((w) => {
@@ -123,7 +119,7 @@ const selectNone = {
 };
 
 const selectInvert = {
-  next(state: Object = initialState) {
+  next(state: any = initialState) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = data.map((w) => ({ ...w, ...{ _selected: !w._selected } }));
@@ -133,7 +129,7 @@ const selectInvert = {
 };
 
 const unselectAll = {
-  next(state: Object) {
+  next(state: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = data.map((w) =>
@@ -149,14 +145,14 @@ const unselectAll = {
   },
 };
 
-const addOrder: Object = {
+const addOrder: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'events' does not exist on type 'Object'.
       payload: { events },
-    }: { payload: Object; events: Array<Object> }
-  ): Object {
+    }: { payload: any; events: Array<Object> }
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -164,7 +160,7 @@ const addOrder: Object = {
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach((obj: Object): void => {
+      events.forEach((obj: any): void => {
         const normalized = normalizeName({
           // @ts-ignore ts-migrate(2339) FIXME: Property 'info' does not exist on type 'Object'.
           ...obj.info,
@@ -199,7 +195,7 @@ const addOrder: Object = {
 
     return state;
   },
-  throw(state: Object = initialState, action: Object): Object {
+  throw(state: any = initialState, action: any): any {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -209,17 +205,17 @@ const addOrder: Object = {
   },
 };
 
-const modifyOrder: Object = {
+const modifyOrder: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'events' does not exist on type 'Object'.
       payload: { events },
     }: {
-      payload: Object;
+      payload: any;
       events: Array<Object>;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -227,7 +223,7 @@ const modifyOrder: Object = {
       const updatedData = setUpdatedToNull(data);
       let newData = updatedData;
 
-      events.forEach((dt: Object): void => {
+      events.forEach((dt: any): void => {
         newData = updateItemWithId(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
           dt.id,
@@ -247,7 +243,7 @@ const modifyOrder: Object = {
 
     return state;
   },
-  throw(state: Object = initialState, action: Object): Object {
+  throw(state: any = initialState, action: any): any {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -265,19 +261,19 @@ const addNote = {
 
 const addNoteWebsocket = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'events' does not exist on type 'Object'.
       payload: { events },
-    }: { payload: Object; events: Array<Object> }
-  ): Object {
+    }: { payload: any; events: Array<Object> }
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     if (state.data.length) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const data = state.data.slice();
       let newData = data;
 
-      events.forEach((dt: Object): void => {
+      events.forEach((dt: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
         const order = newData.find((d) => d.id === dt.id);
         // @ts-ignore ts-migrate(2339) FIXME: Property 'note' does not exist on type 'Object'.
@@ -296,7 +292,7 @@ const addNoteWebsocket = {
 
     return state;
   },
-  throw(state: Object = initialState, action: Object): Object {
+  throw(state: any = initialState, action: any): any {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -308,11 +304,11 @@ const addNoteWebsocket = {
 
 const updateDone = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id },
-    }: { payload: Object; id: number }
+    }: { payload: any; id: number }
   ) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sync' does not exist on type 'Object'.
     if (state.sync) {
@@ -325,7 +321,7 @@ const updateDone = {
 
     return state;
   },
-  throw(state: Object, action: Object) {
+  throw(state: any, action: any) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -335,26 +331,26 @@ const updateDone = {
   },
 };
 
-const fetchData: Object = {
+const fetchData: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id, type, data },
     }: {
-      payload: Object;
+      payload: any;
       id: number;
       type: string;
-      data: Object;
+      data: any;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const dt = [...state.data];
     const newData = updateItemWithId(id, { [type]: data }, dt);
 
     return { ...state, ...{ data: newData } };
   },
-  throw(state: Object, action: Object) {
+  throw(state: any, action: any) {
     return Object.assign({}, state, {
       sync: false,
       loading: false,
@@ -364,13 +360,13 @@ const fetchData: Object = {
   },
 };
 
-const orderAction: Object = {
+const orderAction: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { ids, action, result },
-    }: Object
+    }: any
   ) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
@@ -381,7 +377,7 @@ const orderAction: Object = {
         if (typeof result[res] === 'string') {
           const ord = newData.find(
             // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-            (order: Object): boolean => order.id === parseInt(res, 10)
+            (order: any): boolean => order.id === parseInt(res, 10)
           );
 
           newData = updateItemWithId(
@@ -397,7 +393,7 @@ const orderAction: Object = {
       orders.forEach((id: number): void => {
         const ord = newData.find(
           // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-          (order: Object): boolean => order.id === parseInt(id, 10)
+          (order: any): boolean => order.id === parseInt(id, 10)
         );
 
         const origStatus = ord ? ord.workflowstatus : '';
@@ -417,25 +413,25 @@ const orderAction: Object = {
   },
 };
 
-const skipStep: Object = {
+const skipStep: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'orderId' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { orderId, stepid, ind },
     }: {
-      payload: Object;
+      payload: any;
       orderId: number;
       stepid: number;
       ind: string;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    const order: Object = data.find(
+    const order: any = data.find(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-      (ord: Object): boolean => ord.id === orderId
+      (ord: any): boolean => ord.id === orderId
     );
     const newInstances = skipIndexes(order, stepid, ind);
     const newData = updateItemWithId(orderId, { StepInstances: newInstances }, data);
@@ -444,20 +440,20 @@ const skipStep: Object = {
   },
 };
 
-const schedule: Object = {
+const schedule: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id, date, error, origStatus },
     }: {
-      payload: Object;
+      payload: any;
       id: number;
       date: string;
       error: boolean;
       origStatus: string;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = updateItemWithId(
@@ -473,18 +469,18 @@ const schedule: Object = {
   },
 };
 
-const setPriority: Object = {
+const setPriority: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id, priority },
     }: {
-      payload: Object;
+      payload: any;
       id: number;
       priority: number;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = updateItemWithId(id, { priority }, [...state.data]);
 
@@ -493,29 +489,29 @@ const setPriority: Object = {
 };
 
 // Locking / unlocking
-const lock: Object = {
+const lock: any = {
   next(state) {
     return state;
   },
 };
-const lockWs: Object = {
+const lockWs: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type '{ event... Remove this comment to see the full error message
       payload: { events },
     }: {
       events: Array<Object>;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     let newData = data;
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-    events.forEach(({ id, username, note }: Object) => {
+    events.forEach(({ id, username, note }: any) => {
       // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-      const order: Object = data.find((ord: Object): boolean => ord.id === id);
+      const order: any = data.find((ord: any): boolean => ord.id === id);
 
       if (order) {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'notes' does not exist on type 'Object'.
@@ -546,18 +542,18 @@ const lockWs: Object = {
   },
 };
 
-const updateErrors: Object = {
+const updateErrors: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id, errors },
     }: {
-      payload: Object;
+      payload: any;
       id: number;
       errors: Array<Object>;
     }
-  ): Object {
+  ): any {
     if (errors.err) return state;
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -574,19 +570,19 @@ const updateErrors: Object = {
   },
 };
 
-const updateHierarchy: Object = {
+const updateHierarchy: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id, hierarchy, error },
     }: {
-      payload: Object;
+      payload: any;
       id: number;
-      hierarchy: Object;
+      hierarchy: any;
       error: boolean;
     }
-  ): Object {
+  ): any {
     if (error) {
       return state;
     }
@@ -604,19 +600,19 @@ const updateHierarchy: Object = {
   },
 };
 
-const updateStepInstances: Object = {
+const updateStepInstances: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id, steps, error },
     }: {
-      payload: Object;
+      payload: any;
       id: number;
-      steps: Object;
+      steps: any;
       error: boolean;
     }
-  ): Object {
+  ): any {
     if (error) {
       return state;
     }
@@ -634,18 +630,18 @@ const updateStepInstances: Object = {
   },
 };
 
-const fetchYamlData: Object = {
+const fetchYamlData: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id, yamlData },
     }: {
-      payload: Object;
+      payload: any;
       id: number;
       yamlData: string;
     }
-  ): Object {
+  ): any {
     const data = updateItemWithId(
       id,
       {
@@ -659,18 +655,18 @@ const fetchYamlData: Object = {
   },
 };
 
-const fetchStepData: Object = {
+const fetchStepData: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
       payload: { id, stepData },
     }: {
-      payload: Object;
+      payload: any;
       id: number;
       stepData: string;
     }
-  ): Object {
+  ): any {
     if (!stepData) {
       return state;
     }
@@ -688,14 +684,14 @@ const fetchStepData: Object = {
   },
 };
 
-const updateSensitiveData: Object = {
-  next(state: Object): Object {
+const updateSensitiveData: any = {
+  next(state: any): any {
     return state;
   },
 };
 
-const updateData: Object = {
-  next(state: Object): Object {
+const updateData: any = {
+  next(state: any): any {
     return state;
   },
 };

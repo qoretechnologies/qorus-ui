@@ -18,8 +18,8 @@ import actions from '../../../store/api/actions';
 
 type Props = {
   tabQuery: string;
-  location: Object;
-  logs: Object;
+  location: any;
+  logs: any;
 };
 
 const Log: Function = ({ tabQuery, logs }: Props) => (
@@ -35,7 +35,7 @@ const Log: Function = ({ tabQuery, logs }: Props) => (
     </Headbar>
 
     <SimpleTabs activeTab={tabQuery}>
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'. */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'map' does not exist on type 'Object'. */}
       {logs.map((log) => (
         <SimpleTab name={log.name ? log.name.toLowerCase() : log.logger.toLowerCase()}>
           <Box top fill scrollY>

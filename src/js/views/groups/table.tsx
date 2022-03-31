@@ -22,7 +22,7 @@ import Actions from './toolbar/actions';
 import Selectors from './toolbar/selectors';
 
 type Props = {
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   collection: Array<Object>;
   select: Function;
@@ -56,7 +56,7 @@ const GroupsTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Table fixed hover condensed striped>
     <Thead>
       <FixedRow className="toolbar-row">
@@ -139,7 +139,7 @@ Props): React.Element<any> => (
         <Tbody {...props}>
           {collection.map(
             // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (group: Object, index: number): React.Element<Row> => (
+            (group: any, index: number) => (
               <Row
                 first={index === 0}
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.

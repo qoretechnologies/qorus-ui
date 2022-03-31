@@ -16,7 +16,7 @@ import unsync from '../../hocomponents/unsync';
 import actions from '../../store/api/actions';
 import ExtensionList from './list';
 
-const Extensions = ({ extensions }: { extensions: Object }) => (
+const Extensions = ({ extensions }: { extensions: any }) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -28,7 +28,7 @@ const Extensions = ({ extensions }: { extensions: Object }) => (
         condition={Object.keys(extensions).length === 0}
         title="There are no extensions installed"
       >
-        {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
         <Tabs active={Object.keys(extensions)[0]} id="extensionsTabs">
           {Object.keys(extensions).map((item) => (
             // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; key: string; name: stri... Remove this comment to see the full error message

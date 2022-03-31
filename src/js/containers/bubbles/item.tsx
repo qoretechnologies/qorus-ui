@@ -18,7 +18,7 @@ const timeoutByBubbleType = {
 };
 
 type Props = {
-  bubble: Object;
+  bubble: any;
   dismiss: Function;
   timeout: number;
   type?: string;

@@ -13,6 +13,6 @@ const DateComponent: Function = ({
   date,
   format = DATE_FORMATS.DISPLAY,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (date ? <span>{moment(date).format(format)}</span> : <span />);
+Props) => (date ? <span>{moment(date).format(format)}</span> : <span />);
 
 export default pure(['date', 'format'])(DateComponent);

@@ -24,8 +24,8 @@ type Props = {
   workflows: Array<Object>;
   totalOrderStats: number;
   onSortChange: Function;
-  sortData: Object;
-  orderStats?: Object;
+  sortData: any;
+  orderStats?: any;
 };
 
 const StatsModal: Function = ({
@@ -52,7 +52,7 @@ const StatsModal: Function = ({
           noContainer
           rightElement={<Band band={band} onChange={handleBandChange} />}
         >
-          {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
           <Pane name="Local">
             <SLATable
               workflows={workflows}
@@ -62,7 +62,7 @@ const StatsModal: Function = ({
               local
             />
           </Pane>
-          {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
           <Pane name="Global">
             <SLATable
               workflows={workflows}
@@ -116,7 +116,7 @@ export default compose(
           order_stats &&
           order_stats.find(
             // @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
-            (stat: Object) => stat.label === band.replace(/ /g, '_')
+            (stat: any) => stat.label === band.replace(/ /g, '_')
           )
       ),
       ...rest,

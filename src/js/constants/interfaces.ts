@@ -43,7 +43,7 @@ const INTERFACE_ID_KEYS: Array<string> = [
   'alertid',
 ];
 
-const INTERFACE_IDS: Object = {
+const INTERFACE_IDS: any = {
   workflows: 'workflowid',
   workflow: 'workflowid',
   services: 'serviceid',
@@ -58,7 +58,7 @@ const INTERFACE_IDS: Object = {
   pipelines: 'pipeline',
 };
 
-const INTERFACE_ID_LINKS: Object = {
+const INTERFACE_ID_LINKS: any = {
   workflow: '/workflow/',
   workflows: '/workflows?paneId=',
   services: '/services?paneId=',
@@ -76,9 +76,4 @@ const INTERFACE_ID_LINKS: Object = {
   'value map': '/valuemaps?paneId=',
 };
 
-export {
-  INTERFACE_ICONS,
-  INTERFACE_ID_KEYS,
-  INTERFACE_ID_LINKS,
-  INTERFACE_IDS,
-};
+export { INTERFACE_ICONS, INTERFACE_ID_KEYS, INTERFACE_ID_LINKS, INTERFACE_IDS };

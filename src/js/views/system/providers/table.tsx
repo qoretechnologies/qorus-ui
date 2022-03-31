@@ -39,7 +39,7 @@ const ProvidersTable = ({ fields, intl }) => {
                 <Tbody {...props}>
                   {collection.map(
                     // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                    (provider: Object, index: number): React.Element<any> => (
+                    (provider: any, index: number) => (
                       <Tr first={index === 0}>
                         <NameColumn
                           // @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
@@ -48,7 +48,7 @@ const ProvidersTable = ({ fields, intl }) => {
                             // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                             .join('')} ${provider.name}`}
                         />
-                        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
+                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
                         <DescriptionColumn>{provider.desc}</DescriptionColumn>
                         <NameColumn
                           className="text"
@@ -56,15 +56,15 @@ const ProvidersTable = ({ fields, intl }) => {
                           name={provider.type.name}
                         />
                         <Td className="narrow">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                           <ContentByType content={provider.type.mandatory} />
                         </Td>
                         <Td className="text">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                           {provider.type.types_accepted?.join()}
                         </Td>
                         <Td className="text medium">
-                          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
                           {provider.type.types_returned?.join()}
                         </Td>
                       </Tr>

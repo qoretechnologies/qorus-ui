@@ -34,7 +34,7 @@ let Section: Function = ({
   height,
   clean,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
+Props) => {
   if (!fixed) {
     // @ts-ignore ts-migrate(2559) FIXME: Type '{ children: any; }' has no properties in com... Remove this comment to see the full error message
     return <Tag>{children}</Tag>;
@@ -93,17 +93,17 @@ Section = updateOnlyForKeys(['children', 'height'])(Section);
 
 const Thead = compose(
   setDisplayName('Thead'),
-  mapProps((props: Object) => ({ ...props, type: 'header', Tag: 'thead' }))
+  mapProps((props: any) => ({ ...props, type: 'header', Tag: 'thead' }))
 )(Section);
 
 const Tbody = compose(
   setDisplayName('Tbody'),
-  mapProps((props: Object) => ({ ...props, type: 'body', Tag: 'tbody' }))
+  mapProps((props: any) => ({ ...props, type: 'body', Tag: 'tbody' }))
 )(Section);
 
 const Tfooter = compose(
   setDisplayName('Tfoot'),
-  mapProps((props: Object) => ({ ...props, type: 'footer', Tag: 'tfoot' }))
+  mapProps((props: any) => ({ ...props, type: 'footer', Tag: 'tfoot' }))
 )(Section);
 
 export { Thead, Tbody, Tfooter };

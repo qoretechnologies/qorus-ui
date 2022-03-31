@@ -83,7 +83,7 @@ export default class SystemOptions extends Component {
             {this.props.options.map((opt) => (
               // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
               <option key={opt.name} value={opt.name}>
-                {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                 {opt.name}
               </option>
             ))}
@@ -136,7 +136,7 @@ export default class SystemOptions extends Component {
   render() {
     return (
       <Toolbar mt>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'edit' does not exist on type 'Readonly<{... Remove this comment to see the full error message */}
         {this.state.edit ? this.renderOptions() : this.renderButton()}
       </Toolbar>
     );

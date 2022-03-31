@@ -27,7 +27,7 @@ export default class Search extends Component {
 
   _input: any;
 
-  componentWillReceiveProps(nextProps: Object) {
+  componentWillReceiveProps(nextProps: any) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'defaultValue' does not exist on type 'Ob... Remove this comment to see the full error message
     if (this.props.defaultValue !== nextProps.defaultValue) {
       this.setState({
@@ -107,7 +107,7 @@ export default class Search extends Component {
 
     return searches.map(
       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-      (qry: string, index: number): React.Element<any> => (
+      (qry: string, index: number) => (
         <Item
           key={`${qry}_${index}`}
           title={qry}
@@ -142,7 +142,7 @@ export default class Search extends Component {
           {searches && searches.length !== 0 ? (
             // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
             <Dropdown>
-              {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{ icon: string; noCaret: true; }' is missing... Remove this comment to see the full error message */}
+              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ icon: string; noCaret: true; }' is missing... Remove this comment to see the full error message */}
               <Control icon="history" noCaret />
               {this.renderHistoryItems()}
             </Dropdown>

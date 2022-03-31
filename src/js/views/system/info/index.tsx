@@ -10,7 +10,7 @@ import Headbar from '../../../components/Headbar';
 import InfoTable from '../../../components/info_table';
 import titleManager from '../../../hocomponents/TitleManager';
 
-const SystemInfoTable: Function = ({ data }: { data: Object }) => (
+const SystemInfoTable: Function = ({ data }: { data: any }) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -24,12 +24,10 @@ const SystemInfoTable: Function = ({ data }: { data: Object }) => (
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      data: state.api.system.data,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    data: state.api.system.data,
+  })),
   titleManager('Info'),
   pure(['data'])
 )(SystemInfoTable);

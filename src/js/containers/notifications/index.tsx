@@ -36,15 +36,15 @@ export const NotificationsContainer = ({ collection }: Props) => {
   );
 };
 
-const groupNotifications: Function = (state: Object): Object => {
+const groupNotifications: Function = (state: any): any => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
   const { data } = state.ui.notifications;
-  const groupedNotifications: Object = {};
+  const groupedNotifications: any = {};
 
   data
     // @ts-ignore ts-migrate(2339) FIXME: Property 'read' does not exist on type 'Object'.
-    .filter((datum: Object) => !datum.read)
-    .forEach((datum: Object): void => {
+    .filter((datum: any) => !datum.read)
+    .forEach((datum: any): void => {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'alert' does not exist on type 'Object'.
       const objectItem: any = groupedNotifications[datum.alert];
 

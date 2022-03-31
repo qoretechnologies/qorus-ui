@@ -12,17 +12,17 @@ import { getStatsCount, getStatsPct } from '../../helpers/chart';
 import ChartComponent from '../chart';
 
 type Props = {
-  stats: Object;
+  stats: any;
   onDispositionChartClick: Function;
   onSLAChartClick: Function;
   dispositionLegendHandlers: Array<Function>;
   slaLegendHandlers: Array<Function>;
   autoRecoveriesCount: number;
-  statWithAutoRecoveries?: Object;
+  statWithAutoRecoveries?: any;
   recoveryCurrency: string;
   recoveryAmount: number;
-  options: Object;
-  formatter: Object;
+  options: any;
+  formatter: any;
   intl: any;
 };
 
@@ -43,11 +43,11 @@ const DispositionChart: Function = ({
       <Callout icon="dollar" className="bp3-intent-purple">
         <FormattedMessage id="stats.estimated-savings-1" /> <strong>{autoRecoveriesCount}</strong>{' '}
         <FormattedMessage id="stats.estimated-savings-2" />{' '}
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'. */}
         <strong>{formatter.format(recoveryAmount)}</strong>{' '}
         <FormattedMessage id="stats.estimated-savings-3" />{' '}
         <strong>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'. */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'. */}
           {formatter.format(recoveryAmount * autoRecoveriesCount)}
         </strong>
         <div
@@ -106,7 +106,7 @@ const DispositionChart: Function = ({
         </div>
       </Callout>
     )}
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <ChartComponent
       title={intl.formatMessage({ id: 'stats.workflow-disposition' })}
       onClick={onDispositionChartClick}
@@ -141,7 +141,7 @@ const DispositionChart: Function = ({
         },
       ]}
     />
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <ChartComponent
       title={intl.formatMessage({ id: 'stats.sla-stats' })}
       width={150}
@@ -149,7 +149,7 @@ const DispositionChart: Function = ({
       isNotTime
       type="doughnut"
       // @ts-ignore ts-migrate(2339) FIXME: Property 'sla' does not exist on type 'Object'.
-      empty={stats.sla.every((sla: Object) => sla.pct === 0)}
+      empty={stats.sla.every((sla: any) => sla.pct === 0)}
       onClick={onSLAChartClick}
       legendHandlers={slaLegendHandlers}
       labels={[
@@ -168,29 +168,27 @@ const DispositionChart: Function = ({
 );
 
 export default compose(
-  connect(
-    (state: Object): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
-      options: state.api.systemOptions.data,
-    })
-  ),
+  connect((state: any): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
+    options: state.api.systemOptions.data,
+  })),
   mapProps(
     ({ stats, options, ...rest }: Props): Props => ({
       // @ts-ignore ts-migrate(2339) FIXME: Property 'l' does not exist on type 'Object'.
       statWithAutoRecoveries: stats.l.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'count' does not exist on type 'Object'.
-        (stat: Object) => stat.count > 0 && stat.disposition === 'A'
+        (stat: any) => stat.count > 0 && stat.disposition === 'A'
       ),
       stats,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
       recoveryCurrency: options.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        (option: Object): boolean => option.name === 'recovery-currency'
+        (option: any): boolean => option.name === 'recovery-currency'
       ).value,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'find' does not exist on type 'Object'.
       recoveryAmount: options.find(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        (option: Object): boolean => option.name === 'recovery-amount'
+        (option: any): boolean => option.name === 'recovery-amount'
       ).value,
       options,
 

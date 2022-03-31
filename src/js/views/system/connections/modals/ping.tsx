@@ -21,7 +21,7 @@ export default class Ping extends Component {
   state: {
     error: boolean;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    data: Object;
+    data: any;
   } = {
     error: false,
     data: null,
@@ -32,11 +32,11 @@ export default class Ping extends Component {
   }
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  ping: Function = async (): Promise<*> => {
+  ping: Function = async (): Promise<any> => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
     if (this.props.dispatchAction) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
-      const payload: Object = await this.props.dispatchAction(
+      const payload: any = await this.props.dispatchAction(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.
         actions.remotes.pingRemote,
         this.props.name,
@@ -66,7 +66,7 @@ export default class Ping extends Component {
       return (
         <Box top>
           <Alert bsStyle="danger" title="Ping unsuccessful">
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'info' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'info' does not exist on type 'Object'. */}
             {this.state.data.info}
           </Alert>
         </Box>

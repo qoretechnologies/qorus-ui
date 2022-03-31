@@ -20,7 +20,7 @@ const ToolbarFilters: Function = ({
   handleFilterChange,
   items = ORDER_STATES,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <ButtonGroup>
     <Dropdown
       id="filters"
@@ -31,9 +31,9 @@ Props): React.Element<any> => (
       onSubmit={handleFilterChange}
       selected={filterQuery ? filterQuery.split(',') : ['All']}
     >
-      {/* @ts-expect-error ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */}
       <Control />
-      {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
       <Item title="All" />
       {items.map((o, k) => (
         // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.

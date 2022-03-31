@@ -19,7 +19,7 @@ const Header = ({
   offsetY: number;
   textColor: string;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> => (
+}) => (
   <g x="0" y="0" height={headerHeight} width={svgWidth}>
     <text x={rectWidth / 2} y={offsetY} fill={textColor} textAnchor="middle">
       {intl.formatMessage({ id: 'component.input' })}

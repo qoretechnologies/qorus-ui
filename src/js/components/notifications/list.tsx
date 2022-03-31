@@ -37,7 +37,7 @@ const NotificationList: Function = ({ collection }: Props) => (
   <NoDataIf condition={collection.length === 0} big inBox>
     {() => (
       <Box top scrollY>
-        {collection.map((alert: Object, index: number) => (
+        {collection.map((alert: any, index: number) => (
           <PaneItem
             // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationId' does not exist on type '... Remove this comment to see the full error message
             key={alert.notificationId}
@@ -46,13 +46,13 @@ const NotificationList: Function = ({ collection }: Props) => (
             // @ts-ignore ts-migrate(2339) FIXME: Property 'when' does not exist on type 'Object'.
             label={<NotificationTime time={alert.when} />}
           >
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
             <Link to={getAlertObjectLink(alert.type, alert)}>
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'object' does not exist on type 'Object'. */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'object' does not exist on type 'Object'. */}
               {alert.object}
             </Link>
             <div>
-              {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */}
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'reason' does not exist on type 'Object'. */}
               <small>{alert.reason}</small>
             </div>
           </PaneItem>
@@ -69,7 +69,7 @@ export default compose(
         paneTab !== 'all'
           ? collection.filter(
               // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
-              (alert: Object) => alert.notificationType === paneTab
+              (alert: any) => alert.notificationType === paneTab
             )
           : collection,
       paneTab,

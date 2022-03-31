@@ -1,11 +1,11 @@
 import { updateItemWithId } from '../../utils';
 
 const fetchValues = {
-  next(state: Object, { payload: { values, id } }) {
+  next(state: any, { payload: { values, id } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = state.data.slice();
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    const valuemap: Object = state.data.find((vm: Object): boolean => vm.id === parseInt(id, 10));
+    const valuemap: any = state.data.find((vm: any): boolean => vm.id === parseInt(id, 10));
     // @ts-ignore ts-migrate(2339) FIXME: Property 'vals' does not exist on type 'Object'.
     const vals = valuemap.vals || { sync: true, loading: false, data: [] };
     vals.data = values;
@@ -17,11 +17,11 @@ const fetchValues = {
 };
 
 const addValue = {
-  next(state: Object, { payload: { id, key, value, enabled } }) {
+  next(state: any, { payload: { id, key, value, enabled } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data: Array<Object> = state.data.slice();
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    const valuemap: Object = state.data.find((vm: Object): boolean => vm.id === parseInt(id, 10));
+    const valuemap: any = state.data.find((vm: any): boolean => vm.id === parseInt(id, 10));
     // @ts-ignore ts-migrate(2339) FIXME: Property 'vals' does not exist on type 'Object'.
     const newValsData = { ...valuemap.vals.data, ...{ [key]: { value, enabled } } };
     // @ts-ignore ts-migrate(2339) FIXME: Property 'vals' does not exist on type 'Object'.
@@ -33,11 +33,11 @@ const addValue = {
 };
 
 const updateValue = {
-  next(state: Object, { payload: { id, key, value, enabled } }) {
+  next(state: any, { payload: { id, key, value, enabled } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data: Array<Object> = state.data.slice();
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    const valuemap: Object = state.data.find((vm: Object): boolean => vm.id === parseInt(id, 10));
+    const valuemap: any = state.data.find((vm: any): boolean => vm.id === parseInt(id, 10));
     // @ts-ignore ts-migrate(2339) FIXME: Property 'vals' does not exist on type 'Object'.
     const newValues = { ...valuemap.vals.data[key], ...{ enabled, value } };
     // @ts-ignore ts-migrate(2339) FIXME: Property 'vals' does not exist on type 'Object'.
@@ -51,11 +51,11 @@ const updateValue = {
 };
 
 const deleteValue = {
-  next(state: Object, { payload: { id, key } }) {
+  next(state: any, { payload: { id, key } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data: Array<Object> = state.data.slice();
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    const valuemap: Object = state.data.find((vm: Object): boolean => vm.id === parseInt(id, 10));
+    const valuemap: any = state.data.find((vm: any): boolean => vm.id === parseInt(id, 10));
     // @ts-ignore ts-migrate(2339) FIXME: Property 'vals' does not exist on type 'Object'.
     const newValuesData = { ...valuemap.vals.data };
 
@@ -70,7 +70,7 @@ const deleteValue = {
 };
 
 const getDump = {
-  next(state: Object, { payload: { dump, id } }) {
+  next(state: any, { payload: { dump, id } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = state.data.slice();
     const newData = updateItemWithId(id, { dump }, data);
@@ -80,7 +80,7 @@ const getDump = {
 };
 
 const removeDump = {
-  next(state: Object, { payload }) {
+  next(state: any, { payload }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = updateItemWithId(payload, { dump: null }, data);

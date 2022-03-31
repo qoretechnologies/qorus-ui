@@ -24,23 +24,23 @@ import Table from './table';
 type Props = {
   date: string;
   linkDate: string;
-  workflow?: Object;
+  workflow?: any;
   selected: string;
   fetch: Function;
   onCSVClick: Function;
   selectedIds: Array<number>;
   unselectAll: Function;
-  location: Object;
+  location: any;
   orders: Array<Object>;
   changeOffset: Function;
   limit: number;
-  searchData?: Object;
+  searchData?: any;
   searchPage?: boolean;
   canLoadMore: boolean;
   handleLoadMore: Function;
   loadMoreCurrent: number;
   loadMoreTotal: number;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   filter: string;
   isTablet: boolean;
@@ -66,7 +66,7 @@ const WorkflowOrders: Function = ({
   workflow,
   children,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Box top noPadding>
     <Table
       collection={orders}
@@ -96,7 +96,7 @@ const filterOrders: Function =
   (orders: Array<Object>): Array<Object> =>
     id
       ? // @ts-ignore ts-migrate(2339) FIXME: Property 'workflowid' does not exist on type 'Obje... Remove this comment to see the full error message
-        orders.filter((order: Object): boolean => order.workflowid === id)
+        orders.filter((order: any): boolean => order.workflowid === id)
       : orders;
 
 const filterSearch: Function =
@@ -108,7 +108,7 @@ const idSelector: Function = (state, props) => (props.workflow ? props.workflow.
 
 const collectionSelector: Function = createSelector(
   [querySelector('search'), resourceSelector('orders'), idSelector],
-  (search: string, orders: Object, id: number) =>
+  (search: string, orders: any, id: number) =>
     flowRight(
       filterSearch(search),
       filterOrders(id)
@@ -117,7 +117,7 @@ const collectionSelector: Function = createSelector(
 );
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-const settingsSelector = (state: Object): Object => state.ui.settings;
+const settingsSelector = (state: any): any => state.ui.settings;
 
 const viewSelector: Function = createSelector(
   [
@@ -153,14 +153,12 @@ export default compose(
   withSort('orders', 'orders', sortDefaults.orders),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 4 arguments, but got 2.
   loadMore('orders', 'orders'),
-  mapProps(
-    ({ workflow, ...rest }: Props): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-      id: workflow ? workflow.id : null,
-      workflow,
-      ...rest,
-    })
-  ),
+  mapProps(({ workflow, ...rest }: Props): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+    id: workflow ? workflow.id : null,
+    workflow,
+    ...rest,
+  })),
   patch('load', [
     'id',
     false,

@@ -15,7 +15,7 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
       onSuccess: Function,
       dispatch: Function
     ): void => {
-      const intfcToApiPath: Object = {
+      const intfcToApiPath: any = {
         WORKFLOWS: stepId ? 'steps' : 'workflows',
         SERVICES: 'services',
         JOBS: 'jobs',
@@ -34,7 +34,7 @@ const updateConfigItemAction: Function = (intfc: string): Function =>
 
       fetchWithNotifications(
         // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-        async (): Promise<*> => {
+        async (): Promise<any> => {
           const res = await put(url, {
             body: JSON.stringify({
               value,
@@ -65,7 +65,7 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
       onSuccess: Function,
       dispatch: Function
     ): void => {
-      const intfcToApiPath: Object = {
+      const intfcToApiPath: any = {
         SYSTEM: 'system',
         WORKFLOWS: stepId ? 'steps' : 'workflows',
         SERVICES: 'services',
@@ -83,7 +83,7 @@ const deleteConfigItemAction: Function = (intfc: string): Function =>
 
       fetchWithNotifications(
         // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-        async (): Promise<*> => {
+        async (): Promise<any> => {
           const res = await del(url);
 
           if (!res.err && onSuccess) {
@@ -111,7 +111,7 @@ const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
 
       url = url || intfc;
 
-      const logger: Object = await fetchWithNotifications(
+      const logger: any = await fetchWithNotifications(
         async () => await get(`${settings.REST_BASE_URL}/${url}/${loggerPath.toLowerCase()}`),
         null,
         null,
@@ -119,7 +119,7 @@ const fetchLoggerAction: Function = (intfc: string, url?: string): Function =>
       );
 
       if (logger !== 'success') {
-        const appenders: Object = await fetchWithNotifications(
+        const appenders: any = await fetchWithNotifications(
           async () => await get(`${settings.REST_BASE_URL}/${url}/${appendersPath.toLowerCase()}`),
           null,
           null,

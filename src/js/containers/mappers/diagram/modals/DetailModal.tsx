@@ -7,7 +7,7 @@ import ContentByType from '../../../../components/ContentByType';
 import Modal from '../../../../components/modal';
 
 type Props = {
-  detail: Object;
+  detail: any;
   onClose: Function;
 };
 

@@ -44,7 +44,7 @@ type Props = {
   has_alerts: boolean;
   name: string;
   version: string;
-  states: Object;
+  states: any;
   expanded: boolean;
   deprecated: boolean;
   showDeprecated: boolean;
@@ -52,9 +52,9 @@ type Props = {
   first?: boolean;
   remote: boolean;
   dispatchAction: Function;
-  order_stats?: Object;
-  orderStats?: Object;
-  slaStats?: Object;
+  order_stats?: any;
+  orderStats?: any;
+  slaStats?: any;
   totalOrderStats: number;
   totalSlaStats: number;
   band: string;
@@ -88,7 +88,7 @@ const TableRow: Function = ({
   intl,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Tr
     first={first}
     className={classNames({
@@ -105,9 +105,9 @@ Props): React.Element<any> => (
     <NameColumn
       popoverContent={
         <Box top>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
           <PaneItem title={rest.normalizedName}>{rest.description}</PaneItem>
-          {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
           {rest.TOTAL > 0 && (
             <PaneItem title={intl.formatMessage({ id: 'table.instances' })}>
               <InstancesChart width={400} states={states} instances={rest} />
@@ -146,9 +146,9 @@ Props): React.Element<any> => (
       />
     </Td>
     <Td className="narrow">
-      {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
       <Tooltip content={rest.TOTAL || 0} position={Position.TOP}>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type '{ openPan... Remove this comment to see the full error message */}
         <Link to={`/workflow/${id}?date=${date}`}>{rest.TOTAL || 0}</Link>
       </Tooltip>
     </Td>
@@ -208,7 +208,7 @@ export default compose(
       },
     handleSlaBarClick:
       ({ openPane, id, closePane, isActive }: Props): Function =>
-      (event: Object): void => {
+      (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'stopPropagation' does not exist on type ... Remove this comment to see the full error message
         event.stopPropagation();
 
@@ -219,8 +219,9 @@ export default compose(
         }
       },
   }),
-  // @ts-ignore ts-migrate(2741) FIXME: Property 'band' is missing in type '{ isActive?: b... Remove this comment to see the full error message
+
   mapProps(
+    // @ts-ignore ts-migrate(2741) FIXME: Property 'band' is missing in type '{ isActive?: b... Remove this comment to see the full error message
     ({ order_stats: orderStats, band, ...rest }: Props): Props => ({
       orderStats: orderStats && buildOrderStatsDisposition(orderStats, band),
       slaStats: orderStats && buildOrderStatsSLA(orderStats, band),

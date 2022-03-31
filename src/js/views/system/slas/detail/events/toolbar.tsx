@@ -1,9 +1,9 @@
 // @flow
+import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
 import React, { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
-import { ControlGroup, InputGroup } from '../../../../../../../node_modules/@blueprintjs/core';
 import { Control as Button, Controls } from '../../../../../components/controls';
 import Datepicker from '../../../../../components/datepicker';
 import Toolbar from '../../../../../components/toolbar';
@@ -56,13 +56,13 @@ export default class SearchToolbar extends Component {
     }
   }
 
-  componentDidUpdate(prevProps: Object, prevState: Object) {
+  componentDidUpdate(prevProps: any, prevState: any) {
     if (prevState !== this.state) {
       this._delayedSearch(this.state);
     }
   }
 
-  _delayedSearch: Function = debounce((data: Object) => {
+  _delayedSearch: Function = debounce((data: any) => {
     this.props.changeAllQuery(data);
   }, 280);
 

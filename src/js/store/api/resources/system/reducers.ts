@@ -11,7 +11,7 @@ import {
 } from '../../common/reducers';
 
 const addProcess = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
     const processes = { ...data.processes };
@@ -27,7 +27,7 @@ const addProcess = {
 };
 
 const removeProcess = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
     const processes = { ...data.processes };
@@ -43,7 +43,7 @@ const removeProcess = {
 };
 
 const processMemoryChanged = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
     const processes = { ...data.processes };
@@ -73,7 +73,7 @@ const processMemoryChanged = {
 };
 
 const incrementItems = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
@@ -92,7 +92,7 @@ const incrementItems = {
 };
 
 const decrementItems = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
@@ -114,7 +114,7 @@ const decrementItems = {
 };
 
 const updateDone = {
-  next(state: Object, { payload: { id } }) {
+  next(state: any, { payload: { id } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
     const processes = { ...data.processes };
@@ -128,7 +128,7 @@ const updateDone = {
 };
 
 const init = {
-  next(state: Object) {
+  next(state: any) {
     const newState = { ...state };
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'isOnDashboard' does not exist on type '{... Remove this comment to see the full error message
@@ -139,7 +139,7 @@ const init = {
 };
 
 const unsync = {
-  next(state: Object) {
+  next(state: any) {
     const newState = { ...state };
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'isOnDashboard' does not exist on type '{... Remove this comment to see the full error message
@@ -150,13 +150,13 @@ const unsync = {
 };
 
 const killProcess = {
-  next(state: Object) {
+  next(state: any) {
     return state;
   },
 };
 
 const updateStats = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
@@ -169,7 +169,7 @@ const updateStats = {
 };
 
 const healthChanged = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
@@ -184,14 +184,14 @@ const healthChanged = {
 };
 
 const remoteHealthChanged = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = { ...state.data };
 
     events.forEach((event) => {
       const remote = data.health.remote(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-        (rm: Object): boolean => rm.name === event.name
+        (rm: any): boolean => rm.name === event.name
       );
 
       if (remote) {
@@ -204,7 +204,7 @@ const remoteHealthChanged = {
 };
 
 const removeNode = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = cloneDeep(state.data);
 
@@ -217,7 +217,7 @@ const removeNode = {
 };
 
 const updateNodeInfo = {
-  next(state: Object, { payload: { events } }) {
+  next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = cloneDeep(state.data);
 
@@ -267,7 +267,7 @@ const updateNodeInfo = {
 
 // Global Config
 const fetchGlobalConfig = {
-  next(state: Object, { payload: { globalConfig } }) {
+  next(state: any, { payload: { globalConfig } }) {
     const newState = { ...state };
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'globalConfig' does not exist on type '{ ... Remove this comment to see the full error message
@@ -299,7 +299,7 @@ const fetchDefaultLogger = {
       };
     } else {
       const flattenedAppenders = appenders.reduce(
-        (cur: Array<Object>, appender: Object) => [...cur, formatAppender(appender)],
+        (cur: Array<Object>, appender: any) => [...cur, formatAppender(appender)],
         []
       );
 

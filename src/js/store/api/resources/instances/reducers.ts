@@ -2,7 +2,7 @@
 import { setUpdatedToNull, updateItemWithId } from '../../utils';
 import { normalizeName } from '../utils';
 
-const initialState: Object = {
+const initialState: any = {
   data: [],
   sync: false,
   loading: false,
@@ -12,44 +12,42 @@ const initialState: Object = {
   sortDir: true,
 };
 
-const fetchInstances: Object = {
+const fetchInstances: any = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'instances' does not exist on type 'Objec... Remove this comment to see the full error message
       payload: { instances, fetchMore },
     }: {
-      payload: Object;
+      payload: any;
       instances: Array<Object>;
       fetchMore: boolean;
     }
-  ): Object {
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const data = [...state.data];
     const newData = fetchMore ? [...data, ...instances] : setUpdatedToNull(instances);
-    const normalizedIds = newData.map(
-      (instance: Object): Object => ({
-        ...instance,
-        ...{
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'job_instanceid' does not exist on type '... Remove this comment to see the full error message
-          id: instance.job_instanceid,
-        },
-      })
-    );
-    const normalized = normalizedIds.map((instance: Object): Object => normalizeName(instance));
+    const normalizedIds = newData.map((instance: any): any => ({
+      ...instance,
+      ...{
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'job_instanceid' does not exist on type '... Remove this comment to see the full error message
+        id: instance.job_instanceid,
+      },
+    }));
+    const normalized = normalizedIds.map((instance: any): any => normalizeName(instance));
 
     return { ...state, ...{ data: normalized, loading: false, sync: true } };
   },
 };
 
-const changeOffset: Object = {
+const changeOffset: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { newOffset },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'offset' does not exist on type 'Object'.
     const offset = newOffset || newOffset === 0 ? newOffset : state.offset + 50;
 
@@ -57,14 +55,14 @@ const changeOffset: Object = {
   },
 };
 
-const changeServerSort: Object = {
+const changeServerSort: any = {
   next(
-    state: Object = initialState,
+    state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { sort },
-    }: Object
-  ): Object {
+    }: any
+  ): any {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'sort' does not exist on type 'Object'.
     const sortDir = state.sort === sort ? !state.sortDir : state.sortDir;
 
@@ -80,16 +78,16 @@ const unsync = {
 
 const addInstance = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { events },
-    }: Object
+    }: any
   ) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let newData = [...state.data];
 
-    events.forEach((dt: Object) => {
+    events.forEach((dt: any) => {
       newData.push({
         // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
         jobid: dt.data.jobid,
@@ -114,16 +112,16 @@ const addInstance = {
 
 const modifyInstance = {
   next(
-    state: Object,
+    state: any,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
       payload: { events },
-    }: Object
+    }: any
   ) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let newData = [...state.data];
 
-    events.forEach((dt: Object) => {
+    events.forEach((dt: any) => {
       const {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
         data: { job_instanceid, status },

@@ -18,7 +18,7 @@ const DescriptionColumn: Function = compose(onlyUpdateForKeys(['children', 'expa
     className = 'text',
     expanded,
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  DescriptionColumnProps): React.Element<any> => (
+  DescriptionColumnProps) => (
     <Td className={className}>{children ? <Text text={children} expanded={expanded} /> : '-'}</Td>
   )
 );
@@ -41,7 +41,7 @@ const DescriptionColumnHeader: Function = compose(
     intl,
     ...rest
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  DescriptionColumnHeaderProps): React.Element<any> => (
+  DescriptionColumnHeaderProps) => (
     <Th name={name} icon={icon} className="text" {...rest}>
       {children || intl.formatMessage({ id: 'table.description' })}
     </Th>

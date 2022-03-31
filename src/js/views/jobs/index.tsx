@@ -40,16 +40,16 @@ type Props = {
   date: string;
   selectNone: Function;
   fetch: Function;
-  fetchParams: Object;
+  fetchParams: any;
   systemOptions: Array<Object>;
-  location: Object;
+  location: any;
   selected: string;
   onCSVClick: Function;
   paneId: string | number;
   openPane: Function;
   closePane: Function;
   selectedIds: Array<number>;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   canLoadMore: boolean;
   handleLoadMore: Function;
@@ -61,10 +61,10 @@ type Props = {
   infoTotalCount: number;
   infoEnabled: number;
   infoWithAlerts: number;
-  user: Object;
+  user: any;
   searchQuery: string;
   changeSearchQuery: Function;
-  sortKeysObj: Object;
+  sortKeysObj: any;
 };
 
 const JobsView: Function = ({
@@ -89,7 +89,7 @@ const JobsView: Function = ({
   changeSearchQuery,
   sortKeysObj,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -142,7 +142,7 @@ const collectionSelector: Function = createSelector(
 );
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-const settingsSelector = (state: Object): Object => state.ui.settings;
+const settingsSelector = (state: any): any => state.ui.settings;
 
 const selector: Function = createSelector(
   [
@@ -178,22 +178,18 @@ export default compose(
   }),
   withSort('jobs', 'jobs', sortDefaults.jobs),
   loadMore('jobs', 'jobs', true, 50),
-  mapProps(
-    ({ date, isTablet, user, ...rest }: Props): Object => ({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-      isTablet: isTablet || user.data.storage.sidebarOpen,
-      date: date || DATES.PREV_DAY,
-      user,
-      ...rest,
-    })
-  ),
-  mapProps(
-    ({ date, ...rest }: Props): Object => ({
-      fetchParams: { date: formatDate(date).format() },
-      date,
-      ...rest,
-    })
-  ),
+  mapProps(({ date, isTablet, user, ...rest }: Props): any => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    isTablet: isTablet || user.data.storage.sidebarOpen,
+    date: date || DATES.PREV_DAY,
+    user,
+    ...rest,
+  })),
+  mapProps(({ date, ...rest }: Props): any => ({
+    fetchParams: { date: formatDate(date).format() },
+    date,
+    ...rest,
+  })),
   patch('load', ['fetchParams']),
   sync('meta'),
   lifecycle({

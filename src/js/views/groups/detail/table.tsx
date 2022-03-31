@@ -25,8 +25,8 @@ const GroupDetailTable: Function = ({
   columns = [],
   type,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => {
-  const renderColumns: Function = (item: Object) => [
+Props) => {
+  const renderColumns: Function = (item: any) => [
     <NameColumn
       // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
       name={isObject(item) ? item.name : item}
@@ -65,7 +65,7 @@ Props): React.Element<any> => {
                 <Tbody>
                   {collection.map(
                     // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                    (item: Object, index: number): React.Element<Tr> => (
+                    (item: any, index: number) => (
                       <Tr key={index} first={index === 0}>
                         {renderColumns(normalizeItem(item))}
                       </Tr>

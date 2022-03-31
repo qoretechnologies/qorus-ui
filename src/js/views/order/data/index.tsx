@@ -9,32 +9,32 @@ import StaticView from './static';
 import StepDataView from './step';
 
 type Props = {
-  location: Object;
-  order: Object;
+  location: any;
+  order: any;
 };
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const DataView = (props: Props): React.Element<any> => (
+const DataView = (props: Props) => (
   <Box top fill>
-    {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+    {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
     <Tabs id="orderDataTabs" active="static" local noContainer>
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
       <Pane name={props.intl.formatMessage({ id: 'order.static' })}>
         <StaticView {...props} />
       </Pane>
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
       <Pane name={props.intl.formatMessage({ id: 'order.dynamic' })}>
         <DynamicView {...props} />
       </Pane>
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
       <Pane name={props.intl.formatMessage({ id: 'order.step-specific' })}>
         <StepDataView {...props} />
       </Pane>
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
       <Pane name={props.intl.formatMessage({ id: 'order.sensitive' })}>
         <SensitiveView {...props} />
       </Pane>
-      {/* @ts-expect-error ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
+      {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: any; }' is not as... Remove this comment to see the full error message */}
       <Pane name={props.intl.formatMessage({ id: 'order.keys' })}>
         <KeysView {...props} />
       </Pane>

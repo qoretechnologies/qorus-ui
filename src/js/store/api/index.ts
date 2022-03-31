@@ -71,7 +71,7 @@ export function createResourceReducers(actions, resources = [], iniState = initi
 
               const item = state.data.find(
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                (datum: Object) => datum.id === parseInt(action.meta.id, 10)
+                (datum: any) => datum.id === parseInt(action.meta.id, 10)
               );
 
               if (item) {

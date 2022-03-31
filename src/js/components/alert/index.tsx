@@ -17,7 +17,7 @@ const Alert: Function = ({
   iconName?: string;
   className?: string;
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-}): React.Element<any> => (
+}) => (
   <Callout
     // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'Intent'.
     intent={getIntentFromBsStyle(bsStyle)}

@@ -35,7 +35,7 @@ export default class Item extends Component {
     document.removeEventListener('keypress', this.handleKeyPress);
   }
 
-  handleClick: Function = (event: Object): void => {
+  handleClick: Function = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
     event.preventDefault();
 
@@ -82,7 +82,7 @@ export default class Item extends Component {
    * @returns {ReactElement|Void}
    */
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderIcon(): React.Element<any> {
+  renderIcon() {
     if (this.props.icon) {
       return <i className={classNames('fa', `fa-${this.props.icon}`)} />;
     }
@@ -91,7 +91,7 @@ export default class Item extends Component {
   }
 
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render(): React.Element<any> {
+  render() {
     const { selected, title, marked, multi, disabled, icon } = this.props;
     let intent = this.props.intent;
 

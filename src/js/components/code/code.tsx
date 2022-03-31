@@ -8,7 +8,7 @@ import FSMView from '../FSMDiagram';
 import InfoHeader from '../InfoHeader';
 
 type Props = {
-  selected: Object;
+  selected: any;
   height: any;
 };
 
@@ -66,7 +66,7 @@ class CodeTab extends React.Component {
         return (
           // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           <SourceCode handleRef={this.handleRef} height={height}>
-            {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'. */}
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'. */}
             {selected.code}
           </SourceCode>
         );
@@ -78,7 +78,7 @@ class CodeTab extends React.Component {
 
     return (
       <Flex>
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'. */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'. */}
         {selected.item ? (
           // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
           <InfoHeader model={selected.item} />
@@ -86,7 +86,7 @@ class CodeTab extends React.Component {
           // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
           <h5>{selected.name}</h5>
         )}
-        {/* @ts-expect-error ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message */}
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message */}
         {selected.loading ? <Loader /> : <>{this.renderContent()}</>}
       </Flex>
     );

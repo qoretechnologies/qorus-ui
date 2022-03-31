@@ -18,7 +18,7 @@ import { pureRender } from '../utils';
  * must trigger app state change.
  */
 @pureRender
-export default class EditableCell extends Component {
+export default class EditableCell extends Component<any, any> {
   static propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
     startEdit: PropTypes.bool,

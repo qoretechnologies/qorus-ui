@@ -12,7 +12,7 @@ const createClient: Function = createAction(
     onSuccess: Function,
     dispatch?: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) {
       return {
         clientId,
@@ -60,7 +60,7 @@ const updateClient: Function = createAction(
     onSuccess: Function,
     dispatch?: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) {
       return {
         clientId,
@@ -103,7 +103,7 @@ const deleteClient: Function = createAction(
     onSuccess: Function,
     dispatch?: Function
     // @ts-ignore ts-migrate(1055) FIXME: Type 'ObjectConstructor' is not a valid async func... Remove this comment to see the full error message
-  ): Object => {
+  ): any => {
     if (!dispatch) {
       return {
         clientId,

@@ -24,7 +24,7 @@ import ConnectionsTable from './table';
 
 type Props = {
   tabQuery?: string;
-  location: Object;
+  location: any;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   searchQuery: string;
   changeSearchQuery: Function;
@@ -45,7 +45,7 @@ const Connections: Function = ({
   users,
   perms,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props): React.Element<any> => (
+Props) => (
   <Flex>
     <Headbar>
       <Breadcrumbs>
@@ -109,17 +109,17 @@ export default compose(
   mapProps(
     ({ remotes, ...rest }: Props): Props => ({
       datasources: remotes.filter(
-        (remote: Object): boolean =>
+        (remote: any): boolean =>
           // @ts-ignore ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
           remote.conntype.toLowerCase() === CONN_MAP.datasources.toLowerCase()
       ),
       users: remotes.filter(
-        (remote: Object): boolean =>
+        (remote: any): boolean =>
           // @ts-ignore ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
           remote.conntype.toLowerCase() === CONN_MAP.user.toLowerCase()
       ),
       qorus: remotes.filter(
-        (remote: Object): boolean =>
+        (remote: any): boolean =>
           // @ts-ignore ts-migrate(2339) FIXME: Property 'conntype' does not exist on type 'Object... Remove this comment to see the full error message
           remote.conntype.toLowerCase() === CONN_MAP.qorus.toLowerCase()
       ),

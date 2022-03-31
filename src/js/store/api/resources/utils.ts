@@ -28,7 +28,7 @@ export const normalizeUnknownId = curry((item) => {
 
 export const extendDefaults = curry((defaults, item) => assignIn({}, defaults, item));
 
-export const normalizeName = curry((item: Object, idKey: string = 'id') => {
+export const normalizeName = curry((item: any, idKey: string = 'id') => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
   const { name, version, patch } = item;
   const id = item[idKey];
@@ -58,11 +58,11 @@ export const normalizeWorkflowLib = curry((item) => {
 export const findMissingBand: Function = (
   orderStats: Array<Object>
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-): Array<?string> => {
+): string[] => {
   const bands = ['1_hour_band', '4_hour_band', '24_hour_band'];
   const findMissing =
     (band: string): Function =>
-    (stats: Object) =>
+    (stats: any) =>
       // @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
       stats.label === band;
 
@@ -81,7 +81,7 @@ export const addHasAlerts = curry((item) => {
 });
 
 export const processRESTResponse = (
-  resp: Object,
+  resp: any,
   dispatch: Function,
   successMsg: string,
   notificationId: string | number
@@ -95,7 +95,7 @@ export const processRESTResponse = (
   }
 };
 
-export const injectStorageDefaults = (currentUserData: Object): Object => {
+export const injectStorageDefaults = (currentUserData: any): any => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'storage' does not exist on type 'Object'... Remove this comment to see the full error message
   let { storage } = currentUserData;
 

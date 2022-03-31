@@ -25,7 +25,7 @@ import InstanceRow from './row';
 
 type Props = {
   collection: Array<Object>;
-  sortData: Object;
+  sortData: any;
   onSortChange: Function;
   jobQuery: string | number;
   changeJobQuery: Function;
@@ -38,7 +38,7 @@ type Props = {
   onCSVClick: Function;
   dateQuery: string;
   changeDateQuery: Function;
-  job: Object;
+  job: any;
   filter: string;
 };
 
@@ -85,7 +85,7 @@ const ResultTable = ({
               limit={limit}
             />
             <ButtonGroup>
-              {/* @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
+              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
               <DatePicker date={dateQuery} onApplyDate={changeDateQuery} />
             </ButtonGroup>
             <Filters items={JOB_STATES} />
@@ -129,7 +129,7 @@ const ResultTable = ({
         <Tbody {...props}>
           {collection.map(
             // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (item: Object, idx: number): React.Element<InstanceRow> => (
+            (item: any, idx: number) => (
               <InstanceRow
                 first={idx === 0}
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'job_instanceid' does not exist on type '... Remove this comment to see the full error message

@@ -2,7 +2,7 @@
 import { Link } from 'react-router';
 import { handleActions } from 'redux-actions';
 
-const initialState: Object = {
+const initialState: any = {
   data: {
     Dashboard: {
       items: [
@@ -87,14 +87,7 @@ const initialState: Object = {
         {
           name: 'Global',
           icon: 'layers',
-          activePaths: [
-            '/rbac',
-            '/valuemaps',
-            '/slas',
-            '/sla',
-            '/releases',
-            '/errors',
-          ],
+          activePaths: ['/rbac', '/valuemaps', '/slas', '/sla', '/releases', '/errors'],
           id: 'global',
           submenu: [
             {

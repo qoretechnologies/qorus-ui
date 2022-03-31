@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const manageProp = {
-  next(state: Object = initialState, { payload: { prop } }) {
+  next(state: any = initialState, { payload: { prop } }) {
     if (prop.domain === 'omq') return state;
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -15,19 +15,19 @@ const manageProp = {
 
     return { ...state, ...{ data: updateProps(data, prop) } };
   },
-  throw(state: Object = initialState) {
+  throw(state: any = initialState) {
     return state;
   },
 };
 
 const removeProp = {
-  next(state: Object = initialState, action: Object) {
+  next(state: any = initialState, action: any) {
     return Object.assign({}, state, {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       data: deleteProps(state.data, action.payload.prop),
     });
   },
-  throw(state: Object = initialState) {
+  throw(state: any = initialState) {
     return state;
   },
 };

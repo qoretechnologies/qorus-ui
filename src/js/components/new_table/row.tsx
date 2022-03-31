@@ -8,7 +8,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 type Props = {
   children?: any;
   className?: string;
-  sortData?: Object;
+  sortData?: any;
   onSortChange?: Function;
   highlight?: boolean;
   onHighlightEnd?: Function;
@@ -34,7 +34,7 @@ export default class Tr extends Component {
     this.startHighlight(this.props.highlight);
   }
 
-  componentWillReceiveProps(nextProps: Object): void {
+  componentWillReceiveProps(nextProps: any): void {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'highlight' does not exist on type 'Objec... Remove this comment to see the full error message
     this.startHighlight(nextProps.highlight);
   }
@@ -68,7 +68,7 @@ export default class Tr extends Component {
     }
   };
 
-  handleClick: Function = (event: Object): void => {
+  handleClick: Function = (event: any): void => {
     if (this.props.onClick) {
       this.props.onClick(event);
     }
