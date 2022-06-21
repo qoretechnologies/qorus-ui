@@ -13,10 +13,9 @@ export const LOCAL_PORT: number | string = process.env.REACT_APP_LOCAL_PORT || 3
 export const LOCAL_HOST: string = process.env.REACT_APP_LOCAL_HOST || 'localhost';
 const PROTO: string = process.env.REACT_APP_PROTO || 'https';
 const WS_PROTO: string = PROTO === 'https' ? 'wss' : 'ws';
-const API_HOST: string =
-  process.env.REACT_APP_API_HOST || getWindow()
-    ? getWindow()?.location?.hostname
-    : 'hq.qoretechnologies.com';
+const API_HOST: string = getWindow()
+  ? getWindow()?.location?.hostname
+  : process.env.REACT_APP_API_HOST || 'hq.qoretechnologies.com';
 
 export const SERVER_URL = `${PROTO}://${LOCAL_HOST}:${LOCAL_PORT}`;
 export const API_URL = `${PROTO}://${API_HOST}${API_PORT ? `:${API_PORT}` : ''}`;

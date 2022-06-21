@@ -1,12 +1,14 @@
 /* @flow */
 import React, { Component } from 'react';
-import Draggable from 'react-draggable';
+import _Draggable from 'react-draggable';
 import ResizeHandle from '../resize/handle';
 import { pureRender } from '../utils';
 import Body from './body';
 import Footer from './footer';
 import Header from './header';
 import Manager from './manager';
+
+const Draggable: any = _Draggable;
 
 /**
  * Modal pane component.

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { compose } from 'recompose';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 import Modal from '../components/modal';
 import { generateCSV } from '../helpers/table';
@@ -12,7 +13,6 @@ export default (collection: string, name: string): Function =>
     Component
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
   ) => {
-    @injectIntl
     class WrappedComponent extends React.Component {
       props: {
         openModal: Function;
@@ -55,5 +55,5 @@ export default (collection: string, name: string): Function =>
     // @ts-ignore ts-migrate(2339) FIXME: Property 'displayName' does not exist on type 'typ... Remove this comment to see the full error message
     WrappedComponent.displayName = wrapDisplayName(Component, 'withCSV');
 
-    return modal()(WrappedComponent);
+    return compose(modal(), injectIntl)(WrappedComponent);
   };

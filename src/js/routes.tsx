@@ -14,6 +14,7 @@ import websocket from './hocomponents/websocket';
 import actions from './store/api/actions';
 import * as events from './store/apievents/actions';
 import Root from './views/root';
+//import Services from './views/services';
 import System from './views/system';
 
 const Login = Loadable({
@@ -285,8 +286,6 @@ class AppInfo extends React.Component {
               onEnter={this.requireAuthenticated}
               path="/plugins/oauth2/authorize"
               component={AuthorizeView}
-              // @ts-ignore ts-migrate(17001) FIXME: JSX elements cannot have multiple attributes with ... Remove this comment to see the full error message
-              onEnter={this.requireAuthenticated}
             />
           ) : null}
           <Route path="/logout" onEnter={this.logout} />
@@ -300,7 +299,7 @@ class AppInfo extends React.Component {
   }
 }
 
-export default compose(
+export default compose<any, any>(
   connect(
     (state) => ({
       info: state.api.info,
@@ -332,4 +331,4 @@ export default compose(
     false
   ),
   onlyUpdateForKeys(['plugins', 'info', 'systemSync'])
-)(AppInfo);
+)(AppInfo as any) as any;

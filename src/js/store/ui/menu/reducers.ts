@@ -1,14 +1,15 @@
 // @flow
+import { IQorusSidebarItems } from '@qoretechnologies/reqore/dist/components/Sidebar';
 import { Link } from 'react-router';
 import { handleActions } from 'redux-actions';
 
-const initialState: any = {
+export const defaultMenu: { data: IQorusSidebarItems } = {
   data: {
     Dashboard: {
       items: [
         {
           name: 'Dashboard',
-          icon: 'home',
+          icon: 'Home2Fill',
           props: {
             to: '/dashboard',
           },
@@ -22,7 +23,7 @@ const initialState: any = {
       items: [
         {
           name: 'Workflows',
-          icon: 'exchange',
+          icon: 'ExchangeLine',
           props: {
             to: '/workflows',
           },
@@ -32,7 +33,7 @@ const initialState: any = {
         },
         {
           name: 'Services',
-          icon: 'merge-links',
+          icon: 'GitMergeLine',
           props: {
             to: '/services',
           },
@@ -42,7 +43,7 @@ const initialState: any = {
         },
         {
           name: 'Jobs',
-          icon: 'calendar',
+          icon: 'CalendarLine',
           props: {
             to: '/jobs',
           },
@@ -52,7 +53,7 @@ const initialState: any = {
         },
         {
           name: 'Groups',
-          icon: 'group-objects',
+          icon: 'BubbleChartFill',
           props: {
             to: '/groups',
           },
@@ -62,7 +63,7 @@ const initialState: any = {
         },
         {
           name: 'Connections',
-          icon: 'left-join',
+          icon: 'StackshareLine',
           props: {
             to: '/remote',
           },
@@ -72,7 +73,7 @@ const initialState: any = {
         },
         {
           name: 'Search',
-          icon: 'search',
+          icon: 'SearchLine',
           props: {
             to: '/search',
           },
@@ -86,13 +87,13 @@ const initialState: any = {
       items: [
         {
           name: 'Global',
-          icon: 'layers',
+          icon: 'LayoutGridFill',
           activePaths: ['/rbac', '/valuemaps', '/slas', '/sla', '/releases', '/errors'],
           id: 'global',
           submenu: [
             {
               name: 'RBAC',
-              icon: 'people',
+              icon: 'GroupLine',
               props: {
                 to: '/rbac',
               },
@@ -102,7 +103,7 @@ const initialState: any = {
             },
             {
               name: 'Valuemaps',
-              icon: 'map',
+              icon: 'MapLine',
               props: {
                 to: '/valuemaps',
               },
@@ -112,7 +113,7 @@ const initialState: any = {
             },
             {
               name: 'SLAs',
-              icon: 'time',
+              icon: 'TimeLine',
               props: {
                 to: '/slas',
               },
@@ -122,7 +123,7 @@ const initialState: any = {
             },
             {
               name: 'Releases',
-              icon: 'git-push',
+              icon: 'InstallLine',
               props: {
                 to: '/releases',
               },
@@ -132,7 +133,7 @@ const initialState: any = {
             },
             {
               name: 'Errors',
-              icon: 'error',
+              icon: 'ErrorWarningLine',
               props: {
                 to: '/errors',
               },
@@ -142,7 +143,7 @@ const initialState: any = {
             },
             {
               name: 'Types',
-              icon: 'key',
+              icon: 'Key2Fill',
               props: {
                 to: '/types',
               },
@@ -158,13 +159,13 @@ const initialState: any = {
       items: [
         {
           name: 'System',
-          icon: 'cog',
+          icon: 'Settings2Line',
           activePaths: ['/system'],
           id: 'system',
           submenu: [
             {
               name: 'Alerts',
-              icon: 'warning-sign',
+              icon: 'AlarmWarningLine',
               props: {
                 to: '/system/alerts',
               },
@@ -174,7 +175,7 @@ const initialState: any = {
             },
             {
               name: 'Cluster',
-              icon: 'heat-grid',
+              icon: 'GridFill',
               props: {
                 to: '/system/cluster',
               },
@@ -184,7 +185,7 @@ const initialState: any = {
             },
             {
               name: 'Order Stats',
-              icon: 'vertical-bar-chart-asc',
+              icon: 'PieChartLine',
               props: {
                 to: '/system/orderStats',
               },
@@ -195,7 +196,7 @@ const initialState: any = {
             // { name: 'Providers', icon: 'settings', link: '/system/providers' },
             {
               name: 'Options',
-              icon: 'settings',
+              icon: 'SettingsLine',
               props: {
                 to: '/system/options',
               },
@@ -205,7 +206,7 @@ const initialState: any = {
             },
             {
               name: 'Properties',
-              icon: 'properties',
+              icon: 'StackLine',
               props: {
                 to: '/system/props',
               },
@@ -215,7 +216,7 @@ const initialState: any = {
             },
             {
               name: 'Cache',
-              icon: 'database',
+              icon: 'DatabaseLine',
               props: {
                 to: '/system/sqlcache',
               },
@@ -225,7 +226,7 @@ const initialState: any = {
             },
             {
               name: 'HTTP Services',
-              icon: 'social-media',
+              icon: 'GlobeLine',
               props: {
                 to: '/system/http',
               },
@@ -235,7 +236,7 @@ const initialState: any = {
             },
             {
               name: 'Config Items',
-              icon: 'cog',
+              icon: 'Settings6Line',
               props: {
                 to: '/system/config-items',
               },
@@ -251,13 +252,13 @@ const initialState: any = {
       items: [
         {
           name: 'More',
-          icon: 'more',
+          icon: 'MoreFill',
           activePaths: ['/ocmd', '/library', '/extensions', '/logs', '/info'],
           id: 'more',
           submenu: [
             {
               name: 'OCMD',
-              icon: 'code',
+              icon: 'TerminalLine',
               props: { to: '/ocmd' },
               activePaths: ['/ocmd'],
               id: 'ocmd',
@@ -265,7 +266,7 @@ const initialState: any = {
             },
             {
               name: 'Library',
-              icon: 'book',
+              icon: 'Book3Line',
               props: {
                 to: '/library',
               },
@@ -275,7 +276,7 @@ const initialState: any = {
             },
             {
               name: 'Extensions',
-              icon: 'layout',
+              icon: 'AppsLine',
               props: {
                 to: '/extensions',
               },
@@ -285,7 +286,7 @@ const initialState: any = {
             },
             {
               name: 'Logs',
-              icon: 'comparison',
+              icon: 'FileTextLine',
               props: {
                 to: '/logs',
               },
@@ -295,7 +296,7 @@ const initialState: any = {
             },
             {
               name: 'Info',
-              icon: 'info-sign',
+              icon: 'InformationLine',
               props: {
                 to: '/info',
               },
@@ -310,4 +311,4 @@ const initialState: any = {
   },
 };
 
-export default handleActions({}, initialState);
+export default handleActions({}, defaultMenu);

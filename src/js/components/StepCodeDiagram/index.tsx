@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import createFragment from 'react-addons-create-fragment';
 import PanElement from 'react-element-pan';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { compose } from 'recompose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { COLORS } from '../../constants/ui';
 import { groupInstances } from '../../helpers/orders';
@@ -88,10 +89,8 @@ const DIAGRAM_MIN_COLUMNS = 1;
  * be fetched via API as it is not usually part of the workflow
  * object.
  */
-@onlyUpdateForKeys(['workflow', 'order'])
-@modal()
-@injectIntl
-export default class StepsTab extends Component {
+
+class StepsTab extends Component {
   props: {
     workflow: any;
     order: any;
@@ -1142,3 +1141,5 @@ export default class StepsTab extends Component {
     );
   }
 }
+
+export default compose(injectIntl, modal(), onlyUpdateForKeys(['workflow', 'order']))(StepsTab);

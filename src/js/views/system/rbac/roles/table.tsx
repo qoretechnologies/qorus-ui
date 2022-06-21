@@ -1,6 +1,4 @@
-/* @flow */
 import size from 'lodash/size';
-import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { ActionColumnHeader } from '../../../../components/ActionColumn';

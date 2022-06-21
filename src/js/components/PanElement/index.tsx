@@ -1,6 +1,7 @@
 import { Button, ButtonGroup, Tooltip } from '@blueprintjs/core';
 import React from 'react';
 import { injectIntl } from 'react-intl';
+import { compose } from 'recompose';
 import shortid from 'shortid';
 import styled, { css } from 'styled-components';
 import Minimap from './minimap';
@@ -61,8 +62,7 @@ const StyledToolbarActions = styled.div`
 
 let timeout;
 
-@injectIntl
-export class ElementPan extends React.Component<
+class _ElementPan extends React.Component<
   {
     className?: string;
     onPanStart?: (e?: ElementPanState) => void;
@@ -353,3 +353,5 @@ export class ElementPan extends React.Component<
     );
   }
 }
+
+export const ElementPan = compose(injectIntl)(_ElementPan);

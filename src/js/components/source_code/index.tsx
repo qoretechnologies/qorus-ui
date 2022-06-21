@@ -1,11 +1,11 @@
-// @flow
 import classNames from 'classnames';
-import 'prismjs/components/prism-clike';
 import Prism from 'prismjs/components/prism-core';
+
+import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-qore';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Flex from '../Flex';
 import { pureRender } from '../utils';
 

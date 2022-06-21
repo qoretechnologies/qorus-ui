@@ -1,6 +1,7 @@
 // @flow
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { compose } from 'recompose';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control as Button, Controls as ButtonGroup } from '../controls';
 import Toolbar from '../toolbar';
@@ -9,9 +10,7 @@ import { pureRender } from '../utils';
 /**
  * Drop-down component with a button to add options.
  */
-@pureRender
-@injectIntl
-export default class SystemOptions extends Component {
+class SystemOptions extends Component {
   props: {
     options: Array<Object>;
     onAdd: Function;
@@ -142,3 +141,5 @@ export default class SystemOptions extends Component {
     );
   }
 }
+
+export default compose(pureRender, injectIntl)(SystemOptions);

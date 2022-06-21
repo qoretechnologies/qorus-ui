@@ -1,7 +1,8 @@
 // @flow
 import { Button, Intent } from '@blueprintjs/core';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { compose } from 'recompose';
 import NoData from '../nodata';
 import PaneItem from '../pane_item';
 import Table, { Cell, Row, Section } from '../table';
@@ -21,9 +22,7 @@ import SystemOptions from './system_options';
  * changes. The only state which maintained is to streamline user
  * experience and prevent unwanted flickering.
  */
-@pureRender
-@injectIntl
-export default class Options extends Component {
+class Options extends Component {
   props: {
     model: any;
     systemOptions: Array<Object>;
@@ -231,3 +230,5 @@ export default class Options extends Component {
     );
   }
 }
+
+export default compose(pureRender, injectIntl)(Options);

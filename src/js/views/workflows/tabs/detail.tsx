@@ -1,8 +1,9 @@
 // @flow
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { ActionColumnHeader } from '../../../components/ActionColumn';
 import AlertsTab from '../../../components/alerts_table';
 import Box from '../../../components/box';
@@ -27,13 +28,7 @@ import actions from '../../../store/api/actions';
 import Autostart from '../autostart';
 import WorkflowsControls from '../controls';
 
-@connect(null, {
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
-  setOptions: actions.workflows.setOptions,
-})
-@withDispatch()
-@injectIntl
-export default class DetailTab extends Component {
+class DetailTab extends Component {
   props: any = this.props;
 
   state: {
@@ -276,3 +271,12 @@ export default class DetailTab extends Component {
     );
   }
 }
+
+export default compose(
+  connect(null, {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
+    setOptions: actions.workflows.setOptions,
+  }),
+  withDispatch(),
+  injectIntl
+)(DetailTab);

@@ -5,11 +5,10 @@ import ReactDOM from 'react-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import pure from 'recompose/onlyUpdateForKeys';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import compose from 'recompose/compose';
 import { Control, Controls } from '../controls';
 
-@pure(['minutes', 'hours', 'children', 'futureOnly'])
-@injectIntl
-export default class Picker extends Component {
+class Picker extends Component {
   props: {
     minutes: string | number;
     hours: string | number;
@@ -117,3 +116,5 @@ export default class Picker extends Component {
     );
   }
 }
+
+export default compose(injectIntl, pure(['minutes', 'hours', 'children', 'futureOnly']))(Picker);

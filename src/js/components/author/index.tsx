@@ -1,8 +1,6 @@
 // @flow
-import React from 'react';
+import { ReqorePanel } from '@qoretechnologies/reqore';
 import pure from 'recompose/onlyUpdateForKeys';
-import Icon from '../icon';
-import PaneItem from '../pane_item';
 
 type Props = {
   model: any;
@@ -12,9 +10,9 @@ type Props = {
 // @ts-ignore ts-migrate(2339) FIXME: Property 'author' does not exist on type 'Object'.
 const Author: Function = ({ model: { author } }: Props) =>
   author ? (
-    <PaneItem title="Author">
-      <Icon icon="user" /> {author}
-    </PaneItem>
+    <ReqorePanel flat rounded label="Author" icon="User2Line" padded>
+      {author}
+    </ReqorePanel>
   ) : null;
 
 export default pure(['author'])(Author);

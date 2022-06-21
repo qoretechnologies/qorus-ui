@@ -1,4 +1,3 @@
-import React from 'react';
 import { injectIntl } from 'react-intl';
 import Box from '../../../components/box';
 import Tabs, { Pane } from '../../../components/tabs';
@@ -42,4 +41,4 @@ const DataView = (props: Props) => (
   </Box>
 );
 
-export default injectIntl(DataView);
+export default injectIntl(DataView as any) as any;

@@ -1,45 +1,48 @@
 import {
   Button,
   ButtonGroup,
-  Classes,
-  ControlGroup,
-  InputGroup,
   Intent,
   Menu,
   MenuDivider,
   MenuItem,
-  Navbar,
   NavbarDivider,
-  NavbarGroup,
-  NavbarHeading,
   Popover,
   Position,
   Tag,
-  Tooltip,
 } from '@blueprintjs/core';
+import {
+  ReqoreButton,
+  ReqoreControlGroup,
+  ReqoreDropdown,
+  ReqoreHeader,
+  ReqoreIcon,
+  ReqoreInput,
+  ReqoreNavbarDivider,
+  ReqoreNavbarGroup,
+  ReqoreNavbarItem,
+  ReqorePopover,
+} from '@qoretechnologies/reqore';
 import map from 'lodash/map';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import { compose } from 'recompose';
 import cz from '../../../img/country_flags/cz.jpg';
 import jp from '../../../img/country_flags/jp.png';
 import en from '../../../img/country_flags/us.png';
 import Kubernetes from '../../../img/kubernetes.png';
 import logo from '../../../img/qorus_engine_logo.png';
 import whiteLogo from '../../../img/qorus_engine_logo_white.png';
-// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control } from '../../components/controls';
 import { HEALTH_KEYS } from '../../constants/dashboard';
 import Release from '../../containers/release';
 import withModal from '../../hocomponents/modal';
 import withPane from '../../hocomponents/pane';
 import { LANGS } from '../../intl/messages';
-import settings from '../../settings';
 import actions from '../../store/api/actions';
 import Notifications from '../notifications';
 
-const flags: any = {
+const flags = {
   'cs-CZ': cz,
   'en-US': en,
   'ja-JP': jp,
@@ -76,9 +79,9 @@ const searchableViews = {
 };
 
 export type Props = {
-  info: any;
-  health: any;
-  currentUser: any;
+  info: Object;
+  health: Object;
+  currentUser: Object;
   isTablet?: boolean;
   onMenuToggle: () => void;
   showMenu?: boolean;
@@ -88,27 +91,14 @@ export type Props = {
   light: boolean;
   onThemeClick: Function;
   storeLocale: Function;
-  user: any;
+  user: Object;
   openPane: Function;
   notificationStatus: boolean;
   onMaximizeClick: Function;
 };
 
-@connect(
-  (state: any): any => ({
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-    notificationStatus: state.ui.notifications.read,
-  }),
-  {
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    storeLocale: actions.currentUser.storeLocale,
-  }
-)
-@withModal()
-@withPane(Notifications, null, 'all', 'notifications', 'notificationsPane')
-@injectIntl
-export default class Topbar extends Component {
-  props: Props = this.props;
+class Topbar extends Component {
+  props: any = this.props;
 
   state: {
     quickSearchType: string;
@@ -123,7 +113,6 @@ export default class Topbar extends Component {
   };
 
   handleSubmit: Function = (e: any): void => {
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
     e.preventDefault();
 
     const { quickSearchType, quickSearchValue } = this.state;
@@ -139,38 +128,27 @@ export default class Topbar extends Component {
     const sortedInterfaces: Array<string> = interfaces.sort();
 
     return (
-      <Popover
-        content={
-          <Menu>
-            {/* @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
-            {sortedInterfaces.map((key: string) => (
-              <MenuItem
-                text={key}
-                key={key}
-                onClick={() => this.setState({ quickSearchType: key })}
-              />
-            ))}
-          </Menu>
-        }
-        popoverClassName="popover-dropdown"
-        position={Position.BOTTOM}
-      >
-        <Button
-          className={Classes.MINIMAL}
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-          text={this.props.intl.formatMessage(
-            { id: 'system.global-search-type' },
-            {
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-              type: this.props.intl.formatMessage({
-                id: this.state.quickSearchType,
-              }),
-            }
-          )}
-          // @ts-ignore ts-migrate(2322) FIXME: Type '{ className: string; text: any; rightIconNam... Remove this comment to see the full error message
-          rightIconName="caret-down"
-        />
-      </Popover>
+      <ReqoreDropdown
+        label={this.props.intl.formatMessage(
+          { id: 'system.global-search-type' },
+          {
+            type: this.props.intl.formatMessage({
+              id: this.state.quickSearchType,
+            }),
+          }
+        )}
+        componentProps={{
+          flat: true,
+        }}
+        items={sortedInterfaces.map((key: string): any => ({
+          label: key,
+          id: key,
+          selected: this.state.quickSearchType === key,
+          onClick: () => {
+            this.setState({ quickSearchType: key });
+          },
+        }))}
+      />
     );
   };
 
@@ -178,69 +156,69 @@ export default class Topbar extends Component {
     const {
       light,
       onThemeClick,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       health: { data },
       info,
       onMaximizeClick,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'sendWarning' does not exist on type 'Pro... Remove this comment to see the full error message
       sendWarning,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
       intl,
     } = this.props;
 
     const [countryCode] = this.props.locale.split('-');
 
     return (
-      <Navbar className={`bp3-fixed-top ${light ? '' : 'bp3-dark'} topbar`}>
-        <NavbarGroup>
-          <NavbarHeading>
-            <img src={light ? logo : whiteLogo} className="qore-small-logo" />
-            <span className="topbar-instance-on">on</span>
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
-            <span className="topbar-instance">{info.data['instance-key']}</span>
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'. */}
-            {info.data.is_kubernetes && (
-              <Tag intent="primary" style={{ marginLeft: '15px', verticalAlign: 'sub' }}>
-                <img src={Kubernetes} style={{ width: '15px' }} /> IN KUBERNETES
-              </Tag>
-            )}
-          </NavbarHeading>
-        </NavbarGroup>
-        <NavbarGroup align="right">
-          {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
-          <form onSubmit={this.handleSubmit} id="quickSearchForm">
-            <ControlGroup>
-              <InputGroup
-                id="quickSearch"
-                // @ts-ignore ts-migrate(2322) FIXME: Type '{ id: string; lefticonName: string; placehol... Remove this comment to see the full error message
-                lefticonName="search"
-                placeholder={intl.formatMessage({
-                  id: 'system.global-search',
-                })}
-                rightElement={this.renderSearchMenu()}
-                value={this.state.quickSearchValue}
-                onChange={(e) => this.setState({ quickSearchValue: e.target.value })}
-              />
-              <Control icon="search" type="submit" big />
-            </ControlGroup>
-          </form>
-          <NavbarDivider />
-          <ButtonGroup minimal>
-            <Button
-              icon="git-push"
+      <ReqoreHeader>
+        <ReqoreNavbarGroup>
+          <img src={light ? logo : whiteLogo} className="qore-small-logo" />
+          <span className="topbar-instance-on">on</span>
+          <span className="topbar-instance">{info.data['instance-key']}</span>
+          {info.data.is_kubernetes && (
+            <Tag intent="primary" style={{ marginLeft: '15px', verticalAlign: 'sub' }}>
+              <img src={Kubernetes} style={{ width: '15px' }} /> IN KUBERNETES
+            </Tag>
+          )}
+        </ReqoreNavbarGroup>
+        {true && (
+          <ReqoreNavbarGroup position="left">
+            <ReqorePopover
+              component={ReqoreNavbarItem}
+              placement="right"
+              content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
+            >
+              <ReqoreIcon icon="AlarmWarningLine" />
+            </ReqorePopover>
+          </ReqoreNavbarGroup>
+        )}
+        <ReqoreNavbarGroup position="right">
+          <ReqoreControlGroup stack>
+            <ReqoreInput
+              flat
+              id="quickSearch"
+              icon="SearchLine"
+              placeholder={intl.formatMessage({
+                id: 'system.global-search',
+              })}
+              value={this.state.quickSearchValue}
+              onChange={(e: any) => this.setState({ quickSearchValue: e.target.value })}
+            />
+            {this.renderSearchMenu()}
+            <ReqoreButton icon="SearchLine" flat />
+          </ReqoreControlGroup>
+          <ReqoreNavbarDivider />
+          <ReqoreNavbarGroup position="right">
+            <ReqoreNavbarItem
+              interactive
               onClick={() => {
                 this.props.openModal(<Release onClose={this.props.closeModal} />);
               }}
-            />
-          </ButtonGroup>
-          <NavbarDivider />
+            >
+              <ReqoreIcon icon="InstallLine" />
+            </ReqoreNavbarItem>
+          </ReqoreNavbarGroup>
+          <ReqoreNavbarDivider />
           <Popover
             position={Position.BOTTOM}
-            // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; position: "bottom"; use... Remove this comment to see the full error message
-            useSmartPositioning
             content={
               <Menu>
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
                 <MenuDivider title={this.props.user.name} />
                 <MenuItem
                   text="My profile"
@@ -259,17 +237,6 @@ export default class Topbar extends Component {
               <Button icon="user" />
             </ButtonGroup>
           </Popover>
-          {settings.IS_HTTP && (
-            <ButtonGroup minimal>
-              <Tooltip
-                intent={Intent.DANGER}
-                content="You are currently using this site via an insecure connection.Some functionality requiring a secure connection will not be available."
-                position={Position.LEFT}
-              >
-                <Button icon="warning-sign" intent={Intent.DANGER} />
-              </Tooltip>
-            </ButtonGroup>
-          )}
           <ButtonGroup minimal>
             <Popover
               position={Position.BOTTOM_RIGHT}
@@ -294,11 +261,8 @@ export default class Topbar extends Component {
                     <MenuDivider title="Remote connections" />
                     {data.remote.map((remote: any) => (
                       <MenuItem
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                         key={remote.name}
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                         text={`${remote.name} - ${remote.health}`}
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'health' does not exist on type 'Object'.
                         intent={HEALTH_KEYS[remote.health]}
                       />
                     ))}
@@ -313,8 +277,7 @@ export default class Topbar extends Component {
             <Button
               icon="notifications"
               intent={this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY}
-              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
-              onClick={this.handleNotificationsClick}
+              onClick={this.handleNotificationsClick as any}
               id="notificationsToggle"
             />
           </ButtonGroup>
@@ -330,8 +293,7 @@ export default class Topbar extends Component {
                       <MenuItem
                         key={lang}
                         text={lang}
-                        // @ts-ignore ts-migrate(2322) FIXME: Type 'Element' is not assignable to type 'string'.
-                        label={<img src={flags[loc]} style={{ width: 16, height: 12 }} />}
+                        label={(<img src={flags[loc]} style={{ width: 16, height: 12 }} />) as any}
                         onClick={() => this.props.storeLocale(loc)}
                       />
                     )
@@ -357,15 +319,23 @@ export default class Topbar extends Component {
             />
           </ButtonGroup>
           <ButtonGroup minimal>
-            <Button
-              icon={light ? 'moon' : 'flash'}
-              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
-              onClick={onThemeClick}
-              id="themeToggle"
-            />
+            <Button icon={light ? 'moon' : 'flash'} onClick={onThemeClick} id="themeToggle" />
           </ButtonGroup>
-        </NavbarGroup>
-      </Navbar>
+        </ReqoreNavbarGroup>
+      </ReqoreHeader>
     );
   }
 }
+
+export default compose(
+  connect(
+    (state: any): any => ({
+      notificationStatus: state.ui.notifications.read,
+    }),
+    {
+      storeLocale: actions.currentUser.storeLocale,
+    }
+  ),
+  withModal(),
+  withPane(Notifications, null, 'all', 'notifications', 'notificationsPane')
+)(injectIntl(Topbar as any));

@@ -1,12 +1,13 @@
 /* @flow */
 import { ControlGroup, Popover, Position } from '@blueprintjs/core';
 import moment from 'moment';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import pure from 'recompose/onlyUpdateForKeys';
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 import { formatDate } from '../../helpers/workflows';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import compose from 'recompose/compose';
 import { Control, Controls } from '../controls';
 import Button from '../controls/control';
 import Dropdown, { Control as DropdownControl, Item as DropdownItem } from '../dropdown';
@@ -30,9 +31,7 @@ type Props = {
   disabled?: boolean;
 };
 
-@pure(['date', 'futureOnly', 'className', 'disabled'])
-@injectIntl
-export default class DatePicker extends Component {
+class DatePicker extends Component {
   props: Props = this.props;
 
   state: {
@@ -386,3 +385,8 @@ export default class DatePicker extends Component {
     );
   }
 }
+
+export default compose(
+  injectIntl,
+  pure(['date', 'futureOnly', 'className', 'disabled'])
+)(DatePicker);

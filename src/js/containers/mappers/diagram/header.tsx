@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import { injectIntl } from 'react-intl';
 
 const Header = ({
@@ -30,4 +29,4 @@ const Header = ({
   </g>
 );
 
-export default injectIntl(Header);
+export default injectIntl(Header as any) as any;

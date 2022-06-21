@@ -1,7 +1,6 @@
 // @flow
 import { ProgressBar } from '@blueprintjs/core';
 import replace from 'lodash/replace';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { ORDER_STATS_LEGEND } from '../../constants/orders';
 import { orderStatsPctColorDisp } from '../../helpers/orders';
@@ -80,4 +79,4 @@ Props) => (
   </NoDataIf>
 );
 
-export default injectIntl(StatsTab);
+export default injectIntl(StatsTab as any) as any;

@@ -1,6 +1,6 @@
-import { Button, Spinner } from '@blueprintjs/core';
+import { Button, Spinner as _Spinner } from '@blueprintjs/core';
 import jsyaml from 'js-yaml';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { injectIntl } from 'react-intl';
 import ReactMarkdown from 'react-markdown';
@@ -12,6 +12,8 @@ import Modal from '../components/modal';
 import { COLORS } from '../constants/ui';
 import { del, fetchText } from '../store/api/utils';
 import { connectCall } from '../store/websockets/actions';
+
+const Spinner: any = _Spinner as any;
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -209,9 +211,7 @@ const ReleaseModal = ({ onClose, intl }) => {
           <StyledWrapper>
             <StyledStep
               style={
-                connectionOpened
-                  ? { maxHeight: '0px', minHeight: '0px', border: 0 }
-                  : undefined
+                connectionOpened ? { maxHeight: '0px', minHeight: '0px', border: 0 } : undefined
               }
             >
               <StyledStepTitle color={file ? COLORS.green : '#eee'}>
@@ -266,8 +266,7 @@ const ReleaseModal = ({ onClose, intl }) => {
                   <>
                     {isLoading ? (
                       <>
-                        <Spinner size={22} />{' '}
-                        {intl.formatMessage({ id: 'global.uploading-file' })}
+                        <Spinner size={22} /> {intl.formatMessage({ id: 'global.uploading-file' })}
                       </>
                     ) : (
                       <Button
@@ -352,10 +351,7 @@ const ReleaseModal = ({ onClose, intl }) => {
                 </Button>
               ) : null}
             </StyledStepTitle>
-            <StyledStepContent
-              className="release-installation-progress"
-              ref={installationRef}
-            >
+            <StyledStepContent className="release-installation-progress" ref={installationRef}>
               {connectionOpened && wsMessage === '' ? (
                 <StyledStepContent>
                   <Spinner size={22} />{' '}

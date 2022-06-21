@@ -1,8 +1,9 @@
 import round from 'lodash/round';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import { compose } from 'recompose';
 import { createSelector } from 'reselect';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import ChartComponent from '../../../components/chart';
@@ -53,11 +54,7 @@ type Props = {
   closeModal: Function;
 };
 
-@connect(viewSelector)
-@withModal()
-@titleManager('Dashboard')
-@injectIntl
-export default class Dashboard extends Component {
+class Dashboard extends Component {
   props: Props = this.props;
 
   state: {
@@ -918,3 +915,10 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+export default compose(
+  connect(viewSelector),
+  withModal(),
+  titleManager('Dashboard'),
+  injectIntl
+)(Dashboard);

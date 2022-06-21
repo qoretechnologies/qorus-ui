@@ -1,13 +1,10 @@
 // @ts-ignore ts-migrate(2307) FIXME: Cannot find module '@qoretechnologies/reqore' or i... Remove this comment to see the full error message
-import { ReqoreColors, ReqoreSidebar, ReqoreUIProvider } from '@qoretechnologies/reqore';
+import { ReqoreColors, ReqoreUIProvider } from '@qoretechnologies/reqore';
 import debounce from 'lodash/debounce';
 // @flow
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { addLocaleData, IntlProvider } from 'react-intl';
-import cs from 'react-intl/locale-data/cs';
-import en from 'react-intl/locale-data/en';
-import ja from 'react-intl/locale-data/ja';
+import { Component } from 'react';
+import { IntlProvider } from 'react-intl';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
@@ -24,6 +21,7 @@ import messages from '../intl/messages';
 import actions from '../store/api/actions';
 import { settings } from '../store/ui/actions';
 import { success, warning } from '../store/ui/bubbles/actions';
+import { Sidebar } from './Sidebar';
 
 // eslint-disable-next-line
 const consoleError = console.error.bind(console);
@@ -55,7 +53,6 @@ console.warn = (message, ...args) => {
   consoleWarn(message, ...args);
 };
 
-addLocaleData([...en, ...cs, ...ja]);
 const systemSelector = (state) => state.api.system;
 const currentUserSelector = (state) => state.api.currentUser;
 const menuSelector = (state) => state.ui.menu;
@@ -329,12 +326,10 @@ export default class Root extends Component {
         >
           <ReqoreUIProvider
             theme={{
-              main: '#ffffff',
+              main: '#222222',
               sidebar: {
-                main: '#383c44',
                 item: { activeBackground: ReqoreColors.BLUE },
               },
-              header: { main: '#383c44' },
               intents: {
                 success: '#7fba27',
                 danger: '#e62727',
@@ -369,7 +364,7 @@ export default class Root extends Component {
               )}
               <div className="root__center">
                 {!isMaximized && (
-                  <ReqoreSidebar
+                  <Sidebar
                     isCollapsed={!this.props.sidebarOpen}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message
                     path={this.props.location.pathname}

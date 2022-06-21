@@ -1,6 +1,7 @@
 // @flow
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { compose } from 'recompose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import Box from '../../../components/box';
 import Flex from '../../../components/Flex';
@@ -15,10 +16,7 @@ import Hierarchy from '../hierarchy/';
 import Info from './info';
 import Keys from './keys';
 
-@withDispatch()
-@onlyUpdateForKeys(['order', 'workflow', 'isTablet'])
-@injectIntl
-export default class DiagramView extends Component {
+class DiagramView extends Component {
   props: {
     order: any;
     workflow: any;
@@ -98,3 +96,9 @@ export default class DiagramView extends Component {
     );
   }
 }
+
+export default compose(
+  withDispatch(),
+  onlyUpdateForKeys(['order', 'workflow', 'isTablet']),
+  injectIntl
+)(DiagramView);

@@ -29,4 +29,4 @@ Props) => (
   </ButtonGroup>
 );
 
-export default pure(['children'])(Controls);
+export default pure(['children'])(Controls as any) as any;

@@ -1,8 +1,6 @@
 /* @flow */
 import { Button, Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
-import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -77,10 +75,6 @@ Props) => (
 );
 
 export default compose(
-  connect((state: any): any => ({
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
-    isTablet: state.ui.settings.tablet,
-  })),
   mapProps(
     ({
       className,
@@ -139,4 +133,4 @@ export default compose(
     'text',
     'loading',
   ])
-)(Control);
+)(Control as any) as any;

@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { ActionColumnHeader } from '../../components/ActionColumn';

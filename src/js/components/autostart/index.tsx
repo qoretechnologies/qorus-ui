@@ -1,6 +1,5 @@
-/* @flow */
-import React from 'react';
-import { injectIntl } from 'react-intl';
+import { setupPreviews } from '@previewjs/plugin-react/setup';
+import { useIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -25,26 +24,39 @@ const AutoStart = ({
   handleIncrementClick,
   handleDecrementClick,
   big,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-  intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props) => (
-  <ButtonGroup marginRight={big ? 3 : 0}>
-    <Button
-      title={intl.formatMessage({ id: 'button.decrement-autostart' })}
-      icon="small-minus"
-      onClick={handleDecrementClick}
-      big={big}
-    />
-    <Button big={big} text={`${autostart} / ${execCount}`} btnStyle={btnStyle} />
-    <Button
-      big={big}
-      title={intl.formatMessage({ id: 'button.increment-autostart' })}
-      icon="small-plus"
-      onClick={handleIncrementClick}
-    />
-  </ButtonGroup>
-);
+Props) => {
+  const intl = useIntl();
+
+  return (
+    <ButtonGroup marginRight={big ? 3 : 0}>
+      <Button
+        title={intl.formatMessage({ id: 'button.decrement-autostart' })}
+        icon="small-minus"
+        onClick={handleDecrementClick}
+        big={big}
+      />
+      <Button big={big} text={`${autostart} / ${execCount}`} btnStyle={btnStyle} />
+      <Button
+        big={big}
+        title={intl.formatMessage({ id: 'button.increment-autostart' })}
+        icon="small-plus"
+        onClick={handleIncrementClick}
+      />
+    </ButtonGroup>
+  );
+};
+
+setupPreviews(AutoStart, {
+  Basic: {
+    autostart: 0,
+    execCount: 0,
+    btnStyle: 'success',
+    handleDecrementClick: () => true,
+    handleIncrementClick: () => true,
+    big: false,
+  },
+});
 
 export default compose(
   mapProps(
@@ -87,6 +99,5 @@ export default compose(
         }
       },
   }),
-  pure(['autostart', 'execCount']),
-  injectIntl
+  pure(['autostart', 'execCount'])
 )(AutoStart);

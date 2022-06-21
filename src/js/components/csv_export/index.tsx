@@ -1,13 +1,12 @@
 /* @flow */
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { compose } from 'redux';
 import { generateCSV } from '../../helpers/table';
 import modal from '../../hocomponents/modal';
 import { Control } from '../controls';
 import Modal from '../modal';
 
-@modal()
-@injectIntl
 class CsvExport extends React.Component {
   props: {
     collection: Array<Object>;
@@ -53,4 +52,4 @@ class CsvExport extends React.Component {
   }
 }
 
-export default CsvExport;
+export default compose(injectIntl, modal)(CsvExport);

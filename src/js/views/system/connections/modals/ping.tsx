@@ -1,6 +1,5 @@
-/* @flow */
-import { Spinner } from '@blueprintjs/core';
-import React, { Component } from 'react';
+import { Spinner as _Spinner } from '@blueprintjs/core';
+import { Component } from 'react';
 import Alert from '../../../../components/alert';
 import Box from '../../../../components/box';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
@@ -8,6 +7,8 @@ import { Control as Button, Controls } from '../../../../components/controls';
 import Modal from '../../../../components/modal';
 import withDispatch from '../../../../hocomponents/withDispatch';
 import actions from '../../../../store/api/actions';
+
+const Spinner: any = _Spinner;
 
 @withDispatch()
 export default class Ping extends Component {

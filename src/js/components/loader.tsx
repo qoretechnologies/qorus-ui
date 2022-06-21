@@ -1,12 +1,20 @@
-import React from 'react';
+import { ReqoreMessage } from '@qoretechnologies/reqore';
 import Flex from './Flex';
 
-/**
- * Simple spinning loading indicator.
- *
- * @return {!ReactElement}
- */
-export default function Loader() {
+export interface ILoaderProps {
+  error?: any;
+}
+
+export default function Loader({ error }: ILoaderProps) {
+  if (error) {
+    console.log(error);
+    return (
+      <ReqoreMessage title="Error" intent="danger">
+        Unable to load this view, please check the console.
+      </ReqoreMessage>
+    );
+  }
+
   return (
     <Flex style={{ margin: 10 }}>
       <Flex flexFlow="row" className="skeleton-loader">

@@ -28,7 +28,6 @@ type Props = {
   local: boolean;
 };
 
-@injectIntl
 class CrumbTabs extends React.Component {
   props: Props = this.props;
 
@@ -205,13 +204,13 @@ class CrumbTabs extends React.Component {
 }
 
 export default compose(
-  injectIntl,
   connect((state: any): any => ({
     // @ts-ignore ts-migrate(2339) FIXME: Property 'ui' does not exist on type 'Object'.
     windowWidth: state.ui.settings.width,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
     language: state.api.currentUser.data.storage.locale,
   })),
+  injectIntl,
   mapProps(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'windowWidth' does not exist on type 'Pro... Remove this comment to see the full error message
     ({ tabs, width, windowWidth, intl, ...rest }: Props): Props => ({
@@ -243,4 +242,4 @@ export default compose(
     })
   ),
   onlyUpdateForKeys(['tabQuery', 'tabs', 'width'])
-)(CrumbTabs);
+)(injectIntl(CrumbTabs as any) as any);

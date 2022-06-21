@@ -1,8 +1,6 @@
-// @flow
 import { Icon } from '@blueprintjs/core';
 import last from 'lodash/last';
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';

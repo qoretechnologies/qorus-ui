@@ -313,7 +313,6 @@ export default class ConfigItemsModal extends Component {
                 </Alert>
                 {!item && (
                   <>
-                    {/*  @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call. */}
                     <Dropdown>
                       {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
                       <DControl>{item?.name || 'Please select'}</DControl>

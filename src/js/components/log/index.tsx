@@ -1,7 +1,8 @@
 /* @flow */
 import { Button, ButtonGroup, Intent } from '@blueprintjs/core';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { compose } from 'recompose';
 import pure from 'recompose/onlyUpdateForKeys';
 import Icon from '../../components/icon';
 import { getControlChar } from '../../helpers/document';
@@ -9,9 +10,7 @@ import Flex from '../Flex';
 import Pull from '../Pull';
 import Toolbar from '../toolbar';
 
-@pure(['messages', 'height'])
-@injectIntl
-export default class LogComponent extends Component {
+class LogComponent extends Component {
   props: {
     messages: Array<string>;
     onClearClick: Function;
@@ -109,3 +108,5 @@ export default class LogComponent extends Component {
     );
   }
 }
+
+export default compose(pure(['messages', 'height']), injectIntl)(LogComponent);

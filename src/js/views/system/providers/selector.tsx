@@ -1,7 +1,7 @@
-import { Button, ButtonGroup, Intent, Spinner } from '@blueprintjs/core';
+import { Button, ButtonGroup, Intent, Spinner as _Spinner } from '@blueprintjs/core';
 import map from 'lodash/map';
 import size from 'lodash/size';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
@@ -9,6 +9,8 @@ import Dropdown, { Control, Item } from '../../../components/dropdown';
 import PaneItem from '../../../components/pane_item';
 import settings from '../../../settings';
 import { get } from '../../../store/api/utils';
+
+const Spinner: any = _Spinner;
 
 export interface IProviderProps {
   type: 'inputs' | 'outputs';

@@ -2,6 +2,7 @@ import { InputGroup, Menu, Popover, PopoverPosition, Position } from '@blueprint
 import { includes, remove, xor } from 'lodash';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { compose } from 'recompose';
 import pure from 'recompose/onlyUpdateForKeys';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control as Button, Controls as ButtonGroup } from '../controls';
@@ -32,9 +33,7 @@ type Props = {
   alwaysShowSelectedCount?: boolean;
 };
 
-@pure(['children', 'show', 'selected', 'disabled', 'className'])
-@injectIntl
-export default class Dropdown extends Component {
+class Dropdown extends Component {
   static defaultProps = {
     selectedIcon: 'selection',
     deselectedIcon: 'circle',
@@ -379,4 +378,8 @@ export default class Dropdown extends Component {
   }
 }
 
+export default compose(
+  injectIntl,
+  pure(['children', 'show', 'selected', 'disabled', 'className'])
+)(Dropdown);
 export { Item, CustomItem, Control, Divider };

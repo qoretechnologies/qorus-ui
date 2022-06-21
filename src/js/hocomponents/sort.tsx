@@ -3,6 +3,7 @@ import reduce from 'lodash/reduce';
 import React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 import { sortKeys } from '../constants/sort';
 import { functionOrStringExp } from '../helpers/functions';
@@ -24,7 +25,6 @@ export default (
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
   ) =>
   (Component) => {
-    @injectIntl
     class WrappedComponent extends React.Component {
       props: Props = this.props;
 
@@ -118,12 +118,15 @@ export default (
     WrappedComponent.displayName = wrapDisplayName(Component, 'sort');
 
     // @ts-ignore ts-migrate(2539) FIXME: Cannot assign to 'WrappedComponent' because it is ... Remove this comment to see the full error message
-    WrappedComponent = connect(
-      (state, props) => ({
-        sortData: state.ui.sort[typeof tableName === 'function' ? tableName(props) : tableName],
-        storage: state.api.currentUser.data.storage || {},
-      }),
-      sort
+    WrappedComponent = compose(
+      connect(
+        (state, props) => ({
+          sortData: state.ui.sort[typeof tableName === 'function' ? tableName(props) : tableName],
+          storage: state.api.currentUser.data.storage || {},
+        }),
+        sort
+      ),
+      injectIntl
     )(WrappedComponent);
 
     return WrappedComponent;

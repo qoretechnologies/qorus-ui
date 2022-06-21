@@ -10,14 +10,8 @@ import Loader from '../components/loader';
  * @param {bool} showLoader - show loader or not
  * @param {Function} loadFunc - custom loading function
  */
-export default (
-    propName: string,
-    showLoader: boolean = true,
-    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    loadFunc: string = null
-    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
-  ): Function =>
-  (Component) => {
+export default (propName: string, showLoader: boolean = true, loadFunc: string = null): Function =>
+  (Component: React.FC) => {
     class WrappedComponent extends React.Component {
       state: {
         hasStartedLoading: boolean;
@@ -53,6 +47,8 @@ export default (
       }
 
       render() {
+        console.log(this.props);
+
         if (showLoader && !this.props[propName].sync) {
           return <Loader />;
         }

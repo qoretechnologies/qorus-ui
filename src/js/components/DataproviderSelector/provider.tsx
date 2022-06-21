@@ -1,15 +1,25 @@
-import { Button, ButtonGroup, Callout, Classes, Dialog, Spinner } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Callout,
+  Classes,
+  Dialog,
+  Spinner as _Spinner,
+} from '@blueprintjs/core';
 import { omit } from 'lodash';
 import map from 'lodash/map';
 import nth from 'lodash/nth';
 import size from 'lodash/size';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDebounce } from 'react-use';
 import styled, { css } from 'styled-components';
 import SelectField from '../../components/Field/select';
 import String from '../../components/Field/string';
 import { validateField } from '../../components/Field/validations';
 import { get } from '../../store/api/utils';
+
+// FIXME: yeah this is a weird thing happening with TypeScript
+const Spinner: any = _Spinner as any;
 
 const StyledWrapper = styled.div`
   margin-bottom: 10px;
@@ -404,7 +414,7 @@ const MapperProvider = ({
           <div className={Classes.DIALOG_BODY}>
             <Callout intent="primary">{'Replace wildcard'}</Callout>
             <br />
-            { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; onChange: (_name: any, value... Remove this comment to see the full error message */ }
+            {/* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; onChange: (_name: any, value... Remove this comment to see the full error message */}
             <String
               name="wildcard"
               onChange={(_name, value) => setWildcardDiagram((cur) => ({ ...cur, value }))}
@@ -435,7 +445,7 @@ const MapperProvider = ({
         {!compact && <StyledHeader>{title}</StyledHeader>}
         {compact && title && <span>{title}: </span>}{' '}
         <ButtonGroup>
-          { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; disabled: any; defaultItems:... Remove this comment to see the full error message */ }
+          {/* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; disabled: any; defaultItems:... Remove this comment to see the full error message */}
           <SelectField
             name={`provider${type ? `-${type}` : ''}`}
             disabled={isLoading}
@@ -447,7 +457,7 @@ const MapperProvider = ({
           />
           {nodes.map((child, index) => (
             <ButtonGroup>
-              { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ key: string; name: string; disabled: any; ... Remove this comment to see the full error message */ }
+              {/* @ts-expect-error ts-migrate(2740) FIXME: Type '{ key: string; name: string; disabled: any; ... Remove this comment to see the full error message */}
               <SelectField
                 key={`${title}-${index}`}
                 name={`provider-${type ? `${type}-` : ''}${index}`}

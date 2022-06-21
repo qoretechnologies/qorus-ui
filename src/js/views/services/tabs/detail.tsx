@@ -1,9 +1,10 @@
 // @flow
 import { Button, ControlGroup, InputGroup } from '@blueprintjs/core';
 import { isNumber } from 'lodash';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import AlertsTable from '../../../components/alerts_table';
 import Box from '../../../components/box';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
@@ -36,16 +37,7 @@ function retstr(str) {
   return str.replace(/[^A-Z]/g, '');
 }
 
-@withDispatch()
-@connect(
-  (state) => ({
-    system: state.api.system.data,
-  }),
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
-  actions.services
-)
-@injectIntl
-export default class DetailTab extends Component {
+class DetailTab extends Component {
   props: {
     service: any;
     systemOptions: Array<Object>;
@@ -568,3 +560,15 @@ export default class DetailTab extends Component {
     );
   }
 }
+
+export default compose(
+  withDispatch(),
+  connect(
+    (state) => ({
+      system: state.api.system.data,
+    }),
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'services' does not exist on type '{}'.
+    actions.services
+  ),
+  injectIntl
+)(DetailTab);

@@ -2,9 +2,10 @@
 import { Icon, Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
 import size from 'lodash/size';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import connect from 'react-redux/lib/connect/connect';
+import { compose } from 'recompose';
 import { getType } from '../../helpers/functions';
 import { getLineCount } from '../../helpers/system';
 import withModal from '../../hocomponents/modal';
@@ -27,12 +28,7 @@ const qorusTypeMapper = {
   null: 'null',
 };
 
-@withModal()
-@connect((state) => ({
-  settings: state.api.currentUser.data.storage.settings,
-}))
-@injectIntl
-export default class Tree extends Component {
+class Tree extends Component {
   props: {
     data: any | Array<any>;
     withEdit: boolean;
@@ -400,3 +396,11 @@ export default class Tree extends Component {
     );
   }
 }
+
+export default compose(
+  withModal(),
+  connect((state) => ({
+    settings: state.api.currentUser.data.storage.settings,
+  })),
+  injectIntl
+)(Tree) as any;

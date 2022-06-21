@@ -9,8 +9,7 @@ import { getMaxValue, getStepSize, getUnit, scaleData } from '../../helpers/char
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/la... Remove this comment to see the full error message
 import { CenterWrapper } from '../layout';
 
-@injectIntl
-export default class ChartComponent extends Component {
+class ChartComponent extends Component {
   static defaultProps = {
     width: 400,
     height: 200,
@@ -309,3 +308,5 @@ export default class ChartComponent extends Component {
     );
   }
 }
+
+export default injectIntl(ChartComponent as any) as any;

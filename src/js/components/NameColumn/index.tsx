@@ -1,6 +1,5 @@
 // @flow
 import { Popover, PopoverInteractionKind, Position, Tooltip } from '@blueprintjs/core';
-import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 import compose from 'recompose/compose';
@@ -149,5 +148,5 @@ export default compose(
   injectIntl
 )(NameColumn);
 
-const NCH = injectIntl(NameColumnHeader);
+const NCH = injectIntl(NameColumnHeader as any) as any;
 export { NCH as NameColumnHeader };

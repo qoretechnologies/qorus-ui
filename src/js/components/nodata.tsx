@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import Box from './box';
@@ -24,7 +23,7 @@ Props) => (
     {big && <div>{content || intl.formatMessage({ id: 'component.there-are-no-data' })}</div>}
   </div>
 );
-const NoDataContent = injectIntl(NDC);
+const NoDataContent = injectIntl(NDC as any) as any;
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
 const NoData: Function = ({ inBox, intl, ...rest }: Props) =>

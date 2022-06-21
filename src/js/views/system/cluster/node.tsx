@@ -1,6 +1,4 @@
-// @flow
 import { Tag } from '@blueprintjs/core';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';

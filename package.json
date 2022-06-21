@@ -25,20 +25,20 @@
     "moment": "^2.24.0",
     "normalize.css": "^8.0.0",
     "path": "^0.12.7",
-    "prismjs": "^1.15.0",
+    "prismjs": "^1.28.0",
     "process": "^0.11.10",
     "prop-types": "^15.6.2",
     "qs": "^6.6.0",
-    "react": "^17.0.2",
+    "react": "^18.1.0",
     "react-addons-create-fragment": "^15.3.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-autocomplete": "^1.8.1",
     "react-d3-tree": "^1.16.1",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.1.0",
     "react-draggable": "^3.1.1",
     "react-dropzone": "^11.2.4",
     "react-element-pan": "^2.0.0",
-    "react-intl": "^2.4.0",
+    "react-intl": "^6.0.4",
     "react-loadable": "^5.5.0",
     "react-markdown": "^8.0.1",
     "react-redux": "^5.0.6",
@@ -65,7 +65,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start:dev:https": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true yarn start"
   },
   "eslintConfig": {
     "extends": [
@@ -86,6 +87,8 @@
     ]
   },
   "devDependencies": {
+    "@previewjs/config": "^1.0.5",
+    "@previewjs/plugin-react": "^4.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",

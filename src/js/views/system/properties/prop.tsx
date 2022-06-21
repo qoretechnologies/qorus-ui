@@ -1,5 +1,3 @@
-// @flow
-import React from 'react';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import type { EnhancedTableProps } from '../../../components/EnhancedTable';

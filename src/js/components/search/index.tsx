@@ -4,11 +4,8 @@ import { debounce, includes } from 'lodash';
 import React, { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import Dropdown, { Control, Item } from '../dropdown';
-import { pureRender } from '../utils';
 
-@pureRender
-@injectIntl
-export default class Search extends Component {
+class Search extends Component<any, any> {
   props: {
     onSearchUpdate: Function;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -176,3 +173,5 @@ export default class Search extends Component {
     );
   }
 }
+
+export default injectIntl(Search as any);

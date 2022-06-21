@@ -1,5 +1,5 @@
 import { Classes } from '@blueprintjs/core';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Tree from 'react-d3-tree';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -190,6 +190,7 @@ const PipelineDiagram = ({ load, pipeline, pipeName, openModal, closeModal }) =>
       <StyledProviderUrl>Provider: {getProviderUrl(pipeline)}</StyledProviderUrl>
       <StyledDiagramWrapper ref={wrapperRef} id="pipeline-diagram">
         {wrapperRef.current && (
+          // @ts-expect-error
           <Tree
             // @ts-ignore ts-migrate(2322) FIXME: Type '{ style: { height: string; }; data: any; ori... Remove this comment to see the full error message
             style={{ height: '100%' }}
