@@ -1,5 +1,4 @@
 import { Tooltip } from '@blueprintjs/core';
-import React from 'react';
 import { Link } from 'react-router';
 import { calculateInstanceBarWidths, formatCount } from '../../helpers/orders';
 
@@ -46,6 +45,11 @@ Props) => (
               // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
               content={`${state.name} - ${instances[state.name]}`}
               key={index}
+              targetProps={{
+                style: {
+                  width: `${state.width}%`,
+                },
+              }}
             >
               <Link
                 to={
@@ -54,18 +58,22 @@ Props) => (
                     : // @ts-ignore ts-migrate(2339) FIXME: Property 'title' does not exist on type 'Object'.
                       link || `/${type}/${id}?filter=${state.title}&date=${date}`
                 }
+                style={{
+                  width: '100%',
+                  display: 'inline-block',
+                }}
               >
                 <div
                   // @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'.
                   className={`instances-bar bar-${state.label}`}
                   // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
                   key={state.name}
-                  style={{
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'width' does not exist on type 'Object'.
-                    width: `${state.width}%`,
-                  }}
                   // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
                   onClick={onClick}
+                  style={{
+                    width: '100%',
+                    display: 'inline-block',
+                  }}
                 >
                   {/* @ts-ignore ts-migrate(2339) FIXME: Property 'label' does not exist on type 'Object'. */}
                   <div className={`instance-bar-value bar-${state.label}`}>

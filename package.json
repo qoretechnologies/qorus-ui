@@ -66,7 +66,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:dev:https": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true yarn start"
+    "start:dev:https": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true yarn start",
+    "start:dev:david": "REACT_APP_API_PORT=8011 REACT_APP_API_HOST=qoretechnologies.com HTTPS=true yarn start"
   },
   "eslintConfig": {
     "extends": [

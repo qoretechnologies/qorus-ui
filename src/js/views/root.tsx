@@ -326,9 +326,13 @@ export default class Root extends Component {
         >
           <ReqoreUIProvider
             theme={{
-              main: '#222222',
+              main: '#ffffff',
               sidebar: {
+                main: '#333333',
                 item: { activeBackground: ReqoreColors.BLUE },
+              },
+              header: {
+                main: '#333333',
               },
               intents: {
                 success: '#7fba27',
