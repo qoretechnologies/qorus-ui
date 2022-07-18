@@ -2,7 +2,7 @@
 import { ControlGroup, InputGroup, Intent } from '@blueprintjs/core';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import Datepicker from '../../../components/datepicker';
@@ -74,6 +74,11 @@ export default class SearchToolbar extends Component {
     busErr: this.props.busErrQuery,
   };
 
+  public _isMounted = false;
+  public set isMounted(mounted: boolean) {
+    this._isMounted = mounted;
+  }
+
   componentWillReceiveProps(nextProps: Props) {
     if (this.props !== nextProps) {
       this.setState({
@@ -93,8 +98,18 @@ export default class SearchToolbar extends Component {
     this._delayedSearch(this.state);
   }
 
+  componentDidMount(): void {
+    this.isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this.isMounted = false;
+  }
+
   _delayedSearch: Function = debounce((data: any) => {
-    this.props.changeAllQuery(data);
+    if (this._isMounted) {
+      this.props.changeAllQuery(data);
+    }
   }, 280);
 
   handleClearClick: Function = (): void => {

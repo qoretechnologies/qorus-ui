@@ -47,8 +47,6 @@ export default (propName: string, showLoader: boolean = true, loadFunc: string =
       }
 
       render() {
-        console.log(this.props);
-
         if (showLoader && !this.props[propName].sync) {
           return <Loader />;
         }

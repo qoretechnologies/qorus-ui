@@ -49,7 +49,7 @@ const flags = {
 };
 
 const searchableViews = {
-  'global.in-workflows': 'workflows?',
+  Workflows: 'workflows?',
   Services: 'services?',
   Jobs: 'jobs?',
   Groups: 'groups?',

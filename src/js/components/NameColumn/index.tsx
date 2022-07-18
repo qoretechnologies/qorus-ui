@@ -80,6 +80,11 @@ NameColumnProps) => (
             // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; hoverOpenDelay: number;... Remove this comment to see the full error message
             rootElementTag="div"
             className="table-name-popover"
+            targetProps={{
+              style: {
+                width: '100%',
+              },
+            }}
           >
             {type ? (
               <InterfaceTag

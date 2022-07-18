@@ -1,13 +1,10 @@
 // @flow
 import { Button, Intent } from '@blueprintjs/core';
 import { Component } from 'react';
-import { injectIntl } from 'react-intl';
-import { compose } from 'recompose';
 import NoData from '../nodata';
 import PaneItem from '../pane_item';
 import Table, { Cell, Row, Section } from '../table';
 import EditableCell from '../table/editable_cell';
-import { pureRender } from '../utils';
 import SystemOptions from './system_options';
 
 /**
@@ -214,8 +211,7 @@ class Options extends Component {
    */
   render() {
     return (
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ model: O... Remove this comment to see the full error message
-      <PaneItem title={this.props.intl.formatMessage({ id: 'component.options' })}>
+      <PaneItem title="Options">
         {!this.getModelOptions().length && <NoData />}
         {!!this.getModelOptions().length && (
           <Table
@@ -231,4 +227,4 @@ class Options extends Component {
   }
 }
 
-export default compose(pureRender, injectIntl)(Options);
+export default Options;

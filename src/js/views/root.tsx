@@ -26,16 +26,20 @@ import { Sidebar } from './Sidebar';
 // eslint-disable-next-line
 const consoleError = console.error.bind(console);
 // eslint-disable-next-line
+/* A workaround for a bug in React Intl. */
 console.error = (message, ...args) => {
+  const msg = message.toString();
+
   if (
-    typeof message === 'string' &&
-    (message.startsWith('[React Intl] Missing message:') ||
-      message.startsWith('[React Intl] Cannot format message:') ||
-      message.startsWith('[Blueprint] <Popover> onInteraction') ||
-      message.startsWith('Warning: [react-router]'))
+    msg.startsWith('[React Intl] Missing message:') ||
+    msg.startsWith('[React Intl] Cannot format message:') ||
+    msg.startsWith('[Blueprint] <Popover> onInteraction') ||
+    msg.startsWith('Error: [@formatjs/intl Error MISSING_TRANSLATION]') ||
+    msg.startsWith('Warning: [react-router]')
   ) {
     return;
   }
+
   consoleError(message, ...args);
 };
 

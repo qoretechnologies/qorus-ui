@@ -1,6 +1,5 @@
 // @flow
 import { Icon, Intent } from '@blueprintjs/core';
-import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
@@ -58,8 +57,6 @@ ContentByTypeProps) => {
   if (type === 'object' || type === 'array') {
     return <div className={className}>{emptyTypeToString[type]}</div>;
   }
-
-  console.log(type, content);
 
   if (
     type !== 'number' &&

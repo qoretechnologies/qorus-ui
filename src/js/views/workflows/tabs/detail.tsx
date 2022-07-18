@@ -1,7 +1,6 @@
 // @flow
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
 import { Component } from 'react';
-import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { ActionColumnHeader } from '../../../components/ActionColumn';
@@ -241,7 +240,7 @@ class DetailTab extends Component {
           <ProcessSummary model={workflow} type="workflow" />
           <PaneItem
             // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ workflow... Remove this comment to see the full error message
-            title={this.props.intl.formatMessage({ id: 'global.instances' })}
+            title={this.props.intl?.formatMessage({ id: 'global.instances' })}
           >
             {/* @ts-ignore ts-migrate(2339) FIXME: Property 'TOTAL' does not exist on type 'Object'. */}
             <NoDataIf condition={workflow.TOTAL === 0}>
@@ -277,6 +276,5 @@ export default compose(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'workflows' does not exist on type '{}'.
     setOptions: actions.workflows.setOptions,
   }),
-  withDispatch(),
-  injectIntl
+  withDispatch()
 )(DetailTab);

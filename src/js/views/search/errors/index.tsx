@@ -1,10 +1,8 @@
 // @flow
 import moment from 'moment';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import pure from 'recompose/onlyUpdateForKeys';
 import { DATE_FORMATS } from '../../../constants/dates';
 import withModal from '../../../hocomponents/modal';
 import queryControl from '../../../hocomponents/queryControl';
@@ -138,19 +136,6 @@ export default compose(
       ...rest,
     })
   ),
-  pure([
-    'mindateQuery',
-    'maxdateQuery',
-    'idsQuery',
-    'nameQuery',
-    'retryQuery',
-    'errorQuery',
-    'busErrQuery',
-    'filterQuery',
-    'location',
-    'searchData',
-    'workflows',
-  ]),
   withModal(),
   unsync()
 )(SearchView);
