@@ -174,4 +174,4 @@ class Search extends Component<any, any> {
   }
 }
 
-export default injectIntl(Search as any);
+export default injectIntl(Search as any) as any;
