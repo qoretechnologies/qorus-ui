@@ -34,6 +34,7 @@ import en from '../../../img/country_flags/us.png';
 import Kubernetes from '../../../img/kubernetes.png';
 import logo from '../../../img/qorus_engine_logo.png';
 import whiteLogo from '../../../img/qorus_engine_logo_white.png';
+import { IS_SECURE } from '../../../server_config';
 import { HEALTH_KEYS } from '../../constants/dashboard';
 import Release from '../../containers/release';
 import withModal from '../../hocomponents/modal';
@@ -177,7 +178,7 @@ class Topbar extends Component {
             </Tag>
           )}
         </ReqoreNavbarGroup>
-        {true && (
+        {!IS_SECURE && (
           <ReqoreNavbarGroup position="left">
             <ReqorePopover
               component={ReqoreNavbarItem}

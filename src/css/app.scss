@@ -357,6 +357,11 @@ span.bp3-icon {
   vertical-align: baseline;
 }
 
+.bp3-button-text {
+  display: flex;
+
+}
+
 .bp3-button-group,
 .bp3-control-group {
   &:not(:last-child) {

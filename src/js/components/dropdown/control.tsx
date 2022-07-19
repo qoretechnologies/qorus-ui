@@ -1,6 +1,5 @@
 /* @flow */
 import { Button, ButtonGroup } from '@blueprintjs/core';
-import React from 'react';
 
 type Props = {
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
@@ -35,9 +34,7 @@ const Control = ({
   return children || newIcon || !noCaret ? (
     <ButtonGroup>
       <Button
-        small
         type="button"
-        text={children}
         // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'Intent'.
         intent={intent}
         // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
@@ -47,7 +44,9 @@ const Control = ({
         // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
         onClick={onClick}
         disabled={disabled}
-      />
+      >
+        {children}
+      </Button>
     </ButtonGroup>
   ) : null;
 };

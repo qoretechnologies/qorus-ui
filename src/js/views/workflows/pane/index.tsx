@@ -1,6 +1,6 @@
 /* @flow */
 import size from 'lodash/size';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -136,7 +136,7 @@ export default class WorkflowsDetail extends Component {
               suffix: `(${configItemsCount})`,
             },
             'Steps',
-            'OrderStats',
+            'Order Stats',
             'Process',
             'Releases',
             {

@@ -1,5 +1,6 @@
 /* @flow */
-import React from 'react';
+import { ReqoreTag } from '@qoretechnologies/reqore';
+import { darken, lighten } from 'polished';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -16,6 +17,20 @@ import queryControl from '../../../../hocomponents/queryControl';
 import actions from '../../../../store/api/actions';
 import OrderControls from './controls';
 import Lock from './lock';
+
+const statusColors = {
+  'status-automatic': '#81358a',
+  'status-complete': '#7fba27',
+  'status-ready': '#2965cc',
+  'status-scheduled': lighten(0.2, '#2965cc'),
+  'status-waiting': '#d99e0b',
+  'status-in-progress': darken(0.2, '#2965cc'),
+  'status-retry': lighten(0.3, '#d99e0b'),
+  'status-incomplete': lighten(0.4, '#d99e0b'),
+  'status-canceled': '#8a9ba8',
+  'status-error': '#d13913',
+  'status-blocked': lighten(0.1, '#d13913'),
+};
 
 type Props = {
   date: string;
@@ -106,7 +121,7 @@ Props) => (
       <Lock lock={operLock} id={id} />
     </Td>
     <Td className="medium">
-      <span className={`label status-${label}`}>{workflowstatus}</span>
+      <ReqoreTag label={workflowstatus} size="small" color={statusColors[`status-${label}`]} />
     </Td>
     <Td className="narrow">
       <ContentByType content={busErr} />

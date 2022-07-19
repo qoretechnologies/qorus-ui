@@ -22,4 +22,4 @@ export const API_URL = `${PROTO}://${API_HOST}${API_PORT ? `:${API_PORT}` : ''}`
 export const SERVER_WS_URL = `${WS_PROTO}://${LOCAL_HOST}:${LOCAL_PORT}`;
 export const API_WS_URL = `${WS_PROTO}://${API_HOST}${API_PORT ? `:${API_PORT}` : ''}`;
 export const WEB_IDE_URL = '/ide/';
-export const IS_SECURE = false;
+export const IS_SECURE = window?.location?.protocol === 'https:';

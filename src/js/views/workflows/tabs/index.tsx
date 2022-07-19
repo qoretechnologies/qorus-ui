@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import Box from '../../../components/box';
 import Code from '../../../components/code';
 import ConfigItemsTable from '../../../components/ConfigItemsTable';

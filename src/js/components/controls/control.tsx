@@ -61,15 +61,17 @@ Props) => (
     title={isTablet ? text : title}
     onClick={handleClick}
     disabled={disabled}
-    small
     // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type '"submit" ... Remove this comment to see the full error message
     type={type}
-    style={css}
     // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
     icon={iconName}
     text={isTablet ? (iconName ? undefined : text) : text}
     // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'Intent'.
     intent={intent}
+    style={{
+      backgroundColor: intent === 'success' ? '#7fba27' : undefined,
+      ...css,
+    }}
     loading={loading}
   />
 );

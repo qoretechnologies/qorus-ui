@@ -1,5 +1,5 @@
 // @flow
-import { Icon, Intent } from '@blueprintjs/core';
+import { ReqoreIcon } from '@qoretechnologies/reqore';
 import ReactMarkdown from 'react-markdown';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
@@ -46,9 +46,9 @@ ContentByTypeProps) => {
   if (type === 'boolean') {
     return (
       <div className={className}>
-        <Icon
-          icon={content ? 'small-tick' : 'cross'}
-          intent={content ? Intent.SUCCESS : Intent.DANGER}
+        <ReqoreIcon
+          icon={content ? 'CheckLine' : 'CloseLine'}
+          color={content ? '#0070f3' : '#f30000'}
         />
       </div>
     );

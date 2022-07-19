@@ -332,11 +332,11 @@ export default class Root extends Component {
             theme={{
               main: '#ffffff',
               sidebar: {
-                main: '#333333',
-                item: { activeBackground: ReqoreColors.BLUE },
+                main: isLightTheme ? '#ffffff' : '#333333',
+                item: { activeBackground: ReqoreColors.BLUE, activeColor: '#ffffff' },
               },
               header: {
-                main: '#333333',
+                main: isLightTheme ? '#ffffff' : '#333333',
               },
               intents: {
                 success: '#7fba27',
