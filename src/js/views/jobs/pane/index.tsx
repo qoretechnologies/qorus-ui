@@ -1,6 +1,5 @@
 /* @flow */
 import size from 'lodash/size';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -37,7 +36,7 @@ const Detail = ({
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 }) => (
   <Pane
-    width={width || 600}
+    width={400}
     onResize={onResize}
     onClose={onClose}
     // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
