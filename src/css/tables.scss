@@ -95,7 +95,7 @@ th {
 
   &.date {
     /* [4] */
-    width: 110px;
+    width: 240px;
   }
 
   &.large {
@@ -261,7 +261,7 @@ table.table--data {
       > th,
       > td {
         /* [1] */
-        border-right: 1px solid $table-border-color;
+        border-right: 1px solid #333;
 
         &:last-child {
           border-right: 0;
@@ -271,6 +271,7 @@ table.table--data {
   }
 
   &.table-condensed {
+    border-collapse: collapse;
     > thead,
     > tbody,
     > tfoot {
@@ -311,7 +312,7 @@ table.table--data {
 
           &.date {
             /* [4] */
-            width: 120px;
+            width: 240px;
           }
 
           &.large {
@@ -432,6 +433,14 @@ table.table-header {
   margin-bottom: 0;
 }
 
+table.table-striped {
+  tr {
+    &:nth-of-type(even) {
+      background-color: #00000010;
+    }
+  }
+}
+
 .props-table {
   margin-left: 10%;
   width: 90%;
@@ -461,7 +470,7 @@ table.table-header {
   }
 }
 
-div.table-name-popover {
+span.table-name-popover {
   width: 100%;
   display: flex;
   flex: 1 1 auto;

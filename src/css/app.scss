@@ -2,7 +2,7 @@ $font-size-extra-small: 11px;
 $padding-xs-horizontal: 3px;
 $text-muted: #a9a9a9;
 
-$qore-green: #7fba27;
+$qore-green: #57801a;
 $qore-purple: #81358a;
 $qore-warning: #d99e0b;
 $qore-danger: #d13913;
@@ -25,7 +25,7 @@ $blue3: $qore-cobalt;
 $blue4: lighten($qore-cobalt, 10);
 $blue5: lighten($qore-cobalt, 20);
 
-@import '~@blueprintjs/core/src/blueprint.scss';
+@import '../../node_modules/@blueprintjs/core/lib/css/blueprint.css';
 @import '../../node_modules/prismjs/themes/prism-okaidia';
 @import '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css';
 
@@ -108,6 +108,7 @@ $text-color: #333;
 
 html,
 body,
+#root,
 .app,
 .app__wrap,
 .container-fluid {
@@ -354,6 +355,11 @@ p.header-detail {
 span.bp3-icon {
   font-size: 12px;
   vertical-align: baseline;
+}
+
+.bp3-button-text {
+  display: flex;
+
 }
 
 .bp3-button-group,

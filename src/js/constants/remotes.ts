@@ -1,0 +1,32 @@
+// @flow
+const CONN_MAP: any = {
+  datasources: 'DATASOURCE',
+  user: 'USER-CONNECTION',
+  qorus: 'REMOTE',
+};
+
+const CONN_MAP_REVERSE: any = {
+  DATASOURCE: 'datasources',
+  'USER-CONNECTION': 'user',
+  REMOTE: 'qorus',
+};
+
+const DELETE_PERMS_MAP: any = {
+  datasources: ['DATASOURCE-CONTROL', 'DELETE-DATASOURCE'],
+  user: ['USER-CONNECTION-CONTROL', 'DELETE-USER-CONNECTION'],
+  qorus: ['SERVER-CONNECTION-CONTROL', 'DELETE-SERVER-CONNECTION'],
+};
+
+const ADD_PERMS_MAP: any = {
+  datasources: ['DATASOURCE-CONTROL', 'ADD-DATASOURCE'],
+  user: ['USER-CONNECTION-CONTROL', 'ADD-USER-CONNECTION'],
+  qorus: ['SERVER-CONNECTION-CONTROL'],
+};
+
+const EDIT_PERMS_MAP: any = {
+  datasources: ['DATASOURCE-CONTROL', 'MODIFY-DATASOURCE'],
+  user: ['USER-CONNECTION-CONTROL', 'MODIFY-USER-CONNECTION'],
+  qorus: ['SERVER-CONNECTION-CONTROL'],
+};
+
+export { CONN_MAP, CONN_MAP_REVERSE, DELETE_PERMS_MAP, ADD_PERMS_MAP, EDIT_PERMS_MAP };
