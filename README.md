@@ -1,251 +1,46 @@
-# Qorus Webapp Interface
+# Getting Started with Create React App
 
-## Technology Stack
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-Webapp uses [React](https://facebook.github.io/react/),
-[Redux](http://redux.js.org) (with React bindings),
-[React Router](https://www.npmjs.com/package/react-router) and
-[Bootstrap](http://getbootstrap.com). JavaScript is compiled with
-[Babel](http://babeljs.io) with stage-0 preset and legacy decorators
-plugin. Stylesheets are compiled with
-[Sass](http://sass-lang.com). Resulting static assets are put together
-by [webpack](http://webpack.github.io).
+## Available Scripts
 
-There are two levels of tests following behavior-driven development
-practices. Acceptance tests are written in
-[Cucumber.js](https://cucumber.io/docs/reference/javascript) with
-[Zombie](http://zombie.js.org). Unit tests in
-[Mocha](http://mochajs.org) with [Chai](http://chaijs.com).
+In the project directory, you can run:
 
-There is also a development and test server written in
-[Express](http://expressjs.com).
+### `yarn start`
 
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-## Structure
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-### `src`
+### `yarn test`
 
-The main directory with source code and
-[app entry point](src/app.jsx) for the webapp. Most of other things
-are just support for development or build.
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `src/js/components`
+### `yarn build`
 
-Reusable React components specific to the webapp. If necessary,
-components have stylesheets there. The stylesheets are imported by the
-[main CSS file](src/css/app.scss).
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-### `src/js/views`
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-Application of reusable components and general elements to create the
-whole UI. Internal structure reflects navigation and/or URL
-structure. Stylesheets for views are defined in `src/css` unlike
-components.
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `src/js/store`
+### `yarn eject`
 
-Redux store, reducers and actions.
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-### `types`
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Type definitions in [JSDoc](http://usejsdoc.org),
-[JSON Schema](http://json-schema.org) and
-[React PropTypes](http://facebook.github.io/react/docs/reusable-components.html#prop-validation).
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-### `features`
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-Acceptance tests in Cucumber.js.
+## Learn More
 
-### `test`
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-Unit test in Mocha.
-
-### `fixtures`
-
-Static data for tests.
-
-### `server.js` and `api`
-
-Development and test server implementation in Express.
-
-### `webpack.config.js`, `webpack.config`, `cucumber.js` and dot-files
-
-Configuration of development, test and build environment with webpack,
-its loaders and other utilities.
-
-
-## Getting Started
-
-This is not a typical behavior-driven approach, but it is the fastest
-way the get started.
-
-Please note that in this example, a virtual machine with Qorus server
-installed is accessible via qorus.vm.dev hostname. This requires
-additional configuration. Different approach is to use port-forwarding
-in which case you would replace qorus.vm.dev with localhost and
-additional specify or correct a port number.
-
-Make sure your code and dependencies are up-to-date:
-
-```bash
-git pull --rebase
-npm install
-```
-
-Run Qorus:
-
-```bash
-VBoxManage startvm Qorus --type headless
-ssh qorus.vm.dev qorus
-```
-
-Run development server (defaults are: `HOST=localhost`, `PORT=3000`,
-`API_PROTO=http`, `API_HOST=localhost` and `API_PORT=8001`):
-
-```bash
-API_HOST=qorus.vm.dev npm start
-```
-
-Open the webapp:
-
-```bash
-open http://localhost:3000
-```
-
-Do your changes and run tests:
-
-```bash
-npm test
-```
-
-Check you coding style:
-
-```bash
-npm run lint
-```
-
-Commit and push your changes to
-[Qore repository](https://git.qoretechnologies.com/ui/qorus-webapp). You
-can review status of integrated effort of the team in
-[Jenkins](https://hq.qoretechnologies.com/jenkins/job/qorus-webapp-react/).
-
-
-## Environment Variables
-
-### `NODE_ENV`
-
-There three main values:
-
-- `development`: good defaults for "classic" web development (change
-  code, verify in browser). React is compiled in development mode
-  (props type checking, various other checks,
-  ...). [React performance tools](http://facebook.github.io/react/docs/perf.html)
-  are accessible via `Perf` global variable in the browser. Redux
-  DevTools are enabled. Hot module replacement applies new code
-  changes minimazing necessity to reload the page manually. If API
-  proxy is not used, generated fake API is provided.
-
-- `test`: good for running tests and behavior- or test-driven
-  development. React is compiled in production mode. Test
-  instrumentation which dispatches `WebappDomUpdate` event when React
-  finishes DOM updated or `WebappRouterUpdate` event when route is
-  updated. If API proxy is not used, static mock API is provided.
-
-- `production`: good for production build and performance
-  testing. React is compiled in production mode. Everything is
-  minified. No additional are not present.
-
-### `API_PROTO`, `API_HOST` and `API_PORT`
-
-Causes REST and WebSocket API proxy to be created instead of generated
-fake or static mock API.
-
-### `REST_BASE_URL`
-
-Overrides any `API_*` variable and causes REST API proxy to be
-created. If this variable is not explictly specified, but any of
-`API_*` variable is, the value default to
-`${API_PROTO}://${API_HOST}:${API_PORT}/api` where `API_PROTO`
-defaults to http, `API_HOST` to localhost and `API_PORT` to 8001.
-
-### `WS_BASE_URL`
-
-Overrides any `API_*` variable and causes WebSocket API proxy to be
-created. If this variable is not explictly specified, but any of
-`API_*` variable is, the value default to `${API_PROTO === 'https' ?
-'wss' : 'ws'}://${API_HOST}:${API_PORT}` where `API_PROTO` defaults to
-http, `API_HOST` to localhost and `API_PORT` to 8001.
-
-### `HOST` and `PORT`
-
-Changes host and port to which the server binds. Host defaults to
-localhost which almost certainly results to listening on loopback
-(e.g., 127.0.0.1). Port defaults to 3000.
-
-In acceptance tests, they point to the test site. The test site must
-be started locally anyway (see below).
-
-### `PIDFILE`
-
-Points to a file where the server writes its process ID. The server
-does not start if the file already exists. This prevents from running
-multiple servers in the background by accident. If not set, the server
-does not write anything anywhere.
-
-In acceptance tests, PIDFILE is used to send `SIGUSR2` signal to the
-server to refrest static mock or generated fake data.
-
-PIDFILE can be used to `npm start` the server in the background and
-then `npm stop` it. The `stop` script does not work without `PIDFILE`.
-
-
-## Running Tests
-
-### Acceptance & Integration Tests
-
-Cucumber scenarios are quite slow to run due to spinning up mock API
-server, DOM polling and TCP/IP communication (although on
-loopback). It is suggested to:
-
-- mark scenarios you are working on with `@wip` tag
-- spin up mock API server aside
-- run only `@wip` scenarios
-
-Open new terminal and run WIP scenarios with built-in test server:
-
-```bash
-PORT=3001 npm run test:uat:wip
-```
-
-When you change you code, Nodemon reruns the test suite again. `PORT`
-environment variable is specified to prevent collision with default
-value which is normally used in development mode.
-
-### Unit Tests
-
-Mocha specs are fast, do not require anything else to be running and
-Mocha itself has a great capabilities to provide immediate feedback
-during development.
-
-Open new terminal window and run Mocha in watch mode.
-
-```bash
-npm run test:unit:wip
-```
-
-When you change you code, Mocha reruns the test suite again.
-
-
-## Code Style
-
-[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
-is followed when applicable - which is practically
-everywhere. [ESLint](http://eslint.org) cannot check everything and in
-certain cases acts quite strangely (because of AST provided by Babel
-compiler and experimental features) it may be reasonable to turn off
-some checks. So, find your esthetic self or discuss it with the team.
-
-Custom stylesheets follow
-[CSS Guidelines by Harry Roberts](http://cssguidelin.es), which is the
-main source of rather vague
-[Airbnb CSS / Sass Styleguide](https://github.com/airbnb/css).
+To learn React, check out the [React documentation](https://reactjs.org/).

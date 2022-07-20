@@ -1,7 +1,0 @@
-{
-  "viewportHeight": 1080,
-  "viewportWidth": 1920,
-  "integrationFolder": "tests/e2e",
-  "baseUrl": "https://localhost:3004",
-  "video": false
-}

@@ -6,6 +6,8 @@
   line-height: 14px;
   padding: 0;
   vertical-align: sub;
+  margin-bottom: 0 !important;
+  padding-right: 30px !important;
 
   .bp3-control-indicator {
     width: 14px;
@@ -13,6 +15,7 @@
     line-height: 14px;
     left: 50%;
     transform: translateX(-50%);
+    margin-right: -30px !important;
   }
 }
 

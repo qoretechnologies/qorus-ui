@@ -11,12 +11,12 @@ build_package:
     - docker-exec
   artifacts:
     paths:
-      - dist/
+      - build/
   before_script:
     - apk add yarn
   script:
     - yarn install
-    - yarn build:dev
+    - yarn build
 
 upload_build:
   stage: deploy
@@ -39,8 +39,8 @@ upload_build:
     - chmod 600 ~/.ssh/id_rsa
     - chmod 644 ~/.ssh/id_rsa.pub ~/.ssh/known_hosts
 
-    - find dist -name \*.gz | while read a; do n=`echo $a|sed s/\.gz$//`; if [ -f $n ]; then rm $n; fi; done
+    - find build -name \*.gz | while read a; do n=`echo $a|sed s/\.gz$//`; if [ -f $n ]; then rm $n; fi; done
     - mkdir -p ./${WEBAPP}/webapp
-    - mv -f dist/* ./${WEBAPP}/webapp/
+    - mv -f build/* ./${WEBAPP}/webapp/
     - zip -r qorus-webapp-${WEBAPP}.zip ${WEBAPP}
     - scp qorus-webapp-${WEBAPP}.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/

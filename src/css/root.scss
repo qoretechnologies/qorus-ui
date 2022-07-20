@@ -9,8 +9,6 @@
 
   &:not(.maximized) {
     .root__center {
-      margin-top: 50px; /* [1], [4] */
-
       > .section {
         margin-bottom: 30px;
         height: calc(100vh - 80px);
