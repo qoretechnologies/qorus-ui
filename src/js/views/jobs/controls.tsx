@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { WEB_IDE_URL } from '../../../server_config';
 import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
+import { WebIDEButton } from '../../components/WebIDEButton';
 import withModal from '../../hocomponents/modal';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
@@ -136,16 +136,7 @@ Props) =>
           big={big}
         />
       </ButtonGroup>
-      <ButtonGroup>
-        <Button
-          title={intl.formatMessage({ id: 'button.edit-job' })}
-          icon="code-block"
-          big={big}
-          onClick={() => {
-            window.location.href = `${WEB_IDE_URL}new/job/${id}?origin=${window.location.href}`;
-          }}
-        />
-      </ButtonGroup>
+      <WebIDEButton type="job" id={id} big={big} />
     </React.Fragment>
   );
 
