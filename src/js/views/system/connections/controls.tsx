@@ -1,11 +1,10 @@
 import { Intent } from '@blueprintjs/core';
-import React from 'react';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
-import { WEB_IDE_URL } from '../../../../server_config';
 import ConfirmDialog from '../../../components/confirm_dialog';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
+import { WebIDEButton } from '../../../components/WebIDEButton';
 import withModal from '../../../hocomponents/modal';
 import actions from '../../../store/api/actions';
 import PingModal from './modals/ping';
@@ -76,15 +75,7 @@ const RemoteControls = ({
         onClick={handleDeleteClick}
       />
     </ButtonGroup>
-    <ButtonGroup>
-      <Button
-        title={intl.formatMessage({ id: 'button.edit-connection' })}
-        icon="code-block"
-        onClick={() => {
-          window.location.href = `${WEB_IDE_URL}new/connection/${connid}?origin=${window.location.href}`;
-        }}
-      />
-    </ButtonGroup>
+    <WebIDEButton type="connection" id={connid} />
   </>
 );
 

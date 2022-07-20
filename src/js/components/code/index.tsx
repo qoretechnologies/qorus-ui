@@ -1,6 +1,5 @@
 /* @flow */
 import { AnchorButton } from '@blueprintjs/core';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -9,6 +8,7 @@ import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import { WEB_IDE_URL } from '../../../server_config';
 import ReleasesTab from '../../containers/releases';
+import { isFeatureEnabled } from '../../helpers/functions';
 import Alert from '../alert';
 import Flex from '../Flex';
 import InfoTable from '../info_table';
@@ -64,7 +64,7 @@ Props) => (
               active="code"
               rightElement={
                 // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-                selected.type === 'classes' && selected.item ? (
+                selected.type === 'classes' && selected.item && isFeatureEnabled('WEB_IDE') ? (
                   <AnchorButton
                     icon="code-block"
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
