@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -46,7 +45,7 @@ const ResultDetail = ({
   ];
 
   return (
-    <Flex className={`job-result-info ${sidebarOpen ? 'sidebar-open' : ''}`}>
+    <Flex className={`job-result-info ${sidebarOpen ? 'sidebar-open' : ''}`} height="400px">
       {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ top: true; }' is missing the following pro... Remove this comment to see the full error message */}
       <Resize top />
       {result ? renderResult() : <Loader />}
