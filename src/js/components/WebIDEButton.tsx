@@ -3,6 +3,8 @@ import { isFeatureEnabled } from '../helpers/functions';
 import { Control as Button, Controls as ButtonGroup } from './controls';
 
 export const WebIDEButton = ({ big, id, type }) => {
+  console.log(process.env, process.env.REACT_APP_WEB_IDE, isFeatureEnabled('WEB_IDE'));
+
   if (!isFeatureEnabled('WEB_IDE')) {
     return null;
   }
