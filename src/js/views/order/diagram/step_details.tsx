@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import ContentByType from '../../../components/ContentByType';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import { DateColumn, DateColumnHeader } from '../../../components/DateColumn';
@@ -12,6 +12,7 @@ import Toolbar from '../../../components/toolbar';
 import { pureRender } from '../../../components/utils';
 import { INTERFACE_ICONS } from '../../../constants/interfaces';
 import { canSkip, groupInstances } from '../../../helpers/orders';
+import { StatusLabel } from '../../workflows/tabs/list/row';
 import Errors from '../errors';
 import Skip from './skip';
 
@@ -134,9 +135,7 @@ export default class StepDetailTable extends Component {
                 <NameColumn name={data.stepname} />
                 <Th icon="info-sign">Status</Th>
                 <Td>
-                  <span className={`label status-${data.stepstatus.toLowerCase()}`}>
-                    {data.stepstatus}
-                  </span>
+                  <StatusLabel text={data.stepstatus} label={data.stepstatus.toLowerCase()} />
                 </Td>
               </Tr>
               <Tr>

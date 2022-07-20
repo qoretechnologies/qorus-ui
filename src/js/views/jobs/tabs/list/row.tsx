@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -8,6 +7,7 @@ import { DateColumn } from '../../../../components/DateColumn';
 import NameColumn from '../../../../components/NameColumn';
 import { Td, Tr } from '../../../../components/new_table';
 import actions from '../../../../store/api/actions';
+import { StatusLabel } from '../../../workflows/tabs/list/row';
 
 type Props = {
   id: number;
@@ -46,7 +46,7 @@ Props) => (
   >
     <NameColumn name={instanceId} isActive={active} onDetailClick={handleDetailClick} type="job" />
     <Td className="medium">
-      <span className={`label status-${jobstatus.toLowerCase()}`}>{jobstatus}</span>
+      <StatusLabel text={jobstatus} label={jobstatus.toLowerCase()} />
     </Td>
     <DateColumn>{started}</DateColumn>
     <DateColumn>{modified}</DateColumn>
