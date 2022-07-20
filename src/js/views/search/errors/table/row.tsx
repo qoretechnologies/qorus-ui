@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -8,6 +7,7 @@ import { IdColumn } from '../../../../components/IdColumn';
 import NameColumn from '../../../../components/NameColumn';
 import { Td, Tr } from '../../../../components/new_table';
 import { ALL_ORDER_STATES } from '../../../../constants/orders';
+import { StatusLabel } from '../../../workflows/tabs/list/row';
 
 type Props = {
   id: number;
@@ -45,7 +45,7 @@ Props) => (
     <NameColumn name={normalizedName} type="workflow" link={`/workflow/${workflowid}`} />
     <Td className="medium">{severity}</Td>
     <Td className="medium">
-      <span className={`label status-${label}`}>{workflowstatus}</span>
+      <StatusLabel text={workflowstatus} label={label} />
     </Td>
     <Td className="narrow">
       <ContentByType content={retry} />

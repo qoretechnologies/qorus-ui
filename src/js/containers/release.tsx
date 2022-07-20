@@ -111,7 +111,7 @@ const StyledStepContent = styled.div`
       width: 100%;
 
       p {
-        background-color: #7fba27ab;
+        background-color: #57801aab;
       }
     }
   }

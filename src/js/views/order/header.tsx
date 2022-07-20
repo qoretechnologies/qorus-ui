@@ -1,6 +1,6 @@
 // @flow
 import size from 'lodash/size';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Breadcrumbs, CollapsedCrumb, Crumb, CrumbTabs } from '../../components/breadcrumbs';
 import Headbar from '../../components/Headbar';
 import Pull from '../../components/Pull';
@@ -11,6 +11,7 @@ import queryControl from '../../hocomponents/queryControl';
 import { countConfigItems } from '../../utils';
 import OrderControls from '../workflows/tabs/list/controls';
 import Lock from '../workflows/tabs/list/lock';
+import { StatusLabel } from '../workflows/tabs/list/row';
 
 // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
 @queryControl('target')
@@ -61,10 +62,7 @@ export default class OrderHeader extends Component {
           <Crumb link={backQueriesStr}>
             {/* @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'. */}
             {workflowName} <strong>#{this.props.data.id}</strong>{' '}
-            <span className={`label status-${label}`}>
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'workflowstatus' does not exist on type '... Remove this comment to see the full error message */}
-              {this.props.data.workflowstatus}
-            </span>
+            <StatusLabel text={this.props.data.workflowstatus} label={label} />
           </Crumb>
           <CrumbTabs
             tabs={[

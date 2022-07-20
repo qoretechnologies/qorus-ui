@@ -66,7 +66,7 @@ const StyledFSMState = styled.div`
     if (selected) {
       color = '#277fba';
     } else if (initial) {
-      color = '#7fba27';
+      color = '#57801a';
     }
 
     return css`

@@ -69,7 +69,7 @@ Props) => (
     // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'Intent'.
     intent={intent}
     style={{
-      backgroundColor: intent === 'success' ? '#7fba27' : undefined,
+      backgroundColor: intent === 'success' ? '#57801a' : undefined,
       ...css,
     }}
     loading={loading}

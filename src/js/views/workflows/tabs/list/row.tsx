@@ -20,7 +20,7 @@ import Lock from './lock';
 
 const statusColors = {
   'status-automatic': '#81358a',
-  'status-complete': '#7fba27',
+  'status-complete': '#57801a',
   'status-ready': '#2965cc',
   'status-scheduled': lighten(0.2, '#2965cc'),
   'status-waiting': '#d99e0b',
@@ -31,6 +31,10 @@ const statusColors = {
   'status-error': '#d13913',
   'status-blocked': lighten(0.1, '#d13913'),
 };
+
+export const StatusLabel = ({ text, label }) => (
+  <ReqoreTag label={text} size="small" color={statusColors[`status-${label}`]} />
+);
 
 type Props = {
   date: string;
@@ -121,7 +125,7 @@ Props) => (
       <Lock lock={operLock} id={id} />
     </Td>
     <Td className="medium">
-      <ReqoreTag label={workflowstatus} size="small" color={statusColors[`status-${label}`]} />
+      <StatusLabel text={workflowstatus} label={label} />
     </Td>
     <Td className="narrow">
       <ContentByType content={busErr} />

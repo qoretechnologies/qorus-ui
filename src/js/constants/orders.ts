@@ -6,7 +6,7 @@ export const ORDER_STATES = [
     short: 'C',
     label: 'complete',
     title: 'Complete',
-    color: '#7fba27',
+    color: '#57801a',
   },
   {
     name: 'READY',
@@ -87,7 +87,7 @@ export const ORDER_STATES = [
   },
 ];
 
-export const ORDER_STATES_ARRAY = ORDER_STATES.map(order => order.name);
+export const ORDER_STATES_ARRAY = ORDER_STATES.map((order) => order.name);
 
 export const GROUPED_ORDER_STATES = [
   {
@@ -191,14 +191,7 @@ export const DOUGH_LABELS = {
 
 export const ORDER_GROUPS = {
   'READY/SCHD': ['READY', 'SCHEDULED'],
-  'RUN/WAIT': [
-    'IN-PROGRESS',
-    'ASYNC-WAITING',
-    'WAITING',
-    'EVENT-WAITING',
-    'RETRY',
-    'INCOMPLETE',
-  ],
+  'RUN/WAIT': ['IN-PROGRESS', 'ASYNC-WAITING', 'WAITING', 'EVENT-WAITING', 'RETRY', 'INCOMPLETE'],
   'ERR/BLOCK': ['ERROR', 'BLOCKED'],
   CANCELED: ['CANCELED'],
   COMPLETE: ['COMPLETE'],
@@ -206,14 +199,7 @@ export const ORDER_GROUPS = {
 
 export const ORDER_GROUPS_COMPACT = {
   'R/S': ['READY', 'SCHEDULED'],
-  'R/W': [
-    'IN-PROGRESS',
-    'ASYNC-WAITING',
-    'WAITING',
-    'EVENT-WAITING',
-    'RETRY',
-    'INCOMPLETE',
-  ],
+  'R/W': ['IN-PROGRESS', 'ASYNC-WAITING', 'WAITING', 'EVENT-WAITING', 'RETRY', 'INCOMPLETE'],
   'E/B': ['ERROR', 'BLOCKED'],
   CNC: ['CANCELED'],
   CMP: ['COMPLETE'],

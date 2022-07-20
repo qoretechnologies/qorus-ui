@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -8,6 +7,7 @@ import { DateColumn } from '../../../components/DateColumn';
 import NameColumn from '../../../components/NameColumn';
 import { Td, Tr } from '../../../components/new_table';
 import { ALL_ORDER_STATES } from '../../../constants/orders';
+import { StatusLabel } from '../../workflows/tabs/list/row';
 
 type Props = {
   item: any;
@@ -39,8 +39,7 @@ Props) => (
       type="workflow"
     />
     <Td className="medium">
-      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'workflowstatus' does not exist on type '... Remove this comment to see the full error message */}
-      <span className={`label status-${label}`}>{item.workflowstatus}</span>
+      <StatusLabel text={item.workflowstatus} label={label} />
     </Td>
     <Td className="tiny">
       {/* @ts-ignore ts-migrate(2339) FIXME: Property 'hierarchy_level' does not exist on type ... Remove this comment to see the full error message */}

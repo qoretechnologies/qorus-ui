@@ -1,5 +1,5 @@
 import { Button, Tooltip } from '@blueprintjs/core';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { StyledMapperField } from '.';
 
 export interface IMapperOutputProps {
@@ -44,7 +44,7 @@ const MapperOutput: FC<IMapperOutputProps> = ({
       level={level}
       childrenCount={lastChildIndex}
       style={{
-        backgroundColor: hasRelation ? '#7fba2785' : '#fff',
+        backgroundColor: hasRelation ? '#57801a85' : '#fff',
       }}
     >
       <h4>{name}</h4>

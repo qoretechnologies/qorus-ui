@@ -19,6 +19,7 @@ import { ALL_ORDER_STATES } from '../../../constants/orders';
 import { sortDefaults } from '../../../constants/sort';
 import Search from '../../../containers/search';
 import { groupInstances } from '../../../helpers/orders';
+import { StatusLabel } from '../../workflows/tabs/list/row';
 
 type Props = {
   order: any;
@@ -120,17 +121,15 @@ const StepsTable: Function = ({ steps, intl }: Props) => (
                           {/* @ts-ignore ts-migrate(2339) FIXME: Property 'stepname' does not exist on type 'Object... Remove this comment to see the full error message */}
                           <NameColumn name={step.stepname} />
                           <Td className="normal">
-                            <span
-                              className={`label status-${
+                            <StatusLabel
+                              text={step.stepstatus}
+                              label={
                                 ALL_ORDER_STATES.find(
                                   // @ts-ignore ts-migrate(2339) FIXME: Property 'stepstatus' does not exist on type 'Obje... Remove this comment to see the full error message
                                   (o) => o.name === step.stepstatus
                                 ).label
-                              }`}
-                            >
-                              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'stepstatus' does not exist on type 'Obje... Remove this comment to see the full error message */}
-                              {step.stepstatus}
-                            </span>
+                              }
+                            />
                           </Td>
                           {/* @ts-ignore ts-migrate(2339) FIXME: Property 'custom_status' does not exist on type 'O... Remove this comment to see the full error message */}
                           <Td className="big">{step.custom_status}</Td>

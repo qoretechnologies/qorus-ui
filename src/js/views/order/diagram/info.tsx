@@ -1,6 +1,5 @@
 // @flow
 import includes from 'lodash/includes';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -14,6 +13,7 @@ import PaneItem from '../../../components/pane_item';
 import { ALL_ORDER_STATES, ORDER_ACTIONS } from '../../../constants/orders';
 import withDispatch from '../../../hocomponents/withDispatch';
 import actions from '../../../store/api/actions';
+import { StatusLabel } from '../../workflows/tabs/list/row';
 
 type Props = {
   setPriority: Function;
@@ -65,7 +65,7 @@ Props) => (
             <FormattedMessage id="table.status" />
           </Th>
           <Td>
-            <span className={`label status-${label}`}>{workflowstatus}</span>
+            <StatusLabel text={workflowstatus} label={label} />
           </Td>
         </Tr>
         <Tr>

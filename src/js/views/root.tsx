@@ -339,7 +339,7 @@ export default class Root extends Component {
                 main: isLightTheme ? '#ffffff' : '#333333',
               },
               intents: {
-                success: '#7fba27',
+                success: '#57801a',
                 danger: '#e62727',
                 pending: '#ffdf34',
                 warning: ReqoreColors.ORANGE,
