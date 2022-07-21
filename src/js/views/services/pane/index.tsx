@@ -1,9 +1,10 @@
 // @flow
 import size from 'lodash/size';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import DetailPane from '../../../components/pane';
+import { insertAtIndex } from '../../../helpers/functions';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import titleManager from '../../../hocomponents/TitleManager';
 import actions from '../../../store/api/actions';
@@ -102,6 +103,37 @@ export default class ServicesDetail extends Component {
     }
 
     const configItemsCount: number = countConfigItems(rebuildConfigHash(service));
+    let tabs = [
+      'Detail',
+      {
+        title: 'Config',
+        suffix: `(${configItemsCount})`,
+      },
+      'Code',
+      { title: 'Methods', suffix: `(${size(methods)})` },
+      'Log',
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
+      { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+      { title: 'Mappers', suffix: `(${size(service.mappers)})` },
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+      { title: 'Valuemaps', suffix: `(${size(service.vmaps)})` },
+      {
+        title: 'Resources',
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'resources' does not exist on type 'Objec... Remove this comment to see the full error message
+        suffix: `(${size(service.resources)} / ${size(
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'resource_files' does not exist on type '... Remove this comment to see the full error message
+          service.resource_files
+        )})`,
+      },
+      'Authlabels',
+      'Releases',
+      'Info',
+    ];
+
+    if (service?.api_manager) {
+      tabs = insertAtIndex(tabs, 3, 'API Manager');
+    }
 
     return (
       <DetailPane
@@ -111,33 +143,7 @@ export default class ServicesDetail extends Component {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         title={service.name}
         tabs={{
-          tabs: [
-            'Detail',
-            {
-              title: 'Config',
-              suffix: `(${configItemsCount})`,
-            },
-            'Code',
-            { title: 'Methods', suffix: `(${size(methods)})` },
-            'Log',
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
-            { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
-            { title: 'Mappers', suffix: `(${size(service.mappers)})` },
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
-            { title: 'Valuemaps', suffix: `(${size(service.vmaps)})` },
-            {
-              title: 'Resources',
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'resources' does not exist on type 'Objec... Remove this comment to see the full error message
-              suffix: `(${size(service.resources)} / ${size(
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'resource_files' does not exist on type '... Remove this comment to see the full error message
-                service.resource_files
-              )})`,
-            },
-            'Authlabels',
-            'Releases',
-            'Info',
-          ],
+          tabs,
           queryIdentifier: 'paneTab',
         }}
       >

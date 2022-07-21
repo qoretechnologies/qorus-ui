@@ -137,7 +137,7 @@ Props) => (
 );
 
 export default compose(
-  withState('selected', 'setSelected', ({ selected }) => selected || null),
+  withState('selected', 'setSelected', ({ selected, codeItemQuery }) => selected || null),
   withHandlers({
     handleItemClick:
       ({ setSelected, onItemClick }: Props): Function =>
@@ -163,11 +163,67 @@ export default compose(
       },
   }),
   lifecycle({
+    componentWillMount() {
+      this.props.setSelected(() => {
+        const codeItemQuery = this.props.location.query.codeItem;
+        let type;
+        let item;
+        // Find the FSM or the method in the data
+        const maybeFSM = this.props.data.fsm.find((fsm) => fsm.name === codeItemQuery);
+        const maybeMethod = this.props.data.methods.find((method) => method.name === codeItemQuery);
+
+        type = maybeFSM ? 'fsm' : maybeMethod ? 'method' : null;
+        item = maybeFSM || maybeMethod;
+
+        if (type) {
+          return {
+            name: item.name,
+            code: item.body || item.code,
+            item,
+            type,
+            loading: false,
+          };
+        }
+
+        return null;
+      });
+    },
     componentWillReceiveProps(nextProps) {
       const oldData = JSON.stringify(this.props.data);
       const newData = JSON.stringify(nextProps.data);
+      const codeItemQuery = this.props.location.query.codeItem;
+      const nextCodeItemQuery = nextProps.location.query.codeItem;
+
+      if (codeItemQuery !== nextCodeItemQuery) {
+        this.props.setSelected(() => {
+          let type;
+          let item;
+          // Find the FSM or the method in the data
+          const maybeFSM = nextProps.data.fsm.find((fsm) => fsm.name === nextProps.codeItemQuery);
+          const maybeMethod = nextProps.data.methods.find(
+            (method) => method.name === nextProps.codeItemQuery
+          );
+
+          type = maybeFSM ? 'fsm' : maybeMethod ? 'method' : null;
+          item = maybeFSM || maybeMethod;
+
+          if (type) {
+            return {
+              name: item.name,
+              code: item.body || item.code,
+              item,
+              type,
+              loading: false,
+            };
+          }
+
+          return null;
+        });
+      }
+
       if (oldData !== newData) {
         this.props.setSelected((selected) => {
+          console.log(selected, nextProps.data);
           if (!selected || !nextProps.data[selected.type]) return null;
 
           const item = nextProps.data[selected.type].find(
