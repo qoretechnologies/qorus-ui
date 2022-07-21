@@ -1,5 +1,6 @@
 // @flow
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import Box from '../../../components/box';
 import Code from '../../../components/code';
@@ -29,7 +30,7 @@ type ServiceTabsProps = {
   configItems: any;
   systemOptions: Array<Object>;
   isPane?: boolean;
-  changePaneTabQuery?: (tabId: string) => void;
+  changeRealQuery?: (tabId: string) => void;
   changeCodeItemQuery?: (tabId: string) => void;
 };
 
@@ -42,7 +43,7 @@ const ServiceTabs: Function = ({
   configItems,
   systemOptions,
   isPane,
-  changePaneTabQuery,
+  changeRealQuery,
   changeCodeItemQuery,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ServiceTabsProps) => (
@@ -67,7 +68,7 @@ ServiceTabsProps) => (
           <ApiManager
             {...service.api_manager}
             onEndpointClick={(codeItem: string): void => {
-              changePaneTabQuery('code');
+              changeRealQuery('code');
               changeCodeItemQuery(codeItem);
             }}
           />
@@ -161,7 +162,20 @@ ServiceTabsProps) => (
 );
 
 export default compose(
-  queryControl('paneTab'),
+  queryControl(({ isPane }) => (isPane ? 'paneTab' : 'tab')),
   queryControl('codeItem'),
-  onlyUpdateForKeys(['service', 'methods', 'codeData', 'location', 'activeTab'])
+  mapProps(({ tabQuery, changeTabQuery, changePaneTabQuery, paneTabQuery, ...rest }) => ({
+    realQuery: tabQuery || paneTabQuery,
+    changeRealQuery: changeTabQuery || changePaneTabQuery,
+    ...rest,
+  })),
+  onlyUpdateForKeys([
+    'service',
+    'methods',
+    'codeData',
+    'location',
+    'activeTab',
+    'paneTabQuery',
+    'tabQuery',
+  ])
 )(ServiceTabs);
