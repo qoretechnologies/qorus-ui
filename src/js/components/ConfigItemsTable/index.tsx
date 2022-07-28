@@ -6,7 +6,6 @@ import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withState from 'recompose/withState';
-import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import modal from '../../hocomponents/modal';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
@@ -45,18 +44,17 @@ let ExpandableConfigWrapper = ({
     title={`${belongsTo} (${size(configItems.data)})`}
     key={belongsTo}
     label={
-      size(configItems.data) ? (
-        <ButtonGroup>
-          <Button
-            onClick={() => setGrouped((cur) => !cur)}
-            icon={isGrouped ? 'ungroup-objects' : 'group-objects'}
-          >
-            {intl.formatMessage({
-              id: isGrouped ? 'button.show-un-grouped' : 'button.show-grouped',
-            })}
-          </Button>
-        </ButtonGroup>
-      ) : null
+      size(configItems.data)
+        ? [
+            {
+              label: intl.formatMessage({
+                id: isGrouped ? 'button.show-un-grouped' : 'button.show-grouped',
+              }),
+              onClick: () => setGrouped(!isGrouped),
+              icon: isGrouped ? 'GroupLine' : 'Separator',
+            },
+          ]
+        : null
     }
     show
   >

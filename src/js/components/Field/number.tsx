@@ -1,22 +1,21 @@
-import React, { ChangeEvent } from 'react';
-import { InputGroup, ButtonGroup, Button, Classes } from '@blueprintjs/core';
-import useMount from 'react-use/lib/useMount';
+// @ts-nocheck
+import { setupPreviews } from '@previewjs/plugin-react/setup';
+import { ReqoreInput } from '@qoretechnologies/reqore';
+import { ChangeEvent, FunctionComponent } from 'react';
 
-const NumberField = ({ name, onChange, value, default_value, type, fill }) => {
-  // Fetch data on mount
-  useMount(() => {
-    // Populate default value
-    if (value || default_value) {
-      const val = value || default_value;
-      onChange(
-        name,
-        type === 'int' || type === 'number'
-          ? parseInt(val, 10)
-          : parseFloat(val)
-      );
-    }
-  });
+export interface INumberField {
+  fill?: boolean;
+}
 
+const NumberField: FunctionComponent<INumberField & any> = ({
+  name,
+  onChange,
+  value,
+  default_value,
+  type,
+  fill,
+  disabled,
+}) => {
   // When input value changes
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     onChange(
@@ -33,21 +32,23 @@ const NumberField = ({ name, onChange, value, default_value, type, fill }) => {
   };
 
   return (
-    <InputGroup
-      className={fill && Classes.FILL}
+    <ReqoreInput
+      fluid={fill}
+      disabled={disabled}
       value={value ?? default_value ?? ''}
       onChange={handleInputChange}
+      onClearClick={handleResetClick}
+      // @ts-expect-error
       type="number"
-      step={type === 'int' || type === 'number' ? 1 : 0.1}
-      rightElement={
-        (value && value !== '') || value === 0 ? (
-          <ButtonGroup minimal>
-            <Button onClick={handleResetClick} icon={'cross'} />
-          </ButtonGroup>
-        ) : null
-      }
     />
   );
 };
+
+setupPreviews(NumberField, {
+  Basic: {
+    name: 'Basic',
+    value: 23,
+  },
+});
 
 export default NumberField;

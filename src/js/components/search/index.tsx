@@ -1,18 +1,17 @@
 /* @flow */
-import { Button, Classes, ControlGroup, InputGroup } from '@blueprintjs/core';
+import {
+  ReqoreButton,
+  ReqoreControlGroup,
+  ReqoreDropdown,
+  ReqoreInput,
+} from '@qoretechnologies/reqore';
+import { IReqoreDropdownItemProps } from '@qoretechnologies/reqore/dist/components/Dropdown/item';
 import { debounce, includes } from 'lodash';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { injectIntl } from 'react-intl';
-import Dropdown, { Control, Item } from '../dropdown';
 
 class Search extends Component<any, any> {
-  props: {
-    onSearchUpdate: Function;
-    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-    defaultValue?: string;
-    pullLeft?: boolean;
-    searches?: Array<string>;
-  } = this.props;
+  props: any = this.props;
 
   state: {
     query: string;
@@ -47,7 +46,7 @@ class Search extends Component<any, any> {
    * @param {Event} event
    */
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-  handleInputChange: Function = (event: EventHandler): void => {
+  handleInputChange = (event: EventHandler): void => {
     event.persist();
 
     const { value } = event.target;
@@ -83,9 +82,7 @@ class Search extends Component<any, any> {
   };
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-  handleHistoryClick: Function = (event: EventHandler): void => {
-    const query = event.target.textContent;
-
+  handleHistoryClick = (query: string): void => {
     this.setState({
       query,
       history: false,
@@ -94,25 +91,19 @@ class Search extends Component<any, any> {
     this.delayedSearch(query);
   };
 
-  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderHistoryItems: Function = (): Array<React.Element<any>> => {
+  renderHistoryItems = (): IReqoreDropdownItemProps[] => {
     if (!this.props.searches) return null;
 
     const searches: Array<string> = this.props.searches.filter(
       (qry: string): boolean => includes(qry, this.state.query) && this.state.query !== qry
     );
 
-    return searches.map(
-      // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-      (qry: string, index: number) => (
-        <Item
-          key={`${qry}_${index}`}
-          title={qry}
-          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-          onClick={this.handleHistoryClick}
-        />
-      )
-    );
+    console.log(searches);
+
+    return searches.map((qry: string, index: number) => ({
+      label: qry,
+      onClick: () => this.handleHistoryClick(qry),
+    }));
   };
 
   handleRef: Function = (ref: any): void => {
@@ -135,40 +126,27 @@ class Search extends Component<any, any> {
         onSubmit={this.handleFormSubmit}
         className={`${this.props.pullLeft ? '' : 'pull-right'}`}
       >
-        <ControlGroup>
+        <ReqoreControlGroup stack>
           {searches && searches.length !== 0 ? (
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            <Dropdown>
-              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ icon: string; noCaret: true; }' is missing... Remove this comment to see the full error message */}
-              <Control icon="history" noCaret />
-              {this.renderHistoryItems()}
-            </Dropdown>
+            <ReqoreDropdown
+              icon="HistoryLine"
+              items={this.renderHistoryItems()}
+              filterable
+              componentProps={{ flat: true }}
+            />
           ) : null}
-          <InputGroup
-            // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'IRef<HT... Remove this comment to see the full error message
-            inputRef={this.handleRef}
-            type="text"
+          <ReqoreInput
+            autoFocus
+            minimal
+            onClearClick={() => this.handleClearClick()}
             id="search"
-            // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
             onChange={this.handleInputChange}
             value={this.state.query}
-            autoComplete="off"
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type '{ onSearch... Remove this comment to see the full error message
             placeholder={this.props.intl.formatMessage({ id: 'component.search' })}
-            rightElement={
-              this.state.query && (
-                <Button
-                  className={Classes.MINIMAL}
-                  type="button"
-                  icon="cross"
-                  // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
-                  onClick={this.handleClearClick}
-                />
-              )
-            }
           />
-          <Button type="submit" icon="search" />
-        </ControlGroup>
+          {/* @ts-expect-error */}
+          <ReqoreButton flat type="submit" icon="SearchLine" />
+        </ReqoreControlGroup>
       </form>
     );
   }

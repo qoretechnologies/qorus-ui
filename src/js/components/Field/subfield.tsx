@@ -1,63 +1,92 @@
-import { Button, Icon } from '@blueprintjs/core';
-import React from 'react';
+import { ReqoreMessage, ReqorePanel } from '@qoretechnologies/reqore';
+import { IReqorePanelAction } from '@qoretechnologies/reqore/dist/components/Panel';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
+import Spacer from '../Spacer';
 
 export interface ISubFieldProps {
   title?: string;
   desc?: string;
   children: any;
+  subtle?: boolean;
   onRemove?: () => any;
+  detail?: string;
+  isValid?: boolean;
 }
 
-const StyledSubFieldTitle = styled.h4`
-  margin: 0 0 5px 0;
+export const StyledSubFieldMarkdown: any = styled.div`
+  display: 'inline-block';
 
-  &:not(:first-child) {
-    margin-top: 10px;
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  p:first-child {
+    margin-top: 0;
   }
 `;
 
-const StyledSubFieldDesc = styled.p`
-  padding: 0;
-  margin: 5px 0 10px 0;
-  color: #a9a9a9;
-  font-size: 12px;
+const SubField: React.FC<any> = ({
+  title,
+  desc,
+  children,
+  subtle,
+  onRemove,
+  detail,
+  isValid,
+  defaultShowInfo,
+}) => {
+  const [showInfo, setShowInfo] = useState<boolean>(defaultShowInfo);
 
-  .bp3-icon {
-    margin-right: 3px;
-    vertical-align: text-top;
+  let actions: IReqorePanelAction[] = onRemove
+    ? [{ onClick: onRemove, icon: 'DeleteBin6Line' }]
+    : [];
+
+  if (desc || detail) {
+    actions.unshift({
+      onClick: () => setShowInfo(!showInfo),
+      icon: showInfo ? 'InformationFill' : 'InformationLine',
+      intent: showInfo ? 'info' : undefined,
+    });
   }
-`;
 
-const SubField: React.FC<ISubFieldProps> = ({ title, desc, children, onRemove }) => (
-  <>
-    {title && (
-      <StyledSubFieldTitle>
-        {title}{' '}
-        {onRemove ? (
-          <Button
-            style={{ verticalAlign: 'sub' }}
-            minimal
-            icon="trash"
-            onClick={onRemove}
-            intent="danger"
-          />
-        ) : (
-          ''
-        )}
-      </StyledSubFieldTitle>
-    )}
-    {desc && (
-      <StyledSubFieldDesc>
-        <Icon icon="info-sign" iconSize={12.5} style={{ display: 'inline-block' }} />{' '}
-        <div style={{ display: 'inline-block' }}>
-          <ReactMarkdown>{desc}</ReactMarkdown>
-        </div>
-      </StyledSubFieldDesc>
-    )}
-    {children}
-  </>
-);
+  return (
+    <>
+      {title && (
+        <ReqorePanel
+          flat
+          padded
+          rounded
+          label={title}
+          actions={actions}
+          intent={isValid === false ? 'danger' : undefined}
+          collapsible
+          unMountContentOnCollapse={false}
+        >
+          {showInfo && (desc || detail) ? (
+            <>
+              <ReqorePanel flat rounded padded>
+                <ReqoreMessage
+                  intent="muted"
+                  inverted
+                  size="small"
+                  flat
+                  title={detail ? `<${detail} />` : undefined}
+                >
+                  <StyledSubFieldMarkdown>
+                    <ReactMarkdown>{desc}</ReactMarkdown>
+                  </StyledSubFieldMarkdown>
+                </ReqoreMessage>
+              </ReqorePanel>
+              <Spacer size={10} />
+            </>
+          ) : null}
+          {children}
+        </ReqorePanel>
+      )}
+    </>
+  );
+};
 
 export default SubField;

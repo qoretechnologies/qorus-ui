@@ -27,7 +27,7 @@ const FSMDiagramWrapper: React.FC<IFSMDiagramWrapperProps> = ({
       height="100%"
       startX={0}
       startY={0}
-      onPan={({ x, y }) => setPan(x, y)}
+      onPan={({ x, y }) => setPan?.(x, y)}
       enableDragging={isHoldingShiftKey}
       zoom={zoom}
       items={items}

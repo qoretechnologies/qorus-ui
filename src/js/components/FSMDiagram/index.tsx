@@ -12,7 +12,9 @@ import styled from 'styled-components';
 import TinyGrid from '../../../img/tiny_grid.png';
 import modal from '../../hocomponents/modal';
 import actions from '../../store/api/actions';
+import DataproviderSelector from '../DataproviderSelector';
 import Loader from '../loader';
+import Spacer from '../Spacer';
 import FSMDiagramWrapper from './diagramWrapper';
 import StateModal from './modal';
 import FSMState from './state';
@@ -94,7 +96,7 @@ export interface IFSMState {
   'input-type'?: any;
   'output-type'?: any;
   name?: string;
-  type: 'state' | 'fsm';
+  type: 'state' | 'fsm' | 'block' | 'if';
   desc: string;
 }
 
@@ -172,6 +174,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
     width: 0,
     height: 0,
   });
+  const [openedState, setOpenedState] = useState(null);
 
   useEffect(() => {
     load(fsmName);
@@ -357,6 +360,25 @@ const FSMView: React.FC<IFSMViewProps> = ({
 
   return (
     <>
+      {openedState && <StateModal onClose={() => setOpenedState(null)} {...openedState} />}
+      {fsm.input_type && (
+        <DataproviderSelector
+          value={fsm?.['input_type']}
+          name="input_type"
+          label="FSM Input type"
+          readOnly
+        />
+      )}
+      <Spacer size={10} />
+      {fsm.output_type && (
+        <DataproviderSelector
+          value={fsm?.['output_type']}
+          name="input_type"
+          label="FSM Output type"
+          readOnly
+        />
+      )}
+      <Spacer size={10} />
       <StyledDiagramWrapper ref={wrapperRef} id="fsm-diagram">
         <FSMDiagramWrapper
           wrapperDimensions={wrapperDimensions}
@@ -377,14 +399,11 @@ const FSMView: React.FC<IFSMViewProps> = ({
                 key={id}
                 {...state}
                 onClick={(id) => {
-                  openModal(
-                    <StateModal
-                      onClose={closeModal}
-                      fsmId={fsm.id}
-                      stateId={id}
-                      statesPath={`${statesPath || ''}states`}
-                    />
-                  );
+                  setOpenedState({
+                    fsmId: fsm.id,
+                    stateId: id,
+                    statesPath: `${statesPath || ''}states`,
+                  });
                 }}
                 id={id}
                 selected={selectedState === id}

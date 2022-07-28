@@ -169,8 +169,10 @@ export default compose(
         let type;
         let item;
         // Find the FSM or the method in the data
-        const maybeFSM = this.props.data.fsm.find((fsm) => fsm.name === codeItemQuery);
-        const maybeMethod = this.props.data.methods.find((method) => method.name === codeItemQuery);
+        const maybeFSM = this.props.data.fsm?.find((fsm) => fsm.name === codeItemQuery);
+        const maybeMethod = this.props.data.methods?.find(
+          (method) => method.name === codeItemQuery
+        );
 
         type = maybeFSM ? 'fsm' : maybeMethod ? 'method' : null;
         item = maybeFSM || maybeMethod;

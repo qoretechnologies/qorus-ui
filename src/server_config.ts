@@ -8,7 +8,7 @@ const getWindow = () => {
 
 console.log(process.env);
 
-const API_PORT: string = process.env.REACT_APP_API_PORT || getWindow()?.location?.port;
+const API_PORT: string = process.env.REACT_APP_API_PORT || getWindow()?.location?.port || '8092';
 export const LOCAL_PORT: number | string = process.env.REACT_APP_LOCAL_PORT || 3004;
 export const LOCAL_HOST: string = process.env.REACT_APP_LOCAL_HOST || 'localhost';
 const PROTO: string = process.env.REACT_APP_PROTO || 'https';

@@ -1,62 +1,64 @@
 import { Button, ButtonGroup, ControlGroup } from '@blueprintjs/core';
 import size from 'lodash/size';
-import React from 'react';
+import { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import AutoField from './auto';
 import SelectField from './select';
+
+type IPair = {
+  id: number;
+  value: string;
+  name: string;
+};
 
 export const StyledPairField = styled.div`
   margin-bottom: 10px;
 `;
 
-const OptionHashField = ({
+const OptionHashField: FunctionComponent<any> = ({
   name,
   onChange,
   value = [{ id: 1, value: '', name: '' }],
   items,
-  t,
   options,
 }) => {
-  const changePairData = (index, key, val) => {
+  const changePairData: (index: number, key: string, val: any) => void = (index, key, val) => {
     const newValue = [...value];
     // Get the pair based on the index
-    const pair = newValue[index];
+    const pair: IPair = newValue[index];
     // Update the field
     pair[key] = val;
     // Update the pairs
     onChange(name, newValue);
   };
 
-  const handleAddClick = () => {
+  const handleAddClick: () => void = () => {
     onChange(name, [...value, { id: size(value) + 1, value: '', name: '' }]);
   };
 
-  const handleRemoveClick = (id) => {
+  const handleRemoveClick: (id: number) => void = (id) => {
     // Remove the selected pair
     onChange(
       name,
-      value.filter((_p, index) => id !== index)
+      value.filter((_p: IPair, index: number) => id !== index)
     );
   };
 
-  const getNameType = (name) => {
+  const getNameType: (name: string) => string = (name) => {
     // Find the option and return it's type
     return options[name].type;
   };
 
   // Filter the items
-  const filteredItems = items.filter(
-    (item) => !value.find((val) => val.name === item.name)
-  );
+  const filteredItems = items.filter((item) => !value.find((val) => val.name === item.name));
 
   return (
     <>
-      {value.map((pair, index: number) => (
+      {value.map((pair: IPair, index: number) => (
         <StyledPairField key={pair.name}>
           <div>
             <ControlGroup fill>
               <Button text={`${index + 1}.`} />
-              { /* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; value: string; defaultItems:... Remove this comment to see the full error message */ }
               <SelectField
                 name="name"
                 value={pair.name}
@@ -75,15 +77,10 @@ const OptionHashField = ({
                     changePairData(index, fieldName, value);
                   }}
                   fill
-                  t={t}
                 />
               ) : null}
               {index !== 1 && (
-                <Button
-                  icon={'trash'}
-                  intent="danger"
-                  onClick={() => handleRemoveClick(index)}
-                />
+                <Button icon={'trash'} intent="danger" onClick={() => handleRemoveClick(index)} />
               )}
             </ControlGroup>
           </div>
@@ -91,7 +88,7 @@ const OptionHashField = ({
       ))}
       {size(options) !== 0 && size(value) !== size(options) && (
         <ButtonGroup fill>
-          <Button text={t('AddNew')} icon={'add'} onClick={handleAddClick} />
+          <Button text={'Add New'} icon={'add'} onClick={handleAddClick} />
         </ButtonGroup>
       )}
     </>
