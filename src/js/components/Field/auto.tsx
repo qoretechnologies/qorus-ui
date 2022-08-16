@@ -148,6 +148,7 @@ const AutoField: FunctionComponent<any> = ({
       case 'softstring':
       case 'data':
       case 'binary':
+      case 'file-as-string':
         return (
           <StringField
             fill
