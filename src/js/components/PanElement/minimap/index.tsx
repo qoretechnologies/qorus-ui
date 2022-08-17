@@ -61,7 +61,17 @@ export const getStateStyle = (type, toolbar?: boolean) => {
       `;
     case 'if':
       if (toolbar) {
-        return null;
+        return css`
+          width: 20px;
+          height: 20px;
+          transform: rotateZ(45deg);
+          transform-origin: top left;
+          margin-left: 20px;
+
+          span:first-child {
+            transform: rotateZ(-45deg);
+          }
+        `;
       }
 
       return css`

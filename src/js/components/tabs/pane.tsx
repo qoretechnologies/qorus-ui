@@ -1,3 +1,3 @@
-const Pane = ({ children }) => children;
+const Pane = ({ children }: any) => children;
 
 export default Pane;

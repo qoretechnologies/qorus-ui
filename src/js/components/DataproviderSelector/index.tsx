@@ -27,6 +27,7 @@ export interface IConnectorFieldProps {
   recordType?: TRecordType;
   readOnly?: boolean;
   label?: string;
+  isCollapsed?: boolean;
 }
 
 export type TProviderTypeSupports = {
@@ -207,6 +208,7 @@ const ConnectorField: React.FC<IConnectorFieldProps> = ({
   recordType,
   readOnly,
   label,
+  isCollapsed,
 }) => {
   const [optionProvider, setOptionProvider] = useState<IProviderType | null>(
     maybeBuildOptionProvider(value)
@@ -307,7 +309,13 @@ const ConnectorField: React.FC<IConnectorFieldProps> = ({
 
   return (
     <div>
-      <ReqorePanel collapsible padded label={label || 'Select data provider'} rounded>
+      <ReqorePanel
+        collapsible
+        padded
+        label={label || 'Select data provider'}
+        rounded
+        isCollapsed={isCollapsed}
+      >
         <Provider
           isConfigItem={isConfigItem}
           nodes={nodes}

@@ -63,7 +63,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true react-scripts start",
+    "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=84.42.146.147 HTTPS=true react-scripts start",
     "build:dev": "./node_modules/.bin/dotenv -e .env.development react-scripts build",
     "build": "./node_modules/.bin/dotenv -e .env.production react-scripts build",
     "test": "react-scripts test",

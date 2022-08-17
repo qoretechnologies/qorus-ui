@@ -80,6 +80,8 @@ const ServicesDetail: Function = ({
     tabs = insertAtIndex(tabs, 3, 'API Manager');
   }
 
+  console.log('data', data);
+
   return (
     <Flex>
       <Headbar>
@@ -154,7 +156,9 @@ export default compose(
   })),
   // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
   mapProps(({ service, methods, ...rest }: any): any => ({
-    data: service.lib ? Object.assign(service.lib, { methods }) : {},
+    data: service.lib
+      ? Object.assign(service.lib, { methods, fsm_triggers: service.fsm_triggers || {} })
+      : {},
     service,
     methods,
     ...rest,

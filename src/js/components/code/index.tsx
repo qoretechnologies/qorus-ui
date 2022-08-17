@@ -1,5 +1,7 @@
 /* @flow */
 import { AnchorButton } from '@blueprintjs/core';
+import { ReqoreMessage, ReqoreTag, ReqoreTagGroup } from '@qoretechnologies/reqore';
+import map from 'lodash/map';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -34,107 +36,129 @@ const Code: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props) => (
-  <Flex className="code" flexFlow="row">
-    <Flex className="code-list" scrollY>
-      {Object.keys(data).map(
-        // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-        (name: string, index: number) => (
-          <Section
-            key={name}
-            name={intl.formatMessage({ id: name })}
-            items={data[name]}
-            onItemClick={handleItemClick}
-            selected={selected}
-          />
-        )
-      )}
-    </Flex>
-    <Flex className="code-source">
-      {selected ? (
-        <Flex>
-          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
-          {selected.type &&
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-          selected.type !== 'code' &&
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-          selected.type !== 'methods' ? (
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            <Tabs
-              active="code"
-              rightElement={
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-                selected.type === 'classes' && selected.item && isFeatureEnabled('WEB_IDE') ? (
-                  <AnchorButton
-                    icon="code-block"
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                    href={`${WEB_IDE_URL}new/class/${selected.item.id}?origin=${window.location.href}`}
-                  >
-                    <FormattedMessage id="button.edit-class" />
-                  </AnchorButton>
-                ) : undefined
-              }
-            >
-              {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
-              <Pane name="Code">
-                <CodeTab selected={selected} />
-              </Pane>
-              {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
-              <Pane name="Info">
-                <InfoTable
-                  object={{
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                    author: selected.item.author,
-                    source:
+Props) =>
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+  console.log(data, selected) || (
+    <Flex className="code" flexFlow="row">
+      <Flex className="code-list" scrollY>
+        {Object.keys(data)
+          .filter((item) => item !== 'fsm_triggers')
+          .map(
+            // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
+            (name: string, index: number) => (
+              <Section
+                key={name}
+                name={intl.formatMessage({ id: name })}
+                items={data[name]}
+                onItemClick={handleItemClick}
+                selected={selected}
+              />
+            )
+          )}
+      </Flex>
+      <Flex className="code-source">
+        {selected ? (
+          <Flex>
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+            {selected.type &&
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+            selected.type !== 'code' &&
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+            selected.type !== 'methods' ? (
+              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+              <Tabs
+                active="code"
+                rightElement={
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                  selected.type === 'classes' && selected.item && isFeatureEnabled('WEB_IDE') ? (
+                    <AnchorButton
+                      icon="code-block"
                       // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                      selected.item.source &&
+                      href={`${WEB_IDE_URL}new/class/${selected.item.id}?origin=${window.location.href}`}
+                    >
+                      <FormattedMessage id="button.edit-class" />
+                    </AnchorButton>
+                  ) : undefined
+                }
+              >
+                {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+                <Pane name="Code">
+                  <CodeTab selected={selected} />
+                </Pane>
+                {selected.type === 'fsm' && (
+                  <Pane name="Triggers">
+                    {data.fsm_triggers && data.fsm_triggers[selected.item.name] ? (
+                      data.fsm_triggers[selected.item.name].map((trigger) => (
+                        <>
+                          {map(trigger, (value, key) => (
+                            <ReqoreTagGroup>
+                              <ReqoreTag label={key} intent="warning" />
+                              <ReqoreTag label={value} intent="info" />
+                            </ReqoreTagGroup>
+                          ))}
+                        </>
+                      ))
+                    ) : (
+                      <ReqoreMessage intent="warning">No triggers found</ReqoreMessage>
+                    )}
+                  </Pane>
+                )}
+                {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+                <Pane name="Info">
+                  <InfoTable
+                    object={{
                       // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                      `${selected.item.source}:${selected.item.offset || ''}`,
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                    description: selected.item.description,
-                    tags:
+                      author: selected.item.author,
+                      source:
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                        selected.item.source &&
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                        `${selected.item.source}:${selected.item.offset || ''}`,
                       // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                      selected.item.tags &&
-                      // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                      Object.keys(selected.item.tags).length,
-                  }}
-                />
-              </Pane>
-              {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
-              <Pane name="Releases">
-                <ReleasesTab
-                  // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                  component={selected.item.name}
-                  location={location}
-                  compact
-                />
-              </Pane>
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'. */}
-              {selected.item.requires && selected.item.requires.length > 0 ? (
-                // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
-                <Pane name="Dependencies">
-                  <DependenciesList
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'classes' does not exist on type 'Object'... Remove this comment to see the full error message
-                    classes={data.classes}
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
-                    dependenciesList={selected.item.requires}
+                      description: selected.item.description,
+                      tags:
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                        selected.item.tags &&
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                        Object.keys(selected.item.tags).length,
+                    }}
                   />
                 </Pane>
-              ) : null}
-            </Tabs>
-          ) : (
-            <CodeTab selected={selected} />
-          )}
-        </Flex>
-      ) : (
-        <Alert bsStyle="info">
-          {' '}
-          <FormattedMessage id="component.please-select-item" />{' '}
-        </Alert>
-      )}
+                {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+                <Pane name="Releases">
+                  <ReleasesTab
+                    // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                    component={selected.item.name}
+                    location={location}
+                    compact
+                  />
+                </Pane>
+                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'. */}
+                {selected.item.requires && selected.item.requires.length > 0 ? (
+                  // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+                  <Pane name="Dependencies">
+                    <DependenciesList
+                      // @ts-ignore ts-migrate(2339) FIXME: Property 'classes' does not exist on type 'Object'... Remove this comment to see the full error message
+                      classes={data.classes}
+                      // @ts-ignore ts-migrate(2339) FIXME: Property 'item' does not exist on type 'Object'.
+                      dependenciesList={selected.item.requires}
+                    />
+                  </Pane>
+                ) : null}
+              </Tabs>
+            ) : (
+              <CodeTab selected={selected} />
+            )}
+          </Flex>
+        ) : (
+          <Alert bsStyle="info">
+            {' '}
+            <FormattedMessage id="component.please-select-item" />{' '}
+          </Alert>
+        )}
+      </Flex>
     </Flex>
-  </Flex>
-);
+  );
 
 export default compose(
   withState('selected', 'setSelected', ({ selected, codeItemQuery }) => selected || null),

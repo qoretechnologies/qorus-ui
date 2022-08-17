@@ -34,12 +34,17 @@ import ServiceTabs from '../tabs';
   ...rest,
 }))
 // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
-@mapProps(({ service, methods, ...rest }: any): any => ({
-  data: service.lib ? Object.assign(service.lib, { methods }) : {},
-  service,
-  methods,
-  ...rest,
-}))
+@mapProps(({ service, methods, ...rest }: any): any =>
+  // @ts-ignore go fuck yourself pls
+  ({
+    data: service.lib
+      ? Object.assign(service.lib, { methods, fsm_triggers: service.fsm_triggers || {} })
+      : {},
+    service,
+    methods,
+    ...rest,
+  })
+)
 // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
 @mapProps(({ data, service, ...rest }: any): any => ({
   data: service.class_based

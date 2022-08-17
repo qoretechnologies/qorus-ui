@@ -1,6 +1,6 @@
-import { ReqoreButton, ReqoreControlGroup } from '@qoretechnologies/reqore';
+import { ReqoreButton, ReqoreControlGroup, ReqoreMessage } from '@qoretechnologies/reqore';
 import { reduce, size } from 'lodash';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import settings from '../../settings';
 import { get } from '../../store/api/utils';
 import { TRecordType } from '../DataproviderSelector';
@@ -28,6 +28,7 @@ export const RecordQueryArgs = ({
   readOnly,
 }: ISearchArgsProps) => {
   const [options, setOptions] = React.useState<any>(undefined);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -35,6 +36,10 @@ export const RecordQueryArgs = ({
       setOptions(undefined);
       // Fetch the fields and operators
       const fieldsData = await get(`${settings.REST_BASE_URL}/${url}/record`);
+      // Check if there is an error
+      if (fieldsData.err) {
+        setError(fieldsData);
+      }
       // Set the data
       setOptions(fieldsData);
     })();
@@ -43,6 +48,16 @@ export const RecordQueryArgs = ({
   if (!size(options)) {
     return <p>{'Loading arguments...'}</p>;
   }
+
+  if (error) {
+    return (
+      <ReqoreMessage intent="danger" inverted>
+        {error.desc}
+      </ReqoreMessage>
+    );
+  }
+
+  console.log(options);
 
   const transformedOptions: IOptionsSchema =
     options &&
