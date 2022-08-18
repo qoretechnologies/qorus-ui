@@ -1,27 +1,47 @@
-import {
-  Button,
-  ButtonGroup,
-  Callout,
-  Classes,
-  Dialog,
-  Spinner as _Spinner,
-} from '@blueprintjs/core';
-import { omit } from 'lodash';
+import { Button, Callout, Classes } from '@blueprintjs/core';
+import { ReqoreButton, ReqoreControlGroup } from '@qoretechnologies/reqore';
+import { cloneDeep, omit } from 'lodash';
 import map from 'lodash/map';
 import nth from 'lodash/nth';
 import size from 'lodash/size';
-import { useCallback, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDebounce } from 'react-use';
 import styled, { css } from 'styled-components';
-import SelectField from '../../components/Field/select';
-import String from '../../components/Field/string';
-import { validateField } from '../../components/Field/validations';
+import settings from '../../settings';
 import { get } from '../../store/api/utils';
+import CustomDialog from '../Field/CustomDialog';
+import SelectField from '../Field/select';
+import String from '../Field/string';
+import { validateField } from '../Field/validations';
 
-// FIXME: yeah this is a weird thing happening with TypeScript
-const Spinner: any = _Spinner as any;
+export interface IProviderProps {
+  type: 'inputs' | 'outputs' | 'event' | 'input-output' | 'condition';
+  provider: string;
+  setProvider: any;
+  nodes: any[];
+  setChildren: any;
+  isLoading: boolean;
+  setIsLoading: any;
+  record?: any;
+  setRecord?: any;
+  setFields?: any;
+  clear?: any;
+  title?: string;
+  setOptionProvider?: any;
+  hide?: any;
+  style: any;
+  isConfigItem?: boolean;
+  requiresRequest?: boolean;
+  isRecordSearch?: boolean;
+  options?: { [key: string]: any };
+  optionsChanged?: boolean;
+  setMapperKeys?: any;
+  compact?: boolean;
+  canSelectNull?: boolean;
+  readOnly?: boolean;
+}
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{ compact?: boolean; hasTitle: boolean }>`
   margin-bottom: 10px;
   ${({ compact, hasTitle }) =>
     compact
@@ -45,17 +65,19 @@ const StyledHeader = styled.h3`
   text-align: center;
 `;
 
-export let providers = {
+export const providers: any = {
   type: {
     name: 'type',
-    url: 'api/latest/dataprovider/types',
+    url: 'dataprovider/types',
     suffix: '',
     recordSuffix: '?action=type',
     type: 'type',
+    withDetails: true,
+    desc: 'Data type and custom record descriptions',
   },
   connection: {
     name: 'connection',
-    url: 'api/latest/remote/user',
+    url: 'remote/user',
     filter: 'has_provider',
     namekey: 'name',
     desckey: 'desc',
@@ -63,10 +85,11 @@ export let providers = {
     recordSuffix: '/record',
     requiresRecord: true,
     type: 'connection',
+    desc: 'Qorus user connections; access a data provider through a user connection',
   },
   remote: {
     name: 'remote',
-    url: 'api/latest/remote/qorus',
+    url: 'remote/qorus',
     filter: 'has_provider',
     namekey: 'name',
     desckey: 'desc',
@@ -74,10 +97,11 @@ export let providers = {
     recordSuffix: '/record',
     requiresRecord: true,
     type: 'remote',
+    desc: 'Qorus to Qorus remote connections; access a data provider through a remote Qorus instances (remote datasources and remote Qorus APIs)',
   },
   datasource: {
     name: 'datasource',
-    url: 'api/latest/remote/datasources',
+    url: 'remote/datasources',
     filter: 'has_provider',
     namekey: 'name',
     desckey: 'desc',
@@ -85,10 +109,11 @@ export let providers = {
     recordSuffix: '/record',
     requiresRecord: true,
     type: 'datasource',
+    desc: 'Qorus database connections; access record-based data providers through a local datasource',
   },
   factory: {
     name: 'factory',
-    url: 'api/latest/dataprovider/factories',
+    url: 'dataprovider/factories',
     filter: null,
     inputFilter: null,
     outputFilter: null,
@@ -99,12 +124,13 @@ export let providers = {
     requiresRecord: true,
     suffixRequiresOptions: true,
     type: 'factory',
+    desc: 'Data provider factories for creating data providers from options',
   },
 };
 
 export const configItemFactory = {
   name: 'factory',
-  url: 'api/latest/dataprovider/factories',
+  url: 'dataprovider/factories',
   filter: null,
   inputFilter: null,
   outputFilter: null,
@@ -115,6 +141,7 @@ export const configItemFactory = {
   requiresRecord: false,
   suffixRequiresOptions: true,
   type: 'factory',
+  desc: 'Data provider factories for creating data providers from options',
 };
 
 const MapperProvider = ({
@@ -138,10 +165,17 @@ const MapperProvider = ({
   style,
   isConfigItem,
   options,
+  requiresRequest,
+  isRecordSearch,
   optionsChanged,
-}) => {
+  onReset,
+  optionProvider,
+  recordType,
+  readOnly,
+}: any) => {
   const [wildcardDiagram, setWildcardDiagram] = useState(null);
   const [optionString, setOptionString] = useState('');
+  const [descriptions, setDescriptions] = useState<string[]>([]);
 
   /* When the options hash changes, we want to update the query string. */
   useDebounce(
@@ -158,10 +192,21 @@ const MapperProvider = ({
     [options]
   );
 
-  // Omit type and factory from the list of providers if is config item
-  providers = isConfigItem
-    ? { ...omit(providers, ['type', 'factory']), factory: configItemFactory }
-    : providers;
+  let realProviders = cloneDeep(providers);
+
+  // Omit type and factory from the list of realProviders if is config item
+  if (isConfigItem) {
+    realProviders = omit(realProviders, ['type', 'factory']);
+    realProviders.factory = configItemFactory;
+  }
+
+  if (requiresRequest) {
+    realProviders = omit(realProviders, ['datasource', 'type']);
+  }
+
+  if (recordType) {
+    realProviders = omit(realProviders, ['type']);
+  }
 
   const handleProviderChange = (provider) => {
     setProvider((current) => {
@@ -172,10 +217,11 @@ const MapperProvider = ({
         // Set loading
         setIsLoading(true);
         // Select the provider data
-        const { url, filter, inputFilter, outputFilter } = providers[provider];
+        const { url, filter, inputFilter, outputFilter, withDetails } = realProviders[provider];
         // Get the data
-        let data = await get(url);
-        console.log(data);
+        let data = await get(
+          `${settings.REST_BASE_URL}/${url}${withDetails ? '/childDetails' : ''}`
+        );
         // Remove loading
         setIsLoading(false);
         // Filter unwanted data if needed
@@ -192,16 +238,28 @@ const MapperProvider = ({
           }
         }
         // Save the children
-        let children = data.children || data;
+        const children = data.children || data;
         // Add new child
         setChildren([
           {
-            values: children.map((child) => ({
-              name: providers[provider].namekey ? child[providers[provider].namekey] : child,
-              desc: '',
-              url,
-              suffix: providers[provider].suffix,
-            })),
+            values: children.map((child) => {
+              if (typeof child === 'string') {
+                return {
+                  name: realProviders[provider].namekey
+                    ? child[realProviders[provider].namekey]
+                    : child,
+                  desc: '',
+                  url,
+                  suffix: realProviders[provider].suffix,
+                };
+              }
+
+              return {
+                ...child,
+                url,
+                suffix: realProviders[provider].suffix,
+              };
+            }),
             value: null,
           },
         ]);
@@ -221,18 +279,30 @@ const MapperProvider = ({
     clear && clear(true);
     // Set loading
     setIsLoading(true);
+    const newSuffix = `${suffix}/childDetails`;
     // Build the suffix
-    let suffixString = providers[provider].suffixRequiresOptions
+    let suffixString = realProviders[provider].suffixRequiresOptions
       ? optionString && optionString !== '' && size(options)
-        ? `${suffix}?${optionString}`
+        ? `${newSuffix}?${optionString}`
         : itemIndex === 1
         ? ''
-        : suffix
-      : suffix;
+        : newSuffix
+      : newSuffix;
     // Fetch the data
-    const data = await get(`${url}/${value}${suffixString}`);
+    const data = await get(`${settings.REST_BASE_URL}/${url}/${value}${suffixString}`);
     // Reset loading
     setIsLoading(false);
+
+    /* Setting the state of the descriptions hash. */
+    if (data.desc) {
+      // Add the description to the descriptions hash
+      setDescriptions((current): string[] => {
+        console.log(itemIndex, data.desc);
+        const newData = [...current];
+        newData[itemIndex] = data.desc;
+        return newData;
+      });
+    }
     // Add new child
     setChildren((current) => {
       // Update this item
@@ -252,45 +322,59 @@ const MapperProvider = ({
           return newItem;
         })
         .filter((item) => item);
-      if (data.has_type || isConfigItem) {
+
+      if (
+        data.has_type ||
+        isConfigItem ||
+        provider === 'factory' ||
+        (requiresRequest && data.supports_request)
+      ) {
         (async () => {
           setIsLoading(true);
           if (type === 'outputs' && data.mapper_keys) {
             // Save the mapper keys
             setMapperKeys && setMapperKeys(data.mapper_keys);
           }
-
-          suffixString = providers[provider].suffixRequiresOptions
+          const newSuffix = `${suffix}/childDetails`;
+          suffixString = realProviders[provider].suffixRequiresOptions
             ? optionString && optionString !== '' && size(options)
-              ? `${suffix}${providers[provider].recordSuffix}?${optionString}${
+              ? `${suffix}${realProviders[provider].recordSuffix}?${optionString}${
                   type === 'outputs' ? '&soft=true' : ''
                 }`
-              : `${suffix}`
-            : `${suffix}${providers[provider].recordSuffix}`;
-          console.log(url, value, suffixString);
+              : `${newSuffix}`
+            : `${suffix}${realProviders[provider].recordSuffix}`;
+
           // Fetch the record
-          const record = await get(`${url}/${value}${suffixString}`);
+          const record = await get(`${settings.REST_BASE_URL}/${url}/${value}${suffixString}`);
           // Remove loading
           setIsLoading(false);
           // Save the name by pulling the 3rd item from the split
           // url (same for every provider type)
-          const name = `${url}/${value}`.split('/')[4];
+          const name = `${url}/${value}`.split('/')[2];
           // Set the provider option
           setOptionProvider({
-            type: providers[provider].type,
+            type: realProviders[provider].type,
             name,
-            can_manage_fields: record.can_manage_fields,
+            is_api_call: requiresRequest,
+            supports_request: data.supports_request,
+            supports_read: data.supports_read,
+            supports_update: data.supports_update,
+            supports_create: data.supports_create,
+            supports_delete: data.supports_delete,
+            can_manage_fields: record?.can_manage_fields,
+            descriptions: [...(optionProvider?.descriptions || []), ...descriptions, data.desc],
             path: `${url}/${value}`
               .replace(`${name}`, '')
-              .replace(`${providers[provider].url}/`, '')
+              .replace(`${realProviders[provider].url}/`, '')
               .replace('provider/', ''),
             options,
           });
           if (data.has_type || isConfigItem) {
             // Set the record data
-            setRecord && setRecord(!providers[provider].requiresRecord ? record.fields : record);
+            setRecord &&
+              setRecord(!realProviders[provider].requiresRecord ? record.fields : record);
+            //
           }
-          //
         })();
       }
       // If this provider has children
@@ -300,16 +384,26 @@ const MapperProvider = ({
         return [
           ...newItems,
           {
-            values: data.children.map((child) => ({
-              name: child,
-              desc: '',
-              url: `${url}/${value}${suffix}`,
-              suffix: '',
-            })),
+            values: data.children.map((child) => {
+              if (typeof child === 'string') {
+                return {
+                  name: child,
+                  desc: 'No description provided',
+                  url: `${url}/${value}${suffix}`,
+                  suffix: '',
+                };
+              }
+
+              return {
+                ...child,
+                url: `${url}/${value}${suffix}`,
+                suffix: '',
+              };
+            }),
             value: null,
           },
         ];
-      } else if (data.supports_request) {
+      } else if (data.supports_request && !requiresRequest) {
         // Return the updated items and add
         // the new item
         return [
@@ -338,16 +432,21 @@ const MapperProvider = ({
         if (data.fields) {
           // Save the name by pulling the 3rd item from the split
           // url (same for every provider type)
-          const name = `${url}/${value}`.split('/')[4];
+          const name = `${url}/${value}`.split('/')[2];
           // Set the provider option
           setOptionProvider({
-            type: providers[provider].type,
+            type: realProviders[provider].type,
             can_manage_fields: data.can_manage_fields,
+            supports_read: data.supports_read,
+            supports_update: data.supports_update,
+            supports_create: data.supports_create,
+            supports_delete: data.supports_delete,
             name,
+            descriptions: [...(optionProvider?.descriptions || []), ...descriptions, data.desc],
             subtype: value === 'request' || value === 'response' ? value : undefined,
             path: `${url}/${value}`
               .replace(`${name}`, '')
-              .replace(`${providers[provider].url}/`, '')
+              .replace(`${realProviders[provider].url}/`, '')
               .replace('provider/', '')
               .replace('request', '')
               .replace('response', ''),
@@ -356,40 +455,46 @@ const MapperProvider = ({
           setRecord && setRecord(data.fields);
         }
         // Check if there is a record
-        else if (isConfigItem || data.has_record || !providers[provider].requiresRecord) {
+        else if (isConfigItem || data.has_record || !realProviders[provider].requiresRecord) {
           (async () => {
             setIsLoading(true);
             if (type === 'outputs' && data.mapper_keys) {
               // Save the mapper keys
               setMapperKeys && setMapperKeys(data.mapper_keys);
             }
-            suffixString = providers[provider].suffixRequiresOptions
+            suffixString = realProviders[provider].suffixRequiresOptions
               ? optionString && optionString !== '' && size(options)
-                ? `${suffix}${providers[provider].recordSuffix}?${optionString}${
+                ? `${suffix}${realProviders[provider].recordSuffix}?${optionString}${
                     type === 'outputs' ? '&soft=true' : ''
                   }`
                 : suffix
-              : `${suffix}${providers[provider].recordSuffix}`;
+              : `${suffix}${realProviders[provider].recordSuffix}`;
             // Fetch the record
-            const record = await get(`${url}/${value}${suffix}${suffixString}`);
+            const record = await get(`${settings.REST_BASE_URL}/${url}/${value}${suffixString}`);
             // Remove loading
             setIsLoading(false);
             // Save the name by pulling the 3rd item from the split
             // url (same for every provider type)
-            const name = `${url}/${value}`.split('/')[4];
+            const name = `${url}/${value}`.split('/')[2];
             // Set the provider option
             setOptionProvider({
-              type: providers[provider].type,
+              type: realProviders[provider].type,
               name,
+              supports_read: data.supports_read,
+              supports_update: data.supports_update,
+              supports_create: data.supports_create,
+              supports_delete: data.supports_delete,
               can_manage_fields: record.can_manage_fields,
+              descriptions: [...(optionProvider?.descriptions || []), ...descriptions, data.desc],
               path: `${url}/${value}`
                 .replace(`${name}`, '')
-                .replace(`${providers[provider].url}/`, '')
+                .replace(`${realProviders[provider].url}/`, '')
                 .replace('provider/', ''),
               options,
             });
             // Set the record data
-            setRecord && setRecord(!providers[provider].requiresRecord ? record.fields : record);
+            setRecord &&
+              setRecord(!realProviders[provider].requiresRecord ? record.fields : record);
             //
           })();
         }
@@ -399,9 +504,9 @@ const MapperProvider = ({
     });
   };
 
-  const getDefaultItems = useCallback(
+  const getDefaultItems = useMemo(
     () =>
-      map(providers, ({ name }) => ({ name, desc: '' })).filter((prov) =>
+      map(realProviders, ({ name, desc }) => ({ name, desc })).filter((prov) =>
         prov.name === 'null' ? canSelectNull : true
       ),
     []
@@ -410,11 +515,10 @@ const MapperProvider = ({
   return (
     <>
       {wildcardDiagram?.isOpen && (
-        <Dialog title="Wildcard" isOpen isCloseButtonShown={false}>
+        <CustomDialog title={'Wildcard'} isOpen>
           <div className={Classes.DIALOG_BODY}>
-            <Callout intent="primary">{'Replace wildcard'}</Callout>
+            <Callout intent="primary">{'Wildcard Replacement'}</Callout>
             <br />
-            {/* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; onChange: (_name: any, value... Remove this comment to see the full error message */}
             <String
               name="wildcard"
               onChange={(_name, value) => setWildcardDiagram((cur) => ({ ...cur, value }))}
@@ -439,29 +543,27 @@ const MapperProvider = ({
               />
             </div>
           </div>
-        </Dialog>
+        </CustomDialog>
       )}
       <StyledWrapper compact={compact} hasTitle={!!title} style={style}>
         {!compact && <StyledHeader>{title}</StyledHeader>}
         {compact && title && <span>{title}: </span>}{' '}
-        <ButtonGroup>
-          {/* @ts-expect-error ts-migrate(2740) FIXME: Type '{ name: string; disabled: any; defaultItems:... Remove this comment to see the full error message */}
+        <ReqoreControlGroup stack fluid>
           <SelectField
             name={`provider${type ? `-${type}` : ''}`}
-            disabled={isLoading}
-            defaultItems={getDefaultItems()}
+            disabled={readOnly || isLoading}
+            defaultItems={getDefaultItems}
             onChange={(_name, value) => {
               handleProviderChange(value);
             }}
             value={provider}
           />
           {nodes.map((child, index) => (
-            <ButtonGroup>
-              {/* @ts-expect-error ts-migrate(2740) FIXME: Type '{ key: string; name: string; disabled: any; ... Remove this comment to see the full error message */}
+            <>
               <SelectField
                 key={`${title}-${index}`}
                 name={`provider-${type ? `${type}-` : ''}${index}`}
-                disabled={isLoading}
+                disabled={readOnly || isLoading}
                 defaultItems={child.values}
                 onChange={(_name, value) => {
                   // Get the child data
@@ -482,8 +584,10 @@ const MapperProvider = ({
                 value={child.value}
               />
               {index === 0 && optionsChanged ? (
-                <Button
-                  icon="refresh"
+                <ReqoreButton
+                  flat
+                  disabled={readOnly || isLoading}
+                  icon="RefreshLine"
                   intent="success"
                   onClick={() => {
                     // Get the child data
@@ -504,74 +608,69 @@ const MapperProvider = ({
                 >
                   {' '}
                   Apply options{' '}
-                </Button>
+                </ReqoreButton>
               ) : null}
-            </ButtonGroup>
+            </>
           ))}
-          {isLoading && <Spinner size={15} />}
-          {nodes.length > 0 && (
-            <Button
-              intent="danger"
-              name={`provider-${type ? `${type}-` : ''}back`}
-              icon="step-backward"
-              onClick={() => {
-                /*
-                If the last child is a wildcard, open a dialog that allows the user to fill in the
-                wildcard. Otherwise, change the child.
+          {isLoading && <ReqoreButton flat fixed intent="pending" icon="Loader3Line" />}
+          {nodes.length > 0 && !readOnly ? (
+            <>
+              <ReqoreButton
+                flat
+                intent="warning"
+                icon="DeleteBack2Fill"
+                className={Classes.FIXED}
+                onClick={() => {
+                  setChildren((cur) => {
+                    const result = [...cur];
 
-                Args:
-                  cur: The current value of the children field.
-                Returns:
-                  The new array of children.
-                */
-                setChildren((cur) => {
-                  const result = [...cur];
+                    result.pop();
 
-                  result.pop();
+                    const lastChild = nth(result, -2);
 
-                  const lastChild = nth(result, -2);
+                    if (lastChild) {
+                      const index = size(result) - 2;
+                      const { value, values } = lastChild;
+                      const { url, suffix } = values.find((val) => val.name === value);
 
-                  if (lastChild) {
-                    const index = size(result) - 2;
-                    const { value, values } = lastChild;
-                    const { url, suffix } = values.find((val) => val.name === value);
-
-                    // If the value is a wildcard present a dialog that the user has to fill
-                    if (value === '*') {
-                      setWildcardDiagram({
-                        index,
-                        isOpen: true,
-                        url,
-                        suffix,
-                      });
-                    } else {
-                      // Change the child
-                      handleChildFieldChange(value, url, index, suffix);
+                      // If the value is a wildcard present a dialog that the user has to fill
+                      if (value === '*') {
+                        setWildcardDiagram({
+                          index,
+                          isOpen: true,
+                          url,
+                          suffix,
+                        });
+                      } else {
+                        // Change the child
+                        handleChildFieldChange(value, url, index, suffix);
+                      }
                     }
-                  }
 
-                  // If there are no children then we need to reset the provider
-                  if (size(result) === 0) {
-                    handleProviderChange(provider);
-                  }
+                    // If there are no children then we need to reset the provider
+                    if (size(result) === 0) {
+                      handleProviderChange(provider);
+                    }
 
-                  return result;
-                });
-              }}
-            />
-          )}
+                    return result;
+                  });
+                }}
+              />
+              <ReqoreButton intent="danger" icon="DeleteBin2Fill" onClick={onReset} fixed flat />
+            </>
+          ) : null}
           {record && (
-            <Button
+            <ReqoreButton
+              flat
               intent="success"
-              name={`provider-${type ? `${type}-` : ''}submit`}
-              icon="small-tick"
+              icon="CheckLine"
               onClick={() => {
                 setFields(record);
                 hide();
               }}
             />
           )}
-        </ButtonGroup>
+        </ReqoreControlGroup>
       </StyledWrapper>
     </>
   );

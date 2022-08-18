@@ -1,12 +1,13 @@
 stages:
-  - build-develop
+  - build
   - deploy
 
 build_package:
-  stage: build-develop
-  image: alpine:3.10
+  stage: build
+  image: alpine:latest
   only:
-   - develop
+    - merge_requests
+    - develop
   tags:
     - docker-exec
   artifacts:
@@ -22,7 +23,7 @@ upload_build:
   stage: deploy
   image: alpine:latest
   only:
-   - develop
+    - develop
   tags:
     - docker-exec
   variables:

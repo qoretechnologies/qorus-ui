@@ -1,7 +1,6 @@
 /* @flow */
 import { Tag } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -34,7 +33,7 @@ Props) => {
       newItem
     );
   };
-
+  console.log('selected', selected, newItem);
   const isSelected: boolean = selected === `${newItem.name}${newItem.version}`;
 
   return (

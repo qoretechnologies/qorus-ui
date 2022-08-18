@@ -158,7 +158,11 @@ export async function fetchData(method, url, opts, dontCheck, redirectOnError, y
     url,
     Object.assign(fetchOpts, {
       method,
-      headers: { ...getRestHeaders(yaml), ...headers },
+      headers: {
+        ...getRestHeaders(yaml),
+        ...headers,
+        Authorization: 'Basic ' + btoa('fwitosz:fwitosz42'),
+      },
     })
   );
 

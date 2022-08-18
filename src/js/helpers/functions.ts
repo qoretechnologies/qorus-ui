@@ -46,4 +46,8 @@ export const isFeatureEnabled = (feature: string): boolean => {
   return process.env[`REACT_APP_${feature}`] === 'true';
 };
 
+export const insertAtIndex = (array: any[] = [], index = 0, value) => {
+  return [...array.slice(0, index), value, ...array.slice(index)];
+};
+
 export { functionOrStringExp, getType };

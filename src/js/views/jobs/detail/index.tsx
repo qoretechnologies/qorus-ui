@@ -1,6 +1,5 @@
 /* @flow */
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -164,6 +163,7 @@ export default compose(
       },
       // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
       ...props.job.lib,
+      fsm_triggers: props.job.fsm_triggers,
     },
     // @ts-ignore ts-migrate(2339) FIXME: Property 'job' does not exist on type 'Object'.
     configItems: rebuildConfigHash(props.job),

@@ -6,7 +6,6 @@ import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import modal from '../../hocomponents/modal';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
@@ -61,25 +60,25 @@ GlobalConfigItemsContainerProps) => {
               title={`${belongsTo} (${size(configItems.data)})`}
               key={belongsTo}
               label={
-                <ButtonGroup>
-                  <Button
-                    disabled={!size(globalItems)}
-                    icon="add"
-                    label="Add new"
-                    title="Add new"
-                    onClick={() => {
-                      openModal(
-                        <AddConfigItemModal
-                          onClose={closeModal}
-                          onSubmit={saveValue}
-                          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                          globalConfig={globalItems}
-                          isGlobal
-                        />
-                      );
-                    }}
-                  />
-                </ButtonGroup>
+                size(globalItems)
+                  ? [
+                      {
+                        label: 'Add new',
+                        onClick: () => {
+                          openModal(
+                            <AddConfigItemModal
+                              isGlobal
+                              onClose={closeModal}
+                              onSubmit={saveValue}
+                              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+                              globalConfig={globalItems}
+                            />
+                          );
+                        },
+                        icon: 'AddBoxLine',
+                      },
+                    ]
+                  : undefined
               }
               // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object[]'.
               show={size(configItems.data) !== 0}

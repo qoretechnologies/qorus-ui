@@ -1,3 +1,4 @@
+import { ReqorePanel } from '@qoretechnologies/reqore';
 import forEach from 'lodash/forEach';
 import map from 'lodash/map';
 import maxBy from 'lodash/maxBy';
@@ -12,10 +13,30 @@ import styled from 'styled-components';
 import TinyGrid from '../../../img/tiny_grid.png';
 import modal from '../../hocomponents/modal';
 import actions from '../../store/api/actions';
+import DataproviderSelector from '../DataproviderSelector';
 import Loader from '../loader';
+import { getStateStyle } from '../PanElement/minimap';
+import Spacer from '../Spacer';
 import FSMDiagramWrapper from './diagramWrapper';
 import StateModal from './modal';
 import FSMState from './state';
+
+export const StyledLegendItem = styled.div`
+  height: 30px;
+  width: 100px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-right: 10px;
+  display: inline-flex;
+  margin-top: 10px;
+  ${({ type }) => getStateStyle(type, true)};
+`;
 
 export const isStateIsolated = (
   stateKey: string,
@@ -94,7 +115,7 @@ export interface IFSMState {
   'input-type'?: any;
   'output-type'?: any;
   name?: string;
-  type: 'state' | 'fsm';
+  type: 'state' | 'fsm' | 'block' | 'if';
   desc: string;
 }
 
@@ -172,6 +193,7 @@ const FSMView: React.FC<IFSMViewProps> = ({
     width: 0,
     height: 0,
   });
+  const [openedState, setOpenedState] = useState(null);
 
   useEffect(() => {
     load(fsmName);
@@ -357,6 +379,47 @@ const FSMView: React.FC<IFSMViewProps> = ({
 
   return (
     <>
+      {openedState && <StateModal onClose={() => setOpenedState(null)} {...openedState} />}
+      {fsm.input_type && (
+        <DataproviderSelector
+          isCollapsed
+          value={fsm?.['input_type']}
+          name="input_type"
+          label="FSM Input type"
+          readOnly
+        />
+      )}
+      <Spacer size={10} />
+      {fsm.output_type && (
+        <DataproviderSelector
+          isCollapsed
+          value={fsm?.['output_type']}
+          name="input_type"
+          label="FSM Output type"
+          readOnly
+        />
+      )}
+      <Spacer size={10} />
+      <ReqorePanel label="Legend" padded collapsible rounded style={{ flexShrink: 0 }}>
+        <StyledLegendItem type="mapper">Mapper</StyledLegendItem>
+        <StyledLegendItem type="connector">
+          <span>Connector</span>
+        </StyledLegendItem>
+        <StyledLegendItem type="pipeline">Pipeline</StyledLegendItem>
+        <StyledLegendItem type="fsm">FSM</StyledLegendItem>
+        <StyledLegendItem type="block">Block</StyledLegendItem>
+        <StyledLegendItem type="if">
+          <span>IF</span>
+        </StyledLegendItem>
+        <StyledLegendItem type="apicall">API Call</StyledLegendItem>
+        <StyledLegendItem type="create">Create</StyledLegendItem>
+        <StyledLegendItem type="update">Update</StyledLegendItem>
+        <StyledLegendItem type="search">Search</StyledLegendItem>
+        <StyledLegendItem type="search-single">Single search</StyledLegendItem>
+        <StyledLegendItem type="delete">Delete</StyledLegendItem>
+      </ReqorePanel>
+
+      <Spacer size={10} />
       <StyledDiagramWrapper ref={wrapperRef} id="fsm-diagram">
         <FSMDiagramWrapper
           wrapperDimensions={wrapperDimensions}
@@ -377,14 +440,11 @@ const FSMView: React.FC<IFSMViewProps> = ({
                 key={id}
                 {...state}
                 onClick={(id) => {
-                  openModal(
-                    <StateModal
-                      onClose={closeModal}
-                      fsmId={fsm.id}
-                      stateId={id}
-                      statesPath={`${statesPath || ''}states`}
-                    />
-                  );
+                  setOpenedState({
+                    fsmId: fsm.id,
+                    stateId: id,
+                    statesPath: `${statesPath || ''}states`,
+                  });
                 }}
                 id={id}
                 selected={selectedState === id}

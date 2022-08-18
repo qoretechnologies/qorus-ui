@@ -1,6 +1,4 @@
-import React, {
-  useEffect, useRef, useState
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import map from 'lodash/map';
 import useMount from 'react-use/lib/useMount';
@@ -9,14 +7,14 @@ import styled, { css } from 'styled-components';
 
 import { IF_STATE_SIZE, STATE_HEIGHT, STATE_WIDTH } from '../../FSMDiagram';
 
-export const getStateStyle = (type) => {
+export const getStateStyle = (type, toolbar?: boolean) => {
   switch (type) {
     case 'connector':
       return css`
         transform: skew(15deg);
-        div,
-        > span,
-        > p {
+        > div,
+        > p,
+        > span {
           transform: skew(-15deg);
         }
       `;
@@ -34,15 +32,48 @@ export const getStateStyle = (type) => {
       return css`
         border-style: dotted;
         border-radius: 10px;
-        background: repeating-linear-gradient(
-          -45deg,
-          #fff,
-          #fff 10px,
-          #f3f3f3 10px,
-          #f3f3f3 20px
-        );
+        background: repeating-linear-gradient(-45deg, #fff, #fff 10px, #f3f3f3 10px, #f3f3f3 20px);
+      `;
+    case 'apicall':
+      return css`
+        border-radius: 30%;
+      `;
+    case 'search-single':
+      return css`
+        border-radius: 40% 40% 0 0;
+      `;
+    case 'search':
+      return css`
+        border-radius: 0 0 40% 40%;
+      `;
+    case 'update':
+      return css`
+        border-radius: 0 40% 40% 0;
+      `;
+    case 'create':
+      return css`
+        border-radius: 0 40% 0 40%;
+      `;
+    case 'delete':
+      return css`
+        border-style: dotted;
+        border-radius: 20% 40% 20% 40%;
       `;
     case 'if':
+      if (toolbar) {
+        return css`
+          width: 20px;
+          height: 20px;
+          transform: rotateZ(45deg);
+          transform-origin: top left;
+          margin-left: 20px;
+
+          span:first-child {
+            transform: rotateZ(-45deg);
+          }
+        `;
+      }
+
       return css`
         transform: rotateZ(45deg);
 
@@ -102,7 +133,7 @@ export interface IFSMMinimapProps {
   height: number;
   x: number;
   y: number;
-  items?: { y: number, x: number }[];
+  items?: { y: number; x: number }[];
   onDrag: (x: number, y: number) => void;
   show: boolean;
   panElementId: string;
@@ -110,14 +141,7 @@ export interface IFSMMinimapProps {
 
 const staticPosition = { x: null, y: null };
 
-const Minimap: React.FC<IFSMMinimapProps> = ({
-  items,
-  x,
-  y,
-  onDrag,
-  show,
-  panElementId,
-}) => {
+const Minimap: React.FC<IFSMMinimapProps> = ({ items, x, y, onDrag, show, panElementId }) => {
   const viewRef = useRef(null);
   const [position, setPosition] = useState({ x, y });
   const [wrapperSize, setWrapperSize] = useState({ width: 0, height: 0 });
@@ -142,17 +166,13 @@ const Minimap: React.FC<IFSMMinimapProps> = ({
       });
     });
 
-    resizeObserver.observe(
-      document.querySelector(`#panElement${panElementId}`)
-    );
+    resizeObserver.observe(document.querySelector(`#panElement${panElementId}`));
 
     staticPosition.x = x || 0;
     staticPosition.y = y || 0;
 
     return () => {
-      resizeObserver.unobserve(
-        document.querySelector(`#panElement${panElementId}`)
-      );
+      resizeObserver.unobserve(document.querySelector(`#panElement${panElementId}`));
     };
   });
 
@@ -172,10 +192,7 @@ const Minimap: React.FC<IFSMMinimapProps> = ({
   };
 
   const onDragMove = (e) => {
-    const {
-      width: viewWidth,
-      height: viewHeight,
-    } = viewRef.current.getBoundingClientRect();
+    const { width: viewWidth, height: viewHeight } = viewRef.current.getBoundingClientRect();
 
     staticPosition.x += e.movementX;
     staticPosition.y += e.movementY;
@@ -216,12 +233,7 @@ const Minimap: React.FC<IFSMMinimapProps> = ({
       {show && (
         <>
           {map(items, (item, index) => (
-            <StyledMinimapItem
-              key={index}
-              top={item.y}
-              left={item.x}
-              type={item.type}
-            />
+            <StyledMinimapItem key={index} top={item.y} left={item.x} type={item.type} />
           ))}
           <StyledMinimapView
             width={wrapperSize.width}

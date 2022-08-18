@@ -1,5 +1,4 @@
-import React from 'react';
-import { ButtonGroup, Button, Classes } from '@blueprintjs/core';
+import { Button, ButtonGroup, Classes } from '@blueprintjs/core';
 import { DateInput } from '@blueprintjs/datetime';
 import useMount from 'react-use/lib/useMount';
 import { getValueOrDefaultValue } from './validations';
@@ -9,10 +8,7 @@ const DateField = ({ name, onChange, value, default_value, t, disabled }) => {
   useMount(() => {
     // Populate default value
     if (default_value) {
-      onChange(
-        name,
-        getValueOrDefaultValue(value, default_value || new Date(), false)
-      );
+      onChange(name, getValueOrDefaultValue(value, default_value || new Date(), false));
     }
   });
 
@@ -31,8 +27,8 @@ const DateField = ({ name, onChange, value, default_value, t, disabled }) => {
       timePickerProps={{}}
       closeOnSelection={false}
       disabled={disabled}
-      formatDate={date => date.toLocaleString()}
-      parseDate={str => new Date(str)}
+      formatDate={(date) => date.toLocaleString()}
+      parseDate={(str) => new Date(str)}
       placeholder={'YYYY-MM-DDT00:00:00Z'}
       invalidDateMessage={'InvalidDate'}
       inputProps={{ className: Classes.FILL }}
@@ -44,6 +40,7 @@ const DateField = ({ name, onChange, value, default_value, t, disabled }) => {
       value={!value ? new Date(default_value) : new Date(value)}
       onChange={handleInputChange}
       rightElement={
+        !disabled &&
         value &&
         value !== '' && (
           <ButtonGroup minimal>

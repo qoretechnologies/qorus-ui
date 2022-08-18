@@ -1,14 +1,22 @@
-import React, { ChangeEvent } from 'react';
-import { InputGroup, ButtonGroup, Button, Classes } from '@blueprintjs/core';
+import { ReqoreInput } from '@qoretechnologies/reqore';
+import { IReqoreInputProps } from '@qoretechnologies/reqore/dist/components/Input';
+import { ChangeEvent } from 'react';
 import useMount from 'react-use/lib/useMount';
-import { getValueOrDefaultValue } from './validations';
 import { isNull } from 'util';
+import { getValueOrDefaultValue } from './validations';
 
 export interface IStringField {
   fill?: boolean;
   read_only?: boolean;
   placeholder?: string;
   canBeNull?: boolean;
+  sensitive?: boolean;
+  autoFocus?: boolean;
+  onChange?: (name: string, value: string) => void;
+  name?: string;
+  value?: string;
+  default_value?: string;
+  disabled?: boolean;
 }
 
 const StringField = ({
@@ -21,11 +29,13 @@ const StringField = ({
   disabled,
   placeholder,
   canBeNull,
-}) => {
+  sensitive,
+  autoFocus,
+}: IStringField & IReqoreInputProps & any) => {
   // Fetch data on mount
   useMount(() => {
     // Populate default value
-    onChange(name, getValueOrDefaultValue(value, default_value, canBeNull));
+    onChange && onChange(name, getValueOrDefaultValue(value, default_value, canBeNull));
   });
 
   // When input value changes
@@ -39,29 +49,18 @@ const StringField = ({
   };
 
   return (
-    <InputGroup
+    <ReqoreInput
       placeholder={placeholder}
       disabled={disabled}
-      readOnly={read_only}
-      className={fill && Classes.FILL}
+      fluid={fill}
       value={
-        canBeNull && isNull(value)
-          ? 'Value set to [null]'
-          : !value
-          ? default_value || ''
-          : value
+        canBeNull && isNull(value) ? 'Value set to [null]' : !value ? default_value || '' : value
       }
+      onFocus={(event) => event.stopPropagation()}
+      onClick={(event) => event.stopPropagation()}
       onChange={handleInputChange}
-      rightElement={
-        value &&
-        value !== '' &&
-        !read_only &&
-        !disabled && (
-          <ButtonGroup minimal>
-            <Button onClick={handleResetClick} icon={'cross'} />
-          </ButtonGroup>
-        )
-      }
+      autoFocus={autoFocus}
+      onClearClick={handleResetClick}
     />
   );
 };

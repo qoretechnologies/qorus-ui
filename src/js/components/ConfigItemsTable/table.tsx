@@ -1,6 +1,17 @@
 // @flow
-import { Icon } from '@blueprintjs/core';
-import classnames from 'classnames';
+import {
+  ReqoreButton,
+  ReqoreColumn,
+  ReqoreColumns,
+  ReqoreControlGroup,
+  ReqoreIcon,
+  ReqoreMessage,
+  ReqoreModal,
+  ReqoreModalContent,
+  ReqoreTable,
+  ReqoreTag,
+  ReqoreTree,
+} from '@qoretechnologies/reqore';
 import isArray from 'lodash/isArray';
 import isNull from 'lodash/isNull';
 import isObject from 'lodash/isObject';
@@ -9,28 +20,22 @@ import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 import size from 'lodash/size';
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import { sortDefaults } from '../../constants/sort';
+import { COLORS } from '../../constants/ui';
 import Search from '../../containers/search';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
-import { ActionColumn, ActionColumnHeader } from '../ActionColumn';
 import ContentByType from '../ContentByType';
-import DataOrEmptyTable from '../DataOrEmptyTable';
 import type { EnhancedTableProps } from '../EnhancedTable';
 import EnhancedTable from '../EnhancedTable';
 import { getTypeFromValue, maybeParseYaml } from '../Field/validations';
-import LoadMore from '../LoadMore';
-import NameColumn, { NameColumnHeader } from '../NameColumn';
-import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../new_table';
-import Pull from '../Pull';
-import Tree from '../tree';
+import Spacer from '../Spacer';
 import ConfigItemsModal from './modal';
 
 type ConfigItemsTableProps = {
@@ -82,7 +87,7 @@ export const getItemType = (type, value) => {
   return type.replace('*', '');
 };
 
-export const Value = ({ item, useDefault }) => {
+export const Value = ({ item, useDefault }: any) => {
   const [showValue, setShowValue] = useState(!item.sensitive);
   const [hideTimer, setHideTimer] = useState(null);
 
@@ -146,13 +151,13 @@ export const Value = ({ item, useDefault }) => {
 
   if (isObject(item.value) || isArray(item.value) || type === 'hash' || type === 'list') {
     // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-    return <Tree compact data={item.value} conentInline noMarkdown />;
+    return <ReqoreTree compact data={item.value} />;
   }
 
   return <ContentByType inTable content={item.value} noMarkdown baseType={type} />;
 };
 
-let ItemsTable: Function = ({
+let ItemsTable: any = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'configItems' does not exist on type 'Con... Remove this comment to see the full error message
   configItems,
   belongsTo,
@@ -177,113 +182,128 @@ let ItemsTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'ConfigItem... Remove this comment to see the full error message
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ConfigItemsTableProps) => (
-  <React.Fragment>
-    <EnhancedTable
-      collection={configItemsData}
-      searchBy={['name', 'default_value', 'value', 'type', 'desc']}
-      tableId={belongsTo}
-      sortDefault={sortDefaults.configItems}
-    >
-      {({
-        collection,
-        canLoadMore,
-        handleLoadMore,
-        handleLoadAll,
-        loadMoreTotal,
-        loadMoreCurrent,
-        limit,
-        sortData,
-        onSortChange,
-        handleSearchChange,
-      }: EnhancedTableProps) => (
-        <Table striped condensed fixed hover>
-          <Thead>
-            <FixedRow className="toolbar-row">
-              <Th>
-                {groupName && (
-                  <Pull>
-                    <h5 style={{ lineHeight: '30px' }}>
-                      <Icon icon="group-objects" /> <FormattedMessage id="table.group" />:{' '}
-                      {groupName}
-                    </h5>
-                  </Pull>
-                )}
-                <Pull right>
-                  <ButtonGroup>
-                    <Button
-                      label={intl.formatMessage({
-                        id: 'button.show-descriptions',
-                      })}
-                      icon="align-left"
-                      btnStyle={showDescription ? 'primary' : ''}
-                      onClick={handleToggleDescription}
-                    />
+ConfigItemsTableProps) => {
+  const [inspectValue, setInspectValue] = useState(null);
 
-                    <LoadMore
-                      canLoadMore={canLoadMore}
-                      onLoadMore={handleLoadMore}
-                      onLoadAll={handleLoadAll}
-                      currentCount={loadMoreCurrent}
-                      total={loadMoreTotal}
-                      limit={limit}
-                    />
-                    <Search onSearchUpdate={handleSearchChange} resource="configItems" />
-                  </ButtonGroup>
-                </Pull>
-              </Th>
-            </FixedRow>
-            <FixedRow {...{ sortData, onSortChange }}>
-              <NameColumnHeader />
-              <ActionColumnHeader icon="edit" />
-              <Th className="text" icon="info-sign" name="actual_value">
-                <FormattedMessage id="table.value" />
-              </Th>
-              <Th name="strictly_local">
-                <FormattedMessage id="table.local" />
-              </Th>
-              <Th name="level">
-                <FormattedMessage id="table.level" />
-              </Th>
-              {!title && (
-                <Th name="config_group">
-                  <FormattedMessage id="table.group" />
-                </Th>
-              )}
-              <Th icon="code" name="type" />
-            </FixedRow>
-          </Thead>
-          <DataOrEmptyTable condition={!collection || collection.length === 0} cols={7} small>
-            {(props) => (
-              <Tbody {...props}>
-                {collection.map((item: any, index: number) => (
-                  <React.Fragment>
-                    <Tr
-                      // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-                      key={item.name}
-                      first={index === 0}
-                      className={classnames({
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
-                        'row-alert': !item.value && !item.is_set,
-                      })}
-                    >
-                      <NameColumn
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-                        name={item.name}
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
-                        hasAlerts={!item.value && !item.is_set}
-                        alertTooltip={intl.formatMessage({
-                          id: 'table.cfg-item-val-no-level-set',
-                        })}
-                        minimalAlert
-                      />
-                      <ActionColumn>
-                        <ButtonGroup>
-                          <Button
-                            icon="edit"
-                            title={intl.formatMessage({
-                              id: 'button.edit-this-value',
-                            })}
+  return (
+    <React.Fragment>
+      {inspectValue && (
+        <ReqoreModal isOpen onClose={() => setInspectValue(null)} width="50vw">
+          <ReqoreModalContent>
+            <Value item={inspectValue} />
+          </ReqoreModalContent>
+        </ReqoreModal>
+      )}
+      <EnhancedTable
+        collection={configItemsData}
+        searchBy={['name', 'default_value', 'value', 'type', 'desc']}
+        tableId={belongsTo}
+        sortDefault={sortDefaults.configItems}
+      >
+        {({
+          collection,
+          canLoadMore,
+          handleLoadMore,
+          handleLoadAll,
+          loadMoreTotal,
+          loadMoreCurrent,
+          limit,
+          sortData,
+          onSortChange,
+          handleSearchChange,
+        }: EnhancedTableProps) => (
+          <>
+            <ReqoreColumns>
+              <ReqoreColumn>{groupName && <ReqoreTag label={groupName} />}</ReqoreColumn>
+              <ReqoreColumn justifyContent="flex-end">
+                <Search onSearchUpdate={handleSearchChange} resource="configItems" />
+              </ReqoreColumn>
+            </ReqoreColumns>
+            <Spacer size={10} />
+            {!size(collection) ? (
+              <ReqoreMessage intent="warning" flat inverted>
+                There are no config items for this interface{' '}
+              </ReqoreMessage>
+            ) : null}
+            {size(collection) ? (
+              <>
+                <ReqoreTable
+                  height={size(collection) * 45}
+                  rounded
+                  striped
+                  columns={[
+                    {
+                      dataId: 'name',
+                      header: intl.formatMessage({ id: 'table.name' }),
+                      sortable: true,
+                      grow: 2,
+                      width: 300,
+                    },
+                    {
+                      dataId: 'desc',
+                      header: intl.formatMessage({ id: 'table.description' }),
+                      sortable: true,
+                      cellTooltip(data) {
+                        return data.desc;
+                      },
+                      width: 500,
+                    },
+                    {
+                      dataId: 'value',
+                      header: intl.formatMessage({ id: 'table.value' }),
+                      sortable: true,
+                      width: 240,
+                      onCellClick(data) {
+                        setInspectValue(data);
+                      },
+                      content: (item) =>
+                        isObject(item.value) || isArray(item.value) ? (
+                          <ReqoreTag label="Complex value; click here to show" size="small" />
+                        ) : (
+                          <Value item={item} />
+                        ),
+                    },
+                    {
+                      dataId: 'strictly_local',
+                      header: intl.formatMessage({ id: 'table.local' }),
+                      sortable: true,
+                      align: 'center',
+                      width: 100,
+                      content: ({ strictly_local }) =>
+                        strictly_local ? (
+                          <ReqoreIcon icon="CheckLine" color={COLORS.green} />
+                        ) : (
+                          <ReqoreIcon icon="CloseLine" color={COLORS.danger} />
+                        ),
+                    },
+                    {
+                      dataId: 'level',
+                      header: intl.formatMessage({ id: 'table.level' }),
+                      sortable: true,
+                      align: 'center',
+                      width: 200,
+                      content: ({ level }) => <ReqoreTag label={level} size="small" />,
+                    },
+                    {
+                      dataId: 'type',
+                      header: intl.formatMessage({ id: 'table.type' }),
+                      icon: 'CodeFill',
+                      sortable: true,
+                      align: 'center',
+                      width: 100,
+                      content: ({ type }) => <ReqoreTag label={`<${type} />`} size="small" />,
+                    },
+                    {
+                      dataId: 'actions',
+                      header: intl.formatMessage({ id: 'table.actions' }),
+                      align: 'center',
+                      width: 100,
+                      sortable: false,
+                      content: (item) => (
+                        <ReqoreControlGroup stack>
+                          <ReqoreButton
+                            flat
+                            icon="Edit2Line"
                             onClick={() => {
                               openModal(
                                 <ConfigItemsModal
@@ -300,14 +320,12 @@ ConfigItemsTableProps) => (
                               );
                             }}
                           />
-                          <Button
-                            icon="cross"
-                            title={intl.formatMessage({
-                              id: 'button.remove-this-value',
-                            })}
-                            // @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
+
+                          <ReqoreButton
+                            flat
+                            icon="CloseLine"
                             disabled={item.level ? !item.level.startsWith(levelType || '') : true}
-                            btnStyle="warning"
+                            intent="warning"
                             onClick={() => {
                               dispatchAction(
                                 actions[intrf].deleteConfigItem,
@@ -319,46 +337,23 @@ ConfigItemsTableProps) => (
                               );
                             }}
                           />
-                        </ButtonGroup>
-                      </ActionColumn>
-                      <Td
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'.
-                        className={`text ${item.level === 'workflow' || item.level === 'global'}`}
-                      >
-                        {/* @ts-ignore ts-migrate(2741) FIXME: Property 'useDefault' is missing in type '{ item: ... Remove this comment to see the full error message */}
-                        <Value item={item} />
-                      </Td>
-                      <Td className="narrow">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'strictly_local' does not exist on type '... Remove this comment to see the full error message */}
-                        <ContentByType content={item.strictly_local} />
-                      </Td>
-                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */}
-                      <Td className="medium">{item.level}</Td>
-                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'config_group' does not exist on type 'Ob... Remove this comment to see the full error message */}
-                      {!title && <Td className="medium">{item.config_group}</Td>}
-                      <Td className="narrow">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
-                        <code>{item.type}</code>
-                      </Td>
-                    </Tr>
-                    {showDescription && (
-                      <Tr>
-                        <Td className="text" colspan={groupName ? 6 : 7}>
-                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
-                          <ContentByType inTable content={item.desc} />
-                        </Td>
-                      </Tr>
-                    )}
-                  </React.Fragment>
-                ))}
-              </Tbody>
-            )}
-          </DataOrEmptyTable>
-        </Table>
-      )}
-    </EnhancedTable>
-  </React.Fragment>
-);
+                        </ReqoreControlGroup>
+                      ),
+                    },
+                  ]}
+                  sort={{
+                    by: 'name',
+                  }}
+                  data={collection}
+                />
+              </>
+            ) : null}
+          </>
+        )}
+      </EnhancedTable>
+    </React.Fragment>
+  );
+};
 
 ItemsTable = compose(
   withState('showDescription', 'toggleDescription', false),

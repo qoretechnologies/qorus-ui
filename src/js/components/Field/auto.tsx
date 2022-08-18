@@ -1,10 +1,10 @@
-import { Button, Callout, ControlGroup } from '@blueprintjs/core';
-import React, { useEffect, useState } from 'react';
+import { Callout } from '@blueprintjs/core';
+import { ReqoreButton, ReqoreControlGroup } from '@qoretechnologies/reqore';
+import { FunctionComponent, useEffect, useState } from 'react';
 import useMount from 'react-use/lib/useMount';
 import ConnectorField from '../DataproviderSelector';
 import BooleanField from './boolean';
 import DateField from './date';
-import { InterfaceSelector } from './interfaceSelector';
 import LongStringField from './longString';
 import NumberField from './number';
 import OptionHashField from './optionHash';
@@ -12,8 +12,7 @@ import SelectField from './select';
 import StringField from './string';
 import { getTypeFromValue, getValueOrDefaultValue, maybeParseYaml } from './validations';
 
-// @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'FunctionComponent'.
-const AutoField: FunctionComponent<IField & IFieldChange> = ({
+const AutoField: FunctionComponent<any> = ({
   name,
   onChange,
   value,
@@ -22,13 +21,13 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
   defaultInternalType,
   requestFieldData,
   type,
-  t,
   noSoft,
+  readOnly,
   ...rest
 }) => {
-  const [currentType, setType] = useState(defaultInternalType || null);
-  const [currentInternalType, setInternalType] = useState(defaultInternalType || 'any');
-  const [isSetToNull, setIsSetToNull] = useState(false);
+  const [currentType, setType] = useState<string>(defaultInternalType || null);
+  const [currentInternalType, setInternalType] = useState<string>(defaultInternalType || 'any');
+  const [isSetToNull, setIsSetToNull] = useState<boolean>(false);
 
   useMount(() => {
     let defType = defaultType && defaultType.replace(/"/g, '').trim();
@@ -60,7 +59,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
     // which will be used as a type
     if (rest['type-depends-on']) {
       // Get the requested type
-      const typeValue = requestFieldData(rest['type-depends-on'], 'value');
+      const typeValue: string = requestFieldData(rest['type-depends-on'], 'value');
       // Check if the field has the value set yet
       if (typeValue && typeValue !== currentType) {
         // If this is auto / any field
@@ -105,6 +104,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
   };
 
   const handleChange: (name: string, value: any) => void = (name, value) => {
+    console.log(name, value, currentInternalType, currentType);
     // Run the onchange
     if (onChange && currentInternalType) {
       onChange(name, value, currentInternalType, canBeNull());
@@ -112,6 +112,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
   };
 
   const handleNullToggle = () => {
+    console.log('null toggle', name, value, currentInternalType, currentType);
     setType(defaultType || 'any');
     setInternalType(defaultType || 'any');
     setIsSetToNull((current) => {
@@ -122,14 +123,13 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
     handleChange(name, isSetToNull ? undefined : null);
   };
 
-  console.log(isSetToNull);
-
   const renderField = (currentType: string) => {
     // If this field is set to null
     if (isSetToNull) {
       // Render a readonly field with null
-      // @ts-ignore ts-migrate(2739) FIXME: Type '{ name: any; value: null; onChange: (name: s... Remove this comment to see the full error message
-      return <StringField name={name} value={null} onChange={handleChange} read_only canBeNull />;
+      return (
+        <StringField name={name} value={null} onChange={handleChange as any} read_only canBeNull />
+      );
     }
     if (!currentType) {
       return null;
@@ -148,15 +148,16 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
       case 'softstring':
       case 'data':
       case 'binary':
+      case 'file-as-string':
         return (
-          <LongStringField
+          <StringField
             fill
             {...rest}
             name={name}
             onChange={handleChange}
             value={value}
-            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             type={currentType}
+            disabled={readOnly}
           />
         );
       case 'bool':
@@ -165,11 +166,11 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
           <BooleanField
             fill
             {...rest}
-            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             name={name}
             onChange={handleChange}
             value={value}
             type={currentType}
+            disabled={readOnly}
           />
         );
       case 'date':
@@ -180,8 +181,8 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             name={name}
             onChange={handleChange}
             value={value}
-            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             type={currentType}
+            disabled={readOnly}
           />
         );
       case 'hash':
@@ -197,18 +198,18 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             onChange={handleChange}
             value={value}
             fill
-            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             type={currentType}
             noWrap
-            placeholder={t('Yaml')}
+            placeholder={'Yaml'}
+            disabled={readOnly}
           />
         );
       case 'int':
       case 'softint':
       case 'float':
       case 'softfloat':
+      case 'number':
         return (
-          // @ts-ignore ts-migrate(2741) FIXME: Property 'default_value' is missing in type '{ nam... Remove this comment to see the full error message
           <NumberField
             {...rest}
             name={name}
@@ -216,6 +217,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             value={value}
             fill
             type={currentType}
+            disabled={readOnly}
           />
         );
       case 'option_hash':
@@ -225,11 +227,21 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             name={name}
             onChange={handleChange}
             value={value || undefined}
-            // @ts-ignore ts-migrate(2322) FIXME: Type '{ name: any; onChange: (name: string, value:... Remove this comment to see the full error message
             fill
             type={currentType}
+            readOnly={readOnly}
           />
         );
+      // case 'byte-size':
+      //   return (
+      //     <ByteSizeField
+      //       {...rest}
+      //       name={name}
+      //       onChange={handleChange}
+      //       value={value}
+      //       type={currentType}
+      //     />
+      //   );
       case 'select-string': {
         return (
           <SelectField
@@ -237,42 +249,61 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
             value={value}
             name={name}
             onChange={handleChange}
-            // @ts-ignore ts-migrate(2322) FIXME: Type '{ defaultItems: any; value: any; name: any; ... Remove this comment to see the full error message
             type={currentType}
+            disabled={readOnly}
           />
         );
       }
-      case 'mapper':
-      case 'workflow':
-      case 'service':
-      case 'job':
-      case 'value-map':
-      case 'connection': {
-        return (
-          // @ts-ignore ts-migrate(2741) FIXME: Property 'default_value' is missing in type '{ typ... Remove this comment to see the full error message
-          <InterfaceSelector type={currentType} name={name} value={value} onChange={handleChange} />
-        );
-      }
+      // case 'mapper':
+      // case 'workflow':
+      // case 'service':
+      // case 'job':
+      // case 'value-map':
+      // case 'connection': {
+      //   return (
+      //     <InterfaceSelector type={currentType} name={name} value={value} onChange={handleChange} />
+      //   );
+      // }
       case 'data-provider': {
         return (
-          // @ts-ignore ts-migrate(2739) FIXME: Type '{ value: any; isInitialEditing: boolean; nam... Remove this comment to see the full error message
           <ConnectorField
             value={value}
-            isInitialEditing={!!default_value}
             name={name}
             inline
             minimal
             isConfigItem
             onChange={handleChange}
+            readOnly={readOnly}
           />
         );
       }
+      // case 'file-as-string': {
+      //   return (
+      //     <div>
+      //       <FileField
+      //         name={name}
+      //         value={value}
+      //         onChange={handleChange}
+      //         type={currentType}
+      //         get_message={{
+      //           action: 'creator-get-resources',
+      //           object_type: 'files',
+      //         }}
+      //         return_message={{
+      //           action: 'creator-return-resources',
+      //           object_type: 'files',
+      //           return_value: 'resources',
+      //         }}
+      //       />
+      //     </div>
+      //   );
+      // }
       case 'any':
         return null;
       case 'auto':
         return <Callout>Please select data type</Callout>;
       default:
-        return <Callout intent="danger">{'Unknown Type'}</Callout>;
+        return <Callout intent="danger">{'Unknown Data Type'}</Callout>;
     }
   };
 
@@ -298,6 +329,7 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
         { name: 'hash' },
         { name: 'int' },
         { name: 'softint' },
+        { name: 'number' },
       ]
     : [
         { name: 'bool' },
@@ -308,14 +340,14 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
         { name: 'list' },
         { name: 'hash' },
         { name: 'int' },
+        { name: 'number' },
       ];
 
   // Render type picker if the type is auto or any
   return (
     <>
-      <ControlGroup fill>
-        {showPicker && (
-          // @ts-ignore ts-migrate(2740) FIXME: Type '{ name: string; defaultItems: { name: string... Remove this comment to see the full error message
+      <ReqoreControlGroup fluid>
+        {showPicker && !readOnly ? (
           <SelectField
             name="type"
             defaultItems={types}
@@ -325,20 +357,21 @@ const AutoField: FunctionComponent<IField & IFieldChange> = ({
               setInternalType(value);
             }}
           />
-        )}
+        ) : null}
 
         {renderField(currentInternalType)}
-        {canBeNull() && (
-          <Button
-            intent={isSetToNull ? 'warning' : 'none'}
-            // @ts-ignore ts-migrate(2322) FIXME: Type '"" | "cross"' is not assignable to type 'Ico... Remove this comment to see the full error message
-            icon={isSetToNull && 'cross'}
+        {canBeNull() && !readOnly ? (
+          <ReqoreButton
+            flat
+            fixed
+            intent={isSetToNull ? 'warning' : undefined}
+            icon={isSetToNull ? 'CloseLine' : undefined}
             onClick={handleNullToggle}
           >
             {isSetToNull ? 'Unset null' : 'Set as null'}
-          </Button>
-        )}
-      </ControlGroup>
+          </ReqoreButton>
+        ) : null}
+      </ReqoreControlGroup>
     </>
   );
 };

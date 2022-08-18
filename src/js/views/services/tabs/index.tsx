@@ -1,6 +1,6 @@
 // @flow
-import React from 'react';
 import compose from 'recompose/compose';
+import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import Box from '../../../components/box';
 import Code from '../../../components/code';
@@ -15,6 +15,8 @@ import MappersTable from '../../../containers/mappers';
 import Releases from '../../../containers/releases';
 import Valuemaps from '../../../containers/valuemaps';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
+import queryControl from '../../../hocomponents/queryControl';
+import { ApiManager } from './ApiManager';
 import DetailTab from './detail';
 import MethodsTab from './methods';
 import ResourceTab from './resources';
@@ -28,6 +30,8 @@ type ServiceTabsProps = {
   configItems: any;
   systemOptions: Array<Object>;
   isPane?: boolean;
+  changeRealQuery?: (tabId: string) => void;
+  changeCodeItemQuery?: (tabId: string) => void;
 };
 
 const ServiceTabs: Function = ({
@@ -39,6 +43,8 @@ const ServiceTabs: Function = ({
   configItems,
   systemOptions,
   isPane,
+  changeRealQuery,
+  changeCodeItemQuery,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ServiceTabsProps) => (
   <SimpleTabs activeTab={activeTab}>
@@ -56,6 +62,19 @@ ServiceTabsProps) => (
     <SimpleTab name="methods">
       <MethodsTab service={service} methods={methods} />
     </SimpleTab>
+    {service?.api_manager && (
+      <SimpleTab name="api manager">
+        <Box top fill scrollY>
+          <ApiManager
+            {...service.api_manager}
+            onEndpointClick={(codeItem: string): void => {
+              changeRealQuery('code');
+              changeCodeItemQuery(codeItem);
+            }}
+          />
+        </Box>
+      </SimpleTab>
+    )}
     <SimpleTab name="code">
       <Box top fill>
         <Code data={codeData} location={location} />
@@ -143,5 +162,20 @@ ServiceTabsProps) => (
 );
 
 export default compose(
-  onlyUpdateForKeys(['service', 'methods', 'codeData', 'location', 'activeTab'])
+  queryControl(({ isPane }) => (isPane ? 'paneTab' : 'tab')),
+  queryControl('codeItem'),
+  mapProps(({ tabQuery, changeTabQuery, changePaneTabQuery, paneTabQuery, ...rest }) => ({
+    realQuery: tabQuery || paneTabQuery,
+    changeRealQuery: changeTabQuery || changePaneTabQuery,
+    ...rest,
+  })),
+  onlyUpdateForKeys([
+    'service',
+    'methods',
+    'codeData',
+    'location',
+    'activeTab',
+    'paneTabQuery',
+    'tabQuery',
+  ])
 )(ServiceTabs);

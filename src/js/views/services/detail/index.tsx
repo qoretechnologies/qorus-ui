@@ -1,6 +1,5 @@
 // @flow
 import size from 'lodash/size';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -10,6 +9,7 @@ import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
+import { insertAtIndex } from '../../../helpers/functions';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import patchFuncArgs from '../../../hocomponents/patchFuncArgs';
 import sync from '../../../hocomponents/sync';
@@ -55,63 +55,71 @@ const ServicesDetail: Function = ({
   data,
   tabQuery,
   configItems,
-}: Props) => (
-  <Flex>
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb link="/services"> Services </Crumb>
-        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
-        <Crumb>{service.normalizedName}</Crumb>
-        <CrumbTabs
-          tabs={[
-            { title: 'Methods', suffix: `(${size(methods)})` },
-            {
-              title: 'Config',
-              suffix: `(${countConfigItems(configItems)})`,
-            },
-            'Code',
-            'Log',
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
-            { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
-            { title: 'Mappers', suffix: `(${size(service.mappers)})` },
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
-            { title: 'Valuemaps', suffix: `(${size(service.vmaps)})` },
-            'Resources',
-            'Authlabels',
-            'Releases',
-            'Info',
-          ]}
-        />
-      </Breadcrumbs>
-      <Pull right>
-        <ServiceControls
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-          id={service.id}
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
-          enabled={service.enabled}
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'autostart' does not exist on type 'Objec... Remove this comment to see the full error message
-          autostart={service.autostart}
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Object'.
-          status={service.status}
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
-          remote={service.remote}
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-          type={service.type}
-          big
-        />
-      </Pull>
-    </Headbar>
-    <ServiceTabs
-      service={service}
-      configItems={configItems}
-      methods={methods}
-      location={location}
-      codeData={data}
-      activeTab={tabQuery}
-    />
-  </Flex>
-);
+}: Props) => {
+  let tabs = [
+    { title: 'Methods', suffix: `(${size(methods)})` },
+    {
+      title: 'Config',
+      suffix: `(${countConfigItems(configItems)})`,
+    },
+    'Code',
+    'Log',
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'process' does not exist on type 'Object'... Remove this comment to see the full error message
+    { title: 'Process', suffix: `(${service.process ? 1 : 0})` },
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+    { title: 'Mappers', suffix: `(${size(service.mappers)})` },
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+    { title: 'Valuemaps', suffix: `(${size(service.vmaps)})` },
+    'Resources',
+    'Authlabels',
+    'Releases',
+    'Info',
+  ];
+
+  if (service?.api_manager) {
+    tabs = insertAtIndex(tabs, 3, 'API Manager');
+  }
+
+  console.log('data', data);
+
+  return (
+    <Flex>
+      <Headbar>
+        <Breadcrumbs>
+          <Crumb link="/services"> Services </Crumb>
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
+          <Crumb>{service.normalizedName}</Crumb>
+          <CrumbTabs tabs={tabs} />
+        </Breadcrumbs>
+        <Pull right>
+          <ServiceControls
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+            id={service.id}
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message
+            enabled={service.enabled}
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'autostart' does not exist on type 'Objec... Remove this comment to see the full error message
+            autostart={service.autostart}
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Object'.
+            status={service.status}
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'remote' does not exist on type 'Object'.
+            remote={service.remote}
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+            type={service.type}
+            big
+          />
+        </Pull>
+      </Headbar>
+      <ServiceTabs
+        service={service}
+        configItems={configItems}
+        methods={methods}
+        location={location}
+        codeData={data}
+        activeTab={tabQuery}
+      />
+    </Flex>
+  );
+};
 
 export default compose(
   connect(selector, {
@@ -148,7 +156,9 @@ export default compose(
   })),
   // @ts-ignore ts-migrate(2339) FIXME: Property 'service' does not exist on type 'Object'... Remove this comment to see the full error message
   mapProps(({ service, methods, ...rest }: any): any => ({
-    data: service.lib ? Object.assign(service.lib, { methods }) : {},
+    data: service.lib
+      ? Object.assign(service.lib, { methods, fsm_triggers: service.fsm_triggers || {} })
+      : {},
     service,
     methods,
     ...rest,

@@ -8,8 +8,8 @@ import { changeQuery } from '../helpers/router';
 
 export default (
     queryName: any,
-    customFunc: Function,
-    toggle: boolean,
+    customFunc?: Function,
+    toggle?: boolean,
     merge?: boolean | Function
   ): Function =>
   (Component: any) => {

@@ -1,32 +1,54 @@
-import { Classes, TextArea } from '@blueprintjs/core';
-import React from 'react';
-import { getLineCount } from '../../helpers/system';
-
+import { ReqoreTextarea } from '@qoretechnologies/reqore';
+import { ChangeEvent, FunctionComponent } from 'react';
+import useMount from 'react-use/lib/useMount';
 export interface ILongStringField {
-  // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'TTranslator'.
-  t?: TTranslator;
   fill?: boolean;
   placeholder?: string;
   noWrap?: boolean;
 }
 
-const LongStringField = ({ name, onChange, value, default_value, fill, placeholder, noWrap }) => {
+export const getLineCount: Function = (value: string): number => {
+  try {
+    return value.match(/[^\n]*\n[^\n]*/gi).length;
+  } catch (e) {
+    return 0;
+  }
+};
+
+const LongStringField: FunctionComponent<ILongStringField & any> = ({
+  name,
+  onChange,
+  value = 'kek',
+  default_value,
+  fill,
+  get_message,
+  return_message,
+  placeholder,
+  noWrap,
+}) => {
+  // Fetch data on mount
+  useMount(() => {
+    // Populate default value
+    if (value || default_value) {
+      onChange?.(name, value || default_value);
+    }
+  });
+
   // When input value changes
-  const handleInputChange = (event): void => {
-    onChange(name, event.target.value);
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>): void => {
+    onChange?.(name, event.target.value);
   };
 
   return (
-    <TextArea
-      name={`field-${name}`}
+    <ReqoreTextarea
       style={{
         width: '100%',
         resize: 'none',
         whiteSpace: noWrap ? 'nowrap' : undefined,
       }}
       placeholder={placeholder}
-      rows={getLineCount(value || default_value || '') + 1}
-      className={fill && Classes.FILL}
+      scaleWithContent
+      fluid={fill}
       value={!value ? default_value || '' : value}
       onChange={handleInputChange}
     />

@@ -1,3 +1,4 @@
+import { ReqoreH3, ReqoreP, ReqorePopover } from '@qoretechnologies/reqore';
 import size from 'lodash/size';
 import React from 'react';
 import styled, { css } from 'styled-components';
@@ -26,10 +27,15 @@ const StyledStateName = styled.p`
 `;
 
 const StyledStateAction = styled.p`
-  padding: 0;
+  padding: 0 10px;
   margin: 0;
   color: #a9a9a9;
   font-size: 12px;
+  white-space: nowrap;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
 `;
 
 export const StyledStateTextWrapper = styled.div`
@@ -37,6 +43,7 @@ export const StyledStateTextWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-flow: column;
+  width: 100%;
 `;
 
 const StyledFSMState = styled.div`
@@ -55,16 +62,23 @@ const StyledFSMState = styled.div`
   justify-content: center;
   align-items: center;
   flex-flow: column;
+  overflow: hidden;
+
+  .reqore-popover-wrapper {
+    width: 100%;
+  }
 
   ${StyledStateName}, ${StyledStateAction} {
     opacity: ${({ isIsolated }) => (isIsolated ? 0.4 : 1)};
   }
 
-  ${({ selected, initial }) => {
+  ${({ selected, initial, final }) => {
     let color: string = '#a9a9a9';
 
     if (selected) {
       color = '#277fba';
+    } else if (final) {
+      color = '#81358a';
     } else if (initial) {
       color = '#57801a';
     }
@@ -82,7 +96,7 @@ const StyledFSMState = styled.div`
   ${({ type }) => getStateStyle(type)}
 `;
 
-export const getStateType = ({ type, action, ...rest }: IFSMState) => {
+export const getStateType = ({ type, action, ...rest }: any) => {
   // @ts-ignore ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
   if (type === 'block') {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'states' does not exist on type '{ positi... Remove this comment to see the full error message
@@ -102,13 +116,15 @@ export const getStateType = ({ type, action, ...rest }: IFSMState) => {
     return '';
   }
 
-  return `${
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'class' does not exist on type 'string | ... Remove this comment to see the full error message
-    action.value.class
-      ? // @ts-ignore ts-migrate(2339) FIXME: Property 'class' does not exist on type 'string | ... Remove this comment to see the full error message
-        `${action.value.class}:${action.value.connector}`
-      : action.value
-  } ${action.type}`;
+  if (action.value?.path) {
+    return `${action.value.type}/${action.value.name}/${action.value.path}`;
+  }
+
+  if (action.value?.class) {
+    return `${action.value.class}:${action.value.connector} ${action.type}`;
+  }
+
+  return action.value;
 };
 
 const FSMState: React.FC<IFSMStateProps> = ({
@@ -153,13 +169,21 @@ const FSMState: React.FC<IFSMStateProps> = ({
       isIsolated={isIsolated}
       type={action?.type || type}
     >
-      <StyledStateTextWrapper>
+      <ReqorePopover
+        component={StyledStateTextWrapper}
+        content={
+          <>
+            <ReqoreH3>{name}</ReqoreH3>
+            <ReqoreP>{getStateType({ type, action, ...rest })}</ReqoreP>
+          </>
+        }
+      >
         {/* @ts-ignore ts-migrate(2554) FIXME: Expected 1 arguments, but got 0. */}
         <StyledStateName style={{ fontSize: calculateFontSize() }}>{name}</StyledStateName>
         <StyledStateAction style={{ fontSize: calculateFontSize(true) }}>
           {getStateType({ type, action, ...rest })}
         </StyledStateAction>
-      </StyledStateTextWrapper>
+      </ReqorePopover>
     </StyledFSMState>
   );
 };

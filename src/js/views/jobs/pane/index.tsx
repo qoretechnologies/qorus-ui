@@ -123,6 +123,7 @@ export default compose(
       },
       // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
       ...props.model.lib,
+      fsm_triggers: props.model.fsm_triggers,
     },
     // @ts-ignore ts-migrate(2339) FIXME: Property 'model' does not exist on type 'Object'.
     configItems: rebuildConfigHash(props.model),
