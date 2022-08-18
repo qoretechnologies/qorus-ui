@@ -16,6 +16,8 @@ build_develop:
   before_script:
     - apk add yarn
   script:
+    - mkdir develop_build
+    - cd develop_build
     - yarn install
     - yarn build:dev
 
@@ -32,6 +34,8 @@ build_5_1:
   before_script:
     - apk add yarn
   script:
+    - mkdir 5_1_build
+    - cd 5_1_build
     - yarn install
     - yarn build
 
@@ -58,11 +62,11 @@ upload_build:
     - find build -name \*.gz | while read a; do n=`echo $a|sed s/\.gz$//`; if [ -f $n ]; then rm $n; fi; done
 
     - mkdir -p ./develop/webapp
-    - mv -f build/* ./develop/webapp/
+    - mv -f develop_build/build/* ./develop/webapp/
     - zip -r qorus-webapp-develop.zip develop
     - scp qorus-webapp-develop.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
 
     - mkdir -p ./5_1/webapp
-    - mv -f build/* ./5_1/webapp/
+    - mv -f 5_1_build/build/* ./5_1/webapp/
     - zip -r qorus-webapp-5_1.zip 5_1
     - scp qorus-webapp-5_1.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
