@@ -12,7 +12,7 @@ build_develop:
     - docker-exec
   artifacts:
     paths:
-      - build/
+      - develop_build/build/
   before_script:
     - apk add yarn
   script:
@@ -30,12 +30,13 @@ build_5_1:
     - docker-exec
   artifacts:
     paths:
-      - build/
+      - 5_1_build/build/
   before_script:
     - apk add yarn
   script:
     - mkdir 5_1_build
     - cd 5_1_build
+    - pwd
     - yarn install
     - yarn build
 
