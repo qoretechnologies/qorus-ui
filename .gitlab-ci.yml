@@ -18,7 +18,7 @@ build_develop:
   script:
     - yarn install
     - yarn build:dev
-    - mf -v build ./develop_build
+    - mv -v build ./develop_build
 
 build_5_1:
   stage: build
@@ -35,7 +35,7 @@ build_5_1:
   script:
     - yarn install
     - yarn build
-    - mf -v build ./5_1_build
+    - mv -v build ./5_1_build
 
 upload_build:
   stage: deploy
