@@ -37,7 +37,7 @@ build_5_1:
     - mkdir 5_1_build
     - cd 5_1_build
     - pwd
-    - yarn install
+    - ls && yarn install
     - yarn build
 
 upload_build:
