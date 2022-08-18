@@ -2,11 +2,27 @@ stages:
   - build
   - deploy
 
-build_package:
+build_develop:
   stage: build
   image: alpine:latest
   only:
     - merge_requests
+    - develop
+  tags:
+    - docker-exec
+  artifacts:
+    paths:
+      - build/
+  before_script:
+    - apk add yarn
+  script:
+    - yarn install
+    - yarn build:dev
+
+build_5_1:
+  stage: build
+  image: alpine:latest
+  only:
     - develop
   tags:
     - docker-exec
@@ -26,10 +42,9 @@ upload_build:
     - develop
   tags:
     - docker-exec
-  variables:
-    WEBAPP: develop
   dependencies:
-    - build_package
+    - build_develop
+    - build_5_1
   script:
     - apk add zip openssh-client
     - mkdir -p ~/.ssh
@@ -41,7 +56,13 @@ upload_build:
     - chmod 644 ~/.ssh/id_rsa.pub ~/.ssh/known_hosts
 
     - find build -name \*.gz | while read a; do n=`echo $a|sed s/\.gz$//`; if [ -f $n ]; then rm $n; fi; done
-    - mkdir -p ./${WEBAPP}/webapp
-    - mv -f build/* ./${WEBAPP}/webapp/
-    - zip -r qorus-webapp-${WEBAPP}.zip ${WEBAPP}
-    - scp qorus-webapp-${WEBAPP}.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
+
+    - mkdir -p ./develop/webapp
+    - mv -f build/* ./develop/webapp/
+    - zip -r qorus-webapp-develop.zip develop
+    - scp qorus-webapp-develop.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
+
+    - mkdir -p ./5_1/webapp
+    - mv -f build/* ./5_1/webapp/
+    - zip -r qorus-webapp-5_1.zip 5_1
+    - scp qorus-webapp-5_1.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
