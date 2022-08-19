@@ -29,13 +29,13 @@ build_5_1:
     - docker-exec
   artifacts:
     paths:
-      - 5_1_build/
+      - 5.1_build/
   before_script:
     - apk add yarn
   script:
     - yarn install
     - yarn build
-    - mv -v build ./5_1_build
+    - mv -v build ./5.1_build
 
 upload_build:
   stage: deploy
@@ -62,7 +62,7 @@ upload_build:
     - zip -r qorus-webapp-develop.zip develop
     - scp qorus-webapp-develop.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
 
-    - mkdir -p ./5_1/webapp
-    - mv -f 5_1_build/* ./5_1/webapp/
-    - zip -r qorus-webapp-5_1.zip 5_1
-    - scp qorus-webapp-5_1.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
+    - mkdir -p ./5.1/webapp
+    - mv -f 5.1_build/* ./5.1/webapp/
+    - zip -r qorus-webapp-5.1.zip 5.1
+    - scp qorus-webapp-5.1.zip ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/
