@@ -228,6 +228,7 @@ ConfigItemsTableProps) => {
             {size(collection) ? (
               <>
                 <ReqoreTable
+                  style={{ flexShrink: 0 }}
                   height={size(collection) * 45}
                   rounded
                   striped
