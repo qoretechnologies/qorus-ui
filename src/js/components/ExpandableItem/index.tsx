@@ -22,7 +22,7 @@ const ExpandableItem = ({ children, show, title, label }: Props) =>
         flat
         collapsible={true}
         actions={label ? label : undefined}
-        style={{ flex: '0 auto', minHeight: '40px' }}
+        style={{ flex: '0 auto', minHeight: '40px', flexShrink: 0 }}
       >
         <div
           style={{
