@@ -1,10 +1,4 @@
-import {
-  ReqoreModal,
-  ReqoreModalContent,
-  ReqoreTabs,
-  ReqoreTabsContent,
-  ReqoreTree,
-} from '@qoretechnologies/reqore';
+import { ReqoreModal, ReqoreTabs, ReqoreTabsContent, ReqoreTree } from '@qoretechnologies/reqore';
 import { IReqoreTabsListItem } from '@qoretechnologies/reqore/dist/components/Tabs';
 import { get } from 'lodash';
 import reduce from 'lodash/reduce';
@@ -137,64 +131,67 @@ const StateModal = ({ onClose, intl, fsmId, stateId, fsm, statesPath, states }) 
     <ReqoreModal
       isOpen
       onClose={onClose}
-      title={`${intl.formatMessage({ id: 'global.view-state-detail' })} ${state.name}`}
+      label={`${intl.formatMessage({ id: 'global.view-state-detail' })} ${state.name} - [ ${
+        state.type
+      } - ${state.action?.type?.toUpperCase() || 'BASIC'} ]`}
       blur={4}
+      contentStyle={{
+        maxHeight: '100%',
+      }}
     >
-      <ReqoreModalContent>
-        <ReqoreTabs activeTab={getActiveTab()} tabs={getTabs()} activeTabIntent="info">
-          {state.type === 'fsm' ? (
-            <ReqoreTabsContent tabId="fsm">
-              <FSMDiagram fsmName={state.name} />
-            </ReqoreTabsContent>
-          ) : null}
-          {state.type === 'block' ? (
-            <ReqoreTabsContent tabId="block">
-              <FSMDiagram
-                states={state.states}
-                fsmId={fsmId}
-                statesPath={`${statesPath}.${stateId}.`}
-              />
-            </ReqoreTabsContent>
-          ) : null}
-          {state.type === 'block' ? (
-            <ReqoreTabsContent tabId="block-config">
-              <ReqoreTree data={state['block-config']} />
-            </ReqoreTabsContent>
-          ) : null}
-          {state.action?.type === 'pipeline' && (
-            <ReqoreTabsContent tabId="Pipeline">
-              <br />
-              <h4>{state.action.value}</h4>
-              <br />
-              <PipelineDiagram pipeName={state.action.value} />
-            </ReqoreTabsContent>
-          )}
-          {state.type !== 'if' && state.action?.type !== 'pipeline' ? (
-            <ReqoreTabsContent tabId="config">
-              <ConfigItemsTable
-                items={rebuildConfigHash(getConfigItemsForState(state), null, null, fsmId)}
-                intrf="fsms"
-                intrfId={fsmId}
-                stateId={stateId}
-              />
-            </ReqoreTabsContent>
-          ) : null}
-          {state.action?.value ? (
-            <ReqoreTabsContent tabId="options">
-              <DataproviderSelector
-                value={state.action.value}
-                name="Options"
-                readOnly
-                recordType={state.action.type}
-                requiresRequest={state.action.type === 'apicall'}
-              />
-            </ReqoreTabsContent>
-          ) : null}
-          <ReqoreTabsContent tabId="info">
-            <ReqoreTree data={state} />
+      <ReqoreTabs activeTab={getActiveTab()} tabs={getTabs()} activeTabIntent="info">
+        {state.type === 'fsm' ? (
+          <ReqoreTabsContent tabId="fsm">
+            <FSMDiagram fsmName={state.name} />
           </ReqoreTabsContent>
-        </ReqoreTabs>
-      </ReqoreModalContent>
+        ) : null}
+        {state.type === 'block' ? (
+          <ReqoreTabsContent tabId="block">
+            <FSMDiagram
+              states={state.states}
+              fsmId={fsmId}
+              statesPath={`${statesPath}.${stateId}.`}
+            />
+          </ReqoreTabsContent>
+        ) : null}
+        {state.type === 'block' ? (
+          <ReqoreTabsContent tabId="block-config">
+            <ReqoreTree data={state['block-config']} />
+          </ReqoreTabsContent>
+        ) : null}
+        {state.action?.type === 'pipeline' && (
+          <ReqoreTabsContent tabId="Pipeline">
+            <br />
+            <h4>{state.action.value}</h4>
+            <br />
+            <PipelineDiagram pipeName={state.action.value} />
+          </ReqoreTabsContent>
+        )}
+        {state.type !== 'if' && state.action?.type !== 'pipeline' ? (
+          <ReqoreTabsContent tabId="config">
+            <ConfigItemsTable
+              items={rebuildConfigHash(getConfigItemsForState(state), null, null, fsmId)}
+              intrf="fsms"
+              intrfId={fsmId}
+              stateId={stateId}
+            />
+          </ReqoreTabsContent>
+        ) : null}
+        {state.action?.value ? (
+          <ReqoreTabsContent tabId="options">
+            <DataproviderSelector
+              value={state.action.value}
+              name="Options"
+              readOnly
+              recordType={state.action.type}
+              requiresRequest={state.action.type === 'apicall'}
+            />
+          </ReqoreTabsContent>
+        ) : null}
+        <ReqoreTabsContent tabId="info">
+          <ReqoreTree data={state} />
+        </ReqoreTabsContent>
+      </ReqoreTabs>
     </ReqoreModal>
   );
 };
