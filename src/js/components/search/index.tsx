@@ -136,7 +136,6 @@ class Search extends Component<any, any> {
             />
           ) : null}
           <ReqoreInput
-            autoFocus
             minimal
             onClearClick={() => this.handleClearClick()}
             id="search"
