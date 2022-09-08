@@ -1,5 +1,5 @@
 import { size } from 'lodash';
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import AutoComplete from 'react-autocomplete';
 import { findBy } from '../../helpers/search';
 
@@ -71,6 +71,7 @@ const SuggestField: FunctionComponent<ISuggestField> = ({
           display: 'flex',
           flexFlow: 'column',
           overflow: 'hidden',
+          flex: 1,
         },
       }}
       open={selected !== value}

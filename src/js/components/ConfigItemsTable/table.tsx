@@ -7,7 +7,6 @@ import {
   ReqoreIcon,
   ReqoreMessage,
   ReqoreModal,
-  ReqoreModalContent,
   ReqoreTable,
   ReqoreTag,
   ReqoreTree,
@@ -189,9 +188,7 @@ ConfigItemsTableProps) => {
     <React.Fragment>
       {inspectValue && (
         <ReqoreModal isOpen onClose={() => setInspectValue(null)} width="50vw">
-          <ReqoreModalContent>
-            <Value item={inspectValue} />
-          </ReqoreModalContent>
+          <Value item={inspectValue} />
         </ReqoreModal>
       )}
       <EnhancedTable
@@ -228,6 +225,7 @@ ConfigItemsTableProps) => {
             {size(collection) ? (
               <>
                 <ReqoreTable
+                  style={{ flexShrink: 0 }}
                   height={size(collection) * 45}
                   rounded
                   striped

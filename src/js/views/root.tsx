@@ -373,11 +373,12 @@ export default class Root extends Component {
               <div className="root__center">
                 {!isMaximized && (
                   <Sidebar
-                    isCollapsed={!this.props.sidebarOpen}
+                    isCollapsed={this.props.sidebarOpen === false}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message
                     path={this.props.location.pathname}
                     items={menuWithPlugins}
                     bookmarks={transformOldFavoriteItems(favoriteMenuItems)}
+                    onCollapseChange={(isCollapsed: boolean) => this.setMenu(!isCollapsed)}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'saveFavoriteItems' does not exist on typ... Remove this comment to see the full error message
                     onBookmarksChange={this.props.saveFavoriteItems}
                     wrapperStyle={{ height: 'calc(100% - 30px)' }}

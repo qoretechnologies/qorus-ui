@@ -1,5 +1,5 @@
 import { IDialogProps } from '@blueprintjs/core';
-import { ReqoreModal, ReqoreModalContent } from '@qoretechnologies/reqore';
+import { ReqoreModal } from '@qoretechnologies/reqore';
 import { IReqoreModalProps } from '@qoretechnologies/reqore/dist/components/Modal';
 import React from 'react';
 
@@ -9,11 +9,7 @@ export interface ICustomDialogProps extends IDialogProps {
 }
 
 const CustomDialog: React.FC<IReqoreModalProps> = ({ children, ...rest }) => {
-  return (
-    <ReqoreModal {...rest}>
-      <ReqoreModalContent>{children}</ReqoreModalContent>
-    </ReqoreModal>
-  );
+  return <ReqoreModal {...rest}>{children}</ReqoreModal>;
 };
 
 export default CustomDialog;

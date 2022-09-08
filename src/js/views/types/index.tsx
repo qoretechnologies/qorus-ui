@@ -1,5 +1,6 @@
 /* @flow */
 import { Callout } from '@blueprintjs/core';
+import { ReqoreButton, ReqoreControlGroup } from '@qoretechnologies/reqore';
 import { map, size } from 'lodash';
 import React, { memo } from 'react';
 import { useAsyncRetry } from 'react-use';
@@ -15,6 +16,7 @@ import { StyledFieldsWrapper, StyledMapperWrapper } from '../../containers/mappe
 import MapperInput from '../../containers/mappers/new_diagram/input';
 import { flattenFields, getLastChildIndex } from '../../helpers/mapper';
 import modal from '../../hocomponents/modal';
+import settings from '../../settings';
 import { get } from '../../store/api/utils';
 
 type Props = {
@@ -31,12 +33,12 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
   const [type, setType] = React.useState(null);
 
   const { loading, value, error, retry } = useAsyncRetry(async () => {
-    return get('api/latest/dataprovider/types/listAll');
+    return get(`${settings.REST_BASE_URL}/dataprovider/types/listAll`);
   }, []);
 
   const fieldsData = useAsyncRetry(async () => {
     if (type) {
-      return get(`api/latest/dataprovider/types${type}?action=type`);
+      return get(`${settings.REST_BASE_URL}/dataprovider/types${type}?action=type`);
     }
   }, [type]);
 
@@ -117,15 +119,31 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
         </Breadcrumbs>
       </Headbar>
       <Box top fill>
-        <Suggest
-          defaultItems={value}
-          // @ts-ignore ts-migrate(2322) FIXME: Type '{ defaultItems: any; value: any; selected: a... Remove this comment to see the full error message
-          value={type || val}
-          selected={type}
-          name="path"
-          onChange={(_name, value) => setVal(value)}
-          onSelect={(value) => setType(value)}
-        />
+        <ReqoreControlGroup fluid stack style={{ overflow: 'auto' }}>
+          <Suggest
+            defaultItems={value}
+            // @ts-ignore ts-migrate(2322) FIXME: Type '{ defaultItems: any; value: any; selected: a... Remove this comment to see the full error message
+            value={type || val}
+            selected={type}
+            name="path"
+            fill
+            onChange={(_name, value) => setVal(value)}
+            onSelect={(value) => setType(value)}
+          />
+          {type || val ? (
+            <ReqoreButton
+              onClick={() => {
+                setVal('');
+                setType(null);
+              }}
+              icon="CloseLine"
+              intent="warning"
+              fixed
+            >
+              Clear
+            </ReqoreButton>
+          ) : null}
+        </ReqoreControlGroup>
         {renderTypeFields()}
       </Box>
     </Flex>
