@@ -1,10 +1,11 @@
 // @flow
-import React from 'react';
+import { ReqorePanel, ReqorePopover } from '@qoretechnologies/reqore';
 import { injectIntl } from 'react-intl';
+import ReactMarkdown from 'react-markdown';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import removeMd from 'remove-markdown';
 import { Td, Th } from '../new_table';
-import Text from '../text';
 
 type DescriptionColumnProps = {
   children: any;
@@ -19,7 +20,28 @@ const DescriptionColumn: Function = compose(onlyUpdateForKeys(['children', 'expa
     expanded,
   }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
   DescriptionColumnProps) => (
-    <Td className={className}>{children ? <Text text={children} expanded={expanded} /> : '-'}</Td>
+    <Td className={className}>
+      {children ? (
+        <ReqorePopover
+          noWrapper
+          content={
+            <ReqorePanel padded flat rounded>
+              <ReactMarkdown>{children}</ReactMarkdown>
+            </ReqorePanel>
+          }
+          component="span"
+          placement="left"
+        >
+          <span
+            style={{ display: 'inline-block', width: '100%', cursor: 'help', whiteSpace: 'nowrap' }}
+          >
+            {removeMd(children).replace(/\/n/g, ' ')}
+          </span>
+        </ReqorePopover>
+      ) : (
+        '-'
+      )}
+    </Td>
   )
 );
 
