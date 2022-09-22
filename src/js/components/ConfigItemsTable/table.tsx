@@ -238,15 +238,6 @@ ConfigItemsTableProps) => {
                       width: 300,
                     },
                     {
-                      dataId: 'desc',
-                      header: intl.formatMessage({ id: 'table.description' }),
-                      sortable: true,
-                      cellTooltip(data) {
-                        return data.desc;
-                      },
-                      width: 500,
-                    },
-                    {
                       dataId: 'value',
                       header: intl.formatMessage({ id: 'table.value' }),
                       sortable: true,
@@ -260,36 +251,6 @@ ConfigItemsTableProps) => {
                         ) : (
                           <Value item={item} />
                         ),
-                    },
-                    {
-                      dataId: 'strictly_local',
-                      header: intl.formatMessage({ id: 'table.local' }),
-                      sortable: true,
-                      align: 'center',
-                      width: 100,
-                      content: ({ strictly_local }) =>
-                        strictly_local ? (
-                          <ReqoreIcon icon="CheckLine" color={COLORS.green} />
-                        ) : (
-                          <ReqoreIcon icon="CloseLine" color={COLORS.danger} />
-                        ),
-                    },
-                    {
-                      dataId: 'level',
-                      header: intl.formatMessage({ id: 'table.level' }),
-                      sortable: true,
-                      align: 'center',
-                      width: 200,
-                      content: ({ level }) => <ReqoreTag label={level} size="small" />,
-                    },
-                    {
-                      dataId: 'type',
-                      header: intl.formatMessage({ id: 'table.type' }),
-                      icon: 'CodeFill',
-                      sortable: true,
-                      align: 'center',
-                      width: 100,
-                      content: ({ type }) => <ReqoreTag label={`<${type} />`} size="small" />,
                     },
                     {
                       dataId: 'actions',
@@ -337,6 +298,45 @@ ConfigItemsTableProps) => {
                           />
                         </ReqoreControlGroup>
                       ),
+                    },
+                    {
+                      dataId: 'strictly_local',
+                      header: intl.formatMessage({ id: 'table.local' }),
+                      sortable: true,
+                      align: 'center',
+                      width: 100,
+                      content: ({ strictly_local }) =>
+                        strictly_local ? (
+                          <ReqoreIcon icon="CheckLine" color={COLORS.green} />
+                        ) : (
+                          <ReqoreIcon icon="CloseLine" color={COLORS.danger} />
+                        ),
+                    },
+                    {
+                      dataId: 'level',
+                      header: intl.formatMessage({ id: 'table.level' }),
+                      sortable: true,
+                      align: 'center',
+                      width: 100,
+                      content: ({ level }) => <ReqoreTag label={level} size="small" />,
+                    },
+                    {
+                      dataId: 'type',
+                      header: intl.formatMessage({ id: 'table.type' }),
+                      icon: 'CodeFill',
+                      sortable: true,
+                      align: 'center',
+                      width: 100,
+                      content: ({ type }) => <ReqoreTag label={`<${type} />`} size="small" />,
+                    },
+                    {
+                      dataId: 'desc',
+                      header: intl.formatMessage({ id: 'table.description' }),
+                      sortable: true,
+                      cellTooltip(data) {
+                        return data.desc;
+                      },
+                      width: 500,
                     },
                   ]}
                   sort={{
