@@ -1,6 +1,5 @@
 // @flow
 import { Icon } from '@blueprintjs/core';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';

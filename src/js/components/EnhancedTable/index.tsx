@@ -37,7 +37,7 @@ export default compose(
       ...rest,
     })
   ),
-  withState('search', 'changeSearch', null),
+  withState('search', 'changeSearch', ({ search }) => search),
   withHandlers({
     handleSearchChange:
       ({ changeSearch }: EnhancedTableProps): Function =>

@@ -317,7 +317,7 @@ export default class Root extends Component {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const isLightTheme = currentUser.data.storage.theme === 'light';
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    const menuWithPlugins = transformMenu(menu.data, info.plugins);
+    const menuWithPlugins = transformMenu(menu.data, info.data.plugins);
 
     return (
       <IntlProvider messages={messages(locale)} locale={locale}>

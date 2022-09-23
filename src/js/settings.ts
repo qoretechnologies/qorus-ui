@@ -15,7 +15,8 @@ const settings = {
     process.env.TESTINST || process.env.NODE_ENV === 'dev_fix'
       ? `${API_URL}/api`
       : `${API_URL}/api/latest`,
-  OAUTH_URL: `${API_URL}/oauth2/v1`,
+  OAUTH_URL: `${API_URL}/api/latest/oauth2`,
+  OAUTH_PUBLIC_URL: `${API_URL}/api/public/oauth2`,
   WS_BASE_URL: `${API_WS_URL}`,
   DEFAULT_REST_HEADERS: {
     Accept: 'application/json',
