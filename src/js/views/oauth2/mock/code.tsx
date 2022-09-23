@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import withState from 'recompose/withState';
@@ -53,7 +52,7 @@ export default compose(
       const redirectUri = encodeURIComponent(`https://${window.location.host}/authenticate/token`);
 
       setTimeout(async () => {
-        let url = `${settings.OAUTH_URL}/public/token`;
+        let url = `${settings.OAUTH_PUBLIC_URL}/token`;
         url += `?grant_type=authorization_code&code=${
           // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
           allQueryObj.code

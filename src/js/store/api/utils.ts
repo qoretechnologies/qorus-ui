@@ -161,7 +161,6 @@ export async function fetchData(method, url, opts, dontCheck, redirectOnError, y
       headers: {
         ...getRestHeaders(yaml),
         ...headers,
-        Authorization: 'Basic ' + btoa('fwitosz:fwitosz42'),
       },
     })
   );

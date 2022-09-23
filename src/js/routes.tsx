@@ -8,7 +8,6 @@ import defaultProps from 'recompose/defaultProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import FullPageLoading from './components/FullPageLoading';
 import Loader from './components/loader';
-import { hasPlugin } from './helpers/system';
 import sync from './hocomponents/sync';
 import websocket from './hocomponents/websocket';
 import actions from './store/api/actions';
@@ -192,7 +191,7 @@ class AppInfo extends React.Component {
 
   render() {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'plugins' does not exist on type '{ info:... Remove this comment to see the full error message
-    let { info, plugins, routerProps, systemSync } = this.props;
+    let { info, plugins, routerProps, systemSync, oauth2_enabled } = this.props;
     const token: string = window.localStorage.getItem('token');
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
@@ -238,10 +237,7 @@ class AppInfo extends React.Component {
             <Route path="/errors" component={System.Errors} />
             {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Releases' does not exist on type 'Functi... Remove this comment to see the full error message */}
             <Route path="/releases" component={System.Releases} />
-            {hasPlugin('oauth2', plugins) ? (
-              <Route path="/plugins/oauth2" component={OAuth2View} />
-            ) : null}
-            {hasPlugin('oauth2', plugins) && process.env.NODE_ENV === 'development' ? (
+            {oauth2_enabled && process.env.NODE_ENV === 'development' ? (
               <Route path="/plugins/oauth2/code" component={AuthenticateCodeView} />
             ) : null}
             <Route path="/system" component={System}>
@@ -281,7 +277,7 @@ class AppInfo extends React.Component {
             <Route path="workflows" component={Workflows} />
             <Route path="types" component={Types} />
           </Route>
-          {hasPlugin('oauth2', plugins) ? (
+          {oauth2_enabled ? (
             <Route
               onEnter={this.requireAuthenticated}
               path="/plugins/oauth2/authorize"
@@ -304,6 +300,7 @@ export default compose<any, any>(
     (state) => ({
       info: state.api.info,
       plugins: state.api.system.data.plugins,
+      oauth2_enabled: state.api.system.data.oauth2_enabled,
       systemSync: state.api.system.sync,
     }),
     {
@@ -330,5 +327,5 @@ export default compose<any, any>(
     false,
     false
   ),
-  onlyUpdateForKeys(['plugins', 'info', 'systemSync'])
+  onlyUpdateForKeys(['plugins', 'info', 'systemSync', 'oauth2_enabled'])
 )(AppInfo as any) as any;
