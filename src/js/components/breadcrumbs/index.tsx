@@ -1,6 +1,5 @@
 // @flow
 import { Icon } from '@blueprintjs/core';
-import React from 'react';
 import qoreLogo from '../../../img/qore_logo_purple.png';
 import CollapsedCrumb from './collapsedCrumb';
 import Crumb from './crumb';
@@ -23,7 +22,7 @@ const Breadcrumbs: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <ul className={`bp3-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
-    {!collapsed && (
+    {!collapsed && children ? (
       // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
       <li onClick={onClick}>
         {icon ? (
@@ -33,7 +32,7 @@ Props) => (
           <img src={qoreLogo} style={{ width: '15px' }} />
         )}
       </li>
-    )}
+    ) : null}
     {children}
   </ul>
 );

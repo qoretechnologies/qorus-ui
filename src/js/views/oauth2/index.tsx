@@ -1,21 +1,21 @@
-import size from 'lodash/size';
+import {
+  ReqoreButton,
+  ReqoreColumn,
+  ReqoreColumns,
+  ReqoreContext,
+  ReqoreControlGroup,
+  ReqorePanel,
+  ReqoreTable,
+} from '@qoretechnologies/reqore';
+import { useContext } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { ActionColumn, ActionColumnHeader } from '../../components/ActionColumn';
-import { AuthorColumn, AuthorColumnHeader } from '../../components/AuthorColumn';
-import Box from '../../components/box';
 import ConfirmDialog from '../../components/confirm_dialog';
-import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
-import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import EnhancedTable from '../../components/EnhancedTable';
-import Flex from '../../components/Flex';
-import LoadMore from '../../components/LoadMore';
-import NameColumn, { NameColumnHeader } from '../../components/NameColumn';
-import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../components/new_table';
-import Pull from '../../components/Pull';
+import Spacer from '../../components/Spacer';
 import { sortDefaults } from '../../constants/sort';
 import Search from '../../containers/search';
 import { objectCollectionToArray } from '../../helpers/interfaces';
@@ -24,8 +24,9 @@ import pane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
 import titleManager from '../../hocomponents/TitleManager';
 import withDispatch from '../../hocomponents/withDispatch';
+import settings from '../../settings';
 import actions from '../../store/api/actions';
-import Header from './header';
+import { post } from '../../store/api/utils';
 import AddClientModal from './modals/add';
 import ClientsPane from './pane';
 
@@ -46,10 +47,34 @@ const ClientsView: Function = ({
   openPane,
   paneId,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ClientsViewProps) => (
-  <Flex>
-    <Header />
-    <Box top noPadding>
+ClientsViewProps) => {
+  const { confirmAction, addNotification, removeNotification } = useContext(ReqoreContext);
+
+  const showSecret = (secret: string) => {
+    addNotification({
+      id: 'secret',
+      content: `Please copy this secret and save it somewhere safe. You will not be able to see it again. ${secret}. Clicking on this notification will copy the secret to your clipboard.`,
+      duration: 50000,
+      onClick: () => {
+        navigator.clipboard.writeText(secret);
+        addNotification({
+          id: 'secret',
+          content: 'Successfully copied to clipboard',
+          duration: 2000,
+          flat: true,
+          onFinish(id?) {
+            removeNotification(id);
+          },
+          intent: 'success',
+        });
+      },
+      intent: 'info',
+      flat: true,
+    });
+  };
+
+  return (
+    <ReqorePanel flat contentStyle={{ display: 'flex', flexFlow: 'column' }}>
       <EnhancedTable
         collection={clients}
         searchBy={['client_id', 'name', 'username']}
@@ -67,106 +92,137 @@ ClientsViewProps) => (
           limit,
           collection,
         }) => (
-          <Table fixed striped condensed>
-            <Thead>
-              <FixedRow className="toolbar-row">
-                <Th>
-                  <Pull>
-                    <ButtonGroup>
-                      <Button
-                        big
-                        onClick={handleAddClientClick}
-                        title="Add Client"
-                        text="Add Client"
-                        icon="plus"
-                      />
-                    </ButtonGroup>
-                  </Pull>
-                  <Pull right>
-                    <LoadMore
-                      canLoadMore={canLoadMore}
-                      onLoadMore={handleLoadMore}
-                      onLoadAll={handleLoadAll}
-                      limit={limit}
-                    />
-                    <Search onSearchUpdate={handleSearchChange} resource="clients" />
-                  </Pull>
-                </Th>
-              </FixedRow>
-              <FixedRow {...{ onSortChange, sortData }}>
-                <NameColumnHeader name="client_id" title="Client" />
-                <ActionColumnHeader />
-                <Th className="text" icon="key">
-                  Secret
-                </Th>
-                <AuthorColumnHeader name="username">Parent</AuthorColumnHeader>
-              </FixedRow>
-            </Thead>
-            <DataOrEmptyTable condition={size(collection) === 0} cols={4}>
-              {(props) => (
-                <Tbody {...props}>
-                  {collection.map(
-                    // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                    (client: any, index: number) => (
-                      <Tr
-                        key={index}
-                        first={index === 0}
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-                        active={paneId === client.client_id}
+          <>
+            <ReqoreColumns>
+              <ReqoreColumn>
+                <ReqoreControlGroup>
+                  <ReqoreButton onClick={() => handleAddClientClick(showSecret)} icon="UserAddLine">
+                    Add Client
+                  </ReqoreButton>
+
+                  <ReqoreButton
+                    intent="info"
+                    icon="ShareBoxLine"
+                    onClick={() => {
+                      const redirectUri = encodeURIComponent(
+                        `https://${window.location.host}/plugins/oauth2/code`
+                      );
+
+                      const url = `${settings.OAUTH_PUBLIC_URL}/token?response_type=code&client_id=uitest&username=admin&password=admin&redirect_uri=${redirectUri}`;
+
+                      window.location.href = url;
+                    }}
+                  >
+                    Test Qorus Access
+                  </ReqoreButton>
+                </ReqoreControlGroup>
+              </ReqoreColumn>
+              <ReqoreColumn justifyContent="flex-end">
+                <Search onSearchUpdate={handleSearchChange} resource="clients" />
+              </ReqoreColumn>
+            </ReqoreColumns>
+
+            <Spacer size={15} />
+            <ReqoreTable
+              rounded
+              flat
+              striped
+              fill
+              columns={[
+                { dataId: 'client_id', header: 'Client ID', sortable: true, content: 'title' },
+                {
+                  dataId: 'username',
+                  header: 'User',
+                  icon: 'User3Fill',
+                  sortable: true,
+                  content: 'tag',
+                },
+                {
+                  dataId: 'created',
+                  header: 'Created',
+                  icon: 'TimeLine',
+                  sortable: true,
+                  content: 'time-ago',
+                  align: 'center',
+                },
+                {
+                  dataId: 'modified',
+                  header: 'Modified',
+                  icon: 'TimeLine',
+                  sortable: true,
+                  content: 'time-ago',
+                  align: 'center',
+                },
+                {
+                  dataId: 'actions',
+                  header: 'Actions',
+                  icon: 'SettingsLine',
+                  width: 380,
+                  align: 'right',
+                  content: (data) => (
+                    <ReqoreControlGroup stack>
+                      <ReqoreButton
+                        onClick={async (event) => {
+                          event.stopPropagation();
+
+                          addNotification({
+                            id: 'secret',
+                            intent: 'pending',
+                            flat: true,
+                            title: 'Generating new secret...',
+                            content: 'Please wait...',
+                          });
+
+                          const newSecret = await post(
+                            `${settings.OAUTH_URL}/clients/${data.client_id}/generateSecret`
+                          );
+
+                          console.log(newSecret);
+
+                          if (!newSecret.err) {
+                            showSecret(newSecret.client_secret);
+                          }
+                        }}
+                        icon="RefreshLine"
                       >
-                        <NameColumn
-                          // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-                          name={client.client_id}
-                          onDetailClick={() => {
-                            // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-                            openPane(client.client_id);
-                          }}
-                          // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-                          isActive={paneId === client.client_id}
-                        />
-                        <ActionColumn>
-                          <ButtonGroup>
-                            <Button
-                              icon="edit"
-                              title="Edit client"
-                              onClick={() => {
-                                handleUpdateClientClick(
-                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-                                  client.client_id,
-                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message
-                                  client.client_secret,
-                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
-                                  client.permissions
-                                );
-                              }}
-                            />
-                            <Button
-                              icon="remove"
-                              title="Delete client"
-                              btnStyle="danger"
-                              onClick={() => {
-                                // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-                                handleDeleteClientClick(client.client_id);
-                              }}
-                            />
-                          </ButtonGroup>
-                        </ActionColumn>
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message */}
-                        <Td className="text">{client.client_secret}</Td>
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */}
-                        <AuthorColumn>{client.username}</AuthorColumn>
-                      </Tr>
-                    )
-                  )}
-                </Tbody>
-              )}
-            </DataOrEmptyTable>
-          </Table>
+                        Regenerate Secret
+                      </ReqoreButton>
+                      <ReqoreButton
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleUpdateClientClick(
+                            data.client_id,
+                            data.client_secret,
+                            data.permissions
+                          );
+                        }}
+                        icon="Edit2Line"
+                      >
+                        Edit
+                      </ReqoreButton>
+                      <ReqoreButton
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleDeleteClientClick(data.client_id);
+                        }}
+                        icon="DeleteBin3Fill"
+                        intent="danger"
+                      >
+                        Delete
+                      </ReqoreButton>
+                    </ReqoreControlGroup>
+                  ),
+                },
+              ]}
+              onRowClick={(data) => openPane(data.client_id)}
+              data={collection}
+            />
+          </>
         )}
       </EnhancedTable>
-    </Box>
-  </Flex>
-);
+    </ReqorePanel>
+  );
+};
 
 export default compose(
   connect(
@@ -197,7 +253,7 @@ export default compose(
   withHandlers({
     handleAddClientClick:
       ({ openModal, closeModal, username, userPermissions, optimisticDispatch }): Function =>
-      (): void => {
+      (onSuccess: (secret: string) => void): void => {
         const onSubmit: Function = (clientId, clientSecret, permissions): void => {
           optimisticDispatch(
             // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
@@ -206,8 +262,10 @@ export default compose(
             clientSecret,
             username,
             permissions,
-            () => {
+            (data) => {
               closeModal();
+              console.log('DATA AFTER CREATE', data);
+              onSuccess(data.inserted.client_secret);
             }
           );
         };

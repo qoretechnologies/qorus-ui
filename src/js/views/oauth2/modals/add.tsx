@@ -1,16 +1,22 @@
 // @flow
-import { FormGroup, InputGroup } from '@blueprintjs/core';
-import React from 'react';
+import {
+  ReqoreButton,
+  ReqoreControlGroup,
+  ReqoreDropdown,
+  ReqoreInput,
+  ReqoreModal,
+  ReqoreTag,
+  ReqoreTagGroup,
+} from '@qoretechnologies/reqore';
+import { IReqoreDropdownItemProps } from '@qoretechnologies/reqore/dist/components/Dropdown/item';
+import { size } from 'lodash';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import Box from '../../../components/box';
-import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
-import Dropdown, { Control, Item } from '../../../components/dropdown';
-import Flex from '../../../components/Flex';
-import Modal from '../../../components/modal';
-import Pull from '../../../components/Pull';
+import SubField from '../../../components/Field/subfield';
+import { validateField } from '../../../components/Field/validations';
+import Spacer from '../../../components/Spacer';
 
 type AddClientModalProps = {};
 
@@ -38,78 +44,91 @@ const AddClientModal: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'AddClientM... Remove this comment to see the full error message
   data,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-AddClientModalProps) => (
-  <form onSubmit={handleFormSubmit}>
-    <Modal hasFooter>
-      <Modal.Header onClose={onClose}>Add new client</Modal.Header>
-      <Modal.Body>
-        <Box top fill scrollY>
-          <Flex style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <FormGroup
-              label="Client Name "
-              labelFor="client-id"
-              // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message
-              required
-              requiredLabel
-              inline
-            >
-              <InputGroup
-                disabled={data}
-                id="client-id"
-                onChange={handleClientIdChange}
-                value={clientId}
-                className="bp3-fill"
-              />
-            </FormGroup>
-            <FormGroup
-              label="Client Secret "
-              labelFor="client-secret"
-              // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message
-              required
-              requiredLabel
-              inline
-            >
-              <InputGroup
-                id="client-secret"
-                onChange={handleClientSecretChange}
-                value={clientSecret}
-                className="bp3-fill"
-              />
-            </FormGroup>
-            <FormGroup label="Client Permissions " inline>
-              <ButtonGroup>
-                <Dropdown
-                  multi
-                  alwaysShowSelectedCount
-                  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                  submitOnBlur
-                  onSubmit={handlePermissionsChange}
-                  selected={permissions}
-                >
-                  {/* @ts-ignore ts-migrate(2739) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message */}
-                  <Control />
-                  {userPermissions.map((perm: string, index: number) => (
-                    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                    <Item key={index} title={perm} />
-                  ))}
-                </Dropdown>
-                <Button big text="All" onClick={handleAllPermissionsClick} />
-              </ButtonGroup>
-            </FormGroup>
-          </Flex>
-        </Box>
-      </Modal.Body>
-      <Modal.Footer>
-        <Pull right>
-          <ButtonGroup>
-            <Button icon="disable" big text="Cancel" onClick={onClose} />
-            <Button icon="tick" big text="Save" type="submit" btnStyle="success" />
-          </ButtonGroup>
-        </Pull>
-      </Modal.Footer>
-    </Modal>
-  </form>
-);
+AddClientModalProps) => {
+  const addOrRemovePermission = (permission: string) => {
+    if (permissions.includes(permission)) {
+      handlePermissionsChange(permissions.filter((p: string) => p !== permission));
+    } else {
+      handlePermissionsChange([...permissions, permission]);
+    }
+  };
+
+  return (
+    <ReqoreModal
+      isOpen
+      label="Add new client"
+      blur={5}
+      onClose={onClose}
+      bottomActions={[
+        {
+          label: 'Cancel',
+          onClick: onClose,
+          position: 'left',
+        },
+        {
+          label: 'Save',
+          intent: 'success',
+          position: 'right',
+          onClick:
+            validateField('string', clientId) && validateField('array', permissions)
+              ? handleFormSubmit
+              : undefined,
+        },
+      ]}
+    >
+      <SubField title={'Client Name'}>
+        <ReqoreInput
+          value={clientId}
+          onChange={handleClientIdChange}
+          intent={validateField('string', clientId) ? undefined : 'danger'}
+          onClearClick={() => handleClientIdChange({ target: { value: '' } })}
+        />
+      </SubField>
+      <Spacer size={10} />
+      <SubField title="Scopes">
+        {size(permissions) ? (
+          <ReqoreTagGroup size="small">
+            {permissions.map((p) => (
+              <ReqoreTag label={p} onRemoveClick={() => addOrRemovePermission(p)} size="small" />
+            ))}
+          </ReqoreTagGroup>
+        ) : null}
+        <ReqoreControlGroup stack>
+          <ReqoreDropdown
+            multiSelect
+            filterable
+            componentProps={{
+              intent: validateField('array', permissions) ? undefined : 'danger',
+            }}
+            label="Select scopes"
+            items={userPermissions.map(
+              (permission): IReqoreDropdownItemProps => ({
+                label: permission,
+                id: permission,
+                selected: permissions.includes(permission),
+                onClick(itemId?, event?) {
+                  addOrRemovePermission(itemId);
+                },
+              })
+            )}
+          />
+          <ReqoreButton
+            onClick={handleAllPermissionsClick}
+            disabled={size(permissions) === size(userPermissions)}
+          >
+            Select all
+          </ReqoreButton>
+          <ReqoreButton
+            onClick={() => handlePermissionsChange([])}
+            disabled={size(permissions) === 0}
+          >
+            Remove all
+          </ReqoreButton>
+        </ReqoreControlGroup>
+      </SubField>
+    </ReqoreModal>
+  );
+};
 
 export default compose(
   withState('clientId', 'changeClientId', ({ data }) => data?.clientId || ''),
@@ -141,7 +160,7 @@ export default compose(
       ({ clientId, clientSecret, permissions, onSubmit }): Function =>
       (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
-        event.preventDefault();
+        event?.preventDefault();
 
         onSubmit(clientId, clientSecret, permissions);
       },
