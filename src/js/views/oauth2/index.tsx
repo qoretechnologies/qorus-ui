@@ -13,7 +13,6 @@ import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import ConfirmDialog from '../../components/confirm_dialog';
 import EnhancedTable from '../../components/EnhancedTable';
 import Spacer from '../../components/Spacer';
 import { sortDefaults } from '../../constants/sort';
@@ -177,8 +176,6 @@ ClientsViewProps) => {
                             `${settings.OAUTH_URL}/clients/${data.client_id}/generateSecret`
                           );
 
-                          console.log(newSecret);
-
                           if (!newSecret.err) {
                             showSecret(newSecret.client_secret);
                           }
@@ -203,7 +200,14 @@ ClientsViewProps) => {
                       <ReqoreButton
                         onClick={(event) => {
                           event.stopPropagation();
-                          handleDeleteClientClick(data.client_id);
+                          const handleConfirm = (): void => {
+                            // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
+                            optimisticDispatch(actions.clients.deleteClient, clientId);
+                          };
+
+                          confirmAction({
+                            onConfirm: handleConfirm,
+                          });
                         }}
                         icon="DeleteBin3Fill"
                         intent="danger"
@@ -264,7 +268,6 @@ export default compose(
             permissions,
             (data) => {
               closeModal();
-              console.log('DATA AFTER CREATE', data);
               onSuccess(data.inserted.client_secret);
             }
           );
@@ -306,22 +309,6 @@ export default compose(
             }}
             onSubmit={onSubmit}
           />
-        );
-      },
-    handleDeleteClientClick:
-      ({ openModal, closeModal, optimisticDispatch }): Function =>
-      (clientId): void => {
-        const handleConfirm: Function = (): void => {
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
-          optimisticDispatch(actions.clients.deleteClient, clientId, () => {
-            closeModal();
-          });
-        };
-
-        openModal(
-          <ConfirmDialog onClose={closeModal} onConfirm={handleConfirm}>
-            Are you sure you want to delete this client?
-          </ConfirmDialog>
         );
       },
   }),
