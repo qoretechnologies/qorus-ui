@@ -36,6 +36,7 @@ type ClientsViewProps = {
   handleDeleteClientClick: Function;
   openPane: Function;
   paneId: string;
+  optimisticDispatch: any;
 };
 
 const ClientsView: Function = ({
@@ -45,6 +46,7 @@ const ClientsView: Function = ({
   handleDeleteClientClick,
   openPane,
   paneId,
+  optimisticDispatch,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ClientsViewProps) => {
   const { confirmAction, addNotification, removeNotification } = useContext(ReqoreContext);
@@ -201,12 +203,12 @@ ClientsViewProps) => {
                         onClick={(event) => {
                           event.stopPropagation();
                           const handleConfirm = (): void => {
-                            // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
-                            optimisticDispatch(actions.clients.deleteClient, clientId);
+                            optimisticDispatch(actions.clients.deleteClient, data.client_id);
                           };
 
                           confirmAction({
                             onConfirm: handleConfirm,
+                            description: `Are you sure you want to delete client "${data.client_id}" permanently?`,
                           });
                         }}
                         icon="DeleteBin3Fill"
