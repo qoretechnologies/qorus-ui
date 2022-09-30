@@ -7,7 +7,7 @@ import {
   ReqorePopover,
 } from '@qoretechnologies/reqore';
 import { IReqoreButtonProps } from '@qoretechnologies/reqore/dist/components/Button';
-import { IReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
+import { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
 import { includes } from 'lodash';
 import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -27,7 +27,7 @@ export interface ISelectField {
   messageData: any;
   warningMessageOnEmpty?: string;
   autoSelect?: boolean;
-  intent?: IReqoreIntent;
+  intent?: TReqoreIntent;
 }
 
 export const StyledDialogSelectItem = styled.div`

@@ -16,13 +16,16 @@ const createClient: Function = createAction(
     if (!dispatch) {
       return {
         clientId,
-        clientSecret,
         username,
         permissions,
+        created: Date.now(),
+        modified: Date.now(),
       };
     }
 
-    await fetchWithNotifications(
+    const {
+      inserted: { client_id, client_secret, ...rest },
+    } = await fetchWithNotifications(
       async () => {
         const res = await post(`${settings.OAUTH_URL}/clients`, {
           body: JSON.stringify({
@@ -34,7 +37,7 @@ const createClient: Function = createAction(
         });
 
         if (!res.err) {
-          onSuccess();
+          onSuccess(res);
         }
 
         return res;
@@ -45,7 +48,9 @@ const createClient: Function = createAction(
     );
 
     return {
-      noop: true,
+      clientId: client_id,
+      clientSecret: client_secret,
+      ...rest,
     };
   }
 );

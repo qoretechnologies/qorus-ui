@@ -18,7 +18,7 @@ const createClient: any = {
     state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-      payload: { clientId, clientSecret, username, permissions, noop },
+      payload: { clientId, clientSecret, noop, ...rest },
     }: any
   ): any {
     if (noop) {
@@ -31,8 +31,7 @@ const createClient: any = {
       [clientId]: {
         client_id: clientId,
         client_secret: clientSecret,
-        username,
-        permissions,
+        ...rest,
       },
     };
 
