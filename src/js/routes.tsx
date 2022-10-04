@@ -238,7 +238,7 @@ class AppInfo extends React.Component {
             {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Releases' does not exist on type 'Functi... Remove this comment to see the full error message */}
             <Route path="/releases" component={System.Releases} />
             {oauth2_enabled && process.env.NODE_ENV === 'development' ? (
-              <Route path="/plugins/oauth2/code" component={AuthenticateCodeView} />
+              <Route path="/oauth2/code" component={AuthenticateCodeView} />
             ) : null}
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
@@ -280,7 +280,7 @@ class AppInfo extends React.Component {
           {oauth2_enabled ? (
             <Route
               onEnter={this.requireAuthenticated}
-              path="/plugins/oauth2/authorize"
+              path="/oauth2/authorize"
               component={AuthorizeView}
             />
           ) : null}

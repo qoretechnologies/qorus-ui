@@ -106,7 +106,7 @@ ClientsViewProps) => {
                     icon="ShareBoxLine"
                     onClick={() => {
                       const redirectUri = encodeURIComponent(
-                        `https://${window.location.host}/plugins/oauth2/code`
+                        `https://${window.location.host}/oauth2/code`
                       );
 
                       const url = `${settings.OAUTH_PUBLIC_URL}/token?response_type=code&client_id=uitest&username=admin&password=admin&redirect_uri=${redirectUri}`;
