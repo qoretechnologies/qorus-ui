@@ -100,7 +100,7 @@ ClientsViewProps) => {
                   <ReqoreButton onClick={() => handleAddClientClick(showSecret)} icon="UserAddLine">
                     Add Client
                   </ReqoreButton>
-
+                  {process.env.NODE_ENV === 'development' && (
                   <ReqoreButton
                     intent="info"
                     icon="ShareBoxLine"
@@ -116,6 +116,7 @@ ClientsViewProps) => {
                   >
                     Test Qorus Access
                   </ReqoreButton>
+                  )}
                 </ReqoreControlGroup>
               </ReqoreColumn>
               <ReqoreColumn justifyContent="flex-end">
