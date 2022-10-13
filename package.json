@@ -70,7 +70,7 @@
     "build:dev": "./node_modules/.bin/dotenv -e .env.development react-scripts build",
     "build": "./node_modules/.bin/dotenv -e .env.production react-scripts build",
     "setup-test": "npx playwright install --with-deps",
-    "test": "yarn playwright test",
+    "test": "TEST_USER=ui-test TEST_USER_PASS=sojcaf-4gitta-teGfyg yarn playwright test",
     "test:ci": "yarn playwright test"
   },
   "eslintConfig": {
