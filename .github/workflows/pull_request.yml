@@ -12,20 +12,25 @@ jobs:
         with:
           node-version: 16
       - name: Install dependencies
+        id: install_modules
         run: yarn
       - name: Install Playwright Browsers
-        run: yarn setup-tests
+        id: setup_tests
+        run: yarn setup-test
       - name: Run Playwright tests
+        id: run_server_and_tests
         run: |
           yarn start:ci
           TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
       - uses: actions/upload-artifact@v3
+        id: upload_artifacts
         if: always()
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
       - name: Slack notification
+        id: notify_slack
         uses: Foxhoundn/slack@v1.2.94
         with:
           status: ${{ job.status }}
