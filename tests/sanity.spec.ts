@@ -36,30 +36,39 @@ test.describe('Checks every page for visual regressions', () => {
     await expect(page).toHaveScreenshot('workflows-detail.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=config');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-config.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=steps');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-steps.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=process');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-process.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=releases');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-releases.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=valuemaps');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-valuemaps.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=mappers');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-mappers.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=errors');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-errors.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=code');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-code.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=info');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-info.png', screenshotConfig);
   });
 
@@ -73,33 +82,43 @@ test.describe('Checks every page for visual regressions', () => {
     await expect(page).toHaveScreenshot('services-pane-detail.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=config');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-config.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=code');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-code.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=methods');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-methods.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=process');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-process.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=mappers');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-mappers.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=valuemaps');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-valuemaps.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=resources');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-resources.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=authlabels');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-authlabels.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=releases');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-releases.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/services?paneId=1&paneTab=info');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-info.png', screenshotConfig);
   });
 
@@ -113,24 +132,31 @@ test.describe('Checks every page for visual regressions', () => {
     await expect(page).toHaveScreenshot('jobs-pane-detail.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/jobs?paneId=1&paneTab=config');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('jobs-pane-config.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/jobs?paneId=1&paneTab=process');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('jobs-pane-process.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/jobs?paneId=1&paneTab=mappers');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('jobs-pane-mappers.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/jobs?paneId=1&paneTab=valuemaps');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('jobs-pane-valuemaps.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/jobs?paneId=1&paneTab=releases');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('jobs-pane-releases.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/jobs?paneId=1&paneTab=code');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('jobs-pane-code.png', screenshotConfig);
 
     await page.goto('https://localhost:3000/jobs?paneId=1&paneTab=info');
+    await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('jobs-pane-info.png', screenshotConfig);
   });
 
