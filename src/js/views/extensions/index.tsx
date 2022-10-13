@@ -1,6 +1,5 @@
 /* @flow */
 import _ from 'lodash';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -17,7 +16,7 @@ import actions from '../../store/api/actions';
 import ExtensionList from './list';
 
 const Extensions = ({ extensions }: { extensions: any }) => (
-  <Flex>
+  <Flex id="extensions-view">
     <Headbar>
       <Breadcrumbs>
         <Crumb active>Extensions</Crumb>

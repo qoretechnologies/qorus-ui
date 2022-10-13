@@ -1,7 +1,7 @@
 /* @flow */
 import { Intent } from '@blueprintjs/core';
 import { map } from 'lodash';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 // @ts-ignore ts-migrate(2307) FIXME: Cannot find module 'redux' or its corresponding ty... Remove this comment to see the full error message
 import { compose } from 'redux';
@@ -110,7 +110,7 @@ class SQLCache extends Component {
     const colLength = Object.keys(collection).length;
 
     return (
-      <Flex>
+      <Flex id="cache-view">
         <Headbar>
           <Breadcrumbs>
             <Crumb active> SQL Cache </Crumb>

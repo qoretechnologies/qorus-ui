@@ -1,6 +1,5 @@
 // @flow
 import { Tag } from '@blueprintjs/core';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -36,7 +35,7 @@ const ClusterView: Function = ({
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Flex>
+  <Flex id="cluster-view">
     <Headbar>
       <Breadcrumbs>
         <Crumb active>

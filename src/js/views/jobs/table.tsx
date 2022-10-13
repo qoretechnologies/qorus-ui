@@ -1,7 +1,6 @@
 /* @flow */
 import size from 'lodash/size';
 import moment from 'moment';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -78,7 +77,7 @@ const JobsTable: Function = ({
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Table striped hover condensed fixed>
+  <Table striped hover condensed fixed id="jobs-view">
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan={isTablet ? 6 : 7}>

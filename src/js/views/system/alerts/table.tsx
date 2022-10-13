@@ -50,7 +50,7 @@ const AlertsTable: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <Flex>
-    <Table fixed hover striped condensed>
+    <Table fixed hover striped condensed id="alerts-view">
       <Thead>
         {canLoadMore && (
           <FixedRow className="toolbar-row">

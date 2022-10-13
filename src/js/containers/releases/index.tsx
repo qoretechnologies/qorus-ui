@@ -1,7 +1,6 @@
 // @flow
 import { Button, Intent } from '@blueprintjs/core';
 import moment from 'moment';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -49,7 +48,7 @@ const Releases: Function = ({
   compact,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Flex>
+  <Flex id="releases-view">
     {!compact && (
       <Headbar>
         <Breadcrumbs>

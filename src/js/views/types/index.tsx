@@ -112,7 +112,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
   };
 
   return (
-    <Flex>
+    <Flex id="types-view">
       <Headbar>
         <Breadcrumbs>
           <Crumb active>Dataprovider Types</Crumb>

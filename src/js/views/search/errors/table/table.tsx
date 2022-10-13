@@ -40,7 +40,7 @@ const WorkflowTable: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <Box top noPadding>
-    <Table striped condensed fixed>
+    <Table striped condensed fixed id="errors-search-view">
       <Thead>
         <FixedRow className="toolbar-row">
           <Th colspan="full">{children}</Th>

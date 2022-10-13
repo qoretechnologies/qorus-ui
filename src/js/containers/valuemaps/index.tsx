@@ -1,6 +1,4 @@
-/* @flow */
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -50,7 +48,7 @@ const ValueMapsTable = ({
       sortData,
       onSortChange,
     }: EnhancedTableProps) => (
-      <Table fixed condensed striped>
+      <Table fixed condensed striped id="valuemaps-view">
         <Thead>
           {compact || canLoadMore ? (
             <FixedRow className="toolbar-row">

@@ -39,7 +39,7 @@ Props) => (
       onSortChange,
       collection,
     }: EnhancedTableProps) => (
-      <Table striped condensed fixed>
+      <Table striped condensed fixed id="rbac-view">
         <Thead>
           <FixedRow className="toolbar-row">
             <Th colspan="full">

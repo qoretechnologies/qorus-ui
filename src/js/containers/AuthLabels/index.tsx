@@ -1,6 +1,5 @@
 // @flow
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -82,7 +81,7 @@ AuthLabelsContainerProps) => (
         sortData,
         onSortChange,
       }) => (
-        <Table striped condensend fixed>
+        <Table striped condensed fixed id="authlabels-view">
           <Thead>
             <FixedRow className="toolbar-row">
               <Th>

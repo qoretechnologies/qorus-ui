@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
@@ -19,7 +18,7 @@ const ConfigItemsView: Function = ({
   configItems,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ConfigItemsViewProps) => (
-  <Flex>
+  <Flex id="config-items-view">
     <Headbar>
       <Breadcrumbs>
         <Crumb active> Global config items </Crumb>

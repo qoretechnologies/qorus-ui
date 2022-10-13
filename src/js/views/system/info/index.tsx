@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -11,7 +10,7 @@ import InfoTable from '../../../components/info_table';
 import titleManager from '../../../hocomponents/TitleManager';
 
 const SystemInfoTable: Function = ({ data }: { data: any }) => (
-  <Flex>
+  <Flex id="info-view">
     <Headbar>
       <Breadcrumbs>
         <Crumb active>Info</Crumb>

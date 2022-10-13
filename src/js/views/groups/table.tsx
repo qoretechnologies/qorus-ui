@@ -1,6 +1,5 @@
 // @flow
 import size from 'lodash/size';
-import React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -57,7 +56,7 @@ const GroupsTable: Function = ({
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Table fixed hover condensed striped>
+  <Table fixed hover condensed striped id="groups-view">
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan={11}>
