@@ -17,12 +17,12 @@ jobs:
       - name: Install Playwright Browsers
         id: setup_tests
         run: yarn setup-test
-      - name: Start dev server
-        id: start_server
-        run: yarn start:ci
-      - name: Run Playwright tests
-        id: run_tests
+      - name: Start server and run Playwright tests
+        id: run_server_and_tests
         run: |
+          yarn start:ci &
+          sleep 30 &&
+          curl -k https://localhost:3000 &&
           TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
       - uses: actions/upload-artifact@v3
         id: upload_artifacts
