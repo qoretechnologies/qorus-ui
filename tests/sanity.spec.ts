@@ -6,7 +6,7 @@ let page: Page;
 const screenshotConfig: any = {
   animations: 'disabled',
   fullPage: true,
-  maxDiffPixels: 200,
+  maxDiffPixelRatio: 0.05,
 };
 
 /* Declaring a variable called localServerUrl and assigning it the value of 'https://localhost:3000/'. */
@@ -20,8 +20,8 @@ test.describe('Checks every page for visual regressions', () => {
     await page.goto(localServerUrl);
     await page.waitForSelector('text=Log in');
     // Log in
-    await page.fill('input[id="username"]', process.env.TEST_USER!);
-    await page.fill('input[id="password"]', process.env.TEST_USER_PASS!);
+    await page.fill('input[id="username"]', process.env.TEST_USER! || 'ui-test');
+    await page.fill('input[id="password"]', process.env.TEST_USER_PASS! || 'sojcaf-4gitta-teGfyg');
     await page.click('id=submit');
     await page.waitForSelector('.masonry-layout');
   });
