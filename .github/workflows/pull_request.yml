@@ -36,13 +36,16 @@ jobs:
           TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
       - uses: actions/upload-artifact@v3
         id: upload_artifacts
+        if: failure()
         with:
           name: failed-screenshots
           path: test-results/
           retention-days: 30
+
       - name: Copy folder content recursively to remote
         id: copy_screenshots
         uses: garygrossgarten/github-action-scp@release
+        if: failure()
         with:
           local: test-results
           remote: ${{ secrets.DEPLOY_PATH }}/test-results
@@ -51,12 +54,12 @@ jobs:
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           rmRemote: true
       - name: Slack screenshots notification
-        id: notify_slack
+        id: notify_slack_screnshots
         uses: Foxhoundn/slack@v1.2.94
         with:
           status: 'Action failed, see link below for more information'
           steps: 'https://hq.qoretechnologies.com/export/home/pchalupny/test-results'
-        if: fail()
+        if: failure()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_USERNAME: Qorus UI
