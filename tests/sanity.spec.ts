@@ -125,11 +125,11 @@ test.describe('Checks every page for visual regressions', () => {
   });
 
   test('Workflow detail page is visually identical', async () => {
-    await page.goto('https://localhost:3000/workflows/1');
+    await page.goto('https://localhost:3000/workflow/1');
     await page.waitForSelector('.table-body-wrapper');
     await expect(page).toHaveScreenshot('workflow-detail.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/workflows/1?tab=performance');
+    await page.goto('https://localhost:3000/workflow/1?tab=performance');
     await page.waitForSelector('.chart-view');
     await expect(page).toHaveScreenshot('workflow-detail-performance.png', screenshotConfig);
   });
@@ -371,7 +371,7 @@ test.describe('Checks every page for visual regressions', () => {
   test('Cluster page is visually identical', async () => {
     await page.goto('https://localhost:3000/system/cluster');
     await page.waitForSelector('#cluster-view');
-    await expect(page).toHaveScreenshot('cluster.png', ...screenshotConfig);
+    await expect(page).toHaveScreenshot('cluster.png', screenshotConfig);
   });
 
   test('Order Stats page is visually identical', async () => {
