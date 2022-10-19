@@ -276,7 +276,8 @@ class Topbar extends Component {
             <Button
               icon="notifications"
               intent={this.props.notificationStatus ? Intent.NONE : Intent.PRIMARY}
-              onClick={this.handleNotificationsClick as any}
+              //onClick={this.handleNotificationsClick as any}
+              onClick={() => void null}
               id="notificationsToggle"
             />
           </ButtonGroup>
