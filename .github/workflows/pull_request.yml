@@ -57,8 +57,7 @@ jobs:
         id: notify_slack_screnshots
         uses: Foxhoundn/slack@v1.2.94
         with:
-          status: 'Action failed, see link below for more information'
-          steps: 'https://hq.qoretechnologies.com/export/home/pchalupny/test-results'
+          status: 'Action failed, see link for more information https://hq.qoretechnologies.com/export/home/pchalupny/test-results'
         if: failure()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
