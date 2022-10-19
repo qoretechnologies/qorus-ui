@@ -133,6 +133,18 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
           {type || val ? (
             <ReqoreButton
               onClick={() => {
+                setType(val);
+              }}
+              icon="CheckLine"
+              intent="success"
+              fixed
+            >
+              Submit
+            </ReqoreButton>
+          ) : null}
+          {type || val ? (
+            <ReqoreButton
+              onClick={() => {
                 setVal('');
                 setType(null);
               }}

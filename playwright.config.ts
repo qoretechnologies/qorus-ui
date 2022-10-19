@@ -40,7 +40,7 @@ const config: PlaywrightTestConfig = {
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    viewport: { width: 2560, height: 1440 },
+    viewport: { width: 1920, height: 1080 },
     ignoreHTTPSErrors: true,
   },
 
@@ -50,7 +50,7 @@ const config: PlaywrightTestConfig = {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        viewport: { width: 2560, height: 1440 },
+        viewport: { width: 1920, height: 1080 },
       },
     },
 

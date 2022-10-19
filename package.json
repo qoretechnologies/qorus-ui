@@ -66,6 +66,7 @@
   "scripts": {
     "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true react-scripts start",
     "start:ci": "REACT_APP_API_HOST=sandbox.qoretechnologies.com HTTPS=true react-scripts start",
+    "codegen": "npx playwright codegen --ignore-https-errors --load-storage=codegen-auth.json https://localhost:3000",
     "build:pr": "./node_modules/.bin/dotenv -e .env.pull_request react-scripts build",
     "build:dev": "./node_modules/.bin/dotenv -e .env.development react-scripts build",
     "build": "./node_modules/.bin/dotenv -e .env.production react-scripts build",
