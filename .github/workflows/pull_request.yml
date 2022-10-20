@@ -58,7 +58,7 @@ jobs:
           retention-days: 30
 
       # Copy the screenshots to HQ
-      - name: Copy folder content recursively to remote
+      - name: Copy screenshots to HQ
         id: copy_screenshots
         uses: garygrossgarten/github-action-scp@release
         if: failure()
@@ -90,7 +90,17 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Tests action for PR ${{ github.event.pull_request.html_url }} triggered by ${{ github.triggering_actor }} has *failed*"
+                    "text": "Tests action run #${{ github.run_number }} for PR ${{ github.event.pull_request.html_url }} triggered by ${{ github.triggering_actor }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":rotating_light: FAILED"
                   }
                 },
                 {
@@ -99,6 +109,15 @@ jobs:
                 {
                   "type": "actions",
                   "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":warning: View report",
+                        "emoji": true
+                      },
+                      "url": "https://hq.qoretechnologies.com/~pchalupny/storage/report/index.html"
+                    },
                     {
                       "type": "button",
                       "text": {
@@ -115,7 +134,7 @@ jobs:
                         "text": ":arrow_heading_up: Go to actions",
                         "emoji": true
                       },
-                      "url": "${{ github.repositoryUrl}}/actions/runs/${{ github.run_id}}"
+                      "url": "https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}}"
                     }
                   ]
                 }
