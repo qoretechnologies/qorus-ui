@@ -34,6 +34,7 @@ jobs:
           sleep 30 &&
           curl -k https://localhost:3000 &&
           TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
+
       - uses: actions/upload-artifact@v3
         id: upload_artifacts
         if: failure()
@@ -48,11 +49,11 @@ jobs:
         if: failure()
         with:
           local: test-results
-          remote: ${{ secrets.DEPLOY_PATH }}/test-results
+          remote: /home/export2/pchalupny/public_html/test-results
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          rmRemote: true
+
       - name: Slack screenshots notification
         id: notify_slack_screnshots
         uses: Foxhoundn/slack@v1.2.94
