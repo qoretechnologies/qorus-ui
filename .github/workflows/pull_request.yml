@@ -49,7 +49,7 @@ jobs:
         if: failure()
         with:
           local: test-results
-          remote: /home/export2/pchalupny/public_html/storage/test-results
+          remote: /home/export2/pchalupny/public_html/storage/
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
