@@ -48,7 +48,7 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         if: failure()
         with:
-          local: test-results
+          local: test-results/sanity-Checks-every-page-for-visual-regressions-Shows-notifications-when-clicking-from-top-bar-chromium/
           remote: /home/export2/pchalupny/public_html/storage/
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
