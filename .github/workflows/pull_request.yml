@@ -7,16 +7,25 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
+      # Checkout the repo
       - uses: actions/checkout@v3
+
+      # Setup node
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+
+      # Install dependencies
       - name: Install dependencies
         id: install_modules
         run: yarn
+
+      # Create a temporary build
       - name: Temporary build
         id: build
         run: yarn build
+
+      # Upload the temporary build as artifact
       - uses: actions/upload-artifact@v3
         id: upload_build
         if: success()
@@ -24,9 +33,13 @@ jobs:
           name: build
           path: build/
           retention-days: 30
+
+      # Setup Playwright
       - name: Install Playwright Browsers
         id: setup_tests
         run: yarn setup-test
+
+      # Run the dev server & tests
       - name: Start server and run Playwright tests
         id: run_server_and_tests
         run: |
@@ -35,6 +48,7 @@ jobs:
           curl -k https://localhost:3000 &&
           TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
 
+      # If the tests failed, upload the screenshots as artifacts
       - uses: actions/upload-artifact@v3
         id: upload_artifacts
         if: failure()
@@ -43,33 +57,61 @@ jobs:
           path: test-results/
           retention-days: 30
 
+      # Copy the screenshots to HQ
       - name: Copy folder content recursively to remote
         id: copy_screenshots
         uses: garygrossgarten/github-action-scp@release
         if: failure()
         with:
           local: test-results
-          remote: /export/home2/pchalupny/public_html/storage/
+          remote: ${{ secrets.DEPLOY_PATH }}
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          rmRemote: true
 
+      # Send failure notifications to slack
       - name: Slack screenshots notification
         id: notify_slack_screnshots
-        uses: Foxhoundn/slack@v1.2.94
+        uses: slackapi/slack-github-action@v1.23.0
         with:
-          status: 'Action failed, see link for more information https://hq.qoretechnologies.com/export/home/pchalupny/test-results'
+          channel-id: 'github-ci'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Github Qorus UI tests result ${{ job.status }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Qorus UI tests action has *failed*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ${{ join(steps, ', ') }}
+                  }
+                },
+                {
+                  type: "divider",
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "text",
+                    "text": "You can find screenshots of failed tests here - https://hq.qoretechnologies.com/~pchalupny/storage/test-results"
+                  }
+                }
+              ]
+            }
         if: failure()
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_USERNAME: Qorus UI
-      - name: Slack notification
-        id: notify_slack
-        uses: Foxhoundn/slack@v1.2.94
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-        if: always()
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_USERNAME: Qorus UI
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_BOT_TOKEN }}
