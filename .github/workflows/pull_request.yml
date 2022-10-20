@@ -72,7 +72,7 @@ jobs:
 
       # Send failure notifications to slack
       - name: Slack screenshots notification
-        id: notify_slack_screnshots
+        id: notify_slack_screenshots
         uses: slackapi/slack-github-action@v1.23.0
         with:
           channel-id: 'github-ci'
@@ -83,32 +83,41 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "Github Qorus UI tests result ${{ job.status }}"
+                    "text": "Qorus UI"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Qorus UI tests action has *failed*"
+                    "text": "Tests action for PR ${{ github.event.pull_request.html_url }} triggered by ${{ github.triggering_actor }} has *failed*"
                   }
                 },
                 {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": ${{ join(steps, ', ') }}
-                  }
+                  "type": "divider"
                 },
                 {
-                  type: "divider",
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "text",
-                    "text": "You can find screenshots of failed tests here - https://hq.qoretechnologies.com/~pchalupny/storage/test-results"
-                  }
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":camera: View screenshots",
+                        "emoji": true
+                      },
+                      "url": "https://hq.qoretechnologies.com/~pchalupny/storage/"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":arrow_heading_up: Go to actions",
+                        "emoji": true
+                      },
+                      "url": "${{ github.repositoryUrl}}/actions/runs/${{ github.run_id}}"
+                    }
+                  ]
                 }
               ]
             }
