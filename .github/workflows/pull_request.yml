@@ -72,7 +72,7 @@ jobs:
 
       # Send failure notifications to slack
       - name: Slack screenshots notification
-        id: notify_slack_screenshots
+        id: notify_slack_failure
         uses: slackapi/slack-github-action@v1.23.0
         with:
           channel-id: 'github-ci'
@@ -140,7 +140,7 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
-                        "text": ":arrow_heading_up: Go to actions",
+                        "text": ":arrow_heading_up: Go to action",
                         "emoji": true
                       },
                       "url": "https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}}"
@@ -150,5 +150,69 @@ jobs:
               ]
             }
         if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Slack screenshots notification
+        id: notify_slack_success
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: 'github-ci'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Qorus UI"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Tests action run #${{ github.run_number }} for PR ${{ github.event.pull_request.html_url }} triggered by ${{ github.triggering_actor }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":white_check_mark: SUCCEEDED"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":link: View site",
+                        "emoji": true
+                      },
+                      "url": "https://deploy-preview-${{ github.event.pull_request.number}}--unrivaled-kitsune-6f1aa0.netlify.app"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":arrow_heading_up: Go to action",
+                        "emoji": true
+                      },
+                      "url": "https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}}"
+                    }
+                  ]
+                }
+              ]
+            }
+        if: success()
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

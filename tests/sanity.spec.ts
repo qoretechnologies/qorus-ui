@@ -56,7 +56,7 @@ test.describe('Checks every page for visual regressions', () => {
     await expect(page).toHaveScreenshot('user-profile-settings.png', screenshotConfig);
   });
 
-  test.only('Shows notifications when clicking from top-bar', async () => {
+  test('Shows notifications when clicking from top-bar', async () => {
     await page.goto(localServerUrl);
     await page.waitForSelector('.masonry-layout');
     await page.getByRole('button', { name: 'notifications' }).click();
