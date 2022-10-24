@@ -1,9 +1,17 @@
 {
-  "name": "qorus-web-interface",
-  "version": "5.1.0",
-  "description": "Qorus Web app interface",
-  "author": "Qore Technologies s.r.o.",
-  "private": true,
+  "name": "qorus-ui",
+  "version": "1.0.0",
+  "description": "Qorus UI",
+  "author": "Qore Technologies",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qoretechnologies/qorus-ui.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qoretechnologies/qorus-ui/issues"
+  },
+  "private": false,
   "dependencies": {
     "@blueprintjs/core": "3.36",
     "@blueprintjs/datetime": "^3.15.2",
@@ -65,11 +73,14 @@
   },
   "scripts": {
     "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true react-scripts start",
+    "start:ci": "REACT_APP_API_HOST=sandbox.qoretechnologies.com HTTPS=true react-scripts start",
+    "codegen": "npx playwright codegen --ignore-https-errors --load-storage=codegen-auth.json https://localhost:3000",
+    "build:pr": "./node_modules/.bin/dotenv -e .env.pull_request react-scripts build",
     "build:dev": "./node_modules/.bin/dotenv -e .env.development react-scripts build",
     "build": "./node_modules/.bin/dotenv -e .env.production react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "start:dev:david": "REACT_APP_API_PORT=8011 REACT_APP_API_HOST=qoretechnologies.com HTTPS=true yarn start"
+    "setup-test": "npx playwright install --with-deps",
+    "test": "TEST_USER=ui-test TEST_USER_PASS=sojcaf-4gitta-teGfyg yarn playwright test",
+    "test:ci": "yarn playwright test"
   },
   "eslintConfig": {
     "extends": [
@@ -90,6 +101,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.27.0",
     "@previewjs/config": "^1.0.5",
     "@previewjs/plugin-react": "^4.0.0",
     "@testing-library/jest-dom": "^5.14.1",

@@ -1,6 +1,5 @@
 /* @flow */
 import capitalize from 'lodash/capitalize';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -83,7 +82,7 @@ const LibraryView: Function = ({
   constants,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Flex>
+  <Flex id="library-view">
     <Headbar>
       <Breadcrumbs>
         <Crumb active>Library</Crumb>

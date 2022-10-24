@@ -44,4 +44,6 @@ npm-debug.log*
 /i.txt
 /rest.http
 launch.json
-
+/test-results/
+/playwright-report/
+/playwright/.cache/

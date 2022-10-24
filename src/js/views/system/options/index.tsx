@@ -1,6 +1,5 @@
 // @flow
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 // @ts-ignore ts-migrate(2307) FIXME: Cannot find module 'redux' or its corresponding ty... Remove this comment to see the full error message
@@ -62,7 +61,7 @@ Props) => (
       </Pull>
     </Headbar>
     <Box top noPadding>
-      <Table fixed condensed striped>
+      <Table fixed condensed striped id="options-view">
         <Thead>
           <FixedRow {...{ sortData, onSortChange }}>
             <Th name="status" icon="lock" />

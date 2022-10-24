@@ -1,6 +1,5 @@
 // @flow
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -33,7 +32,7 @@ const SLATable: Function = ({
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Table striped condensed fixed>
+  <Table striped condensed fixed id="slas-view">
     <Thead>
       <FixedRow sortData={sortData} onSortChange={onSortChange}>
         <IdColumnHeader name="slaid" />

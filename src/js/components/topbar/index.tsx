@@ -113,9 +113,7 @@ class Topbar extends Component {
     this.props.openPane();
   };
 
-  handleSubmit: Function = (e: any): void => {
-    e.preventDefault();
-
+  handleSubmit = (): void => {
     const { quickSearchType, quickSearchValue } = this.state;
     const searchable = searchableViews[quickSearchType];
     const link: string = typeof searchable === 'object' ? searchable.link : searchable;
@@ -202,7 +200,7 @@ class Topbar extends Component {
               onChange={(e: any) => this.setState({ quickSearchValue: e.target.value })}
             />
             {this.renderSearchMenu()}
-            <ReqoreButton icon="SearchLine" flat />
+            <ReqoreButton icon="SearchLine" flat onClick={() => this.handleSubmit()} />
           </ReqoreControlGroup>
           <ReqoreNavbarDivider />
           <ReqoreNavbarGroup position="right">

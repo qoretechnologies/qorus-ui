@@ -14,7 +14,7 @@ import Th from './th';
 type Props = {
   children: any;
   className?: string;
-  condensed?: string;
+  condensed?: string | boolean;
   striped?: boolean;
   bordered?: boolean;
   hover?: boolean;
@@ -24,9 +24,10 @@ type Props = {
   marginBottom?: number;
   width?: number | string;
   clean?: boolean;
+  id?: string;
 };
 
-let Table: Function = ({
+let Table = ({
   children,
   fixed,
   striped,
@@ -39,10 +40,11 @@ let Table: Function = ({
   marginBottom,
   info,
   width,
+  id,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) =>
   fixed ? (
-    <Flex className="table-wrapper">
+    <Flex className="table-wrapper" id={id}>
       {React.Children.map(
         children,
         // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message

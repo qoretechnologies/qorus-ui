@@ -1,7 +1,6 @@
 /* @flow */
 import { Icon, Position, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
 import { injectIntl } from 'react-intl';
 import { Link } from 'react-router';
 import compose from 'recompose/compose';
@@ -135,7 +134,7 @@ Props) => (
         <Icon icon={deprecated ? 'small-tick' : 'cross'} />
       </Td>
     )}
-    <Td className="huge separated-cell">
+    <Td className="big separated-cell">
       <InstancesBar
         states={states}
         instances={rest}

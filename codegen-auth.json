@@ -1,0 +1,14 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "https://localhost:3000",
+      "localStorage": [
+        {
+          "name": "token",
+          "value": "20a88938-9c35-4323-acc2-aec141a9c9e6"
+        }
+      ]
+    }
+  ]
+}

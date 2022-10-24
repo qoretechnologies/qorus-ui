@@ -112,7 +112,7 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
   };
 
   return (
-    <Flex>
+    <Flex id="types-view">
       <Headbar>
         <Breadcrumbs>
           <Crumb active>Dataprovider Types</Crumb>
@@ -130,6 +130,18 @@ const DataProviderTypes = memo(({ openModal, closeModal }) => {
             onChange={(_name, value) => setVal(value)}
             onSelect={(value) => setType(value)}
           />
+          {type || val ? (
+            <ReqoreButton
+              onClick={() => {
+                setType(val);
+              }}
+              icon="CheckLine"
+              intent="success"
+              fixed
+            >
+              Submit
+            </ReqoreButton>
+          ) : null}
           {type || val ? (
             <ReqoreButton
               onClick={() => {
