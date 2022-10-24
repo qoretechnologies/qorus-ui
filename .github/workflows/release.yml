@@ -1,9 +1,9 @@
-name: Pull Request Tests
+name: Live UI release
 on:
-  pull_request:
-    branches: [develop]
+  push:
+    branches: [main]
 jobs:
-  test:
+  live_release:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -20,59 +20,38 @@ jobs:
         id: install_modules
         run: yarn
 
-      # Create a temporary build
-      - name: Temporary build
-        id: build
-        run: yarn build
+      # Create a production build
+      - name: Production build
+        id: prod_build
+        run: |
+          yarn build
+          zip -r qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip build
+          rm -rf build
 
-      # Upload the temporary build as artifact
+      # Upload the prod build as artifact
       - uses: actions/upload-artifact@v3
-        id: upload_build
+        id: upload_prod_build
         if: success()
         with:
-          name: build
-          path: build/
+          name: production_build
+          path: qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip
           retention-days: 30
 
-      # Setup Playwright
-      - name: Install Playwright Browsers
-        id: setup_tests
-        run: yarn setup-test
-
-      # Run the dev server & tests
-      - name: Start server and run Playwright tests
-        id: run_server_and_tests
-        run: |
-          yarn start:ci &
-          sleep 30 &&
-          curl -k https://localhost:3000 &&
-          TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
-
-      # If the tests failed, upload the screenshots as artifacts
-      - uses: actions/upload-artifact@v3
-        id: upload_artifacts
-        if: failure()
-        with:
-          name: failed-screenshots
-          path: test-results/
-          retention-days: 30
-
-      # Copy the screenshots to HQ
-      - name: Copy screenshots to HQ
-        id: copy_screenshots
+      # Copy the production build to HQ
+      - name: Copy production build to HQ
+        id: copy_prod_build
         uses: garygrossgarten/github-action-scp@release
-        if: failure()
+        if: success()
         with:
-          local: test-results
-          remote: ${{ secrets.TEST_REPORT_PATH }}
+          local: qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip
+          remote: ${{ secrets.DEPLOY_PATH }}
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          rmRemote: true
 
-      # Send failure notifications to slack
-      - name: Slack screenshots notification
-        id: notify_slack_failure
+      # Send failure notification to slack
+      - name: Slack deploy notification
+        id: notify_deploy_failure
         uses: slackapi/slack-github-action@v1.23.0
         with:
           channel-id: 'github-ci'
@@ -83,14 +62,14 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "Qorus UI"
+                    "text": "Qorus UI live deployment"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Tests action run #${{ github.run_number }} for PR ${{ github.event.pull_request.html_url }} triggered by ${{ github.triggering_actor }}"
+                    "text": "Live deploy action run #${{ github.run_number }} triggered by ${{ github.triggering_actor }}"
                   }
                 },
                 {
@@ -113,33 +92,6 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
-                        "text": ":warning: View report",
-                        "emoji": true
-                      },
-                      "url": "https://hq.qoretechnologies.com/~pchalupny/storage/report/index.html"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":camera: View screenshots",
-                        "emoji": true
-                      },
-                      "url": "https://hq.qoretechnologies.com/~pchalupny/storage/"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":link: View site",
-                        "emoji": true
-                      },
-                      "url": "https://deploy-preview-${{ github.event.pull_request.number}}--unrivaled-kitsune-6f1aa0.netlify.app"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
                         "text": ":arrow_heading_up: Go to action",
                         "emoji": true
                       },
@@ -153,7 +105,7 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
-      - name: Slack screenshots notification
+      - name: Slack deploy notification success
         id: notify_slack_success
         uses: slackapi/slack-github-action@v1.23.0
         with:
@@ -165,14 +117,14 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "Qorus UI"
+                    "text": "Qorus UI live deployment"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Tests action run #${{ github.run_number }} for PR ${{ github.event.pull_request.html_url }} triggered by ${{ github.triggering_actor }}"
+                    "text": "Live deploy action run #${{ github.run_number }} triggered by ${{ github.triggering_actor }}"
                   }
                 },
                 {
@@ -195,10 +147,10 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
-                        "text": ":link: View site",
+                        "text": ":package: Get build",
                         "emoji": true
                       },
-                      "url": "https://deploy-preview-${{ github.event.pull_request.number}}--unrivaled-kitsune-6f1aa0.netlify.app"
+                      "url": "https://hq.qoretechnologies.com/~pchalupny/ui-builds/qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip"
                     },
                     {
                       "type": "button",
