@@ -131,6 +131,15 @@ jobs:
                       "type": "button",
                       "text": {
                         "type": "plain_text",
+                        "text": ":link: View site",
+                        "emoji": true
+                      },
+                      "url": "https://deploy-preview-${{ github.event.pull_request.number}}--unrivaled-kitsune-6f1aa0.netlify.app"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
                         "text": ":arrow_heading_up: Go to actions",
                         "emoji": true
                       },
