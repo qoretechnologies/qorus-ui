@@ -423,9 +423,9 @@ test.describe('Checks every page for visual regressions', () => {
       .locator('#properties-view div:has-text("Properties addAdd property")')
       .getByRole('button', { name: 'add Add property' })
       .click();
-    await page.getByRole('button', { name: 'Select caret-down' }).first().click();
-    await page.locator('li:has-text("arch") a').click();
-    await page.getByRole('button', { name: 'Select caret-down' }).nth(1).click();
+    await page.getByRole('button', { name: 'Please select domain Please select domain' }).click();
+    await page.getByRole('button', { name: 'arch arch' }).click();
+    await page.getByRole('button', { name: 'Select caret-down' }).nth(0).click();
     await page.getByPlaceholder('...or specify new key').click();
     await page.getByPlaceholder('...or specify new key').press('CapsLock');
     await page.getByPlaceholder('...or specify new key').fill('test');
