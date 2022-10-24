@@ -1,5 +1,5 @@
 {
-  "name": "@qoretechnologies/qorus-ui",
+  "name": "qorus-ui",
   "version": "1.0.0",
   "description": "Qorus UI",
   "author": "Qore Technologies",
@@ -11,7 +11,6 @@
   "bugs": {
     "url": "https://github.com/qoretechnologies/qorus-ui/issues"
   },
-  "homepage": "https://github.com/qoretechnologies/qorus-ui#readme",
   "private": false,
   "dependencies": {
     "@blueprintjs/core": "3.36",
