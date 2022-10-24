@@ -15,6 +15,11 @@ jobs:
         with:
           node-version: 16
 
+      # Save release version to outputs
+      - name: Save release version to outputs
+        id: save_release_version
+        run: echo ::set-output name=version::$(node -pe "require('./package.json').version")
+
       # Install dependencies
       - name: Install dependencies
         id: install_modules
@@ -169,14 +174,15 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
+      # Create a GitHub release
       - name: Create a release
         id: release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ secrets.LIVE_QORUS_VERSION }}
-          release_name: v${{ secrets.LIVE_QORUS_VERSION }}
-          body: v${{ secrets.LIVE_QORUS_VERSION }}
+          tag_name: v${{ secrets.LIVE_QORUS_VERSION }}-${{ steps.save_release_version.outputs.version }}
+          release_name: v${{ secrets.LIVE_QORUS_VERSION }}-${{ steps.save_release_version.outputs.version }}
+          body: v${{ secrets.LIVE_QORUS_VERSION }}-${{ steps.save_release_version.outputs.version }}
           draft: false
           prerelease: false
