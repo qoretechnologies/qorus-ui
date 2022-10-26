@@ -65,7 +65,6 @@ jobs:
       - name: Copy develop build to HQ
         id: copy_develop_build_test_storage
         uses: garygrossgarten/github-action-scp@release
-        if: success()
         with:
           local: qorus-webapp-develop.zip
           remote: /export/home2/pchalupny/public_html/storage/
