@@ -37,7 +37,7 @@ jobs:
           cd tmp
           echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" >> id_rsa
           chmod 600 ./id_rsa
-          scp -i ./id_rsa qorus-webapp-develop.zip ${{ secrets.DEPLOY_USER}}@${{ secrets.DEPLOY_HOST}}:${{ secrets.DEPLOY_PATH }}
+          scp -i ./id_rsa ../qorus-webapp-develop.zip ${{ secrets.DEPLOY_USER}}@${{ secrets.DEPLOY_HOST}}:${{ secrets.DEPLOY_PATH }}
 
       # Upload the dev build as artifact
       - uses: actions/upload-artifact@v3
