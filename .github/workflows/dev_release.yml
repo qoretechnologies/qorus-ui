@@ -28,6 +28,18 @@ jobs:
           zip -r qorus-webapp-develop.zip build
           chmod 777 -R qorus-webapp-develop.zip
           rm -rf build
+          
+      # Copy the build to HQ
+      - name: Copy develop build to HQ
+        id: copy_develop_build
+        uses: garygrossgarten/github-action-scp@release
+        if: success()
+        with:
+          local: qorus-webapp-develop.zip
+          remote: ${{ secrets.DEPLOY_PATH }}
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
 
       # Upload the dev build as artifact
       - uses: actions/upload-artifact@v3
@@ -37,42 +49,7 @@ jobs:
           name: develop_build
           path: qorus-webapp-develop.zip
           retention-days: 30
-
-      # Copy the build to HQ
-      #- name: Copy develop build to HQ
-      #  id: copy_develop_build
-      #  uses: garygrossgarten/github-action-scp@release
-      #  if: success()
-      #  with:
-      #    local: qorus-webapp-develop.zip
-      #    remote: ${{ secrets.DEPLOY_PATH }}
-      #    host: ${{ secrets.DEPLOY_HOST }}
-      #    username: ${{ secrets.DEPLOY_USER }}
-      #    privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           
-      # Copy the build to HQ 
-      #- name: Copy develop build to HQ
-      #  id: copy_develop_build_test
-      #  uses: garygrossgarten/github-action-scp@release
-      #  if: success()
-      #  with:
-      #    local: qorus-webapp-develop.zip
-      #    remote: /export/home/pchalupny/public_html/ui-builds/
-      #    host: ${{ secrets.DEPLOY_HOST }}
-      #    username: ${{ secrets.DEPLOY_USER }}
-      #    privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-          
-      # Copy the build to HQ
-      - name: Copy develop build to HQ
-        id: copy_develop_build_test_storage
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: qorus-webapp-develop.zip
-          remote: ${{ secrets.TEST_REPORT_PATH }}
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-
       # Send failure notification to slack
       - name: Slack deploy notification
         id: notify_deploy_failure
