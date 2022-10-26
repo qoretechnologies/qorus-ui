@@ -25,9 +25,8 @@ jobs:
         id: dev_build
         run: |
           yarn build:dev
-          #zip -r qorus-webapp-develop.zip build
-          #chmod 777 -R qorus-webapp-develop.zip
-          #rm -rf build
+          zip -r qorus-webapp-develop.zip build
+          chmod 777 qorus-webapp-develop.zip
           
       # Copy the build to HQ
       - name: Copy develop build to HQ
@@ -35,8 +34,8 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         if: success()
         with:
-          local: build
-          remote: ${{ secrets.DEPLOY_PATH }}
+          local: qorus-webapp-develop.zip
+          remote: ${{ secrets.DEPLOY_PATH }}/
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
