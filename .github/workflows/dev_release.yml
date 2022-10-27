@@ -34,7 +34,7 @@ jobs:
         if: success()
         run: |
           mkdir -p ~/.ssh
-          echo "hq.qoretechnologies.com,192.168.16.2 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAkA62t/wtFMNDfp7PI5ssGGYbdqAR1T0nCFC5e9GQH3RRnietwTk/3GuNs2N3bE1w0RIXWtg2ahxcvEDtVpv0I=" > ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
           echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/id_rsa
