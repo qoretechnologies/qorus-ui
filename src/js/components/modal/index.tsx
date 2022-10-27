@@ -165,6 +165,7 @@ export default class Modal extends Component {
         aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
         // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
         onMouseDown={this.onEscape}
+        style={{ zIndex: 11000 }}
       >
         <Draggable handle=".handle">
           <div
