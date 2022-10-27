@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -57,7 +56,7 @@ Props) => (
       link={getAlertObjectLink(type, { name, id })}
       isActive={isActive}
       onDetailClick={handleDetailClick}
-      name={name}
+      name={name || id}
       type={type}
     />
     <Td className="big text">
