@@ -359,7 +359,6 @@ span.bp3-icon {
 
 .bp3-button-text {
   display: flex;
-
 }
 
 .bp3-button-group,
@@ -478,4 +477,10 @@ span.bp3-icon {
 .select-field div,
 .select-field button {
   width: 100%;
+}
+
+.bp3-portal,
+.bp3-overlay-backdrop,
+.bp3-overlay {
+  z-index: 10999;
 }
