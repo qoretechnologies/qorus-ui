@@ -1,6 +1,5 @@
 // @flow
 import classnames from 'classnames';
-import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
@@ -142,7 +141,7 @@ Props) => (
         {expiry}
       </DateColumn>
     )}
-    <Td className="huge separated-cell">
+    <Td className="medium separated-cell">
       <InstancesBar
         states={[
           { name: 'COMPLETE', label: 'complete', title: 'Complete' },

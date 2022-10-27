@@ -1,0 +1,188 @@
+name: Live UI release
+on:
+  push:
+    branches: [main]
+jobs:
+  live_release:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repo
+      - uses: actions/checkout@v3
+
+      # Setup node
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      # Save release version to outputs
+      - name: Save release version to outputs
+        id: save_release_version
+        run: echo ::set-output name=version::$(node -pe "require('./package.json').version")
+
+      # Install dependencies
+      - name: Install dependencies
+        id: install_modules
+        run: yarn
+
+      # Create a production build
+      - name: Production build
+        id: prod_build
+        run: |
+          yarn build
+          zip -r qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip build
+          rm -rf build
+
+      # Upload the prod build as artifact
+      - uses: actions/upload-artifact@v3
+        id: upload_prod_build
+        if: success()
+        with:
+          name: production_build
+          path: qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip
+          retention-days: 30
+
+      # Copy the production build to HQ
+      - name: Copy production build to HQ
+        id: copy_prod_build
+        if: success()
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          echo "${{ secrets.DEPLOY_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/id_rsa
+          scp qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip ${{ secrets.DEPLOY_USER}}@${{ secrets.DEPLOY_HOST}}:${{ secrets.DEPLOY_PATH }}
+
+      # Send failure notification to slack
+      - name: Slack deploy notification
+        id: notify_deploy_failure
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: 'github-ci'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Qorus UI live deployment"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Live deploy action run #${{ github.run_number }} triggered by ${{ github.triggering_actor }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":rotating_light: FAILED"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":arrow_heading_up: Go to action",
+                        "emoji": true
+                      },
+                      "url": "https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}}"
+                    }
+                  ]
+                }
+              ]
+            }
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Slack deploy notification success
+        id: notify_slack_success
+        uses: slackapi/slack-github-action@v1.23.0
+        with:
+          channel-id: 'github-ci'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Qorus UI live deployment"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Live deploy action run #${{ github.run_number }} triggered by ${{ github.triggering_actor }}"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":white_check_mark: SUCCEEDED"
+                  }
+                },
+                {
+                  "type": "divider"
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":package: Get build",
+                        "emoji": true
+                      },
+                      "url": "https://hq.qoretechnologies.com/~pchalupny/ui-builds/qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": ":arrow_heading_up: Go to action",
+                        "emoji": true
+                      },
+                      "url": "https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}}"
+                    }
+                  ]
+                }
+              ]
+            }
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      # Create a GitHub release
+      - name: Create a release
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ secrets.LIVE_QORUS_VERSION }}-${{ steps.save_release_version.outputs.version }}
+          release_name: v${{ secrets.LIVE_QORUS_VERSION }}-${{ steps.save_release_version.outputs.version }}
+          body: v${{ secrets.LIVE_QORUS_VERSION }}-${{ steps.save_release_version.outputs.version }}
+          draft: false
+          prerelease: false

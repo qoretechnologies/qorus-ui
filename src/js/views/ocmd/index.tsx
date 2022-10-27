@@ -242,7 +242,7 @@ export default class OCMDView extends Component {
     if (size(this.state.collection) === 0) return <Loader />;
 
     return (
-      <Flex>
+      <Flex id="ocmd-view">
         <Headbar>
           <Breadcrumbs>
             <Crumb active>OCMD</Crumb>

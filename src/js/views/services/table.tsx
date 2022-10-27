@@ -1,6 +1,4 @@
-// @flow
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -62,7 +60,15 @@ const ServicesTable: Function = ({
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Table fixed hover condensed striped className="resource-table" key={collection.length}>
+  <Table
+    fixed
+    hover
+    condensed
+    striped
+    className="resource-table"
+    key={collection.length}
+    id="services-view"
+  >
     <Thead>
       <FixedRow className="toolbar-row">
         <Th>

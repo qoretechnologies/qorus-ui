@@ -53,7 +53,7 @@ Props) => (
       collection,
       handleSearchChange,
     }: EnhancedTableProps) => (
-      <Table striped condensed fixed height={height}>
+      <Table striped condensed fixed height={height} id="errors-view">
         <Thead>
           <FixedRow className="toolbar-row">
             <Th>

@@ -1,7 +1,6 @@
 /* @flow */
 import map from 'lodash/map';
 import size from 'lodash/size';
-import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import compose from 'recompose/compose';
@@ -22,7 +21,7 @@ type Props = {
 };
 
 const UserHttp: Function = ({ collection }: Props): any => (
-  <Flex>
+  <Flex id="http-services-view">
     <Headbar>
       <Breadcrumbs>
         <Crumb active> User HTTP Services </Crumb>

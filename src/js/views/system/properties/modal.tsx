@@ -1,12 +1,15 @@
 // @flow
+import { ReqoreDropdown } from '@qoretechnologies/reqore';
+import { IReqoreDropdownItemProps } from '@qoretechnologies/reqore/dist/components/Dropdown/item';
 import includes from 'lodash/includes';
 import React, { Component } from 'react';
+import pure from 'recompose/onlyUpdateForKeys';
 import Box from '../../../components/box';
-// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control, Controls } from '../../../components/controls';
 import Dropdown, { Control as DControl, Item as DItem } from '../../../components/dropdown';
 import Modal from '../../../components/modal';
 
+@pure(['asgasgasgasg'])
 export default class extends Component {
   props: {
     onMount: Function;
@@ -145,6 +148,8 @@ export default class extends Component {
   render() {
     const { data, collection } = this.props;
 
+    console.log('UPDATED');
+
     return (
       <Modal hasFooter>
         <Modal.Header titleId="props-modal" onClose={this.props.onClose}>
@@ -157,15 +162,21 @@ export default class extends Component {
               <div className={`form-group ${!data ? 'input-group' : ''}`}>
                 {!data && (
                   <div className="input-group-btn">
-                    <Dropdown
-                      id="props"
-                      show={this.state.showDomains}
-                      onHide={this.handleDomainClose}
+                    <ReqoreDropdown
+                      componentProps={{
+                        type: 'button',
+                      }}
+                      items={this.getDomainList(this.state.domain).map(
+                        (domain: string): IReqoreDropdownItemProps => ({
+                          label: domain,
+                          selected: domain === this.state.domain,
+                          onClick: (domain) => this.setState({ domain }),
+                          id: domain,
+                        })
+                      )}
                     >
-                      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
-                      <DControl> Select </DControl>
-                      {this.renderDomains()}
-                    </Dropdown>
+                      {this.state.domain || 'Please select domain'}
+                    </ReqoreDropdown>
                   </div>
                 )}
                 <input

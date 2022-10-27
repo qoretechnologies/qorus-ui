@@ -1,5 +1,4 @@
 import { Icon } from '@blueprintjs/core';
-import React from 'react';
 import { normalizeUnknownId } from '../../store/api/resources/utils';
 import ContentByType from '../ContentByType';
 import PaneItem from '../pane_item';
@@ -22,6 +21,11 @@ const InfoHeader: Function = ({ model }: Props) => (
         </h5>
       ) : null
     }
+    style={{
+      maxHeight: '300px',
+      overflow: 'auto',
+      flex: '1 0 auto',
+    }}
   >
     {/* @ts-ignore ts-migrate(2339) FIXME: Property 'description' does not exist on type 'Obj... Remove this comment to see the full error message */}
     {model.description && <ContentByType content={model.description} />}

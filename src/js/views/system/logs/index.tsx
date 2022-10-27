@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -23,7 +22,7 @@ type Props = {
 };
 
 const Log: Function = ({ tabQuery, logs }: Props) => (
-  <Flex>
+  <Flex id="logs-view">
     <Headbar>
       <Breadcrumbs>
         <Crumb>Logs</Crumb>

@@ -2,7 +2,6 @@
 import { Button } from '@blueprintjs/core';
 import capitalize from 'lodash/capitalize';
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { withRouter } from 'react-router';
 import compose from 'recompose/compose';
@@ -82,7 +81,7 @@ const ConnectionTable: Function = ({
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Table fixed striped>
+  <Table fixed striped id="connections-view">
     <Thead>
       <FixedRow className="toolbar-row">
         <Th colspan="full">

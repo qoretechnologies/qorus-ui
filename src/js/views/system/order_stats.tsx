@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import { connect } from 'react-redux';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import Flex from '../../components/Flex';
@@ -8,7 +7,7 @@ import OrderStats from '../../components/OrderStats';
 
 // @ts-ignore ts-migrate(2339) FIXME: Property 'orderStats' does not exist on type 'Obje... Remove this comment to see the full error message
 const OrderStatsView = ({ orderStats }: any): any => (
-  <Flex>
+  <Flex id="order-stats-view">
     <Headbar>
       <Breadcrumbs>
         <Crumb active> Global order stats</Crumb>

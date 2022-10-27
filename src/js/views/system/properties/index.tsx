@@ -1,6 +1,6 @@
 /* @flow */
 import { flow, includes, map, omit, size } from 'lodash';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { createSelector } from 'reselect';
@@ -137,7 +137,7 @@ export default class PropertiesView extends Component {
     const { collection, user, changeSearchQuery, searchQuery } = this.props;
 
     return (
-      <Flex>
+      <Flex id="properties-view">
         <Headbar>
           <Breadcrumbs>
             <Crumb active> Properties </Crumb>
