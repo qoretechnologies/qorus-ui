@@ -79,6 +79,15 @@ test.describe('Checks every page for visual regressions', () => {
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-config.png', screenshotConfig);
 
+    await page
+      .locator(
+        'div:nth-child(9) > .reqore-table-body > div > .sc-fbPSWO > div:nth-child(3) > .sc-gsnTZi > button'
+      )
+      .first()
+      .click();
+    await page.waitForSelector('.bp3-dialog-container');
+    await expect(page).toHaveScreenshot('workflows-config-item-open.png', screenshotConfig);
+
     await page.goto('https://localhost:3000/workflows?paneId=1&paneTab=steps');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-steps.png', screenshotConfig);
