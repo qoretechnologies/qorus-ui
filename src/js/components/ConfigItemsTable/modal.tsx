@@ -1,15 +1,12 @@
 // @flow
+import { ControlGroup, InputGroup, TextArea, Tooltip } from '@blueprintjs/core';
 import {
-  Button as Btn,
-  ButtonGroup as BtnGrp,
-  ControlGroup,
-  InputGroup,
-  Intent,
-  Popover,
-  Position,
-  TextArea,
-  Tooltip,
-} from '@blueprintjs/core';
+  ReqoreMessage,
+  ReqoreModal,
+  ReqoreSpacer,
+  ReqoreTabs,
+  ReqoreTabsContent,
+} from '@qoretechnologies/reqore';
 import jsyaml from 'js-yaml';
 import isNull from 'lodash/isNull';
 import map from 'lodash/map';
@@ -24,14 +21,11 @@ import { getLineCount } from '../../helpers/system';
 import settings from '../../settings';
 import { get } from '../../store/api/utils';
 import Alert from '../alert';
-import Box from '../box';
 import ContentByType from '../ContentByType';
 import AutoField from '../Field/auto';
 import { validateField } from '../Field/validations';
 import Loader from '../loader';
-import Modal from '../modal';
 import Pull from '../Pull';
-import Tabs, { Pane } from '../tabs';
 import Tree from '../tree';
 
 type Props = {
@@ -284,376 +278,336 @@ export default class ConfigItemsModal extends Component {
     const globalConfigItems = pickBy(globalConfig, (data, name) => isNull(data.value));
 
     return (
-      <Modal
-        hasFooter
-        onEnterPress={(event) => {
-          if (event.srcElement.tagName !== 'TEXTAREA') {
-            this.handleSaveClick();
-          }
-        }}
+      <ReqoreModal
+        label={item.name}
+        resizable
+        onClose={() => onClose()}
+        isOpen
+        headerSize={2}
+        blur={5}
       >
-        <Modal.Header onClose={onClose} titleId="yamlEdit">
-          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
-          {!item ? 'Assign new config item value' : `Editing ${item.name} config item`}
-        </Modal.Header>
-        <Modal.Body>
-          <Box top fill scrollY>
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
-            {item?.desc && (
-              <Alert icon="info-sign">
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
-                <ReactMarkdown>{item.desc}</ReactMarkdown>
-              </Alert>
-            )}
-            {isGlobal && (
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
+        {item?.desc && (
+          <>
+            <ReqoreMessage customTheme={{ main: '#e4e8ef' }} icon="InformationLine" flat>
+              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
+              <ReactMarkdown>{item.desc}</ReactMarkdown>
+            </ReqoreMessage>
+            <ReqoreSpacer height={10} />
+          </>
+        )}
+        {isGlobal && (
+          <>
+            <ReqoreMessage intent="warning">
+              {!item ? 'Creating new ' : 'Editing'} global config value will affect all interfaces
+              using this item.
+            </ReqoreMessage>
+            {!item && (
               <>
-                <Alert bsStyle="warning">
-                  {!item ? 'Creating new ' : 'Editing'} global config value will affect all
-                  interfaces using this item.
-                </Alert>
-                {!item && (
-                  <>
-                    <Dropdown>
-                      {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
-                      <DControl>{item?.name || 'Please select'}</DControl>
-                      {map(globalConfigItems, (data) => (
+                <Dropdown>
+                  {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
+                  <DControl>{item?.name || 'Please select'}</DControl>
+                  {map(globalConfigItems, (data) => (
+                    <Item
+                      title={data.name}
+                      // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+                      onClick={async (event, name) => {
+                        const { intrf, intrfId } = this.props;
+
+                        const interfacePath: string = intrfId ? `${intrf}/${intrfId}` : 'system';
+
+                        const yamlData: any = await get(
+                          `${settings.REST_BASE_URL}/${interfacePath}/config/${name}?action=yaml`
+                        );
+
+                        this.setState({
+                          value: null,
+                          item: { ...data, name },
+                          type: data.type === 'any' ? null : data.type,
+                          yamlData,
+                        });
+                      }}
+                    />
+                  ))}
+                </Dropdown>
+                <br />
+              </>
+            )}
+          </>
+        )}
+
+        {!yamlData && <Loader />}
+        {yamlData ? (
+          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+          <ReqoreTabs
+            activeTab={useTemplate ? 'template' : 'custom'}
+            flat
+            activeTabIntent="info"
+            tabs={[
+              {
+                label: 'Custom',
+                id: 'custom',
+                activeIntent: 'info',
+              },
+              {
+                label: 'Template',
+                id: 'template',
+                activeIntent: 'info',
+              },
+            ]}
+          >
+            {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
+            <ReqoreTabsContent tabId="custom">
+              <React.Fragment>
+                <div className="configItemsEditor">
+                  <div className="header">
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
+                    {yamlData.allowed_values
+                      ? this.renderAllowedItems(yamlData)
+                      : isGlobal
+                      ? 'Set item value'
+                      : 'Set custom value or'}
+                    {!isGlobal && (
+                      <Pull right>
+                        <ButtonGroup>
+                          <Tooltip
+                            content={
+                              this.state.type === 'hash' || this.state.type === 'list' ? (
+                                // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+                                <Tree data={item.default_value} noButtons expanded compact />
+                              ) : (
+                                <ContentByType
+                                  inTable
+                                  noControls
+                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 'O... Remove this comment to see the full error message
+                                  content={item.default_value}
+                                />
+                              )
+                            }
+                          >
+                            <Button
+                              label="Set default value"
+                              // @ts-ignore ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 'O... Remove this comment to see the full error message
+                              disabled={!item.default_value}
+                              onClick={this.handleDefaultClick}
+                            />
+                          </Tooltip>
+                        </ButtonGroup>
+                      </Pull>
+                    )}
+                  </div>
+                  <div className="body">
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
+                    {item?.allowed_values && (
+                      <Alert bsStyle="warning" icon="warning-sign">
+                        This config item can only be set using predefined values
+                      </Alert>
+                    )}
+                    {error && (
+                      <Alert bsStyle="danger">The provided value is not in correct format</Alert>
+                    )}
+                    {this.renderValueContent()}
+                  </div>
+                </div>
+              </React.Fragment>
+            </ReqoreTabsContent>
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
+            {!item?.allowed_values && (
+              // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
+              <ReqoreTabsContent tabId="template">
+                <div className="configItemsEditor">
+                  <div className="header">Set custom template</div>
+                  <div className="body">
+                    <Alert bsStyle="info" icon="info-sign">
+                      {'Template items are in the format: $<type>:<key>'}
+                    </Alert>
+                    <ControlGroup className="bp3-fill">
+                      {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                      <Dropdown className="bp3-fixed">
+                        {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
+                        <DControl icon="dollar">{this.state.templateType}</DControl>
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
                         <Item
-                          title={data.name}
-                          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                          onClick={async (event, name) => {
-                            const { intrf, intrfId } = this.props;
-
-                            const interfacePath: string = intrfId
-                              ? `${intrf}/${intrfId}`
-                              : 'system';
-
-                            const yamlData: any = await get(
-                              `${settings.REST_BASE_URL}/${interfacePath}/config/${name}?action=yaml`
-                            );
-
+                          title="config"
+                          onClick={() => {
+                            this.setState({ templateType: 'config' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="dynamic"
+                          onClick={() => {
+                            this.setState({ templateType: 'dynamic' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="jinfo"
+                          onClick={() => {
+                            this.setState({ templateType: 'jinfo' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="keys"
+                          onClick={() => {
+                            this.setState({ templateType: 'keys' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="local"
+                          onClick={() => {
+                            this.setState({ templateType: 'local' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="parse-value"
+                          onClick={() => {
+                            this.setState({ templateType: 'parse-value' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="pstate"
+                          onClick={() => {
+                            this.setState({ templateType: 'pstate' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="python-expr"
+                          onClick={() => {
+                            this.setState({ templateType: 'python-expr' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="qore-expr"
+                          onClick={() => {
+                            this.setState({ templateType: 'qore-expr' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="qore-expr-value"
+                          onClick={() => {
+                            this.setState({ templateType: 'qore-expr-value' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="rest"
+                          onClick={() => {
+                            this.setState({ templateType: 'rest' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="sensitive"
+                          onClick={() => {
+                            this.setState({ templateType: 'sensitive' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="sensitive-alias"
+                          onClick={() => {
                             this.setState({
-                              value: null,
-                              item: { ...data, name },
-                              type: data.type === 'any' ? null : data.type,
-                              yamlData,
+                              templateType: 'sensitive-alias',
                             });
                           }}
                         />
-                      ))}
-                    </Dropdown>
-                    <br />
-                  </>
-                )}
-              </>
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="state"
+                          onClick={() => {
+                            this.setState({ templateType: 'state' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="static"
+                          onClick={() => {
+                            this.setState({ templateType: 'static' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="step"
+                          onClick={() => {
+                            this.setState({ templateType: 'step' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="sysprop"
+                          onClick={() => {
+                            this.setState({ templateType: 'sysprop' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="temp"
+                          onClick={() => {
+                            this.setState({ templateType: 'temp' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="timestamp"
+                          onClick={() => {
+                            this.setState({ templateType: 'timestamp' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="transient"
+                          onClick={() => {
+                            this.setState({ templateType: 'transient' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="value-map"
+                          onClick={() => {
+                            this.setState({ templateType: 'value-map' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="var"
+                          onClick={() => {
+                            this.setState({ templateType: 'var' });
+                          }}
+                        />
+                        {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
+                        <Item
+                          title="xconfig"
+                          onClick={() => {
+                            this.setState({ templateType: 'xconfig' });
+                          }}
+                        />
+                      </Dropdown>
+                      <Button text=":" big className="bp3-fixed" />
+                      <InputGroup
+                        value={this.state.templateKey}
+                        onChange={(event: any) => {
+                          this.setState({
+                            templateKey: event.target.value,
+                            value: `$${this.state.templateType}:${event.target.value}`,
+                          });
+                        }}
+                      />
+                    </ControlGroup>
+                  </div>
+                </div>
+              </ReqoreTabsContent>
             )}
-
-            {!yamlData && <Loader />}
-            {yamlData ? (
-              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-              <Tabs
-                active={useTemplate ? 'template' : 'custom'}
-                onChangeEnd={() => {
-                  this.setState({ value: null });
-                }}
-              >
-                {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message */}
-                <Pane name="custom">
-                  <React.Fragment>
-                    <div className="configItemsEditor">
-                      <div className="header">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
-                        {yamlData.allowed_values
-                          ? this.renderAllowedItems(yamlData)
-                          : isGlobal
-                          ? 'Set item value'
-                          : 'Set custom value or'}
-                        {!isGlobal && (
-                          <Pull right>
-                            <ButtonGroup>
-                              <Tooltip
-                                content={
-                                  this.state.type === 'hash' || this.state.type === 'list' ? (
-                                    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                                    <Tree data={item.default_value} noButtons expanded compact />
-                                  ) : (
-                                    <ContentByType
-                                      inTable
-                                      noControls
-                                      // @ts-ignore ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 'O... Remove this comment to see the full error message
-                                      content={item.default_value}
-                                    />
-                                  )
-                                }
-                              >
-                                <Button
-                                  label="Set default value"
-                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 'O... Remove this comment to see the full error message
-                                  disabled={!item.default_value}
-                                  onClick={this.handleDefaultClick}
-                                />
-                              </Tooltip>
-                            </ButtonGroup>
-                          </Pull>
-                        )}
-                      </div>
-                      <div className="body">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
-                        {item?.allowed_values && (
-                          <Alert bsStyle="warning" icon="warning-sign">
-                            This config item can only be set using predefined values
-                          </Alert>
-                        )}
-                        {error && (
-                          <Alert bsStyle="danger">
-                            The provided value is not in correct format
-                          </Alert>
-                        )}
-                        {this.renderValueContent()}
-                      </div>
-                    </div>
-                  </React.Fragment>
-                </Pane>
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'allowed_values' does not exist on type '... Remove this comment to see the full error message */}
-                {!item?.allowed_values && (
-                  // @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; name: string; }' is not... Remove this comment to see the full error message
-                  <Pane name="template">
-                    <div className="configItemsEditor">
-                      <div className="header">Set custom template</div>
-                      <div className="body">
-                        <Alert bsStyle="info" icon="info-sign">
-                          {'Template items are in the format: $<type>:<key>'}
-                        </Alert>
-                        <ControlGroup className="bp3-fill">
-                          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                          <Dropdown className="bp3-fixed">
-                            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; icon: string; }' is miss... Remove this comment to see the full error message */}
-                            <DControl icon="dollar">{this.state.templateType}</DControl>
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="config"
-                              onClick={() => {
-                                this.setState({ templateType: 'config' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="dynamic"
-                              onClick={() => {
-                                this.setState({ templateType: 'dynamic' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="jinfo"
-                              onClick={() => {
-                                this.setState({ templateType: 'jinfo' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="keys"
-                              onClick={() => {
-                                this.setState({ templateType: 'keys' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="local"
-                              onClick={() => {
-                                this.setState({ templateType: 'local' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="parse-value"
-                              onClick={() => {
-                                this.setState({ templateType: 'parse-value' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="pstate"
-                              onClick={() => {
-                                this.setState({ templateType: 'pstate' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="python-expr"
-                              onClick={() => {
-                                this.setState({ templateType: 'python-expr' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="qore-expr"
-                              onClick={() => {
-                                this.setState({ templateType: 'qore-expr' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="qore-expr-value"
-                              onClick={() => {
-                                this.setState({ templateType: 'qore-expr-value' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="rest"
-                              onClick={() => {
-                                this.setState({ templateType: 'rest' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="sensitive"
-                              onClick={() => {
-                                this.setState({ templateType: 'sensitive' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="sensitive-alias"
-                              onClick={() => {
-                                this.setState({
-                                  templateType: 'sensitive-alias',
-                                });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="state"
-                              onClick={() => {
-                                this.setState({ templateType: 'state' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="static"
-                              onClick={() => {
-                                this.setState({ templateType: 'static' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="step"
-                              onClick={() => {
-                                this.setState({ templateType: 'step' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="sysprop"
-                              onClick={() => {
-                                this.setState({ templateType: 'sysprop' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="temp"
-                              onClick={() => {
-                                this.setState({ templateType: 'temp' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="timestamp"
-                              onClick={() => {
-                                this.setState({ templateType: 'timestamp' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="transient"
-                              onClick={() => {
-                                this.setState({ templateType: 'transient' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="value-map"
-                              onClick={() => {
-                                this.setState({ templateType: 'value-map' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="var"
-                              onClick={() => {
-                                this.setState({ templateType: 'var' });
-                              }}
-                            />
-                            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                            <Item
-                              title="xconfig"
-                              onClick={() => {
-                                this.setState({ templateType: 'xconfig' });
-                              }}
-                            />
-                          </Dropdown>
-                          <Button text=":" big className="bp3-fixed" />
-                          <InputGroup
-                            value={this.state.templateKey}
-                            onChange={(event: any) => {
-                              this.setState({
-                                templateKey: event.target.value,
-                                value: `$${this.state.templateType}:${event.target.value}`,
-                              });
-                            }}
-                          />
-                        </ControlGroup>
-                      </div>
-                    </div>
-                  </Pane>
-                )}
-              </Tabs>
-            ) : null}
-          </Box>
-        </Modal.Body>
-        <Modal.Footer>
-          {yamlData ? (
-            <div className="pull-right">
-              <ButtonGroup>
-                <Button label="Cancel" btnStyle="default" action={onClose} big />
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'default_value' does not exist on type 's... Remove this comment to see the full error message */}
-                {!isGlobal && value === yamlData?.default_value ? (
-                  <Popover
-                    position={Position.TOP}
-                    content={
-                      <Box fill top style={{ width: '300px' }}>
-                        <p>
-                          The value submitted is same as default value, but will not change when
-                          default value is changed in the future.
-                        </p>
-                        <BtnGrp>
-                          <Btn
-                            className="bp3-fill"
-                            text="Submit anyway"
-                            intent={Intent.SUCCESS}
-                            // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
-                            onClick={this.handleSaveClick}
-                          />
-                        </BtnGrp>
-                      </Box>
-                    }
-                  >
-                    <Btn text="Save" icon="warning-sign" intent={Intent.WARNING} />
-                  </Popover>
-                ) : (
-                  <Button
-                    label="Save"
-                    btnStyle="success"
-                    disabled={error}
-                    action={this.handleSaveClick}
-                    big
-                  />
-                )}
-              </ButtonGroup>
-            </div>
-          ) : null}
-        </Modal.Footer>
-      </Modal>
+          </ReqoreTabs>
+        ) : null}
+      </ReqoreModal>
     );
   }
 }

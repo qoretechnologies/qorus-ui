@@ -1,17 +1,22 @@
 // @flow
 import {
   ReqoreButton,
+  ReqoreCollection,
   ReqoreColumn,
   ReqoreColumns,
   ReqoreControlGroup,
   ReqoreIcon,
   ReqoreMessage,
   ReqoreModal,
+  ReqorePanel,
   ReqoreTable,
   ReqoreTag,
+  ReqoreTagGroup,
   ReqoreTree,
 } from '@qoretechnologies/reqore';
+import { IReqoreCollectionItemProps } from '@qoretechnologies/reqore/dist/components/Collection/item';
 import isArray from 'lodash/isArray';
+import isBoolean from 'lodash/isBoolean';
 import isNull from 'lodash/isNull';
 import isObject from 'lodash/isObject';
 import isUndefined from 'lodash/isUndefined';
@@ -20,6 +25,7 @@ import reduce from 'lodash/reduce';
 import size from 'lodash/size';
 import React, { useEffect, useState } from 'react';
 import { injectIntl } from 'react-intl';
+import ReactMarkdown from 'react-markdown';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
@@ -54,29 +60,106 @@ type ConfigItemsTableProps = {
 };
 
 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-const ConfigItemsTable: Function = (props: ConfigItemsTableProps) => (
-  <React.Fragment>
-    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'isGrouped' does not exist on type 'Confi... Remove this comment to see the full error message */}
-    {props.isGrouped && size(props.data) ? (
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'ConfigItem... Remove this comment to see the full error message
-      map(props.data, (configItemsData, groupName) => (
-        <>
-          <br />
-          <ItemsTable
-            {...props}
-            groupName={groupName}
-            configItemsData={configItemsData}
-            title={groupName}
-          />
-          <br />
-        </>
-      ))
-    ) : (
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'configItems' does not exist on type 'Con... Remove this comment to see the full error message
-      <ItemsTable {...props} configItemsData={props.configItems.data} />
-    )}
-  </React.Fragment>
-);
+const ConfigItemsTable: Function = ({
+  openModal,
+  closeModal,
+  saveValue,
+  intrf,
+  configItems,
+  intrfId,
+  stepId,
+  levelType,
+  belongsTo,
+  ...rest
+}: any) => {
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  return (
+    <React.Fragment>
+      {selectedItem && (
+        <ConfigItemsModal
+          onClose={() => setSelectedItem(null)}
+          item={{ ...selectedItem }}
+          belongsTo={belongsTo}
+          onSubmit={saveValue}
+          intrf={intrf}
+          intrfId={configItems.id || intrfId}
+          stepId={configItems.stepId || stepId}
+          levelType={levelType}
+        />
+      )}
+      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'isGrouped' does not exist on type 'Confi... Remove this comment to see the full error message */}
+      {rest.isGrouped && size(rest.data) ? (
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'ConfigItem... Remove this comment to see the full error message
+        map(rest.data, (configItemsData, groupName) => (
+          <>
+            <ReqoreCollection
+              label={groupName}
+              filterable
+              sortable
+              customTheme={{
+                main: '#7c7c7c',
+              }}
+              maxItemHeight={200}
+              items={configItemsData.map(
+                (configItem): IReqoreCollectionItemProps => ({
+                  label: configItem.name,
+                  headerSize: 3,
+                  icon: 'PriceTag3Line',
+                  customTheme: {
+                    main: '#ececec',
+                  },
+                  tooltip: {
+                    opaque: true,
+                    delay: 300,
+                    content: (
+                      <ReqorePanel
+                        label={configItem.name}
+                        headerSize={3}
+                        icon="InformationLine"
+                        customTheme={{ main: '#e4e8ef' }}
+                      >
+                        <ReactMarkdown>{configItem.desc}</ReactMarkdown>
+                        <ReqoreTagGroup>
+                          <ReqoreTag labelKey="Level" label={configItem.level} intent="info" />
+                          <ReqoreTag
+                            labelKey="Strictly Local"
+                            rightIcon={configItem.strictly_local ? 'CheckLine' : 'CloseLine'}
+                            intent="info"
+                          />
+                        </ReqoreTagGroup>
+                      </ReqorePanel>
+                    ),
+                  },
+                  onClick: () => setSelectedItem(configItem),
+                  content: <Value item={configItem} />,
+                  tags: [
+                    {
+                      label: configItem.type,
+                      icon: 'CodeLine',
+                      intent: 'info',
+                      rightIcon: '24HoursFill',
+                    },
+                  ],
+                })
+              )}
+            />
+            {/* <ItemsTable
+                          {...props}
+                          groupName={groupName}
+                          configItemsData={configItemsData}
+                          title={groupName}
+                        />
+                        <br /> */}
+          </>
+        ))
+      ) : (
+        // @ts-ignore ts-migrate(2339) FIXME: Property 'configItems' does not exist on type 'Con... Remove this comment to see the full error message
+        <ItemsTable {...rest} configItemsData={rest.configItems?.data} />
+      )}
+    </React.Fragment>
+  );
+};
 
 export const getItemType = (type, value) => {
   if (type === 'any' || type === 'auto') {
@@ -137,7 +220,7 @@ export const Value = ({ item, useDefault }: any) => {
     return <span> - </span>;
   }
   if (isNull(value)) {
-    return <span> null </span>;
+    return <ReqoreTag label="null" icon="Forbid2Line" />;
   }
   if (item.isTemplatedString) {
     return <ContentByType inTable content={value} />;
@@ -149,11 +232,25 @@ export const Value = ({ item, useDefault }: any) => {
       : item.type;
 
   if (isObject(item.value) || isArray(item.value) || type === 'hash' || type === 'list') {
-    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-    return <ReqoreTree compact data={item.value} />;
+    return <ReqoreTree data={item.value} showControls={false} size="small" />;
   }
 
-  return <ContentByType inTable content={item.value} noMarkdown baseType={type} />;
+  if (isBoolean(value)) {
+    return (
+      <ReqoreTag
+        labelKey={value.toString()}
+        color={!value ? '#D53939' : undefined}
+        rightIcon={value ? 'CheckLine' : 'CloseLine'}
+        intent={value ? 'success' : undefined}
+      />
+    );
+  }
+
+  return (
+    <ReqoreMessage customTheme={{ main: '#e4e9ec' }} flat>
+      {value}
+    </ReqoreMessage>
+  );
 };
 
 let ItemsTable: any = ({

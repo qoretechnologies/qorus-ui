@@ -33,7 +33,7 @@ const Pane: Function = ({
       onClose={onClose}
       position="right"
       width={`${width}px`}
-      minSize="500px"
+      minSize="650px"
       isOpen
       blur={5}
       floating
