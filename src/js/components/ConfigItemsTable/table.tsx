@@ -74,6 +74,8 @@ const ConfigItemsTable: Function = ({
 }: any) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
+  console.log(rest, configItems);
+
   return (
     <React.Fragment>
       {selectedItem && (
@@ -155,7 +157,57 @@ const ConfigItemsTable: Function = ({
         ))
       ) : (
         // @ts-ignore ts-migrate(2339) FIXME: Property 'configItems' does not exist on type 'Con... Remove this comment to see the full error message
-        <ItemsTable {...rest} configItemsData={rest.configItems?.data} />
+        //<ItemsTable {...rest} configItemsData={rest.configItems?.data} />
+        <ReqoreCollection
+          filterable
+          sortable
+          customTheme={{
+            main: '#7c7c7c',
+          }}
+          maxItemHeight={200}
+          items={configItems.data.map(
+            (configItem): IReqoreCollectionItemProps => ({
+              label: configItem.name,
+              headerSize: 3,
+              icon: 'PriceTag3Line',
+              customTheme: {
+                main: '#ececec',
+              },
+              tooltip: {
+                opaque: true,
+                delay: 300,
+                content: (
+                  <ReqorePanel
+                    label={configItem.name}
+                    headerSize={3}
+                    icon="InformationLine"
+                    customTheme={{ main: '#e4e8ef' }}
+                  >
+                    <ReactMarkdown>{configItem.desc}</ReactMarkdown>
+                    <ReqoreTagGroup>
+                      <ReqoreTag labelKey="Level" label={configItem.level} intent="info" />
+                      <ReqoreTag
+                        labelKey="Strictly Local"
+                        rightIcon={configItem.strictly_local ? 'CheckLine' : 'CloseLine'}
+                        intent="info"
+                      />
+                    </ReqoreTagGroup>
+                  </ReqorePanel>
+                ),
+              },
+              onClick: () => setSelectedItem(configItem),
+              content: <Value item={configItem} />,
+              tags: [
+                {
+                  label: configItem.type,
+                  icon: 'CodeLine',
+                  intent: 'info',
+                  rightIcon: '24HoursFill',
+                },
+              ],
+            })
+          )}
+        />
       )}
     </React.Fragment>
   );
