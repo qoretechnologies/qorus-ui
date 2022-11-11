@@ -6,6 +6,8 @@ import {
   ReqoreSpacer,
   ReqoreTabs,
   ReqoreTabsContent,
+  ReqoreTag,
+  ReqoreTagGroup,
 } from '@qoretechnologies/reqore';
 import jsyaml from 'js-yaml';
 import isNull from 'lodash/isNull';
@@ -607,6 +609,14 @@ export default class ConfigItemsModal extends Component {
             )}
           </ReqoreTabs>
         ) : null}
+        <ReqoreTagGroup>
+          <ReqoreTag labelKey="Level" label={item.level} intent="info" />
+          <ReqoreTag
+            labelKey="Strictly Local"
+            rightIcon={item.strictly_local ? 'CheckLine' : 'CloseLine'}
+            intent="info"
+          />
+        </ReqoreTagGroup>
       </ReqoreModal>
     );
   }
