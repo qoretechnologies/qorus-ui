@@ -65,7 +65,7 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'NODE_INFO':
         if (state.api.system.sync) {
-          pipeline(eventstr, system.updateNodeInfo, { ...info, timestamp: d.time }, dispatch);
+          //pipeline(eventstr, system.updateNodeInfo, { ...info, timestamp: d.time }, dispatch);
         }
         break;
       case 'WORKFLOW_STATS_UPDATED':
