@@ -401,9 +401,7 @@ test.describe('Checks every page for visual regressions', () => {
     await page.waitForTimeout(3000);
 
     expect(
-      page
-        .getByRole('row', { name: '- alert-smtp-enable W S J false false edit' })
-        .getByText('false')
+      page.getByRole('row', { name: '- alert-smtp-enable W S J false true edit' }).getByText('true')
     ).toBeTruthy();
 
     await page
