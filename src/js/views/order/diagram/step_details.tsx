@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { Component } from 'react';
 import ContentByType from '../../../components/ContentByType';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
@@ -9,14 +8,14 @@ import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
 import { Table, Tbody, Td, Th, Tr } from '../../../components/new_table';
 import PaneItem from '../../../components/pane_item';
 import Toolbar from '../../../components/toolbar';
-import { pureRender } from '../../../components/utils';
 import { INTERFACE_ICONS } from '../../../constants/interfaces';
 import { canSkip, groupInstances } from '../../../helpers/orders';
+import modal from '../../../hocomponents/modal';
 import { StatusLabel } from '../../workflows/tabs/list/row';
 import Errors from '../errors';
 import Skip from './skip';
 
-@pureRender
+@modal()
 export default class StepDetailTable extends Component {
   props: {
     step: string;
@@ -24,12 +23,9 @@ export default class StepDetailTable extends Component {
     steps: any;
     onSkipSubmit: Function;
     order: any;
+    openModal: any;
+    closeModal: any;
   } = this.props;
-
-  static contextTypes = {
-    openModal: PropTypes.func,
-    closeModal: PropTypes.func,
-  };
 
   componentWillMount() {
     this.setup(this.props);
@@ -66,17 +62,16 @@ export default class StepDetailTable extends Component {
 
   handleSkipClick = () => {
     // @ts-ignore ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
-    this._modal = (
+    this.props.openModal(
       <Skip
-        onClose={this.handleModalClose}
+        onClose={this.props.closeModal}
         // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
         steps={this.state.steps}
+        // @ts-ignore
+        instances={this.props.instances}
         onSubmit={this.handleSkipSubmit}
       />
     );
-
-    // @ts-ignore ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
-    this.context.openModal(this._modal);
   };
 
   handleModalClose = () => {

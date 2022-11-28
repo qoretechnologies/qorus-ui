@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
+import { ReqoreMessage, ReqoreSpacer } from '@qoretechnologies/reqore';
+import { size } from 'lodash';
+import { Component } from 'react';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control, Controls } from '../../../components/controls';
 import Modal from '../../../components/modal';
 
 export default class extends Component {
-  props: {
-    onClose: Function;
-    onSubmit: Function;
-    steps: Array<Object>;
-  } = this.props;
+  props: any = this.props;
 
   componentWillMount() {
     this.setState({
-      value: '',
+      value: size(this.props.instances) === 1 ? this.props.instances[0].ind : '',
       error: false,
     });
   }
@@ -69,15 +67,24 @@ export default class extends Component {
         </Modal.Header>
         <form onSubmit={this.handleFormSubmit}>
           <Modal.Body>
+            <ReqoreSpacer height={10} />
             <p> You can skip a step using: </p>
-            <p> - individual step indexes separated by comma (1, 2, 3)</p>
-            <p> - index ranges (1, 3, 5-10)</p>
+            <p> - individual step indexes separated by comma (0, 2, 3)</p>
+            <p> - index ranges (0, 3, 5-10)</p>
+            <ReqoreMessage intent="info">
+              {size(this.props.instances) === 1
+                ? `There is only 1 instance of this step`
+                : `There are ${size(this.props.instances)} instances of this step`}
+              .
+            </ReqoreMessage>
+            <ReqoreSpacer height={10} />
             <input
               type="text"
               // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Readonly<... Remove this comment to see the full error message
               value={this.state.value}
               // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Readonly<... Remove this comment to see the full error message
               className={`form-control ${this.state.error ? 'form-error' : ''}`}
+              disabled={size(this.props.instances) === 1}
               onChange={this.handleInputChange}
             />
           </Modal.Body>

@@ -191,8 +191,6 @@ Props) => (
                 // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                 (error: any, index: number) => (
                   <>
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'error_instanceid' does not exist
-                    on type... Remove this comment to see the full error message
                     <Tr key={error.error_instanceid} first={index === 0}>
                       {/* @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'. */}
                       <NameColumn name={error.error} />
