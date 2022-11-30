@@ -86,7 +86,7 @@ const Footer: Function = ({ info, path, openModal, closeModal, intl }: Props) =>
           </span>
         )}
         {' | '}
-        <a href={'http://bugs.qoretechnologies.com/projects/webapp-interface/issues/new'}>
+        <a href={'https://github.com/qoretechnologies/qorus-ui/issues/new/choose'}>
           <FormattedMessage id="global.report-bug" />
         </a>
       </p>
