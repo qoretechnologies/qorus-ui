@@ -353,7 +353,10 @@ export default class Root extends Component {
             }}
             withSidebar
           >
-            <div className={`root ${isMaximized ? 'maximized' : ''}`} style={{ flex: 1 }}>
+            <div
+              className={`root ${isMaximized ? 'maximized' : ''}`}
+              style={{ flex: 1, width: '100%' }}
+            >
               {!isMaximized && (
                 <Topbar
                   onMaximizeClick={maximize}
