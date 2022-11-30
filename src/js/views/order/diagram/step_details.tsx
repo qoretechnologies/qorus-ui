@@ -1,8 +1,14 @@
+import {
+  ReqoreButton,
+  ReqoreControlGroup,
+  ReqoreDropdown,
+  ReqoreTag,
+  ReqoreTagGroup,
+} from '@qoretechnologies/reqore';
+import { IReqoreDropdownItemProps } from '@qoretechnologies/reqore/dist/components/Dropdown/item';
 import { Component } from 'react';
-import ContentByType from '../../../components/ContentByType';
-import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import { DateColumn, DateColumnHeader } from '../../../components/DateColumn';
-import Dropdown, { Control, Item } from '../../../components/dropdown';
+import { Item } from '../../../components/dropdown';
 import { IdColumn, IdColumnHeader } from '../../../components/IdColumn';
 import NameColumn, { NameColumnHeader } from '../../../components/NameColumn';
 import { Table, Tbody, Td, Th, Tr } from '../../../components/new_table';
@@ -30,6 +36,8 @@ export default class StepDetailTable extends Component {
   componentWillMount() {
     this.setup(this.props);
   }
+
+  state: any = {};
 
   componentWillReceiveProps(nextProps) {
     if (this.props.step !== nextProps.step || this.props.instances !== nextProps.instances) {
@@ -61,22 +69,7 @@ export default class StepDetailTable extends Component {
   };
 
   handleSkipClick = () => {
-    // @ts-ignore ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
-    this.props.openModal(
-      <Skip
-        onClose={this.props.closeModal}
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
-        steps={this.state.steps}
-        // @ts-ignore
-        instances={this.props.instances}
-        onSubmit={this.handleSkipSubmit}
-      />
-    );
-  };
-
-  handleModalClose = () => {
-    // @ts-ignore ts-migrate(2339) FIXME: Property '_modal' does not exist on type 'StepDeta... Remove this comment to see the full error message
-    this.context.closeModal(this._modal);
+    this.setState({ isSkip: true });
   };
 
   handleDropdownItemClick = (ind) => () => {
@@ -103,14 +96,38 @@ export default class StepDetailTable extends Component {
     if (this.state.steps.length === 1) return undefined;
 
     return (
-      <Dropdown id="steps">
-        {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
-        <Control>
-          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'currentStep' does not exist on type 'Rea... Remove this comment to see the full error message */}
-          {`${this.state.currentStep.ind} - ${this.state.currentStep.stepname}`}
-        </Control>
-        {this.renderDropdownItems()}
-      </Dropdown>
+      <ReqoreDropdown
+        filterable
+        items={this.state.steps.map(
+          (step): IReqoreDropdownItemProps => ({
+            label: `${step.ind} - ${step.stepname} - ${step.stepstatus}`,
+            onClick: this.handleDropdownItemClick(step.ind),
+            intent:
+              step.stepstatus === 'ERROR'
+                ? 'danger'
+                : step.stepstatus === 'COMPLETE'
+                ? 'success'
+                : undefined,
+          })
+        )}
+      >
+        <ReqoreTagGroup size="small" style={{ marginTop: '5px' }}>
+          <ReqoreTag
+            labelKey={this.state.currentStep.ind.toString()}
+            label={this.state.currentStep.stepname}
+          />
+          <ReqoreTag
+            intent={
+              this.state.currentStep.stepstatus === 'ERROR'
+                ? 'danger'
+                : this.state.currentStep.stepstatus === 'COMPLETE'
+                ? 'success'
+                : undefined
+            }
+            label={this.state.currentStep.stepstatus}
+          />
+        </ReqoreTagGroup>
+      </ReqoreDropdown>
     );
   }
 
@@ -121,6 +138,18 @@ export default class StepDetailTable extends Component {
 
     return (
       <div>
+        {this.state.isSkip && (
+          <Skip
+            onClose={() => this.setState({ isSkip: false })}
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'steps' does not exist on type 'Readonly<... Remove this comment to see the full error message
+            steps={this.state.steps}
+            // @ts-ignore
+            instances={this.props.instances}
+            onSubmit={this.handleSkipSubmit}
+            // @ts-ignore
+            ind={this.state.currentStep.ind}
+          />
+        )}
         <PaneItem title="Step details">
           <Toolbar mb>{this.renderDropdown()}</Toolbar>
           <Table condensed bordered className="text-table">
@@ -144,11 +173,24 @@ export default class StepDetailTable extends Component {
                 <IdColumn>{data.stepid}</IdColumn>
                 <Th icon="exclude-row">Skipped</Th>
                 <Td>
-                  <ContentByType content={data.skip} />{' '}
-                  {canSkip(data) && (
-                    <ButtonGroup>
-                      <Button icon="edit" action={this.handleSkipClick} />
-                    </ButtonGroup>
+                  {canSkip(data) ? (
+                    <ReqoreControlGroup stack size="small">
+                      <ReqoreButton
+                        icon={data.skip ? 'CheckFill' : 'CloseLine'}
+                        intent={data.skip ? 'success' : 'danger'}
+                        flat
+                        readOnly
+                      />
+                      <ReqoreButton onClick={this.handleSkipClick} size="small" icon="Edit2Line" />
+                    </ReqoreControlGroup>
+                  ) : (
+                    <ReqoreButton
+                      icon={data.skip ? 'CheckFill' : 'CloseLine'}
+                      intent={data.skip ? 'success' : 'danger'}
+                      flat
+                      size="small"
+                      readOnly
+                    />
                   )}
                 </Td>
               </Tr>
