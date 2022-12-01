@@ -91,6 +91,7 @@ class LogComponent extends Component {
             className="language-log"
             style={{
               height: `${height || 'auto'}`,
+              flex: '1 1 auto',
             }}
             // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'LegacyR... Remove this comment to see the full error message
             ref={this.scrollRef}
