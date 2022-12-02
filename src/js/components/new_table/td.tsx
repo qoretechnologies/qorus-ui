@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import compose from 'recompose/compose';
 import updateOnlyForKeys from 'recompose/onlyUpdateForKeys';
 
@@ -18,7 +17,7 @@ const Td: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <td colSpan={colspan} className={className} title={title}>
-    {children || '-'}
+    {children ?? '-'}
   </td>
 );
 

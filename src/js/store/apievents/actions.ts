@@ -58,14 +58,14 @@ const handleEvent = (url, data, dispatch, state) => {
 
     switch (eventstr) {
       case 'NODE_REMOVED': {
-        if (state.api.system.sync) {
+        if (state.api.system.sync && state.api.system.isOnDashboard) {
           pipeline(eventstr, system.removeNode, info, dispatch);
         }
         break;
       }
       case 'NODE_INFO':
-        if (state.api.system.sync) {
-          //pipeline(eventstr, system.updateNodeInfo, { ...info, timestamp: d.time }, dispatch);
+        if (state.api.system.sync && state.api.system.isOnDashboard) {
+          pipeline(eventstr, system.updateNodeInfo, { ...info, timestamp: d.time }, dispatch);
         }
         break;
       case 'WORKFLOW_STATS_UPDATED':
@@ -87,7 +87,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'PROCESS_MEMORY_CHANGED':
       case 'PROCESS_STARTED': {
-        if (state.api.system.sync) {
+        if (state.api.system.sync && state.api.system.isOnDashboard) {
           if (eventstr === 'PROCESS_STARTED') {
             pipeline(eventstr, system.addProcess, info, dispatch);
           } else {
@@ -114,7 +114,7 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       }
       case 'PROCESS_STOPPED': {
-        if (state.api.system.sync) {
+        if (state.api.system.sync && state.api.system.isOnDashboard) {
           pipeline(eventstr, system.removeProcess, info, dispatch);
         }
 

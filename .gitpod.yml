@@ -12,3 +12,6 @@ ports:
     name: Dev Server
     onOpen: ignore
     visibility: public
+vscode:
+  extensions:
+    - 'ms-playwright.playwright'

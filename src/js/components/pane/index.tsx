@@ -38,6 +38,7 @@ const Pane: Function = ({
       blur={5}
       floating
       hidable
+      contentStyle={{ display: 'flex', flexFlow: 'column', height: '100%', overflow: 'hidden' }}
     >
       <Headbar>
         <Breadcrumbs icon="list-detail-view">

@@ -21,6 +21,7 @@ const settings = {
   DEFAULT_REST_HEADERS: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
+    'Qorus-Client-Time-Zone': Intl?.DateTimeFormat().resolvedOptions().timeZone,
   },
   YAML_REST_HEADERS: {
     Accept: 'application/x-yaml',

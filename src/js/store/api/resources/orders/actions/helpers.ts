@@ -43,7 +43,7 @@ const unlockOrder = (order, note, username) => {
 };
 
 const skipIndexes = (order, stepid, value) => {
-  const indexes = value.split(',');
+  const indexes = value.toString().split(',');
   const steps = order.StepInstances.slice();
 
   indexes.forEach((i) => {

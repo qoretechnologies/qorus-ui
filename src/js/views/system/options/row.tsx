@@ -1,21 +1,15 @@
 // @flow
 import { Icon, Intent, Tag } from '@blueprintjs/core';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
-import withHandlers from 'recompose/withHandlers';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import NameColumn from '../../../components/NameColumn';
 import { Td, Tr } from '../../../components/new_table';
 import Text from '../../../components/text';
 import { typeToString } from '../../../helpers/system';
 import { hasPermission } from '../../../helpers/user';
-import withModal from '../../../hocomponents/modal';
-import withDispatch from '../../../hocomponents/withDispatch';
-import actions from '../../../store/api/actions';
-import OptionModal from './modal';
 
 type Props = {
   dispatchAction: Function;
@@ -34,8 +28,6 @@ type Props = {
   def: any;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   value: any;
-  openModal: Function;
-  closeModal: Function;
   permissions: Array<string>;
   canEdit: boolean;
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -43,6 +35,7 @@ type Props = {
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   stringVal: any;
   first: boolean;
+  onEditClick: any;
 };
 
 const OptionRow: Function = ({
@@ -53,7 +46,7 @@ const OptionRow: Function = ({
   job,
   stringDef,
   stringVal,
-  handleEditClick,
+  onEditClick,
   canEdit,
   first,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
@@ -103,7 +96,7 @@ Props) => (
           <Button
             title="Edit this option"
             icon="edit"
-            onClick={handleEditClick}
+            onClick={onEditClick}
             className="bp3-small"
           />
         </ButtonGroup>
@@ -117,7 +110,6 @@ export default compose(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
     permissions: state.api.currentUser.data.permissions,
   })),
-  withDispatch(),
   mapProps(
     ({ permissions, status, default: def, value, ...rest }: Props): Props => ({
       stringDef: typeToString(def),
@@ -130,21 +122,5 @@ export default compose(
       ...rest,
     })
   ),
-  withModal(),
-  withHandlers({
-    handleOptionSave:
-      ({ dispatchAction, closeModal, name }: Props): Function =>
-      (model: any, value: any): void => {
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'systemOptions' does not exist on type '{... Remove this comment to see the full error message
-        dispatchAction(actions.systemOptions.setOption, name, value, closeModal);
-      },
-  }),
-  withHandlers({
-    handleEditClick:
-      ({ openModal, closeModal, handleOptionSave, ...rest }: Props): Function =>
-      (): void => {
-        openModal(<OptionModal onClose={closeModal} onSave={handleOptionSave} model={rest} />);
-      },
-  }),
   pure(['value'])
 )(OptionRow);

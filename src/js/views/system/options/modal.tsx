@@ -1,33 +1,32 @@
 /* @flow */
-import React, { Component } from 'react';
-import Box from '../../../components/box';
+import {
+  ReqoreDropdown,
+  ReqoreH4,
+  ReqoreInput,
+  ReqoreMessage,
+  ReqoreModal,
+  ReqorePanel,
+  ReqoreSpacer,
+  ReqoreTag,
+  ReqoreTagGroup,
+  ReqoreTextarea,
+} from '@qoretechnologies/reqore';
+import { Component } from 'react';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control, Controls } from '../../../components/controls';
-import Dropdown, { Control as DToggle, Item as DItem } from '../../../components/dropdown';
-import Modal from '../../../components/modal';
-import PaneItem from '../../../components/pane_item';
+import withDispatch from '../../../hocomponents/withDispatch';
+import actions from '../../../store/api/actions';
 
+@withDispatch()
 export default class OptionModal extends Component {
-  props: {
-    onSave: Function;
-    onClose: Function;
-    model: any;
-  } = this.props;
+  props: any = this.props;
 
   state: {
-    value: string | number;
+    value: any;
+    listValue?: any;
   } = {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
-    value: this.props.model.value || 'null',
+    value: this.props.model.value,
   };
-
-  componentDidMount() {
-    window.addEventListener('keyup', this.handleEnterPress);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keyup', this.handleEnterPress);
-  }
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleInputChange: Function = (event: EventHandler): void => {
@@ -36,30 +35,20 @@ export default class OptionModal extends Component {
     });
   };
 
-  handleDropdownItemClick: Function = (
-    // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-    event: EventHandler,
-    value: any
-  ): void => {
+  handleDropdownItemClick: Function = (value: any): void => {
     this.setState({
       value,
     });
   };
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-  handleFormSubmit: Function = (event?: EventHandler): void => {
-    if (event) {
-      event.preventDefault();
-    }
-
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-    this.props.onSave(this.props.model.name, this.state.value);
-  };
-
-  handleEnterPress = (event) => {
-    if (event.key === 'Enter') {
-      this.handleFormSubmit();
-    }
+  handleFormSubmit = (event?: any): void => {
+    this.props.dispatchAction(
+      actions.systemOptions.setOption,
+      this.props.model.name,
+      this.state.value,
+      this.props.onClose
+    );
   };
 
   renderValue() {
@@ -67,18 +56,64 @@ export default class OptionModal extends Component {
     let min;
     let max;
 
+    // if (model.expects === 'list') {
+    //   return (
+    //     <>
+    //       <ReqoreTagGroup>
+    //         {((this.state.value as Array<string>) || []).map((item: any) => (
+    //           <ReqoreTag
+    //             key={item}
+    //             label={item}
+    //             onRemoveClick={() =>
+    //               this.setState({ value: this.state.value.filter((val) => val !== item) })
+    //             }
+    //           />
+    //         ))}
+    //       </ReqoreTagGroup>
+    //       <ReqoreControlGroup fluid>
+    //         <ReqoreInput
+    //           placeholder="Add new value"
+    //           onChange={(e: any) => this.setState({ listValue: e.target.value })}
+    //           value={this.state.listValue}
+    //         />
+    //         <ReqoreButton
+    //           fixed
+    //           onClick={() =>
+    //             this.setState({
+    //               value: [...((this.state.value as Array<string>) || []), this.state.listValue],
+    //               listValue: '',
+    //             })
+    //           }
+    //           intent="info"
+    //         >
+    //           Add
+    //         </ReqoreButton>
+    //       </ReqoreControlGroup>
+    //     </>
+    //   );
+    // }
+
     // @ts-ignore ts-migrate(2339) FIXME: Property 'expects' does not exist on type 'Object'... Remove this comment to see the full error message
     switch (this.props.model.expects) {
       case 'bool':
         return (
-          <Dropdown id="option">
-            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
-            <DToggle>{this.state.value.toString()}</DToggle>
-            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-            <DItem title="true" action={this.handleDropdownItemClick} />
-            {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-            <DItem title="false" action={this.handleDropdownItemClick} />
-          </Dropdown>
+          <ReqoreDropdown
+            items={[
+              {
+                label: 'true',
+                icon: 'CheckLine',
+                onClick: () => this.handleDropdownItemClick('true'),
+                selected: this.state.value?.toString() === 'true',
+              },
+              {
+                label: 'false',
+                icon: 'CloseLine',
+                onClick: () => this.handleDropdownItemClick('false'),
+                selected: this.state.value?.toString() === 'false',
+              },
+            ]}
+            label={this.state?.value?.toString() || 'Nothing'}
+          />
         );
       case 'integer':
         // @ts-ignore ts-migrate(2339) FIXME: Property 'interval' does not exist on type 'Object... Remove this comment to see the full error message
@@ -103,11 +138,10 @@ export default class OptionModal extends Component {
         }
 
         return (
-          <input
+          <ReqoreInput
             type="number"
             // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'ChangeE... Remove this comment to see the full error message
             onChange={this.handleInputChange}
-            className="form-control"
             value={this.state.value}
             min={min}
             max={max}
@@ -115,12 +149,12 @@ export default class OptionModal extends Component {
         );
       default:
         return (
-          <input
+          <ReqoreTextarea
             type="text"
             // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'ChangeE... Remove this comment to see the full error message
             onChange={this.handleInputChange}
-            className="form-control"
-            value={this.state.value}
+            scaleWithContent
+            value={this.state.value?.toString()}
           />
         );
     }
@@ -130,44 +164,49 @@ export default class OptionModal extends Component {
     const { model, onClose } = this.props;
 
     return (
-      // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
-      <form onSubmit={this.handleFormSubmit}>
-        <Modal hasFooter>
-          <Modal.Header titleId="option" onClose={onClose}>
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
-            {model.name}
-          </Modal.Header>
-          <Modal.Body>
-            <Box fill top scrollY>
-              <PaneItem title="Description">
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
-                <p>{model.desc}</p>
-              </PaneItem>
-              <PaneItem title="Expects">
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'expects' does not exist on type 'Object'... Remove this comment to see the full error message */}
-                <code>{model.expects}</code>
-              </PaneItem>
-              <PaneItem title="Interval">
-                <p>
-                  {/* @ts-ignore ts-migrate(2339) FIXME: Property 'interval' does not exist on type 'Object... Remove this comment to see the full error message */}
-                  {model.interval ? JSON.stringify(model.interval) : 'No data'}
-                </p>
-              </PaneItem>
-              <PaneItem title="Default value">
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'default' does not exist on type 'Object'... Remove this comment to see the full error message */}
-                <code>{model.default ? model.default.toString() : 'null'}</code>
-              </PaneItem>
-              <PaneItem title="Current value">{this.renderValue()}</PaneItem>
-            </Box>
-          </Modal.Body>
-          <Modal.Footer>
-            <Controls noControls grouped>
-              <Control label="Cancel" big onClick={this.props.onClose} />
-              <Control type="submit" label="Save" btnStyle="success" big />
-            </Controls>
-          </Modal.Footer>
-        </Modal>
-      </form>
+      <ReqoreModal
+        isOpen
+        label={model.name}
+        onClose={onClose}
+        flat
+        width="500px"
+        blur={3}
+        bottomActions={[
+          {
+            label: 'Save',
+            onClick: this.handleFormSubmit,
+            intent: 'success',
+            icon: 'CheckFill',
+            position: 'right',
+            minimal: false,
+          },
+        ]}
+      >
+        <ReqoreMessage intent="info" inverted>
+          {model.desc}
+        </ReqoreMessage>
+        <ReqoreSpacer height={10} />
+        <ReqoreTagGroup>
+          <ReqoreTag labelKey="Expects:" label={model.expects} icon="CodeBoxLine" />
+          {model.interval && (
+            <ReqoreTag
+              labelKey="Interval:"
+              label={JSON.stringify(model.interval)}
+              icon="TimeFill"
+            />
+          )}
+        </ReqoreTagGroup>
+        <ReqoreSpacer height={20} />
+        <ReqoreH4>Default Value</ReqoreH4>
+        <ReqoreSpacer height={10} />
+        <ReqorePanel contentSize="small">
+          {model.default ? model.default.toString() : 'null'}
+        </ReqorePanel>
+        <ReqoreSpacer height={20} />
+        <ReqoreH4>Current Value</ReqoreH4>
+        <ReqoreSpacer height={10} />
+        {this.renderValue()}
+      </ReqoreModal>
     );
   }
 }

@@ -60,9 +60,6 @@ test.describe('Checks every page for visual regressions', () => {
     await page.goto(localServerUrl);
     await page.waitForSelector('.masonry-layout');
     await page.getByRole('button', { name: 'notifications' }).click();
-    // await expect(page).toHaveURL(
-    //   'https://localhost:3000/dashboard?notificationsPane=open&notificationsPaneTab=all'
-    // );
     await expect(page).toHaveScreenshot('notifications.png', screenshotConfig);
   });
 
@@ -117,7 +114,7 @@ test.describe('Checks every page for visual regressions', () => {
   });
 
   test('Service detail page is visually identical', async () => {
-    await page.goto('https://localhost:3000/service/1');
+    await page.goto('https://localhost:3000/service/12');
     await page.waitForSelector('.table-body-wrapper');
     await expect(page).toHaveScreenshot('service-detail.png', screenshotConfig);
   });
@@ -133,6 +130,17 @@ test.describe('Checks every page for visual regressions', () => {
     await page.waitForSelector('.table-body-wrapper');
     await expect(page).toHaveScreenshot('workflow-detail.png', screenshotConfig);
 
+    await page.getByRole('button', { name: 'All caret-down' }).click();
+    await page.getByText('circleComplete').click();
+    await page.getByText('circleReady').click();
+    await page.getByText('circleScheduled').click();
+    await expect(page).toHaveScreenshot('workflow-detail-statuses.png', screenshotConfig);
+    await page.getByRole('button', { name: 'Scheduled, Ready, Complete caret-down' }).click();
+    await page.waitForTimeout(3000);
+    await expect(page).toHaveURL(
+      'https://localhost:3000/workflow/1?filter=Scheduled%2CReady%2CComplete'
+    );
+
     await page.goto('https://localhost:3000/workflow/1?tab=performance');
     await page.waitForSelector('.chart-view');
     await expect(page).toHaveScreenshot('workflow-detail-performance.png', screenshotConfig);
@@ -143,47 +151,47 @@ test.describe('Checks every page for visual regressions', () => {
     await page.waitForSelector('#services-view');
     await expect(page).toHaveScreenshot('services.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=detail');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=detail');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-detail.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=config');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=config');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-config.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=code');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=code');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-code.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=methods');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=methods');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-methods.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=process');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=process');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-process.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=mappers');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=mappers');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-mappers.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=valuemaps');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=valuemaps');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-valuemaps.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=resources');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=resources');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-resources.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=authlabels');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=authlabels');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-authlabels.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=releases');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=releases');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-releases.png', screenshotConfig);
 
-    await page.goto('https://localhost:3000/services?paneId=1&paneTab=info');
+    await page.goto('https://localhost:3000/services?paneId=12&paneTab=info');
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('services-pane-info.png', screenshotConfig);
   });
