@@ -25,7 +25,8 @@ jobs:
         id: dev_build
         run: |
           yarn build:dev
-          zip -r qorus-webapp-develop.zip build
+          mkdir -p ./develop/webapp && cp -R build/* develop/webapp
+          zip -r qorus-webapp-develop.zip develop
           chmod 644 qorus-webapp-develop.zip
           
       # Copy the build to HQ
