@@ -30,7 +30,8 @@ jobs:
         id: prod_build
         run: |
           yarn build
-          zip -r qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip build
+          mkdir -p ./develop/${{ secrets.LIVE_QORUS_VERSION }} && cp -R build/* develop/${{ secrets.LIVE_QORUS_VERSION }}
+          zip -r qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip develop
           rm -rf build
 
       # Upload the prod build as artifact
