@@ -205,6 +205,7 @@ const AutoField: FunctionComponent<any> = ({
           />
         );
       case 'int':
+      case 'integer':
       case 'softint':
       case 'float':
       case 'softfloat':
@@ -342,6 +343,9 @@ const AutoField: FunctionComponent<any> = ({
         { name: 'int' },
         { name: 'number' },
       ];
+
+  console.log('showPicker', showPicker && !readOnly);
+  console.log('canBeNull', canBeNull() && !readOnly);
 
   // Render type picker if the type is auto or any
   return (
