@@ -18,7 +18,7 @@ const createClient: any = {
     state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-      payload: { clientId, clientSecret, noop, ...rest },
+      payload: { clientId, clientSecret, clientDescription, noop, ...rest },
     }: any
   ): any {
     if (noop) {
@@ -31,6 +31,7 @@ const createClient: any = {
       [clientId]: {
         client_id: clientId,
         client_secret: clientSecret,
+        client_description: clientDescription,
         ...rest,
       },
     };
@@ -44,7 +45,7 @@ const updateClient: any = {
     state: any = initialState,
     {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
-      payload: { clientId, clientSecret, permissions, noop },
+      payload: { clientId, clientSecret, clientDescription, permissions, noop },
     }: any
   ): any {
     if (noop) {
@@ -56,6 +57,7 @@ const updateClient: any = {
 
     data[clientId].client_secret = clientSecret;
     data[clientId].permissions = permissions;
+    data[clientId].client_description = clientDescription;
 
     return { ...state, ...{ data } };
   },

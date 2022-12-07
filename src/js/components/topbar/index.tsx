@@ -136,12 +136,10 @@ class Topbar extends Component {
             }),
           }
         )}
-        componentProps={{
-          flat: true,
-        }}
-        items={sortedInterfaces.map((key: string): any => ({
+        flat
+        items={sortedInterfaces.map((key: string) => ({
           label: key,
-          id: key,
+          value: key,
           selected: this.state.quickSearchType === key,
           onClick: () => {
             this.setState({ quickSearchType: key });
