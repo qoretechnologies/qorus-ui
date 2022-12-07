@@ -1,5 +1,4 @@
 /* @flow */
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -86,7 +85,7 @@ const Footer: Function = ({ info, path, openModal, closeModal, intl }: Props) =>
           </span>
         )}
         {' | '}
-        <a href={'https://github.com/qoretechnologies/qorus-ui/issues/new/choose'}>
+        <a href={'https://github.com/qoretechnologies/qorus-ui/issues/new/choose'} target="_blank">
           <FormattedMessage id="global.report-bug" />
         </a>
       </p>
