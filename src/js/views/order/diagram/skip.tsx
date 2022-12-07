@@ -49,7 +49,7 @@ export default class extends Component {
           },
           {
             label: 'Skip and Retry',
-            onClick: this.handleSkipClick,
+            onClick: this.handleSkipRetryClick,
             icon: 'CheckDoubleFill',
             position: 'right',
             intent: 'success',
