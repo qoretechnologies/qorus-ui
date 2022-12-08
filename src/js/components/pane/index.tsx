@@ -35,24 +35,27 @@ const Pane: Function = ({
       width={`${width}px`}
       minSize="650px"
       isOpen
+      minimal
       blur={5}
       floating
       hidable
       contentStyle={{ display: 'flex', flexFlow: 'column', height: '100%', overflow: 'hidden' }}
     >
-      <Headbar>
-        <Breadcrumbs icon="list-detail-view">
-          {tabs && (
-            <CrumbTabs
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'tabs' does not exist on type 'Object'.
-              tabs={tabs.tabs}
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'queryIdentifier' does not exist on type ... Remove this comment to see the full error message
-              queryIdentifier={tabs.queryIdentifier}
-              isPane
-            />
-          )}
-        </Breadcrumbs>
-      </Headbar>
+      {tabs && (
+        <Headbar>
+          <Breadcrumbs icon="list-detail-view">
+            {tabs && (
+              <CrumbTabs
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'tabs' does not exist on type 'Object'.
+                tabs={tabs.tabs}
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'queryIdentifier' does not exist on type ... Remove this comment to see the full error message
+                queryIdentifier={tabs.queryIdentifier}
+                isPane
+              />
+            )}
+          </Breadcrumbs>
+        </Headbar>
+      )}
       <Flex className="pane__content">{children}</Flex>
     </ReqoreDrawer>
   );

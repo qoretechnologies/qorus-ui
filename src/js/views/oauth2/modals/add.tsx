@@ -50,6 +50,8 @@ const AddClientModal: Function = ({
     })
   );
 
+  const isValid = validateField('string', clientDescription) && validateField('array', permissions);
+
   return (
     <ReqoreModal
       isOpen
@@ -64,12 +66,11 @@ const AddClientModal: Function = ({
         },
         {
           label: 'Save',
-          intent: 'success',
+          intent: isValid ? 'success' : 'warning',
           position: 'right',
-          onClick:
-            validateField('string', clientDescription) && validateField('array', permissions)
-              ? handleFormSubmit
-              : undefined,
+          disabled: !isValid,
+          minimal: false,
+          onClick: isValid ? handleFormSubmit : undefined,
         },
       ]}
     >

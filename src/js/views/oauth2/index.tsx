@@ -7,10 +7,11 @@ import {
   ReqorePanel,
   ReqoreTable,
 } from '@qoretechnologies/reqore';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
+import withState from 'recompose/withState';
 import EnhancedTable from '../../components/EnhancedTable';
 import Spacer from '../../components/Spacer';
 import Search from '../../containers/search';
@@ -35,6 +36,8 @@ type ClientsViewProps = {
   optimisticDispatch: any;
   username: string;
   userPermissions: Array<string>;
+  clientData: any;
+  setClientData: any;
 };
 
 const ClientsView: Function = ({
@@ -42,11 +45,12 @@ const ClientsView: Function = ({
   openPane,
   username,
   userPermissions,
+  clientData,
+  setClientData,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ClientsViewProps) => {
   const { confirmAction, addNotification, removeNotification } = useContext(ReqoreContext);
-  const [clientData, setClientData] = useState(null);
 
   const showSecret = (secret: string) => {
     addNotification({
@@ -123,7 +127,6 @@ ClientsViewProps) => {
           userPermissions={userPermissions}
         />
       )}
-
       <ReqorePanel flat contentStyle={{ display: 'flex', flexFlow: 'column' }}>
         <EnhancedTable
           collection={clients}
@@ -314,6 +317,7 @@ export default compose(
     }
   ),
   sync('meta'),
+  withState('clientData', 'setClientData', {}),
   mapProps(
     ({ clients, ...rest }: ClientsViewProps): ClientsViewProps => ({
       clients: objectCollectionToArray(clients),
@@ -321,7 +325,7 @@ export default compose(
     })
   ),
   //@ts-ignore
-  pane(ClientsPane, ['handleUpdateClientClick']),
+  pane(ClientsPane, ['setClientData']),
   titleManager('OAuth2 Plugin'),
   withDispatch()
 )(ClientsView);

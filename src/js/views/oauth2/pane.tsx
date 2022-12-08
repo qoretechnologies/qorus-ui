@@ -1,4 +1,10 @@
-import { ReqorePanel, ReqoreTag, ReqoreTagGroup } from '@qoretechnologies/reqore';
+import {
+  ReqoreMessage,
+  ReqorePanel,
+  ReqoreSpacer,
+  ReqoreTag,
+  ReqoreTagGroup,
+} from '@qoretechnologies/reqore';
 import size from 'lodash/size';
 // @flow
 import { connect } from 'react-redux';
@@ -12,7 +18,7 @@ import { objectCollectionToArray } from '../../helpers/interfaces';
 type ClientPaneProps = {
   paneId: string;
   onClose: Function;
-  handleUpdateClientClick: Function;
+  setClientData: Function;
   client: any;
 };
 
@@ -20,26 +26,30 @@ const ClientPane: Function = ({
   paneId,
   onClose,
   client,
-  handleUpdateClientClick,
+  setClientData,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ClientPaneProps) => (
   <Pane title={paneId} onClose={onClose} width={600}>
+    <ReqoreMessage intent="info" title="Description" flat>
+      {client.client_description}
+    </ReqoreMessage>
+    <ReqoreSpacer height="20" />
     <ReqorePanel
       flat
       label="Permissions"
+      opacity={0}
+      headerSize={3}
       actions={[
         {
           label: 'Edit',
           icon: 'Edit2Line',
           onClick: () => {
-            handleUpdateClientClick(
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-              client.client_id,
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'client_secret' does not exist on type 'O... Remove this comment to see the full error message
-              client.client_secret,
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message
-              client.permissions
-            );
+            setClientData({
+              clientId: client.client_id,
+              clientDescription: client.client_description,
+              clientSecret: client.client_secret,
+              permissions: client.permissions,
+            });
           },
         },
       ]}
