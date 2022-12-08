@@ -1,6 +1,7 @@
 // @flow
 import { ReqoreDropdown } from '@qoretechnologies/reqore';
-import { IReqoreDropdownItemProps } from '@qoretechnologies/reqore/dist/components/Dropdown/item';
+import { IReqoreButtonProps } from '@qoretechnologies/reqore/dist/components/Button';
+import { IReqoreDropdownItem } from '@qoretechnologies/reqore/dist/components/Dropdown/list';
 import includes from 'lodash/includes';
 import React, { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -162,16 +163,15 @@ export default class extends Component {
               <div className={`form-group ${!data ? 'input-group' : ''}`}>
                 {!data && (
                   <div className="input-group-btn">
-                    <ReqoreDropdown
-                      componentProps={{
-                        type: 'button',
-                      }}
+                    <ReqoreDropdown<IReqoreButtonProps>
+                      //@ts-ignore
+                      type="button"
                       items={this.getDomainList(this.state.domain).map(
-                        (domain: string): IReqoreDropdownItemProps => ({
+                        (domain: string): IReqoreDropdownItem => ({
                           label: domain,
                           selected: domain === this.state.domain,
-                          onClick: (domain) => this.setState({ domain }),
-                          id: domain,
+                          onClick: ({ value }) => this.setState({ domain: value }),
+                          value: domain,
                         })
                       )}
                     >

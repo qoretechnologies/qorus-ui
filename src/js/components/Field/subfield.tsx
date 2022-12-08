@@ -58,6 +58,7 @@ const SubField: React.FC<any> = ({
           flat
           padded
           rounded
+          minimal
           label={title}
           actions={actions}
           intent={isValid === false ? 'danger' : undefined}

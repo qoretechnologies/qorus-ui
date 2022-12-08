@@ -5,7 +5,7 @@ import {
   ReqoreDropdown,
   ReqoreInput,
 } from '@qoretechnologies/reqore';
-import { IReqoreDropdownItemProps } from '@qoretechnologies/reqore/dist/components/Dropdown/item';
+import { IReqoreDropdownItem } from '@qoretechnologies/reqore/dist/components/Dropdown/list';
 import { debounce, includes } from 'lodash';
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
@@ -91,17 +91,15 @@ class Search extends Component<any, any> {
     this.delayedSearch(query);
   };
 
-  renderHistoryItems = (): IReqoreDropdownItemProps[] => {
+  renderHistoryItems = (): IReqoreDropdownItem[] => {
     if (!this.props.searches) return null;
 
     const searches: Array<string> = this.props.searches.filter(
       (qry: string): boolean => includes(qry, this.state.query) && this.state.query !== qry
     );
 
-    console.log(searches);
-
     return searches.map((qry: string, index: number) => ({
-      label: qry,
+      value: qry,
       onClick: () => this.handleHistoryClick(qry),
     }));
   };
@@ -128,12 +126,7 @@ class Search extends Component<any, any> {
       >
         <ReqoreControlGroup stack>
           {searches && searches.length !== 0 ? (
-            <ReqoreDropdown
-              icon="HistoryLine"
-              items={this.renderHistoryItems()}
-              filterable
-              componentProps={{ flat: true }}
-            />
+            <ReqoreDropdown icon="HistoryLine" items={this.renderHistoryItems()} filterable flat />
           ) : null}
           <ReqoreInput
             minimal
