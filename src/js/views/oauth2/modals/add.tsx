@@ -8,10 +8,10 @@ import {
   ReqoreTag,
   ReqoreTagGroup,
 } from '@qoretechnologies/reqore';
-import { IReqoreDropdownItemProps } from '@qoretechnologies/reqore/dist/components/Dropdown/item';
+import { IReqoreButtonProps } from '@qoretechnologies/reqore/dist/components/Button';
+import { IReqoreDropdownItem } from '@qoretechnologies/reqore/dist/components/Dropdown/list';
 import { size } from 'lodash';
 import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import SubField from '../../../components/Field/subfield';
@@ -21,37 +21,36 @@ import Spacer from '../../../components/Spacer';
 type AddClientModalProps = {};
 
 const AddClientModal: Function = ({
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'onClose' does not exist on type 'AddClie... Remove this comment to see the full error message
   onClose,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleFormSubmit' does not exist on type... Remove this comment to see the full error message
   handleFormSubmit,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleClientIdChange' does not exist on ... Remove this comment to see the full error message
-  handleClientIdChange,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleClientSecretChange' does not exist... Remove this comment to see the full error message
-  handleClientSecretChange,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'handlePermissionsChange' does not exist ... Remove this comment to see the full error message
+  handleClientDescriptionChange,
   handlePermissionsChange,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'clientId' does not exist on type 'AddCli... Remove this comment to see the full error message
-  clientId,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'clientSecret' does not exist on type 'Ad... Remove this comment to see the full error message
-  clientSecret,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Add... Remove this comment to see the full error message
+  clientDescription,
   permissions,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'userPermissions' does not exist on type ... Remove this comment to see the full error message
   userPermissions,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'handleAllPermissionsClick' does not exis... Remove this comment to see the full error message
   handleAllPermissionsClick,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'AddClientM... Remove this comment to see the full error message
   data,
-}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-AddClientModalProps) => {
+}: any) => {
   const addOrRemovePermission = (permission: string) => {
+    console.log(permissions);
     if (permissions.includes(permission)) {
       handlePermissionsChange(permissions.filter((p: string) => p !== permission));
     } else {
       handlePermissionsChange([...permissions, permission]);
     }
   };
+
+  const items = [...userPermissions].map(
+    (permission): IReqoreDropdownItem => ({
+      value: permission,
+      selected: permissions.includes(permission),
+      onClick: ({ value }) => {
+        addOrRemovePermission(value);
+      },
+    })
+  );
+
+  const isValid = validateField('string', clientDescription) && validateField('array', permissions);
 
   return (
     <ReqoreModal
@@ -67,21 +66,20 @@ AddClientModalProps) => {
         },
         {
           label: 'Save',
-          intent: 'success',
+          intent: isValid ? 'success' : 'warning',
           position: 'right',
-          onClick:
-            validateField('string', clientId) && validateField('array', permissions)
-              ? handleFormSubmit
-              : undefined,
+          disabled: !isValid,
+          minimal: false,
+          onClick: isValid ? handleFormSubmit : undefined,
         },
       ]}
     >
-      <SubField title={'Client Name'}>
+      <SubField title={'Client Description'}>
         <ReqoreInput
-          value={clientId}
-          onChange={handleClientIdChange}
-          intent={validateField('string', clientId) ? undefined : 'danger'}
-          onClearClick={() => handleClientIdChange({ target: { value: '' } })}
+          value={clientDescription}
+          onChange={handleClientDescriptionChange}
+          intent={validateField('string', clientDescription) ? undefined : 'danger'}
+          onClearClick={() => handleClientDescriptionChange({ target: { value: '' } })}
         />
       </SubField>
       <Spacer size={10} />
@@ -94,23 +92,12 @@ AddClientModalProps) => {
           </ReqoreTagGroup>
         ) : null}
         <ReqoreControlGroup stack>
-          <ReqoreDropdown
-            multiSelect
+          <ReqoreDropdown<IReqoreButtonProps>
             filterable
-            componentProps={{
-              intent: validateField('array', permissions) ? undefined : 'danger',
-            }}
+            multiSelect
+            intent={validateField('array', permissions) ? undefined : 'danger'}
             label="Select scopes"
-            items={userPermissions.map(
-              (permission): IReqoreDropdownItemProps => ({
-                label: permission,
-                id: permission,
-                selected: permissions.includes(permission),
-                onClick(itemId?, event?) {
-                  addOrRemovePermission(itemId);
-                },
-              })
-            )}
+            items={items}
           />
           <ReqoreButton
             onClick={handleAllPermissionsClick}
@@ -132,16 +119,21 @@ AddClientModalProps) => {
 
 export default compose(
   withState('clientId', 'changeClientId', ({ data }) => data?.clientId || ''),
+  withState(
+    'clientDescription',
+    'changeClientDescription',
+    ({ data }) => data?.clientDescription || ''
+  ),
   withState('clientSecret', 'changeClientSecret', ({ data }) => data?.clientSecret || ''),
   withState('permissions', 'changePermissions', ({ data }) => data?.permissions || []),
   withHandlers({
-    handleClientIdChange:
-      ({ changeClientId }): Function =>
+    handleClientDescriptionChange:
+      ({ changeClientDescription }): Function =>
       (event: any): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
         const { value } = event.target;
 
-        changeClientId(() => value);
+        changeClientDescription(() => value);
       },
     handleClientSecretChange:
       ({ changeClientSecret }): Function =>
@@ -157,12 +149,10 @@ export default compose(
         changePermissions(() => newPermissions);
       },
     handleFormSubmit:
-      ({ clientId, clientSecret, permissions, onSubmit }): Function =>
+      ({ clientId, clientDescription, clientSecret, permissions, onSubmit }): Function =>
       (event: any): void => {
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'preventDefault' does not exist on type '... Remove this comment to see the full error message
         event?.preventDefault();
-
-        onSubmit(clientId, clientSecret, permissions);
+        onSubmit(clientId, clientDescription, clientSecret, permissions);
       },
   }),
   withHandlers({
@@ -171,6 +161,5 @@ export default compose(
       (): void => {
         handlePermissionsChange(userPermissions);
       },
-  }),
-  onlyUpdateForKeys(['clientId', 'clientSecret', 'permissions'])
+  })
 )(AddClientModal);

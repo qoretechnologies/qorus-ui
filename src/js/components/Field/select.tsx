@@ -6,7 +6,6 @@ import {
   ReqoreMessage,
   ReqorePopover,
 } from '@qoretechnologies/reqore';
-import { IReqoreButtonProps } from '@qoretechnologies/reqore/dist/components/Button';
 import { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
 import { includes } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -256,6 +255,7 @@ const SelectField = ({
             <ReqoreDropdown
               items={items.map((item) => ({
                 label: item.name,
+                value: item.name,
                 selected: item.name === value,
                 intent: item.name === value ? 'info' : undefined,
                 onClick: () => handleSelectClick(item),
@@ -264,13 +264,9 @@ const SelectField = ({
               closeOnOutsideClick
               filterable={false}
               caretPosition="right"
-              componentProps={
-                {
-                  disabled,
-                  flat: true,
-                  intent: value ? 'info' : undefined,
-                } as IReqoreButtonProps
-              }
+              disabled={disabled}
+              flat
+              intent={value ? 'info' : undefined}
             />
           )}
           <div>

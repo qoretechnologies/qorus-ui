@@ -11,14 +11,11 @@ import { useContext } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
 import EnhancedTable from '../../components/EnhancedTable';
 import Spacer from '../../components/Spacer';
-import { sortDefaults } from '../../constants/sort';
 import Search from '../../containers/search';
 import { objectCollectionToArray } from '../../helpers/interfaces';
-import modal from '../../hocomponents/modal';
 import pane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
 import titleManager from '../../hocomponents/TitleManager';
@@ -37,16 +34,20 @@ type ClientsViewProps = {
   openPane: Function;
   paneId: string;
   optimisticDispatch: any;
+  username: string;
+  userPermissions: Array<string>;
+  clientData: any;
+  setClientData: any;
 };
 
 const ClientsView: Function = ({
   clients,
-  handleAddClientClick,
-  handleUpdateClientClick,
-  handleDeleteClientClick,
   openPane,
-  paneId,
-  optimisticDispatch,
+  username,
+  userPermissions,
+  clientData,
+  setClientData,
+  ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ClientsViewProps) => {
   const { confirmAction, addNotification, removeNotification } = useContext(ReqoreContext);
@@ -74,159 +75,227 @@ ClientsViewProps) => {
     });
   };
 
+  const onSubmit: Function = (
+    clientId: string,
+    clientDescription,
+    clientSecret,
+    permissions
+  ): void => {
+    rest.optimisticDispatch(
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
+      actions.clients.createClient,
+      clientId,
+      clientDescription,
+      clientSecret,
+      username,
+      permissions,
+      (data) => {
+        setClientData(null);
+        showSecret(data.inserted.client_secret);
+      }
+    );
+  };
+
+  const onSubmitUpdate: Function = (
+    clientId: string,
+    clientDescription,
+    clientSecret,
+    permissions
+  ): void => {
+    alert(clientId);
+    rest.optimisticDispatch(
+      // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
+      actions.clients.updateClient,
+      clientId,
+      clientDescription,
+      clientSecret,
+      username,
+      permissions,
+      (data) => {
+        setClientData(null);
+      }
+    );
+  };
+
   return (
-    <ReqorePanel flat contentStyle={{ display: 'flex', flexFlow: 'column' }}>
-      <EnhancedTable
-        collection={clients}
-        searchBy={['client_id', 'name', 'username']}
-        tableId="clients"
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{ order... Remove this comment to see the full error message
-        sortDefault={sortDefaults.clients}
-      >
-        {({
-          sortData,
-          onSortChange,
-          handleSearchChange,
-          handleLoadMore,
-          handleLoadAll,
-          canLoadMore,
-          limit,
-          collection,
-        }) => (
-          <>
-            <ReqoreColumns>
-              <ReqoreColumn>
-                <ReqoreControlGroup>
-                  <ReqoreButton onClick={() => handleAddClientClick(showSecret)} icon="UserAddLine">
-                    Add Client
-                  </ReqoreButton>
+    <>
+      {clientData && (
+        <AddClientModal
+          data={clientData}
+          onClose={() => setClientData(null)}
+          onSubmit={clientData.clientId ? onSubmitUpdate : onSubmit}
+          userPermissions={userPermissions}
+        />
+      )}
+      <ReqorePanel flat contentStyle={{ display: 'flex', flexFlow: 'column' }}>
+        <EnhancedTable
+          collection={clients}
+          searchBy={['client_id', 'client_description', 'name', 'username']}
+          tableId="clients"
+        >
+          {({
+            sortData,
+            onSortChange,
+            handleSearchChange,
+            handleLoadMore,
+            handleLoadAll,
+            canLoadMore,
+            limit,
+            collection,
+          }) => (
+            <>
+              <ReqoreColumns>
+                <ReqoreColumn>
+                  <ReqoreControlGroup>
+                    <ReqoreButton onClick={() => setClientData({})} icon="UserAddLine">
+                      Add Client
+                    </ReqoreButton>
 
-                  <ReqoreButton
-                    intent="info"
-                    icon="ShareBoxLine"
-                    onClick={() => {
-                      const redirectUri = encodeURIComponent(
-                        `https://${window.location.host}/oauth2/code`
-                      );
+                    <ReqoreButton
+                      intent="info"
+                      icon="ShareBoxLine"
+                      onClick={() => {
+                        const redirectUri = encodeURIComponent(
+                          `https://${window.location.host}/oauth2/code`
+                        );
 
-                      const url = `${settings.OAUTH_PUBLIC_URL}/token?response_type=code&client_id=uitest&username=admin&password=admin&redirect_uri=${redirectUri}`;
+                        const url = `${settings.OAUTH_PUBLIC_URL}/token?response_type=code&client_id=uitest&username=admin&password=admin&redirect_uri=${redirectUri}`;
 
-                      window.location.href = url;
-                    }}
-                  >
-                    Test Qorus Access
-                  </ReqoreButton>
-                </ReqoreControlGroup>
-              </ReqoreColumn>
-              <ReqoreColumn justifyContent="flex-end">
-                <Search onSearchUpdate={handleSearchChange} resource="clients" />
-              </ReqoreColumn>
-            </ReqoreColumns>
+                        window.location.href = url;
+                      }}
+                    >
+                      Test Qorus Access
+                    </ReqoreButton>
+                  </ReqoreControlGroup>
+                </ReqoreColumn>
+                <ReqoreColumn justifyContent="flex-end">
+                  <Search onSearchUpdate={handleSearchChange} resource="clients" />
+                </ReqoreColumn>
+              </ReqoreColumns>
 
-            <Spacer size={15} />
-            <ReqoreTable
-              rounded
-              flat
-              striped
-              fill
-              columns={[
-                { dataId: 'client_id', header: 'Client ID', sortable: true, content: 'title' },
-                {
-                  dataId: 'username',
-                  header: 'User',
-                  icon: 'User3Fill',
-                  sortable: true,
-                  content: 'tag',
-                },
-                {
-                  dataId: 'created',
-                  header: 'Created',
-                  icon: 'TimeLine',
-                  sortable: true,
-                  content: 'time-ago',
-                  align: 'center',
-                },
-                {
-                  dataId: 'modified',
-                  header: 'Modified',
-                  icon: 'TimeLine',
-                  sortable: true,
-                  content: 'time-ago',
-                  align: 'center',
-                },
-                {
-                  dataId: 'actions',
-                  header: 'Actions',
-                  icon: 'SettingsLine',
-                  width: 380,
-                  align: 'right',
-                  content: (data) => (
-                    <ReqoreControlGroup stack>
-                      <ReqoreButton
-                        onClick={async (event) => {
-                          event.stopPropagation();
+              <Spacer size={15} />
+              <ReqoreTable
+                rounded
+                flat
+                striped
+                fill
+                columns={[
+                  {
+                    dataId: 'client_id',
+                    header: 'Client ID',
+                    sortable: true,
+                    grow: 2,
+                    cellTooltip: ({ client_id }) => client_id,
+                  },
+                  {
+                    dataId: 'client_description',
+                    header: 'Client Description',
+                    sortable: true,
+                    cellTooltip: ({ client_description }) => client_description,
+                  },
+                  {
+                    dataId: 'username',
+                    header: 'User',
+                    icon: 'User3Fill',
+                    sortable: true,
+                    content: 'tag',
+                  },
+                  {
+                    dataId: 'created',
+                    header: 'Created',
+                    icon: 'TimeLine',
+                    sortable: true,
+                    content: 'time-ago',
+                    align: 'center',
+                  },
+                  {
+                    dataId: 'modified',
+                    header: 'Modified',
+                    icon: 'TimeLine',
+                    sortable: true,
+                    content: 'time-ago',
+                    align: 'center',
+                  },
+                  {
+                    dataId: 'actions',
+                    header: 'Actions',
+                    icon: 'SettingsLine',
+                    width: 380,
+                    align: 'right',
+                    content: (data) => (
+                      <ReqoreControlGroup stack>
+                        <ReqoreButton
+                          onClick={async (event) => {
+                            event.stopPropagation();
 
-                          addNotification({
-                            id: 'secret',
-                            intent: 'pending',
-                            flat: true,
-                            title: 'Generating new secret...',
-                            content: 'Please wait...',
-                          });
+                            addNotification({
+                              id: 'secret',
+                              intent: 'pending',
+                              flat: true,
+                              title: 'Generating new secret...',
+                              content: 'Please wait...',
+                            });
 
-                          const newSecret = await post(
-                            `${settings.OAUTH_URL}/clients/${data.client_id}/generateSecret`
-                          );
+                            const newSecret = await post(
+                              `${settings.OAUTH_URL}/clients/${data.client_id}/generateSecret`
+                            );
 
-                          if (!newSecret.err) {
-                            showSecret(newSecret.client_secret);
-                          }
-                        }}
-                        icon="RefreshLine"
-                      >
-                        Regenerate Secret
-                      </ReqoreButton>
-                      <ReqoreButton
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          handleUpdateClientClick(
-                            data.client_id,
-                            data.client_secret,
-                            data.permissions
-                          );
-                        }}
-                        icon="Edit2Line"
-                      >
-                        Edit
-                      </ReqoreButton>
-                      <ReqoreButton
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          const handleConfirm = (): void => {
-                            optimisticDispatch(actions.clients.deleteClient, data.client_id);
-                          };
+                            if (!newSecret.err) {
+                              showSecret(newSecret.client_secret);
+                            }
+                          }}
+                          icon="RefreshLine"
+                        >
+                          Regenerate Secret
+                        </ReqoreButton>
+                        <ReqoreButton
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            setClientData({
+                              clientId: data.client_id,
+                              clientDescription: data.client_description,
+                              clientSecret: data.client_secret,
+                              permissions: data.permissions,
+                            });
+                          }}
+                          icon="Edit2Line"
+                        >
+                          Edit
+                        </ReqoreButton>
+                        <ReqoreButton
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            const handleConfirm = (): void => {
+                              rest.optimisticDispatch(
+                                actions.clients.deleteClient,
+                                data.client_id,
+                                null
+                              );
+                            };
 
-                          confirmAction({
-                            onConfirm: handleConfirm,
-                            description: `Are you sure you want to delete client "${data.client_id}" permanently?`,
-                          });
-                        }}
-                        icon="DeleteBin3Fill"
-                        intent="danger"
-                      >
-                        Delete
-                      </ReqoreButton>
-                    </ReqoreControlGroup>
-                  ),
-                },
-              ]}
-              onRowClick={(data) => openPane(data.client_id)}
-              data={collection}
-            />
-          </>
-        )}
-      </EnhancedTable>
-    </ReqorePanel>
+                            confirmAction({
+                              onConfirm: () => handleConfirm(),
+                              description: `Are you sure you want to delete client "${data.client_id}" permanently?`,
+                            });
+                          }}
+                          icon="DeleteBin3Fill"
+                          intent="danger"
+                        >
+                          Delete
+                        </ReqoreButton>
+                      </ReqoreControlGroup>
+                    ),
+                  },
+                ]}
+                onRowClick={(data) => openPane(data.client_id)}
+                data={collection}
+                sort={{ by: 'created', direction: 'desc' }}
+              />
+            </>
+          )}
+        </EnhancedTable>
+      </ReqorePanel>
+    </>
   );
 };
 
@@ -248,74 +317,15 @@ export default compose(
     }
   ),
   sync('meta'),
+  withState('clientData', 'setClientData', {}),
   mapProps(
     ({ clients, ...rest }: ClientsViewProps): ClientsViewProps => ({
       clients: objectCollectionToArray(clients),
       ...rest,
     })
   ),
-  modal(),
-  withDispatch(),
-  withHandlers({
-    handleAddClientClick:
-      ({ openModal, closeModal, username, userPermissions, optimisticDispatch }): Function =>
-      (onSuccess: (secret: string) => void): void => {
-        const onSubmit: Function = (clientId, clientSecret, permissions): void => {
-          optimisticDispatch(
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
-            actions.clients.createClient,
-            clientId,
-            clientSecret,
-            username,
-            permissions,
-            (data) => {
-              closeModal();
-              onSuccess(data.inserted.client_secret);
-            }
-          );
-        };
-
-        openModal(
-          <AddClientModal
-            onClose={closeModal}
-            userPermissions={userPermissions}
-            onSubmit={onSubmit}
-          />
-        );
-      },
-    handleUpdateClientClick:
-      ({ openModal, closeModal, username, userPermissions, optimisticDispatch }): Function =>
-      (clientId, clientSecret, permissions): void => {
-        const onSubmit: Function = (newClientId, newClientSecret, newPermissions): void => {
-          optimisticDispatch(
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
-            actions.clients.updateClient,
-            newClientId,
-            newClientSecret,
-            username,
-            newPermissions,
-            () => {
-              closeModal();
-            }
-          );
-        };
-
-        openModal(
-          <AddClientModal
-            onClose={closeModal}
-            userPermissions={userPermissions}
-            data={{
-              clientId,
-              clientSecret,
-              permissions,
-            }}
-            onSubmit={onSubmit}
-          />
-        );
-      },
-  }),
-  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 2.
-  pane(ClientsPane, ['handleUpdateClientClick']),
+  //@ts-ignore
+  pane(ClientsPane, ['setClientData']),
   titleManager('OAuth2 Plugin'),
-  onlyUpdateForKeys(['clients', 'paneId'])
+  withDispatch()
 )(ClientsView);
