@@ -5,7 +5,7 @@ import {
   ReqoreContext,
   ReqoreControlGroup,
   ReqorePanel,
-  ReqoreTable,
+  ReqoreTable
 } from '@qoretechnologies/reqore';
 import { useContext } from 'react';
 import { connect } from 'react-redux';
@@ -321,7 +321,7 @@ export default compose(
     }
   ),
   sync('meta'),
-  withState('clientData', 'setClientData', {}),
+  withState('clientData', 'setClientData', null),
   mapProps(
     ({ clients, ...rest }: ClientsViewProps): ClientsViewProps => ({
       clients: objectCollectionToArray(clients),
