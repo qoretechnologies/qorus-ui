@@ -74,7 +74,7 @@ const AddClientModal: Function = ({
         },
       ]}
     >
-      <SubField title={'Client Description'}>
+      <SubField title={'Client Description'} isValid={validateField('string', clientDescription)}>
         <ReqoreInput
           value={clientDescription}
           onChange={handleClientDescriptionChange}
@@ -83,7 +83,7 @@ const AddClientModal: Function = ({
         />
       </SubField>
       <Spacer size={10} />
-      <SubField title="Scopes">
+      <SubField title="Scopes" isValid={validateField('array', permissions)}>
         {size(permissions) ? (
           <ReqoreTagGroup size="small">
             {permissions.map((p) => (
@@ -95,17 +95,19 @@ const AddClientModal: Function = ({
           <ReqoreDropdown<IReqoreButtonProps>
             filterable
             multiSelect
-            intent={validateField('array', permissions) ? undefined : 'danger'}
+            flat={false}
             label="Select scopes"
             items={items}
           />
           <ReqoreButton
+            flat={false}
             onClick={handleAllPermissionsClick}
             disabled={size(permissions) === size(userPermissions)}
           >
             Select all
           </ReqoreButton>
           <ReqoreButton
+            flat={false}
             onClick={() => handlePermissionsChange([])}
             disabled={size(permissions) === 0}
           >

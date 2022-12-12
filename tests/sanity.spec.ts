@@ -76,7 +76,7 @@ test.describe('Checks every page for visual regressions', () => {
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-config.png', screenshotConfig);
 
-    await page.locator('div:nth-child(2) > .sc-ciZhAO > .sc-jIZahH > div').first().click();
+    await page.locator('div:nth-child(2) .reqore-collection-item').first().click();
     await page.waitForSelector('.reqore-modal');
     await expect(page).toHaveScreenshot('workflows-config-item-open.png', screenshotConfig);
 
@@ -274,6 +274,10 @@ test.describe('Checks every page for visual regressions', () => {
     await page.goto('https://localhost:3000/rbac?tab=permissions');
     await page.waitForSelector('#rbac-view');
     await expect(page).toHaveScreenshot('rbac-permissions.png', screenshotConfig);
+
+    await page.goto('https://localhost:3000/rbac?tab=oauth2');
+    await page.waitForSelector('.reqore-table');
+    await expect(page).toHaveScreenshot('rbac-oauth2.png', screenshotConfig);
   });
 
   test('Value Maps page is visually identical', async () => {
