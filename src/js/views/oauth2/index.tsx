@@ -225,6 +225,7 @@ ClientsViewProps) => {
                     content: (data) => (
                       <ReqoreControlGroup stack>
                         <ReqoreButton
+                          flat={false}
                           onClick={async (event) => {
                             event.stopPropagation();
 
@@ -249,6 +250,7 @@ ClientsViewProps) => {
                           Regenerate Secret
                         </ReqoreButton>
                         <ReqoreButton
+                          flat={false}
                           onClick={(event) => {
                             event.stopPropagation();
                             setClientData({
@@ -259,10 +261,15 @@ ClientsViewProps) => {
                             });
                           }}
                           icon="Edit2Line"
-                        >
-                          Edit
-                        </ReqoreButton>
+                        />
                         <ReqoreButton
+                          effect={{
+                            gradient: {
+                              direction: 'to right bottom',
+                              colors: { 0: '#a11c58', 140: '#480724' },
+                            },
+                          }}
+                          flat={false}
                           onClick={(event) => {
                             event.stopPropagation();
                             const handleConfirm = (): void => {
@@ -280,9 +287,7 @@ ClientsViewProps) => {
                           }}
                           icon="DeleteBin3Fill"
                           intent="danger"
-                        >
-                          Delete
-                        </ReqoreButton>
+                        />
                       </ReqoreControlGroup>
                     ),
                   },

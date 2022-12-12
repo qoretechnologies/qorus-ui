@@ -61,8 +61,8 @@ const SubField: React.FC<any> = ({
           minimal
           label={title}
           actions={actions}
-          intent={isValid === false ? 'danger' : undefined}
           collapsible
+          icon={!isValid ? 'AlertLine' : undefined}
           unMountContentOnCollapse={false}
         >
           {showInfo && (desc || detail) ? (

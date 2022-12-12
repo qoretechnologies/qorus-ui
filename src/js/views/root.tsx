@@ -351,7 +351,12 @@ export default class Root extends Component {
                 },
               },
             }}
-            withSidebar
+            options={{
+              withSidebar: true,
+              animations: {
+                buttons: false,
+              },
+            }}
           >
             <div
               className={`root ${isMaximized ? 'maximized' : ''}`}
