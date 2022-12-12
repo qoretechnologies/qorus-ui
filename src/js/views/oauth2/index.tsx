@@ -102,7 +102,6 @@ ClientsViewProps) => {
     clientSecret,
     permissions
   ): void => {
-    alert(clientId);
     rest.optimisticDispatch(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
       actions.clients.updateClient,
