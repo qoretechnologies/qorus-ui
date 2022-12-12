@@ -76,7 +76,7 @@ test.describe('Checks every page for visual regressions', () => {
     await page.waitForSelector('.reqore-drawer');
     await expect(page).toHaveScreenshot('workflows-pane-config.png', screenshotConfig);
 
-    await page.locator('div:nth-child(2) > .sc-ciZhAO > .sc-jIZahH > div').first().click();
+    await page.locator('div:nth-child(2) .reqore-collection-item').first().click();
     await page.waitForSelector('.reqore-modal');
     await expect(page).toHaveScreenshot('workflows-config-item-open.png', screenshotConfig);
 
