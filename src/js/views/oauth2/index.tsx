@@ -5,7 +5,7 @@ import {
   ReqoreContext,
   ReqoreControlGroup,
   ReqorePanel,
-  ReqoreTable,
+  ReqoreTable
 } from '@qoretechnologies/reqore';
 import { useContext } from 'react';
 import { connect } from 'react-redux';
@@ -102,7 +102,6 @@ ClientsViewProps) => {
     clientSecret,
     permissions
   ): void => {
-    alert(clientId);
     rest.optimisticDispatch(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'clients' does not exist on type '{}'.
       actions.clients.updateClient,
@@ -225,6 +224,7 @@ ClientsViewProps) => {
                     content: (data) => (
                       <ReqoreControlGroup stack>
                         <ReqoreButton
+                          flat={false}
                           onClick={async (event) => {
                             event.stopPropagation();
 
@@ -249,6 +249,7 @@ ClientsViewProps) => {
                           Regenerate Secret
                         </ReqoreButton>
                         <ReqoreButton
+                          flat={false}
                           onClick={(event) => {
                             event.stopPropagation();
                             setClientData({
@@ -259,10 +260,15 @@ ClientsViewProps) => {
                             });
                           }}
                           icon="Edit2Line"
-                        >
-                          Edit
-                        </ReqoreButton>
+                        />
                         <ReqoreButton
+                          effect={{
+                            gradient: {
+                              direction: 'to right bottom',
+                              colors: { 0: '#a11c58', 140: '#480724' },
+                            },
+                          }}
+                          flat={false}
                           onClick={(event) => {
                             event.stopPropagation();
                             const handleConfirm = (): void => {
@@ -280,9 +286,7 @@ ClientsViewProps) => {
                           }}
                           icon="DeleteBin3Fill"
                           intent="danger"
-                        >
-                          Delete
-                        </ReqoreButton>
+                        />
                       </ReqoreControlGroup>
                     ),
                   },
@@ -317,7 +321,7 @@ export default compose(
     }
   ),
   sync('meta'),
-  withState('clientData', 'setClientData', {}),
+  withState('clientData', 'setClientData', null),
   mapProps(
     ({ clients, ...rest }: ClientsViewProps): ClientsViewProps => ({
       clients: objectCollectionToArray(clients),
