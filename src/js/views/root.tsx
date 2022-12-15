@@ -355,6 +355,7 @@ export default class Root extends Component {
               withSidebar: true,
               animations: {
                 buttons: false,
+                dialogs: false,
               },
             }}
           >

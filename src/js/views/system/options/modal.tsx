@@ -101,12 +101,14 @@ export default class OptionModal extends Component {
             items={[
               {
                 label: 'true',
+                value: 'true',
                 icon: 'CheckLine',
                 onClick: () => this.handleDropdownItemClick('true'),
                 selected: this.state.value?.toString() === 'true',
               },
               {
                 label: 'false',
+                value: 'false',
                 icon: 'CloseLine',
                 onClick: () => this.handleDropdownItemClick('false'),
                 selected: this.state.value?.toString() === 'false',

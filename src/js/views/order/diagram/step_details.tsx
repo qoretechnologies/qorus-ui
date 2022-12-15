@@ -5,7 +5,7 @@ import {
   ReqoreTag,
   ReqoreTagGroup,
 } from '@qoretechnologies/reqore';
-import { IReqoreDropdownItemProps } from '@qoretechnologies/reqore/dist/components/Dropdown/item';
+import { IReqoreDropdownItem } from '@qoretechnologies/reqore/dist/components/Dropdown/list';
 import { Component } from 'react';
 import { DateColumn, DateColumnHeader } from '../../../components/DateColumn';
 import { Item } from '../../../components/dropdown';
@@ -99,8 +99,9 @@ export default class StepDetailTable extends Component {
       <ReqoreDropdown
         filterable
         items={this.state.steps.map(
-          (step): IReqoreDropdownItemProps => ({
+          (step): IReqoreDropdownItem => ({
             label: `${step.ind} - ${step.stepname} - ${step.stepstatus}`,
+            value: step.ind,
             onClick: this.handleDropdownItemClick(step.ind),
             intent:
               step.stepstatus === 'ERROR'
