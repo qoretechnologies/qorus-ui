@@ -212,9 +212,15 @@ export default class ConfigItemsModal extends Component {
     );
   };
 
-  removeQuotes: (s: string) => string = (s) => {
+  removeQuotes: (s: any) => any = (s) => {
     if (s && s[0] === '"' && s[s.length - 1] === '"') {
       return s && typeof s === 'string' ? s.slice(1, -1) : s;
+    }
+
+    console.log(s);
+
+    if (this.state.type === 'bool') {
+      return s === 'true' || s === true ? true : false;
     }
 
     return s;
@@ -287,6 +293,22 @@ export default class ConfigItemsModal extends Component {
         isOpen
         headerSize={2}
         blur={5}
+        bottomActions={[
+          {
+            label: 'Cancel',
+            icon: 'CloseLine',
+            onClick: () => onClose(),
+            position: 'left',
+          },
+          {
+            label: 'Save',
+            icon: 'CheckLine',
+            onClick: () => this.handleSaveClick(),
+            disabled: error,
+            position: 'right',
+            intent: 'success',
+          },
+        ]}
       >
         {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
         {item?.desc && (
@@ -343,8 +365,7 @@ export default class ConfigItemsModal extends Component {
           // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
           <ReqoreTabs
             activeTab={useTemplate ? 'template' : 'custom'}
-            flat
-            activeTabIntent="info"
+            flat={false}
             tabs={[
               {
                 label: 'Custom',
@@ -610,6 +631,7 @@ export default class ConfigItemsModal extends Component {
           </ReqoreTabs>
         ) : null}
         <ReqoreTagGroup>
+          <ReqoreTag labelKey="Type" label={item.type} intent="info" />
           <ReqoreTag labelKey="Level" label={item.level} intent="info" />
           <ReqoreTag
             labelKey="Strictly Local"
