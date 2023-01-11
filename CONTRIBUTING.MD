@@ -8,6 +8,12 @@
 
 > First off, thanks for taking the time to contribute!
 
+Contributions are always welcome. Before contributing please read the
+[code of conduct](CODE_OF_CONDUCT.md) &
+[search the issue tracker](https://github.com/qoretechnologies/qorus-ui/issues) your issue may have already been discussed or fixed in `master`. To contribute,
+[fork](https://help.github.com/articles/fork-a-repo/) QorusToolkit, commit your changes,
+& [send a pull request](https://help.github.com/articles/using-pull-requests/).
+
 We put together a set of guidelines for contributing to Qore Technologies and it's packages, which are hosted in the [Qore Technologies Organization](https://github.com/qoretechnologies/qorus-ui) on GitHub. The provided guidelines are not rules but recommendations. Use your best judgement, and feel free to propose changes to this document with a pull request.
 
 ## We host our open-source on Github
@@ -22,10 +28,8 @@ Pull requests are the best way to propose changes to the codebase (we use [Githu
 
 1. Fork the repo and create your branch from `develop`.
 2. If you've added code that should be tested, add tests.
-3. If you've changed APIs, update the documentation.
-4. Ensure the test suite passes.
-5. Make sure your code lints.
-6. Issue that pull request!
+3. Ensure the test suite passes.
+4. Issue that pull request!
 
 ## Any contributions you make will be under the MIT Software License
 
@@ -33,7 +37,7 @@ In short, when you submit code changes, your submissions are understood to be un
 
 ## Report bugs using Github's issues
 
-We use GitHub issues to track public bugs. Report a bug by opening a new issue on <code>github.com/qoretechnologies/{Repository-Name}/issues</code> it's that easy!
+We use GitHub issues to track public bugs. Report a bug by opening a new issue on <code>github.com/qoretechnologies/qorus-ui/issues</code> it's that easy!
 
 ## Write bug reports with detail, background, and sample code
 
@@ -54,8 +58,7 @@ We _love_ thorough bug reports so that we can act fast on them.
 > Reference [Facebook's Guidelines](https://github.com/facebook/draft-js/blob/a9316a723f9e918afde44dea68b5f9f39b7d9b00/CONTRIBUTING.md)
 
 - 2 spaces for indentation rather than tabs
-- 80 character line length
-- Run `npm run lint` to conform to our lint rules
+- 100 character line length
 
 ## Community
 
@@ -69,4 +72,3 @@ By contributing, you agree that your contributions will be licensed under its MI
 ## References
 
 This document was adapted from the open-source contribution guidelines for Reference [Facebook's Guidelines](https://github.com/facebook/draft-js/blob/a9316a723f9e918afde44dea68b5f9f39b7d9b00/CONTRIBUTING.md)
-

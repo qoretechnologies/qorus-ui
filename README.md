@@ -16,11 +16,9 @@ See the [Contributing Guide](CONTRIBUTING.MD) for more technical details on cont
 
 ### Security Issues
 
-If you discover a security vulnerability in Qorus-Toolkit, please see [Security Policies and Procedures]().
+If you discover a security vulnerability in Qorus-Toolkit, please see [Security Policies and Procedures](SECURITY.md).
 
 ## Contributors
-
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 
 <div style="max-width: 80px;">
     <div style="padding-left: 15px">
@@ -30,6 +28,11 @@ This project exists thanks to all the people who contribute. [[Contribute](CONTR
       <a href="https://github.com/Foxhoundn">@foxhoudn</a>
     </div>
 </div>
+
+## Community
+
+- [GitHub Organization](https://github.com/qoretechnologies) for Official open-source projects
+- [Discord]() for support, discussion, news and latest release updates
 
 ## License
 
