@@ -36,4 +36,4 @@ If you discover a security vulnerability in Qorus-Toolkit, please see [Security 
 
 ## License
 
-[MIT] When using Qorus Integration Engine UI or other GitHub logos, be sure to follow the [GitHub logo guidelines](https://github.com/logos).
+[MIT](LICENSE) When using Qorus Integration Engine UI or other GitHub logos, be sure to follow the [GitHub logo guidelines](https://github.com/logos).
