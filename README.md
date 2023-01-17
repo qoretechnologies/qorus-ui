@@ -32,7 +32,8 @@ If you discover a security vulnerability in Qorus-Toolkit, please see [Security 
 ## Community
 
 - [GitHub Organization](https://github.com/qoretechnologies) for Official open-source projects
-- [Discord](https://discord.gg/T7vgS6nh) for support, discussion, news and latest release updates
+- [Discord](https://discord.gg/MWUwDKRR) for support, discussion, news and latest release updates
+- [Qore Technologies Website](https://www.qoretechnologies.com)
 
 ## License
 
