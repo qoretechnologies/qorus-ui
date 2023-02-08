@@ -64,7 +64,7 @@ const Footer: Function = ({ info, path, openModal, closeModal, intl }: Props) =>
       <ReqoreNavbarGroup>
         <ReqoreNavbarItem>
           {'Qorus Integration Engine: '}
-          {info.edition} edition
+          {info.edition} Edition
         </ReqoreNavbarItem>
       </ReqoreNavbarGroup>
       <ReqoreNavbarGroup position="right">
