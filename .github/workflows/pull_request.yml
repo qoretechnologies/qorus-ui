@@ -233,7 +233,7 @@ jobs:
           DISCORD_AVATAR: 'https://raw.githubusercontent.com/qoretechnologies/qorus-ui/1447b57476c84ae72fd27baf760ccaefb6bfab37/public/q-symbol.png'
         uses: Ilshidur/action-discord@0.3.2
         with:
-          args: ':white_check_mark: Tests action run #${{ github.run_number }} for [PR](${{ github.event.pull_request.html_url }}) triggered by ${{ github.triggering_actor }}'
+          args: ':white_check_mark: Tests action run #${{ github.run_number }} for [PR](${{ github.event.pull_request.html_url }}) triggered by ${{ github.triggering_actor }} success'
         if: success()
       - name: Discord notification
         env:
