@@ -7,6 +7,13 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
+      # Get time of the action trigger
+      - name: Get current time
+        uses: josStorer/get-current-time@v2.0.2
+        id: current_time
+        with:
+          format: YYYYMMDD-HH
+          utcOffset: '+01:00'
       # Checkout the repo
       - uses: actions/checkout@v3
 
