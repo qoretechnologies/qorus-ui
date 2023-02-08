@@ -14,13 +14,14 @@ jobs:
         with:
           format: YYYYMMDD-HH
           utcOffset: '+01:00'
+      # Checkout the repo
+      - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
       # Get commit message
       - name: Print head git commit message
         id: get_head_commit_message
         run: echo "::set-output name=HEAD_COMMIT_MESSAGE::$(git show -s --format=%s)"
-      # Checkout the repo
-      - uses: actions/checkout@v3
-
       # Setup node
       - uses: actions/setup-node@v3
         with:
