@@ -1,46 +1,40 @@
-# Getting Started with Create React App
+<div align="center">
+  <br><br><br>
+  <img src="./public/logo.png" alt="Unstated Logo" width="700">
+  <br><br><br>
+</div>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Qorus Integration Engine UI
 
-## Available Scripts
+> Qorus Integration Engine UI is a web application which provides a intuitive dashboard to manage Qorus server api's and services
 
-In the project directory, you can run:
+## Contributing
 
-### `yarn start`
+The Qorus Integration UI project welcomes all constructive contributions. Contributions can be of many forms including bug fixes, enhancements, fixes to documentation, additional tests and more!
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+See the [Contributing Guide](CONTRIBUTING.MD) for more technical details on contributing.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Security Issues
 
-### `yarn test`
+If you discover a security vulnerability in Qorus Integration UI, please see [Security Policies and Procedures](SECURITY.md).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Contributors
 
-### `yarn build`
+<div style="max-width: 80px;">
+    <div style="padding-left: 15px">
+      <img src="https://avatars.githubusercontent.com/u/8861481?v=4" alt="Unstated Logo" width="50" style="border-radius: 50%; border: 2px solid #fff">
+    </div>
+    <div style="text-align: center">
+      <a href="https://github.com/Foxhoundn">@foxhoudn</a>
+    </div>
+</div>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Community
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [GitHub Organization](https://github.com/qoretechnologies) for Official open-source projects
+- [Discord](https://discord.gg/MWUwDKRR) for support, discussion, news and latest release updates
+- [Qore Technologies Website](https://www.qoretechnologies.com)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## License
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+[MIT](LICENSE) When using Qorus Integration Engine UI or other GitHub logos, be sure to follow the [GitHub logo guidelines](https://github.com/logos).
