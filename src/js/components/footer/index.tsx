@@ -1,4 +1,5 @@
 /* @flow */
+import { ReqoreFooter, ReqoreNavbarGroup, ReqoreNavbarItem } from '@qoretechnologies/reqore';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -56,40 +57,50 @@ const Footer: Function = ({ info, path, openModal, closeModal, intl }: Props) =>
     }
   };
 
+  console.log(info);
+
   return (
-    <footer>
-      <p className="text-right text-muted">
-        {'Qorus Integration Engine '}
+    <ReqoreFooter style={{ height: '30px' }}>
+      <ReqoreNavbarGroup>
+        <ReqoreNavbarItem>
+          {'Qorus Integration Engine: '}
+          {info.edition} edition
+        </ReqoreNavbarItem>
+      </ReqoreNavbarGroup>
+      <ReqoreNavbarGroup position="right">
         {info['omq-schema'] && (
-          <small>
+          <ReqoreNavbarItem>
             {'(' + intl.formatMessage({ id: 'global.schema' }) + `: ${info['omq-schema']})`}
-          </small>
+          </ReqoreNavbarItem>
         )}
-        {info['omq-schema'] && ' '}
         {info['omq-version'] && (
-          <small>
+          <ReqoreNavbarItem>
             {'(' + intl.formatMessage({ id: 'global.version' }) + ': '}
             {info['omq-version']}
             {info['omq-build'] && `.${info['omq-build']}`}
             {')'}
-          </small>
+          </ReqoreNavbarItem>
         )}
-        {info['omq-version'] && ' '}
-        &copy; <a href="http://qoretechnologies.com">Qore Technologies</a>
+        <ReqoreNavbarItem>
+          &copy; <a href="http://qoretechnologies.com">Qore Technologies</a>
+        </ReqoreNavbarItem>
         {helpItem && (
-          <span>
-            {' | '}
+          <ReqoreNavbarItem>
             <a onClick={handleHelpClick} href="#">
               <FormattedMessage id="global.help" />
             </a>
-          </span>
+          </ReqoreNavbarItem>
         )}
-        {' | '}
-        <a href={'https://github.com/qoretechnologies/qorus-ui/issues/new/choose'} target="_blank">
-          <FormattedMessage id="global.report-bug" />
-        </a>
-      </p>
-    </footer>
+        <ReqoreNavbarItem>
+          <a
+            href={'https://github.com/qoretechnologies/qorus-ui/issues/new/choose'}
+            target="_blank"
+          >
+            <FormattedMessage id="global.report-bug" />
+          </a>
+        </ReqoreNavbarItem>
+      </ReqoreNavbarGroup>
+    </ReqoreFooter>
   );
 };
 
