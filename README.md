@@ -18,17 +18,6 @@ See the [Contributing Guide](CONTRIBUTING.MD) for more technical details on cont
 
 If you discover a security vulnerability in Qorus Integration UI, please see [Security Policies and Procedures](SECURITY.md).
 
-## Contributors
-
-<div style="max-width: 80px;">
-    <div style="padding-left: 15px">
-      <img src="https://avatars.githubusercontent.com/u/8861481?v=4" alt="Unstated Logo" width="50" style="border-radius: 50%; border: 2px solid #fff">
-    </div>
-    <div style="text-align: center">
-      <a href="https://github.com/Foxhoundn">@foxhoudn</a>
-    </div>
-</div>
-
 ## Community
 
 - [GitHub Organization](https://github.com/qoretechnologies) for Official open-source projects
