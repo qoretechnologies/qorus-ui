@@ -533,6 +533,6 @@ test.describe('Checks every page for visual regressions', () => {
     await page.getByRole('button', { name: 'user' }).click();
     await page.getByText('log-outLogout').click();
     await expect(page).toHaveURL('https://localhost:3000/login?logout=true');
-    await expect(page).toHaveScreenshot('logerr.png', screenshotConfig);
+    await expect(page).toHaveScreenshot('logout.png', screenshotConfig);
   });
 });
