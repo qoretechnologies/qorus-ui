@@ -9,8 +9,8 @@ import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
 import Flex from '../components/Flex';
-import Footer from '../components/footer';
 import FullPageLoading from '../components/FullPageLoading';
+import Footer from '../components/footer';
 import { Manager as ModalManager } from '../components/modal';
 import Topbar from '../components/topbar';
 import Bubbles from '../containers/bubbles';
@@ -338,6 +338,9 @@ export default class Root extends Component {
               header: {
                 main: isLightTheme ? '#ffffff' : '#333333',
               },
+              footer: {
+                main: '#d7d7d7',
+              },
               intents: {
                 success: '#57801a',
                 danger: '#a11c58',
@@ -390,7 +393,6 @@ export default class Root extends Component {
                     onCollapseChange={(isCollapsed: boolean) => this.setMenu(!isCollapsed)}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'saveFavoriteItems' does not exist on typ... Remove this comment to see the full error message
                     onBookmarksChange={this.props.saveFavoriteItems}
-                    wrapperStyle={{ height: 'calc(100% - 30px)' }}
                     useNativeTitle
                   />
                 )}

@@ -1,4 +1,5 @@
 /* @flow */
+import { ReqoreNotification } from '@qoretechnologies/reqore';
 import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -6,7 +7,6 @@ import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import shortid from 'shortid';
 import qoreLogo from '../../../img/qore_logo_purple.png';
-import { Bubble } from '../../components/bubbles';
 import queryControl from '../../hocomponents/queryControl';
 import { bubbles, notifications } from '../../store/ui/actions';
 
@@ -86,14 +86,14 @@ export class BubbleItem extends React.Component {
     this._timeout = null;
   };
 
-  handleView: Function = () => {
+  handleView = () => {
     this.props.changeNotificationsPaneQuery('open');
     this.cancelTimeout();
     this.handleDelete('all');
   };
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  handleDelete = (dismissType: string) => {
+  handleDelete = (dismissType?: string) => {
     const { bubble, dismiss, type } = this.props;
 
     if (dismissType && dismissType === 'all') {
@@ -105,23 +105,21 @@ export class BubbleItem extends React.Component {
   };
 
   render() {
-    const { bubble, type, stack, notificationsSound } = this.props;
+    const { bubble, type, timeout, stack, notificationsSound } = this.props;
+    const timeoutByType = timeout || timeoutByBubbleType[bubble.type];
     // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message
     const message: string = bubble.notificationType || bubble.message;
 
     return (
-      <Bubble
-        onClick={this.handleDelete}
-        onViewClick={type === 'notification' && this.handleView}
+      <ReqoreNotification
+        duration={timeoutByType}
+        onClose={() => this.handleDelete()}
+        content={message}
+        opaque
+        onClick={type === 'notification' && this.handleView}
         // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-        type={bubble.type.toLowerCase()}
-        stack={stack}
-        notification={type === 'notification'}
-        notificationsSound={notificationsSound}
-        id={shortid.generate()}
-      >
-        {message}
-      </Bubble>
+        intent={bubble.type.toLowerCase()}
+      />
     );
   }
 }

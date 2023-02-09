@@ -35,7 +35,7 @@
 }
 
 .qore-small-logo {
-  padding: 0 0px 0 5px;
+  padding: 10px 0px 10px 5px;
   vertical-align: middle;
   height: 44px;
   display: inline-block !important;
@@ -50,6 +50,7 @@
   font-family: 'NeoLight';
   padding-top: 11px;
   font-size: 18px;
+  flex: 1 0 auto;
 }
 
 .topbar-instance-on {

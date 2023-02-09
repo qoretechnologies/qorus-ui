@@ -1,8 +1,10 @@
 /* @flow */
-import React from 'react';
 
 const SystemInfo = ({ info }: { info: any }) => (
   <div className="login-footer">
+    <span>
+      <strong>Qorus Integration Engine:</strong> {info['edition']} Edition
+    </span>
     <span>
       <strong>Schema information:</strong> {info['omq-schema']}
     </span>
