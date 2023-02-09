@@ -7,8 +7,22 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
+      # Get time of the action trigger
+      - name: Get current time
+        uses: josStorer/get-current-time@v2.0.2
+        id: current_time
+        with:
+          format: YYYYMMDD-HH
+          utcOffset: '+01:00'
       # Checkout the repo
       - uses: actions/checkout@v3
+        with: 
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      # Get commit message
+      - name: Print head git commit message
+        id: get_head_commit_message
+        run: echo "::set-output name=HEAD_COMMIT_MESSAGE::$(git show -s --format=%s)"
 
       # Setup node
       - uses: actions/setup-node@v3
@@ -54,127 +68,26 @@ jobs:
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/id_rsa
           scp qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip ${{ secrets.DEPLOY_USER}}@${{ secrets.DEPLOY_HOST}}:${{ secrets.DEPLOY_PATH }}
-
-      # Send failure notification to slack
-      - name: Slack deploy notification
-        id: notify_deploy_failure
-        uses: slackapi/slack-github-action@v1.23.0
-        with:
-          channel-id: 'github-ci'
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Qorus UI live deployment"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Live deploy action run #${{ github.run_number }} triggered by ${{ github.triggering_actor }}"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":rotating_light: FAILED"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":arrow_heading_up: Go to action",
-                        "emoji": true
-                      },
-                      "url": "https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}}"
-                    }
-                  ]
-                }
-              ]
-            }
-        if: failure()
+      # Notify discord if success
+      - name: Discord notification
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-
-      - name: Slack deploy notification success
-        id: notify_slack_success
-        uses: slackapi/slack-github-action@v1.23.0
+          DISCORD_WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
+          DISCORD_EMBEDS: '[{"author": {"icon_url": "https://avatars.githubusercontent.com/${{ github.actor }}", "name": "${{ github.actor }}", "url": "https://github.com/${{github.actor}}"}, "url": "https://github.com/${{github.repository}}/commit/${{github.sha}}", "fields": [{ "name": "Commit Message", "value": "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"},{"name": "Repository","value": "[${{github.event.repository.name}}](${{github.event.repository.clone_url}})","inline": true},{"name": "Branch","value": "[${{github.ref_name}}](https://github.com/${{github.repository}}/pull/${{github.ref_name}})","inline": true},{ "name": "Event", "value": "${{github.event_name}}", "inline": true },{"name": "Author","value": "[${{github.actor}}](https://github.com/${{github.actor}})","inline": true},{ "name": "Job", "value": "${{github.job}}", "inline": true },{"name": "","value": "🤖 [Github Action](https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}}) 🧱 [GetBuild](https://hq.qoretechnologies.com/~pchalupny/ui-builds/qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip) "}],"color": 65280,"footer": { "text": "Published at ${{steps.current_time.outputs.readableTime}}" }}]'
+          DISCORD_AVATAR: 'https://github.com/qoretechnologies/qorus-ui/blob/fe66760cd405cb3d958778a45c0d865f8b503b12/public/q-symbol-small.png?raw=true'
+        uses: Ilshidur/action-discord@0.3.2
         with:
-          channel-id: 'github-ci'
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "Qorus UI live deployment"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "Live deploy action run #${{ github.run_number }} triggered by ${{ github.triggering_actor }}"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":white_check_mark: SUCCEEDED"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":package: Get build",
-                        "emoji": true
-                      },
-                      "url": "https://hq.qoretechnologies.com/~pchalupny/ui-builds/qorus-webapp-${{ secrets.LIVE_QORUS_VERSION }}.zip"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": ":arrow_heading_up: Go to action",
-                        "emoji": true
-                      },
-                      "url": "https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}}"
-                    }
-                  ]
-                }
-              ]
-            }
+          args: ':white_check_mark: Live deploy action run #${{ github.run_number }} triggered by ${{ github.triggering_actor }} was successful'
         if: success()
+      # Notify discord if failure
+      - name: Discord notification
         env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-
+          DISCORD_WEBHOOK: ${{secrets.DISCORD_WEBHOOK}}
+          DISCORD_EMBEDS: '[{"author": {"icon_url": "https://avatars.githubusercontent.com/${{ github.actor }}", "name": "${{ github.actor }}", "url": "https://github.com/${{github.actor}}"}, "url": "https://github.com/${{github.repository}}/commit/${{github.sha}}", "fields": [{ "name": "Commit Message", "value": "${{ steps.get_head_commit_message.outputs.HEAD_COMMIT_MESSAGE }}"},{"name": "Repository","value": "[${{github.event.repository.name}}](${{github.event.repository.clone_url}})","inline": true},{"name": "Branch","value": "[${{github.ref_name}}](https://github.com/${{github.repository}}/pull/${{github.ref_name}})","inline": true},{ "name": "Event", "value": "${{github.event_name}}", "inline": true },{"name": "Author","value": "[${{github.actor}}](https://github.com/${{github.actor}})","inline": true},{ "name": "Job", "value": "${{github.job}}", "inline": true },{"name": "","value": "🤖 [Github Action](https://github.com/${{ github.repository}}/actions/runs/${{ github.run_id}})"}],"color": 16711680,"footer": { "text": "Triggered at ${{steps.current_time.outputs.readableTime}}" }}]'
+          DISCORD_AVATAR: 'https://github.com/qoretechnologies/qorus-ui/blob/fe66760cd405cb3d958778a45c0d865f8b503b12/public/q-symbol-small.png?raw=true'
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+          args: ':exclamation: Live deploy action run #${{ github.run_number }} triggered by ${{ github.triggering_actor }} failed!'
+        if: failure()
       # Create a GitHub release
       - name: Create a release
         id: release
@@ -187,3 +100,4 @@ jobs:
           body: v${{ secrets.LIVE_QORUS_VERSION }}-${{ steps.save_release_version.outputs.version }}
           draft: false
           prerelease: false
+      

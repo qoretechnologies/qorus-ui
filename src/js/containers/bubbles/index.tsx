@@ -1,5 +1,5 @@
 /* @flow */
-import React from 'react';
+import { ReqoreNotificationsWrapper } from '@qoretechnologies/reqore';
 import { connect } from 'react-redux';
 import BubbleItem from './item';
 
@@ -9,17 +9,11 @@ export const Bubbles = ({ bubbleList }: { bubbleList: Array<any> }) => {
     return null;
   }
   return (
-    <div
-      className="
-        bp3-toast-container bp3-overlay bp3-overlay-open bp3-toast-container-top
-      "
-    >
-      <span>
-        {bubbleList.map((item) => (
-          <BubbleItem key={`bubble_${item.id}`} bubble={item} />
-        ))}
-      </span>
-    </div>
+    <ReqoreNotificationsWrapper position="TOP">
+      {bubbleList.map((item) => (
+        <BubbleItem key={`bubble_${item.id}`} bubble={item} />
+      ))}
+    </ReqoreNotificationsWrapper>
   );
 };
 
