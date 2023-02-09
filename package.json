@@ -16,7 +16,7 @@
     "@blueprintjs/core": "3.36",
     "@blueprintjs/datetime": "^3.15.2",
     "@blueprintjs/select": "^3.11.2",
-    "@qoretechnologies/reqore": "^0.27.0",
+    "@qoretechnologies/reqore": "^0.30.16",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "@types/react": "^17.0.20",
@@ -80,7 +80,8 @@
     "build": "./node_modules/.bin/dotenv -e .env.production react-scripts build",
     "setup-test": "npx playwright install --with-deps",
     "test": "TEST_USER=ui-test TEST_USER_PASS=sojcaf-4gitta-teGfyg yarn playwright test",
-    "test:ci": "yarn playwright test"
+    "test:ci": "yarn playwright test",
+    "update-reqore": "yarn add @qoretechnologies/reqore@beta"
   },
   "eslintConfig": {
     "extends": [
