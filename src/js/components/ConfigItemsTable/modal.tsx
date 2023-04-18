@@ -172,7 +172,7 @@ export default class ConfigItemsModal extends Component {
       value = jsyaml.safeDump(value);
     }
 
-    console.log({ value });
+    console.log({ value }, this.state);
 
     this.props.onSubmit(
       this.state.item,
@@ -339,6 +339,7 @@ export default class ConfigItemsModal extends Component {
             {!item && (
               <>
                 <ReqoreDropdown
+                  filterable
                   paging={{
                     infinite: true,
                     autoLoadMore: true,
@@ -349,19 +350,18 @@ export default class ConfigItemsModal extends Component {
                   label={item?.name || 'Please select'}
                   items={map(globalConfigItems, (data) => ({
                     label: data.name,
-                    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                    onClick: async (event, name) => {
+                    onClick: async ({ label }) => {
                       const { intrf, intrfId } = this.props;
 
                       const interfacePath: string = intrfId ? `${intrf}/${intrfId}` : 'system';
 
                       const yamlData: any = await get(
-                        `${settings.REST_BASE_URL}/${interfacePath}/config/${name}?action=yaml`
+                        `${settings.REST_BASE_URL}/${interfacePath}/config/${label}?action=yaml`
                       );
 
                       this.setState({
                         value: null,
-                        item: { ...data, name },
+                        item: { ...data, name: label },
                         type: data.type === 'any' ? null : data.type,
                         yamlData,
                       });
