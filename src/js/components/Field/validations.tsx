@@ -271,22 +271,21 @@ export const getTypeFromValue = (value: any) => {
     return 'bool';
   }
 
-  if (Number(value) === value && value % 1 === 0) {
+  if (value === 0 || (Number(value) === value && value % 1 === 0)) {
     return 'int';
   }
 
-  if (Number(value) === value && value % 1 !== 0) {
+  if (value === 0 || value === 0.0 || (Number(value) === value && value % 1 !== 0)) {
     return 'float';
-  }
-
-  if (new Date(value).toString() !== 'Invalid Date') {
-    return 'date';
   }
   if (isObject(value)) {
     return 'hash';
   }
   if (isArray(value)) {
     return 'list';
+  }
+  if (new Date(value).toString() !== 'Invalid Date') {
+    return 'date';
   }
   if (isString(value)) {
     return 'string';

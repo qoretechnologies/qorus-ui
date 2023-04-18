@@ -1,6 +1,7 @@
 // @flow
 import { ControlGroup, InputGroup, TextArea, Tooltip } from '@blueprintjs/core';
 import {
+  ReqoreDropdown,
   ReqoreMessage,
   ReqoreModal,
   ReqoreSpacer,
@@ -8,6 +9,7 @@ import {
   ReqoreTabsContent,
   ReqoreTag,
   ReqoreTagGroup,
+  ReqoreVerticalSpacer,
 } from '@qoretechnologies/reqore';
 import jsyaml from 'js-yaml';
 import isNull from 'lodash/isNull';
@@ -22,12 +24,12 @@ import { DATE_FORMATS } from '../../constants/dates';
 import { getLineCount } from '../../helpers/system';
 import settings from '../../settings';
 import { get } from '../../store/api/utils';
-import Alert from '../alert';
 import ContentByType from '../ContentByType';
 import AutoField from '../Field/auto';
 import { validateField } from '../Field/validations';
-import Loader from '../loader';
 import Pull from '../Pull';
+import Alert from '../alert';
+import Loader from '../loader';
 import Tree from '../tree';
 
 type Props = {
@@ -113,10 +115,16 @@ export default class ConfigItemsModal extends Component {
         `${settings.REST_BASE_URL}/${interfacePath}/config/${item.name}?action=yaml`
       );
 
+      let valueFromServer = yamlData.value;
+
+      if (yamlData.type === 'int' || yamlData.type === 'float') {
+        valueFromServer = parseFloat(yamlData.value);
+      }
+
       this.setState({
         yamlData,
         // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
-        value: yamlData.value,
+        value: valueFromServer,
       });
     }
   }
@@ -164,6 +172,8 @@ export default class ConfigItemsModal extends Component {
       value = jsyaml.safeDump(value);
     }
 
+    console.log({ value });
+
     this.props.onSubmit(
       this.state.item,
       value,
@@ -202,8 +212,8 @@ export default class ConfigItemsModal extends Component {
               onClick={(event, title) => {
                 this.handleObjectChange(
                   title,
-                  item.type.replace('*', ''),
-                  item.type.startsWith('*')
+                  item?.type.replace('*', ''),
+                  item?.type.startsWith('*')
                 );
               }}
             />
@@ -244,9 +254,9 @@ export default class ConfigItemsModal extends Component {
             this.handleObjectChange(
               event.target.value,
               // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-              item.type.replace('*', ''),
+              item?.type.replace('*', ''),
               // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-              item.type.startsWith('*')
+              item?.type.startsWith('*')
             );
           }}
         />
@@ -270,7 +280,7 @@ export default class ConfigItemsModal extends Component {
         disabled={!!item.allowed_values}
         requestFieldData={(field) =>
           // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-          field === 'can_be_undefined' ? item.type.startsWith('*') : item.type.replace('*', '')
+          field === 'can_be_undefined' ? item?.type.startsWith('*') : item?.type.replace('*', '')
         }
         onChange={(name, value, type, canBeNull) => {
           this.handleObjectChange(value, type, canBeNull);
@@ -287,7 +297,7 @@ export default class ConfigItemsModal extends Component {
 
     return (
       <ReqoreModal
-        label={item.name}
+        label={item?.name || 'New config item value'}
         resizable
         onClose={() => onClose()}
         isOpen
@@ -328,33 +338,37 @@ export default class ConfigItemsModal extends Component {
             </ReqoreMessage>
             {!item && (
               <>
-                <Dropdown>
-                  {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: any; }' is missing the following... Remove this comment to see the full error message */}
-                  <DControl>{item?.name || 'Please select'}</DControl>
-                  {map(globalConfigItems, (data) => (
-                    <Item
-                      title={data.name}
-                      // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                      onClick={async (event, name) => {
-                        const { intrf, intrfId } = this.props;
+                <ReqoreDropdown
+                  paging={{
+                    infinite: true,
+                    autoLoadMore: true,
+                    includeBottomControls: false,
+                    itemsPerPage: 20,
+                    fluid: true,
+                  }}
+                  label={item?.name || 'Please select'}
+                  items={map(globalConfigItems, (data) => ({
+                    label: data.name,
+                    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+                    onClick: async (event, name) => {
+                      const { intrf, intrfId } = this.props;
 
-                        const interfacePath: string = intrfId ? `${intrf}/${intrfId}` : 'system';
+                      const interfacePath: string = intrfId ? `${intrf}/${intrfId}` : 'system';
 
-                        const yamlData: any = await get(
-                          `${settings.REST_BASE_URL}/${interfacePath}/config/${name}?action=yaml`
-                        );
+                      const yamlData: any = await get(
+                        `${settings.REST_BASE_URL}/${interfacePath}/config/${name}?action=yaml`
+                      );
 
-                        this.setState({
-                          value: null,
-                          item: { ...data, name },
-                          type: data.type === 'any' ? null : data.type,
-                          yamlData,
-                        });
-                      }}
-                    />
-                  ))}
-                </Dropdown>
-                <br />
+                      this.setState({
+                        value: null,
+                        item: { ...data, name },
+                        type: data.type === 'any' ? null : data.type,
+                        yamlData,
+                      });
+                    },
+                  }))}
+                />
+                <ReqoreVerticalSpacer height={10} />
               </>
             )}
           </>
@@ -630,15 +644,17 @@ export default class ConfigItemsModal extends Component {
             )}
           </ReqoreTabs>
         ) : null}
-        <ReqoreTagGroup>
-          <ReqoreTag labelKey="Type" label={item.type} intent="info" />
-          <ReqoreTag labelKey="Level" label={item.level} intent="info" />
-          <ReqoreTag
-            labelKey="Strictly Local"
-            rightIcon={item.strictly_local ? 'CheckLine' : 'CloseLine'}
-            intent="info"
-          />
-        </ReqoreTagGroup>
+        {item && (
+          <ReqoreTagGroup>
+            <ReqoreTag labelKey="Type" label={item.type} intent="info" />
+            {item.level && <ReqoreTag labelKey="Level" label={item.level} intent="info" />}
+            <ReqoreTag
+              labelKey="Strictly Local"
+              rightIcon={item.strictly_local ? 'CheckLine' : 'CloseLine'}
+              intent="info"
+            />
+          </ReqoreTagGroup>
+        )}
       </ReqoreModal>
     );
   }
