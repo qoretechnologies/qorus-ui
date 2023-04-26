@@ -1910,10 +1910,10 @@
     chokidar "^3.5.3"
     fs-extra "^10.0.1"
 
-"@qoretechnologies/reqore@^0.34.8":
-  version "0.34.8"
-  resolved "https://registry.yarnpkg.com/@qoretechnologies/reqore/-/reqore-0.34.8.tgz#d6179b6372c339f8ef357640eaccc5c6ce8a0620"
-  integrity sha512-s+FcWLCVxwU/yRXNz69bFAPmSBblDRGuENC2oLd8SboKdQg2Rp+jkkv5+URiibIUaTm1WXYNYDzhynXrP3u0tA==
+"@qoretechnologies/reqore@^0.34.9":
+  version "0.34.9"
+  resolved "https://registry.yarnpkg.com/@qoretechnologies/reqore/-/reqore-0.34.9.tgz#25c27f4cb9f701ba0c2f8148d83676f9f2303c2c"
+  integrity sha512-jhHGdeq4kkdvsTkWi+edBFhRqzykgBpk4wVq6X85pi7DlGBwGEN0zNY5nXGBDUqZ2pWethcsbYjbbtMiqB0jgw==
   dependencies:
     "@popperjs/core" "^2.11.6"
     "@react-spring/web" "^9.6.1"
