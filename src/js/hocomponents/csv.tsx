@@ -1,9 +1,8 @@
 // @flow
+import { ReqoreModal, ReqoreTextarea, useReqoreProperty } from '@qoretechnologies/reqore';
 import React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { compose } from 'recompose';
-import wrapDisplayName from 'recompose/wrapDisplayName';
-import Modal from '../components/modal';
 import { generateCSV } from '../helpers/table';
 import modal from './modal';
 
@@ -13,47 +12,78 @@ export default (collection: string, name: string): Function =>
     Component
     // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
   ) => {
-    class WrappedComponent extends React.Component {
-      props: {
-        openModal: Function;
-        closeModal: Function;
-      } = this.props;
+    const CSVWrapper = (props) => {
+      const [isOpen, setIsOpen] = React.useState(false);
+      const addNotification = useReqoreProperty('addNotification');
 
-      handleModalMount: Function = (): void => {
-        const el: any = document.querySelector('#CSV-modal-text');
-
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'select' does not exist on type 'Object'.
-        if (el) el.select();
+      const handleCSVClick = (): void => {
+        setIsOpen(true);
       };
 
-      handleCSVClick: Function = (): void => {
-        this.props.openModal(
-          <Modal onMount={this.handleModalMount}>
-            <Modal.Header onClose={this.props.closeModal} titleId="CSV-modal">
-              <FormattedMessage id="global.copy-table" />
-              <small> (Press ⌘ + c / CTRL + c) </small>
-            </Modal.Header>
-            <Modal.Body>
-              <textarea
-                // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
-                rows="12"
+      const handleCopy = async (): Promise<void> => {
+        try {
+          await navigator.clipboard.writeText(`${generateCSV(props[collection], name)}`);
+          addNotification({
+            intent: 'success',
+            title: 'Copied to clipboard',
+            content: 'The CSV data has been copied to your clipboard',
+            duration: 2000,
+            opaque: true,
+          });
+        } catch (e) {
+          addNotification({
+            intent: 'danger',
+            title: 'Failed to copy to clipboard',
+            content: 'The CSV data could not be copied to your clipboard',
+            opaque: true,
+            duration: 4000,
+          });
+        }
+      };
+
+      return (
+        <>
+          {isOpen && (
+            <ReqoreModal
+              isOpen
+              label="Export data as CSV"
+              onClose={() => setIsOpen(false)}
+              fill
+              bottomActions={[
+                {
+                  label: 'Copy',
+                  position: 'right',
+                  intent: 'info',
+                  icon: 'ClipboardLine',
+                  onClick: async () => {
+                    handleCopy();
+                  },
+                },
+                {
+                  label: 'Copy and close',
+                  position: 'right',
+                  intent: 'success',
+                  icon: 'ClipboardFill',
+                  onClick: async () => {
+                    handleCopy();
+                    setIsOpen(false);
+                  },
+                },
+              ]}
+            >
+              <ReqoreTextarea
+                scaleWithContent
+                fluid
                 readOnly
                 id="CSV-modal-text"
-                className="form-control"
-                value={generateCSV(this.props[collection], name)}
+                value={`${generateCSV(props[collection], name)}`}
               />
-            </Modal.Body>
-          </Modal>
-        );
-      };
+            </ReqoreModal>
+          )}
+          <Component onCSVClick={handleCSVClick} {...props} />;
+        </>
+      );
+    };
 
-      render() {
-        return <Component onCSVClick={this.handleCSVClick} {...this.props} />;
-      }
-    }
-
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'displayName' does not exist on type 'typ... Remove this comment to see the full error message
-    WrappedComponent.displayName = wrapDisplayName(Component, 'withCSV');
-
-    return compose(modal(), injectIntl)(WrappedComponent);
+    return compose(modal(), injectIntl)(CSVWrapper);
   };

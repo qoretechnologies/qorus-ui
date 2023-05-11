@@ -18,7 +18,7 @@ export const getLineCount: Function = (value: string): number => {
 const LongStringField: FunctionComponent<ILongStringField & any> = ({
   name,
   onChange,
-  value = 'kek',
+  value,
   default_value,
   fill,
   get_message,

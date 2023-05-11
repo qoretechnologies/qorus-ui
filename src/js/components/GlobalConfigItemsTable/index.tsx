@@ -43,6 +43,8 @@ const GlobalConfigItemsContainer: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 GlobalConfigItemsContainerProps) => {
   const saveValue = (item, newValue, onSuccess, stepId?) => {
+    console.log({ item, newValue });
+
     dispatchAction(
       // @ts-ignore ts-migrate(2339) FIXME: Property 'system' does not exist on type '{}'.
       actions.system.updateConfigItem,
