@@ -10,6 +10,7 @@ import { get } from '../../../store/api/utils';
 type Props = {
   data?: any;
   onSave: Function;
+  onChange: Function;
   canEdit: boolean;
   urlProtocol: string;
 };
@@ -146,6 +147,7 @@ export default class ConnectionOptions extends Component {
   changeData: Function = (item: string, value: string): void => {
     if (item && item !== '' && (value || value === '')) {
       this.setState({ [item]: value });
+      this.props.onChange();
     }
   };
 

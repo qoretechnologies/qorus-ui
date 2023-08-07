@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import Alert from '../../../../components/alert';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { ReqoreModal, useReqoreProperty } from '@qoretechnologies/reqore';
 import { Control as Button, Controls } from '../../../../components/controls';
-import Modal from '../../../../components/modal';
 import { CONN_MAP } from '../../../../constants/remotes';
 import withDispatch from '../../../../hocomponents/withDispatch';
 import actions from '../../../../store/api/actions';
 import Options from '../options';
 
 type Props = {
-  onClose: Function;
+  onClose: () => void;
   optimisticDispatch: Function;
   edit?: boolean;
   remoteType: string;
@@ -32,6 +32,30 @@ type Props = {
   url?: string;
 };
 
+const ConfirmControls = ({ onClose, onSubmit, hasUnsavedOptions }) => {
+  const confirmAction = useReqoreProperty('confirmAction');
+
+  const handleSubmit = () => {
+    if (hasUnsavedOptions) {
+      confirmAction({
+        title: 'Unsaved options',
+        description: 'You have unsaved options. Are you sure you want to continue?',
+        confirmLabel: 'Continue',
+        cancelLabel: 'Cancel',
+        onConfirm: onSubmit,
+        intent: 'warning',
+      });
+    } else {
+      onSubmit();
+    }
+  }
+
+  return <Controls noControls grouped>
+              <Button big btnStyle="default" label="Cancel" onClick={onClose} />
+              <Button big btnStyle={hasUnsavedOptions ? "warning" : "success"} label="Save" type="submit" onClick={handleSubmit} />
+            </Controls>
+}
+
 @connect((state: any) => ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
   remotes: state.api.remotes.data,
@@ -41,6 +65,7 @@ class ManageModal extends Component {
   props: Props = this.props;
 
   state: {
+    hasUnsavedOptions: boolean;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     error: string;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
@@ -48,11 +73,12 @@ class ManageModal extends Component {
   } = {
     error: null,
     options: '',
+    hasUnsavedOptions: false,
   };
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleFormSubmit: Function = (event: EventHandler): void => {
-    event.preventDefault();
+    event?.preventDefault();
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'dispatchAction' does not exist on type '... Remove this comment to see the full error message
     const { dispatchAction, remoteType, remotes, onClose, edit } = this.props;
@@ -132,20 +158,18 @@ class ManageModal extends Component {
   };
 
   handleOptionsSave: Function = (options: any) => {
-    this.setState({ options });
+    this.setState({ options, hasUnsavedOptions: false });
   };
 
   render() {
     const { onClose, edit, name, opts, desc, url } = this.props;
 
     return (
-      <Modal hasFooter>
-        <Modal.Header titleId="manage" onClose={onClose}>
-          {edit ? 'Edit connection' : 'Add connection'}
-        </Modal.Header>
-        {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
-        <form onSubmit={this.handleFormSubmit} className="form-horizontal">
-          <Modal.Body>
+      <ReqoreModal isOpen label={edit ? 'Edit connection' : 'Add connection'} onClose={onClose} bottomActions={[{
+        as: ConfirmControls,
+        position: 'right',
+        props: { onClose, onSubmit: this.handleFormSubmit, hasUnsavedOptions: this.state.hasUnsavedOptions },
+      }]} width='500px'>
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
             <div>
               <div className="form-group">
@@ -207,19 +231,12 @@ class ManageModal extends Component {
                 </label>
                 <div className="col-lg-6">
                   {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-                  <Options canEdit data={opts} onSave={this.handleOptionsSave} />
+                  <Options canEdit data={opts} onSave={this.handleOptionsSave} onChange={() => this.setState({ hasUnsavedOptions: true })} />
                 </div>
               </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Controls noControls grouped>
-              <Button big btnStyle="default" label="Cancel" onClick={onClose} />
-              <Button big btnStyle="success" label="Save" type="submit" />
-            </Controls>
-          </Modal.Footer>
-        </form>
-      </Modal>
+
+      </ReqoreModal>
     );
   }
 }
