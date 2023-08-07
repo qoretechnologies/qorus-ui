@@ -1,19 +1,19 @@
 // @flow
 import { includes, lowerCase, upperFirst } from 'lodash';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
+import ContentByType from '../../../components/ContentByType';
+import NameColumn from '../../../components/NameColumn';
+import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
 import Alert from '../../../components/alert';
 import AlertsTable from '../../../components/alerts_table';
 import Box from '../../../components/box';
-import ContentByType from '../../../components/ContentByType';
-import NameColumn from '../../../components/NameColumn';
 import { EditableCell, Table, Tbody, Td, Th, Tr } from '../../../components/new_table';
 import NoData from '../../../components/nodata';
 import Pane from '../../../components/pane';
 import PaneItem from '../../../components/pane_item';
-import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
 import LogContainer from '../../../containers/log';
 import { attrsMapper, attrsSelector } from '../../../helpers/remotes';
 import { getDependencyObjectLink } from '../../../helpers/system';
@@ -199,7 +199,7 @@ export default class ConnectionsPane extends Component {
                     Passwords are not displayed
                   </Alert>
                 )}
-                <Table condensed clean className="text-table">
+                <Table condensed clean className="text-table" width="100%">
                   <Tbody>
                     {this.getData().map(
                       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
