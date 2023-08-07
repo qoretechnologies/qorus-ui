@@ -1,6 +1,6 @@
 // @flow
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
-import React, { Component, useState } from 'react';
+import { Component, useState } from 'react';
 import styled from 'styled-components';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { Control as Button, Controls } from '../../../components/controls';
@@ -40,7 +40,7 @@ Object) => {
 
   const handleEditClick: Function = (): void => {
     onEdit('key', objKey);
-    onEdit('value', value);
+    onEdit('value', JSON.stringify(value));
   };
 
   const handleDeleteClick: Function = (): void => {
@@ -48,16 +48,16 @@ Object) => {
   };
 
   const renderValue = () => {
-    if (!sensitive || isShown) {
-      return value.toString();
+    if (typeof value === 'object' || !sensitive || isShown) {
+      return JSON.stringify(value);
     }
 
     return <StyledSensitive onClick={() => setIsShown(!isShown)} />;
   };
 
   return (
-    <div className="conn-options-item">
-      "{objKey}": "{renderValue()}"{' '}
+    <div className="conn-options-item" style={{ whiteSpace: 'break-spaces' }}>
+      "{objKey}": {renderValue()}{' '}
       {canEdit && (
         <div className="pull-right">
           <Controls grouped>
