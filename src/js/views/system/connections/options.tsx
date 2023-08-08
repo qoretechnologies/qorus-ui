@@ -112,11 +112,13 @@ export default class ConnectionOptions extends Component {
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleKeyChange: Function = (ev: EventHandler): void => {
     this.changeData('key', ev.target.value);
+    this.props.onChange();
   };
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleValueChange: Function = (ev: EventHandler): void => {
     this.changeData('value', ev.target.value);
+    this.props.onChange();
   };
 
   handleOptionSave: Function = () => {
@@ -147,7 +149,6 @@ export default class ConnectionOptions extends Component {
   changeData: Function = (item: string, value: string): void => {
     if (item && item !== '' && (value || value === '')) {
       this.setState({ [item]: value });
-      this.props.onChange();
     }
   };
 
