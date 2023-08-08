@@ -343,7 +343,7 @@ export default class Root extends Component {
               },
               intents: {
                 success: '#57801a',
-                danger: '#a11c58',
+                //danger: '#a11c58',
                 pending: '#ffdf34',
                 warning: ReqoreColors.ORANGE,
               },

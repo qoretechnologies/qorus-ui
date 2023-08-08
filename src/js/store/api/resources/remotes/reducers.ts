@@ -1,3 +1,4 @@
+import omit from 'lodash/omit';
 import remove from 'lodash/remove';
 import { CONN_MAP_REVERSE } from '../../../../constants/remotes';
 import {
@@ -289,6 +290,7 @@ const clearAlert = {
 const updateConnection = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: any = initialState, { payload: { models } }: any): any {
+    console.log('WS EVENT', models);
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let newData = [...state.data];
 
@@ -296,9 +298,11 @@ const updateConnection = {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const exists = state.data.find((conn) => conn.name === dt.name);
       if (exists) {
-        newData = updateItemWithName(dt.name, { ...dt, _updated: true }, newData);
+        newData = updateItemWithName(dt.name, { ...omit(dt, ['id']), _updated: true }, newData);
       }
     });
+
+    console.log({ ...state, ...{ data: newData } });
 
     return { ...state, ...{ data: newData } };
   },
@@ -358,26 +362,26 @@ const editAppender = editAppenderReducer;
 const deleteAppender = deleteAppenderReducer;
 
 export {
-  pingRemote as PINGREMOTE,
+  addAlert as ADDALERT,
+  addAppender as ADDAPPENDER,
+  addConnection as ADDCONNECTION,
+  addUpdateLogger as ADDUPDATELOGGER,
+  clearAlert as CLEARALERT,
   connectionChange as CONNECTIONCHANGE,
   debugChange as DEBUGCHANGE,
-  enabledChange as ENABLEDCHANGE,
-  updateDone as UPDATEDONE,
-  addAlert as ADDALERT,
-  clearAlert as CLEARALERT,
-  manageConnection as MANAGECONNECTION,
+  deleteAppender as DELETEAPPENDER,
   deleteConnection as DELETECONNECTION,
+  deleteLogger as DELETELOGGER,
+  editAppender as EDITAPPENDER,
+  enabledChange as ENABLEDCHANGE,
+  fetchLogger as FETCHLOGGER,
+  fetchPass as FETCHPASS,
+  manageConnection as MANAGECONNECTION,
+  pingRemote as PINGREMOTE,
   removeConnectionWs as REMOVECONNECTIONWS,
+  resetConnection as RESETCONNECTION,
   toggleConnection as TOGGLECONNECTION,
   toggleDebug as TOGGLEDEBUG,
-  resetConnection as RESETCONNECTION,
   updateConnection as UPDATECONNECTION,
-  addConnection as ADDCONNECTION,
-  fetchPass as FETCHPASS,
-  fetchLogger as FETCHLOGGER,
-  addUpdateLogger as ADDUPDATELOGGER,
-  deleteLogger as DELETELOGGER,
-  addAppender as ADDAPPENDER,
-  editAppender as EDITAPPENDER,
-  deleteAppender as DELETEAPPENDER,
+  updateDone as UPDATEDONE,
 };

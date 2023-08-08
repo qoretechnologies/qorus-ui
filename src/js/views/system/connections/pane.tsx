@@ -96,16 +96,18 @@ export default class ConnectionsPane extends Component {
     }
   }
 
-  getData: Function = () => {
+  getData: Function = (remote) => {
     const data = [];
 
     for (const attr of this.props.attrs) {
       data.push({
         attr,
-        value: this.props.remote[attr],
+        value: remote[attr],
         editable: includes(this.props.editable, attr),
       });
     }
+
+    console.log({ data });
 
     return data;
   };
@@ -130,10 +132,6 @@ export default class ConnectionsPane extends Component {
 
       if (val && val !== '' && attr === 'opts') {
         data[optsKey] = JSON.parse(data[optsKey]);
-
-        Object.keys(data[optsKey]).forEach((key: string): void => {
-          proceed = typeof data[optsKey][key] === 'object' ? false : proceed;
-        });
       }
 
       if (!proceed) {
@@ -164,6 +162,8 @@ export default class ConnectionsPane extends Component {
     const canEdit = !locked && this.props.canEdit;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'canDelete' does not exist on type '{ rem... Remove this comment to see the full error message
     const canDelete = this.props.canDelete;
+
+    console.log('REMOTE AFTER UPDATE W/E', this.props.remote);
 
     return (
       <Pane
@@ -201,7 +201,7 @@ export default class ConnectionsPane extends Component {
                 )}
                 <Table condensed clean className="text-table" width="100%">
                   <Tbody>
-                    {this.getData().map(
+                    {this.getData(this.props.remote).map(
                       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
                       (val: any, key: number) => (
                         <Tr key={key}>
