@@ -86,7 +86,7 @@ export default {
     'connection.up': 'Up',
     'connection.monitor': 'Monitor',
     'connection.status': 'Status',
-    'connection.last_checked': 'Last checked',
+    'connection.last_check': 'Last checked',
     'connection.locked': 'Locked',
   },
   'cs-CZ': {
@@ -176,7 +176,7 @@ export default {
     'connection.up': 'Aktivni',
     'connection.monitor': 'Monitorování',
     'connection.status': 'Status',
-    'connection.last_checked': 'Poslední kontrola',
+    'connection.last_check': 'Poslední kontrola',
     'connection.locked': 'Zamknuto',
   },
   'ja-JP': {
@@ -266,7 +266,7 @@ export default {
     'connection.up': 'アップ',
     'connection.monitor': 'モニタリング',
     'connection.status': '状態',
-    'connection.last_checked': '最後にチェックした',
+    'connection.last_check': '最後にチェックした',
     'connection.locked': 'ロック済み',
   },
   'ko-KR': {
@@ -356,7 +356,7 @@ export default {
     'connection.up': '쪽으로',
     'connection.monitor': '모니터링',
     'connection.status': '지위',
-    'connection.last_checked': '마지막 확인',
+    'connection.last_check': '마지막 확인',
     'connection.locked': '잠김',
   },
 };
