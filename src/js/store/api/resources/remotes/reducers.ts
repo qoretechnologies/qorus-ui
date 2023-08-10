@@ -217,7 +217,7 @@ const addAlert = {
       let newData = stateData;
 
       events.forEach((dt) => {
-        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.type);
+        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.conntype);
 
         if (remote) {
           const alerts = [...remote.alerts, dt];
@@ -254,7 +254,7 @@ const clearAlert = {
       let newData = stateData;
 
       events.forEach((dt) => {
-        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.type);
+        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.conntype);
 
         if (remote) {
           const alerts = [...remote.alerts];
@@ -342,7 +342,7 @@ const removeConnectionWs = {
         data,
         (remote: any): boolean =>
           // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-          remote.name === dt.name && remote.conntype === dt.type
+          remote.name === dt.name && remote.conntype === dt.conntype
       );
     });
 
