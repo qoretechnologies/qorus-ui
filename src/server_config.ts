@@ -6,8 +6,6 @@ const getWindow = () => {
   return window;
 };
 
-console.log(process.env);
-
 const API_PORT: string =
   process.env.NODE_ENV === 'development'
     ? process.env.REACT_APP_API_PORT || getWindow()?.location?.port

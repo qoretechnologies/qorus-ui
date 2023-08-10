@@ -57,8 +57,6 @@ export const RecordQueryArgs = ({
     );
   }
 
-  console.log(options);
-
   const transformedOptions: IOptionsSchema =
     options &&
     reduce(

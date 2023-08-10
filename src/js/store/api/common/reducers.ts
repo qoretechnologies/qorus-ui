@@ -4,7 +4,6 @@ import { setUpdatedToNull, updateItemWithId, updateItemWithName } from '../utils
 
 const updateConfigItemWsCommon = {
   next(state, { payload: { events } }) {
-    console.log(state, events);
     let newState = { ...state };
     let newData = newState.data;
 

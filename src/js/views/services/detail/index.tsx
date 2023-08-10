@@ -5,15 +5,15 @@ import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
-import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import { insertAtIndex } from '../../../helpers/functions';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
+import titleManager from '../../../hocomponents/TitleManager';
 import patchFuncArgs from '../../../hocomponents/patchFuncArgs';
 import sync from '../../../hocomponents/sync';
-import titleManager from '../../../hocomponents/TitleManager';
 import unsync from '../../../hocomponents/unsync';
 import withTabs from '../../../hocomponents/withTabs';
 import { paramSelector, resourceSelector } from '../../../selectors';
@@ -79,8 +79,6 @@ const ServicesDetail: Function = ({
   if (service?.api_manager) {
     tabs = insertAtIndex(tabs, 3, 'API Manager');
   }
-
-  console.log('data', data);
 
   return (
     <Flex>

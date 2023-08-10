@@ -7,7 +7,6 @@ export interface ILoaderProps {
 
 export default function Loader({ error }: ILoaderProps) {
   if (error) {
-    console.log(error);
     return (
       <ReqoreMessage title="Error" intent="danger">
         Unable to load this view, please check the console.

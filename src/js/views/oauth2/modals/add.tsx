@@ -32,7 +32,6 @@ const AddClientModal: Function = ({
   data,
 }: any) => {
   const addOrRemovePermission = (permission: string) => {
-    console.log(permissions);
     if (permissions.includes(permission)) {
       handlePermissionsChange(permissions.filter((p: string) => p !== permission));
     } else {

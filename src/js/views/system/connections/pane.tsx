@@ -1,21 +1,22 @@
 // @flow
-import { includes, lowerCase, upperFirst } from 'lodash';
+import { ReqoreKeyValueTable, ReqoreMessage } from '@qoretechnologies/reqore';
+import { includes, lowerCase, omit, pick } from 'lodash';
 import { Component } from 'react';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
-import ContentByType from '../../../components/ContentByType';
 import NameColumn from '../../../components/NameColumn';
 import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
-import Alert from '../../../components/alert';
 import AlertsTable from '../../../components/alerts_table';
 import Box from '../../../components/box';
-import { EditableCell, Table, Tbody, Td, Th, Tr } from '../../../components/new_table';
+import { Table, Tbody, Tr } from '../../../components/new_table';
 import NoData from '../../../components/nodata';
 import Pane from '../../../components/pane';
 import PaneItem from '../../../components/pane_item';
 import LogContainer from '../../../containers/log';
-import { attrsMapper, attrsSelector } from '../../../helpers/remotes';
+import { attrsSelector } from '../../../helpers/remotes';
 import { getDependencyObjectLink } from '../../../helpers/system';
 import showIfPassed from '../../../hocomponents/show-if-passed';
 import withDispatch from '../../../hocomponents/withDispatch';
@@ -33,15 +34,7 @@ const viewSelector = createSelector([remoteSelector, attrsSelector], (remote, at
   editable: attrs.editable,
 }));
 
-@connect(viewSelector)
-// @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
-@showIfPassed(({ remote }) => remote)
-@withDispatch()
-@mapProps(({ remote, ...rest }) => ({
-  remote: { ...remote, url: settings.IS_HTTP ? remote.url : remote.safeUrl },
-  ...rest,
-}))
-export default class ConnectionsPane extends Component {
+class ConnectionsPane extends Component {
   props: {
     remote: any;
     onClose: Function;
@@ -107,8 +100,6 @@ export default class ConnectionsPane extends Component {
       });
     }
 
-    console.log({ data });
-
     return data;
   };
 
@@ -163,8 +154,6 @@ export default class ConnectionsPane extends Component {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'canDelete' does not exist on type '{ rem... Remove this comment to see the full error message
     const canDelete = this.props.canDelete;
 
-    console.log('REMOTE AFTER UPDATE W/E', this.props.remote);
-
     return (
       <Pane
         width={this.props.width || 400}
@@ -176,113 +165,84 @@ export default class ConnectionsPane extends Component {
           tabs: remoteType === 'datasources' ? ['Detail', 'Log'] : ['Detail'],
           queryIdentifier: 'paneTab',
         }}
+        actions={[
+          {
+            icon: 'EditLine',
+            tooltip: 'Edit',
+            onClick: () => this.props.handleEditClick(this.props.remote),
+          },
+        ]}
       >
         <SimpleTabs activeTab={paneTab}>
-          <SimpleTab name="detail">
-            <Box top fill scrollY>
-              <PaneItem
-                title="Overview"
-                label={
-                  <RemoteControls
-                    {...this.props.remote}
-                    remoteType={remoteType}
-                    dispatchAction={dispatchAction}
-                    canEdit={canEdit}
-                    canDelete={canDelete}
-                    isPane
-                  />
-                }
-              >
-                {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
-                {settings.IS_HTTP && (
-                  <Alert bsStyle="warning" title="Insecure connection">
-                    Passwords are not displayed
-                  </Alert>
-                )}
-                <Table condensed clean className="text-table" width="100%">
+          <SimpleTab name="detail" scrollY>
+            {this.state.error && <ReqoreMessage intent="danger">{this.state.error}</ReqoreMessage>}
+            {settings.IS_HTTP && (
+              <ReqoreMessage intent="warning" title="Insecure connection">
+                Passwords are not displayed
+              </ReqoreMessage>
+            )}
+            <ReqoreKeyValueTable
+              label="Overview"
+              keyAlign="right"
+              sortable
+              filterable
+              zoomable
+              exportable
+              keyIcon="InformationLine"
+              valueIcon="PriceTagLine"
+              keyRenderer={(key: string | number) =>
+                this.props.intl.formatMessage({ id: `connection.${key}` })
+              }
+              actions={[
+                {
+                  as: RemoteControls,
+                  props: {
+                    ...this.props.remote,
+                    remoteType,
+                    dispatchAction,
+                    canEdit,
+                    canDelete,
+                    isPane: true,
+                    big: true,
+                  },
+                },
+              ]}
+              data={omit(pick(this.props.remote, this.props.attrs), ['opts'])}
+              striped
+              keyColumnIntent={undefined}
+            />
+            <Options
+              urlProtocol={url_hash?.protocol}
+              data={this.props.remote.opts}
+              onSave={this.handleEditSave('opts')}
+              canEdit={canEdit}
+            />
+            <AlertsTable alerts={alerts} />
+            <PaneItem title="Dependencies">
+              {deps && deps.length ? (
+                <Table striped condensed>
                   <Tbody>
-                    {this.getData(this.props.remote).map(
+                    {deps.map(
                       // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                      (val: any, key: number) => (
-                        <Tr key={key}>
-                          <Th className="name">
-                            {upperFirst(
-                              // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
-                              attrsMapper(val.attr).replace(/_/g, ' ')
-                            )}
-                          </Th>
-                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'editable' does not exist on type 'Object... Remove this comment to see the full error message */}
-                          {val.editable &&
-                          canEdit &&
-                          // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
-                          val.attr !== 'options' &&
-                          // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
-                          val.attr !== 'opts' ? (
-                            // @ts-ignore ts-migrate(2739) FIXME: Type '{ noMarkdown: boolean; className: string; va... Remove this comment to see the full error message
-                            <EditableCell
-                              // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
-                              noMarkdown={val.attr === 'url'}
-                              className="text"
-                              // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
-                              value={val.value}
-                              // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
-                              onSave={this.handleEditSave(val.attr)}
-                            />
-                          ) : (
-                            <Td className="text">
-                              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'. */}
-                              {val.attr === 'options' || val.attr === 'opts' ? (
-                                <Options
-                                  urlProtocol={url_hash?.protocol}
-                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
-                                  data={val.value}
-                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
-                                  onSave={this.handleEditSave(val.attr)}
-                                  canEdit={canEdit}
-                                />
-                              ) : (
-                                <ContentByType
-                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
-                                  content={val.value}
-                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'attr' does not exist on type 'Object'.
-                                  noMarkdown={val.attr === 'url'}
-                                />
-                              )}
-                            </Td>
-                          )}
+                      (dep: any, index: number) => (
+                        <Tr key={index}>
+                          <NameColumn
+                            // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                            name={dep.name}
+                            // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                            link={getDependencyObjectLink(dep.type, dep)}
+                            // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
+                            type={lowerCase(dep.type)}
+                          />
                         </Tr>
                       )
                     )}
                   </Tbody>
                 </Table>
-              </PaneItem>
-              <AlertsTable alerts={alerts} />
-              <PaneItem title="Dependencies">
-                {deps && deps.length ? (
-                  <Table striped condensed>
-                    <Tbody>
-                      {deps.map(
-                        // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                        (dep: any, index: number) => (
-                          <Tr key={index}>
-                            <NameColumn
-                              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-                              name={dep.name}
-                              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-                              link={getDependencyObjectLink(dep.type, dep)}
-                              // @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'.
-                              type={lowerCase(dep.type)}
-                            />
-                          </Tr>
-                        )
-                      )}
-                    </Tbody>
-                  </Table>
-                ) : (
-                  <NoData />
-                )}
-              </PaneItem>
-            </Box>
+              ) : (
+                <NoData />
+              )}
+            </PaneItem>
           </SimpleTab>
           {remoteType === 'datasources' && (
             <SimpleTab name="log">
@@ -301,3 +261,15 @@ export default class ConnectionsPane extends Component {
     );
   }
 }
+
+export default compose(
+  connect(viewSelector),
+  // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+  showIfPassed(({ remote }) => remote),
+  withDispatch(),
+  mapProps(({ remote, ...rest }) => ({
+    remote: { ...remote, url: settings.IS_HTTP ? remote.url : remote.safeUrl },
+    ...rest,
+  })),
+  injectIntl
+)(ConnectionsPane);

@@ -297,7 +297,6 @@ const MapperProvider = ({
     if (data.desc) {
       // Add the description to the descriptions hash
       setDescriptions((current): string[] => {
-        console.log(itemIndex, data.desc);
         const newData = [...current];
         newData[itemIndex] = data.desc;
         return newData;

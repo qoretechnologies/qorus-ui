@@ -290,7 +290,6 @@ const clearAlert = {
 const updateConnection = {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'payload' does not exist on type 'Object'... Remove this comment to see the full error message
   next(state: any = initialState, { payload: { models } }: any): any {
-    console.log('WS EVENT', models);
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     let newData = [...state.data];
 
@@ -301,8 +300,6 @@ const updateConnection = {
         newData = updateItemWithName(dt.name, { ...omit(dt, ['id']), _updated: true }, newData);
       }
     });
-
-    console.log({ ...state, ...{ data: newData } });
 
     return { ...state, ...{ data: newData } };
   },

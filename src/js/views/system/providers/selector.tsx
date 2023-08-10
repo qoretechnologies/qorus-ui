@@ -108,7 +108,6 @@ const DataProvider: FC<IProviderProps> = ({
         const { url, filter } = providers[provider];
         // Get the data
         let data = await get(`${settings.REST_BASE_URL}/${url}`);
-        console.log(data);
         // Remove loading
         setIsLoading(false);
         // Filter unwanted data if needed
@@ -217,7 +216,6 @@ const DataProvider: FC<IProviderProps> = ({
         }
         // Check if there is a record
         else if (data.has_record || !providers[provider].requiresRecord) {
-          console.log(data);
           (async () => {
             setIsLoading(true);
             // Fetch the record

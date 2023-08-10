@@ -10,6 +10,7 @@ import {
   ReqoreDropdown,
   ReqoreInput,
   ReqoreKeyValueTable,
+  ReqoreMessage,
   ReqorePanel,
   ReqoreVerticalSpacer,
 } from '@qoretechnologies/reqore';
@@ -110,7 +111,7 @@ export default class ConnectionOptions extends Component {
   }
 
   async componentWillReceiveProps(nextProps: Props) {
-    if (this.props.data !== nextProps.data) {
+    if (this.props.data !== nextProps.data || this.props.urlProtocol !== nextProps.urlProtocol) {
       const optionsData = await get(`${settings.REST_BASE_URL}/options/remote`);
 
       this.setState({
@@ -172,51 +173,54 @@ export default class ConnectionOptions extends Component {
   };
 
   render() {
-    const opts: Array<string> = Object.keys(this.props.data);
+    const opts: Array<string> = Object.keys(this.props.data || {});
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'optionsData' does not exist on type '{ k... Remove this comment to see the full error message
     if (!this.state.optionsData) {
       return <p> Loading ... </p>;
     }
 
-    console.log(opts, this.props.data);
-
     return (
       <div>
-        <ReqoreKeyValueTable
-          data={this.props.data}
-          fill
-          exportable
-          sortable
-          keyLabel="Option"
-          valueLabel="Value"
-        />
-        {opts.length > 0 && (
-          <div className="row">
-            <div className="col-sm-12">
-              <pre>
-                {opts.map(
-                  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                  (opt: string) => (
-                    <Option
-                      canEdit={this.props.canEdit}
-                      sensitive={
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'optionsData' does not exist on type '{ k... Remove this comment to see the full error message
-                        this.state.optionsData[this.props.urlProtocol]?.[opt]?.sensitive
-                      }
-                      key={opt}
-                      objKey={opt}
-                      value={this.props.data[opt]}
-                      onEdit={this.changeData}
-                      onDelete={this.handleDelete}
-                    />
-                  )
-                )}
-              </pre>
-            </div>
-          </div>
-        )}
-        {this.props.canEdit && (
+        {this.props.urlProtocol && this.state.optionsData[this.props.urlProtocol] ? (
+          <ReqoreKeyValueTable
+            data={this.props.data}
+            label="Options"
+            exportable
+            striped
+            sortable
+            filterable
+            zoomable
+            headerSize={3}
+            keyIcon="Settings4Line"
+            keyAlign="right"
+            valueIcon="PriceTagLine"
+            valueRenderer={({ value }, DefaultComponent) => <DefaultComponent value={value} />}
+            rowActions={(option, value) => [
+              {
+                icon: 'EditLine',
+                onClick: () => {
+                  this.changeData('key', option);
+                  this.changeData('originalKey', option);
+                  this.changeData(
+                    'value',
+                    typeof value === 'object' ? JSON.stringify(value) : value.toString()
+                  );
+                },
+              },
+              {
+                icon: 'DeleteBinLine',
+                intent: 'danger',
+                onClick: () => {
+                  this.handleDelete(option);
+                },
+              },
+            ]}
+          />
+        ) : null}
+        {this.props.canEdit &&
+        this.props.urlProtocol &&
+        this.state.optionsData[this.props.urlProtocol] ? (
           <>
             <ReqoreVerticalSpacer height={10} />
             <ReqorePanel label="Manage options" icon="Settings4Line" size="small">
@@ -251,6 +255,15 @@ export default class ConnectionOptions extends Component {
                 />
               </ReqoreControlGroup>
             </ReqorePanel>
+          </>
+        ) : (
+          <>
+            {!this.props.canEdit ? null : (
+              <ReqoreMessage intent="warning" margin="top">
+                Either the URL protocol is invalid or there are no options available for the given
+                protocol: {this.props.urlProtocol || 'No protocol found in URL'}
+              </ReqoreMessage>
+            )}
           </>
         )}
       </div>

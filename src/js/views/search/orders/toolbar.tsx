@@ -4,10 +4,10 @@ import debounce from 'lodash/debounce';
 import moment from 'moment';
 import { Component } from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
+import Pull from '../../../components/Pull';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
 import Datepicker from '../../../components/datepicker';
 import Dropdown, { Control, Item } from '../../../components/dropdown';
-import Pull from '../../../components/Pull';
 import { DATE_FORMATS } from '../../../constants/dates';
 import { ORDER_STATES } from '../../../constants/orders';
 import { formatDate } from '../../../helpers/date';
@@ -86,7 +86,6 @@ export default class SearchToolbar extends Component {
   }
 
   _delayedSearch: Function = debounce((data: any) => {
-    console.log('IS MOUNTED', this._isMounted);
     if (this._isMounted) {
       this.props.changeAllQuery(data);
     }
