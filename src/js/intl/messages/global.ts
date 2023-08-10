@@ -86,8 +86,8 @@ export default {
     'connection.up': 'Up',
     'connection.monitor': 'Monitor',
     'connection.status': 'Status',
-    'connnection.last_checked': 'Last checked',
-    'connnection.locked': 'Locked',
+    'connection.last_check': 'Last checked',
+    'connection.locked': 'Locked',
   },
   'cs-CZ': {
     'Alerts': 'Poplachy',
@@ -176,8 +176,8 @@ export default {
     'connection.up': 'Aktivni',
     'connection.monitor': 'Monitorování',
     'connection.status': 'Status',
-    'connnection.last_checked': 'Poslední kontrola',
-    'connnection.locked': 'Zamknuto',
+    'connection.last_check': 'Poslední kontrola',
+    'connection.locked': 'Zamknuto',
   },
   'ja-JP': {
     'Alerts': 'アラート',
@@ -266,8 +266,8 @@ export default {
     'connection.up': 'アップ',
     'connection.monitor': 'モニタリング',
     'connection.status': '状態',
-    'connnection.last_checked': '最後にチェックした',
-    'connnection.locked': 'ロック済み',
+    'connection.last_check': '最後にチェックした',
+    'connection.locked': 'ロック済み',
   },
   'ko-KR': {
     'Alerts': '알림',
@@ -356,7 +356,7 @@ export default {
     'connection.up': '쪽으로',
     'connection.monitor': '모니터링',
     'connection.status': '지위',
-    'connnection.last_checked': '마지막 확인',
-    'connnection.locked': '잠김',
+    'connection.last_check': '마지막 확인',
+    'connection.locked': '잠김',
   },
 };
