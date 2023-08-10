@@ -172,8 +172,6 @@ export default class ConfigItemsModal extends Component {
       value = jsyaml.safeDump(value);
     }
 
-    console.log({ value }, this.state);
-
     this.props.onSubmit(
       this.state.item,
       value,
@@ -226,8 +224,6 @@ export default class ConfigItemsModal extends Component {
     if (s && s[0] === '"' && s[s.length - 1] === '"') {
       return s && typeof s === 'string' ? s.slice(1, -1) : s;
     }
-
-    console.log(s);
 
     if (this.state.type === 'bool') {
       return s === 'true' || s === true ? true : false;

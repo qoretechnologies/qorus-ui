@@ -1,9 +1,19 @@
 // @flow
-import { ControlGroup, InputGroup } from '@blueprintjs/core';
+import cloneDeep from 'lodash/cloneDeep';
+import map from 'lodash/map';
 import { Component, useState } from 'react';
 import styled from 'styled-components';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control as Button, Controls } from '../../../components/controls';
+import {
+  ReqoreButton,
+  ReqoreControlGroup,
+  ReqoreDropdown,
+  ReqoreInput,
+  ReqoreKeyValueTable,
+  ReqoreMessage,
+  ReqorePanel,
+  ReqoreVerticalSpacer,
+} from '@qoretechnologies/reqore';
 import settings from '../../../settings';
 import { get } from '../../../store/api/utils';
 
@@ -39,12 +49,13 @@ const Option: Function = ({
 Object) => {
   const [isShown, setIsShown] = useState(false);
 
-  const handleEditClick: Function = (): void => {
+  const handleEditClick = (): void => {
     onEdit('key', objKey);
-    onEdit('value', JSON.stringify(value));
+    onEdit('originalKey', objKey);
+    onEdit('value', typeof value === 'object' ? JSON.stringify(value) : value.toString());
   };
 
-  const handleDeleteClick: Function = (): void => {
+  const handleDeleteClick = (): void => {
     onDelete(objKey);
   };
 
@@ -61,10 +72,10 @@ Object) => {
       "{objKey}": {renderValue()}{' '}
       {canEdit && (
         <div className="pull-right">
-          <Controls grouped>
-            <Button icon="edit" btnStyle="warning" onClick={handleEditClick} />
-            <Button icon="cross" btnStyle="danger" onClick={handleDeleteClick} />
-          </Controls>
+          <ReqoreControlGroup stack size="small">
+            <ReqoreButton icon="EditLine" onClick={handleEditClick} />
+            <ReqoreButton icon="DeleteBinLine" intent="danger" onClick={handleDeleteClick} />
+          </ReqoreControlGroup>
         </div>
       )}
     </div>
@@ -77,11 +88,14 @@ export default class ConnectionOptions extends Component {
   state: {
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     key: string;
+    originalKey?: string;
     // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     value: string;
     options: any;
+    optionsData: any;
   } = {
     key: '',
+    originalKey: '',
     value: '',
     options: this.props.data || {},
     // @ts-ignore ts-migrate(2322) FIXME: Type '{ key: string; value: string; options: Objec... Remove this comment to see the full error message
@@ -97,7 +111,7 @@ export default class ConnectionOptions extends Component {
   }
 
   async componentWillReceiveProps(nextProps: Props) {
-    if (this.props.data !== nextProps.data) {
+    if (this.props.data !== nextProps.data || this.props.urlProtocol !== nextProps.urlProtocol) {
       const optionsData = await get(`${settings.REST_BASE_URL}/options/remote`);
 
       this.setState({
@@ -110,49 +124,56 @@ export default class ConnectionOptions extends Component {
   }
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-  handleKeyChange: Function = (ev: EventHandler): void => {
-    this.changeData('key', ev.target.value);
+  handleKeyChange = (label: string | number): void => {
+    this.changeData('key', label);
+    this.props.onChange?.();
   };
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
-  handleValueChange: Function = (ev: EventHandler): void => {
+  handleValueChange = (ev: EventHandler): void => {
     this.changeData('value', ev.target.value);
+    this.props.onChange?.();
   };
 
-  handleOptionSave: Function = () => {
-    const { options, key, value } = this.state;
+  handleOptionSave = () => {
+    const { key, value, originalKey } = this.state;
 
     if (key !== '' && value !== '') {
-      options[key] = value;
+      const newOptions = {
+        ...this.props.data,
+        [key]: typeof value === 'object' ? JSON.parse(value) : value,
+      };
+
+      // If the key does not match the original key, delete the original key
+      if (key !== originalKey) {
+        delete newOptions[originalKey];
+      }
 
       this.setState({
         key: '',
+        originalKey: '',
         value: '',
-        options,
       });
 
-      this.props.onSave(JSON.stringify(options));
+      this.props.onSave(JSON.stringify(newOptions));
     }
   };
 
   handleDelete: Function = (key: string) => {
-    const { options } = this.state;
+    const newOptions = cloneDeep(this.props.data);
+    delete newOptions[key];
 
-    delete options[key];
-
-    this.setState({ options });
-    this.props.onSave(JSON.stringify(options));
+    this.props.onSave(JSON.stringify(newOptions));
   };
 
   changeData: Function = (item: string, value: string): void => {
     if (item && item !== '' && (value || value === '')) {
       this.setState({ [item]: value });
-      this.props.onChange();
     }
   };
 
   render() {
-    const opts: Array<string> = Object.keys(this.state.options);
+    const opts: Array<string> = Object.keys(this.props.data || {});
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'optionsData' does not exist on type '{ k... Remove this comment to see the full error message
     if (!this.state.optionsData) {
@@ -161,57 +182,89 @@ export default class ConnectionOptions extends Component {
 
     return (
       <div>
-        {opts.length > 0 && (
-          <div className="row">
-            <div className="col-sm-12">
-              <pre>
-                {opts.map(
-                  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-                  (opt: string) => (
-                    <Option
-                      canEdit={this.props.canEdit}
-                      sensitive={
-                        // @ts-ignore ts-migrate(2339) FIXME: Property 'optionsData' does not exist on type '{ k... Remove this comment to see the full error message
-                        this.state.optionsData[this.props.urlProtocol]?.[opt]?.sensitive
-                      }
-                      key={opt}
-                      objKey={opt}
-                      value={this.state.options[opt]}
-                      onEdit={this.changeData}
-                      onDelete={this.handleDelete}
-                    />
-                  )
-                )}
-              </pre>
-            </div>
-          </div>
-        )}
-        {this.props.canEdit && (
-          <ControlGroup className="bp3-fill">
-            <InputGroup
-              placeholder="Key..."
-              type="text"
-              value={this.state.key}
-              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
-              onChange={this.handleKeyChange}
-            />
-            <InputGroup
-              placeholder="Value..."
-              type="text"
-              value={this.state.value}
-              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
-              onChange={this.handleValueChange}
-            />
-            <Controls>
-              <Button
-                btnStyle="success"
-                icon="small-tick"
-                big
-                className="bp3-fixed"
-                onClick={this.handleOptionSave}
-              />
-            </Controls>
-          </ControlGroup>
+        {this.props.urlProtocol && this.state.optionsData[this.props.urlProtocol] ? (
+          <ReqoreKeyValueTable
+            data={this.props.data}
+            label="Options"
+            exportable
+            striped
+            sortable
+            filterable
+            zoomable
+            headerSize={3}
+            keyIcon="Settings4Line"
+            keyAlign="right"
+            valueIcon="PriceTagLine"
+            valueRenderer={({ value }, DefaultComponent) => <DefaultComponent value={value} />}
+            rowActions={(option, value) => [
+              {
+                icon: 'EditLine',
+                onClick: () => {
+                  this.changeData('key', option);
+                  this.changeData('originalKey', option);
+                  this.changeData(
+                    'value',
+                    typeof value === 'object' ? JSON.stringify(value) : value.toString()
+                  );
+                },
+              },
+              {
+                icon: 'DeleteBinLine',
+                intent: 'danger',
+                onClick: () => {
+                  this.handleDelete(option);
+                },
+              },
+            ]}
+          />
+        ) : null}
+        {this.props.canEdit &&
+        this.props.urlProtocol &&
+        this.state.optionsData[this.props.urlProtocol] ? (
+          <>
+            <ReqoreVerticalSpacer height={10} />
+            <ReqorePanel label="Manage options" icon="Settings4Line" size="small">
+              <ReqoreControlGroup fluid stack>
+                <ReqoreDropdown
+                  items={map(
+                    this.state.optionsData[this.props.urlProtocol],
+                    (_option, optionName) => ({
+                      label: optionName,
+                      disabled: !!this.props.data?.[optionName],
+                      selected: this.state.key === optionName,
+                    })
+                  )}
+                  filterable
+                  scrollToSelected
+                  label={this.state.key || 'Select option'}
+                  onItemSelect={(item) => {
+                    this.handleKeyChange(item.label);
+                  }}
+                />
+                <ReqoreInput
+                  placeholder="Value..."
+                  type="text"
+                  value={this.state.value}
+                  onChange={this.handleValueChange}
+                />
+                <ReqoreButton
+                  intent="success"
+                  icon="CheckLine"
+                  fixed
+                  onClick={this.handleOptionSave}
+                />
+              </ReqoreControlGroup>
+            </ReqorePanel>
+          </>
+        ) : (
+          <>
+            {!this.props.canEdit ? null : (
+              <ReqoreMessage intent="warning" margin="top">
+                Either the URL protocol is invalid or there are no options available for the given
+                protocol: {this.props.urlProtocol || 'No protocol found in URL'}
+              </ReqoreMessage>
+            )}
+          </>
         )}
       </div>
     );

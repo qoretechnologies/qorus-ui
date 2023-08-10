@@ -1,3 +1,4 @@
+import omit from 'lodash/omit';
 import remove from 'lodash/remove';
 import { CONN_MAP_REVERSE } from '../../../../constants/remotes';
 import {
@@ -216,7 +217,7 @@ const addAlert = {
       let newData = stateData;
 
       events.forEach((dt) => {
-        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.type);
+        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.conntype);
 
         if (remote) {
           const alerts = [...remote.alerts, dt];
@@ -253,7 +254,7 @@ const clearAlert = {
       let newData = stateData;
 
       events.forEach((dt) => {
-        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.type);
+        const remote = newData.find((r) => r.name === dt.name && r.conntype === dt.conntype);
 
         if (remote) {
           const alerts = [...remote.alerts];
@@ -296,7 +297,7 @@ const updateConnection = {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
       const exists = state.data.find((conn) => conn.name === dt.name);
       if (exists) {
-        newData = updateItemWithName(dt.name, { ...dt, _updated: true }, newData);
+        newData = updateItemWithName(dt.name, { ...omit(dt, ['id']), _updated: true }, newData);
       }
     });
 
@@ -341,7 +342,7 @@ const removeConnectionWs = {
         data,
         (remote: any): boolean =>
           // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-          remote.name === dt.name && remote.conntype === dt.type
+          remote.name === dt.name && remote.conntype === dt.conntype
       );
     });
 
@@ -358,26 +359,26 @@ const editAppender = editAppenderReducer;
 const deleteAppender = deleteAppenderReducer;
 
 export {
-  pingRemote as PINGREMOTE,
+  addAlert as ADDALERT,
+  addAppender as ADDAPPENDER,
+  addConnection as ADDCONNECTION,
+  addUpdateLogger as ADDUPDATELOGGER,
+  clearAlert as CLEARALERT,
   connectionChange as CONNECTIONCHANGE,
   debugChange as DEBUGCHANGE,
-  enabledChange as ENABLEDCHANGE,
-  updateDone as UPDATEDONE,
-  addAlert as ADDALERT,
-  clearAlert as CLEARALERT,
-  manageConnection as MANAGECONNECTION,
+  deleteAppender as DELETEAPPENDER,
   deleteConnection as DELETECONNECTION,
+  deleteLogger as DELETELOGGER,
+  editAppender as EDITAPPENDER,
+  enabledChange as ENABLEDCHANGE,
+  fetchLogger as FETCHLOGGER,
+  fetchPass as FETCHPASS,
+  manageConnection as MANAGECONNECTION,
+  pingRemote as PINGREMOTE,
   removeConnectionWs as REMOVECONNECTIONWS,
+  resetConnection as RESETCONNECTION,
   toggleConnection as TOGGLECONNECTION,
   toggleDebug as TOGGLEDEBUG,
-  resetConnection as RESETCONNECTION,
   updateConnection as UPDATECONNECTION,
-  addConnection as ADDCONNECTION,
-  fetchPass as FETCHPASS,
-  fetchLogger as FETCHLOGGER,
-  addUpdateLogger as ADDUPDATELOGGER,
-  deleteLogger as DELETELOGGER,
-  addAppender as ADDAPPENDER,
-  editAppender as EDITAPPENDER,
-  deleteAppender as DELETEAPPENDER,
+  updateDone as UPDATEDONE,
 };

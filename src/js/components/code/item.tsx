@@ -33,7 +33,6 @@ Props) => {
       newItem
     );
   };
-  console.log('selected', selected, newItem);
   const isSelected: boolean = selected === `${newItem.name}${newItem.version}`;
 
   return (

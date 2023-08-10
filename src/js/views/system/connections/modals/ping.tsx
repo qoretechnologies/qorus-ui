@@ -1,10 +1,7 @@
 import { Spinner as _Spinner } from '@blueprintjs/core';
 import { Component } from 'react';
-import Alert from '../../../../components/alert';
-import Box from '../../../../components/box';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control as Button, Controls } from '../../../../components/controls';
-import Modal from '../../../../components/modal';
+import { ReqoreMessage, ReqoreModal, ReqoreSpinner } from '@qoretechnologies/reqore';
 import withDispatch from '../../../../hocomponents/withDispatch';
 import actions from '../../../../store/api/actions';
 
@@ -15,13 +12,12 @@ export default class Ping extends Component {
   props: {
     pingRemote?: Function;
     name: string;
-    onClose: Function;
+    onClose: () => void;
     type: string;
   } = this.props;
 
   state: {
     error: boolean;
-    // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
     data: any;
   } = {
     error: false,
@@ -56,21 +52,18 @@ export default class Ping extends Component {
   renderBody() {
     if (!this.state.data) {
       return (
-        <Box top>
-          <Spinner className="bp3-small" />
-        </Box>
+        <ReqoreSpinner centered size="big">
+          Pinging...
+        </ReqoreSpinner>
       );
     }
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'ok' does not exist on type 'Object'.
     if (this.state.error || !this.state.data.ok) {
       return (
-        <Box top>
-          <Alert bsStyle="danger" title="Ping unsuccessful">
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'info' does not exist on type 'Object'. */}
-            {this.state.data.info}
-          </Alert>
-        </Box>
+        <ReqoreMessage intent="danger" title="Ping unsuccessful">
+          {this.state.data.info}
+        </ReqoreMessage>
       );
     }
 
@@ -78,28 +71,31 @@ export default class Ping extends Component {
     const { url, result } = this.state.data;
 
     return (
-      <Box top>
-        <Alert bsStyle="success" title="Ping successful">
-          The ping request against {url} took <strong>{result}</strong>.
-        </Alert>
-      </Box>
+      <ReqoreMessage intent="success" title="Ping successful" opaque>
+        The ping request against {url} took <strong>{result}</strong>.
+      </ReqoreMessage>
     );
   }
 
   render() {
     return (
-      <Modal hasFooter>
-        <Modal.Header titleId="ping" onClose={this.props.onClose}>
-          Pinging {this.props.name}
-        </Modal.Header>
-        <Modal.Body>{this.renderBody()}</Modal.Body>
-        <Modal.Footer>
-          <Controls noControls grouped>
-            <Button label="Close" btnStyle="default" action={this.props.onClose} big />
-            <Button label="Try again" btnStyle="success" action={this.ping} big />
-          </Controls>
-        </Modal.Footer>
-      </Modal>
+      <ReqoreModal
+        isOpen
+        onClose={this.props.onClose}
+        label={`Pinging ${this.props.name}`}
+        blur={2}
+        bottomActions={[
+          {
+            label: 'Try again',
+            intent: 'info',
+            onClick: () => this.ping(),
+            icon: 'GlobeLine',
+            position: 'right',
+          },
+        ]}
+      >
+        {this.renderBody()}
+      </ReqoreModal>
     );
   }
 }

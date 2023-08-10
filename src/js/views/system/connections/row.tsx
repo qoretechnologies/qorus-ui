@@ -1,7 +1,6 @@
 // @flow
 import { Icon, Intent, Tag } from '@blueprintjs/core';
 import classnames from 'classnames';
-import React from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -107,7 +106,7 @@ Props) => (
       onDetailClick={handleDetailClick}
       hasAlerts={hasAlerts}
     />
-    <Td className="large">
+    <Td className="huge normal">
       <RemoteControls
         enabled={enabled}
         locked={locked}

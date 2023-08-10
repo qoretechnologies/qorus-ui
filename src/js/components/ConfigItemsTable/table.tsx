@@ -74,8 +74,6 @@ const ConfigItemsTable: Function = ({
 }: any) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
-  console.log(rest, configItems);
-
   return (
     <React.Fragment>
       {selectedItem && (
