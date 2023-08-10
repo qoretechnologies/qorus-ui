@@ -11,18 +11,18 @@ import withHandlers from 'recompose/withHandlers';
 import DataOrEmptyTable from '../../../components/DataOrEmptyTable';
 import LoadMore from '../../../components/LoadMore';
 import { NameColumnHeader } from '../../../components/NameColumn';
-import { FixedRow, Table, Tbody, Th, Thead } from '../../../components/new_table';
 import Pull from '../../../components/Pull';
+import { FixedRow, Table, Tbody, Th, Thead } from '../../../components/new_table';
 import { ADD_PERMS_MAP, DELETE_PERMS_MAP, EDIT_PERMS_MAP } from '../../../constants/remotes';
 import { sortDefaults } from '../../../constants/sort';
 import { findBy } from '../../../helpers/search';
 import { hasPermission } from '../../../helpers/user';
+import titleManager from '../../../hocomponents/TitleManager';
 import withLoadMore from '../../../hocomponents/loadMore';
 import withModal from '../../../hocomponents/modal';
 import withPane from '../../../hocomponents/pane';
 import queryControl from '../../../hocomponents/queryControl';
 import withSort from '../../../hocomponents/sort';
-import titleManager from '../../../hocomponents/TitleManager';
 import viewBehindPermission from '../../../hocomponents/viewBehindPermission';
 import ManageModal from './modals/manage';
 import ConnectionPane from './pane';
@@ -111,7 +111,7 @@ Props) => (
           <FormattedMessage id="table.status" />
         </Th>
         <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} icon="application" />
-        <Th icon="build">
+        <Th icon="build" className="huge">
           <FormattedMessage id="table.actions" />
         </Th>
         <Th className="text" name="url" icon="link">
@@ -191,8 +191,6 @@ export default compose(
   ),
   withSort(({ type }: Props): string => type, 'remotes', sortDefaults.remote),
   withLoadMore('remotes', null, true, 50),
-  // @ts-ignore ts-migrate(2554) FIXME: Expected 5 arguments, but got 4.
-  withPane(ConnectionPane, ['remoteType', 'canEdit', 'canDelete'], 'detail', 'connections'),
   withModal(),
   withHandlers({
     handleAddClick:
@@ -201,7 +199,19 @@ export default compose(
         // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
         openModal(<ManageModal onClose={closeModal} remoteType={type} />);
       },
+    handleEditClick:
+      ({ openModal, closeModal, type }: Props): Function =>
+      (remote) => {
+        // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+        openModal(<ManageModal onClose={closeModal} remoteType={type} edit {...remote} />);
+      },
   }),
+  withPane(
+    ConnectionPane,
+    ['remoteType', 'canEdit', 'canDelete', 'handleEditClick'],
+    'detail',
+    'connections'
+  ),
   titleManager(
     // @ts-ignore ts-migrate(2345) FIXME: Argument of type '({ remoteType }: Props) => strin... Remove this comment to see the full error message
     ({ remoteType }: Props): string => `${capitalize(remoteType)} connections`

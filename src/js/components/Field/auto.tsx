@@ -104,7 +104,6 @@ const AutoField: FunctionComponent<any> = ({
   };
 
   const handleChange: (name: string, value: any) => void = (name, value) => {
-    console.log(name, value, currentInternalType, currentType);
     // Run the onchange
     if (onChange && currentInternalType) {
       onChange(name, value, currentInternalType, canBeNull());
@@ -112,7 +111,6 @@ const AutoField: FunctionComponent<any> = ({
   };
 
   const handleNullToggle = () => {
-    console.log('null toggle', name, value, currentInternalType, currentType);
     setType(defaultType || 'any');
     setInternalType(defaultType || 'any');
     setIsSetToNull((current) => {
@@ -343,9 +341,6 @@ const AutoField: FunctionComponent<any> = ({
         { name: 'int' },
         { name: 'number' },
       ];
-
-  console.log('showPicker', showPicker && !readOnly);
-  console.log('canBeNull', canBeNull() && !readOnly);
 
   // Render type picker if the type is auto or any
   return (

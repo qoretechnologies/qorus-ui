@@ -209,6 +209,11 @@ export const validateField: (
   }
 };
 
+export function extractProtocol(url: string): string {
+  const match = url.match(/^(\w+):\/\//);
+  return match ? match[1] : '';
+}
+
 export const maybeParseYaml: (yaml: any) => any = (yaml) => {
   // If we are dealing with basic boolean
   if (yaml === true || yaml === false) {

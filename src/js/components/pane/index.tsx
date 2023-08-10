@@ -5,6 +5,7 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { Breadcrumbs, CrumbTabs } from '../breadcrumbs';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { IReqoreDrawerProps } from '@qoretechnologies/reqore/dist/components/Drawer';
 import Flex from '../Flex';
 import Headbar from '../Headbar';
 
@@ -17,18 +18,10 @@ type Props = {
   tabs?: any;
 };
 
-const Pane: Function = ({
-  width,
-  onClose,
-  children,
-  onResize,
-  title,
-  tabs,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-  intl,
-}: Props) => {
+const Pane = ({ width, onClose, children, title, tabs, ...rest }: Props & IReqoreDrawerProps) => {
   return (
     <ReqoreDrawer
+      {...rest}
       label={title}
       onClose={onClose}
       position="right"
@@ -36,7 +29,7 @@ const Pane: Function = ({
       minSize="650px"
       isOpen
       minimal
-      blur={5}
+      blur={2}
       floating
       hidable
       contentStyle={{ display: 'flex', flexFlow: 'column', height: '100%', overflow: 'hidden' }}
@@ -61,4 +54,4 @@ const Pane: Function = ({
   );
 };
 
-export default compose(pure(['width', 'children', 'tabs']), injectIntl)(Pane);
+export default compose(pure(['width', 'children', 'tabs', 'actions']), injectIntl)(Pane);

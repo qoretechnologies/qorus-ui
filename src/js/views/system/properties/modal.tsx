@@ -149,8 +149,6 @@ export default class extends Component {
   render() {
     const { data, collection } = this.props;
 
-    console.log('UPDATED');
-
     return (
       <Modal hasFooter>
         <Modal.Header titleId="props-modal" onClose={this.props.onClose}>

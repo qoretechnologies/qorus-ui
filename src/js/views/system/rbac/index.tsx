@@ -2,15 +2,15 @@
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
-import Box from '../../../components/box';
-import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
 import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
+import Box from '../../../components/box';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import Search from '../../../containers/search';
-import queryControl from '../../../hocomponents/queryControl';
 import titleManager from '../../../hocomponents/TitleManager';
+import queryControl from '../../../hocomponents/queryControl';
 import viewBehindPermission from '../../../hocomponents/viewBehindPermission';
 import withTabs from '../../../hocomponents/withTabs';
 import OAuth2View from '../../../views/oauth2';
@@ -40,7 +40,6 @@ const RBAC: Function = ({
   system,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => {
-  console.log(system);
   const tabs = [
     { title: 'Users', suffix: `(${users.length})` },
     { title: 'Roles', suffix: `(${roles.length})` },

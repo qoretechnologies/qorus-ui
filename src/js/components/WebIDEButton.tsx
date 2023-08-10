@@ -1,6 +1,6 @@
+import { ReqoreButton, ReqoreControlGroup } from '@qoretechnologies/reqore';
 import { WEB_IDE_URL } from '../../server_config';
 import { isFeatureEnabled } from '../helpers/functions';
-import { Control as Button, Controls as ButtonGroup } from './controls';
 
 export interface IWebIDEButtonProps {
   big?: boolean;
@@ -14,15 +14,15 @@ export const WebIDEButton = ({ big, id, type }: IWebIDEButtonProps) => {
   }
 
   return (
-    <ButtonGroup>
-      <Button
-        title="Edit in Web IDE"
-        icon="code-block"
-        big={big}
+    <ReqoreControlGroup>
+      <ReqoreButton
+        tooltip="Edit in Web IDE"
+        size={big ? undefined : 'small'}
+        icon="CodeLine"
         onClick={() => {
           window.location.href = `${WEB_IDE_URL}new/${type}/${id}?origin=${window.location.href}`;
         }}
       />
-    </ButtonGroup>
+    </ReqoreControlGroup>
   );
 };

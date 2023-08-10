@@ -57,8 +57,6 @@ const Footer: Function = ({ info, path, openModal, closeModal, intl }: Props) =>
     }
   };
 
-  console.log(info);
-
   return (
     <ReqoreFooter style={{ height: '30px' }}>
       <ReqoreNavbarGroup>
