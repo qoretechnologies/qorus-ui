@@ -244,7 +244,7 @@ test.describe('Checks every page for visual regressions', () => {
     await expect(page).toHaveScreenshot('groups-detail.png', screenshotConfig);
   });
 
-  test.only('Connections page is visually identical', async () => {
+  test('Connections page is visually identical', async () => {
     await page.goto('https://localhost:3000/remote');
     await page.waitForSelector('#connections-view');
     await expect(page).toHaveScreenshot('connections-datasources.png', screenshotConfig);
