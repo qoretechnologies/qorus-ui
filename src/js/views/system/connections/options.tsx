@@ -230,7 +230,7 @@ export default class ConnectionOptions extends Component {
                     this.state.optionsData[this.props.urlProtocol],
                     (_option, optionName) => ({
                       label: optionName,
-                      disabled: !!this.props.data[optionName],
+                      disabled: !!this.props.data?.[optionName],
                       selected: this.state.key === optionName,
                     })
                   )}
