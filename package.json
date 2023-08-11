@@ -1,6 +1,6 @@
 {
   "name": "qorus-ui",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Qorus UI",
   "author": "Qore Technologies",
   "repository": {
@@ -31,6 +31,7 @@
     "js-yaml": "^3.6.0",
     "keymirror": "^0.1.1",
     "lodash": "^4.17.11",
+    "million": "^2.5.10",
     "moment": "^2.24.0",
     "normalize.css": "^8.0.0",
     "path": "^0.12.7",
@@ -74,14 +75,16 @@
   },
   "scripts": {
     "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true craco start",
+    "start:http": "REACT_APP_API_PORT=8091 REACT_APP_API_HOST=hq.qoretechnologies.com craco start",
     "start:ci": "REACT_APP_API_HOST=sandbox.qoretechnologies.com HTTPS=true craco start",
     "codegen": "npx playwright codegen --ignore-https-errors --load-storage=codegen-auth.json https://localhost:3000",
     "build:pr": "./node_modules/.bin/dotenv -e .env.pull_request craco build",
     "build:dev": "./node_modules/.bin/dotenv -e .env.development craco build",
     "build": "./node_modules/.bin/dotenv -e .env.production craco build",
     "setup-test": "npx playwright install --with-deps",
-    "test": "TEST_USER=ui-test TEST_USER_PASS=sojcaf-4gitta-teGfyg yarn playwright test",
-    "test:ci": "yarn playwright test",
+    "test": "TEST_USER=ui-test TEST_USER_PASS=sojcaf-4gitta-teGfyg yarn playwright test tests/sanity.spec.ts",
+    "test:ci": "yarn playwright test tests/sanity.spec.ts",
+    "test:http": "yarn playwright test tests/http.spec.ts",
     "update-reqore": "yarn add @qoretechnologies/reqore@beta"
   },
   "eslintConfig": {

@@ -16,7 +16,7 @@ jobs:
           utcOffset: '+01:00'
       # Checkout the repo
       - uses: actions/checkout@v3
-        with: 
+        with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       # Get commit message
@@ -60,6 +60,15 @@ jobs:
           curl -k https://localhost:3000 &&
           TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
 
+      # Run the dev server & http tests
+      - name: Start server and run Playwright tests
+        id: run_server_and_http_tests
+        run: |
+          yarn start:http &
+          sleep 30 &&
+          curl -k http://localhost:3000 &&
+          yarn test:http
+
       # If the tests failed, upload the screenshots as artifacts
       - uses: actions/upload-artifact@v3
         id: upload_artifacts
@@ -99,4 +108,3 @@ jobs:
         with:
           args: ':exclamation: Tests action run #${{ github.run_number }} for [PR](${{ github.event.pull_request.html_url }}) triggered by ${{ github.triggering_actor }} failed!'
         if: failure()
-    
