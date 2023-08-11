@@ -84,7 +84,7 @@
     "setup-test": "npx playwright install --with-deps",
     "test": "TEST_USER=ui-test TEST_USER_PASS=sojcaf-4gitta-teGfyg yarn playwright test tests/sanity.spec.ts",
     "test:ci": "yarn playwright test tests/sanity.spec.ts",
-    "test:http": "yarn playwright test tests/http.spec.ts",
+    "test:http": "yarn playwright test --config=./playwright-http.config.ts tests/http.spec.ts",
     "update-reqore": "yarn add @qoretechnologies/reqore@beta"
   },
   "eslintConfig": {

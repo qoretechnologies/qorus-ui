@@ -61,7 +61,7 @@ jobs:
           TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
 
       # Run the dev server & http tests
-      - name: Start server and run Playwright tests
+      - name: Start HTTP server and run Playwright tests
         id: run_server_and_http_tests
         run: |
           yarn start:http &
@@ -78,6 +78,15 @@ jobs:
           path: test-results/
           retention-days: 30
 
+      # If the tests failed, upload the screenshots as artifacts
+      - uses: actions/upload-artifact@v3
+        id: upload_artifacts_http
+        if: failure()
+        with:
+          name: failed-screenshots-http
+          path: test-results-http/
+          retention-days: 30
+
       # Copy the screenshots to HQ
       - name: Copy screenshots to HQ
         id: copy_screenshots
@@ -86,6 +95,18 @@ jobs:
         with:
           local: test-results
           remote: ${{ secrets.TEST_REPORT_PATH }}
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          rmRemote: true
+      # Copy the screenshots to HQ
+      - name: Copy HTTP screenshots to HQ
+        id: copy_screenshots_http
+        uses: garygrossgarten/github-action-scp@release
+        if: failure()
+        with:
+          local: test-results-http
+          remote: ${{ secrets.TEST_REPORT_PATH }}-http
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
