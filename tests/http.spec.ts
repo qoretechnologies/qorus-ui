@@ -10,7 +10,7 @@ const screenshotConfig: any = {
 };
 
 /* Declaring a variable called localServerUrl and assigning it the value of 'https://localhost:3000/'. */
-const localServerUrl = 'http://localhost:3000/';
+const localServerUrl = 'http://localhost:3001/';
 
 /* A test suite that checks every page for visual regressions. */
 test.describe('Checks HTTP site', () => {

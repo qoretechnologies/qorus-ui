@@ -75,7 +75,7 @@
   },
   "scripts": {
     "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true craco start",
-    "start:http": "REACT_APP_API_PORT=8091 REACT_APP_API_HOST=hq.qoretechnologies.com craco start",
+    "start:http": "REACT_APP_API_PORT=8091 REACT_APP_API_HOST=hq.qoretechnologies.com PORT=3001 craco start",
     "start:ci": "REACT_APP_API_HOST=sandbox.qoretechnologies.com HTTPS=true craco start",
     "codegen": "npx playwright codegen --ignore-https-errors --load-storage=codegen-auth.json https://localhost:3000",
     "build:pr": "./node_modules/.bin/dotenv -e .env.pull_request craco build",
