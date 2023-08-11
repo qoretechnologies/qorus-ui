@@ -16,7 +16,7 @@ jobs:
           utcOffset: '+01:00'
       # Checkout the repo
       - uses: actions/checkout@v3
-        with: 
+        with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       # Get commit message
@@ -60,6 +60,15 @@ jobs:
           curl -k https://localhost:3000 &&
           TEST_USER=${{ secrets.TEST_USER }} TEST_USER_PASS=${{ secrets.TEST_USER_PASS }} yarn test:ci
 
+      # Run the dev server & http tests
+      - name: Start HTTP server and run Playwright tests
+        id: run_server_and_http_tests
+        run: |
+          yarn start:http &
+          sleep 30 &&
+          curl -k http://localhost:3001 &&
+          yarn test:http
+
       # If the tests failed, upload the screenshots as artifacts
       - uses: actions/upload-artifact@v3
         id: upload_artifacts
@@ -67,6 +76,15 @@ jobs:
         with:
           name: failed-screenshots
           path: test-results/
+          retention-days: 30
+
+      # If the tests failed, upload the screenshots as artifacts
+      - uses: actions/upload-artifact@v3
+        id: upload_artifacts_http
+        if: failure()
+        with:
+          name: failed-screenshots-http
+          path: test-results-http/
           retention-days: 30
 
       # Copy the screenshots to HQ
@@ -77,6 +95,18 @@ jobs:
         with:
           local: test-results
           remote: ${{ secrets.TEST_REPORT_PATH }}
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+          rmRemote: true
+      # Copy the screenshots to HQ
+      - name: Copy HTTP screenshots to HQ
+        id: copy_screenshots_http
+        uses: garygrossgarten/github-action-scp@release
+        if: failure()
+        with:
+          local: test-results-http
+          remote: ${{ secrets.TEST_REPORT_PATH }}/http
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}
@@ -99,4 +129,3 @@ jobs:
         with:
           args: ':exclamation: Tests action run #${{ github.run_number }} for [PR](${{ github.event.pull_request.html_url }}) triggered by ${{ github.triggering_actor }} failed!'
         if: failure()
-    
