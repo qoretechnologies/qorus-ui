@@ -106,7 +106,7 @@ jobs:
         if: failure()
         with:
           local: test-results-http
-          remote: ${{ secrets.TEST_REPORT_PATH }}-http
+          remote: ${{ secrets.TEST_REPORT_PATH }}/http
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           privateKey: ${{ secrets.DEPLOY_PRIVATE_KEY }}

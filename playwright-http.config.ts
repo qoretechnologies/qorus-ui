@@ -16,6 +16,7 @@ const httpConfig: PlaywrightTestConfig = {
   reporter: process.env.CI
     ? [['html', { open: 'never', outputFolder: 'test-results-http/report' }]]
     : 'line',
+  outputDir: 'test-results-http',
 };
 
 export default httpConfig;
