@@ -49,7 +49,7 @@ const AddClientModal: Function = ({
     })
   );
 
-  const isValid = validateField('string', clientDescription) && validateField('array', permissions);
+  const isValid = validateField('string', clientDescription);
 
   return (
     <ReqoreModal

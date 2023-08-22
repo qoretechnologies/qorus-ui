@@ -2,8 +2,8 @@
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import withState from 'recompose/withState';
-import Box from '../../../components/box';
 import Flex from '../../../components/Flex';
+import Box from '../../../components/box';
 import queryControl from '../../../hocomponents/queryControl';
 import settings from '../../../settings';
 import { post } from '../../../store/api/utils';
@@ -63,7 +63,6 @@ export default compose(
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa('uitest:blablabla')}`,
           },
         });
 
