@@ -137,7 +137,17 @@ ClientsViewProps) => {
           zoomable
           columns={[
             {
-              pin: 'left',
+              dataId: 'client_id',
+              header: {
+                label: 'Client ID',
+              },
+              sortable: true,
+              grow: 1,
+              cell: {
+                tooltip: ({ client_id }) => client_id,
+              },
+            },
+            {
               dataId: 'client_description',
               header: {
                 label: 'Client Description',
@@ -149,18 +159,6 @@ ClientsViewProps) => {
                 tooltip: ({ client_description }) => client_description,
               },
             },
-            {
-              dataId: 'client_id',
-              header: {
-                label: 'Client ID',
-              },
-              sortable: true,
-              grow: 1,
-              cell: {
-                tooltip: ({ client_id }) => client_id,
-              },
-            },
-
             {
               dataId: 'username',
               header: {
@@ -213,6 +211,7 @@ ClientsViewProps) => {
                 actions: (data) => [
                   {
                     icon: 'RefreshLine',
+                    tooltip: 'Regenerate secret',
                     iconsAlign: 'center',
                     onClick: async (event) => {
                       event.stopPropagation();
@@ -250,6 +249,7 @@ ClientsViewProps) => {
                   },
                   {
                     icon: 'Edit2Line',
+                    tooltip: 'Edit client',
                     iconsAlign: 'center',
                     onClick: (event) => {
                       event.stopPropagation();
@@ -268,6 +268,7 @@ ClientsViewProps) => {
                         colors: { 0: '#a11c58', 140: '#480724' },
                       },
                     },
+                    tooltip: 'Delete client',
                     iconsAlign: 'center',
                     onClick: (event) => {
                       event.stopPropagation();
@@ -277,7 +278,7 @@ ClientsViewProps) => {
 
                       confirmAction({
                         onConfirm: () => handleConfirm(),
-                        description: `Are you sure you want to delete client "${data.client_id}" permanently?`,
+                        description: `Are you sure you want to delete client "${data.client_id} - ${data.client_description}" permanently?`,
                       });
                     },
                     icon: 'DeleteBin3Fill',
