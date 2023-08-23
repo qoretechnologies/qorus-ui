@@ -136,6 +136,7 @@ ClientsViewProps) => {
       tooltip: 'Test access',
       icon: 'ShareBoxLine',
       iconsAlign: 'center',
+      disabled: data.username !== username,
       onClick: () => {
         const redirectUri = encodeURIComponent(`https://${window.location.host}/oauth2/code`);
 

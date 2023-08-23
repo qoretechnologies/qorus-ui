@@ -57,14 +57,14 @@ export default compose(
         const token = await post(url, {
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
           },
-          body: {
+          body: JSON.stringify({
             grant_type: 'authorization_code',
             code: allQueryObj.code,
             redirect_uri: redirectUri,
             client_id: allQueryObj.client_id,
-          },
+          }),
         });
 
         setToken(() => token.access_token);
