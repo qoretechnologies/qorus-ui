@@ -1,6 +1,5 @@
-import React from 'react';
+import { ReqoreMessage } from '@qoretechnologies/reqore';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import NoData from '../nodata';
 
 type Props = {
   condition: boolean;
@@ -25,7 +24,9 @@ Props) =>
       children
     )
   ) : (
-    <NoData title={title} big={big} inBox={inBox} top />
+    <ReqoreMessage size={big ? 'big' : undefined} intent="muted" minimal>
+      {title || 'No data'}
+    </ReqoreMessage>
   );
 
 export default onlyUpdateForKeys(['condition', 'children'])(NoDataIf);

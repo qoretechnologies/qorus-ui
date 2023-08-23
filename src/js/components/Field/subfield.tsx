@@ -61,6 +61,7 @@ const SubField: React.FC<any> = ({
           minimal
           label={title}
           actions={actions}
+          headerSize={4}
           collapsible
           icon={!isValid ? 'AlertLine' : undefined}
           unMountContentOnCollapse={false}
@@ -70,7 +71,6 @@ const SubField: React.FC<any> = ({
               <ReqorePanel flat rounded padded>
                 <ReqoreMessage
                   intent="muted"
-                  inverted
                   size="small"
                   flat
                   title={detail ? `<${detail} />` : undefined}

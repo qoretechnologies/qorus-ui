@@ -1,4 +1,5 @@
 import { ReqoreTable, useReqoreProperty } from '@qoretechnologies/reqore';
+import { IReqorePanelAction } from '@qoretechnologies/reqore/dist/components/Panel';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -45,6 +46,7 @@ ClientsViewProps) => {
   const showSecret = (secret: string) => {
     addNotification({
       id: 'secret',
+      title: 'Secret generated',
       content: `Please copy this secret and save it somewhere safe. You will not be able to see it again. ${secret}. Clicking on this notification will copy the secret to your clipboard.`,
       duration: 50000,
       onClick: () => {
@@ -61,6 +63,7 @@ ClientsViewProps) => {
         });
       },
       intent: 'info',
+      opaque: true,
       flat: true,
     });
   };
@@ -106,6 +109,78 @@ ClientsViewProps) => {
     );
   };
 
+  const getActions = (data): IReqorePanelAction[] => [
+    {
+      icon: 'RefreshLine',
+      tooltip: 'Regenerate secret',
+      iconsAlign: 'center',
+      onClick: async () => {
+        addNotification({
+          id: 'secret',
+          intent: 'pending',
+          flat: true,
+          title: 'Generating new secret...',
+          content: 'Please wait...',
+        });
+
+        const newSecret = await post(
+          `${settings.OAUTH_URL}/clients/${data.client_id}/generateSecret`
+        );
+
+        if (!newSecret.err) {
+          showSecret(newSecret.client_secret);
+        }
+      },
+    },
+    {
+      tooltip: 'Test access',
+      icon: 'ShareBoxLine',
+      iconsAlign: 'center',
+      onClick: () => {
+        const redirectUri = encodeURIComponent(`https://${window.location.host}/oauth2/code`);
+
+        const url = `${settings.OAUTH_PUBLIC_URL}/token?response_type=code&client_id=${data.client_id}&redirect_uri=${redirectUri}`;
+
+        window.location.href = url;
+      },
+    },
+    {
+      icon: 'Edit2Line',
+      tooltip: 'Edit client',
+      iconsAlign: 'center',
+      onClick: () => {
+        setClientData({
+          clientId: data.client_id,
+          clientDescription: data.client_description,
+          clientSecret: data.client_secret,
+          permissions: data.permissions,
+        });
+      },
+    },
+    {
+      effect: {
+        gradient: {
+          direction: 'to right bottom',
+          colors: { 0: '#a11c58', 140: '#480724' },
+        },
+      },
+      tooltip: 'Delete client',
+      iconsAlign: 'center',
+      onClick: () => {
+        const handleConfirm = (): void => {
+          rest.optimisticDispatch(actions.clients.deleteClient, data.client_id, null);
+        };
+
+        confirmAction({
+          onConfirm: () => handleConfirm(),
+          intent: 'danger',
+          description: `Are you sure you want to delete client "${data.client_id} - ${data.client_description}" permanently?`,
+        });
+      },
+      icon: 'DeleteBin3Fill',
+    },
+  ];
+
   return (
     <>
       {clientData && (
@@ -119,7 +194,7 @@ ClientsViewProps) => {
 
       <>
         <ReqoreTable
-          label="List of available OAUTH2 clients"
+          label="List of available OAuth2 clients"
           rounded
           flat
           actions={[
@@ -208,86 +283,11 @@ ClientsViewProps) => {
               pin: 'right',
               cell: {
                 padded: 'none',
-                actions: (data) => [
-                  {
-                    icon: 'RefreshLine',
-                    tooltip: 'Regenerate secret',
-                    iconsAlign: 'center',
-                    onClick: async (event) => {
-                      event.stopPropagation();
-
-                      addNotification({
-                        id: 'secret',
-                        intent: 'pending',
-                        flat: true,
-                        title: 'Generating new secret...',
-                        content: 'Please wait...',
-                      });
-
-                      const newSecret = await post(
-                        `${settings.OAUTH_URL}/clients/${data.client_id}/generateSecret`
-                      );
-
-                      if (!newSecret.err) {
-                        showSecret(newSecret.client_secret);
-                      }
-                    },
-                  },
-                  {
-                    tooltip: 'Test access',
-                    icon: 'ShareBoxLine',
-                    iconsAlign: 'center',
-                    onClick: () => {
-                      const redirectUri = encodeURIComponent(
-                        `https://${window.location.host}/oauth2/code`
-                      );
-
-                      const url = `${settings.OAUTH_PUBLIC_URL}/token?response_type=code&client_id=${data.client_id}&redirect_uri=${redirectUri}`;
-
-                      window.location.href = url;
-                    },
-                  },
-                  {
-                    icon: 'Edit2Line',
-                    tooltip: 'Edit client',
-                    iconsAlign: 'center',
-                    onClick: (event) => {
-                      event.stopPropagation();
-                      setClientData({
-                        clientId: data.client_id,
-                        clientDescription: data.client_description,
-                        clientSecret: data.client_secret,
-                        permissions: data.permissions,
-                      });
-                    },
-                  },
-                  {
-                    effect: {
-                      gradient: {
-                        direction: 'to right bottom',
-                        colors: { 0: '#a11c58', 140: '#480724' },
-                      },
-                    },
-                    tooltip: 'Delete client',
-                    iconsAlign: 'center',
-                    onClick: (event) => {
-                      event.stopPropagation();
-                      const handleConfirm = (): void => {
-                        rest.optimisticDispatch(actions.clients.deleteClient, data.client_id, null);
-                      };
-
-                      confirmAction({
-                        onConfirm: () => handleConfirm(),
-                        description: `Are you sure you want to delete client "${data.client_id} - ${data.client_description}" permanently?`,
-                      });
-                    },
-                    icon: 'DeleteBin3Fill',
-                  },
-                ],
+                actions: (data) => getActions(data),
               },
             },
           ]}
-          onRowClick={(data) => openPane(data.client_id)}
+          onRowClick={(data) => openPane(data.client_id, undefined, { actions: getActions(data) })}
           data={clients}
           sort={{ by: 'created', direction: 'desc' }}
         />

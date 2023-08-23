@@ -2116,15 +2116,16 @@
     chokidar "^3.5.3"
     fs-extra "^10.0.1"
 
-"@qoretechnologies/reqore@^0.36.4":
-  version "0.36.4"
-  resolved "https://registry.yarnpkg.com/@qoretechnologies/reqore/-/reqore-0.36.4.tgz#14e0183f9cc219020fbbe2ed445a9012aa20359d"
-  integrity sha512-pIvdNEb/iUgtWV895J9mLYsVCMo8FpxwRFuiS36Vz6LQ9kladoVoTB8HJP9Rw4loh4dyVWso1yIPVa1AIz4Hag==
+"@qoretechnologies/reqore@^0.36.8":
+  version "0.36.8"
+  resolved "https://registry.yarnpkg.com/@qoretechnologies/reqore/-/reqore-0.36.8.tgz#58755c963b998daba5e9f9956c5a80faec3f96df"
+  integrity sha512-N50NlHPGwKKT4G0np+GPKX9JgGCExuSWaQEfklCqcZEr4p7qZfPQTv483dkpuACwbbGLGU5lGoji5PW1uN9fJA==
   dependencies:
     "@popperjs/core" "^2.11.6"
     "@react-spring/web" "^9.6.1"
     classnames "^2.2.6"
     epoch-timeago "^1.1.9"
+    fast-json-stable-stringify "^2.1.0"
     lodash "^4.17.21"
     polished "^4.2.2"
     re-resizable "^6.9.0"
