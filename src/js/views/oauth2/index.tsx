@@ -32,6 +32,7 @@ type ClientsViewProps = {
 const ClientsView: Function = ({
   clients,
   openPane,
+  closePane,
   username,
   userPermissions,
   clientData,
@@ -169,6 +170,7 @@ ClientsViewProps) => {
       iconsAlign: 'center',
       onClick: () => {
         const handleConfirm = (): void => {
+          closePane();
           rest.optimisticDispatch(actions.clients.deleteClient, data.client_id, null);
         };
 
