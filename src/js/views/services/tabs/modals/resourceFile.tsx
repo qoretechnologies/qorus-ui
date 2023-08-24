@@ -1,50 +1,46 @@
 // @flow
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import compose from 'recompose/compose';
-import lifecycle from 'recompose/lifecycle';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import withState from 'recompose/withState';
-import Box from '../../../../components/box';
-import Loader from '../../../../components/loader';
-import Modal from '../../../../components/modal';
+import { ReqoreMessage, ReqoreModal, ReqoreSpinner } from '@qoretechnologies/reqore';
+import { useState } from 'react';
+import { useMount } from 'react-use';
 import settings from '../../../../settings';
 import { get } from '../../../../store/api/utils';
 
 type ResourceFileModalProps = {
-  onClose: Function;
+  id: string;
   name: string;
-  contents: string;
 };
 
 const ResourceFileModal: Function = ({
+  id,
   name,
-  onClose,
-  contents,
+  ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-ResourceFileModalProps) => (
-  <Modal width="80vw">
-    <Modal.Header titleId="resourceFile" onClose={onClose}>
-      <FormattedMessage id="dialog.contents" />: {name}
-    </Modal.Header>
-    <Modal.Body>
-      <Box top fill>
-        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'string'. */}
-        {contents ? <pre>{contents.data}</pre> : <Loader />}
-      </Box>
-    </Modal.Body>
-  </Modal>
-);
+ResourceFileModalProps) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(undefined);
+  const [error, setError] = useState(undefined);
 
-export default compose(
-  withState('contents', 'setContents', null),
-  lifecycle({
-    async componentDidMount() {
-      const { id, name, setContents } = this.props;
-      const contents = await get(`${settings.REST_BASE_URL}/services/${id}/resource_files/${name}`);
+  useMount(async () => {
+    const contents = await get(`${settings.REST_BASE_URL}/services/${id}/resource_files/${name}`);
 
-      setContents(() => contents);
-    },
-  }),
-  onlyUpdateForKeys(['id', 'contents'])
-)(ResourceFileModal);
+    if (contents.err) {
+      setData(undefined);
+      setError(contents.desc);
+    } else {
+      setError(undefined);
+      setData(contents.data);
+    }
+
+    setIsLoading(false);
+  });
+
+  return (
+    <ReqoreModal {...rest} label={`Contents for: ${name}`} width="80vw">
+      {isLoading && <ReqoreSpinner centered>Loading file contents...</ReqoreSpinner>}
+      {data && <pre>{data}</pre>}
+      {error && <ReqoreMessage intent="danger">{error}</ReqoreMessage>}
+    </ReqoreModal>
+  );
+};
+
+export default ResourceFileModal;

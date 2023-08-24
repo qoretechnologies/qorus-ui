@@ -2116,10 +2116,10 @@
     chokidar "^3.5.3"
     fs-extra "^10.0.1"
 
-"@qoretechnologies/reqore@^0.36.8":
-  version "0.36.8"
-  resolved "https://registry.yarnpkg.com/@qoretechnologies/reqore/-/reqore-0.36.8.tgz#58755c963b998daba5e9f9956c5a80faec3f96df"
-  integrity sha512-N50NlHPGwKKT4G0np+GPKX9JgGCExuSWaQEfklCqcZEr4p7qZfPQTv483dkpuACwbbGLGU5lGoji5PW1uN9fJA==
+"@qoretechnologies/reqore@^0.37.0":
+  version "0.37.0"
+  resolved "https://registry.yarnpkg.com/@qoretechnologies/reqore/-/reqore-0.37.0.tgz#926b06c6b8b5a07df2b33ca4e43bb44d561688d5"
+  integrity sha512-FF3dDbsllVuf1Zcc3jYiCwRy2OU9WV7arNAFMpexjQ8O0wbV0WlNVL034faUvCTsY7J8/F3u6oF3R23JruFo+Q==
   dependencies:
     "@popperjs/core" "^2.11.6"
     "@react-spring/web" "^9.6.1"
@@ -2653,6 +2653,11 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
+
+"@types/lodash@^4.14.197":
+  version "4.14.197"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.197.tgz#e95c5ddcc814ec3e84c891910a01e0c8a378c54b"
+  integrity sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==
 
 "@types/mdast@^3.0.0":
   version "3.0.10"
