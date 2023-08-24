@@ -1,10 +1,8 @@
 import { Tag } from '@blueprintjs/core';
 import { isArray, size } from 'lodash';
 import moment from 'moment';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import withProcessKill from '../../hocomponents/withProcessKill';
 import Alert from '../alert';
@@ -32,6 +30,7 @@ const ProcessSummary: Function = ({
     active,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'loaded' does not exist on type 'Object'.
     loaded,
+    status,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'expiry_date' does not exist on type 'Obj... Remove this comment to see the full error message
     expiry_date: expiry,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'jobid' does not exist on type 'Object'.
@@ -165,7 +164,7 @@ Props) => {
 
     return (
       <PaneItem title={intl.formatMessage({ id: 'summary.process-summary' })}>
-        {type === 'service' && !loaded ? (
+        {type === 'service' && status === 'unloaded' ? (
           <Alert
             title={intl.formatMessage({ id: 'summary.service-not-loaded-title' })}
             bsStyle="warning"
@@ -188,4 +187,4 @@ Props) => {
   );
 };
 
-export default compose(withProcessKill, onlyUpdateForKeys(['model']), injectIntl)(ProcessSummary);
+export default compose(withProcessKill, injectIntl)(ProcessSummary);
