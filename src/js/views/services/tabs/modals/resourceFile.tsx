@@ -1,4 +1,5 @@
 // @flow
+import Editor from '@monaco-editor/react';
 import { ReqoreMessage, ReqoreModal, ReqoreSpinner } from '@qoretechnologies/reqore';
 import { useState } from 'react';
 import { useMount } from 'react-use';
@@ -28,16 +29,42 @@ ResourceFileModalProps) => {
       setError(contents.desc);
     } else {
       setError(undefined);
-      setData(contents.data);
+      setData(contents);
     }
 
     setIsLoading(false);
   });
 
+  const renderContent = () => {
+    if (data.mimetype.startsWith('image/')) {
+      return <img src={`data:${data.mimetype};base64,${data.data}`} />;
+    }
+
+    if (data.type === 'N' || data.type === 'T') {
+      // Get everything after the /
+      const language = data.mimetype.split('/')[1].replace('x-', '');
+
+      return (
+        <Editor
+          height="100%"
+          language={language}
+          value={data.data}
+          options={{
+            readOnly: true,
+            // do not scroll after last line
+            scrollBeyondLastLine: false,
+          }}
+        />
+      );
+    }
+
+    return <pre>{data.data}</pre>;
+  };
+
   return (
-    <ReqoreModal {...rest} label={`Contents for: ${name}`} width="80vw">
+    <ReqoreModal {...rest} label={`Contents for: ${name}`} width="80vw" height="80vh">
       {isLoading && <ReqoreSpinner centered>Loading file contents...</ReqoreSpinner>}
-      {data && <pre>{data}</pre>}
+      {data ? renderContent() : null}
       {error && <ReqoreMessage intent="danger">{error}</ReqoreMessage>}
     </ReqoreModal>
   );

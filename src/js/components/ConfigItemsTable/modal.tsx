@@ -4,7 +4,6 @@ import {
   ReqoreDropdown,
   ReqoreMessage,
   ReqoreModal,
-  ReqoreSpacer,
   ReqoreTabs,
   ReqoreTabsContent,
   ReqoreTag,
@@ -318,13 +317,10 @@ export default class ConfigItemsModal extends Component {
       >
         {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
         {item?.desc && (
-          <>
-            <ReqoreMessage customTheme={{ main: '#e4e8ef' }} icon="InformationLine" flat>
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
-              <ReactMarkdown>{item.desc}</ReactMarkdown>
-            </ReqoreMessage>
-            <ReqoreSpacer height={10} />
-          </>
+          <ReqoreMessage intent="info" minimal margin="bottom">
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'desc' does not exist on type 'Object'. */}
+            <ReactMarkdown>{item.desc}</ReactMarkdown>
+          </ReqoreMessage>
         )}
         {isGlobal && (
           <>

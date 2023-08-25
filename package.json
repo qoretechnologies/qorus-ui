@@ -16,6 +16,7 @@
     "@blueprintjs/core": "3.36",
     "@blueprintjs/datetime": "^3.15.2",
     "@blueprintjs/select": "^3.11.2",
+    "@monaco-editor/react": "^4.5.2",
     "@qoretechnologies/reqore": "^0.37.0",
     "@types/jest": "^27.0.1",
     "@types/lodash": "^4.14.197",

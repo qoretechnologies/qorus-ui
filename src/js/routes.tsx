@@ -177,7 +177,6 @@ class AppInfo extends React.Component {
     const token = window.localStorage.getItem('token');
 
     if (!token && !noauth) {
-      console.log('QUERY PARAMS', encodeURIComponent(nextState.location.search));
       replace(
         `/login?next=${nextState.location.pathname}${encodeURIComponent(nextState.location.search)}`
       );

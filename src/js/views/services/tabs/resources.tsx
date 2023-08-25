@@ -13,7 +13,6 @@ import size from 'lodash/size';
 import { injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import modal from '../../../hocomponents/modal';
 import ResourceFileModal from './modals/resourceFile';
 
 type Props = {
@@ -24,16 +23,7 @@ type Props = {
   id: number;
 };
 
-const ResourceTable: Function = ({
-  resources,
-  resourceFiles = [],
-  openModal,
-  closeModal,
-  id,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-  intl,
-}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props) => {
+const ResourceTable: Function = ({ resources, resourceFiles = [], id }: Props) => {
   const addModal = useReqoreProperty('addModal');
 
   return (
@@ -87,6 +77,10 @@ Props) => {
       <ReqoreTabsContent tabId="resourcefiles">
         <ReqoreTable
           label="Resource files"
+          striped
+          onRowClick={({ name }) => {
+            addModal(<ResourceFileModal id={id} name={name} />);
+          }}
           columns={[
             {
               dataId: 'name',
@@ -98,11 +92,20 @@ Props) => {
               sortable: true,
             },
             {
-              dataId: 'type',
+              dataId: 'typedesc',
               header: {
                 label: 'Type',
               },
               width: 150,
+              sortable: true,
+            },
+            {
+              dataId: 'mimetype',
+              header: {
+                label: 'MIME type',
+              },
+              width: 150,
+              grow: 1,
               cell: {
                 content: 'tag',
               },
@@ -117,7 +120,7 @@ Props) => {
               pin: 'right',
               cell: {
                 padded: 'none',
-                actions: ({ name }) => [
+                actions: ({ name  }) => [
                   {
                     icon: 'File3Line',
                     tooltip: 'Show file contents',
@@ -138,4 +141,4 @@ Props) => {
   );
 };
 
-export default compose(modal(), pure(['resources', 'resourceFiles']), injectIntl)(ResourceTable);
+export default compose(pure(['resources', 'resourceFiles']), injectIntl)(ResourceTable);
