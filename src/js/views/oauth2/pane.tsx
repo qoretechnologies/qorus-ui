@@ -1,12 +1,12 @@
 import {
-  ReqoreMessage,
   ReqorePanel,
-  ReqoreSpacer,
   ReqoreTag,
   ReqoreTagGroup,
+  ReqoreVerticalSpacer,
 } from '@qoretechnologies/reqore';
 import size from 'lodash/size';
 // @flow
+import { IReqorePanelAction } from '@qoretechnologies/reqore/dist/components/Panel';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
@@ -20,40 +20,22 @@ type ClientPaneProps = {
   onClose: Function;
   setClientData: Function;
   client: any;
+  actions?: IReqorePanelAction[];
 };
 
 const ClientPane: Function = ({
   paneId,
   onClose,
   client,
-  setClientData,
+  actions,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ClientPaneProps) => (
   <Pane title={paneId} onClose={onClose} width={600}>
-    <ReqoreMessage intent="info" title="Description" flat>
+    <ReqorePanel label="Description" flat transparent actions={actions} padded={false}>
       {client.client_description}
-    </ReqoreMessage>
-    <ReqoreSpacer height="20" />
-    <ReqorePanel
-      flat
-      label="Permissions"
-      opacity={0}
-      headerSize={3}
-      actions={[
-        {
-          label: 'Edit',
-          icon: 'Edit2Line',
-          onClick: () => {
-            setClientData({
-              clientId: client.client_id,
-              clientDescription: client.client_description,
-              clientSecret: client.client_secret,
-              permissions: client.permissions,
-            });
-          },
-        },
-      ]}
-    >
+    </ReqorePanel>
+    <ReqoreVerticalSpacer height={20} />
+    <ReqorePanel flat label="Permissions" transparent headerSize={3} padded={false}>
       {/* @ts-ignore ts-migrate(2339) FIXME: Property 'permissions' does not exist on type 'Obj... Remove this comment to see the full error message */}
       <NoDataIf condition={!size(client.permissions)}>
         {() => (

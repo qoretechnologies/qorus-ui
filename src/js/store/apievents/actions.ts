@@ -354,6 +354,7 @@ const handleEvent = (url, data, dispatch, state) => {
                   name: info.name,
                   alertid: info.alertid,
                   type: info.type,
+                  conntype: info.conntype,
                 },
                 dispatch
               );
@@ -377,6 +378,7 @@ const handleEvent = (url, data, dispatch, state) => {
                   name: info.name,
                   alertid: info.alertid,
                   type: info.type,
+                  conntype: info.conntype,
                 },
                 dispatch
               );
@@ -400,6 +402,7 @@ const handleEvent = (url, data, dispatch, state) => {
                   name: info.name,
                   alertid: info.alertid,
                   type: info.type,
+                  conntype: info.conntype,
                 },
                 dispatch
               );

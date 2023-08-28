@@ -1,4 +1,4 @@
-/* @flow */
+import size from 'lodash/size';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -26,6 +26,7 @@ type Props = {
   users: Array<string>;
   roles: Array<string>;
   perms: Array<string>;
+  clients?: any[];
   system: any;
 };
 
@@ -37,17 +38,18 @@ const RBAC: Function = ({
   users,
   roles,
   perms,
+  clients,
   system,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => {
   const tabs = [
-    { title: 'Users', suffix: `(${users.length})` },
-    { title: 'Roles', suffix: `(${roles.length})` },
-    { title: 'Permissions', suffix: `(${perms.length})` },
+    { title: 'Users', suffix: `(${users.length || '?'})` },
+    { title: 'Roles', suffix: `(${roles.length || '?'})` },
+    { title: 'Permissions', suffix: `(${perms.length || '?'})` },
   ];
 
   if (system?.oauth2_enabled) {
-    tabs.push({ title: 'OAuth2', suffix: '' });
+    tabs.push({ title: 'OAuth2', suffix: `(${size(clients) || '?'})` });
   }
 
   return (
@@ -101,6 +103,7 @@ export default compose(
     // @ts-ignore ts-migrate(2339) FIXME: Property 'api' does not exist on type 'Object'.
     perms: state.api.perms.data,
     system: state.api.system.data,
+    clients: state.api.clients.data,
   })),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
   withTabs('users'),
