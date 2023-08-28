@@ -1,12 +1,10 @@
 /* @flow */
-import React from 'react';
+import { Link } from 'react-router';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
-import size from 'lodash/size';
 
-import PaneItem from '../pane_item';
-import NoDataIf from '../NoDataIf';
-import AlertsTableItem from './item';
+import { ReqoreCollection } from '@qoretechnologies/reqore';
+import { noop } from 'lodash';
 import { injectIntl } from 'react-intl';
 
 const AlertsTab = ({
@@ -15,25 +13,36 @@ const AlertsTab = ({
   title,
   intl,
 }: {
-  alerts: Array<Object>,
-  noTag: boolean,
-  title: string,
-  intl: any,
-}) => (
-  <PaneItem title={title || intl.formatMessage({ id: 'component.alerts' })}>
-    <NoDataIf condition={size(alerts) === 0}>
-      {() => (
-        <div className="alerts-table">
-          {alerts.map((item, index) => (
-            <AlertsTableItem key={index} item={item} noTag={noTag} />
-          ))}
-        </div>
-      )}
-    </NoDataIf>
-  </PaneItem>
-);
+  alerts: Array<any>;
+  noTag: boolean;
+  title: string;
+  intl: any;
+}) => {
+  return (
+    <ReqoreCollection
+      label={title || intl.formatMessage({ id: 'component.alerts' })}
+      filterable
+      zoomable
+      maxItemHeight={200}
+      items={alerts.map((item) => ({
+        label: item.alert,
+        icon: 'ErrorWarningLine',
+        size: 'small',
+        content: item.reason,
+        flat: false,
+        minimal: false,
+        badge: item.alertid,
+        as: noTag ? undefined : Link,
+        expandable: noTag,
+        onClick: noTag ? noop : undefined,
+        intent: 'danger',
+        iconColor: 'danger',
+        to: noTag
+          ? undefined
+          : `/system/alerts?tab=${item.alerttype.toLowerCase()}&paneId=${item.alertid}`,
+      }))}
+    />
+  );
+};
 
-export default compose(
-  pure(['alerts']),
-  injectIntl
-)(AlertsTab);
+export default compose(pure(['alerts']), injectIntl)(AlertsTab);
