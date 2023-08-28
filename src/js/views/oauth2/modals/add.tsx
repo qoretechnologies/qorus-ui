@@ -3,10 +3,10 @@ import {
   ReqoreButton,
   ReqoreControlGroup,
   ReqoreDropdown,
-  ReqoreInput,
   ReqoreModal,
   ReqoreTag,
   ReqoreTagGroup,
+  ReqoreTextarea,
 } from '@qoretechnologies/reqore';
 import { IReqoreButtonProps } from '@qoretechnologies/reqore/dist/components/Button';
 import { IReqoreDropdownItem } from '@qoretechnologies/reqore/dist/components/Dropdown/list';
@@ -49,12 +49,12 @@ const AddClientModal: Function = ({
     })
   );
 
-  const isValid = validateField('string', clientDescription) && validateField('array', permissions);
+  const isValid = validateField('string', clientDescription);
 
   return (
     <ReqoreModal
       isOpen
-      label="Add new client"
+      label="Client management"
       blur={5}
       onClose={onClose}
       bottomActions={[
@@ -74,7 +74,8 @@ const AddClientModal: Function = ({
       ]}
     >
       <SubField title={'Client Description'} isValid={validateField('string', clientDescription)}>
-        <ReqoreInput
+        <ReqoreTextarea
+          scaleWithContent
           value={clientDescription}
           onChange={handleClientDescriptionChange}
           intent={validateField('string', clientDescription) ? undefined : 'danger'}

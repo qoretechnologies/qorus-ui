@@ -7,9 +7,9 @@ import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import elementsLogo from '../../../img/elements.png';
 import logo from '../../../img/qorus_engine_logo.png';
+import Flex from '../../components/Flex';
 import Box from '../../components/box';
 import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
-import Flex from '../../components/Flex';
 import queryControl from '../../hocomponents/queryControl';
 import settings from '../../settings';
 import { fetchWithNotifications, get } from '../../store/api/utils';
@@ -112,9 +112,9 @@ export default compose(
   })),
   withHandlers({
     handleDenyClick:
-      ({ deny }): Function =>
+      ({ deny, allQueryObj }): Function =>
       (): void => {
-        deny(() => true);
+        window.location.href = `${allQueryObj.redirect_uri}?error=access_denied&error_description=The user clicked deny`;
       },
     handleUndoClick:
       ({ deny }): Function =>

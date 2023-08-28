@@ -1,24 +1,13 @@
-import {
-  ReqoreButton,
-  ReqoreColumn,
-  ReqoreColumns,
-  ReqoreContext,
-  ReqoreControlGroup,
-  ReqorePanel,
-  ReqoreTable
-} from '@qoretechnologies/reqore';
-import { useContext } from 'react';
+import { ReqoreTable, useReqoreProperty } from '@qoretechnologies/reqore';
+import { IReqorePanelAction } from '@qoretechnologies/reqore/dist/components/Panel';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import withState from 'recompose/withState';
-import EnhancedTable from '../../components/EnhancedTable';
-import Spacer from '../../components/Spacer';
-import Search from '../../containers/search';
 import { objectCollectionToArray } from '../../helpers/interfaces';
+import titleManager from '../../hocomponents/TitleManager';
 import pane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
-import titleManager from '../../hocomponents/TitleManager';
 import withDispatch from '../../hocomponents/withDispatch';
 import settings from '../../settings';
 import actions from '../../store/api/actions';
@@ -43,6 +32,7 @@ type ClientsViewProps = {
 const ClientsView: Function = ({
   clients,
   openPane,
+  closePane,
   username,
   userPermissions,
   clientData,
@@ -50,11 +40,14 @@ const ClientsView: Function = ({
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ClientsViewProps) => {
-  const { confirmAction, addNotification, removeNotification } = useContext(ReqoreContext);
+  const confirmAction = useReqoreProperty('confirmAction');
+  const addNotification = useReqoreProperty('addNotification');
+  const removeNotification = useReqoreProperty('removeNotification');
 
   const showSecret = (secret: string) => {
     addNotification({
       id: 'secret',
+      title: 'Secret generated',
       content: `Please copy this secret and save it somewhere safe. You will not be able to see it again. ${secret}. Clicking on this notification will copy the secret to your clipboard.`,
       duration: 50000,
       onClick: () => {
@@ -71,6 +64,7 @@ ClientsViewProps) => {
         });
       },
       intent: 'info',
+      opaque: true,
       flat: true,
     });
   };
@@ -116,6 +110,80 @@ ClientsViewProps) => {
     );
   };
 
+  const getActions = (data): IReqorePanelAction[] => [
+    {
+      icon: 'RefreshLine',
+      tooltip: 'Regenerate secret',
+      iconsAlign: 'center',
+      onClick: async () => {
+        addNotification({
+          id: 'secret',
+          intent: 'pending',
+          flat: true,
+          title: 'Generating new secret...',
+          content: 'Please wait...',
+        });
+
+        const newSecret = await post(
+          `${settings.OAUTH_URL}/clients/${data.client_id}/generateSecret`
+        );
+
+        if (!newSecret.err) {
+          showSecret(newSecret.client_secret);
+        }
+      },
+    },
+    {
+      tooltip: 'Test access',
+      icon: 'ShareBoxLine',
+      iconsAlign: 'center',
+      disabled: data.username !== username,
+      onClick: () => {
+        const redirectUri = encodeURIComponent(`https://${window.location.host}/oauth2/code`);
+
+        const url = `${settings.OAUTH_PUBLIC_URL}/token?response_type=code&client_id=${data.client_id}&redirect_uri=${redirectUri}`;
+
+        window.location.href = url;
+      },
+    },
+    {
+      icon: 'Edit2Line',
+      tooltip: 'Edit client',
+      iconsAlign: 'center',
+      onClick: () => {
+        setClientData({
+          clientId: data.client_id,
+          clientDescription: data.client_description,
+          clientSecret: data.client_secret,
+          permissions: data.permissions,
+        });
+      },
+    },
+    {
+      effect: {
+        gradient: {
+          direction: 'to right bottom',
+          colors: { 0: '#a11c58', 140: '#480724' },
+        },
+      },
+      tooltip: 'Delete client',
+      iconsAlign: 'center',
+      onClick: () => {
+        const handleConfirm = (): void => {
+          closePane();
+          rest.optimisticDispatch(actions.clients.deleteClient, data.client_id, null);
+        };
+
+        confirmAction({
+          onConfirm: () => handleConfirm(),
+          intent: 'danger',
+          description: `Are you sure you want to delete client "${data.client_id} - ${data.client_description}" permanently?`,
+        });
+      },
+      icon: 'DeleteBin3Fill',
+    },
+  ];
+
   return (
     <>
       {clientData && (
@@ -126,179 +194,107 @@ ClientsViewProps) => {
           userPermissions={userPermissions}
         />
       )}
-      <ReqorePanel flat contentStyle={{ display: 'flex', flexFlow: 'column' }}>
-        <EnhancedTable
-          collection={clients}
-          searchBy={['client_id', 'client_description', 'name', 'username']}
-          tableId="clients"
-        >
-          {({
-            sortData,
-            onSortChange,
-            handleSearchChange,
-            handleLoadMore,
-            handleLoadAll,
-            canLoadMore,
-            limit,
-            collection,
-          }) => (
-            <>
-              <ReqoreColumns>
-                <ReqoreColumn>
-                  <ReqoreControlGroup>
-                    <ReqoreButton onClick={() => setClientData({})} icon="UserAddLine">
-                      Add Client
-                    </ReqoreButton>
 
-                    <ReqoreButton
-                      intent="info"
-                      icon="ShareBoxLine"
-                      onClick={() => {
-                        const redirectUri = encodeURIComponent(
-                          `https://${window.location.host}/oauth2/code`
-                        );
-
-                        const url = `${settings.OAUTH_PUBLIC_URL}/token?response_type=code&client_id=uitest&username=admin&password=admin&redirect_uri=${redirectUri}`;
-
-                        window.location.href = url;
-                      }}
-                    >
-                      Test Qorus Access
-                    </ReqoreButton>
-                  </ReqoreControlGroup>
-                </ReqoreColumn>
-                <ReqoreColumn justifyContent="flex-end">
-                  <Search onSearchUpdate={handleSearchChange} resource="clients" />
-                </ReqoreColumn>
-              </ReqoreColumns>
-
-              <Spacer size={15} />
-              <ReqoreTable
-                rounded
-                flat
-                striped
-                fill
-                columns={[
-                  {
-                    dataId: 'client_id',
-                    header: 'Client ID',
-                    sortable: true,
-                    grow: 2,
-                    cellTooltip: ({ client_id }) => client_id,
-                  },
-                  {
-                    dataId: 'client_description',
-                    header: 'Client Description',
-                    sortable: true,
-                    cellTooltip: ({ client_description }) => client_description,
-                  },
-                  {
-                    dataId: 'username',
-                    header: 'User',
-                    icon: 'User3Fill',
-                    sortable: true,
-                    content: 'tag',
-                  },
-                  {
-                    dataId: 'created',
-                    header: 'Created',
-                    icon: 'TimeLine',
-                    sortable: true,
-                    content: 'time-ago',
-                    align: 'center',
-                  },
-                  {
-                    dataId: 'modified',
-                    header: 'Modified',
-                    icon: 'TimeLine',
-                    sortable: true,
-                    content: 'time-ago',
-                    align: 'center',
-                  },
-                  {
-                    dataId: 'actions',
-                    header: 'Actions',
-                    icon: 'SettingsLine',
-                    width: 380,
-                    align: 'right',
-                    content: (data) => (
-                      <ReqoreControlGroup stack>
-                        <ReqoreButton
-                          flat={false}
-                          onClick={async (event) => {
-                            event.stopPropagation();
-
-                            addNotification({
-                              id: 'secret',
-                              intent: 'pending',
-                              flat: true,
-                              title: 'Generating new secret...',
-                              content: 'Please wait...',
-                            });
-
-                            const newSecret = await post(
-                              `${settings.OAUTH_URL}/clients/${data.client_id}/generateSecret`
-                            );
-
-                            if (!newSecret.err) {
-                              showSecret(newSecret.client_secret);
-                            }
-                          }}
-                          icon="RefreshLine"
-                        >
-                          Regenerate Secret
-                        </ReqoreButton>
-                        <ReqoreButton
-                          flat={false}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setClientData({
-                              clientId: data.client_id,
-                              clientDescription: data.client_description,
-                              clientSecret: data.client_secret,
-                              permissions: data.permissions,
-                            });
-                          }}
-                          icon="Edit2Line"
-                        />
-                        <ReqoreButton
-                          effect={{
-                            gradient: {
-                              direction: 'to right bottom',
-                              colors: { 0: '#a11c58', 140: '#480724' },
-                            },
-                          }}
-                          flat={false}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            const handleConfirm = (): void => {
-                              rest.optimisticDispatch(
-                                actions.clients.deleteClient,
-                                data.client_id,
-                                null
-                              );
-                            };
-
-                            confirmAction({
-                              onConfirm: () => handleConfirm(),
-                              description: `Are you sure you want to delete client "${data.client_id}" permanently?`,
-                            });
-                          }}
-                          icon="DeleteBin3Fill"
-                          intent="danger"
-                        />
-                      </ReqoreControlGroup>
-                    ),
-                  },
-                ]}
-                onRowClick={(data) => openPane(data.client_id)}
-                data={collection}
-                sort={{ by: 'created', direction: 'desc' }}
-              />
-            </>
-          )}
-        </EnhancedTable>
-      </ReqorePanel>
+      <>
+        <ReqoreTable
+          label="List of available OAuth2 clients"
+          rounded
+          flat
+          actions={[
+            {
+              label: 'Add client',
+              intent: 'info',
+              icon: 'UserAddLine',
+              onClick: () => setClientData({}),
+            },
+          ]}
+          striped
+          fill
+          filterable
+          exportable
+          zoomable
+          columns={[
+            {
+              dataId: 'client_id',
+              header: {
+                label: 'Client ID',
+              },
+              sortable: true,
+              grow: 1,
+              cell: {
+                tooltip: ({ client_id }) => client_id,
+              },
+            },
+            {
+              dataId: 'client_description',
+              header: {
+                label: 'Client Description',
+              },
+              width: 200,
+              grow: 2,
+              sortable: true,
+              cell: {
+                tooltip: ({ client_description }) => client_description,
+              },
+            },
+            {
+              dataId: 'username',
+              header: {
+                label: 'User',
+                icon: 'User3Fill',
+              },
+              width: 100,
+              sortable: true,
+              cell: {
+                content: 'tag',
+              },
+            },
+            {
+              dataId: 'created',
+              header: {
+                label: 'Created',
+                icon: 'TimeLine',
+              },
+              width: 100,
+              sortable: true,
+              cell: {
+                content: 'time-ago',
+              },
+              align: 'center',
+            },
+            {
+              dataId: 'modified',
+              header: {
+                label: 'Modified',
+                icon: 'Timer2Line',
+              },
+              sortable: true,
+              width: 100,
+              cell: {
+                content: 'time-ago',
+              },
+              align: 'center',
+            },
+            {
+              dataId: 'actions',
+              header: {
+                label: 'Actions',
+                icon: 'SettingsLine',
+              },
+              width: 160,
+              align: 'right',
+              pin: 'right',
+              cell: {
+                padded: 'none',
+                actions: (data) => getActions(data),
+              },
+            },
+          ]}
+          onRowClick={(data) => openPane(data.client_id, undefined, { actions: getActions(data) })}
+          data={clients}
+          sort={{ by: 'created', direction: 'desc' }}
+        />
+      </>
     </>
   );
 };

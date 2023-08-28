@@ -2,8 +2,8 @@
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import withState from 'recompose/withState';
-import Box from '../../../components/box';
 import Flex from '../../../components/Flex';
+import Box from '../../../components/box';
 import queryControl from '../../../hocomponents/queryControl';
 import settings from '../../../settings';
 import { post } from '../../../store/api/utils';
@@ -53,18 +53,18 @@ export default compose(
 
       setTimeout(async () => {
         let url = `${settings.OAUTH_PUBLIC_URL}/token`;
-        url += `?grant_type=authorization_code&code=${
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'code' does not exist on type 'Object'.
-          allQueryObj.code
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'client_id' does not exist on type 'Objec... Remove this comment to see the full error message
-        }&redirect_uri=${redirectUri}&client_id=${allQueryObj.client_id}`;
 
         const token = await post(url, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Basic ${btoa('uitest:blablabla')}`,
           },
+          body: JSON.stringify({
+            grant_type: 'authorization_code',
+            code: allQueryObj.code,
+            redirect_uri: redirectUri,
+            client_id: allQueryObj.client_id,
+          }),
         });
 
         setToken(() => token.access_token);

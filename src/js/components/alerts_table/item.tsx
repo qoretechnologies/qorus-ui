@@ -1,9 +1,7 @@
 // @flow
 import classnames from 'classnames';
-import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
@@ -74,6 +72,5 @@ export default compose(
       (): void => {
         changeExpanded((expanded) => !expanded);
       },
-  }),
-  onlyUpdateForKeys(['item', 'expanded'])
+  })
 )(AlertsTableItem);
