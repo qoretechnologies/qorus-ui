@@ -1,8 +1,6 @@
 /* @flow */
-import { InputGroup } from '@blueprintjs/core';
-import React from 'react';
-import compose from 'recompose/compose';
-import pure from 'recompose/onlyUpdateForKeys';
+import { ReqoreInput } from '@qoretechnologies/reqore';
+import { forwardRef } from 'react';
 import withHandlers from 'recompose/withHandlers';
 
 type Props = {
@@ -19,21 +17,21 @@ type Props = {
   disabled: boolean;
 };
 
-const Input = (props: Props) => (
-  <InputGroup
+const Input = forwardRef((props: Props, ref) => (
+  <ReqoreInput
+    {...props}
+    ref={ref}
     type="text"
     onBlur={props.applyOnBlur ? props.onApplyDate : null}
     value={props.inputDate}
     onChange={props.onInputChange}
-    onKeyUp={props.onKeyUp}
     onClick={props.onInputClick}
     placeholder={props.placeholder}
     id={props.id}
-    name={props.name}
     className={props.className}
     disabled={props.disabled}
   />
-);
+));
 
 const addKeyUpHandler = withHandlers({
   onKeyUp:
@@ -46,4 +44,4 @@ const addKeyUpHandler = withHandlers({
     },
 });
 
-export default compose(addKeyUpHandler, pure(['inputDate', 'disabled']))(Input);
+export default Input;

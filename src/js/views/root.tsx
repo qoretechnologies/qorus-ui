@@ -330,7 +330,7 @@ export default class Root extends Component {
         >
           <ReqoreUIProvider
             theme={{
-              main: '#ffffff',
+              main: '#333333',
               sidebar: {
                 main: isLightTheme ? '#ffffff' : '#333333',
                 item: { activeBackground: ReqoreColors.BLUE, activeColor: '#ffffff' },
@@ -346,12 +346,6 @@ export default class Root extends Component {
                 //danger: '#a11c58',
                 pending: '#ffdf34',
                 warning: ReqoreColors.ORANGE,
-              },
-              breadcrumbs: {
-                item: {
-                  color: '#b9b9b9',
-                  activeColor: ReqoreColors.BLUE,
-                },
               },
             }}
             options={{
@@ -397,7 +391,7 @@ export default class Root extends Component {
                   />
                 )}
                 <Flex className="section" scrollX>
-                  <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
+                  <Flex>{this.props.children}</Flex>
                 </Flex>
               </div>
               {/* @ts-ignore ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message */}

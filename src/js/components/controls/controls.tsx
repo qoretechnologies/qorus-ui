@@ -1,7 +1,6 @@
 /* @flow */
-import { ButtonGroup } from '@blueprintjs/core';
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import React from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
 
 type Props = {
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
@@ -24,9 +23,9 @@ const Controls: Function = ({
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <ButtonGroup className={className} style={{ marginRight }} {...rest}>
+  <ReqoreControlGroup className={className} style={{ marginRight }} {...rest}>
     {children}
-  </ButtonGroup>
+  </ReqoreControlGroup>
 );
 
-export default pure(['children'])(Controls as any) as any;
+export default Controls as any as any;

@@ -1,6 +1,5 @@
 // @flow
 import { Navbar, NavbarDivider, NavbarGroup } from '@blueprintjs/core';
-import React from 'react';
 import Flex from '../Flex';
 import Loader from '../loader';
 
@@ -41,7 +40,7 @@ const FullPageLoading: Function = () => (
         </div>
       </div>
       <Flex className="section" scrollX>
-        <Flex style={{ minWidth: 1024 }}>
+        <Flex>
           <Loader />
         </Flex>
       </Flex>

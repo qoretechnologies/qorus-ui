@@ -3,7 +3,6 @@ import { Icon } from '@blueprintjs/core';
 import _ from 'lodash';
 import moment from 'moment';
 import React, { Component } from 'react';
-import pure from 'recompose/onlyUpdateForKeys';
 
 const chunk = (arr: Array<Object>, unit: number): Array<any> => {
   const res: any = {};
@@ -22,13 +21,12 @@ const chunk = (arr: Array<Object>, unit: number): Array<any> => {
   return _.toArray(res);
 };
 
-@pure(['date', 'activeDate'])
 export default class Calendar extends Component {
   props: {
     date: any;
     setDate: (date: any) => void;
     activeDate: any;
-    setActiveDate: () => void;
+    setActiveDate: (date: any) => void;
     futureOnly: boolean;
   } = this.props;
 

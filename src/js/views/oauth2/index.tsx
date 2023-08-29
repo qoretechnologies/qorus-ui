@@ -2,12 +2,11 @@ import {
   ReqoreButton,
   ReqoreColumn,
   ReqoreColumns,
-  ReqoreContext,
   ReqoreControlGroup,
   ReqorePanel,
-  ReqoreTable
+  ReqoreTable,
+  useReqoreProperty,
 } from '@qoretechnologies/reqore';
-import { useContext } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -16,9 +15,9 @@ import EnhancedTable from '../../components/EnhancedTable';
 import Spacer from '../../components/Spacer';
 import Search from '../../containers/search';
 import { objectCollectionToArray } from '../../helpers/interfaces';
+import titleManager from '../../hocomponents/TitleManager';
 import pane from '../../hocomponents/pane';
 import sync from '../../hocomponents/sync';
-import titleManager from '../../hocomponents/TitleManager';
 import withDispatch from '../../hocomponents/withDispatch';
 import settings from '../../settings';
 import actions from '../../store/api/actions';
@@ -50,7 +49,9 @@ const ClientsView: Function = ({
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 ClientsViewProps) => {
-  const { confirmAction, addNotification, removeNotification } = useContext(ReqoreContext);
+  const confirmAction = useReqoreProperty('confirmAction');
+  const addNotification = useReqoreProperty('addNotification');
+  const removeNotification = useReqoreProperty('removeNotification');
 
   const showSecret = (secret: string) => {
     addNotification({

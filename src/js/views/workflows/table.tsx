@@ -1,36 +1,24 @@
-/* @flow */
-import size from 'lodash/size';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { ReqoreButton, ReqoreControlGroup, ReqoreTable } from '@qoretechnologies/reqore';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { ActionColumnHeader } from '../../components/ActionColumn';
-import DataOrEmptyTable from '../../components/DataOrEmptyTable';
-import DatePicker from '../../components/datepicker';
-import { IdColumnHeader } from '../../components/IdColumn';
-import LoadMore from '../../components/LoadMore';
-import { NameColumnHeader } from '../../components/NameColumn';
-import { FixedRow, Table, Tbody, Th, Thead } from '../../components/new_table';
-import Pull from '../../components/Pull';
-import { SelectColumnHeader } from '../../components/SelectColumn';
-import SortingDropdown from '../../components/SortingDropdown';
+import Datepicker from '../../components/datepicker';
+import InstancesBar from '../../components/instances_bar';
 import withModal from '../../hocomponents/modal';
 import queryControl from '../../hocomponents/queryControl';
 import actions from '../../store/api/actions';
+import Controls from './controls';
 import SortModal from './modals/sort_modal';
-import Row from './row';
-import Actions from './toolbar/actions';
-import Band from './toolbar/band';
-import Filters from './toolbar/filters';
-import Selector from './toolbar/selector';
 
 type Props = {
   sortData: any;
   onSortChange: Function;
   states: any;
   deprecated?: boolean;
-  collection: Array<Object>;
+  collection: { [key: string]: any }[];
   paneId?: number;
   openPane: Function;
   closePane: Function;
@@ -95,107 +83,177 @@ const WorkflowsTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props) => (
-  <Table striped hover condensed fixed id="workflows-view">
-    <Thead>
-      <FixedRow className="toolbar-row">
-        <Th colspan={5}>
-          <Pull>
-            <Selector
-              selected={selected}
-              selectedCount={selectedIds.length}
-              disabled={size(collection) === 0}
-            />
-            <Actions selectedIds={selectedIds} show={selected !== 'none'} isTablet={isTablet} />
-            <Filters location={location} isTablet={isTablet} />
-            <SortingDropdown
-              onSortChange={onSortChange}
-              sortData={sortData}
-              sortKeys={sortKeysObj}
-            />
-          </Pull>
-          <Pull right>
-            <LoadMore
-              limit={limit}
-              canLoadMore={canLoadMore}
-              handleLoadAll={handleLoadAll}
-              handleLoadMore={handleLoadMore}
-              total={loadMoreTotal}
-              currentCount={loadMoreCurrent}
-            />
-          </Pull>
-        </Th>
-        <Th className="separated-cell" colspan={2}>
-          <DatePicker
-            date={dateQuery || '24h'}
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            onApplyDate={changeDateQuery}
-            className="toolbar-item"
-          />
-        </Th>
-        <Th className="separated-cell" colspan={2}>
-          <Band band={band} onChange={handleDispositionChange} />
-        </Th>
-      </FixedRow>
-      <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <SelectColumnHeader />
-        <IdColumnHeader />
-        <NameColumnHeader />
-        <ActionColumnHeader />
-        <Th name="autostart" icon="automatic-updates">
-          <FormattedMessage id="table.auto-execs" />
-        </Th>
-        {deprecated && (
-          <Th name="deprecated" icon="flag">
-            <FormattedMessage id="table.deprecated" />
-          </Th>
-        )}
-        <Th className="separated-cell" onClick={handleInstancesClick} icon="layout-grid">
-          <FormattedMessage id="table.instances" />
-        </Th>
-        <Th name="TOTAL" icon="grid">
-          <FormattedMessage id="table.all" />
-        </Th>
-        <Th className="separated-cell" icon="pie-chart">
-          <FormattedMessage id="table.disposition" /> (%)
-        </Th>
-        <Th className="normal" icon="time">
-          <FormattedMessage id="table.sla" /> (%)
-        </Th>
-      </FixedRow>
-    </Thead>
-    <DataOrEmptyTable condition={collection.length === 0} cols={deprecated ? 10 : 9}>
-      {(props) => (
-        <Tbody {...props}>
-          {collection.map(
-            // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-            (workflow: any, index: number) => (
-              <Row
-                first={index === 0}
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                key={workflow.id}
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                isActive={workflow.id === parseInt(paneId, 10)}
-                openPane={openPane}
-                closePane={closePane}
-                date={date}
-                select={select}
-                updateDone={updateDone}
-                states={states}
-                showDeprecated={deprecated}
-                expanded={expanded}
-                isTablet={isTablet}
-                setRemote={setRemote}
-                band={band.replace(/ /g, '_')}
-                {...workflow}
-              />
-            )
-          )}
-        </Tbody>
-      )}
-    </DataOrEmptyTable>
-  </Table>
-);
+Props) => {
+  return (
+    <>
+      <ReqoreTable
+        icon="GitBranchLine"
+        label="Workflows"
+        breadcrumbs={{
+          items: [
+            {
+              label: 'Home',
+              icon: 'Home3Line',
+              as: Link,
+              props: {
+                to: '/',
+              },
+            },
+            {
+              label: 'Workflows',
+              active: true,
+            },
+          ],
+        }}
+        striped
+        flat
+        fill
+        selectable
+        exportable
+        filterable
+        paging={{
+          itemsPerPage: 200,
+          infinite: true,
+        }}
+        selected={collection.filter((item) => item._selected).map((item) => item.id)}
+        sort={{
+          by: 'id',
+          direction: 'desc',
+        }}
+        columns={[
+          {
+            dataId: 'id',
+            align: 'center',
+            sortable: true,
+            width: 90,
+            resizable: false,
+            hideable: false,
+            header: {
+              icon: 'ListOrdered',
+              tooltip: 'ID',
+            },
+          },
+          {
+            dataId: 'actions',
+            align: 'center',
+            pin: 'right',
+            width: 130,
+            header: {
+              label: 'Actions',
+              icon: 'Settings4Fill',
+              tooltip: 'Actions',
+            },
+            cell: {
+              content: ({ _size, id, enabled, remote, ...rest }) => (
+                <Controls id={id} enabled={enabled} remote={remote} size={_size} />
+              ),
+            },
+          },
+          {
+            dataId: 'name',
+            align: 'left',
+            sortable: true,
+            width: 300,
+            grow: 3,
+            header: {
+              label: 'Name',
+              icon: 'PriceTagLine',
+              tooltip: 'Name',
+            },
+            cell: {
+              padded: 'none',
+              content: ({ name, id, _size }) => (
+                <ReqoreButton
+                  onClick={(e) => e.stopPropagation()}
+                  icon="GitBranchLine"
+                  size={_size}
+                >
+                  <Link to={`workflow/${id}?date=${date}`}>{name}</Link>
+                </ReqoreButton>
+              ),
+            },
+          },
+          {
+            dataId: 'date-picker',
+
+            header: {
+              content: (
+                <Datepicker
+                  key="datepicker"
+                  date={dateQuery || '24h'}
+                  onApplyDate={changeDateQuery}
+                />
+              ),
+              columns: [
+                {
+                  dataId: 'instances',
+                  align: 'center',
+                  width: 150,
+                  resizable: true,
+                  filterable: true,
+                  sortable: true,
+                  header: {
+                    label: 'Instances',
+                    icon: 'GridLine',
+                    tooltip: 'Instances',
+                  },
+                  cell: {
+                    content: ({ TOTAL, id, ...rest }) => (
+                      <InstancesBar
+                        states={states}
+                        instances={rest}
+                        totalInstances={TOTAL}
+                        id={id}
+                        date={date}
+                      />
+                    ),
+                  },
+                },
+                {
+                  dataId: 'TOTAL',
+                  align: 'center',
+                  width: 50,
+                  resizable: true,
+                  filterable: true,
+                  sortable: true,
+                  header: {
+                    label: 'All',
+                    icon: 'GridFill',
+                    tooltip: 'Total number of instances',
+                  },
+                  cell: {
+                    content: ({ TOTAL, id }) => (
+                      <ReqoreControlGroup fluid>
+                        <ReqoreButton
+                          textAlign="center"
+                          disabled={TOTAL === 0}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Link
+                            to={`workflow/${id}?date=${date}`}
+                            style={{ width: '100%', display: 'inline-block' }}
+                          >
+                            {TOTAL.toString()}
+                          </Link>
+                        </ReqoreButton>
+                      </ReqoreControlGroup>
+                    ),
+                  },
+                },
+              ],
+            },
+          },
+        ]}
+        data={collection.map((item) => ({
+          ...item,
+          _selectId: item.id,
+          _intent: paneId == item.id ? 'info' : undefined,
+        }))}
+        onRowClick={({ id }) => openPane(id)}
+      />
+    </>
+  );
+};
 
 export default compose(
   connect(null, {

@@ -1,9 +1,7 @@
 /* @flow */
 import { ControlGroup, InputGroup, Intent } from '@blueprintjs/core';
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import pure from 'recompose/onlyUpdateForKeys';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import compose from 'recompose/compose';
 import { Control, Controls } from '../controls';
@@ -23,26 +21,6 @@ class Picker extends Component {
     children?: Array<React.Element<any>>;
     futureOnly: boolean;
   } = this.props;
-
-  componentDidMount(): void {
-    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-    document.addEventListener('click', this.handleOutsideClick);
-  }
-
-  componentWillUnmount(): void {
-    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-    document.removeEventListener('click', this.handleOutsideClick);
-  }
-
-  handleOutsideClick: Function = (event: any): void => {
-    const el = ReactDOM.findDOMNode(this.refs.datepicker);
-
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
-    if (!el.contains(event.target)) {
-      this.props.onResetClick();
-      this.props.hideDatepicker();
-    }
-  };
 
   // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   renderControls() {
@@ -117,4 +95,4 @@ class Picker extends Component {
   }
 }
 
-export default compose(injectIntl, pure(['minutes', 'hours', 'children', 'futureOnly']))(Picker);
+export default compose(injectIntl)(Picker);

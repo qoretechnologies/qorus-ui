@@ -1,5 +1,6 @@
 // @flow
 import { FormGroup, Icon, InputGroup } from '@blueprintjs/core';
+import { ReqoreColors, ReqoreUIProvider } from '@qoretechnologies/reqore';
 import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -8,10 +9,10 @@ import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import elementsLogo from '../../../img/elements.png';
 import logo from '../../../img/qorus_engine_logo.png';
+import Flex from '../../components/Flex';
 import Alert from '../../components/alert';
 import Box from '../../components/box';
 import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
-import Flex from '../../components/Flex';
 import SystemInfo from '../../containers/system_info';
 import titleManager from '../../hocomponents/TitleManager';
 import settings from '../../settings';
@@ -49,85 +50,114 @@ Props) => (
       backgroundRepeat: 'no-repeat',
     }}
   >
-    <Flex style={{ justifyContent: 'center', alignItems: 'center' }}>
-      <img src={logo} style={{ width: 400 }} />
-      {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
-      <form onSubmit={handleFormSubmit}>
-        <Box top noPadding width={400}>
-          <Flex
-            flex="0 1 auto"
-            flexFlow="row"
-            style={{ justifyContent: 'space-between' }}
-            className="authorize-header"
-          >
-            <span>
-              <Icon icon="log-in" />
-              Log in to {info['instance-key']}
-            </span>
-            <span style={{ color: '#aaa' }}>{info['omq-version']}</span>
-          </Flex>
-          <Flex flex="10 1 auto" className="authorize-content">
-            {hasLogout && (
-              <React.Fragment>
-                <Alert bsStyle="success">You have been successfuly logged out</Alert>
-                <br />
-              </React.Fragment>
-            )}
-            {hasNext && (
-              <React.Fragment>
-                <Alert bsStyle="info">Log in to access {hasNext}</Alert>
-                <br />
-              </React.Fragment>
-            )}
-            {error && (
-              <React.Fragment>
-                <Alert bsStyle="danger">{error}</Alert>
-                <br />
-              </React.Fragment>
-            )}
-            {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */}
-            <FormGroup label="Username" labelFor="username" required={true}>
-              <InputGroup
-                id="username"
-                placeholder="Username"
-                required={true}
-                disabled={loading}
-                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
-                onChange={handleUsernameChange}
-                value={username}
-              />
-            </FormGroup>
-            {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */}
-            <FormGroup label="Password" labelFor="password" required={true}>
-              <InputGroup
-                required={true}
-                id="password"
-                placeholder="Password"
-                type="password"
-                disabled={loading}
-                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
-                onChange={handlePasswordChange}
-                value={password}
-              />
-            </FormGroup>
-          </Flex>
-          <Flex flex="0 1 auto" className="authorize-footer">
-            <ButtonGroup className="bp3-fill" style={{ lineHeight: '30px' }}>
-              <Button
-                id="submit"
-                text="Log in"
-                icon="small-tick"
-                btnStyle={!loading && 'success'}
-                loading={loading}
-                type="submit"
-                big
-              />
-            </ButtonGroup>
-          </Flex>
-        </Box>
-      </form>
-    </Flex>
-    <SystemInfo info={info} />
+    <ReqoreUIProvider
+      theme={{
+        main: '#ffffff',
+        sidebar: {
+          main: '#ffffff',
+          item: { activeBackground: ReqoreColors.BLUE, activeColor: '#ffffff' },
+        },
+        header: {
+          main: '#ffffff',
+        },
+        footer: {
+          main: '#d7d7d7',
+        },
+        intents: {
+          success: '#57801a',
+          danger: '#a11c58',
+          pending: '#ffdf34',
+          warning: ReqoreColors.ORANGE,
+        },
+      }}
+      options={{
+        withSidebar: true,
+        animations: {
+          buttons: false,
+          dialogs: false,
+        },
+      }}
+    >
+      <Flex style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <img src={logo} style={{ width: 400 }} />
+        {/* @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message */}
+        <form onSubmit={handleFormSubmit}>
+          <Box top noPadding width={400}>
+            <Flex
+              flex="0 1 auto"
+              flexFlow="row"
+              style={{ justifyContent: 'space-between' }}
+              className="authorize-header"
+            >
+              <span>
+                <Icon icon="log-in" />
+                Log in to {info['instance-key']}
+              </span>
+              <span style={{ color: '#aaa' }}>{info['omq-version']}</span>
+            </Flex>
+            <Flex flex="10 1 auto" className="authorize-content">
+              {hasLogout && (
+                <React.Fragment>
+                  <Alert bsStyle="success">You have been successfuly logged out</Alert>
+                  <br />
+                </React.Fragment>
+              )}
+              {hasNext && (
+                <React.Fragment>
+                  <Alert bsStyle="info">Log in to access {hasNext}</Alert>
+                  <br />
+                </React.Fragment>
+              )}
+              {error && (
+                <React.Fragment>
+                  <Alert bsStyle="danger">{error}</Alert>
+                  <br />
+                </React.Fragment>
+              )}
+              {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */}
+              <FormGroup label="Username" labelFor="username" required={true}>
+                <InputGroup
+                  id="username"
+                  placeholder="Username"
+                  required={true}
+                  disabled={loading}
+                  // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+                  onChange={handleUsernameChange}
+                  value={username}
+                />
+              </FormGroup>
+              {/* @ts-ignore ts-migrate(2322) FIXME: Type '{ children: Element; label: string; labelFor... Remove this comment to see the full error message */}
+              <FormGroup label="Password" labelFor="password" required={true}>
+                <InputGroup
+                  required={true}
+                  id="password"
+                  placeholder="Password"
+                  type="password"
+                  disabled={loading}
+                  // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
+                  onChange={handlePasswordChange}
+                  value={password}
+                />
+              </FormGroup>
+            </Flex>
+            <Flex flex="0 1 auto" className="authorize-footer">
+              <ButtonGroup className="bp3-fill" style={{ lineHeight: '30px' }}>
+                <Button
+                  id="submit"
+                  text="Log in"
+                  icon="small-tick"
+                  btnStyle={!loading && 'success'}
+                  loading={loading}
+                  type="submit"
+                  big
+                />
+              </ButtonGroup>
+            </Flex>
+          </Box>
+        </form>
+      </Flex>
+      <SystemInfo info={info} />
+    </ReqoreUIProvider>
   </div>
 );
 

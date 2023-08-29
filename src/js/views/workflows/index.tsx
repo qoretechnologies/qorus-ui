@@ -1,8 +1,5 @@
 // @flow
 import { flowRight } from 'lodash';
-import size from 'lodash/size';
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -11,11 +8,6 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import { createSelector } from 'reselect';
-import Box from '../../components/box';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
-import CsvControl from '../../components/CsvControl';
-import Flex from '../../components/Flex';
-import Headbar from '../../components/Headbar';
 import { DATES } from '../../constants/dates';
 import {
   GROUPED_ORDER_STATES,
@@ -25,10 +17,10 @@ import {
   ORDER_STATES,
 } from '../../constants/orders';
 import { sortDefaults } from '../../constants/sort';
-import Search from '../../containers/search';
 import { formatCount } from '../../helpers/orders';
 import { findBy } from '../../helpers/search';
 import { formatDate } from '../../helpers/workflows';
+import titleManager from '../../hocomponents/TitleManager';
 import withCSV from '../../hocomponents/csv';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 import loadMore from '../../hocomponents/loadMore';
@@ -38,7 +30,6 @@ import queryControl from '../../hocomponents/queryControl';
 import selectable from '../../hocomponents/selectable';
 import withSort from '../../hocomponents/sort';
 import sync from '../../hocomponents/sync';
-import titleManager from '../../hocomponents/TitleManager';
 import unsync from '../../hocomponents/unsync';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import { querySelector, resourceSelector } from '../../selectors';
@@ -272,53 +263,34 @@ const Workflows: Function = ({
   changeDispositionQuery,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Flex>
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb active>
-          {' '}
-          <FormattedMessage id="Workflows" />{' '}
-        </Crumb>
-      </Breadcrumbs>
-      <div className="pull-right">
-        <CsvControl onClick={onCSVClick} disabled={size(workflows) === 0} />
-        <Search
-          defaultValue={searchQuery}
-          onSearchUpdate={changeSearchQuery}
-          resource="workflows"
-          focusOnMount
-        />
-      </div>
-    </Headbar>
-    <Box top noPadding fill>
-      <WorkflowsTable
-        sortKeysObj={sortKeysObj}
-        collection={workflows}
-        paneId={paneId}
-        openPane={openPane}
-        closePane={closePane}
-        states={ORDER_STATES}
-        expanded={expanded}
-        deprecated={deprecated}
-        date={date}
-        sortData={sortData}
-        onSortChange={onSortChange}
-        canLoadMore={canLoadMore}
-        limit={limit}
-        handleLoadMore={handleLoadMore}
-        handleLoadAll={handleLoadAll}
-        loadMoreCurrent={loadMoreCurrent}
-        loadMoreTotal={loadMoreTotal}
-        isTablet={isTablet}
-        totalInstances={totalInstances}
-        selected={selected}
-        selectedIds={selectedIds}
-        location={location}
-        band={band}
-        changeDispositionQuery={changeDispositionQuery}
-      />
-    </Box>
-  </Flex>
+  <>
+    <WorkflowsTable
+      sortKeysObj={sortKeysObj}
+      collection={workflows}
+      paneId={paneId}
+      openPane={openPane}
+      closePane={closePane}
+      states={ORDER_STATES}
+      expanded={expanded}
+      deprecated={deprecated}
+      date={date}
+      sortData={sortData}
+      onSortChange={onSortChange}
+      canLoadMore={canLoadMore}
+      limit={limit}
+      handleLoadMore={handleLoadMore}
+      handleLoadAll={handleLoadAll}
+      loadMoreCurrent={loadMoreCurrent}
+      loadMoreTotal={loadMoreTotal}
+      isTablet={isTablet}
+      totalInstances={totalInstances}
+      selected={selected}
+      selectedIds={selectedIds}
+      location={location}
+      band={band}
+      changeDispositionQuery={changeDispositionQuery}
+    />
+  </>
 );
 
 export default compose(
@@ -350,7 +322,7 @@ export default compose(
   sync('meta'),
   withInfoBar('workflows'),
   withSort('workflows', 'workflows', sortDefaults.workflows),
-  loadMore('workflows', 'workflows', true, 50),
+  loadMore('workflows', 'workflows', true, 200),
   withState('expanded', 'toggleExpand', false),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3-4 arguments, but got 1.
   queryControl('disposition'),

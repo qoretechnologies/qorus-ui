@@ -1,5 +1,5 @@
 /* @flow */
-import { Button, Intent } from '@blueprintjs/core';
+import { ReqoreButton, ReqoreIntents } from '@qoretechnologies/reqore';
 import classNames from 'classnames';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -7,12 +7,12 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 
 const intentTransform = {
-  success: Intent.SUCCESS,
-  danger: Intent.DANGER,
-  info: Intent.PRIMARY,
-  primary: Intent.PRIMARY,
+  success: ReqoreIntents.SUCCESS,
+  danger: ReqoreIntents.DANGER,
+  info: ReqoreIntents.INFO,
+  primary: undefined,
   default: null,
-  warning: Intent.WARNING,
+  warning: ReqoreIntents.WARNING,
 };
 
 type Props = {
@@ -55,7 +55,7 @@ const Control: Function = ({
   big,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Button
+  <ReqoreButton
     id={id}
     className={className}
     title={isTablet ? text : title}
@@ -65,13 +65,13 @@ Props) => (
     type={type}
     // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
     icon={iconName}
-    text={isTablet ? (iconName ? undefined : text) : text}
+    label={isTablet ? (iconName ? undefined : text) : text}
     // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'Intent'.
     intent={intent}
     style={{
-      backgroundColor: intent === 'success' ? '#57801a' : undefined,
       ...css,
     }}
+    size={big ? 'normal' : 'small'}
     loading={loading}
   />
 );

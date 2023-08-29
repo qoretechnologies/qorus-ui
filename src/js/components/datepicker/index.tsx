@@ -1,22 +1,18 @@
-/* @flow */
-import { ControlGroup, Popover, Position } from '@blueprintjs/core';
+import { ReqoreControlGroup, ReqoreInput, ReqorePopover } from '@qoretechnologies/reqore';
+import { IReqoreIconName } from '@qoretechnologies/reqore/dist/types/icons';
 import moment from 'moment';
-import { Component } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { injectIntl } from 'react-intl';
-import pure from 'recompose/onlyUpdateForKeys';
+import { useMount } from 'react-use';
+import compose from 'recompose/compose';
 import { DATES, DATE_FORMATS } from '../../constants/dates';
 import { formatDate } from '../../helpers/workflows';
-// @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import compose from 'recompose/compose';
-import { Control, Controls } from '../controls';
 import Button from '../controls/control';
 import Dropdown, { Control as DropdownControl, Item as DropdownItem } from '../dropdown';
 import Calendar from './calendar';
-import Input from './input';
 import Picker from './picker';
 
 type Props = {
-  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
   date: string;
   onApplyDate: (date: string) => void;
   futureOnly?: boolean;
@@ -27,68 +23,62 @@ type Props = {
   id?: string;
   name?: string;
   small?: boolean;
-  icon?: string;
+  icon?: IReqoreIconName;
   disabled?: boolean;
 };
 
-class DatePicker extends Component {
-  props: Props = this.props;
+const DatePicker = memo((props: Props) => {
+  const [state, setState] = useState<any>({
+    date: moment(),
+    inputDate: moment().format(DATE_FORMATS.DISPLAY),
+    activeDate: moment(),
+    hours: undefined,
+    defaultHours: undefined,
+    minutes: undefined,
+    defaultMinutes: undefined,
+    popoverData: undefined,
+  });
+  useMount(() => {
+    console.log('mounted');
+    setupDate(props);
+  });
 
-  state: {
-    date: any;
-    inputDate: string;
-    activeDate: any;
-    hours: string;
-    defaultHours: string;
-    minutes: string;
-    defaultMinutes: string;
-    showDatepicker: boolean;
-  };
+  useEffect(() => {
+    console.log('DATE HAS CHANGED', props.date);
+    setupDate(props);
+  }, [props.date]);
 
-  componentWillMount(): void {
-    this.setupDate(this.props);
-  }
-
-  componentWillReceiveProps(nextProps: Props): void {
-    if (this.props.date !== nextProps.date) {
-      this.setupDate(nextProps);
-    }
-  }
-
-  setupDate = (props: Props): void => {
-    this.hideDatepicker();
-
+  const setupDate = (props: Props): void => {
     const date: any = props.date ? formatDate(props.date) : moment();
     const inputDate: string = props.date
       ? // @ts-ignore ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'.
         date.format(DATE_FORMATS.DISPLAY)
       : '';
 
-    this.setState({
+    setState({
+      ...state,
       date,
       inputDate,
       activeDate: date,
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'hours' does not exist on type 'Object'.
       hours: date.hours(),
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'hours' does not exist on type 'Object'.
       defaultHours: date.hours(),
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'minutes' does not exist on type 'Object'... Remove this comment to see the full error message
       minutes: date.minutes(),
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'minutes' does not exist on type 'Object'... Remove this comment to see the full error message
       defaultMinutes: date.minutes(),
-      showDatepicker: false,
     });
   };
 
-  setDate: Function = (date: any): void => {
-    this.setState({
+  const setDate = (date: any): void => {
+    console.log('DATE', date);
+    setState({
+      ...state,
       date,
     });
   };
 
-  setActiveDate: Function = (activeDate: any): void => {
-    const { hours, minutes } = this.state;
-    const { futureOnly } = this.props;
+  const setActiveDate = (activeDate: any): void => {
+    console.log('ACTIVE DATE', activeDate);
+    const { hours, minutes } = state;
+    const { futureOnly } = props;
     const potentialDate = activeDate;
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'minutes' does not exist on type 'Object'... Remove this comment to see the full error message
@@ -97,296 +87,213 @@ class DatePicker extends Component {
     potentialDate.hours(hours);
 
     if (!futureOnly || moment().isSameOrBefore(potentialDate)) {
-      this.setState({
+      console.log('SETTING ACTIVE DATE ACTUALLY LOL', activeDate);
+      setState({
+        ...state,
         activeDate,
       });
     }
   };
 
-  applyDate: Function = (date: string): void => {
-    this.props.onApplyDate(date);
+  const applyDate = (date: string): void => {
+    props.onApplyDate(date);
+    //state.popoverData?.close();
   };
 
-  showDatepicker: Function = (event: any): void => {
-    event.stopPropagation();
-
-    this.setState({
-      showDatepicker: true,
-    });
-  };
-
-  hideDatepicker: Function = (): void => {
-    this.setState({
-      showDatepicker: false,
-    });
-  };
-
-  handleHoursChange: Function = (event: any): void => {
+  const handleHoursChange = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
     const hours: string = event.target.value;
-    const activeDate: any = this.state.activeDate;
+    const activeDate: any = state.activeDate;
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'hours' does not exist on type 'Object'.
     activeDate.hours(hours);
 
-    this.setState({
+    setState({
+      ...state,
       activeDate,
       hours,
     });
   };
 
-  handleMinutesChange: Function = (event: any): void => {
+  const handleMinutesChange = (event: any): void => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
     const minutes: string = event.target.value;
-    const activeDate: any = this.state.activeDate;
+    const activeDate: any = state.activeDate;
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'minutes' does not exist on type 'Object'... Remove this comment to see the full error message
     activeDate.minutes(minutes);
 
-    this.setState({
+    setState({
+      ...state,
       activeDate,
       minutes,
     });
   };
 
-  handleResetClick: Function = (): void => {
-    this.setState({
-      hours: this.state.defaultHours,
-      minutes: this.state.defaultMinutes,
+  const handleResetClick = (): void => {
+    setState({
+      ...state,
+      hours: state.defaultHours,
+      minutes: state.defaultMinutes,
     });
   };
 
-  handleApplyClick: Function = (): void => {
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'format' does not exist on type 'Object'.
-    const date: string = this.state.activeDate.format(DATE_FORMATS.URL_FORMAT);
+  const handleApplyClick = (): void => {
+    const date: string = state.activeDate.format(DATE_FORMATS.URL_FORMAT);
 
-    this.applyDate(date);
+    applyDate(date);
   };
 
-  handleAllClick: Function = (): void => {
-    this.applyDate(DATES.ALL);
+  const handleAllClick = (): void => {
+    applyDate(DATES.ALL);
   };
 
-  handleWeekClick: Function = (): void => {
-    this.applyDate(DATES.WEEK);
+  const handleWeekClick = (): void => {
+    applyDate(DATES.WEEK);
   };
 
-  handleMonthClick: Function = (): void => {
-    this.applyDate(DATES.MONTH);
+  const handleMonthClick = (): void => {
+    applyDate(DATES.MONTH);
   };
 
-  handleThirtyClick: Function = (): void => {
-    this.applyDate(DATES.THIRTY);
+  const handleThirtyClick = (): void => {
+    applyDate(DATES.THIRTY);
   };
 
-  handleNowClick: Function = (): void => {
-    this.applyDate(DATES.NOW);
+  const handleNowClick = (): void => {
+    applyDate(DATES.NOW);
   };
 
-  handle24hClick: Function = (): void => {
-    this.applyDate(DATES.PREV_DAY);
+  const handle24hClick = (): void => {
+    applyDate(DATES.PREV_DAY);
   };
 
-  handleTodayClick: Function = (): void => {
-    this.applyDate(DATES.TODAY);
+  const handleTodayClick = (): void => {
+    applyDate(DATES.TODAY);
   };
 
-  handleInputChange: Function = (event: any): void => {
-    this.setState({
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'target' does not exist on type 'Object'.
+  const handleInputChange = (event: any): void => {
+    setState({
+      ...state,
       inputDate: event.target.value,
     });
   };
 
-  handleApplyDate: Function = (): void => {
-    if (this.state.inputDate === '') {
-      this.applyDate('');
+  const handleApplyDate = (): void => {
+    if (state.inputDate === '') {
+      applyDate('');
     } else {
-      const date: any = new Date(this.state.inputDate);
+      const date: any = new Date(state.inputDate);
 
       if (moment(date).isValid()) {
-        this.applyDate(moment(date).format(DATE_FORMATS.URL_FORMAT));
+        applyDate(moment(date).format(DATE_FORMATS.URL_FORMAT));
       }
     }
   };
 
-  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderDatepicker() {
-    if (!this.state.showDatepicker) return null;
-  }
+  const { futureOnly, noButtons, small, className, icon, disabled } = props;
+  const activeDate = useMemo(
+    () => moment(new Date(state.activeDate)).format(DATE_FORMATS.URL_FORMAT),
+    [state.activeDate]
+  );
 
-  // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
-  renderControls() {
-    if (this.props.futureOnly || this.props.noButtons) return null;
+  console.log('THE ACTIVE DATE FROM NEW RERENDER STATE', activeDate);
 
-    return (
-      <Controls grouped noControls>
-        <Control
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-          label={this.props.intl.formatMessage({ id: 'datetime.all' })}
-          btnStyle="default"
-          big
-          action={this.handleAllClick}
-        />
-        <Dropdown id="date-selection">
-          {/* @ts-ignore ts-migrate(2741) FIXME: Property 'onClick' is missing in type '{ btnStyle:... Remove this comment to see the full error message */}
-          <DropdownControl btnStyle="default" />
-          <DropdownItem
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-            title={this.props.intl.formatMessage({ id: 'datetime.now' })}
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            action={this.handleNowClick}
-          />
-          <DropdownItem
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-            title={this.props.intl.formatMessage({ id: 'datetime.today' })}
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            action={this.handleTodayClick}
-          />
-          <DropdownItem
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-            title={this.props.intl.formatMessage({ id: 'datetime.24h' })}
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            action={this.handle24hClick}
-          />
-          <DropdownItem
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-            title={this.props.intl.formatMessage({ id: 'datetime.week' })}
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            action={this.handleWeekClick}
-          />
-          <DropdownItem
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-            title={this.props.intl.formatMessage({ id: 'datetime.this-month' })}
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            action={this.handleMonthClick}
-          />
-          <DropdownItem
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-            title={this.props.intl.formatMessage({ id: 'datetime.30-days' })}
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            action={this.handleThirtyClick}
-          />
-        </Dropdown>
-      </Controls>
-    );
-  }
+  return (
+    <ReqoreControlGroup stack rounded={false} fluid>
+      <ReqorePopover
+        component={ReqoreInput}
+        componentProps={{
+          onBlur: props.applyOnBlur ? handleApplyDate : null,
+          value: state.inputDate,
+          onChange: handleInputChange,
+          placeholder: props.placeholder,
+          disabled: props.disabled,
+          icon: icon || 'CalendarLine',
+          rounded: false,
+          fluid: true,
+        }}
+        isReqoreComponent
+        handler="focus"
+        content={
+          <Picker
+            minutes={state.minutes}
+            hours={state.hours}
+            onAllClick={handleAllClick}
+            on24hClick={handle24hClick}
+            onApplyClick={handleApplyClick}
+            onResetClick={handleResetClick}
+            onMinutesChange={handleMinutesChange}
+            onHoursChange={handleHoursChange}
+            futureOnly={props.futureOnly}
+          >
+            <Calendar
+              futureOnly={props.futureOnly}
+              date={state.date}
+              setDate={setDate}
+              activeDate={state.activeDate}
+              setActiveDate={setActiveDate}
+            />
+          </Picker>
+        }
+      />
 
-  // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-  render() {
-    const { futureOnly, noButtons, small, className, icon, disabled } = this.props;
-
-    return (
-      <ControlGroup className={`vab ${className}`} style={{ verticalAlign: 'top' }}>
+      {!futureOnly && !noButtons && (
         <Button
-          icon={icon || 'timeline-events'}
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+          text={props.intl.formatMessage({ id: 'datetime.all' })}
+          onClick={handleAllClick}
           big={!small}
-          onClick={this.showDatepicker}
           disabled={disabled}
         />
-        <Popover
-          isOpen={this.state.showDatepicker}
-          position={Position.BOTTOM}
-          content={
-            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-            <Picker
-              minutes={this.state.minutes}
-              hours={this.state.hours}
-              onAllClick={this.handleAllClick}
-              on24hClick={this.handle24hClick}
-              onApplyClick={this.handleApplyClick}
-              onResetClick={this.handleResetClick}
-              onMinutesChange={this.handleMinutesChange}
-              onHoursChange={this.handleHoursChange}
-              hideDatepicker={this.hideDatepicker}
-              futureOnly={this.props.futureOnly}
-            >
-              {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-              <Calendar
-                futureOnly={this.props.futureOnly}
-                date={this.state.date}
-                setDate={this.setDate}
-                activeDate={this.state.activeDate}
-                setActiveDate={this.setActiveDate}
-              />
-            </Picker>
-          }
-        >
-          <Input
-            onApplyDate={this.handleApplyDate}
-            applyOnBlur={this.props.applyOnBlur}
-            onInputChange={this.handleInputChange}
-            inputDate={this.state.inputDate}
-            onInputClick={this.showDatepicker}
-            placeholder={this.props.placeholder}
-            id={this.props.id}
-            name={this.props.name}
-            className={small && 'datepicker-input-small bp3-small'}
-            disabled={disabled}
-          />
-        </Popover>
-
-        {!futureOnly && !noButtons && (
-          <Button
+      )}
+      {!futureOnly && !noButtons && (
+        // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+        <Dropdown disabled={disabled}>
+          {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ small: boolean; }' is missing the followin... Remove this comment to see the full error message */}
+          <DropdownControl small={small} />
+          <DropdownItem
             // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-            text={this.props.intl.formatMessage({ id: 'datetime.all' })}
-            onClick={this.handleAllClick}
-            big={!small}
-            disabled={disabled}
+            title={props.intl.formatMessage({ id: 'datetime.now' })}
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+            onClick={handleNowClick}
           />
-        )}
-        {!futureOnly && !noButtons && (
-          // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-          <Dropdown disabled={disabled}>
-            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ small: boolean; }' is missing the followin... Remove this comment to see the full error message */}
-            <DropdownControl small={small} />
-            <DropdownItem
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-              title={this.props.intl.formatMessage({ id: 'datetime.now' })}
-              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-              onClick={this.handleNowClick}
-            />
-            <DropdownItem
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-              title={this.props.intl.formatMessage({ id: 'datetime.today' })}
-              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-              onClick={this.handleTodayClick}
-            />
-            <DropdownItem
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-              title={this.props.intl.formatMessage({ id: 'datetime.24h' })}
-              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-              onClick={this.handle24hClick}
-            />
-            <DropdownItem
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-              title={this.props.intl.formatMessage({ id: 'datetime.week' })}
-              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-              onClick={this.handleWeekClick}
-            />
-            <DropdownItem
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-              title={this.props.intl.formatMessage({
-                id: 'datetime.this-month',
-              })}
-              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-              onClick={this.handleMonthClick}
-            />
-            <DropdownItem
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
-              title={this.props.intl.formatMessage({ id: 'datetime.30-days' })}
-              // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-              onClick={this.handleThirtyClick}
-            />
-          </Dropdown>
-        )}
-        {this.renderDatepicker()}
-      </ControlGroup>
-    );
-  }
-}
+          <DropdownItem
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+            title={props.intl.formatMessage({ id: 'datetime.today' })}
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+            onClick={handleTodayClick}
+          />
+          <DropdownItem
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+            title={props.intl.formatMessage({ id: 'datetime.24h' })}
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+            onClick={handle24hClick}
+          />
+          <DropdownItem
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+            title={props.intl.formatMessage({ id: 'datetime.week' })}
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+            onClick={handleWeekClick}
+          />
+          <DropdownItem
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+            title={props.intl.formatMessage({
+              id: 'datetime.this-month',
+            })}
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+            onClick={handleMonthClick}
+          />
+          <DropdownItem
+            // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
+            title={props.intl.formatMessage({ id: 'datetime.30-days' })}
+            // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+            onClick={handleThirtyClick}
+          />
+        </Dropdown>
+      )}
+    </ReqoreControlGroup>
+  );
+});
 
-export default compose(
-  injectIntl,
-  pure(['date', 'futureOnly', 'className', 'disabled'])
-)(DatePicker);
+export default compose(injectIntl)(DatePicker);

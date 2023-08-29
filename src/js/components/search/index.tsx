@@ -119,27 +119,21 @@ class Search extends Component<any, any> {
     const { searches } = this.props;
 
     return (
-      <form
-        // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
-        onSubmit={this.handleFormSubmit}
-        className={`${this.props.pullLeft ? '' : 'pull-right'}`}
-      >
-        <ReqoreControlGroup stack>
-          {searches && searches.length !== 0 ? (
-            <ReqoreDropdown icon="HistoryLine" items={this.renderHistoryItems()} filterable flat />
-          ) : null}
-          <ReqoreInput
-            minimal
-            onClearClick={() => this.handleClearClick()}
-            id="search"
-            onChange={this.handleInputChange}
-            value={this.state.query}
-            placeholder={this.props.intl.formatMessage({ id: 'component.search' })}
-          />
-          {/* @ts-expect-error */}
-          <ReqoreButton flat type="submit" icon="SearchLine" />
-        </ReqoreControlGroup>
-      </form>
+      <ReqoreControlGroup stack>
+        {searches && searches.length !== 0 ? (
+          <ReqoreDropdown icon="HistoryLine" items={this.renderHistoryItems()} filterable flat />
+        ) : null}
+        <ReqoreInput
+          minimal
+          onClearClick={() => this.handleClearClick()}
+          id="search"
+          onChange={this.handleInputChange}
+          value={this.state.query}
+          placeholder={this.props.intl.formatMessage({ id: 'component.search' })}
+        />
+        {/* @ts-expect-error */}
+        <ReqoreButton flat type="submit" icon="SearchLine" onClick={this.handleFormSubmit} />
+      </ReqoreControlGroup>
     );
   }
 }
