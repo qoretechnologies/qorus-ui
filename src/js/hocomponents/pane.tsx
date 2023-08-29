@@ -54,6 +54,10 @@ export default (
         changeTabQuery: Function;
       } = this.props;
 
+      state = {
+        customProps: undefined,
+      };
+
       handleClose: Function = (omitQueries: Array<String> | Object = []): void => {
         const { query, pathname }: { query: any; pathname: string } =
           this.props.location || this.context.location;
@@ -68,19 +72,31 @@ export default (
           ...omitQueriesArray,
         ]);
 
+        if (this.state.customProps) {
+          this.setState({ customProps: undefined });
+        }
+
         this.context.router.push({
           pathname,
           query: newQuery,
         });
       };
 
-      handleOpen: Function = (paneId: number | string = 'open', openOnTab: string): void => {
+      handleOpen: Function = (
+        paneId: number | string = 'open',
+        openOnTab: string,
+        customProps?: any
+      ): void => {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'handleTabChange' does not exist on type ... Remove this comment to see the full error message
         const { tabQuery, handleTabChange, changePaneIdQuery } = this.props;
         // @ts-ignore ts-migrate(8020) FIXME: JSDoc types can only be used inside documentation ... Remove this comment to see the full error message
         const openOn: string = openOnTab || tabQuery;
 
         changePaneIdQuery(paneId);
+
+        if (customProps) {
+          this.setState({ customProps });
+        }
 
         if (openOn) {
           handleTabChange(openOn);
@@ -109,6 +125,7 @@ export default (
         return (
           <Pane
             {...props}
+            {...(this.state.customProps || {})}
             onClose={this.handleClose}
             paneId={paneIdQuery}
             paneTab={tabQuery}

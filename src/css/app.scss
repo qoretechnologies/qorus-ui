@@ -1,3 +1,17 @@
+a,
+a:hover,
+a:focus,
+a:active,
+a:visited {
+  & {
+    text-decoration: none;
+  }
+
+  * {
+    text-decoration: none !important;
+  }
+}
+
 $font-size-extra-small: 11px;
 $padding-xs-horizontal: 3px;
 $text-muted: #a9a9a9;
