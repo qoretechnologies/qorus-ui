@@ -356,6 +356,9 @@ export default class Root extends Component {
             }}
             options={{
               withSidebar: true,
+              tooltips: {
+                delay: 200,
+              },
               animations: {
                 buttons: false,
                 dialogs: false,
