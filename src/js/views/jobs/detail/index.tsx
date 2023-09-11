@@ -1,4 +1,5 @@
 /* @flow */
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import size from 'lodash/size';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
@@ -7,19 +8,17 @@ import lifecycle from 'recompose/lifecycle';
 import mapProps from 'recompose/mapProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { createSelector } from 'reselect';
-import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import Flex from '../../../components/Flex';
-import Headbar from '../../../components/Headbar';
-import Pull from '../../../components/Pull';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import { normalizeName } from '../../../components/utils';
 import { DATES, DATE_FORMATS } from '../../../constants/dates';
 import Search from '../../../containers/search';
 import { formatDate } from '../../../helpers/date';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
+import titleManager from '../../../hocomponents/TitleManager';
 import patch from '../../../hocomponents/patchFuncArgs';
 import queryControl from '../../../hocomponents/queryControl';
 import sync from '../../../hocomponents/sync';
-import titleManager from '../../../hocomponents/TitleManager';
 import unsync from '../../../hocomponents/unsync';
 import withTabs from '../../../hocomponents/withTabs';
 import { paramSelector, querySelector, resourceSelector } from '../../../selectors';
@@ -57,40 +56,38 @@ const JobPage = ({
   configItems,
 }: Props) => (
   <Flex>
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb link="/jobs">
-          {' '}
-          <FormattedMessage id="Jobs" />{' '}
-        </Crumb>
-        <Crumb>{normalizeName(job)}</Crumb>
-        <CrumbTabs
-          tabs={[
-            'Instances',
-            {
-              title: 'Config',
-              suffix: `(${countConfigItems(configItems)})`,
-            },
-            'Process',
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
-            { title: 'Mappers', suffix: `(${size(job.mappers)})` },
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
-            { title: 'Valuemaps', suffix: `(${size(job.vmaps)})` },
-            'Releases',
-            'Code',
-            'Log',
-            'Info',
-          ]}
-        />
-      </Breadcrumbs>
-      <Pull right>
+    <Breadcrumbs>
+      <Crumb link="/jobs">
+        {' '}
+        <FormattedMessage id="Jobs" />{' '}
+      </Crumb>
+      <Crumb>{normalizeName(job)}</Crumb>
+      <CrumbTabs
+        tabs={[
+          'Instances',
+          {
+            title: 'Config',
+            suffix: `(${countConfigItems(configItems)})`,
+          },
+          'Process',
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+          { title: 'Mappers', suffix: `(${size(job.mappers)})` },
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+          { title: 'Valuemaps', suffix: `(${size(job.vmaps)})` },
+          'Releases',
+          'Code',
+          'Log',
+          'Info',
+        ]}
+      />
+      <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
         {/* @ts-ignore ts-migrate(2339) FIXME: Property 'wday' does not exist on type 'Object'. */}
         <Controls {...job} week={job.wday} expiry={job.expiry_date} big />
         {tabQuery === 'instances' && (
           <Search defaultValue={searchQuery} onSearchUpdate={changeSearchQuery} resource="job" />
         )}
-      </Pull>
-    </Headbar>
+      </ReqoreControlGroup>
+    </Breadcrumbs>
     <JobsDetailTabs
       model={job}
       lib={lib}

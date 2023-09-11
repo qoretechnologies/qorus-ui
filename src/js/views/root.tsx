@@ -1,5 +1,5 @@
 // @ts-ignore ts-migrate(2307) FIXME: Cannot find module '@qoretechnologies/reqore' or i... Remove this comment to see the full error message
-import { ReqoreColors, ReqoreUIProvider } from '@qoretechnologies/reqore';
+import { ReqoreColors, ReqoreUIProvider, useReqoreProperty } from '@qoretechnologies/reqore';
 import debounce from 'lodash/debounce';
 // @flow
 import PropTypes from 'prop-types';
@@ -11,7 +11,6 @@ import { createSelector } from 'reselect';
 import Flex from '../components/Flex';
 import FullPageLoading from '../components/FullPageLoading';
 import Footer from '../components/footer';
-import { Manager as ModalManager } from '../components/modal';
 import Topbar from '../components/topbar';
 import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
@@ -63,6 +62,22 @@ const menuSelector = (state) => state.ui.menu;
 const settingsSelector = (state) => state.ui.settings;
 const healthSelector = (state) => state.api.health;
 const optionsSelector = (state) => state.api.systemOptions;
+
+const ModalProvider = ({ children }) => {
+  const addModal = useReqoreProperty('addModal');
+  const removeModal = useReqoreProperty('removeModal');
+
+  return (
+    <ModalContext.Provider
+      value={{
+        addModal,
+        removeModal,
+      }}
+    >
+      {children}
+    </ModalContext.Provider>
+  );
+};
 
 /**
  * Basic layout with global navbar, menu, footer and the main content.
@@ -321,50 +336,44 @@ export default class Root extends Component {
 
     return (
       <IntlProvider messages={messages(locale)} locale={locale}>
-        <ModalContext.Provider
-          value={{
-            addModal: this.addModal,
-            removeModal: this.removeModal,
-            modals: this.state.modals,
+        <ReqoreUIProvider
+          theme={{
+            main: '#ffffff',
+            sidebar: {
+              main: isLightTheme ? '#ffffff' : '#333333',
+              item: { activeBackground: ReqoreColors.BLUE, activeColor: '#ffffff' },
+            },
+            header: {
+              main: isLightTheme ? '#ffffff' : '#333333',
+            },
+            footer: {
+              main: '#d7d7d7',
+            },
+            intents: {
+              success: '#57801a',
+              //danger: '#a11c58',
+              pending: '#ffdf34',
+              warning: ReqoreColors.ORANGE,
+            },
+            breadcrumbs: {
+              item: {
+                color: '#b9b9b9',
+                activeColor: ReqoreColors.BLUE,
+              },
+            },
+          }}
+          options={{
+            withSidebar: true,
+            tooltips: {
+              delay: 200,
+            },
+            animations: {
+              buttons: false,
+              dialogs: false,
+            },
           }}
         >
-          <ReqoreUIProvider
-            theme={{
-              main: '#ffffff',
-              sidebar: {
-                main: isLightTheme ? '#ffffff' : '#333333',
-                item: { activeBackground: ReqoreColors.BLUE, activeColor: '#ffffff' },
-              },
-              header: {
-                main: isLightTheme ? '#ffffff' : '#333333',
-              },
-              footer: {
-                main: '#d7d7d7',
-              },
-              intents: {
-                success: '#57801a',
-                //danger: '#a11c58',
-                pending: '#ffdf34',
-                warning: ReqoreColors.ORANGE,
-              },
-              breadcrumbs: {
-                item: {
-                  color: '#b9b9b9',
-                  activeColor: ReqoreColors.BLUE,
-                },
-              },
-            }}
-            options={{
-              withSidebar: true,
-              tooltips: {
-                delay: 200,
-              },
-              animations: {
-                buttons: false,
-                dialogs: false,
-              },
-            }}
-          >
+          <ModalProvider>
             <div
               className={`root ${isMaximized ? 'maximized' : ''}`}
               style={{ flex: 1, width: '100%' }}
@@ -405,12 +414,11 @@ export default class Root extends Component {
               </div>
               {/* @ts-ignore ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message */}
               {!isMaximized && <Footer path={this.props.location.pathname} info={info.data} />}
-              <ModalManager />
               <Notifications />
               <Bubbles />
             </div>
-          </ReqoreUIProvider>
-        </ModalContext.Provider>
+          </ModalProvider>
+        </ReqoreUIProvider>
       </IntlProvider>
     );
   }

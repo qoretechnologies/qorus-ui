@@ -27,6 +27,7 @@ class Headbar extends React.Component {
         ref={this.handleRef}
         style={{
           flex: '0 1 auto',
+          display: 'flex',
         }}
       >
         {/* @ts-ignore ts-migrate(2349) FIXME: This expression is not callable. */}

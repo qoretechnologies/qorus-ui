@@ -1,5 +1,6 @@
 // @flow
-import { Icon } from '@blueprintjs/core';
+import { ReqoreControlGroup, ReqoreIcon } from '@qoretechnologies/reqore';
+import { IReqoreIconName } from '@qoretechnologies/reqore/dist/types/icons';
 import qoreLogo from '../../../img/qore_logo_purple.png';
 import CollapsedCrumb from './collapsedCrumb';
 import Crumb from './crumb';
@@ -8,9 +9,10 @@ import CrumbTabs from './tabs';
 type Props = {
   children?: any;
   collapsed?: boolean;
-  onClick?: Function;
+  onClick?: any;
   noFloat?: boolean;
-  icon?: string;
+  icon?: IReqoreIconName;
+  noIcon?: boolean;
 };
 
 const Breadcrumbs: Function = ({
@@ -19,22 +21,22 @@ const Breadcrumbs: Function = ({
   noFloat,
   icon,
   collapsed = false,
+  noIcon,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <ul className={`bp3-breadcrumbs ${noFloat ? '' : 'pull-left'}`}>
+  <ReqoreControlGroup gapSize="small" fluid>
     {!collapsed && children ? (
-      // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
-      <li onClick={onClick}>
+      <>
         {icon ? (
-          // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'IconName ... Remove this comment to see the full error message
-          <Icon className="bp3-breadcrumb" icon={icon} />
-        ) : (
-          <img src={qoreLogo} style={{ width: '15px' }} />
+          <ReqoreIcon icon={icon || 'SideBarLine'} onClick={onClick} />
+        ) : noIcon ? null : (
+          <ReqoreIcon image={qoreLogo} />
         )}
-      </li>
+      </>
     ) : null}
+
     {children}
-  </ul>
+  </ReqoreControlGroup>
 );
 
-export { Breadcrumbs, Crumb, CrumbTabs, CollapsedCrumb };
+export { Breadcrumbs, CollapsedCrumb, Crumb, CrumbTabs };

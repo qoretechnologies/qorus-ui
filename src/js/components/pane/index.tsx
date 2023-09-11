@@ -7,7 +7,6 @@ import { Breadcrumbs, CrumbTabs } from '../breadcrumbs';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { IReqoreDrawerProps } from '@qoretechnologies/reqore/dist/components/Drawer';
 import Flex from '../Flex';
-import Headbar from '../Headbar';
 
 type Props = {
   width?: number;
@@ -35,19 +34,17 @@ const Pane = ({ width, onClose, children, title, tabs, ...rest }: Props & IReqor
       contentStyle={{ display: 'flex', flexFlow: 'column', height: '100%', overflow: 'hidden' }}
     >
       {tabs && (
-        <Headbar>
-          <Breadcrumbs icon="list-detail-view">
-            {tabs && (
-              <CrumbTabs
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'tabs' does not exist on type 'Object'.
-                tabs={tabs.tabs}
-                // @ts-ignore ts-migrate(2339) FIXME: Property 'queryIdentifier' does not exist on type ... Remove this comment to see the full error message
-                queryIdentifier={tabs.queryIdentifier}
-                isPane
-              />
-            )}
-          </Breadcrumbs>
-        </Headbar>
+        <Breadcrumbs noIcon>
+          {tabs && (
+            <CrumbTabs
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'tabs' does not exist on type 'Object'.
+              tabs={tabs.tabs}
+              // @ts-ignore ts-migrate(2339) FIXME: Property 'queryIdentifier' does not exist on type ... Remove this comment to see the full error message
+              queryIdentifier={tabs.queryIdentifier}
+              isPane
+            />
+          )}
+        </Breadcrumbs>
       )}
       <Flex className="pane__content">{children}</Flex>
     </ReqoreDrawer>

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { ModalContext } from '../context/modal';
+import { useReqoreProperty } from '@qoretechnologies/reqore';
+import { useState } from 'react';
 
 /**
  * A high-order component that provides an easy access to
@@ -8,32 +8,28 @@ import { ModalContext } from '../context/modal';
 // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'ReactClass'.
 export default (): Function => (Component) => {
   const ComponentWithModal = (props) => {
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'addModal' does not exist on type '{}'.
-    const { addModal, removeModal, modals } = useContext(ModalContext);
-
-    useEffect(() => {
-      if (modals.length) {
-        window.addEventListener('keyup', handleKeyUp);
-      } else {
-        window.removeEventListener('keyup', handleKeyUp);
-      }
-
-      return () => {
-        window.removeEventListener('keyup', handleKeyUp);
-      };
-    }, [modals]);
-
-    const handleKeyUp = (event) => {
-      if (event.key === 'Escape') {
-        removeModal();
-      }
-    };
+    const [modalId, setModalId] = useState(undefined);
+    const addModal = useReqoreProperty('addModal');
+    const removeModal = useReqoreProperty('removeModal');
 
     const handleOpenModal = (Modal) => {
-      addModal(Modal);
+      console.log(addModal);
+      const id = addModal(Modal);
+      setModalId(id);
     };
 
-    return <Component openModal={handleOpenModal} closeModal={() => removeModal()} {...props} />;
+    console.log(modalId);
+
+    return (
+      <Component
+        openModal={handleOpenModal}
+        closeModal={() => {
+          console.log(modalId);
+          removeModal(modalId);
+        }}
+        {...props}
+      />
+    );
   };
 
   return ComponentWithModal;

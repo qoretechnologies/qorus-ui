@@ -1,20 +1,19 @@
 // @flow
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import { createSelector } from 'reselect';
-import Box from '../../components/box';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import CsvControl from '../../components/CsvControl';
 import Flex from '../../components/Flex';
-import Headbar from '../../components/Headbar';
-import Pull from '../../components/Pull';
+import Box from '../../components/box';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import { sortDefaults } from '../../constants/sort';
 import Search from '../../containers/search';
 import { findBy } from '../../helpers/search';
+import titleManager from '../../hocomponents/TitleManager';
 import withCSV from '../../hocomponents/csv';
 import loadMore from '../../hocomponents/loadMore';
 import withPane from '../../hocomponents/pane';
@@ -22,7 +21,6 @@ import queryControl from '../../hocomponents/queryControl';
 import selectable from '../../hocomponents/selectable';
 import withSort from '../../hocomponents/sort';
 import sync from '../../hocomponents/sync';
-import titleManager from '../../hocomponents/TitleManager';
 import unsync from '../../hocomponents/unsync';
 import withInfoBar from '../../hocomponents/withInfoBar';
 import { querySelector, resourceSelector } from '../../selectors';
@@ -76,13 +74,11 @@ const Services: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <Flex>
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb active>
-          <FormattedMessage id="Services" />
-        </Crumb>
-      </Breadcrumbs>
-      <Pull right>
+    <Breadcrumbs>
+      <Crumb active>
+        <FormattedMessage id="Services" />
+      </Crumb>
+      <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
         <CsvControl onClick={onCSVClick} disabled={size(services) === 0} />
         <Search
           defaultValue={searchQuery}
@@ -90,8 +86,9 @@ Props) => (
           resource="services"
           focusOnMount
         />
-      </Pull>
-    </Headbar>
+      </ReqoreControlGroup>
+    </Breadcrumbs>
+
     <Box top noPadding>
       <ServicesTable
         selected={selected}
