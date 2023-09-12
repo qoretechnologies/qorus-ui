@@ -1,6 +1,12 @@
 // @flow
-import { ReqoreKeyValueTable, ReqoreMessage } from '@qoretechnologies/reqore';
-import { includes, lowerCase, omit, pick } from 'lodash';
+import {
+  ReqoreMessage,
+  ReqorePanel,
+  ReqoreTag,
+  ReqoreTagGroup,
+  ReqoreVerticalSpacer,
+} from '@qoretechnologies/reqore';
+import { includes, lowerCase, size } from 'lodash';
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -154,6 +160,17 @@ class ConnectionsPane extends Component {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'canDelete' does not exist on type '{ rem... Remove this comment to see the full error message
     const canDelete = this.props.canDelete;
 
+    const tabs = [
+      'Detail',
+      { title: 'Options', suffix: size(this.props.remote.opts) },
+      { title: 'Alerts', suffix: size(alerts) },
+      'Log',
+    ];
+
+    if (remoteType === 'datasources') {
+      tabs.push({ title: 'Dependencies', suffix: size(deps) });
+    }
+
     return (
       <Pane
         width={this.props.width || 400}
@@ -162,62 +179,99 @@ class ConnectionsPane extends Component {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
         title={`${this.props.remote.name} detail`}
         tabs={{
-          tabs: remoteType === 'datasources' ? ['Detail', 'Log'] : ['Detail'],
+          tabs,
           queryIdentifier: 'paneTab',
         }}
         actions={[
           {
-            icon: 'EditLine',
-            tooltip: 'Edit',
-            onClick: () => this.props.handleEditClick(this.props.remote),
+            as: RemoteControls,
+            props: {
+              ...this.props.remote,
+              remoteType,
+              dispatchAction,
+              canEdit,
+              canDelete,
+              isPane: true,
+              big: true,
+              handleEditClick: () => this.props.handleEditClick(this.props.remote),
+            },
           },
         ]}
       >
         <SimpleTabs activeTab={paneTab}>
-          <SimpleTab name="detail" scrollY>
-            {this.state.error && <ReqoreMessage intent="danger">{this.state.error}</ReqoreMessage>}
+          <SimpleTab name="detail">
+            {this.state.error && (
+              <ReqoreMessage intent="danger" margin="top">
+                {this.state.error}
+              </ReqoreMessage>
+            )}
             {settings.IS_HTTP && (
-              <ReqoreMessage intent="warning" title="Insecure connection">
+              <ReqoreMessage intent="warning" title="Insecure connection" margin="top">
                 Passwords are not displayed
               </ReqoreMessage>
             )}
-            <ReqoreKeyValueTable
-              label="Overview"
-              keyAlign="right"
-              sortable
-              filterable
-              zoomable
-              exportable
-              keyIcon="InformationLine"
-              valueIcon="PriceTagLine"
-              keyRenderer={(key: string | number) =>
-                this.props.intl.formatMessage({ id: `connection.${key}` })
-              }
-              actions={[
-                {
-                  as: RemoteControls,
-                  props: {
-                    ...this.props.remote,
-                    remoteType,
-                    dispatchAction,
-                    canEdit,
-                    canDelete,
-                    isPane: true,
-                    big: true,
-                  },
-                },
-              ]}
-              data={omit(pick(this.props.remote, this.props.attrs), ['opts'])}
-              striped
-              keyColumnIntent={undefined}
-            />
+            <ReqoreVerticalSpacer height={10} />
+            <ReqorePanel label={this.props.remote.name} badge={this.props.remote.conntype}>
+              {this.props.remote.desc}
+              <ReqoreVerticalSpacer height={10} />
+              <ReqoreTagGroup>
+                <ReqoreTag
+                  intent="info"
+                  labelKey="URL"
+                  label={this.props.remote.url}
+                  icon="GlobeLine"
+                />
+                <ReqoreTag
+                  intent={this.props.remote.up ? 'success' : 'danger'}
+                  labelKey="UP"
+                  rightIcon={this.props.remote.up ? 'CheckLine' : 'CloseLine'}
+                  icon="ArrowUpLine"
+                />
+              </ReqoreTagGroup>
+              <ReqoreVerticalSpacer height={10} />
+              <ReqoreTagGroup>
+                <ReqoreTag
+                  intent={this.props.remote.locked ? 'success' : undefined}
+                  labelKey="Locked"
+                  icon="LockLine"
+                  rightIcon={this.props.remote.locked ? 'CheckLine' : 'CloseLine'}
+                />
+                <ReqoreTag
+                  icon="CameraLine"
+                  intent={this.props.remote.monitor ? 'success' : undefined}
+                  labelKey="Monitor"
+                  rightIcon={this.props.remote.monitor ? 'CheckLine' : 'CloseLine'}
+                />
+              </ReqoreTagGroup>
+            </ReqorePanel>
+            <ReqoreMessage
+              intent={this.props.remote.up ? 'success' : 'danger'}
+              title="Status"
+              margin="top"
+              opaque={false}
+            >
+              {this.props.remote.status}
+              <ReqoreVerticalSpacer height={10} />
+              <ReqoreTag
+                icon="TimeLine"
+                intent={this.props.remote.up ? 'success' : 'danger'}
+                labelKey="Last check"
+                label={this.props.remote.last_check}
+              />
+            </ReqoreMessage>
+          </SimpleTab>
+          <SimpleTab name="options">
             <Options
               urlProtocol={url_hash?.protocol}
               data={this.props.remote.opts}
               onSave={this.handleEditSave('opts')}
               canEdit={canEdit}
             />
+          </SimpleTab>
+          <SimpleTab name="alerts">
             <AlertsTable alerts={alerts} />
+          </SimpleTab>
+          <SimpleTab name="dependencies">
             <PaneItem title="Dependencies">
               {deps && deps.length ? (
                 <Table striped condensed>

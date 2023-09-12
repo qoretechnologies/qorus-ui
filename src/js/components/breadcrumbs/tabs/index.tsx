@@ -1,5 +1,5 @@
 // @flow
-import { ReqoreTabs } from '@qoretechnologies/reqore';
+import { ReqoreIcon, ReqoreTabs } from '@qoretechnologies/reqore';
 import isString from 'lodash/isString';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -21,23 +21,34 @@ type Props = {
   queryIdentifier?: string;
   width: number;
   local: boolean;
+  isPane?: boolean;
 };
 
-export const Tabs = ({ tabs, tabQuery, handleTabChange, queryIdentifier, local }: Props) => {
+export const Tabs = ({
+  tabs,
+  tabQuery,
+  handleTabChange,
+  queryIdentifier,
+  local,
+  isPane,
+}: Props) => {
   return (
-    <ReqoreTabs
-      flat={false}
-      padded={false}
-      activeTabIntent="info"
-      activeTab={tabQuery}
-      tabs={tabs.map((tab) => ({
-        label: tab.title,
-        id: tab.tabId.toLowerCase(),
-        as: local ? undefined : Link,
-        props: local ? undefined : { to: buildPageLinkWithQueries(queryIdentifier, tab.tabId) },
-      }))}
-      onTabChange={handleTabChange}
-    />
+    <>
+      {!isPane && <ReqoreIcon icon="ArrowRightSLine" />}
+      <ReqoreTabs
+        padded={false}
+        activeTabIntent="info"
+        activeTab={tabQuery}
+        tabs={tabs.map((tab) => ({
+          label: tab.title,
+          badge: tab.badge,
+          id: tab.tabId.toLowerCase(),
+          as: local ? undefined : Link,
+          props: local ? undefined : { to: buildPageLinkWithQueries(queryIdentifier, tab.tabId) },
+        }))}
+        onTabChange={handleTabChange}
+      />
+    </>
   );
 };
 
@@ -56,9 +67,8 @@ export default compose(
         isString(tab)
           ? { title: intl.formatMessage({ id: tab }), tabId: tab }
           : {
-              title: `${intl.formatMessage({ id: tab.title })}${
-                tab.suffix ? ` ${tab.suffix}` : ''
-              }`,
+              title: `${intl.formatMessage({ id: tab.title })}`,
+              badge: tab.suffix,
               tabId: tab.title,
             }
       ),

@@ -204,13 +204,14 @@ export default class ConnectionOptions extends Component {
     }
 
     return (
-      <div>
+      <ReqorePanel fill flat padded={false} contentStyle={{ display: 'flex', flexFlow: 'column' }}>
         {this.props.urlProtocol && this.state.optionsData[this.props.urlProtocol] ? (
           <ReqoreKeyValueTable
             data={this.props.data}
             label="Options"
             exportable
             striped
+            fill
             sortable
             filterable
             zoomable
@@ -246,7 +247,11 @@ export default class ConnectionOptions extends Component {
               },
             ]}
           />
-        ) : null}
+        ) : (
+          <ReqoreMessage intent="warning" margin="top">
+            URL protocol for this connection not found / invalid, unable to display options
+          </ReqoreMessage>
+        )}
         {this.props.canEdit &&
         this.props.urlProtocol &&
         this.state.optionsData[this.props.urlProtocol] ? (
@@ -295,7 +300,7 @@ export default class ConnectionOptions extends Component {
             )}
           </>
         )}
-      </div>
+      </ReqorePanel>
     );
   }
 }

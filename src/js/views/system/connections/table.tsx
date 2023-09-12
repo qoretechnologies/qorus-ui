@@ -116,7 +116,7 @@ Props) => {
             <FormattedMessage id="table.status" />
           </Th>
           <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} icon="application" />
-          <Th icon="build" className="huge">
+          <Th icon="build" className=" text">
             <FormattedMessage id="table.actions" />
           </Th>
           <Th className="text" name="url" icon="link">
