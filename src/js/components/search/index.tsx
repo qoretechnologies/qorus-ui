@@ -129,7 +129,6 @@ class Search extends Component<any, any> {
             <ReqoreDropdown icon="HistoryLine" items={this.renderHistoryItems()} filterable flat />
           ) : null}
           <ReqoreInput
-            minimal
             onClearClick={() => this.handleClearClick()}
             id="search"
             onChange={this.handleInputChange}

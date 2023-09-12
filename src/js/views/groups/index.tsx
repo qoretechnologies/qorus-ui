@@ -1,18 +1,16 @@
 // @flow
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withProps from 'recompose/withProps';
 import { createSelector } from 'reselect';
-import Box from '../../components/box';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import CsvControl from '../../components/CsvControl';
 import Flex from '../../components/Flex';
-import Headbar from '../../components/Headbar';
-import Pull from '../../components/Pull';
+import Box from '../../components/box';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import { sortDefaults } from '../../constants/sort';
 import Search from '../../containers/search';
 import { findBy } from '../../helpers/search';
@@ -75,36 +73,32 @@ const GroupsView: Function = ({
 Props) =>
   group ? (
     <Flex>
-      <Headbar>
-        <Breadcrumbs>
-          <Crumb link="/groups">
-            <FormattedMessage id="Groups" />
-          </Crumb>
-          <Crumb active>
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
-            {group.name} ({group.id})
-          </Crumb>
-        </Breadcrumbs>
-        <Pull right>
+      <Breadcrumbs>
+        <Crumb link="/groups">
+          <FormattedMessage id="Groups" />
+        </Crumb>
+        <Crumb active>
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+          {group.name} ({group.id})
+        </Crumb>
+        <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
           {/* @ts-ignore ts-migrate(2339) FIXME: Property 'enabled' does not exist on type 'Object'... Remove this comment to see the full error message */}
           <Controls enabled={group.enabled} name={group.name} big />
-        </Pull>
-      </Headbar>
+        </ReqoreControlGroup>
+      </Breadcrumbs>
       <GroupsDetail {...group} />
     </Flex>
   ) : (
     <Flex>
-      <Headbar>
-        <Breadcrumbs>
-          <Crumb active>
-            <FormattedMessage id="Groups" />
-          </Crumb>
-        </Breadcrumbs>
-        <Pull right>
+      <Breadcrumbs>
+        <Crumb active>
+          <FormattedMessage id="Groups" />
+        </Crumb>
+        <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
           <CsvControl onClick={onCSVClick} disabled={size(groups) === 0} />
           <Search defaultValue={searchQuery} onSearchUpdate={changeSearchQuery} resource="groups" />
-        </Pull>
-      </Headbar>
+        </ReqoreControlGroup>
+      </Breadcrumbs>
       <Box top noPadding>
         <GroupsTable
           collection={groups}

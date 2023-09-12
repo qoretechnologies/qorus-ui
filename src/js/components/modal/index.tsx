@@ -7,6 +7,7 @@ import Body from './body';
 import Footer from './footer';
 import Header from './header';
 import Manager from './manager';
+import { ReqoreBackdrop } from '@qoretechnologies/reqore';
 
 const Draggable: any = _Draggable;
 
@@ -155,43 +156,45 @@ export default class Modal extends Component {
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
   render() {
     return (
-      <div
-        className={`bp3-dialog-container ${this.props.hasFooter ? 'has-footer' : ''}`}
-        // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'LegacyR... Remove this comment to see the full error message
-        ref={this.refModal}
-        // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
-        // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
-        onMouseDown={this.onEscape}
-        style={{ zIndex: 11000 }}
-      >
-        <Draggable handle=".handle">
-          <div
-            className="bp3-dialog"
-            role="document"
-            style={{
-              width: this.props.width,
-              height: this.state.height ? `${this.state.height}px` : 'auto',
-              // @ts-ignore ts-migrate(2322) FIXME: Type '"relative !important"' is not assignable to ... Remove this comment to see the full error message
-              position: 'relative !important',
-            }}
-          >
-            {this.props.children}
-            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ left: true; onStop: Function; }' is missin... Remove this comment to see the full error message */}
-            <ResizeHandle left onStop={this.handleStop} />
-            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ right: true; onStop: Function; }' is missi... Remove this comment to see the full error message */}
-            <ResizeHandle right onStop={this.handleStop} />
-            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ bottom: true; onStop: Function; }' is miss... Remove this comment to see the full error message */}
-            <ResizeHandle bottom onStop={this.handleStop} />
-            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ left: true; bottom: true; onStop: Function... Remove this comment to see the full error message */}
-            <ResizeHandle left bottom onStop={this.handleStop} />
-            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ right: true; bottom: true; onStop: Functio... Remove this comment to see the full error message */}
-            <ResizeHandle right bottom onStop={this.handleStop} />
-          </div>
-        </Draggable>
-      </div>
+      <ReqoreBackdrop>
+        <div
+          className={`bp3-dialog-container ${this.props.hasFooter ? 'has-footer' : ''}`}
+          // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'LegacyR... Remove this comment to see the full error message
+          ref={this.refModal}
+          // @ts-ignore ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
+          tabIndex="-1"
+          role="dialog"
+          aria-labelledby={this.getHeader() && this.getHeader().props.titleId}
+          // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'MouseEv... Remove this comment to see the full error message
+          onMouseDown={this.onEscape}
+          style={{ zIndex: 11000 }}
+        >
+          <Draggable handle=".handle">
+            <div
+              className="bp3-dialog"
+              role="document"
+              style={{
+                width: this.props.width,
+                height: this.state.height ? `${this.state.height}px` : 'auto',
+                // @ts-ignore ts-migrate(2322) FIXME: Type '"relative !important"' is not assignable to ... Remove this comment to see the full error message
+                position: 'relative !important',
+              }}
+            >
+              {this.props.children}
+              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ left: true; onStop: Function; }' is missin... Remove this comment to see the full error message */}
+              <ResizeHandle left onStop={this.handleStop} />
+              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ right: true; onStop: Function; }' is missi... Remove this comment to see the full error message */}
+              <ResizeHandle right onStop={this.handleStop} />
+              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ bottom: true; onStop: Function; }' is miss... Remove this comment to see the full error message */}
+              <ResizeHandle bottom onStop={this.handleStop} />
+              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ left: true; bottom: true; onStop: Function... Remove this comment to see the full error message */}
+              <ResizeHandle left bottom onStop={this.handleStop} />
+              {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ right: true; bottom: true; onStop: Functio... Remove this comment to see the full error message */}
+              <ResizeHandle right bottom onStop={this.handleStop} />
+            </div>
+          </Draggable>
+        </div>
+      </ReqoreBackdrop>
     );
   }
 }

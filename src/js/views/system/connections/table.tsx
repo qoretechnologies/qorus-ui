@@ -1,5 +1,6 @@
 /* @flow */
 import { Button } from '@blueprintjs/core';
+import { useReqoreProperty } from '@qoretechnologies/reqore';
 import capitalize from 'lodash/capitalize';
 import size from 'lodash/size';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -80,80 +81,85 @@ const ConnectionTable: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props) => (
-  <Table fixed striped id="connections-view">
-    <Thead>
-      <FixedRow className="toolbar-row">
-        <Th colspan="full">
-          <Pull>
-            <Button
-              disabled={!canAdd}
-              // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
-              onClick={handleAddClick}
-              icon="add"
-              text={intl.formatMessage({ id: 'button.add-new' })}
-            />
-          </Pull>
-          <Pull right>
-            <LoadMore
-              canLoadMore={canLoadMore}
-              handleLoadMore={handleLoadMore}
-              handleLoadAll={handleLoadAll}
-              currentCount={loadMoreCurrent}
-              total={loadMoreTotal}
-              limit={limit}
-            />
-          </Pull>
-        </Th>
-      </FixedRow>
-      <FixedRow sortData={sortData} onSortChange={onSortChange}>
-        <Th name="up" icon="info-sign">
-          <FormattedMessage id="table.status" />
-        </Th>
-        <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} icon="application" />
-        <Th icon="build" className="huge">
-          <FormattedMessage id="table.actions" />
-        </Th>
-        <Th className="text" name="url" icon="link">
-          <FormattedMessage id="table.url" />
-        </Th>
-        <Th className="text" name="desc" icon="label">
-          <FormattedMessage id="table.description" />
-        </Th>
-        <Th icon="lock" name="locked">
-          <FormattedMessage id="table.locked" />
-        </Th>
-        <Th icon="repeat" name="loopback">
-          <FormattedMessage id="table.loopback" />
-        </Th>
-      </FixedRow>
-    </Thead>
-    <DataOrEmptyTable condition={!remotes || size(remotes) === 0} cols={7}>
-      {(props) => (
-        <Tbody {...props}>
-          {/* @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
-          {remotes.map((remote: any, index: number) => (
-            <ConnectionRow
-              first={index === 0}
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-              key={remote.name}
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-              isActive={remote.name === paneId}
-              // @ts-ignore ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'.
-              hasAlerts={remote.alerts.length > 0}
-              openPane={openPane}
-              closePane={closePane}
-              remoteType={type}
-              canDelete={canDelete}
-              canEdit={canEdit}
-              {...remote}
-            />
-          ))}
-        </Tbody>
-      )}
-    </DataOrEmptyTable>
-  </Table>
-);
+Props) => {
+  const addModal = useReqoreProperty('addModal');
+  const closeModal = useReqoreProperty('removeModal');
+
+  return (
+    <Table fixed striped id="connections-view">
+      <Thead>
+        <FixedRow className="toolbar-row">
+          <Th colspan="full">
+            <Pull>
+              <Button
+                disabled={!canAdd}
+                // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
+                onClick={() => handleAddClick(addModal, closeModal)}
+                icon="add"
+                text={intl.formatMessage({ id: 'button.add-new' })}
+              />
+            </Pull>
+            <Pull right>
+              <LoadMore
+                canLoadMore={canLoadMore}
+                handleLoadMore={handleLoadMore}
+                handleLoadAll={handleLoadAll}
+                currentCount={loadMoreCurrent}
+                total={loadMoreTotal}
+                limit={limit}
+              />
+            </Pull>
+          </Th>
+        </FixedRow>
+        <FixedRow sortData={sortData} onSortChange={onSortChange}>
+          <Th name="up" icon="info-sign">
+            <FormattedMessage id="table.status" />
+          </Th>
+          <NameColumnHeader title={intl.formatMessage({ id: 'table.name' })} icon="application" />
+          <Th icon="build" className=" text">
+            <FormattedMessage id="table.actions" />
+          </Th>
+          <Th className="text" name="url" icon="link">
+            <FormattedMessage id="table.url" />
+          </Th>
+          <Th className="text" name="desc" icon="label">
+            <FormattedMessage id="table.description" />
+          </Th>
+          <Th icon="lock" name="locked">
+            <FormattedMessage id="table.locked" />
+          </Th>
+          <Th icon="repeat" name="loopback">
+            <FormattedMessage id="table.loopback" />
+          </Th>
+        </FixedRow>
+      </Thead>
+      <DataOrEmptyTable condition={!remotes || size(remotes) === 0} cols={7}>
+        {(props) => (
+          <Tbody {...props}>
+            {/* @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message */}
+            {remotes.map((remote: any, index: number) => (
+              <ConnectionRow
+                first={index === 0}
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                key={remote.name}
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                isActive={remote.name === paneId}
+                // @ts-ignore ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'Object'.
+                hasAlerts={remote.alerts.length > 0}
+                openPane={openPane}
+                closePane={closePane}
+                remoteType={type}
+                canDelete={canDelete}
+                canEdit={canEdit}
+                {...remote}
+              />
+            ))}
+          </Tbody>
+        )}
+      </DataOrEmptyTable>
+    </Table>
+  );
+};
 
 export default compose(
   viewBehindPermission(
@@ -194,8 +200,8 @@ export default compose(
   withModal(),
   withHandlers({
     handleAddClick:
-      ({ openModal, closeModal, type }: Props): Function =>
-      () => {
+      ({ type }: Props): Function =>
+      (openModal, closeModal) => {
         // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
         openModal(<ManageModal onClose={closeModal} remoteType={type} />);
       },

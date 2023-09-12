@@ -1,6 +1,6 @@
 // @flow
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import compose from 'recompose/compose';
@@ -8,8 +8,6 @@ import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
-import Headbar from '../../../components/Headbar';
-import Pull from '../../../components/Pull';
 import Search from '../../../containers/search';
 import { rebuildConfigHash } from '../../../helpers/interfaces';
 import showIfPassed from '../../../hocomponents/show-if-passed';
@@ -35,46 +33,44 @@ const WorkflowHeader: Function = ({
   handleAlertClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Headbar>
-    <Breadcrumbs>
-      <Crumb link="/workflows">
-        {' '}
-        <FormattedMessage id="Workflows" />{' '}
-      </Crumb>
-      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
-      <Crumb>{workflow.normalizedName}</Crumb>
-      <CrumbTabs
-        tabs={[
-          'Orders',
-          {
-            title: 'Config',
-            suffix: `(${countConfigItems({
-              ...rebuildConfigHash(workflow, true),
-            })})`,
-          },
-          'Performance',
-          'Steps',
-          'Order Stats',
-          'Process',
-          'Releases',
-          {
-            title: 'Valuemaps',
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
-            suffix: `(${size(workflow.vmaps)})`,
-          },
-          {
-            title: 'Mappers',
-            // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
-            suffix: `(${size(workflow.mappers)})`,
-          },
-          'Errors',
-          'Code',
-          'Log',
-          'Info',
-        ]}
-      />
-    </Breadcrumbs>
-    <Pull right>
+  <Breadcrumbs>
+    <Crumb link="/workflows">
+      {' '}
+      <FormattedMessage id="Workflows" />{' '}
+    </Crumb>
+    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
+    <Crumb>{workflow.normalizedName}</Crumb>
+    <CrumbTabs
+      tabs={[
+        'Orders',
+        {
+          title: 'Config',
+          suffix: `(${countConfigItems({
+            ...rebuildConfigHash(workflow, true),
+          })})`,
+        },
+        'Performance',
+        'Steps',
+        'Order Stats',
+        'Process',
+        'Releases',
+        {
+          title: 'Valuemaps',
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'vmaps' does not exist on type 'Object'.
+          suffix: `(${size(workflow.vmaps)})`,
+        },
+        {
+          title: 'Mappers',
+          // @ts-ignore ts-migrate(2339) FIXME: Property 'mappers' does not exist on type 'Object'... Remove this comment to see the full error message
+          suffix: `(${size(workflow.mappers)})`,
+        },
+        'Errors',
+        'Code',
+        'Log',
+        'Info',
+      ]}
+    />
+    <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
       {/* @ts-ignore ts-migrate(2339) FIXME: Property 'hasAlerts' does not exist on type 'Objec... Remove this comment to see the full error message */}
       {workflow.hasAlerts && (
         <ButtonGroup>
@@ -112,8 +108,8 @@ Props) => (
       {tab === 'orders' && (
         <Search defaultValue={searchQuery} onSearchUpdate={onSearch} resource="workflow" />
       )}
-    </Pull>
-  </Headbar>
+    </ReqoreControlGroup>
+  </Breadcrumbs>
 );
 
 export default compose(

@@ -1,17 +1,15 @@
 // @flow
-import { Tag } from '@blueprintjs/core';
+import { ReqoreTag, ReqoreTagGroup } from '@qoretechnologies/reqore';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
+import Flex from '../../../components/Flex';
 import Box from '../../../components/box';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
-import Flex from '../../../components/Flex';
-import Headbar from '../../../components/Headbar';
-import Pull from '../../../components/Pull';
 import { calculateMemory } from '../../../helpers/system';
-import withPane from '../../../hocomponents/pane';
 import titleManager from '../../../hocomponents/TitleManager';
+import withPane from '../../../hocomponents/pane';
 import Node from './node';
 import ClusterPane from './pane';
 
@@ -36,24 +34,27 @@ const ClusterView: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <Flex id="cluster-view">
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb active>
-          <FormattedMessage id="cluster.cluster" />
-        </Crumb>
-      </Breadcrumbs>
-      <Pull right>
-        <Tag className="bp3-large">
-          <FormattedMessage id="cluster.nodes" />: {Object.keys(nodes).length}
-        </Tag>{' '}
-        <Tag className="bp3-large">
-          <FormattedMessage id="cluster.processes" />: {Object.keys(processes).length}
-        </Tag>{' '}
-        <Tag className="bp3-large">
-          <FormattedMessage id="cluster.cluster-memory" />: {calculateMemory(nodesMemory)}
-        </Tag>
-      </Pull>
-    </Headbar>
+    <Breadcrumbs>
+      <Crumb active>
+        <FormattedMessage id="cluster.cluster" />
+      </Crumb>
+      <ReqoreTagGroup style={{ marginLeft: 'auto' }}>
+        <ReqoreTag
+          labelKey={`${intl.formatMessage({ id: 'cluster.nodes' })}`}
+          label={`${Object.keys(nodes).length}`}
+        />
+        <ReqoreTag
+          style={{ marginLeft: 'auto' }}
+          labelKey={`${intl.formatMessage({ id: 'cluster.processes' })}`}
+          label={`${Object.keys(processes).length}`}
+        />
+        <ReqoreTag
+          style={{ marginLeft: 'auto' }}
+          labelKey={`${intl.formatMessage({ id: 'cluster.cluster-memory' })}`}
+          label={calculateMemory(nodesMemory)}
+        />
+      </ReqoreTagGroup>
+    </Breadcrumbs>
     <Box top fill scrollY>
       {Object.keys(nodes).map((node: string): any => {
         const list: Array<Object> = Object.keys(processes)

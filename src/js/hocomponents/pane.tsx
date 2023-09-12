@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import wrapDisplayName from 'recompose/wrapDisplayName';
-import Flex from '../components/Flex';
 import { functionOrStringExp } from '../helpers/functions';
 import actions from '../store/api/actions';
 import queryControl from './queryControl';
@@ -140,7 +139,7 @@ export default (
         const { paneIdQuery, tabQuery } = this.props;
 
         return (
-          <Flex className="floating-pane-wrapper">
+          <>
             <Component
               {...this.props}
               openPane={this.handleOpen}
@@ -149,7 +148,7 @@ export default (
               paneTab={tabQuery}
             />
             {this.renderPane()}
-          </Flex>
+          </>
         );
       }
     }
