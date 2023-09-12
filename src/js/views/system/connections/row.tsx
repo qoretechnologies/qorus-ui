@@ -70,6 +70,7 @@ const ConnectionRow: Function = ({
   handleToggleClick,
   handleResetClick,
   features,
+  auth_request_uri,
   locked,
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'Props'.
   intl,
@@ -122,6 +123,7 @@ Props) => (
         name={name}
         connid={connectionid}
         features={features}
+        redirectUri={auth_request_uri}
       />
     </Td>
     <Td className="text">

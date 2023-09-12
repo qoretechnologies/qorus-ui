@@ -187,6 +187,7 @@ class ConnectionsPane extends Component {
             as: RemoteControls,
             props: {
               ...this.props.remote,
+              redirectUri: this.props.remote.auth_request_uri,
               remoteType,
               dispatchAction,
               canEdit,
@@ -223,9 +224,9 @@ class ConnectionsPane extends Component {
                 />
                 <ReqoreTag
                   intent={this.props.remote.up ? 'success' : 'danger'}
-                  labelKey="UP"
+                  labelKey={this.props.remote.up ? 'UP' : 'DOWN'}
                   rightIcon={this.props.remote.up ? 'CheckLine' : 'CloseLine'}
-                  icon="ArrowUpLine"
+                  icon={this.props.remote.up ? 'ArrowUpLine' : 'ArrowDownLine'}
                 />
               </ReqoreTagGroup>
               <ReqoreVerticalSpacer height={10} />

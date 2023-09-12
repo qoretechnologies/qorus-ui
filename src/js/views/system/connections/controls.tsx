@@ -1,47 +1,11 @@
-import {
-  ReqoreButton,
-  ReqoreControlGroup,
-  ReqoreModal,
-  ReqoreSpinner,
-  useReqoreProperty,
-} from '@qoretechnologies/reqore';
-import { useEffect } from 'react';
+import { ReqoreButton, ReqoreControlGroup, useReqoreProperty } from '@qoretechnologies/reqore';
 import { injectIntl } from 'react-intl';
-import { useAsyncRetry } from 'react-use';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import { WebIDEButton } from '../../../components/WebIDEButton';
 import withModal from '../../../hocomponents/modal';
-import settings from '../../../settings';
 import actions from '../../../store/api/actions';
-import { get } from '../../../store/api/utils';
 import PingModal from './modals/ping';
-
-// Redirect back to the current client
-const redirect_uri = window.location.origin + window.location.pathname;
-
-const OAuth2Modal = ({ name, closeModal, ...rest }) => {
-  const { loading, value } = useAsyncRetry(async () => {
-    const data = await get(
-      `${settings.REST_BASE_URL}/connections/${name}/oauth2AuthRequestUri?redirect_uri=${redirect_uri}`
-    );
-
-    return data;
-  });
-
-  useEffect(() => {
-    if (value) {
-      window.location.href = value;
-    }
-  }, [value]);
-
-  return (
-    <ReqoreModal {...rest} isOpen intent="info" label={`OAuth2 Access request for ${name}`}>
-      {loading && <ReqoreSpinner centered>Loading...</ReqoreSpinner>}
-      {value && <ReqoreSpinner centered>Redirecting...</ReqoreSpinner>}
-    </ReqoreModal>
-  );
-};
 
 const RemoteControls = ({
   intl,
@@ -63,16 +27,10 @@ const RemoteControls = ({
   name,
   features,
   big,
+  redirectUri,
   ...rest
 }) => {
   const confirmAction = useReqoreProperty('confirmAction');
-  const addModal = useReqoreProperty('addModal');
-
-  console.log(features, rest);
-
-  const handleOauthClick = () => {
-    addModal(<OAuth2Modal name={name} />);
-  };
 
   return (
     <ReqoreControlGroup size={big ? undefined : 'small'} fluid={false}>
@@ -128,12 +86,14 @@ const RemoteControls = ({
           }}
         />
       </ReqoreControlGroup>
-      {features?.['oauth2-auth-code'] && (
+      {redirectUri && (
         <ReqoreButton
           icon="RemoteControlLine"
           tooltip="Grant OAuth2 Access"
           intent="info"
-          onClick={handleOauthClick}
+          onClick={() => {
+            window.location.href = redirectUri;
+          }}
         />
       )}
       <WebIDEButton type="connection" id={connid} big={big} />
