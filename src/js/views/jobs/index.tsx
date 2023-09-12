@@ -1,6 +1,6 @@
 // @flow
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
@@ -8,17 +8,16 @@ import lifecycle from 'recompose/lifecycle';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import { createSelector } from 'reselect';
-import Box from '../../components/box';
-import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import CsvControl from '../../components/CsvControl';
 import Flex from '../../components/Flex';
-import Headbar from '../../components/Headbar';
-import Pull from '../../components/Pull';
+import Box from '../../components/box';
+import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
 import { DATES } from '../../constants/dates';
 import { sortDefaults } from '../../constants/sort';
 import Search from '../../containers/search';
 import { findBy } from '../../helpers/search';
 import { formatDate } from '../../helpers/workflows';
+import titleManager from '../../hocomponents/TitleManager';
 import withCSV from '../../hocomponents/csv';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 import loadMore from '../../hocomponents/loadMore';
@@ -28,7 +27,6 @@ import queryControl from '../../hocomponents/queryControl';
 import selectable from '../../hocomponents/selectable';
 import withSort from '../../hocomponents/sort';
 import sync from '../../hocomponents/sync';
-import titleManager from '../../hocomponents/TitleManager';
 import unsync from '../../hocomponents/unsync';
 import { querySelector, resourceSelector } from '../../selectors';
 import actions from '../../store/api/actions';
@@ -91,13 +89,11 @@ const JobsView: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <Flex>
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb active>
-          <FormattedMessage id="Jobs" />
-        </Crumb>
-      </Breadcrumbs>
-      <Pull right>
+    <Breadcrumbs>
+      <Crumb active>
+        <FormattedMessage id="Jobs" />
+      </Crumb>
+      <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
         <CsvControl onClick={onCSVClick} disabled={size(jobs) === 0} />
         <Search
           defaultValue={searchQuery}
@@ -105,8 +101,9 @@ Props) => (
           resource="jobs"
           focusOnMount
         />
-      </Pull>
-    </Headbar>
+      </ReqoreControlGroup>
+    </Breadcrumbs>
+
     <Box top noPadding fill>
       <JobsTable
         collection={jobs}

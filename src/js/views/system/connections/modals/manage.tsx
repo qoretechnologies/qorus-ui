@@ -144,6 +144,7 @@ const ConnecitonManageModal = ({ edit, onClose, ...rest }: Props) => {
         },
       ]}
       width="800px"
+      contentStyle={{ display: 'flex', flexFlow: 'column' }}
     >
       {error && (
         <ReqoreMessage intent="danger" margin="both">

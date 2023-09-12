@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import { ReqoreButton, ReqoreIcon } from '@qoretechnologies/reqore';
 import { Link } from 'react-router';
 
 type Props = {
@@ -19,26 +19,18 @@ const Crumb: Function = ({
   active,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <li>
+  <>
+    <ReqoreIcon icon="ArrowRightSLine" />
     {link ? (
-      <Link
-        className={`bp3-breadcrumb ${disabled ? 'bp3-disabled' : ''} ${
-          active ? 'bp3-breadcrumb-current' : ''
-        }`}
-        to={link}
-      >
+      <ReqoreButton as={Link} active={active} disabled={disabled} to={link} flat>
         {text || children}
-      </Link>
+      </ReqoreButton>
     ) : (
-      <span
-        className={`bp3-breadcrumb ${disabled ? 'bp3-disabled' : ''} ${
-          active ? 'bp3-breadcrumb-current' : ''
-        }`}
-      >
+      <ReqoreButton active={active} disabled={disabled} flat>
         {text || children}
-      </span>
+      </ReqoreButton>
     )}
-  </li>
+  </>
 );
 
 export default Crumb;

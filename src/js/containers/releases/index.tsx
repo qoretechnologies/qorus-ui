@@ -1,16 +1,15 @@
 // @flow
 import { Button, Intent } from '@blueprintjs/core';
+import { ReqoreTree } from '@qoretechnologies/reqore';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import pure from 'recompose/onlyUpdateForKeys';
 import { createSelector } from 'reselect';
+import Flex from '../../components/Flex';
 import Box from '../../components/box';
 import { Breadcrumbs, Crumb } from '../../components/breadcrumbs';
-import Flex from '../../components/Flex';
-import Headbar from '../../components/Headbar';
-import Tree from '../../components/tree';
 import { sortTable } from '../../helpers/table';
 import loadMore from '../../hocomponents/loadMore';
 import patch from '../../hocomponents/patchFuncArgs';
@@ -50,26 +49,22 @@ const Releases: Function = ({
 Props) => (
   <Flex id="releases-view">
     {!compact && (
-      <Headbar>
-        <Breadcrumbs>
-          <Crumb active>Releases</Crumb>
-        </Breadcrumbs>
-      </Headbar>
+      <Breadcrumbs>
+        <Crumb active>Releases</Crumb>
+      </Breadcrumbs>
     )}
     {compact ? (
       [
         <ReleasesToolbar sort={sort} sortDir={sortDir} compact key="release-toolbar" />,
         <Flex key="release-content">
-          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-          <Tree data={data} />
+          <ReqoreTree data={data} zoomable exportable fill />
         </Flex>,
       ]
     ) : (
       <Box top>
         <ReleasesToolbar sort={sort} sortDir={sortDir} />
         <Flex>
-          {/* @ts-ignore ts-migrate(2769) FIXME: No overload matches this call. */}
-          <Tree data={data} />
+          <ReqoreTree data={data} zoomable exportable fill />
         </Flex>
       </Box>
     )}

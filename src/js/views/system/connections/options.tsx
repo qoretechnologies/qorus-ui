@@ -14,6 +14,7 @@ import {
   ReqorePanel,
   ReqoreVerticalSpacer,
 } from '@qoretechnologies/reqore';
+import { ReqoreTextEffect } from '@qoretechnologies/reqore/dist/components/Effect';
 import settings from '../../../settings';
 import { get } from '../../../store/api/utils';
 
@@ -79,6 +80,28 @@ Object) => {
         </div>
       )}
     </div>
+  );
+};
+
+export const ConnectionOptionValue = ({ sensitive, DefaultComponent, value }: any) => {
+  const [show, setShow] = useState(!sensitive);
+
+  if (!show) {
+    return (
+      <ReqoreControlGroup fluid>
+        <ReqoreTextEffect effect={{ blur: 3, noWrap: true }} onClick={() => setShow(true)}>
+          abcdefghijklmnopqrstuvwxyz
+        </ReqoreTextEffect>
+        <ReqoreButton fixed icon="EyeLine" onClick={() => setShow(true)} />
+      </ReqoreControlGroup>
+    );
+  }
+
+  return (
+    <>
+      <DefaultComponent value={value} />
+      {sensitive && <ReqoreButton icon="EyeCloseLine" onClick={() => setShow(false)} />}
+    </>
   );
 };
 
@@ -181,13 +204,14 @@ export default class ConnectionOptions extends Component {
     }
 
     return (
-      <div>
+      <ReqorePanel fill flat padded={false} contentStyle={{ display: 'flex', flexFlow: 'column' }}>
         {this.props.urlProtocol && this.state.optionsData[this.props.urlProtocol] ? (
           <ReqoreKeyValueTable
             data={this.props.data}
             label="Options"
             exportable
             striped
+            fill
             sortable
             filterable
             zoomable
@@ -195,7 +219,13 @@ export default class ConnectionOptions extends Component {
             keyIcon="Settings4Line"
             keyAlign="right"
             valueIcon="PriceTagLine"
-            valueRenderer={({ value }, DefaultComponent) => <DefaultComponent value={value} />}
+            valueRenderer={(data, DefaultComponent) => (
+              <ConnectionOptionValue
+                {...data}
+                sensitive={this.state.optionsData[this.props.urlProtocol][data.tableKey]?.sensitive}
+                DefaultComponent={DefaultComponent}
+              />
+            )}
             rowActions={(option, value) => [
               {
                 icon: 'EditLine',
@@ -217,7 +247,11 @@ export default class ConnectionOptions extends Component {
               },
             ]}
           />
-        ) : null}
+        ) : (
+          <ReqoreMessage intent="warning" margin="top">
+            URL protocol for this connection not found / invalid, unable to display options
+          </ReqoreMessage>
+        )}
         {this.props.canEdit &&
         this.props.urlProtocol &&
         this.state.optionsData[this.props.urlProtocol] ? (
@@ -266,7 +300,7 @@ export default class ConnectionOptions extends Component {
             )}
           </>
         )}
-      </div>
+      </ReqorePanel>
     );
   }
 }

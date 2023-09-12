@@ -1,19 +1,17 @@
 import { Button, ButtonGroup, Intent, Tag } from '@blueprintjs/core';
-import React from 'react';
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
+import Flex from '../../components/Flex';
+import { SimpleTab, SimpleTabs } from '../../components/SimpleTabs';
 import Alert from '../../components/alert';
 import Box from '../../components/box';
 import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';
-import Flex from '../../components/Flex';
-import Headbar from '../../components/Headbar';
 import NoData from '../../components/nodata';
 import PaneItem from '../../components/pane_item';
-import Pull from '../../components/Pull';
-import { SimpleTab, SimpleTabs } from '../../components/SimpleTabs';
 import Tree from '../../components/tree';
 import { normalizeName } from '../../components/utils';
 import { INTERFACE_IDS } from '../../constants/interfaces';
@@ -49,15 +47,13 @@ const UserView: Function = ({
   tabQuery: string;
 }) => (
   <Flex>
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb>
-          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
-          {userData.name} <small>({userData.provider})</small>
-        </Crumb>
-        <CrumbTabs tabs={['Overview', 'Settings']} />
-      </Breadcrumbs>
-      <Pull right>
+    <Breadcrumbs>
+      <Crumb>
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+        {userData.name} <small>({userData.provider})</small>
+      </Crumb>
+      <CrumbTabs tabs={['Overview', 'Settings']} />
+      <ReqoreControlGroup fixed>
         <ButtonGroup>
           <Button
             icon="lock"
@@ -72,8 +68,8 @@ const UserView: Function = ({
             onClick={clearStorage}
           />
         </ButtonGroup>
-      </Pull>
-    </Headbar>
+      </ReqoreControlGroup>
+    </Breadcrumbs>
 
     <SimpleTabs activeTab={tabQuery}>
       <SimpleTab name="overview">

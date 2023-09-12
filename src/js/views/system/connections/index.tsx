@@ -1,17 +1,16 @@
 /* @flow */
-import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
-import Box from '../../../components/box';
-import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import Flex from '../../../components/Flex';
 import Headbar from '../../../components/Headbar';
 import Pull from '../../../components/Pull';
 import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
+import Box from '../../../components/box';
+import { Breadcrumbs, Crumb, CrumbTabs } from '../../../components/breadcrumbs';
 import { CONN_MAP } from '../../../constants/remotes';
 import Search from '../../../containers/search';
 import patch from '../../../hocomponents/patchFuncArgs';
@@ -55,9 +54,9 @@ Props) => (
         </Crumb>
         <CrumbTabs
           tabs={[
-            { title: 'Datasources', suffix: `(${datasources.length})` },
-            { title: 'Qorus', suffix: `(${qorus.length})` },
-            { title: 'User', suffix: `(${users.length})` },
+            { title: 'Datasources', suffix: `${datasources.length}` },
+            { title: 'Qorus', suffix: `${qorus.length}` },
+            { title: 'User', suffix: `${users.length}` },
           ]}
           defaultTab="datasources"
         />

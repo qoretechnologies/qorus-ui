@@ -21,19 +21,19 @@ const RemoteControls = ({
   canEdit,
   handleDetailClick,
   handleDeleteClick,
+  handleEditClick,
   isPane,
   connid,
   name,
+  features,
   big,
+  redirectUri,
+  ...rest
 }) => {
   const confirmAction = useReqoreProperty('confirmAction');
 
   return (
-    <ReqoreControlGroup
-      size={big ? undefined : 'small'}
-      fluid={false}
-      horizontalAlign={big ? undefined : 'center'}
-    >
+    <ReqoreControlGroup size={big ? undefined : 'small'} fluid={false}>
       <ReqoreControlGroup stack>
         <ReqoreButton
           tooltip={intl.formatMessage({
@@ -46,7 +46,7 @@ const RemoteControls = ({
         />
         {remoteType === 'datasources' && (
           <ReqoreButton
-            title={intl.formatMessage({ id: 'button.reset' })}
+            tooltip={intl.formatMessage({ id: 'button.reset' })}
             icon="HistoryLine"
             onClick={handleResetClick}
           />
@@ -66,18 +66,16 @@ const RemoteControls = ({
         />
       </ReqoreControlGroup>
       <ReqoreControlGroup stack>
-        {!isPane && (
-          <ReqoreButton
-            icon="EditLine"
-            tooltip={intl.formatMessage({ id: 'button.edit' })}
-            disabled={!(!locked && canEdit)}
-            onClick={handleDetailClick}
-          />
-        )}
+        <ReqoreButton
+          icon="EditLine"
+          tooltip={intl.formatMessage({ id: 'button.edit' })}
+          disabled={!(!locked && canEdit)}
+          onClick={handleEditClick || handleDetailClick}
+        />
         <ReqoreButton
           tooltip={intl.formatMessage({ id: 'button.delete' })}
           disabled={!(!locked && canDelete)}
-          icon="CloseLine"
+          icon="DeleteBinLine"
           intent="danger"
           onClick={() => {
             confirmAction({
@@ -88,6 +86,16 @@ const RemoteControls = ({
           }}
         />
       </ReqoreControlGroup>
+      {redirectUri && (
+        <ReqoreButton
+          icon="RemoteControlLine"
+          tooltip="Grant OAuth2 Access"
+          intent="info"
+          onClick={() => {
+            window.location.href = redirectUri;
+          }}
+        />
+      )}
       <WebIDEButton type="connection" id={connid} big={big} />
     </ReqoreControlGroup>
   );

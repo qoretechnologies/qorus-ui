@@ -1,17 +1,16 @@
 // @flow
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
+import Flex from '../../components/Flex';
+import { SimpleTab, SimpleTabs } from '../../components/SimpleTabs';
 import { Breadcrumbs, Crumb, CrumbTabs } from '../../components/breadcrumbs';
 import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
-import Flex from '../../components/Flex';
-import Headbar from '../../components/Headbar';
-import Pull from '../../components/Pull';
-import { SimpleTab, SimpleTabs } from '../../components/SimpleTabs';
+import titleManager from '../../hocomponents/TitleManager';
 import hasInterfaceAccess from '../../hocomponents/hasInterfaceAccess';
 import withModal from '../../hocomponents/modal';
 import queryControl from '../../hocomponents/queryControl';
-import titleManager from '../../hocomponents/TitleManager';
 import withTabs from '../../hocomponents/withTabs';
 import actions from '../../store/api/actions';
 import Errors from './errors';
@@ -35,18 +34,17 @@ const Search: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <Flex>
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb>Search</Crumb>
-        <CrumbTabs tabs={['Orders', 'Errors']} />
-      </Breadcrumbs>
-      <Pull right>
+    <Breadcrumbs>
+      <Crumb>Search</Crumb>
+      <CrumbTabs tabs={['Orders', 'Errors']} />
+      <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
         <ButtonGroup>
           <Button text="Save search" icon="floppy-disk" onClick={onSaveClick} big />
           <Button text="Show saved searches" icon="history" onClick={onHistoryClick} big />
         </ButtonGroup>
-      </Pull>
-    </Headbar>
+      </ReqoreControlGroup>
+    </Breadcrumbs>
+
     <SimpleTabs activeTab={tabQuery}>
       <SimpleTab name="orders">
         <Orders location={location} />

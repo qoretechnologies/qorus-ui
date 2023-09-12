@@ -1,22 +1,21 @@
 /* @flow */
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import { flow, includes, map, omit, size } from 'lodash';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { createSelector } from 'reselect';
+import Flex from '../../../components/Flex';
+import NoDataIf from '../../../components/NoDataIf';
 import Box from '../../../components/box';
 import { Breadcrumbs, Crumb } from '../../../components/breadcrumbs';
 import { Control as Button, Controls as ButtonGroup } from '../../../components/controls';
-import Flex from '../../../components/Flex';
-import Headbar from '../../../components/Headbar';
-import NoDataIf from '../../../components/NoDataIf';
-import Pull from '../../../components/Pull';
 import Search from '../../../containers/search';
 import { hasPermission } from '../../../helpers/user';
+import titleManager from '../../../hocomponents/TitleManager';
 import modal from '../../../hocomponents/modal';
 import queryControl from '../../../hocomponents/queryControl';
 import sync from '../../../hocomponents/sync';
-import titleManager from '../../../hocomponents/TitleManager';
 import withDispatch from '../../../hocomponents/withDispatch';
 import { querySelector } from '../../../selectors';
 import actions from '../../../store/api/actions';
@@ -138,11 +137,9 @@ export default class PropertiesView extends Component {
 
     return (
       <Flex id="properties-view">
-        <Headbar>
-          <Breadcrumbs>
-            <Crumb active> Properties </Crumb>
-          </Breadcrumbs>
-          <Pull right>
+        <Breadcrumbs>
+          <Crumb active> Properties </Crumb>
+          <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
             <ButtonGroup>
               <Button
                 disabled={
@@ -164,8 +161,8 @@ export default class PropertiesView extends Component {
               defaultValue={searchQuery}
               resource="properties"
             />
-          </Pull>
-        </Headbar>
+          </ReqoreControlGroup>
+        </Breadcrumbs>
         <NoDataIf condition={size(collection) === 0} big inBox>
           {() => (
             <Box top scrollY>
