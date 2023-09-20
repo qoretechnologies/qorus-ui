@@ -1,11 +1,46 @@
-import { ReqoreButton, ReqoreControlGroup, useReqoreProperty } from '@qoretechnologies/reqore';
+import {
+  ReqoreButton,
+  ReqoreControlGroup,
+  ReqoreModal,
+  ReqoreSpinner,
+  useReqoreProperty,
+} from '@qoretechnologies/reqore';
+import { useEffect } from 'react';
 import { injectIntl } from 'react-intl';
+import { useAsyncRetry } from 'react-use';
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
 import { WebIDEButton } from '../../../components/WebIDEButton';
 import withModal from '../../../hocomponents/modal';
+import settings from '../../../settings';
 import actions from '../../../store/api/actions';
+import { put } from '../../../store/api/utils';
 import PingModal from './modals/ping';
+
+const OAuth2Modal = ({ name, closeModal, ...rest }: any) => {
+  const redirect_uri = window.location.href;
+  const { loading, value } = useAsyncRetry(async () => {
+    const data = await put(
+      `${settings.REST_BASE_URL}/connections/${name}/oauth2AuthRequestUri?redirect_uri=${redirect_uri}`
+    );
+
+    return data;
+  });
+
+  useEffect(() => {
+    if (value) {
+      //console.log(value);
+      window.location.href = value;
+    }
+  }, [value]);
+
+  return (
+    <ReqoreModal {...rest} isOpen intent="info" label={`OAuth2 Access request for ${name}`}>
+      {loading && <ReqoreSpinner centered>Loading...</ReqoreSpinner>}
+      {value && <ReqoreSpinner centered>Redirecting...</ReqoreSpinner>}
+    </ReqoreModal>
+  );
+};
 
 const RemoteControls = ({
   intl,
@@ -31,6 +66,11 @@ const RemoteControls = ({
   ...rest
 }) => {
   const confirmAction = useReqoreProperty('confirmAction');
+  const addModal = useReqoreProperty('addModal');
+
+  const handleOauthClick = () => {
+    addModal(<OAuth2Modal name={name} />);
+  };
 
   return (
     <ReqoreControlGroup size={big ? undefined : 'small'} fluid={false}>
@@ -91,9 +131,7 @@ const RemoteControls = ({
           icon="RemoteControlLine"
           tooltip="Grant OAuth2 Access"
           intent="info"
-          onClick={() => {
-            window.location.href = redirectUri;
-          }}
+          onClick={handleOauthClick}
         />
       )}
       <WebIDEButton type="connection" id={connid} big={big} />

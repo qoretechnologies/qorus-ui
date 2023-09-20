@@ -10,6 +10,7 @@ import { includes, lowerCase, size } from 'lodash';
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { compose } from 'recompose';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
@@ -40,6 +41,7 @@ const viewSelector = createSelector([remoteSelector, attrsSelector], (remote, at
   editable: attrs.editable,
 }));
 
+@withRouter
 class ConnectionsPane extends Component {
   props: {
     remote: any;
@@ -66,6 +68,10 @@ class ConnectionsPane extends Component {
   } = {
     error: null,
     options: null,
+    status: this.props.location?.query?.status,
+    messageTitle: this.props.location?.query?.messageTitle,
+    message: this.props.location?.query?.message,
+    messageDuration: this.props.location?.query?.messageDuration,
   };
 
   componentDidMount() {
@@ -150,11 +156,12 @@ class ConnectionsPane extends Component {
   };
 
   render() {
+    console.log(this.props);
     // @ts-ignore ts-migrate(2339) FIXME: Property 'deps' does not exist on type 'Object'.
     const { deps, alerts, locked, url_hash } = this.props.remote;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'paneTab' does not exist on type '{ remot... Remove this comment to see the full error message
     const { paneTab, paneId, remoteType, dispatchAction } = this.props;
-    const { isPassLoaded } = this.state;
+    const { isPassLoaded, status, message, messageTitle, messageDuration } = this.state;
 
     const canEdit = !locked && this.props.canEdit;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'canDelete' does not exist on type '{ rem... Remove this comment to see the full error message
@@ -199,6 +206,25 @@ class ConnectionsPane extends Component {
           },
         ]}
       >
+        {status && (
+          <ReqoreMessage
+            margin="both"
+            intent={status}
+            opaque={false}
+            title={messageTitle}
+            duration={messageDuration}
+            onFinish={() => {
+              this.setState({
+                status: null,
+                message: null,
+                messageTitle: null,
+                messageDuration: null,
+              });
+            }}
+          >
+            {message}
+          </ReqoreMessage>
+        )}
         <SimpleTabs activeTab={paneTab}>
           <SimpleTab name="detail">
             {this.state.error && (
