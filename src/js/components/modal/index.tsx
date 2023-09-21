@@ -1,4 +1,5 @@
 /* @flow */
+import { ReqoreBackdrop } from '@qoretechnologies/reqore';
 import React, { Component } from 'react';
 import _Draggable from 'react-draggable';
 import ResizeHandle from '../resize/handle';
@@ -7,7 +8,6 @@ import Body from './body';
 import Footer from './footer';
 import Header from './header';
 import Manager from './manager';
-import { ReqoreBackdrop } from '@qoretechnologies/reqore';
 
 const Draggable: any = _Draggable;
 
@@ -156,7 +156,7 @@ export default class Modal extends Component {
   // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
   render() {
     return (
-      <ReqoreBackdrop>
+      <ReqoreBackdrop zIndex={this.props.zIndex} onClose={this.getHeader()?.props?.onClose}>
         <div
           className={`bp3-dialog-container ${this.props.hasFooter ? 'has-footer' : ''}`}
           // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'LegacyR... Remove this comment to see the full error message

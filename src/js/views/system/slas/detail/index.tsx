@@ -1,16 +1,14 @@
 // @flow
 import moment from 'moment';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
 import { createSelector } from 'reselect';
+import Flex from '../../../../components/Flex';
+import { SimpleTab, SimpleTabs } from '../../../../components/SimpleTabs';
 import Box from '../../../../components/box';
 import { Breadcrumbs, Crumb, CrumbTabs } from '../../../../components/breadcrumbs';
-import Flex from '../../../../components/Flex';
-import Headbar from '../../../../components/Headbar';
-import { SimpleTab, SimpleTabs } from '../../../../components/SimpleTabs';
 import { DATE_FORMATS } from '../../../../constants/dates';
 import patch from '../../../../hocomponents/patchFuncArgs';
 import queryControl from '../../../../hocomponents/queryControl';
@@ -47,16 +45,14 @@ const SLADetail: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <Flex>
-    <Headbar>
-      <Breadcrumbs>
-        <Crumb link="/slas"> SLAs </Crumb>
-        <Crumb>
-          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
-          {sla.name} <small>({sla.slaid})</small>
-        </Crumb>
-        <CrumbTabs tabs={['Events', 'Sources', 'Performance']} defaultTab="events" />
-      </Breadcrumbs>
-    </Headbar>
+    <Breadcrumbs>
+      <Crumb link="/slas"> SLAs </Crumb>
+      <Crumb>
+        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+        {sla.name} <small>({sla.slaid})</small>
+      </Crumb>
+      <CrumbTabs tabs={['Performance', 'Events', 'Sources']} defaultTab="performance" />
+    </Breadcrumbs>
     <Box top>
       <SimpleTabs activeTab={tabQuery}>
         <SimpleTab name="events">
@@ -121,7 +117,7 @@ export default compose(
   patch('load', ['fetchParams', 'id']),
   sync('meta'),
   // @ts-ignore ts-migrate(2554) FIXME: Expected 3 arguments, but got 1.
-  withTabs('events'),
+  withTabs('performance'),
   pure(['location', 'children']),
   unsync()
 )(SLADetail);

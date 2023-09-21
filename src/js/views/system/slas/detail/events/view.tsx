@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
@@ -46,7 +45,7 @@ const EventsView: Function = ({
   collection,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
-  <Flex display="initial">
+  <Flex display="flex">
     {collection.length ? (
       <EventsTable
         sortData={sortData}
@@ -57,9 +56,7 @@ Props) => (
     ) : (
       <NoData />
     )}
-    {canLoadMore && (
-      <Button label={`Load ${limit} more...`} btnStyle="success" big onClick={handleLoadMore} />
-    )}
+    {canLoadMore && <Button label={`Load ${limit} more...`} big onClick={handleLoadMore} />}
   </Flex>
 );
 

@@ -1,16 +1,18 @@
 // @flow
 import yaml from 'js-yaml';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import Box from '../../../../components/box';
 import { Control as Button, Controls as ButtonGroup } from '../../../../components/controls';
 import Dropdown, { Control, Item } from '../../../../components/dropdown';
 import Modal from '../../../../components/modal';
 import PaneItem from '../../../../components/pane_item';
+import injectReqore from '../../../../hocomponents/injectReqore';
 import settings from '../../../../settings';
 import { fetchJson, fetchWithNotifications } from '../../../../store/api/utils';
 
 @connect()
+@injectReqore('getAndIncreaseZIndex')
 export default class ModalRun extends Component {
   props: {
     method: any;
@@ -136,7 +138,11 @@ export default class ModalRun extends Component {
     const { service } = this.props;
 
     return (
-      <Modal hasFooter onResizeStop={this.handleModalResize}>
+      <Modal
+        hasFooter
+        onResizeStop={this.handleModalResize}
+        zIndex={this.props.getAndIncreaseZIndex()}
+      >
         <Modal.Header titleId="errorsTableModalLabel" onClose={this.handleCancel}>
           {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
           Method execution for {service.name} service
