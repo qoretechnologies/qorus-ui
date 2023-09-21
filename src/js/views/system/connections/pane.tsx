@@ -10,6 +10,7 @@ import { includes, lowerCase, size } from 'lodash';
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { compose } from 'recompose';
 import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
@@ -24,6 +25,7 @@ import PaneItem from '../../../components/pane_item';
 import LogContainer from '../../../containers/log';
 import { attrsSelector } from '../../../helpers/remotes';
 import { getDependencyObjectLink } from '../../../helpers/system';
+import queryControl from '../../../hocomponents/queryControl';
 import showIfPassed from '../../../hocomponents/show-if-passed';
 import withDispatch from '../../../hocomponents/withDispatch';
 import settings from '../../../settings';
@@ -40,6 +42,7 @@ const viewSelector = createSelector([remoteSelector, attrsSelector], (remote, at
   editable: attrs.editable,
 }));
 
+@withRouter
 class ConnectionsPane extends Component {
   props: {
     remote: any;
@@ -66,6 +69,10 @@ class ConnectionsPane extends Component {
   } = {
     error: null,
     options: null,
+    status: this.props.location?.query?.status,
+    messageTitle: this.props.location?.query?.messageTitle,
+    message: this.props.location?.query?.message,
+    messageDuration: this.props.location?.query?.messageDuration,
   };
 
   componentDidMount() {
@@ -154,7 +161,7 @@ class ConnectionsPane extends Component {
     const { deps, alerts, locked, url_hash } = this.props.remote;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'paneTab' does not exist on type '{ remot... Remove this comment to see the full error message
     const { paneTab, paneId, remoteType, dispatchAction } = this.props;
-    const { isPassLoaded } = this.state;
+    const { isPassLoaded, status, message, messageTitle, messageDuration } = this.state;
 
     const canEdit = !locked && this.props.canEdit;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'canDelete' does not exist on type '{ rem... Remove this comment to see the full error message
@@ -199,6 +206,30 @@ class ConnectionsPane extends Component {
           },
         ]}
       >
+        {status && (
+          <ReqoreMessage
+            margin="both"
+            intent={status}
+            opaque={false}
+            title={messageTitle}
+            duration={messageDuration}
+            onFinish={() => {
+              this.props.changeStatusQuery(undefined);
+              this.props.changeMessageQuery(undefined);
+              this.props.changeMessageTitleQuery(undefined);
+              this.props.changeMessageDurationQuery(undefined);
+
+              this.setState({
+                status: null,
+                message: null,
+                messageTitle: null,
+                messageDuration: null,
+              });
+            }}
+          >
+            {message}
+          </ReqoreMessage>
+        )}
         <SimpleTabs activeTab={paneTab}>
           <SimpleTab name="detail">
             {this.state.error && (
@@ -326,5 +357,9 @@ export default compose(
     remote: { ...remote, url: settings.IS_HTTP ? remote.url : remote.safeUrl },
     ...rest,
   })),
+  queryControl('status'),
+  queryControl('message'),
+  queryControl('messageTitle'),
+  queryControl('messageDuration'),
   injectIntl
 )(ConnectionsPane);

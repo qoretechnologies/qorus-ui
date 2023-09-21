@@ -1,6 +1,6 @@
 // @flow
-import { Button, ControlGroup, Intent } from '@blueprintjs/core';
-import React from 'react';
+import { Intent } from '@blueprintjs/core';
+import { ReqoreButton, ReqoreControlGroup, ReqoreDropdown } from '@qoretechnologies/reqore';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
@@ -8,7 +8,6 @@ import withState from 'recompose/withState';
 import NoData from '../../components/nodata';
 import withModal from '../../hocomponents/modal';
 import ConfirmDialog from '../confirm_dialog';
-import Dropdown, { Control as Toggle, Item } from '../dropdown';
 
 type Props = {
   canModify: boolean;
@@ -36,39 +35,32 @@ const SLAControl: Function = ({
 Props) => {
   if (canModify) {
     return (
-      <ControlGroup>
+      <ReqoreControlGroup>
         {slas.length > 0 ? (
           // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-          <Dropdown>
-            {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; small: true; }' is missi... Remove this comment to see the full error message */}
-            <Toggle small>{slavalue || 'None'}</Toggle>
-            {slas.map(
-              // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-              (sla: any) => (
-                <Item
-                  // @ts-ignore ts-migrate(2339) FIXME: Property 'slaid' does not exist on type 'Object'.
-                  key={sla.slaid}
-                  // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-                  title={sla.name}
-                  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                  action={handleSlaChange}
-                />
-              )
-            )}
-          </Dropdown>
+          <ReqoreDropdown
+            items={slas.map((sla) => ({
+              label: sla.name,
+              value: sla.name,
+              selected: slavalue === sla.name,
+            }))}
+            onItemSelect={({ label }) => {
+              handleSlaChange(null, label);
+            }}
+            label={slavalue || 'None'}
+          />
         ) : (
           <p>{slavalue || 'None'}</p>
         )}
         {slavalue && slavalue !== 'None' && (
-          <Button
-            icon="cross"
+          <ReqoreButton
+            icon="CloseLine"
             intent={Intent.DANGER}
             // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type '((event... Remove this comment to see the full error message
             onClick={handleRemoveClick}
-            className="bp3-small"
           />
         )}
-      </ControlGroup>
+      </ReqoreControlGroup>
     );
   }
 

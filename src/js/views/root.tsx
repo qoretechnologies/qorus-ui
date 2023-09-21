@@ -397,7 +397,7 @@ export default class Root extends Component {
               <div className="root__center">
                 {!isMaximized && (
                   <Sidebar
-                    isCollapsed={this.props.sidebarOpen === false}
+                    isCollapsed={this.props.sidebarOpen === false || isTablet}
                     // @ts-ignore ts-migrate(2339) FIXME: Property 'pathname' does not exist on type 'Object... Remove this comment to see the full error message
                     path={this.props.location.pathname}
                     items={menuWithPlugins}
