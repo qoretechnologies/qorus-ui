@@ -19,10 +19,13 @@ import PingModal from './modals/ping';
 
 const OAuth2Modal = ({ name, closeModal, ...rest }: any) => {
   const redirect_uri = window.location.href;
+
   const { loading, value } = useAsyncRetry(async () => {
-    const data = await put(
-      `${settings.REST_BASE_URL}/connections/${name}/oauth2AuthRequestUri?redirect_uri=${redirect_uri}`
-    );
+    const data = await put(`${settings.REST_BASE_URL}/connections/${name}/oauth2AuthRequestUri`, {
+      body: JSON.stringify({
+        redirect_uri,
+      }),
+    });
 
     return data;
   });
