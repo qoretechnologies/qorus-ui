@@ -25,6 +25,7 @@ import PaneItem from '../../../components/pane_item';
 import LogContainer from '../../../containers/log';
 import { attrsSelector } from '../../../helpers/remotes';
 import { getDependencyObjectLink } from '../../../helpers/system';
+import queryControl from '../../../hocomponents/queryControl';
 import showIfPassed from '../../../hocomponents/show-if-passed';
 import withDispatch from '../../../hocomponents/withDispatch';
 import settings from '../../../settings';
@@ -156,7 +157,6 @@ class ConnectionsPane extends Component {
   };
 
   render() {
-    console.log(this.props);
     // @ts-ignore ts-migrate(2339) FIXME: Property 'deps' does not exist on type 'Object'.
     const { deps, alerts, locked, url_hash } = this.props.remote;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'paneTab' does not exist on type '{ remot... Remove this comment to see the full error message
@@ -214,6 +214,11 @@ class ConnectionsPane extends Component {
             title={messageTitle}
             duration={messageDuration}
             onFinish={() => {
+              this.props.changeStatusQuery(undefined);
+              this.props.changeMessageQuery(undefined);
+              this.props.changeMessageTitleQuery(undefined);
+              this.props.changeMessageDurationQuery(undefined);
+
               this.setState({
                 status: null,
                 message: null,
@@ -352,5 +357,9 @@ export default compose(
     remote: { ...remote, url: settings.IS_HTTP ? remote.url : remote.safeUrl },
     ...rest,
   })),
+  queryControl('status'),
+  queryControl('message'),
+  queryControl('messageTitle'),
+  queryControl('messageDuration'),
   injectIntl
 )(ConnectionsPane);

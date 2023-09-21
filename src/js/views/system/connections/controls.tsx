@@ -32,7 +32,6 @@ const OAuth2Modal = ({ name, closeModal, ...rest }: any) => {
 
   useEffect(() => {
     if (value) {
-      //console.log(value);
       window.location.href = value;
     }
   }, [value]);
