@@ -163,7 +163,7 @@ class Topbar extends Component {
     const [countryCode] = this.props.locale.split('-');
 
     return (
-      <ReqoreHeader>
+      <ReqoreHeader style={{ minWidth: 700 }}>
         <ReqoreNavbarGroup>
           <img src={light ? logo : whiteLogo} className="qore-small-logo" />
           <span className="topbar-instance-on">on</span>
@@ -186,21 +186,25 @@ class Topbar extends Component {
           </ReqoreNavbarGroup>
         )}
         <ReqoreNavbarGroup position="right">
-          <ReqoreControlGroup stack>
-            <ReqoreInput
-              flat
-              id="quickSearch"
-              icon="SearchLine"
-              placeholder={intl.formatMessage({
-                id: 'system.global-search',
-              })}
-              value={this.state.quickSearchValue}
-              onChange={(e: any) => this.setState({ quickSearchValue: e.target.value })}
-            />
-            {this.renderSearchMenu()}
-            <ReqoreButton icon="SearchLine" flat onClick={() => this.handleSubmit()} />
-          </ReqoreControlGroup>
-          <ReqoreNavbarDivider />
+          {!this.props.isTablet && (
+            <>
+              <ReqoreControlGroup stack>
+                <ReqoreInput
+                  flat
+                  id="quickSearch"
+                  icon="SearchLine"
+                  placeholder={intl.formatMessage({
+                    id: 'system.global-search',
+                  })}
+                  value={this.state.quickSearchValue}
+                  onChange={(e: any) => this.setState({ quickSearchValue: e.target.value })}
+                />
+                {this.renderSearchMenu()}
+                <ReqoreButton icon="SearchLine" flat onClick={() => this.handleSubmit()} />
+              </ReqoreControlGroup>
+              <ReqoreNavbarDivider />
+            </>
+          )}
           <ReqoreNavbarGroup position="right">
             <ReqoreNavbarItem
               interactive

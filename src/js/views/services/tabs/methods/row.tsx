@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -7,7 +6,7 @@ import withHandlers from 'recompose/withHandlers';
 import { ActionColumn } from '../../../../components/ActionColumn';
 import ContentByType from '../../../../components/ContentByType';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control as Button, Controls } from '../../../../components/controls';
+import { ReqoreButton, ReqoreControlGroup } from '@qoretechnologies/reqore';
 import NameColumn from '../../../../components/NameColumn';
 import { Td, Tr } from '../../../../components/new_table';
 import SLAControl from '../../../../components/sla_control';
@@ -55,10 +54,10 @@ Props) => (
     {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
     <NameColumn name={method.name} />
     <ActionColumn>
-      <Controls>
-        <Button icon="play" onClick={handleRunClick} />
-        <Button icon="code" onClick={handleCodeClick} />
-      </Controls>
+      <ReqoreControlGroup stack size="small">
+        <ReqoreButton icon="PlayLine" onClick={handleRunClick} />
+        <ReqoreButton icon="CodeLine" onClick={handleCodeClick} />
+      </ReqoreControlGroup>
     </ActionColumn>
     <Td className="narrow">
       {/* @ts-ignore ts-migrate(2339) FIXME: Property 'locktype' does not exist on type 'Object... Remove this comment to see the full error message */}

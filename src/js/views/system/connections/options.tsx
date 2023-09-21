@@ -11,10 +11,12 @@ import {
   ReqoreInput,
   ReqoreKeyValueTable,
   ReqoreMessage,
+  ReqoreP,
   ReqorePanel,
   ReqoreVerticalSpacer,
 } from '@qoretechnologies/reqore';
 import { ReqoreTextEffect } from '@qoretechnologies/reqore/dist/components/Effect';
+import ReactMarkdown from 'react-markdown';
 import settings from '../../../settings';
 import { get } from '../../../store/api/utils';
 
@@ -32,56 +34,6 @@ const StyledSensitive = styled.span`
   width: 150px;
   background-color: #000;
 `;
-
-const Option: Function = ({
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'objKey' does not exist on type 'Object'.
-  objKey,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'value' does not exist on type 'Object'.
-  value,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'onEdit' does not exist on type 'Object'.
-  onEdit,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'onDelete' does not exist on type 'Object... Remove this comment to see the full error message
-  onDelete,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'canEdit' does not exist on type 'Object'... Remove this comment to see the full error message
-  canEdit,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'sensitive' does not exist on type 'Objec... Remove this comment to see the full error message
-  sensitive,
-}: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Object) => {
-  const [isShown, setIsShown] = useState(false);
-
-  const handleEditClick = (): void => {
-    onEdit('key', objKey);
-    onEdit('originalKey', objKey);
-    onEdit('value', typeof value === 'object' ? JSON.stringify(value) : value.toString());
-  };
-
-  const handleDeleteClick = (): void => {
-    onDelete(objKey);
-  };
-
-  const renderValue = () => {
-    if (typeof value === 'object' || !sensitive || isShown) {
-      return JSON.stringify(value);
-    }
-
-    return <StyledSensitive onClick={() => setIsShown(!isShown)} />;
-  };
-
-  return (
-    <div className="conn-options-item" style={{ whiteSpace: 'break-spaces' }}>
-      "{objKey}": {renderValue()}{' '}
-      {canEdit && (
-        <div className="pull-right">
-          <ReqoreControlGroup stack size="small">
-            <ReqoreButton icon="EditLine" onClick={handleEditClick} />
-            <ReqoreButton icon="DeleteBinLine" intent="danger" onClick={handleDeleteClick} />
-          </ReqoreControlGroup>
-        </div>
-      )}
-    </div>
-  );
-};
 
 export const ConnectionOptionValue = ({ sensitive, DefaultComponent, value }: any) => {
   const [show, setShow] = useState(!sensitive);
@@ -105,7 +57,7 @@ export const ConnectionOptionValue = ({ sensitive, DefaultComponent, value }: an
   );
 };
 
-export default class ConnectionOptions extends Component {
+class ConnectionOptions extends Component {
   props: Props = this.props;
 
   state: {
@@ -218,7 +170,17 @@ export default class ConnectionOptions extends Component {
             headerSize={3}
             keyIcon="Settings4Line"
             keyAlign="right"
+            keyTooltip={(key) => ({
+              content: (
+                <ReactMarkdown>
+                  {this.state.optionsData[this.props.urlProtocol][key]?.desc}
+                </ReactMarkdown>
+              ),
+              delay: 300,
+              maxWidth: '300px',
+            })}
             valueIcon="PriceTagLine"
+            valueTooltip={(value) => JSON.stringify(value)}
             valueRenderer={(data, DefaultComponent) => (
               <ConnectionOptionValue
                 {...data}
@@ -226,26 +188,48 @@ export default class ConnectionOptions extends Component {
                 DefaultComponent={DefaultComponent}
               />
             )}
-            rowActions={(option, value) => [
-              {
-                icon: 'EditLine',
-                onClick: () => {
-                  this.changeData('key', option);
-                  this.changeData('originalKey', option);
-                  this.changeData(
-                    'value',
-                    typeof value === 'object' ? JSON.stringify(value) : value.toString()
-                  );
+            rowActions={{
+              width: 120,
+              actions: (option, value) => [
+                {
+                  icon: 'InformationLine',
+                  tooltip: {
+                    title: option,
+                    handler: 'click',
+                    placement: 'left',
+
+                    content: (
+                      <>
+                        <ReqoreP>{JSON.stringify(value)}</ReqoreP>
+                        <ReqoreMessage margin="top" intent="info" opaque={false}>
+                          <ReactMarkdown>
+                            {this.state.optionsData[this.props.urlProtocol][option]?.desc}
+                          </ReactMarkdown>
+                        </ReqoreMessage>
+                      </>
+                    ),
+                  },
                 },
-              },
-              {
-                icon: 'DeleteBinLine',
-                intent: 'danger',
-                onClick: () => {
-                  this.handleDelete(option);
+                {
+                  icon: 'EditLine',
+                  onClick: () => {
+                    this.changeData('key', option);
+                    this.changeData('originalKey', option);
+                    this.changeData(
+                      'value',
+                      typeof value === 'object' ? JSON.stringify(value) : value.toString()
+                    );
+                  },
                 },
-              },
-            ]}
+                {
+                  icon: 'DeleteBinLine',
+                  intent: 'danger',
+                  onClick: () => {
+                    this.handleDelete(option);
+                  },
+                },
+              ],
+            }}
           />
         ) : (
           <ReqoreMessage intent="warning" margin="top">
@@ -304,3 +288,5 @@ export default class ConnectionOptions extends Component {
     );
   }
 }
+
+export default ConnectionOptions;
