@@ -213,6 +213,7 @@ class AppInfo extends React.Component {
       return (
         <Router {...routerProps}>
           <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
+          <Route path="/grant" component={GrantView} />
           <Route path="*" onEnter={this.requireAuthenticated} />
         </Router>
       );
