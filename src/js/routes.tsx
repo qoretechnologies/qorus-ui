@@ -71,6 +71,11 @@ const ErrorView = Loadable({
   loading: Loader,
 });
 
+const GrantView = Loadable({
+  loader: () => import(/* webpackChunkName: "error" */ './grant'),
+  loading: Loader,
+});
+
 const Order = Loadable({
   loader: () => import(/* webpackChunkName: "order" */ './views/order'),
   loading: Loader,
@@ -286,6 +291,7 @@ class AppInfo extends React.Component {
           ) : null}
           <Route path="/logout" onEnter={this.logout} />
           <Route path="/error" component={ErrorView} />
+          <Route path="/grant" component={GrantView} />
           <Redirect from="*" to="/" />
         </Router>
       );
