@@ -16,7 +16,7 @@ const RegisterCodeView = ({ tokenQuery }) => {
 
     console.log(token);
 
-    document.cookie = `Qorus-Auth-Context=${token}; path=/`;
+    document.cookie = `Qorus-Auth-Context=${token}; path=/; secure; samesite=none;`;
     window.location.href = `${API_URL}/code/?token=${token}`;
   });
 
