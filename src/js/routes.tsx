@@ -14,6 +14,7 @@ import actions from './store/api/actions';
 import * as events from './store/apievents/actions';
 import Root from './views/root';
 //import Services from './views/services';
+import RegisterCodeView from './views/code/register';
 import System from './views/system';
 
 const Login = Loadable({
@@ -53,6 +54,11 @@ const User = Loadable({
 
 const Extensions = Loadable({
   loader: () => import(/* webpackChunkName: "extensions" */ './views/extensions'),
+  loading: Loader,
+});
+
+const Code = Loadable({
+  loader: () => import(/* webpackChunkName: "code" */ './views/code'),
   loading: Loader,
 });
 
@@ -214,6 +220,7 @@ class AppInfo extends React.Component {
         <Router {...routerProps}>
           <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
           <Route path="/grant" component={GrantView} />
+          <Route path="/registerDevTools" component={RegisterCodeView} />
           <Route path="*" onEnter={this.requireAuthenticated} />
         </Router>
       );
@@ -276,6 +283,8 @@ class AppInfo extends React.Component {
             <Route path="mappers/:id" component={Mapper} />
             <Route path="library" component={Library} />
             <Route path="extensions" component={Extensions} />
+            <Route path="devtools" component={Code} />
+            <Route path="/registerDevTools" component={RegisterCodeView} />
             <Route path="extension/:name" component={ExtensionDetail} />
             <Route path="groups" component={Groups} />
             <Route path="jobs" component={Jobs} />
