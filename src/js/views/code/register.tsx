@@ -12,12 +12,17 @@ import queryControl from '../../hocomponents/queryControl';
 
 const RegisterCodeView = ({ tokenQuery }) => {
   useMount(() => {
+    const URL = API_URL;
     const token = localStorage.getItem('token') || tokenQuery;
 
     console.log(token);
 
     document.cookie = `Qorus-Auth-Context=${token}; path=/; secure; samesite=none;`;
-    window.location.href = `${API_URL}/code/?token=${token}`;
+
+    // Log the cookies
+    console.log(document.cookie);
+
+    window.location.href = `${URL}/code/?token=${token}`;
   });
 
   return (

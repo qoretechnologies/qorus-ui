@@ -253,6 +253,8 @@ class AppInfo extends React.Component {
             {oauth2_enabled && process.env.NODE_ENV === 'development' ? (
               <Route path="/oauth2/code" component={AuthenticateCodeView} />
             ) : null}
+            <Route path="devtools" component={Code} />
+            <Route path="registerDevTools" component={RegisterCodeView} />
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
               {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
@@ -283,8 +285,6 @@ class AppInfo extends React.Component {
             <Route path="mappers/:id" component={Mapper} />
             <Route path="library" component={Library} />
             <Route path="extensions" component={Extensions} />
-            <Route path="devtools" component={Code} />
-            <Route path="/registerDevTools" component={RegisterCodeView} />
             <Route path="extension/:name" component={ExtensionDetail} />
             <Route path="groups" component={Groups} />
             <Route path="jobs" component={Jobs} />

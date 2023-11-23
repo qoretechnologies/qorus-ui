@@ -17,6 +17,16 @@ export const defaultMenu: { data: IQorusSidebarItems } = {
           id: 'dashboard',
           as: Link,
         },
+        {
+          name: 'IDE',
+          icon: 'CodeBoxLine',
+          props: {
+            to: '/devtools',
+          },
+          activePaths: ['/devtools'],
+          id: 'devtools',
+          as: Link,
+        },
       ],
     },
     Interfaces: {
