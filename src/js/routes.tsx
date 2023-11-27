@@ -229,6 +229,7 @@ class AppInfo extends React.Component {
     if (systemSync) {
       return (
         <Router {...this.props.routerProps}>
+          <Route path="registerDevTools" component={RegisterCodeView} />
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
             <IndexRedirect to="/dashboard" />
             {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
@@ -254,7 +255,6 @@ class AppInfo extends React.Component {
               <Route path="/oauth2/code" component={AuthenticateCodeView} />
             ) : null}
             <Route path="devtools" component={Code} />
-            <Route path="registerDevTools" component={RegisterCodeView} />
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
               {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
