@@ -15,12 +15,11 @@ const RegisterCodeView = ({ tokenQuery }) => {
     const URL = API_URL;
     const token = localStorage.getItem('token') || tokenQuery;
 
-    console.log(token);
+    // Remove the Qorus Auth Context cookie
+    document.cookie = 'Qorus-Auth-Context=; path=/; secure; samesite=none;';
 
+    // Set the Qorus Auth Context cookie
     document.cookie = `Qorus-Auth-Context=${token}; path=/; secure; samesite=none;`;
-
-    // Log the cookies
-    console.log(document.cookie);
 
     window.location.href = `${URL}/code/?token=${token}`;
   });

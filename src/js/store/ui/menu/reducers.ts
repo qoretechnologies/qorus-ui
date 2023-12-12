@@ -3,7 +3,7 @@ import { IQorusSidebarItems } from '@qoretechnologies/reqore/dist/components/Sid
 import { Link } from 'react-router';
 import { handleActions } from 'redux-actions';
 
-export const defaultMenu: { data: IQorusSidebarItems } = {
+const defaultMenu: { data: IQorusSidebarItems } = {
   data: {
     Dashboard: {
       items: [
@@ -15,16 +15,6 @@ export const defaultMenu: { data: IQorusSidebarItems } = {
           },
           activePaths: ['/dashboard'],
           id: 'dashboard',
-          as: Link,
-        },
-        {
-          name: 'IDE',
-          icon: 'CodeBoxLine',
-          props: {
-            to: '/devtools',
-          },
-          activePaths: ['/devtools'],
-          id: 'devtools',
           as: Link,
         },
       ],
@@ -320,5 +310,24 @@ export const defaultMenu: { data: IQorusSidebarItems } = {
     },
   },
 };
+
+if (process.env.REACT_APP_WEB_IDE) {
+  defaultMenu.data.IDE = {
+    items: [
+      {
+        name: 'IDEagsasgasg',
+        icon: 'CodeBoxLine',
+        props: {
+          to: '/devtools',
+        },
+        activePaths: ['/devtools'],
+        id: 'devtools',
+        as: Link,
+      },
+    ],
+  };
+}
+
+export { defaultMenu };
 
 export default handleActions({}, defaultMenu);
