@@ -14,6 +14,7 @@ import actions from './store/api/actions';
 import * as events from './store/apievents/actions';
 import Root from './views/root';
 //import Services from './views/services';
+import RegisterCodeView from './views/code/register';
 import System from './views/system';
 
 const Login = Loadable({
@@ -53,6 +54,11 @@ const User = Loadable({
 
 const Extensions = Loadable({
   loader: () => import(/* webpackChunkName: "extensions" */ './views/extensions'),
+  loading: Loader,
+});
+
+const Code = Loadable({
+  loader: () => import(/* webpackChunkName: "code" */ './views/code'),
   loading: Loader,
 });
 
@@ -214,6 +220,7 @@ class AppInfo extends React.Component {
         <Router {...routerProps}>
           <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
           <Route path="/grant" component={GrantView} />
+          <Route path="/registerDevTools" component={RegisterCodeView} />
           <Route path="*" onEnter={this.requireAuthenticated} />
         </Router>
       );
@@ -222,6 +229,7 @@ class AppInfo extends React.Component {
     if (systemSync) {
       return (
         <Router {...this.props.routerProps}>
+          <Route path="registerDevTools" component={RegisterCodeView} />
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
             <IndexRedirect to="/dashboard" />
             {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
@@ -246,6 +254,7 @@ class AppInfo extends React.Component {
             {oauth2_enabled && process.env.NODE_ENV === 'development' ? (
               <Route path="/oauth2/code" component={AuthenticateCodeView} />
             ) : null}
+            <Route path="devtools" component={Code} />
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
               {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
