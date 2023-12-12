@@ -19,6 +19,24 @@ const defaultMenu: { data: IQorusSidebarItems } = {
         },
       ],
     },
+    ...(process.env.REACT_APP_WEB_IDE
+      ? {
+          IDE: {
+            items: [
+              {
+                name: 'Qorus IDE',
+                icon: 'CodeBoxLine',
+                props: {
+                  to: '/devtools',
+                },
+                activePaths: ['/devtools'],
+                id: 'devtools',
+                as: Link,
+              },
+            ],
+          },
+        }
+      : {}),
     Interfaces: {
       items: [
         {
@@ -310,23 +328,6 @@ const defaultMenu: { data: IQorusSidebarItems } = {
     },
   },
 };
-
-if (process.env.REACT_APP_WEB_IDE) {
-  defaultMenu.data.IDE = {
-    items: [
-      {
-        name: 'IDEagsasgasg',
-        icon: 'CodeBoxLine',
-        props: {
-          to: '/devtools',
-        },
-        activePaths: ['/devtools'],
-        id: 'devtools',
-        as: Link,
-      },
-    ],
-  };
-}
 
 export { defaultMenu };
 
