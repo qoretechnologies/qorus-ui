@@ -220,6 +220,7 @@ class AppInfo extends React.Component {
         <Router {...routerProps}>
           <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
           <Route path="/grant" component={GrantView} />
+          <Route path="/error" component={ErrorView} />
           <Route path="/registerDevTools" component={RegisterCodeView} />
           <Route path="*" onEnter={this.requireAuthenticated} />
         </Router>
