@@ -6,7 +6,7 @@
 
 # Qorus Integration Engine UI
 
-> Qorus Integration Engine UI is a web application which provides a intuitive dashboard to manage Qorus server api's and services
+> Qorus Integration Engine UI is a web application which provides an intuitive UI to manage Qorus server APIs and services
 
 ## Contributing
 
