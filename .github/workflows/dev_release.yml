@@ -1,4 +1,4 @@
-name: Develop UI release
+name: Develop UI deployment
 on:
   push:
     branches: [develop]
