@@ -7,13 +7,13 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import Alert from '../../components/alert';
 import ContentByType from '../../components/ContentByType';
-import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import Flex from '../../components/Flex';
-import Loader from '../../components/loader';
 import NameColumn, { NameColumnHeader } from '../../components/NameColumn';
+import Alert from '../../components/alert';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
+import Loader from '../../components/loader';
 import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../components/new_table';
 import PaneItem from '../../components/pane_item';
 import showIfPassed from '../../hocomponents/show-if-passed';
@@ -80,7 +80,7 @@ LoggerContainerProps) => (
                     onCancel={() => toggleLoggerPopover(() => false)}
                   />
                 }
-                position={Position.LEFT_TOP}
+                usePortal={false}
                 isOpen={isLoggerPopoverOpen}
               >
                 <ButtonGroup>
@@ -139,7 +139,7 @@ LoggerContainerProps) => (
                     onCancel={() => toggleAppenderPopover(() => false)}
                   />
                 }
-                position={Position.LEFT_TOP}
+                usePortal={false}
                 isOpen={isAppenderPopoverOpen}
               >
                 <Button

@@ -359,6 +359,7 @@ class Dropdown extends Component {
           isOpen={this.state.showDropdown}
           enforceFocus={false}
           autoFocus={false}
+          usePortal={false}
           onInteraction={(inter) => {
             if (!inter) {
               if (onSubmit && submitOnBlur) {
@@ -382,4 +383,5 @@ export default compose(
   injectIntl,
   pure(['children', 'show', 'selected', 'disabled', 'className'])
 )(Dropdown);
-export { Item, CustomItem, Control, Divider };
+export { Control, CustomItem, Divider, Item };
+

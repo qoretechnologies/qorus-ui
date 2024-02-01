@@ -6,12 +6,10 @@ import compose from 'recompose/compose';
 import { createSelector } from 'reselect';
 import Alert from '../../../../components/alert';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
-import { Control as Button, Controls } from '../../../../components/controls';
-import Dropdown, {
-  Control as DropControl,
-  Item as DropItem,
+import { ReqoreModal, ReqoreMultiSelect } from '@qoretechnologies/reqore';
+import {
+  Item as DropItem
 } from '../../../../components/dropdown';
-import Modal from '../../../../components/modal';
 import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
 
@@ -126,8 +124,6 @@ export default class AddUserModal extends Component {
 
   // @ts-ignore ts-migrate(2304) FIXME: Cannot find name 'EventHandler'.
   handleFormSubmit: Function = (event: EventHandler): void => {
-    event.preventDefault();
-
     // @ts-ignore ts-migrate(2339) FIXME: Property 'passOnly' does not exist on type '{ role... Remove this comment to see the full error message
     if (this.props.model || this.props.passOnly) {
       this.handleSaveClick();
@@ -151,12 +147,13 @@ export default class AddUserModal extends Component {
 
     return (
       // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
-      <form className="form-horizontal" onSubmit={this.handleFormSubmit}>
-        <Modal hasFooter>
-          <Modal.Header titleId="addUserModal" onClose={onClose}>
-            {this.props.title}{' '}
-          </Modal.Header>
-          <Modal.Body>
+        <ReqoreModal label={this.props.title} isOpen onClose={onClose} bottomActions={[{
+          label: 'Submit',
+          onClick: this.handleFormSubmit,
+          intent: 'success',
+          position: 'right',
+          icon: 'CheckLine',
+        }]} width='500px'>
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
             {rbacExternal && (
               <Alert bsStyle="warning">
@@ -228,29 +225,26 @@ export default class AddUserModal extends Component {
                   Roles{' '}
                 </label>
                 <div className="col-sm-6">
-                  <Dropdown
-                    id="roles"
-                    multi
-                    // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-                    onSelect={this.handleRoleSelect}
-                    selected={model ? this.state.roles : null}
-                  >
-                    {/* @ts-ignore ts-migrate(2739) FIXME: Type '{ children: string; }' is missing the follow... Remove this comment to see the full error message */}
-                    <DropControl> Select roles </DropControl>
-                    {this.renderRoles()}
-                  </Dropdown>
+                  <ReqoreMultiSelect
+                    onValueChange={(roles) => {
+                      console.log(roles);
+                      this.setState({
+                      roles,
+                    })
+                    }}
+                    canRemoveItems
+                    value={this.state.roles}
+                    items={this.props.rolesModel?.map(({ role }) => ({
+                      label: role,
+                      value: role,
+                    }))}
+                    flat={false}
+                  />
                 </div>
               </div>
             )}
-          </Modal.Body>
-          <Modal.Footer>
-            <Controls noControls grouped>
-              <Button label="Cancel" big btnStyle="default" action={onClose} type="button" />
-              <Button label="Save" big btnStyle="success" type="submit" />
-            </Controls>
-          </Modal.Footer>
-        </Modal>
-      </form>
+
+        </ReqoreModal>
     );
   }
 }
