@@ -1,13 +1,13 @@
 // @flow
 import { Intent } from '@blueprintjs/core';
-import React from 'react';
+import { ReqoreControlGroup } from '@qoretechnologies/reqore';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
-import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import { WebIDEButton } from '../../components/WebIDEButton';
+import { Control as Button } from '../../components/controls';
 import withModal from '../../hocomponents/modal';
 import withDispatch from '../../hocomponents/withDispatch';
 import actions from '../../store/api/actions';
@@ -75,8 +75,8 @@ Props) =>
       />
     </div>
   ) : (
-    <React.Fragment>
-      <ButtonGroup>
+    <ReqoreControlGroup>
+      <ReqoreControlGroup stack>
         <Button
           title={intl.formatMessage({
             id: enabled ? 'button.disable' : 'button.enable',
@@ -113,8 +113,8 @@ Props) =>
             big={big}
           />
         )}
-      </ButtonGroup>
-      <ButtonGroup>
+      </ReqoreControlGroup>
+      <ReqoreControlGroup stack>
         <Button
           title={intl.formatMessage({ id: 'button.run' })}
           icon="play"
@@ -135,9 +135,9 @@ Props) =>
           onClick={handleScheduleClick}
           big={big}
         />
-      </ButtonGroup>
+      </ReqoreControlGroup>
       <WebIDEButton id={id} type="job" big={big} />
-    </React.Fragment>
+    </ReqoreControlGroup>
   );
 
 export default compose(
