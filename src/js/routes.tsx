@@ -14,6 +14,7 @@ import actions from './store/api/actions';
 import * as events from './store/apievents/actions';
 import Root from './views/root';
 //import Services from './views/services';
+import RegisterCodeView from './views/code/register';
 import System from './views/system';
 
 const Login = Loadable({
@@ -56,6 +57,11 @@ const Extensions = Loadable({
   loading: Loader,
 });
 
+const Code = Loadable({
+  loader: () => import(/* webpackChunkName: "code" */ './views/code'),
+  loading: Loader,
+});
+
 const ExtensionDetail = Loadable({
   loader: () => import(/* webpackChunkName: "extension-detail" */ './views/extensions/detail'),
   loading: Loader,
@@ -68,6 +74,11 @@ const Job = Loadable({
 
 const ErrorView = Loadable({
   loader: () => import(/* webpackChunkName: "error" */ './error'),
+  loading: Loader,
+});
+
+const GrantView = Loadable({
+  loader: () => import(/* webpackChunkName: "error" */ './grant'),
   loading: Loader,
 });
 
@@ -208,6 +219,9 @@ class AppInfo extends React.Component {
       return (
         <Router {...routerProps}>
           <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
+          <Route path="/grant" component={GrantView} />
+          <Route path="/error" component={ErrorView} />
+          <Route path="/registerDevTools" component={RegisterCodeView} />
           <Route path="*" onEnter={this.requireAuthenticated} />
         </Router>
       );
@@ -216,6 +230,7 @@ class AppInfo extends React.Component {
     if (systemSync) {
       return (
         <Router {...this.props.routerProps}>
+          <Route path="registerDevTools" component={RegisterCodeView} />
           <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
             <IndexRedirect to="/dashboard" />
             {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
@@ -240,6 +255,7 @@ class AppInfo extends React.Component {
             {oauth2_enabled && process.env.NODE_ENV === 'development' ? (
               <Route path="/oauth2/code" component={AuthenticateCodeView} />
             ) : null}
+            <Route path="devtools" component={Code} />
             <Route path="/system" component={System}>
               <IndexRedirect to="alerts" />
               {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
@@ -286,6 +302,7 @@ class AppInfo extends React.Component {
           ) : null}
           <Route path="/logout" onEnter={this.logout} />
           <Route path="/error" component={ErrorView} />
+          <Route path="/grant" component={GrantView} />
           <Redirect from="*" to="/" />
         </Router>
       );

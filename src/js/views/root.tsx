@@ -408,7 +408,13 @@ export default class Root extends Component {
                     useNativeTitle
                   />
                 )}
-                <Flex className="section" scrollX>
+                <Flex
+                  className="section"
+                  scrollX
+                  style={{
+                    padding: this.props.location.pathname.includes('devtools') ? 0 : undefined,
+                  }}
+                >
                   <Flex style={{ minWidth: 1024 }}>{this.props.children}</Flex>
                 </Flex>
               </div>

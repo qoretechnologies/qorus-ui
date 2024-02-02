@@ -1,5 +1,6 @@
 // @flow
 import { Icon, Popover, Position } from '@blueprintjs/core';
+import { useReqore } from '@qoretechnologies/reqore';
 import size from 'lodash/size';
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -8,11 +9,11 @@ import compose from 'recompose/compose';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import Alert from '../../components/alert';
 import ContentByType from '../../components/ContentByType';
-import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import DataOrEmptyTable from '../../components/DataOrEmptyTable';
 import NameColumn, { NameColumnHeader } from '../../components/NameColumn';
+import Alert from '../../components/alert';
+import { Control as Button, Controls as ButtonGroup } from '../../components/controls';
 import { FixedRow, Table, Tbody, Td, Th, Thead, Tr } from '../../components/new_table';
 import PaneItem from '../../components/pane_item';
 import withDispatch from '../../hocomponents/withDispatch';
@@ -68,311 +69,278 @@ const DefaultLoggerContainer: Function = ({
   // @ts-ignore ts-migrate(2339) FIXME: Property 'intl' does not exist on type 'LoggerCont... Remove this comment to see the full error message
   intl,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-LoggerContainerProps) => (
-  <React.Fragment>
-    {logger === 'empty' ? (
-      <PaneItem
-        title={
-          <>
-            <Icon icon="info-sign" /> {name || intl.formatMessage({ id: 'component.logger' })}
-          </>
-        }
-        label={
-          <React.Fragment>
-            <Popover
-              content={
-                <NewLoggerPopover
+LoggerContainerProps) => {
+  const {getAndIncreaseZIndex} = useReqore();
+    return (
+      <React.Fragment>
+        {logger === 'empty' ? (
+          <PaneItem
+            title={<>
+              <Icon icon="info-sign" /> {name || intl.formatMessage({ id: 'component.logger' })}
+            </>}
+            label={<React.Fragment>
+              <Popover
+                content={<NewLoggerPopover
                   resource={resource}
                   url={url}
-                  onCancel={() => toggleDefaultLoggerPopover(() => false)}
-                />
-              }
-              position={Position.LEFT_TOP}
-              isOpen={isDefaultLoggerPopoverOpen}
-            >
-              <ButtonGroup>
-                <Button
-                  text={intl.formatMessage({ id: 'button.add-new-default-logger' })}
-                  icon="add"
-                  stopPropagation
-                  onClick={() => {
-                    toggleLoggerPopover(() => false);
-                    toggleDefaultLoggerPopover(() => true);
-                  }}
-                />
-              </ButtonGroup>
-            </Popover>
-            {!defaultOnly && (
-              <Popover
-                content={
-                  <NewLoggerPopover
-                    resource={resource}
-                    url={url}
-                    id={id}
-                    onCancel={() => toggleLoggerPopover(() => false)}
-                  />
-                }
-                position={Position.LEFT_TOP}
-                isOpen={isLoggerPopoverOpen}
+                  onCancel={() => toggleDefaultLoggerPopover(() => false)} />}
+                position={Position.BOTTOM}
+                isOpen={isDefaultLoggerPopoverOpen}
               >
                 <ButtonGroup>
                   <Button
-                    text={intl.formatMessage({ id: 'button.add-new' })}
+                    text={intl.formatMessage({ id: 'button.add-new-default-logger' })}
                     icon="add"
                     stopPropagation
                     onClick={() => {
-                      toggleLoggerPopover(() => true);
-                      toggleDefaultLoggerPopover(() => false);
-                    }}
-                  />
+                      toggleLoggerPopover(() => false);
+                      toggleDefaultLoggerPopover(() => true);
+                    } } />
                 </ButtonGroup>
               </Popover>
-            )}
-          </React.Fragment>
-        }
-      >
-        <Alert bsStyle="danger">
-          {intl.formatMessage(
-            { id: 'component.no-logger-defined-for-res' },
-            { resource: resource }
-          )}{' '}
-          {!defaultOnly && intl.formatMessage({ id: 'component.no-logger-defined-for-res-2' })}.
-        </Alert>
-      </PaneItem>
-    ) : (
-      <React.Fragment>
-        <PaneItem
-          title={
-            <>
-              <Icon icon="info-sign" /> {name || intl.formatMessage({ id: 'component.logger' })}
-            </>
-          }
-          label={
-            <React.Fragment>
               {!defaultOnly && (
-                <React.Fragment>
-                  <Popover
-                    content={
-                      <NewLoggerPopover
+                <Popover
+                  content={<NewLoggerPopover
+                    resource={resource}
+                    url={url}
+                    id={id}
+                    onCancel={() => toggleLoggerPopover(() => false)} />}
+                  isOpen={isLoggerPopoverOpen}
+                  position={Position.BOTTOM}
+                  usePortal={false}
+                >
+                  <ButtonGroup>
+                    <Button
+                      text={intl.formatMessage({ id: 'button.add-new' })}
+                      icon="add"
+                      stopPropagation
+                      onClick={() => {
+                        toggleLoggerPopover(() => true);
+                        toggleDefaultLoggerPopover(() => false);
+                      } } />
+                  </ButtonGroup>
+                </Popover>
+              )}
+            </React.Fragment>}
+          >
+            <Alert bsStyle="danger">
+              {intl.formatMessage(
+                { id: 'component.no-logger-defined-for-res' },
+                { resource: resource }
+              )}{' '}
+              {!defaultOnly && intl.formatMessage({ id: 'component.no-logger-defined-for-res-2' })}.
+            </Alert>
+          </PaneItem>
+        ) : (
+          <React.Fragment>
+            <PaneItem
+              title={<>
+                <Icon icon="info-sign" /> {name || intl.formatMessage({ id: 'component.logger' })}
+              </>}
+              label={<React.Fragment>
+                {!defaultOnly && (
+                  <React.Fragment>
+                    <Popover
+                      content={<NewLoggerPopover
                         resource={resource}
                         url={url}
                         id={id}
-                        onCancel={() => toggleLoggerPopover(() => false)}
-                      />
-                    }
-                    position={Position.LEFT_TOP}
-                    isOpen={isLoggerPopoverOpen}
-                  >
+                        onCancel={() => toggleLoggerPopover(() => false)} />}
+                      isOpen={isLoggerPopoverOpen}
+                      position={Position.BOTTOM}
+                      usePortal={false}
+                    >
+                      <ButtonGroup>
+                        <Button
+                          text={intl.formatMessage({ id: 'button.add-new' })}
+                          icon="add"
+                          stopPropagation
+                          onClick={() => {
+                            toggleLoggerPopover(() => true);
+                            toggleLoggerEditPopover(() => false);
+                          } } />
+                      </ButtonGroup>
+                    </Popover>
                     <ButtonGroup>
                       <Button
-                        text={intl.formatMessage({ id: 'button.add-new' })}
-                        icon="add"
+                        text={intl.formatMessage({ id: 'button.clone-logger' })}
+                        icon="duplicate"
                         stopPropagation
-                        onClick={() => {
-                          toggleLoggerPopover(() => true);
-                          toggleLoggerEditPopover(() => false);
-                        }}
-                      />
+                        onClick={handleLoggerDuplicateClick} />
                     </ButtonGroup>
-                  </Popover>
-                  <ButtonGroup>
-                    <Button
-                      text={intl.formatMessage({ id: 'button.clone-logger' })}
-                      icon="duplicate"
-                      stopPropagation
-                      onClick={handleLoggerDuplicateClick}
-                    />
-                  </ButtonGroup>
-                </React.Fragment>
-              )}
-              <Popover
-                content={
-                  <NewLoggerPopover
+                  </React.Fragment>
+                )}
+                <Popover
+                  content={<NewLoggerPopover
                     resource={resource}
                     url={url}
                     id={id}
                     data={logger}
-                    onCancel={() => toggleLoggerEditPopover(() => false)}
-                  />
-                }
-                position={Position.LEFT_TOP}
-                isOpen={isLoggerEditPopoverOpen}
-              >
+                    onCancel={() => toggleLoggerEditPopover(() => false)} />}
+                  isOpen={isLoggerEditPopoverOpen}
+                  usePortal={false}
+                >
+                  <ButtonGroup>
+                    <Button
+                      text={intl.formatMessage({ id: 'button.edit' })}
+                      icon="edit"
+                      stopPropagation
+                      onClick={() => {
+                        toggleLoggerEditPopover(() => true);
+                        toggleLoggerPopover(() => false);
+                      } } />
+                  </ButtonGroup>
+                </Popover>
                 <ButtonGroup>
                   <Button
-                    text={intl.formatMessage({ id: 'button.edit' })}
-                    icon="edit"
-                    stopPropagation
-                    onClick={() => {
-                      toggleLoggerEditPopover(() => true);
-                      toggleLoggerPopover(() => false);
-                    }}
-                  />
+                    text={intl.formatMessage({ id: 'button.delete' })}
+                    btnStyle="danger"
+                    icon="remove"
+                    onClick={handleLoggerDeleteClick} />
                 </ButtonGroup>
-              </Popover>
-              <ButtonGroup>
-                <Button
-                  text={intl.formatMessage({ id: 'button.delete' })}
-                  btnStyle="danger"
-                  icon="remove"
-                  onClick={handleLoggerDeleteClick}
-                />
-              </ButtonGroup>
-            </React.Fragment>
-          }
-        >
-          {!defaultOnly && (
-            <Alert bsStyle="warning">
-              <FormattedMessage id="component.interface-using-def-logger" />
-            </Alert>
-          )}
-          <Table fixed striped>
-            <Thead>
-              <FixedRow>
-                <NameColumnHeader />
-                <Th icon="info-sign">
-                  <FormattedMessage id="logger.level" />
-                </Th>
-                <Th icon="info-sign">
-                  <FormattedMessage id="logger.additivity" />
-                </Th>
-              </FixedRow>
-            </Thead>
-            <Tbody>
-              <Tr first>
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
-                <NameColumn name={logger.name} />
-                {/* @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */}
-                <Td>{Object.keys(logger.level)[0]}</Td>
-                <Td>
-                  {/* @ts-ignore ts-migrate(2339) FIXME: Property 'additivity' does not exist on type 'Obje... Remove this comment to see the full error message */}
-                  <ContentByType content={logger.additivity} />
-                </Td>
-              </Tr>
-            </Tbody>
-          </Table>
-        </PaneItem>
-        <br />
-        <PaneItem
-          title={
-            <>
-              <Icon icon="info-sign" /> <FormattedMessage id="component.appenders" />
-            </>
-          }
-          label={
-            <Popover
-              content={
-                <NewAppenderPopover
+              </React.Fragment>}
+            >
+              {!defaultOnly && (
+                <Alert bsStyle="warning">
+                  <FormattedMessage id="component.interface-using-def-logger" />
+                </Alert>
+              )}
+              <Table fixed striped>
+                <Thead>
+                  <FixedRow>
+                    <NameColumnHeader />
+                    <Th icon="info-sign">
+                      <FormattedMessage id="logger.level" />
+                    </Th>
+                    <Th icon="info-sign">
+                      <FormattedMessage id="logger.additivity" />
+                    </Th>
+                  </FixedRow>
+                </Thead>
+                <Tbody>
+                  <Tr first>
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                    <NameColumn name={logger.name} />
+                    {/* @ts-ignore ts-migrate(2339) FIXME: Property 'level' does not exist on type 'Object'. */}
+                    <Td>{Object.keys(logger.level)[0]}</Td>
+                    <Td>
+                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'additivity' does not exist on type 'Obje... Remove this comment to see the full error message */}
+                      <ContentByType content={logger.additivity} />
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </PaneItem>
+            <br />
+            <PaneItem
+              title={<>
+                <Icon icon="info-sign" /> <FormattedMessage id="component.appenders" />
+              </>}
+              label={<Popover
+                content={<NewAppenderPopover
                   resource={resource}
                   url={url}
                   id={id}
-                  onCancel={() => toggleAppenderPopover(() => false)}
-                />
-              }
-              position={Position.LEFT_TOP}
-              isOpen={isAppenderPopoverOpen}
+                  onCancel={() => toggleAppenderPopover(() => false)} />}
+                position={Position.LEFT_TOP}
+                usePortal={false}
+                isOpen={isAppenderPopoverOpen}
+              >
+                <Button
+                  text={intl.formatMessage({ id: 'button.add-new' })}
+                  icon="add"
+                  stopPropagation
+                  onClick={() => toggleAppenderPopover(() => true)} />
+              </Popover>}
             >
-              <Button
-                text={intl.formatMessage({ id: 'button.add-new' })}
-                icon="add"
-                stopPropagation
-                onClick={() => toggleAppenderPopover(() => true)}
-              />
-            </Popover>
-          }
-        >
-          <Table fixed condensed striped>
-            <Thead>
-              <FixedRow>
-                <NameColumnHeader />
-                <Th className="text" icon="info-sign">
-                  <FormattedMessage id="table.type" />
-                </Th>
-                <Th className="text" icon="info-sign">
-                  <FormattedMessage id="logger.filename" />
-                </Th>
-                <Th className="text" icon="info-sign">
-                  <FormattedMessage id="logger.encoding" />
-                </Th>
-                <Th className="text" icon="info-sign">
-                  <FormattedMessage id="logger.layout-pattern" />
-                </Th>
-                <Th icon="refresh" title={intl.formatMessage({ id: 'logger.rotation-count' })} />
-                <Th icon="wrench" title={intl.formatMessage({ id: 'table.actions' })} />
-              </FixedRow>
-            </Thead>
-            <DataOrEmptyTable condition={size(appenders) === 0} cols={7} small>
-              {(props: any) => (
-                <Tbody {...props}>
-                  {appenders.map((appender: any, index: number): any => (
-                    // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                    <Tr first={index === 0} key={appender.id}>
-                      {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
-                      <NameColumn name={appender.name} />
-                      <Td className="text">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
-                        <ContentByType content={appender.type} />
-                      </Td>
-                      <Td className="text">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'Object... Remove this comment to see the full error message */}
-                        <ContentByType content={appender.filename} />
-                      </Td>
-                      <Td className="text">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'Object... Remove this comment to see the full error message */}
-                        <ContentByType content={appender.encoding} />
-                      </Td>
-                      <Td className="text">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'O... Remove this comment to see the full error message */}
-                        <ContentByType content={appender.layoutPattern} />
-                      </Td>
-                      <Td className="narrow">
-                        {/* @ts-ignore ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'O... Remove this comment to see the full error message */}
-                        <ContentByType content={appender.rotationCount} />
-                      </Td>
-                      <Td className="narrow">
-                        <ButtonGroup>
-                          <Popover
-                            content={
-                              <NewAppenderPopover
-                                resource={resource}
-                                url={url}
-                                id={id}
-                                data={appender}
-                                onCancel={() => toggleEditAppenderPopover(() => false)}
-                              />
-                            }
-                            position={Position.LEFT_TOP}
-                            isOpen={isEditAppenderPopoverOpen}
-                          >
-                            <Button
-                              title={intl.formatMessage({ id: 'button.edit' })}
-                              icon="edit"
-                              stopPropagation
-                              onClick={() => toggleEditAppenderPopover(() => true)}
-                            />
-                          </Popover>
-                          <Button
-                            title={intl.formatMessage({ id: 'button.remove-appender' })}
-                            btnStyle="danger"
-                            icon="remove"
-                            onClick={() =>
-                              // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
-                              handleDeleteAppenderClick(appender.id)
-                            }
-                          />
-                        </ButtonGroup>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              )}
-            </DataOrEmptyTable>
-          </Table>
-        </PaneItem>
+              <Table fixed condensed striped>
+                <Thead>
+                  <FixedRow>
+                    <NameColumnHeader />
+                    <Th className="text" icon="info-sign">
+                      <FormattedMessage id="table.type" />
+                    </Th>
+                    <Th className="text" icon="info-sign">
+                      <FormattedMessage id="logger.filename" />
+                    </Th>
+                    <Th className="text" icon="info-sign">
+                      <FormattedMessage id="logger.encoding" />
+                    </Th>
+                    <Th className="text" icon="info-sign">
+                      <FormattedMessage id="logger.layout-pattern" />
+                    </Th>
+                    <Th icon="refresh" title={intl.formatMessage({ id: 'logger.rotation-count' })} />
+                    <Th icon="wrench" title={intl.formatMessage({ id: 'table.actions' })} />
+                  </FixedRow>
+                </Thead>
+                <DataOrEmptyTable condition={size(appenders) === 0} cols={7} small>
+                  {(props: any) => (
+                    <Tbody {...props}>
+                      {appenders.map((appender: any, index: number): any => (
+                        // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                        <Tr first={index === 0} key={appender.id}>
+                          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'. */}
+                          <NameColumn name={appender.name} />
+                          <Td className="text">
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'type' does not exist on type 'Object'. */}
+                            <ContentByType content={appender.type} />
+                          </Td>
+                          <Td className="text">
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'filename' does not exist on type 'Object... Remove this comment to see the full error message */}
+                            <ContentByType content={appender.filename} />
+                          </Td>
+                          <Td className="text">
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'encoding' does not exist on type 'Object... Remove this comment to see the full error message */}
+                            <ContentByType content={appender.encoding} />
+                          </Td>
+                          <Td className="text">
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'layoutPattern' does not exist on type 'O... Remove this comment to see the full error message */}
+                            <ContentByType content={appender.layoutPattern} />
+                          </Td>
+                          <Td className="narrow">
+                            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'rotationCount' does not exist on type 'O... Remove this comment to see the full error message */}
+                            <ContentByType content={appender.rotationCount} />
+                          </Td>
+                          <Td className="narrow">
+                            <ButtonGroup>
+                              <Popover
+                                content={<NewAppenderPopover
+                                  resource={resource}
+                                  url={url}
+                                  id={id}
+                                  data={appender}
+                                  onCancel={() => toggleEditAppenderPopover(() => false)} />}
+                                position={Position.LEFT_TOP}
+                                isOpen={isEditAppenderPopoverOpen}
+                                usePortal={false}
+                              >
+                                <Button
+                                  title={intl.formatMessage({ id: 'button.edit' })}
+                                  icon="edit"
+                                  stopPropagation
+                                  onClick={() => toggleEditAppenderPopover(() => true)} />
+                              </Popover>
+                              <Button
+                                title={intl.formatMessage({ id: 'button.remove-appender' })}
+                                btnStyle="danger"
+                                icon="remove"
+                                onClick={() =>
+                                  // @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'.
+                                  handleDeleteAppenderClick(appender.id)} />
+                            </ButtonGroup>
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  )}
+                </DataOrEmptyTable>
+              </Table>
+            </PaneItem>
+          </React.Fragment>
+        )}
       </React.Fragment>
-    )}
-  </React.Fragment>
-);
+    );
+  };
 
 export default compose(
   connect((state, ownProps) => {

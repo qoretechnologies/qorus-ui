@@ -4,15 +4,15 @@ import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
 import { ActionColumn } from '../../components/ActionColumn';
-import Box from '../../components/box';
 import { DateColumn } from '../../components/DateColumn';
 import { IdColumn } from '../../components/IdColumn';
-import InstancesBar from '../../components/instances_bar';
 import NameColumn from '../../components/NameColumn';
-import { Td, Tr } from '../../components/new_table';
-import PaneItem from '../../components/pane_item';
 import ProcessSummary from '../../components/ProcessSummary';
 import { SelectColumn } from '../../components/SelectColumn';
+import Box from '../../components/box';
+import InstancesBar from '../../components/instances_bar';
+import { Td, Tr } from '../../components/new_table';
+import PaneItem from '../../components/pane_item';
 import JobControls from './controls';
 
 type Props = {
@@ -141,7 +141,7 @@ Props) => (
         {expiry}
       </DateColumn>
     )}
-    <Td className="medium separated-cell">
+    <Td className="huge separated-cell">
       <InstancesBar
         states={[
           { name: 'COMPLETE', label: 'complete', title: 'Complete' },
