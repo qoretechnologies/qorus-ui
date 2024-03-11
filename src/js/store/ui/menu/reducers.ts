@@ -27,10 +27,10 @@ const defaultMenu: { data: IQorusSidebarItems } = {
                 name: 'Qorus IDE',
                 icon: 'CodeBoxLine',
                 props: {
-                  to: '/devtools',
+                  to: '/ide',
                 },
-                activePaths: ['/devtools'],
-                id: 'devtools',
+                activePaths: ['/ide'],
+                id: 'ide',
                 as: Link,
               },
             ],
