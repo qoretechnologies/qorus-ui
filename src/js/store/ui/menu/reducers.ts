@@ -27,7 +27,6 @@ const defaultMenu: { data: IQorusSidebarItems } = {
                 name: 'Qorus IDE',
                 icon: 'CodeBoxLine',
                 props: {
-                  target: '_blank',
                   href: '/ide',
                 },
                 id: 'ide',
