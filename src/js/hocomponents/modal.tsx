@@ -12,16 +12,16 @@ export default (): Function => (Component) => {
     const addModal = useReqoreProperty('addModal');
     const removeModal = useReqoreProperty('removeModal');
 
-    const handleOpenModal = (Modal) => {
-      const id = addModal(Modal);
-      setModalId(id);
+    const handleOpenModal = (Modal, id) => {
+      const _id = addModal(Modal);
+      setModalId(id || _id);
     };
 
     return (
       <Component
         openModal={handleOpenModal}
-        closeModal={() => {
-          removeModal(modalId);
+        closeModal={(id) => {
+          removeModal(id || modalId);
         }}
         {...props}
       />
