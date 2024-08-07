@@ -72,11 +72,12 @@ export default (collection: string, name: string): Function =>
               ]}
             >
               <ReqoreTextarea
-                scaleWithContent
                 fluid
+                style={{ height: '100%' }}
+                wrapperStyle={{ height: '100%' }}
                 readOnly
                 id="CSV-modal-text"
-                value={`${generateCSV(props[collection], name)}`}
+                value={`${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}${generateCSV(props[collection], name)}`}
               />
             </ReqoreModal>
           )}
