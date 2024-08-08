@@ -74,7 +74,7 @@ export default (collection: string, name: string): Function =>
             >
               <ReqoreTextarea
                 fluid
-                style={{ height: '100%' }}
+                style={{ height: '100%', resize: 'none' }}
                 wrapperStyle={{ height: '100%' }}
                 readOnly
                 id="CSV-modal-text"
