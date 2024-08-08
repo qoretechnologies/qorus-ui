@@ -1,6 +1,5 @@
 // @flow
 import flowRight from 'lodash/flowRight';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';

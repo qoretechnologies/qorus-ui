@@ -1,7 +1,6 @@
 // @flow
 import map from 'lodash/map';
 import size from 'lodash/size';
-import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -88,7 +87,7 @@ Props) => (
             </Th>
           </FixedRow>
           <FixedRow {...{ sortData, onSortChange }}>
-            <IdColumnHeader />
+            <IdColumnHeader className="medium" />
             <NameColumnHeader title={intl.formatMessage({ id: 'table.workflow' })} />
             <Th icon="info-sign" name="workflowstatus">
               <FormattedMessage id="table.status" />

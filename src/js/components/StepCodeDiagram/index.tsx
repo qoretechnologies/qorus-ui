@@ -12,11 +12,10 @@ import { groupInstances } from '../../helpers/orders';
 import modal from '../../hocomponents/modal';
 import { graph } from '../../lib/graph';
 import StepDetailTable from '../../views/order/diagram/step_details';
-import { Breadcrumbs, Crumb } from '../breadcrumbs';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
+import { ReqoreControlGroup, ReqoreH5 } from '@qoretechnologies/reqore';
 import { Control as Button, Controls as ButtonGroup } from '../controls';
 import Flex from '../Flex';
-import Headbar from '../Headbar';
 import Loader from '../loader';
 import Pull from '../Pull';
 import StepModal from './modal';
@@ -1056,13 +1055,9 @@ class StepsTab extends Component {
 
     return (
       <Flex>
-        <Headbar>
-          <Breadcrumbs collapsed>
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'normalizedName' does not exist on type '... Remove this comment to see the full error message */}
-            <Crumb>{workflow.normalizedName}</Crumb>
-          </Breadcrumbs>
-          <Pull right>
-            <ButtonGroup>
+        <ReqoreControlGroup style={{ justifyContent: 'space-between'}}>
+          <ReqoreH5>{workflow.normalizedName}</ReqoreH5>
+          <ReqoreControlGroup>
               {useDrag && (
                 <span style={{ lineHeight: '30px', paddingRight: 5 }} className="text-muted">
                   <FormattedMessage id="button.drag-to-move-around" />
@@ -1101,9 +1096,8 @@ class StepsTab extends Component {
                 onClick={this.handleZoomReset}
                 big
               />
-            </ButtonGroup>
-          </Pull>
-        </Headbar>
+          </ReqoreControlGroup>
+        </ReqoreControlGroup>
         <div
           ref={this.handlePanRef}
           style={{

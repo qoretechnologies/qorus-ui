@@ -82,7 +82,7 @@ export default (collection: string, name: string): Function =>
               />
             </ReqoreModal>
           )}
-          <Component onCSVClick={handleCSVClick} {...props} />;
+          <Component onCSVClick={handleCSVClick} {...props} />
         </>
       );
     };

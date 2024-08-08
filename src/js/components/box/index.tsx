@@ -1,5 +1,4 @@
 // @flow
-import React from 'react';
 import pure from 'recompose/onlyUpdateForKeys';
 import Flex from '../Flex';
 

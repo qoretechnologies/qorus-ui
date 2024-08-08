@@ -27,7 +27,7 @@ const HierarchyRow: Function = ({
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
 Props) => (
   <Tr first={first}>
-    <NameColumn name={id} link={`/order/${id}/24h`} type="order" className="normal" />
+    <NameColumn name={id} link={`/order/${id}/24h`} type="order" className="medium" />
     <NameColumn
       // @ts-ignore ts-migrate(2339) FIXME: Property 'hierarchy_level' does not exist on type ... Remove this comment to see the full error message
       name={`${[...Array(item.hierarchy_level)].map((): string => '--')} ${
