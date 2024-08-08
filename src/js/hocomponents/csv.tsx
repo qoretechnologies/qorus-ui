@@ -49,6 +49,7 @@ export default (collection: string, name: string): Function =>
               label="Export data as CSV"
               onClose={() => setIsOpen(false)}
               fill
+              height='400px'
               bottomActions={[
                 {
                   label: 'Copy',
@@ -72,15 +73,16 @@ export default (collection: string, name: string): Function =>
               ]}
             >
               <ReqoreTextarea
-                scaleWithContent
                 fluid
+                style={{ height: '100%', resize: 'none' }}
+                wrapperStyle={{ height: '100%' }}
                 readOnly
                 id="CSV-modal-text"
                 value={`${generateCSV(props[collection], name)}`}
               />
             </ReqoreModal>
           )}
-          <Component onCSVClick={handleCSVClick} {...props} />;
+          <Component onCSVClick={handleCSVClick} {...props} />
         </>
       );
     };

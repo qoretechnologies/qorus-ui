@@ -48,6 +48,7 @@ WorkflowDetailTabsProps) => (
     {!isPane && (
       <SimpleTab name="orders">
         <List {...{ workflow, date, location, linkDate }} />
+
       </SimpleTab>
     )}
     {!isPane && (
