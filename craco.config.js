@@ -3,7 +3,8 @@ const million = require('million/compiler');
 module.exports = {
   webpack: {
     configure: {
-      devtool: 'eval-source-map',
+      // Disable source maps
+      devtool: false,
     },
     plugins: {
       add: [million.webpack({ auto: true })],

@@ -1,5 +1,6 @@
 // @flow
 import { ControlGroup, InputGroup } from '@blueprintjs/core';
+import { isEqual } from 'lodash';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
 import { Component } from 'react';
@@ -73,6 +74,11 @@ export default class SearchToolbar extends Component {
     }
   }
 
+  // Check if the component should update
+  shouldComponentUpdate(nextProps: Readonly<{}>, nextState: Readonly<{}>): boolean {
+    return !isEqual(this.props, nextProps) || !isEqual(this.state, nextState);
+  }
+
   componentDidUpdate() {
     this._delayedSearch(this.state);
   }
@@ -86,10 +92,11 @@ export default class SearchToolbar extends Component {
   }
 
   _delayedSearch: Function = debounce((data: any) => {
+    console.log('searching', data);
     if (this._isMounted) {
       this.props.changeAllQuery(data);
     }
-  }, 280);
+  }, 400);
 
   handleHistoryClick: Function = (): void => {
     this.props.openModal(<HistoryModal type="orderSearch" onClose={this.props.closeModal} />);
