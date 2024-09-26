@@ -76,7 +76,7 @@ export default class SearchToolbar extends Component {
 
   // Check if the component should update
   shouldComponentUpdate(nextProps: Readonly<{}>, nextState: Readonly<{}>): boolean {
-    return !isEqual(this.props, nextProps) || isEqual(this.state, nextState);
+    return !isEqual(this.props, nextProps) || !isEqual(this.state, nextState);
   }
 
   componentDidUpdate() {
