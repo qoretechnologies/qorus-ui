@@ -32,29 +32,32 @@ const Search: Function = ({
   onSaveClick,
   onHistoryClick,
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props) => (
-  <Flex>
-    <Breadcrumbs>
-      <Crumb>Search</Crumb>
-      <CrumbTabs tabs={['Orders', 'Errors']} />
-      <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
-        <ButtonGroup>
-          <Button text="Save search" icon="floppy-disk" onClick={onSaveClick} big />
-          <Button text="Show saved searches" icon="history" onClick={onHistoryClick} big />
-        </ButtonGroup>
-      </ReqoreControlGroup>
-    </Breadcrumbs>
+Props) => {
+  console.log('Search View Updated');
+  return (
+    <Flex>
+      <Breadcrumbs>
+        <Crumb>Search</Crumb>
+        <CrumbTabs tabs={['Orders', 'Errors']} />
+        <ReqoreControlGroup fixed style={{ marginLeft: 'auto' }}>
+          <ButtonGroup>
+            <Button text="Save search" icon="floppy-disk" onClick={onSaveClick} big />
+            <Button text="Show saved searches" icon="history" onClick={onHistoryClick} big />
+          </ButtonGroup>
+        </ReqoreControlGroup>
+      </Breadcrumbs>
 
-    <SimpleTabs activeTab={tabQuery}>
-      <SimpleTab name="orders">
-        <Orders location={location} />
-      </SimpleTab>
-      <SimpleTab name="errors">
-        <Errors location={location} />
-      </SimpleTab>
-    </SimpleTabs>
-  </Flex>
-);
+      <SimpleTabs activeTab={tabQuery}>
+        <SimpleTab name="orders">
+          <Orders location={location} />
+        </SimpleTab>
+        <SimpleTab name="errors">
+          <Errors location={location} />
+        </SimpleTab>
+      </SimpleTabs>
+    </Flex>
+  );
+};
 
 export default compose(
   hasInterfaceAccess('workflows', 'Orders', 'Search'),

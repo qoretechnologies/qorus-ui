@@ -65,6 +65,7 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'NODE_INFO':
         if (state.api.system.sync && state.api.system.isOnDashboard) {
+          console.log('Updating node info');
           pipeline(eventstr, system.updateNodeInfo, { ...info, timestamp: d.time }, dispatch);
         }
         break;

@@ -1,6 +1,5 @@
 // @flow
 import moment from 'moment';
-import React from 'react';
 import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import mapProps from 'recompose/mapProps';
@@ -42,11 +41,14 @@ const SearchView: Function = ({
   searchData,
   ...rest
 }: // @ts-ignore ts-migrate(2724) FIXME: 'React' has no exported member named 'Element'. Di... Remove this comment to see the full error message
-Props) => (
-  <OrdersView location={location} linkDate={mindateQuery} searchData={searchData} searchPage>
-    <SearchToolbar mindateQuery={mindateQuery} {...rest} />
-  </OrdersView>
-);
+Props) => {
+  console.log('Search bar updated');
+  return (
+    <OrdersView location={location} linkDate={mindateQuery} searchData={searchData} searchPage>
+      <SearchToolbar mindateQuery={mindateQuery} {...rest} />
+    </OrdersView>
+  );
+};
 
 export default compose(
   connect(
