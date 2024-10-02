@@ -59,7 +59,7 @@ export default class OrderHeader extends Component {
       <Headbar>
         <Breadcrumbs>
           <CollapsedCrumb links={{ Workflows: '/workflows' }} />
-          <Crumb link={backQueriesStr}>
+          <Crumb link={encodeURI(backQueriesStr)}>
             {/* @ts-ignore ts-migrate(2339) FIXME: Property 'id' does not exist on type 'Object'. */}
             {workflowName} <strong>#{this.props.data.id}</strong>{' '}
             <StatusLabel text={this.props.data.workflowstatus} label={label} />

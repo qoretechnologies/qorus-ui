@@ -105,7 +105,9 @@ Props) => (
     <SelectColumn onClick={handleCheckboxClick} checked={_selected} />
     <NameColumn
       name={id}
-      link={`/order/${id}/${date}?target=${target}&prevQuery=${JSON.stringify(allQuery)}`}
+      link={`/order/${id}/${date}?target=${target}&prevQuery=${encodeURI(
+        JSON.stringify(allQuery)
+      )}`}
       className="normal"
       type="order"
     />
