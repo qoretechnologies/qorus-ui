@@ -15,8 +15,8 @@ jobs:
           format: YYYYMMDD-HH
           utcOffset: '+01:00'
       # Checkout the repo
-      - uses: actions/checkout@v3
-        with: 
+      - uses: actions/checkout@v4
+        with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
       # Get commit message
@@ -25,7 +25,7 @@ jobs:
         run: echo "::set-output name=HEAD_COMMIT_MESSAGE::$(git show -s --format=%s)"
 
       # Setup node
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 16
 
@@ -49,7 +49,7 @@ jobs:
           rm -rf build
 
       # Upload the prod build as artifact
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         id: upload_prod_build
         if: success()
         with:
@@ -100,4 +100,3 @@ jobs:
           body: v${{ secrets.LIVE_QORUS_VERSION }}-${{ steps.save_release_version.outputs.version }}
           draft: false
           prerelease: false
-      
