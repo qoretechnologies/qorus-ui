@@ -22,17 +22,29 @@ const connectionSelector: Function = (state: any, props: any): any => {
   return data[props.url];
 };
 
-// @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
-const selector: Function = createSelector([connectionSelector], (conn: any) => ({
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'connected' does not exist on type 'Objec... Remove this comment to see the full error message
-  connected: conn.connected,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message
-  loading: conn.loading,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
-  error: conn.error,
-  // @ts-ignore ts-migrate(2339) FIXME: Property 'paused' does not exist on type 'Object'.
-  paused: conn.paused,
-}));
+const infoSelector: Function = (state: any, props: any): any => {
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'ws' does not exist on type 'Object'.
+  const { data } = state.api.info;
+
+  // @ts-ignore ts-migrate(2339) FIXME: Property 'url' does not exist on type 'Object'.
+  return data?.noauth;
+};
+
+const selector: Function = createSelector(
+  // @ts-ignore ts-migrate(2769) FIXME: No overload matches this call.
+  [connectionSelector, infoSelector],
+  (conn: any, noauth: boolean) => ({
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'connected' does not exist on type 'Objec... Remove this comment to see the full error message
+    connected: conn.connected,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'loading' does not exist on type 'Object'... Remove this comment to see the full error message
+    loading: conn.loading,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
+    error: conn.error,
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'paused' does not exist on type 'Object'.
+    paused: conn.paused,
+    noauth,
+  })
+);
 
 /**
  * A high-order component that provides an easy access to
@@ -61,6 +73,7 @@ export default (
         connect: Function;
         disconnect: Function;
         url: string;
+        noauth: boolean;
       } = this.props;
 
       componentWillMount() {
@@ -96,7 +109,7 @@ export default (
           const { connected, loading, url, connect } = props;
           const getFunc = this.getFunc(props);
 
-          if (!connected && !loading && localStorage.getItem('token')) {
+          if (!connected && !loading && (localStorage.getItem('token') || props.noauth)) {
             connect(
               url,
               resume ? getFunc('onResume') : getFunc('onOpen'),
