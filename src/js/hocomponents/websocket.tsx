@@ -26,8 +26,6 @@ const infoSelector: Function = (state: any, props: any): any => {
   // @ts-ignore ts-migrate(2339) FIXME: Property 'ws' does not exist on type 'Object'.
   const { data } = state.api.info;
 
-  console.log(data?.noauth, state);
-
   // @ts-ignore ts-migrate(2339) FIXME: Property 'url' does not exist on type 'Object'.
   return data?.noauth;
 };
