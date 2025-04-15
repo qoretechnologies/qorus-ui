@@ -7,9 +7,7 @@ import { createSelector } from 'reselect';
 import Alert from '../../../../components/alert';
 // @ts-ignore ts-migrate(2306) FIXME: File '/workspace/qorus-webapp/src/js/components/co... Remove this comment to see the full error message
 import { ReqoreModal, ReqoreMultiSelect } from '@qoretechnologies/reqore';
-import {
-  Item as DropItem
-} from '../../../../components/dropdown';
+import { Item as DropItem } from '../../../../components/dropdown';
 import sync from '../../../../hocomponents/sync';
 import actions from '../../../../store/api/actions';
 
@@ -141,110 +139,124 @@ export default class AddUserModal extends Component {
         ))
       : null;
 
+  handleClose = () => {};
+
   render() {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'passOnly' does not exist on type '{ role... Remove this comment to see the full error message
     const { model, onClose, rbacExternal, passOnly } = this.props;
 
     return (
       // @ts-ignore ts-migrate(2322) FIXME: Type 'Function' is not assignable to type 'FormEve... Remove this comment to see the full error message
-        <ReqoreModal label={this.props.title} isOpen onClose={onClose} bottomActions={[{
-          label: 'Submit',
-          onClick: this.handleFormSubmit,
-          intent: 'success',
-          position: 'right',
-          icon: 'CheckLine',
-        }]} width='500px'>
-            {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
-            {rbacExternal && (
-              <Alert bsStyle="warning">
-                Only users stored in Qorus system DB are manageable in this area. External RBAC
-                providers are: {rbacExternal}.
-              </Alert>
-            )}
-            {!passOnly && (
-              <>
-                <div className="form-group">
-                  <label htmlFor="username" className="col-sm-4 control-label">
-                    Username *
-                  </label>
-                  <div className="col-sm-6">
-                    <input
-                      // @ts-ignore ts-migrate(2322) FIXME: Type 'Object' is not assignable to type 'boolean'.
-                      readOnly={model}
-                      ref="username"
-                      type="text"
-                      className="form-control"
-                      id="username"
-                      // @ts-ignore ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message
-                      defaultValue={model ? model.username : ''}
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="name" className="col-sm-4 control-label">
-                    Full name *
-                  </label>
-                  <div className="col-sm-6">
-                    <input
-                      ref="name"
-                      type="text"
-                      className="form-control"
-                      id="name"
-                      // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
-                      defaultValue={model ? model.name : ''}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
+      <ReqoreModal
+        label={this.props.title}
+        isOpen
+        bottomActions={[
+          {
+            label: 'Cancel',
+            onClick: onClose,
+            position: 'left',
+            icon: 'CloseLine',
+          },
+          {
+            label: 'Submit',
+            onClick: this.handleFormSubmit,
+            intent: 'success',
+            position: 'right',
+            icon: 'CheckLine',
+          },
+        ]}
+        width="500px"
+      >
+        {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
+        {rbacExternal && (
+          <Alert bsStyle="warning">
+            Only users stored in Qorus system DB are manageable in this area. External RBAC
+            providers are: {rbacExternal}.
+          </Alert>
+        )}
+        {!passOnly && (
+          <>
             <div className="form-group">
-              <label htmlFor="password" className="col-sm-4 control-label">
-                {passOnly || model ? 'New password' : 'Password *'}
-              </label>
-              <div className="col-sm-6">
-                <input ref="password" type="password" className="form-control" id="password" />
-              </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor="password-confirm" className="col-sm-4 control-label">
-                {passOnly || model ? 'Confirm new password' : 'Confirm password *'}
+              <label htmlFor="username" className="col-sm-4 control-label">
+                Username *
               </label>
               <div className="col-sm-6">
                 <input
-                  ref="passwordConf"
-                  type="password"
+                  // @ts-ignore ts-migrate(2322) FIXME: Type 'Object' is not assignable to type 'boolean'.
+                  readOnly={model}
+                  ref="username"
+                  type="text"
                   className="form-control"
-                  id="password-confirm"
+                  id="username"
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message
+                  defaultValue={model ? model.username : ''}
                 />
               </div>
             </div>
-            {!passOnly && (
-              <div className="form-group">
-                <label htmlFor="roles" className="col-sm-4 control-label">
-                  {' '}
-                  Roles{' '}
-                </label>
-                <div className="col-sm-6">
-                  <ReqoreMultiSelect
-                    onValueChange={(roles) => {
-                      console.log(roles);
-                      this.setState({
-                      roles,
-                    })
-                    }}
-                    canRemoveItems
-                    value={this.state.roles}
-                    items={this.props.rolesModel?.map(({ role }) => ({
-                      label: role,
-                      value: role,
-                    }))}
-                    flat={false}
-                  />
-                </div>
+            <div className="form-group">
+              <label htmlFor="name" className="col-sm-4 control-label">
+                Full name *
+              </label>
+              <div className="col-sm-6">
+                <input
+                  ref="name"
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  // @ts-ignore ts-migrate(2339) FIXME: Property 'name' does not exist on type 'Object'.
+                  defaultValue={model ? model.name : ''}
+                />
               </div>
-            )}
-
-        </ReqoreModal>
+            </div>
+          </>
+        )}
+        <div className="form-group">
+          <label htmlFor="password" className="col-sm-4 control-label">
+            {passOnly || model ? 'New password' : 'Password *'}
+          </label>
+          <div className="col-sm-6">
+            <input ref="password" type="password" className="form-control" id="password" />
+          </div>
+        </div>
+        <div className="form-group">
+          <label htmlFor="password-confirm" className="col-sm-4 control-label">
+            {passOnly || model ? 'Confirm new password' : 'Confirm password *'}
+          </label>
+          <div className="col-sm-6">
+            <input
+              ref="passwordConf"
+              type="password"
+              className="form-control"
+              id="password-confirm"
+            />
+          </div>
+        </div>
+        {!passOnly && (
+          <div className="form-group">
+            <label htmlFor="roles" className="col-sm-4 control-label">
+              {' '}
+              Roles{' '}
+            </label>
+            <div className="col-sm-6">
+              <ReqoreMultiSelect
+                onValueChange={(roles) => {
+                  console.log(roles);
+                  this.setState({
+                    roles,
+                  });
+                }}
+                canRemoveItems
+                value={this.state.roles}
+                items={this.props.rolesModel?.map(({ role }) => ({
+                  label: role,
+                  value: role,
+                }))}
+                flat={false}
+              />
+            </div>
+          </div>
+        )}
+      </ReqoreModal>
     );
   }
 }

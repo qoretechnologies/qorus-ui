@@ -1,6 +1,6 @@
 {
   "name": "qorus-ui",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Qorus UI",
   "author": "Qore Technologies",
   "repository": {
@@ -76,7 +76,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "REACT_APP_API_PORT=9091 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true craco start",
+    "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true craco start",
     "start:http": "REACT_APP_API_PORT=8091 REACT_APP_API_HOST=hq.qoretechnologies.com REACT_APP_PROTO=http HTTPS=false PORT=3001 craco start",
     "start:ci": "REACT_APP_API_HOST=sandbox.qoretechnologies.com HTTPS=true craco start",
     "codegen": "npx playwright codegen --ignore-https-errors --load-storage=codegen-auth.json https://localhost:3000",
