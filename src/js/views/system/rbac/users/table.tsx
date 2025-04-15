@@ -93,7 +93,7 @@ Props) => (
           <FixedRow {...{ onSortChange, sortData }}>
             <NameColumnHeader />
             <ActionColumnHeader />
-            <Th className="text big" name="username" icon="user">
+            <Th className="text" name="username" icon="user">
               Username
             </Th>
             <Th className="text" icon="contrast">
