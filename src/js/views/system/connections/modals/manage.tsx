@@ -103,7 +103,7 @@ const ConnecitonManageModal = ({ edit, onClose, ...rest }: Props) => {
       );
 
     if (exists && !edit) {
-      setError(`A ${remoteType} with this name already exists.`);
+      setError(`A ${remoteType} connection with this name already exists.`);
     } else {
       dispatchAction(
         // @ts-ignore ts-migrate(2339) FIXME: Property 'remotes' does not exist on type '{}'.

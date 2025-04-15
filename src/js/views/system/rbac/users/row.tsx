@@ -1,6 +1,5 @@
 /* @flow */
 import { Button, ButtonGroup, Intent } from '@blueprintjs/core';
-import React from 'react';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
 import withHandlers from 'recompose/withHandlers';
@@ -54,7 +53,7 @@ Props) => (
         />
       </ButtonGroup>
     </ActionColumn>
-    <Td className="text big">
+    <Td className="text">
       {/* @ts-ignore ts-migrate(2339) FIXME: Property 'username' does not exist on type 'Object... Remove this comment to see the full error message */}
       <Text text={model.username} />
     </Td>
