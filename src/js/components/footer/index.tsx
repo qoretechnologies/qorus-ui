@@ -1,5 +1,10 @@
 /* @flow */
-import { ReqoreFooter, ReqoreNavbarGroup, ReqoreNavbarItem } from '@qoretechnologies/reqore';
+import {
+  ReqoreFooter,
+  ReqoreHorizontalSpacer,
+  ReqoreNavbarGroup,
+  ReqoreNavbarItem,
+} from '@qoretechnologies/reqore';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import compose from 'recompose/compose';
 import pure from 'recompose/onlyUpdateForKeys';
@@ -58,11 +63,20 @@ const Footer: Function = ({ info, path, openModal, closeModal, intl }: Props) =>
   };
 
   return (
-    <ReqoreFooter style={{ height: '30px' }}>
+    <ReqoreFooter
+      style={{ height: '30px' }}
+      customTheme={!info.licensed ? { main: '#ff0000', color: '#ffffff' } : undefined}
+    >
       <ReqoreNavbarGroup>
         <ReqoreNavbarItem>
           {'Qorus Integration Engine: '}
-          {info.edition} Edition
+          {info.edition} Edition{' '}
+          {!info.licensed ? (
+            <>
+              <ReqoreHorizontalSpacer width={10} />
+              <strong> UNLICENSED - NOT FOR COMMERCIAL USE</strong>
+            </>
+          ) : null}
         </ReqoreNavbarItem>
       </ReqoreNavbarGroup>
       <ReqoreNavbarGroup position="right">

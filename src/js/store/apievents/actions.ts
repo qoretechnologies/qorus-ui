@@ -22,7 +22,7 @@ import * as remotes from '../api/resources/remotes/actions';
 import * as services from '../api/resources/services/actions/specials';
 import * as system from '../api/resources/system/actions';
 import * as workflows from '../api/resources/workflows/actions/specials';
-import { notifications } from '../ui/actions';
+import { bubbles, notifications } from '../ui/actions';
 
 const interfaceActions: any = {
   workflows,
@@ -65,7 +65,6 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'NODE_INFO':
         if (state.api.system.sync && state.api.system.isOnDashboard) {
-          console.log('Updating node info');
           pipeline(eventstr, system.updateNodeInfo, { ...info, timestamp: d.time }, dispatch);
         }
         break;
@@ -289,6 +288,13 @@ const handleEvent = (url, data, dispatch, state) => {
         }
 
         break;
+      case 'SYSTEM_SHUTDOWN':
+      case 'SYSTEM_ALERT': {
+        info.messages?.forEach((msg) => {
+          dispatch(bubbles.error(msg.content));
+        });
+        break;
+      }
       case 'ALERT_ONGOING_CLEARED':
         switch (info.type) {
           case 'WORKFLOW':
