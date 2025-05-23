@@ -74,7 +74,7 @@ const Footer: Function = ({ info, path, openModal, closeModal, intl }: Props) =>
           {!info.licensed ? (
             <>
               <ReqoreHorizontalSpacer width={10} />
-              <strong> UNLICENSED - NOT FOR COMMERCIAL USE</strong>
+              <strong>{info.license_message}</strong>
             </>
           ) : null}
         </ReqoreNavbarItem>

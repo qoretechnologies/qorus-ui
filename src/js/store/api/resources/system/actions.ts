@@ -21,6 +21,13 @@ const addProcess: Function = createAction('SYSTEM_ADDPROCESS', (events: Array<Ob
   events,
 }));
 
+const updateLicense: Function = createAction(
+  'SYSTEM_UPDATELICENSE',
+  (events: Array<Object>): any => ({
+    events,
+  })
+);
+
 const removeProcess: Function = createAction(
   'SYSTEM_REMOVEPROCESS',
   (events: Array<Object>): any => ({ events })
@@ -173,6 +180,7 @@ export {
   updateConfigItem,
   updateConfigItemWs,
   updateDone,
+  updateLicense,
   updateNodeInfo,
   updateStats,
 };

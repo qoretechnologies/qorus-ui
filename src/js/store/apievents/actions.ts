@@ -68,6 +68,11 @@ const handleEvent = (url, data, dispatch, state) => {
           pipeline(eventstr, system.updateNodeInfo, { ...info, timestamp: d.time }, dispatch);
         }
         break;
+      case 'LICENSE_CHANGED':
+        if (state.api.system.sync) {
+          pipeline(eventstr, system.updateLicense, info, dispatch);
+        }
+        break;
       case 'WORKFLOW_STATS_UPDATED':
         if (info.tag === 'global') {
           if (state.api.system.sync) {
