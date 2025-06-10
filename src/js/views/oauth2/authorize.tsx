@@ -130,15 +130,30 @@ export default compose(
       }): Function =>
       async (): Promise<void> => {
         const res = await fetchWithNotifications(
-          async () =>
-            get(`${settings.OAUTH_URL}/code?type=code&client_id=${allQueryObj.client_id}`),
+          async () => {
+            let query: string = `${settings.OAUTH_URL}/code?type=code&client_id=${allQueryObj.client_id}`;
+            if (allQueryObj.code_challenge) {
+              query += `&code_challenge=${allQueryObj.code_challenge}`;
+              if (allQueryObj.code_challenge_method) {
+                query += `&code_challenge_method=${allQueryObj.code_challenge_method}`;
+              }
+            }
+            return get(query);
+          },
           `Authorizing client ${allQueryObj.client_id}...`,
           `Client ${allQueryObj.client_id} successfully authorized.`,
           dispatch
         );
 
         if (!res.err) {
-          window.location.href = `${allQueryObj.redirect_uri}?code=${res.code}&client_id=${allQueryObj.client_id}`;
+          let query: string = `${allQueryObj.redirect_uri}?code=${res.code}&client_id=${allQueryObj.client_id}`;
+          if (allQueryObj.code_challenge) {
+            query += `&code_challenge=${allQueryObj.code_challenge}`;
+            if (allQueryObj.code_challenge_method) {
+              query += `&code_challenge_method=${allQueryObj.code_challenge_method}`;
+            }
+          }
+          window.location.href = query;
         }
       },
   }),
