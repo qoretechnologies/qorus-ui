@@ -1,6 +1,6 @@
 {
   "name": "qorus-ui",
-  "version": "2.0.7",
+  "version": "2.0.9",
   "description": "Qorus UI",
   "author": "Qore Technologies",
   "repository": {
@@ -117,5 +117,6 @@
     "dotenv-cli": "^6.0.0",
     "sass": "^1.49.9",
     "ts-migrate": "^0.1.28"
-  }
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }

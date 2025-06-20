@@ -12,7 +12,7 @@ import { bubbles, notifications } from '../../store/ui/actions';
 
 const timeoutByBubbleType = {
   WARNING: '30000',
-  DANGER: '5000',
+  DANGER: '60000',
   SUCCESS: '5000',
   INFO: '5000',
 };
@@ -105,6 +105,7 @@ export class BubbleItem extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     const { bubble, type, timeout, stack, notificationsSound } = this.props;
     const timeoutByType = timeout || timeoutByBubbleType[bubble.type];
     // @ts-ignore ts-migrate(2339) FIXME: Property 'notificationType' does not exist on type... Remove this comment to see the full error message

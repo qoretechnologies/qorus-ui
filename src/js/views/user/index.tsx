@@ -76,7 +76,7 @@ const UserView: Function = ({
         <Box fill top scrollY>
           {interfaces.map((intrf: string) => (
             <PaneItem title={intl.formatMessage({ id: 'global.' + intrf })}>
-              {userData[intrf].length ? (
+              {userData[intrf]?.length ? (
                 userData[intrf]
                   .map((datum: string | Object) => {
                     if (typeof datum === 'string') {

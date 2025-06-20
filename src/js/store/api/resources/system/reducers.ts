@@ -91,6 +91,20 @@ const incrementItems = {
   },
 };
 
+const updateLicense = {
+  next(state: any, { payload: { events } }) {
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
+    const data = { ...state.data };
+
+    events.forEach((event) => {
+      data.licensed = event.licensed;
+      data.license_message = event.license_message;
+    });
+
+    return { ...state, ...{ data } };
+  },
+};
+
 const decrementItems = {
   next(state: any, { payload: { events } }) {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
@@ -465,6 +479,7 @@ export {
   unsync as UNSYNC,
   updateConfigItemWs as UPDATECONFIGITEMWS,
   updateDone as UPDATEDONE,
+  updateLicense as UPDATELICENSE,
   updateNodeInfo as UPDATENODEINFO,
   updateStats as UPDATESTATS,
 };
