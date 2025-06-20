@@ -13,16 +13,13 @@ export const sendBubble = createAction(
   })
 );
 
-export const deleteBubble = createAction(
-  actions.DELETE_BUBBLE,
-  (id: string) => id
-);
+export const deleteBubble = createAction(actions.DELETE_BUBBLE, (id: string) => id);
 
-export const success = (message: string, id: string | number) =>
+export const success = (message: string, id?: string | number) =>
   sendBubble(statuses.SUCCESS, message, id);
-export const warning = (message: string, id: string | number) =>
+export const warning = (message: string, id?: string | number) =>
   sendBubble(statuses.WARNING, message, id);
-export const error = (message: string, id: string | number) =>
+export const error = (message: string, id?: string | number) =>
   sendBubble(statuses.DANGER, message, id);
-export const info = (message: string, id: string | number) =>
+export const info = (message: string, id?: string | number) =>
   sendBubble(statuses.INFO, message, id);
