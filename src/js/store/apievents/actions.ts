@@ -892,12 +892,12 @@ const handleEvent = (url, data, dispatch, state) => {
         break;
       case 'CONNECTION_CREATED':
         if (state.api.remotes.sync) {
-          pipeline(eventstr, remotes.addConnection, info, dispatch);
+          pipeline(eventstr, remotes.addConnection, { ...info, ...info.info }, dispatch);
         }
         break;
       case 'CONNECTION_UPDATED':
         if (state.api.remotes.sync) {
-          pipeline(eventstr, remotes.updateConnection, info, dispatch);
+          pipeline(eventstr, remotes.updateConnection, { ...info, ...info.info }, dispatch);
         }
         break;
       case 'CONNECTION_DELETED':
