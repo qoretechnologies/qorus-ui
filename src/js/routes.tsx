@@ -14,6 +14,7 @@ import actions from './store/api/actions';
 import * as events from './store/apievents/actions';
 import Root from './views/root';
 //import Services from './views/services';
+import { getToken } from './store/api/utils';
 import RegisterCodeView from './views/code/register';
 import System from './views/system';
 
@@ -150,7 +151,7 @@ class AppInfo extends React.Component {
   componentDidMount() {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const { noauth } = this.props.info.data;
-    const token = window.localStorage.getItem('token');
+    const token = getToken();
 
     if (token || noauth) {
       // @ts-ignore ts-migrate(2339) FIXME: Property 'loadSystem' does not exist on type '{ in... Remove this comment to see the full error message
@@ -170,7 +171,8 @@ class AppInfo extends React.Component {
         data: { noauth },
       },
     } = this.props;
-    const token = window.localStorage.getItem('token');
+    const token = getToken();
+
     if (token || noauth) {
       replace('/');
     }
@@ -185,7 +187,7 @@ class AppInfo extends React.Component {
   requireAuthenticated = (nextState, replace) => {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
     const { noauth } = this.props.info.data;
-    const token = window.localStorage.getItem('token');
+    const token = getToken();
 
     if (!token && !noauth) {
       replace(
@@ -203,7 +205,7 @@ class AppInfo extends React.Component {
   render() {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'plugins' does not exist on type '{ info:... Remove this comment to see the full error message
     let { info, plugins, routerProps, systemSync, oauth2_enabled } = this.props;
-    const token: string = window.localStorage.getItem('token');
+    const token: string = getToken();
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
     if (info.error) {

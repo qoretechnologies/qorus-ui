@@ -97,6 +97,15 @@ export function createApiActions(actions) {
   return apiActions;
 }
 
+export function getToken() {
+  return (
+    document.cookie
+      ?.split('; ')
+      .find((row) => row.startsWith('Qorus-Auth-Context='))
+      ?.split('=')[1] || window.localStorage.getItem('token')
+  );
+}
+
 /**
  * getHeaders - add Qorus-Token header to default headers
  * if token set in localStorage
@@ -106,7 +115,7 @@ export function createApiActions(actions) {
 function getRestHeaders(yaml) {
   let headers = yaml ? settings.YAML_REST_HEADERS : settings.DEFAULT_REST_HEADERS;
 
-  const token = window.localStorage.getItem('token');
+  const token = getToken();
 
   if (token) {
     headers = Object.assign({}, headers, {
