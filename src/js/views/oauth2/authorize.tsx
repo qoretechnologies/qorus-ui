@@ -138,6 +138,9 @@ export default compose(
                 query += `&code_challenge_method=${allQueryObj.code_challenge_method}`;
               }
             }
+            if (allQueryObj.state) {
+              query += `&state=${allQueryObj.state}`
+            }
             return get(query);
           },
           `Authorizing client ${allQueryObj.client_id}...`,
@@ -152,6 +155,9 @@ export default compose(
             if (allQueryObj.code_challenge_method) {
               query += `&code_challenge_method=${allQueryObj.code_challenge_method}`;
             }
+          }
+          if (allQueryObj.state) {
+            query += `&state=${allQueryObj.state}`
           }
           window.location.href = query;
         }
