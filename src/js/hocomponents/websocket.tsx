@@ -7,7 +7,6 @@ import wrapDisplayName from 'recompose/wrapDisplayName';
 import { createSelector } from 'reselect';
 import Alert from '../components/alert';
 import { DEFAULTSTATE } from '../constants/websockets';
-import { getToken } from '../store/api/utils';
 import * as actions from '../store/websockets/actions';
 
 const connectionSelector: Function = (state: any, props: any): any => {
@@ -110,7 +109,7 @@ export default (
           const { connected, loading, url, connect } = props;
           const getFunc = this.getFunc(props);
 
-          if (!connected && !loading && (getToken() || props.noauth)) {
+          if (!connected && !loading) {
             connect(
               url,
               resume ? getFunc('onResume') : getFunc('onOpen'),

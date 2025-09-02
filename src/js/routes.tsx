@@ -198,7 +198,6 @@ class AppInfo extends React.Component {
   render() {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'plugins' does not exist on type '{ info:... Remove this comment to see the full error message
     let { info, plugins, routerProps, systemSync, oauth2_enabled } = this.props;
-    const token: string = getToken();
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'error' does not exist on type 'Object'.
     if (info.error) {
