@@ -1,6 +1,7 @@
 /* @flow */
 import { createAction } from 'redux-actions';
 import settings from '../../settings';
+import { getToken } from '../api/utils';
 
 const connections = {};
 
@@ -27,11 +28,9 @@ export const connectCall: Function = (
   // @ts-ignore ts-migrate(1015) FIXME: Parameter cannot have question mark and initialize... Remove this comment to see the full error message
   useHeartbeat?: boolean = true
 ): any => {
-  const token = localStorage.getItem('token');
+  const token = getToken();
 
-  connections[url] = new WebSocket(
-    `${settings.WS_BASE_URL}/${url}${token ? `?token=${token}` : ''}`
-  );
+  connections[url] = new WebSocket(`${settings.WS_BASE_URL}/${url}`);
 
   const ws = connections[url];
   let timeout;

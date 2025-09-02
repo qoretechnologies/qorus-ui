@@ -181,7 +181,7 @@ export default compose(
           const nextUrl =
             !location.query.next || location.query.next === '/error' ? '/' : location.query.next;
           // @ts-ignore ts-migrate(2339) FIXME: Property 'token' does not exist on type 'Object'.
-          window.localStorage.setItem('token', loginData.token);
+          //window.localStorage.setItem('token', loginData.token);
           window.location.href = decodeURIComponent(nextUrl);
         }
       },

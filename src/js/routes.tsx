@@ -6,7 +6,6 @@ import { IndexRedirect, Redirect, Route, Router } from 'react-router';
 import compose from 'recompose/compose';
 import defaultProps from 'recompose/defaultProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
-import FullPageLoading from './components/FullPageLoading';
 import Loader from './components/loader';
 import sync from './hocomponents/sync';
 import websocket from './hocomponents/websocket';
@@ -149,14 +148,8 @@ class AppInfo extends React.Component {
   } = this.props;
 
   componentDidMount() {
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    const { noauth } = this.props.info.data;
-    const token = getToken();
-
-    if (token || noauth) {
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'loadSystem' does not exist on type '{ in... Remove this comment to see the full error message
-      this.props.loadSystem();
-    }
+    // @ts-ignore ts-migrate(2339) FIXME: Property 'loadSystem' does not exist on type '{ in... Remove this comment to see the full error message
+    //
   }
 
   /**
@@ -185,15 +178,15 @@ class AppInfo extends React.Component {
    * @param  {Function} replace change state function
    */
   requireAuthenticated = (nextState, replace) => {
-    // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    const { noauth } = this.props.info.data;
-    const token = getToken();
-
-    if (!token && !noauth) {
-      replace(
-        `/login?next=${nextState.location.pathname}${encodeURIComponent(nextState.location.search)}`
-      );
-    }
+    // Server is now in control of auth, so we do not need to do any redirecting
+    // const { noauth } = this.props.info.data;
+    // const token = getToken();
+    // if (!token && !noauth) {
+    //   replace(
+    //     `/login?next=${nextState.location.pathname}${encodeURIComponent(nextState.location.search)}`
+    //   );
+    // }
+    this.props.loadSystem();
   };
 
   logout = (nextState, replace) => {
@@ -217,100 +210,97 @@ class AppInfo extends React.Component {
     }
 
     // @ts-ignore ts-migrate(2339) FIXME: Property 'data' does not exist on type 'Object'.
-    if (!token && !info.data.noauth) {
-      return (
-        <Router {...routerProps}>
-          <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
-          <Route path="/grant" component={GrantView} />
-          <Route path="/error" component={ErrorView} />
-          <Route path="/registerDevTools" component={RegisterCodeView} />
-          <Route path="*" onEnter={this.requireAuthenticated} />
-        </Router>
-      );
-    }
+    // if (!token && !info.data.noauth) {
+    //   return (
+    //     <Router {...routerProps}>
 
-    if (systemSync) {
-      return (
-        <Router {...this.props.routerProps}>
-          <Route path="registerDevTools" component={RegisterCodeView} />
-          <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
-            <IndexRedirect to="/dashboard" />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
-            <Route path="/dashboard" component={System.Dashboard} />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Connections' does not exist on type 'Fun... Remove this comment to see the full error message */}
-            <Route path="/remote" component={System.Connections} />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Slas' does not exist on type 'Function'. */}
-            <Route path="/slas" component={System.Slas} />
-            <Route path="/sla/:id" component={Sla} />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Valuemaps' does not exist on type 'Funct... Remove this comment to see the full error message */}
-            <Route path="/valuemaps" component={System.Valuemaps} />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Info' does not exist on type 'Function'. */}
-            <Route path="/info" component={System.Info} />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Logs' does not exist on type 'Function'. */}
-            <Route path="/logs" component={System.Logs} />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'RBAC' does not exist on type 'Function'. */}
-            <Route path="/rbac" component={System.RBAC} />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Errors' does not exist on type 'Function... Remove this comment to see the full error message */}
-            <Route path="/errors" component={System.Errors} />
-            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Releases' does not exist on type 'Functi... Remove this comment to see the full error message */}
-            <Route path="/releases" component={System.Releases} />
-            {oauth2_enabled && process.env.NODE_ENV === 'development' ? (
-              <Route path="/oauth2/code" component={AuthenticateCodeView} />
-            ) : null}
-            <Route path="devtools" component={Code} />
-            <Route path="/system" component={System}>
-              <IndexRedirect to="alerts" />
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
-              <Route path="alerts" component={System.Alerts} />
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Options' does not exist on type 'Functio... Remove this comment to see the full error message */}
-              <Route path="options" component={System.Options} />
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Properties' does not exist on type 'Func... Remove this comment to see the full error message */}
-              <Route path="props" component={System.Properties} />
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'SqlCache' does not exist on type 'Functi... Remove this comment to see the full error message */}
-              <Route path="sqlcache" component={System.SqlCache} />
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'HttpServices' does not exist on type 'Fu... Remove this comment to see the full error message */}
-              <Route path="http" component={System.HttpServices} />
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Cluster' does not exist on type 'Functio... Remove this comment to see the full error message */}
-              <Route path="cluster" component={System.Cluster} />
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'OrderStats' does not exist on type 'Func... Remove this comment to see the full error message */}
-              <Route path="orderStats" component={System.OrderStats} />
-              {/* @ts-ignore ts-migrate(2339) FIXME: Property 'ConfigItems' does not exist on type 'Fun... Remove this comment to see the full error message */}
-              <Route path="config-items" component={System.ConfigItems} />
-              {/* <Route path="providers" component={System.Providers} /> */}
-            </Route>
-            <Route path="workflow/:id" component={Workflow} />
-            <Route path="order/:id/:date" component={Order} />
-            <Route path="services" component={Services} />
-            <Route path="service/:id" component={Service} />
-            <Route path="job/:id" component={Job} />
-            <Route path="ocmd" component={Ocmd} />
-            <Route path="user" component={User} />
-            <Route path="mappers/:id" component={Mapper} />
-            <Route path="library" component={Library} />
-            <Route path="extensions" component={Extensions} />
-            <Route path="extension/:name" component={ExtensionDetail} />
-            <Route path="groups" component={Groups} />
-            <Route path="jobs" component={Jobs} />
-            <Route path="search" component={Search} />
-            <Route path="workflows" component={Workflows} />
-            <Route path="types" component={Types} />
-          </Route>
-          {oauth2_enabled ? (
-            <Route
-              onEnter={this.requireAuthenticated}
-              path="/oauth2/authorize"
-              component={AuthorizeView}
-            />
+    //       <Route path="/grant" component={GrantView} />
+    //       <Route path="/error" component={ErrorView} />
+    //       <Route path="/registerDevTools" component={RegisterCodeView} />
+    //       <Route path="*" onEnter={this.requireAuthenticated} />
+    //     </Router>
+    //   );
+    // }
+
+    return (
+      <Router {...this.props.routerProps}>
+        <Route path="registerDevTools" component={RegisterCodeView} />
+        <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
+        <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
+          <IndexRedirect to="/dashboard" />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
+          <Route path="/dashboard" component={System.Dashboard} />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Connections' does not exist on type 'Fun... Remove this comment to see the full error message */}
+          <Route path="/remote" component={System.Connections} />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Slas' does not exist on type 'Function'. */}
+          <Route path="/slas" component={System.Slas} />
+          <Route path="/sla/:id" component={Sla} />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Valuemaps' does not exist on type 'Funct... Remove this comment to see the full error message */}
+          <Route path="/valuemaps" component={System.Valuemaps} />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Info' does not exist on type 'Function'. */}
+          <Route path="/info" component={System.Info} />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Logs' does not exist on type 'Function'. */}
+          <Route path="/logs" component={System.Logs} />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'RBAC' does not exist on type 'Function'. */}
+          <Route path="/rbac" component={System.RBAC} />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Errors' does not exist on type 'Function... Remove this comment to see the full error message */}
+          <Route path="/errors" component={System.Errors} />
+          {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Releases' does not exist on type 'Functi... Remove this comment to see the full error message */}
+          <Route path="/releases" component={System.Releases} />
+          {oauth2_enabled && process.env.NODE_ENV === 'development' ? (
+            <Route path="/oauth2/code" component={AuthenticateCodeView} />
           ) : null}
-          <Route path="/logout" onEnter={this.logout} />
-          <Route path="/error" component={ErrorView} />
-          <Route path="/grant" component={GrantView} />
-          <Redirect from="*" to="/" />
-        </Router>
-      );
-    }
-
-    return <FullPageLoading />;
+          <Route path="devtools" component={Code} />
+          <Route path="/system" component={System}>
+            <IndexRedirect to="alerts" />
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Alerts' does not exist on type 'Function... Remove this comment to see the full error message */}
+            <Route path="alerts" component={System.Alerts} />
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Options' does not exist on type 'Functio... Remove this comment to see the full error message */}
+            <Route path="options" component={System.Options} />
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Properties' does not exist on type 'Func... Remove this comment to see the full error message */}
+            <Route path="props" component={System.Properties} />
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'SqlCache' does not exist on type 'Functi... Remove this comment to see the full error message */}
+            <Route path="sqlcache" component={System.SqlCache} />
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'HttpServices' does not exist on type 'Fu... Remove this comment to see the full error message */}
+            <Route path="http" component={System.HttpServices} />
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Cluster' does not exist on type 'Functio... Remove this comment to see the full error message */}
+            <Route path="cluster" component={System.Cluster} />
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'OrderStats' does not exist on type 'Func... Remove this comment to see the full error message */}
+            <Route path="orderStats" component={System.OrderStats} />
+            {/* @ts-ignore ts-migrate(2339) FIXME: Property 'ConfigItems' does not exist on type 'Fun... Remove this comment to see the full error message */}
+            <Route path="config-items" component={System.ConfigItems} />
+            {/* <Route path="providers" component={System.Providers} /> */}
+          </Route>
+          <Route path="workflow/:id" component={Workflow} />
+          <Route path="order/:id/:date" component={Order} />
+          <Route path="services" component={Services} />
+          <Route path="service/:id" component={Service} />
+          <Route path="job/:id" component={Job} />
+          <Route path="ocmd" component={Ocmd} />
+          <Route path="user" component={User} />
+          <Route path="mappers/:id" component={Mapper} />
+          <Route path="library" component={Library} />
+          <Route path="extensions" component={Extensions} />
+          <Route path="extension/:name" component={ExtensionDetail} />
+          <Route path="groups" component={Groups} />
+          <Route path="jobs" component={Jobs} />
+          <Route path="search" component={Search} />
+          <Route path="workflows" component={Workflows} />
+          <Route path="types" component={Types} />
+        </Route>
+        {oauth2_enabled ? (
+          <Route
+            onEnter={this.requireAuthenticated}
+            path="/oauth2/authorize"
+            component={AuthorizeView}
+          />
+        ) : null}
+        <Route path="/logout" onEnter={this.logout} />
+        <Route path="/error" component={ErrorView} />
+        <Route path="/grant" component={GrantView} />
+        <Redirect from="*" to="/" />
+      </Router>
+    );
   }
 }
 

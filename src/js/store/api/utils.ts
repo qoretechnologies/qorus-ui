@@ -3,9 +3,14 @@ import omit from 'lodash/omit';
 import { browserHistory } from 'react-router';
 import { createAction } from 'redux-actions';
 import shortid from 'shortid';
+import { create } from 'zustand';
 import settings from '../../settings';
 import { warning } from '../ui/bubbles/actions';
 import { processRESTResponse } from './resources/utils';
+
+export const PublicStore = create<{ noauth?: boolean; cookie?: string }>(() => ({
+  cookie: 'Qorus-Auth-Context',
+}));
 
 export const updateItemWithId: Function = (
   id: string | number,
@@ -97,13 +102,18 @@ export function createApiActions(actions) {
   return apiActions;
 }
 
+// Function that gets the cookie value by name
+export const getCookie = (name: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(';').shift();
+  }
+  return null;
+};
+
 export function getToken() {
-  return (
-    document.cookie
-      ?.split('; ')
-      .find((row) => row.startsWith('Qorus-Auth-Context='))
-      ?.split('=')[1] || window.localStorage.getItem('token')
-  );
+  return getCookie(PublicStore.getState().cookie); // || window.localStorage.getItem('token');
 }
 
 /**
@@ -115,13 +125,6 @@ export function getToken() {
 function getRestHeaders(yaml) {
   let headers = yaml ? settings.YAML_REST_HEADERS : settings.DEFAULT_REST_HEADERS;
 
-  const token = getToken();
-
-  if (token) {
-    headers = Object.assign({}, headers, {
-      'Qorus-Token': token,
-    });
-  }
   return headers;
 }
 
@@ -132,9 +135,10 @@ function getRestHeaders(yaml) {
  */
 function checkResponse(res, currentPath, redirectOnError = true, notificationId) {
   const pathname = window.location.pathname + encodeURIComponent(window.location.search);
+  console.log(currentPath, window.location.pathname);
   if (res.status === 401 && currentPath === window.location.pathname) {
     window.localStorage.removeItem('token');
-    browserHistory.push(`/login?next=${pathname}`);
+    window.location.href = `/login?next=${pathname}`;
   }
 
   if (res.status === 500) {
@@ -171,6 +175,7 @@ export async function fetchData(method, url, opts, dontCheck, redirectOnError, y
         ...getRestHeaders(yaml),
         ...headers,
       },
+      credentials: 'include',
     })
   );
 
@@ -181,7 +186,13 @@ export async function fetchData(method, url, opts, dontCheck, redirectOnError, y
   return res;
 }
 
-export async function fetchJson(method, url, opts = {}, dontCheck, redirectOnError) {
+export async function fetchJson(
+  method,
+  url,
+  opts = {},
+  dontCheck?: boolean,
+  redirectOnError?: boolean
+) {
   // @ts-ignore ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
   const res = await fetchData(method, url, opts, dontCheck, redirectOnError);
   let jsonRes;

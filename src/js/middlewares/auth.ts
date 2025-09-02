@@ -20,7 +20,7 @@ const auth: Function =
       // @ts-ignore ts-migrate(2339) FIXME: Property 'token' does not exist on type 'Object'.
       if (payload.token) {
         // @ts-ignore ts-migrate(2339) FIXME: Property 'token' does not exist on type 'Object'.
-        localStorage.setItem('token', payload.token);
+        //localStorage.setItem('token', payload.token);
 
         const updatedAction: any = Object.assign({}, action, {
           payload: { status: 'ok' },

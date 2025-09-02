@@ -1,5 +1,4 @@
 import '@blueprintjs/datetime/lib/css/blueprint-datetime.css';
-import React from 'react';
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import Routes from './routes';

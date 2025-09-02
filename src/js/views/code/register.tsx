@@ -9,11 +9,12 @@ import {
 import { useMount } from 'react-use';
 import { API_URL } from '../../../server_config';
 import queryControl from '../../hocomponents/queryControl';
+import { getToken } from '../../store/api/utils';
 
 const RegisterCodeView = ({ tokenQuery }) => {
   useMount(() => {
     const URL = API_URL;
-    const token = localStorage.getItem('token') || tokenQuery;
+    const token = getToken() || tokenQuery;
 
     // Remove the Qorus Auth Context cookie
     document.cookie = 'Qorus-Auth-Context=; path=/; secure; samesite=none;';
