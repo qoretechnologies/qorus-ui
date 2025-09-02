@@ -4,13 +4,10 @@ import Loadable from 'react-loadable';
 import { connect } from 'react-redux';
 import { IndexRedirect, Redirect, Route, Router } from 'react-router';
 import compose from 'recompose/compose';
-import defaultProps from 'recompose/defaultProps';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import Loader from './components/loader';
 import sync from './hocomponents/sync';
-import websocket from './hocomponents/websocket';
 import actions from './store/api/actions';
-import * as events from './store/apievents/actions';
 import Root from './views/root';
 //import Services from './views/services';
 import { getToken } from './store/api/utils';
@@ -225,6 +222,9 @@ class AppInfo extends React.Component {
       <Router {...this.props.routerProps}>
         <Route path="registerDevTools" component={RegisterCodeView} />
         <Route path="/login" component={Login} onEnter={this.requireAnonymous} />
+        <Route path="/error" component={ErrorView} />
+        <Route path="/grant" component={GrantView} />
+        <Route path="/logout" onEnter={this.logout} />
         <Route path="/" component={Root} onEnter={this.requireAuthenticated}>
           <IndexRedirect to="/dashboard" />
           {/* @ts-ignore ts-migrate(2339) FIXME: Property 'Dashboard' does not exist on type 'Funct... Remove this comment to see the full error message */}
@@ -294,9 +294,7 @@ class AppInfo extends React.Component {
             component={AuthorizeView}
           />
         ) : null}
-        <Route path="/logout" onEnter={this.logout} />
-        <Route path="/error" component={ErrorView} />
-        <Route path="/grant" component={GrantView} />
+
         <Redirect from="*" to="/" />
       </Router>
     );
@@ -318,22 +316,8 @@ export default compose<any, any>(
       loadSystem: actions.system.fetch,
       // @ts-ignore ts-migrate(2339) FIXME: Property 'logout' does not exist on type '{}'.
       logout: actions.logout.logout,
-      message: events.message,
-      close: events.disconnect,
     }
   ),
-  defaultProps({
-    url: 'apievents',
-  }),
   sync('info', true),
-  websocket(
-    {
-      onMessage: 'message',
-      onClose: 'close',
-    },
-    false,
-    false,
-    false
-  ),
   onlyUpdateForKeys(['plugins', 'info', 'systemSync', 'oauth2_enabled'])
 )(AppInfo as any) as any;
