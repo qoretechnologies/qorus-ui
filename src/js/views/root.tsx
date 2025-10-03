@@ -16,8 +16,10 @@ import Bubbles from '../containers/bubbles';
 import Notifications from '../containers/notifications';
 import { ModalContext } from '../context/modal';
 import { transformMenu, transformOldFavoriteItems } from '../helpers/system';
+import websocket from '../hocomponents/websocket';
 import messages from '../intl/messages';
 import actions from '../store/api/actions';
+import * as events from '../store/apievents/actions';
 import { settings } from '../store/ui/actions';
 import { success, warning } from '../store/ui/bubbles/actions';
 import { Sidebar } from './Sidebar';
@@ -124,13 +126,25 @@ const ModalProvider = ({ children }) => {
     sendWarning: warning,
     // @ts-ignore ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     saveFavoriteItems: actions.currentUser.storeFavoriteMenuItem,
+    message: events.message,
+    close: events.disconnect,
   }
 )
 @mapProps(({ currentUser, ...rest }): any => ({
   sidebarOpen: currentUser.sync && currentUser.data.storage.sidebarOpen,
   currentUser,
+  url: 'apievents',
   ...rest,
 }))
+@websocket(
+  {
+    onMessage: 'message',
+    onClose: 'close',
+  },
+  false,
+  false,
+  false
+)
 export default class Root extends Component {
   props: {
     children: any;

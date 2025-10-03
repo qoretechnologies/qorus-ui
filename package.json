@@ -1,6 +1,6 @@
 {
   "name": "qorus-ui",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "description": "Qorus UI",
   "author": "Qore Technologies",
   "repository": {
@@ -73,7 +73,8 @@
     "styled-components": "^5.0.0",
     "thenby": "^1.2.0",
     "typescript": "^4.4.2",
-    "web-vitals": "^2.1.0"
+    "web-vitals": "^2.1.0",
+    "zustand": "^5.0.8"
   },
   "scripts": {
     "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true craco start",
@@ -90,10 +91,17 @@
     "update-reqore": "yarn add @qoretechnologies/reqore@beta"
   },
   "eslintConfig": {
-    "extends": ["react-app", "react-app/jest"]
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -101,6 +109,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-syntax-top-level-await": "^7.14.5",
     "@playwright/test": "^1.27.0",
     "@previewjs/config": "^1.0.5",
     "@previewjs/plugin-react": "^4.0.0",

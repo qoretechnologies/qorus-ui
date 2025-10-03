@@ -109,7 +109,7 @@ export default (
           const { connected, loading, url, connect } = props;
           const getFunc = this.getFunc(props);
 
-          if (!connected && !loading && (localStorage.getItem('token') || props.noauth)) {
+          if (!connected && !loading) {
             connect(
               url,
               resume ? getFunc('onResume') : getFunc('onOpen'),
