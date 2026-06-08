@@ -21,5 +21,6 @@
     "titleBar.inactiveBackground": "#552cc999",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#552cc9"
+  "peacock.color": "#552cc9",
+  "autoHide.autoHidePanel": false
 }

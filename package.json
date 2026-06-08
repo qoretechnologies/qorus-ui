@@ -1,6 +1,6 @@
 {
   "name": "qorus-ui",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "description": "Qorus UI",
   "author": "Qore Technologies",
   "repository": {
@@ -79,6 +79,7 @@
   "scripts": {
     "start": "REACT_APP_API_PORT=8092 REACT_APP_API_HOST=hq.qoretechnologies.com HTTPS=true craco start",
     "start:http": "REACT_APP_API_PORT=8091 REACT_APP_API_HOST=hq.qoretechnologies.com REACT_APP_PROTO=http HTTPS=false PORT=3001 craco start",
+    "start:http:local": "REACT_APP_API_PORT=8001 REACT_APP_API_HOST=localhost REACT_APP_PROTO=http HTTPS=false PORT=8001 craco start",
     "start:ci": "REACT_APP_API_HOST=sandbox.qoretechnologies.com HTTPS=true craco start",
     "codegen": "npx playwright codegen --ignore-https-errors --load-storage=codegen-auth.json https://localhost:3000",
     "build:pr": "./node_modules/.bin/dotenv -e .env.pull_request craco build",
@@ -88,7 +89,8 @@
     "test": "TEST_USER=ui-test TEST_USER_PASS=sojcaf-4gitta-teGfyg yarn playwright test tests/sanity.spec.ts",
     "test:ci": "yarn playwright test tests/sanity.spec.ts",
     "test:http": "yarn playwright test --config=./playwright-http.config.ts tests/http.spec.ts",
-    "update-reqore": "yarn add @qoretechnologies/reqore@beta"
+    "update-reqore": "yarn add @qoretechnologies/reqore@beta",
+    "deploy:local": "yarn build && sudo rm -rf /opt/qorus/webapp/* && sudo cp -r build/* /opt/qorus/webapp/"
   },
   "eslintConfig": {
     "extends": [

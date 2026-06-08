@@ -12,7 +12,6 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { compose } from 'recompose';
-import mapProps from 'recompose/mapProps';
 import { createSelector } from 'reselect';
 import NameColumn from '../../../components/NameColumn';
 import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
@@ -201,7 +200,14 @@ class ConnectionsPane extends Component {
               canDelete,
               isPane: true,
               big: true,
-              handleEditClick: () => this.props.handleEditClick(this.props.remote),
+              handleEditClick: () =>
+                this.props.handleEditClick({
+                  ...this.props.remote,
+                  // The manage modal lets the user edit the URL, so pass the
+                  // password-bearing URL (fetched via with_password=true) when
+                  // available. The detail pane itself only shows the safe URL.
+                  url: this.props.remote.safeUrl || this.props.remote.url,
+                }),
             },
           },
         ]}
@@ -353,10 +359,6 @@ export default compose(
   // @ts-ignore ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
   showIfPassed(({ remote }) => remote),
   withDispatch(),
-  mapProps(({ remote, ...rest }) => ({
-    remote: { ...remote, url: settings.IS_HTTP ? remote.url : remote.safeUrl },
-    ...rest,
-  })),
   queryControl('status'),
   queryControl('message'),
   queryControl('messageTitle'),
