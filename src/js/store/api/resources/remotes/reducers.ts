@@ -1,14 +1,6 @@
 import omit from 'lodash/omit';
 import remove from 'lodash/remove';
 import { CONN_MAP_REVERSE } from '../../../../constants/remotes';
-import {
-  addAppenderReducer,
-  addUpdateLoggerReducer,
-  deleteAppenderReducer,
-  deleteLoggerReducer,
-  editAppenderReducer,
-  loggerReducer,
-} from '../../common/reducers';
 import { setUpdatedToNull, updateItemWithName } from '../../utils';
 
 const initialState = {
@@ -350,28 +342,14 @@ const removeConnectionWs = {
   },
 };
 
-// LOGGER
-const fetchLogger = loggerReducer;
-const addUpdateLogger = addUpdateLoggerReducer;
-const deleteLogger = deleteLoggerReducer;
-const addAppender = addAppenderReducer;
-const editAppender = editAppenderReducer;
-const deleteAppender = deleteAppenderReducer;
-
 export {
   addAlert as ADDALERT,
-  addAppender as ADDAPPENDER,
   addConnection as ADDCONNECTION,
-  addUpdateLogger as ADDUPDATELOGGER,
   clearAlert as CLEARALERT,
   connectionChange as CONNECTIONCHANGE,
   debugChange as DEBUGCHANGE,
-  deleteAppender as DELETEAPPENDER,
   deleteConnection as DELETECONNECTION,
-  deleteLogger as DELETELOGGER,
-  editAppender as EDITAPPENDER,
   enabledChange as ENABLEDCHANGE,
-  fetchLogger as FETCHLOGGER,
   fetchPass as FETCHPASS,
   manageConnection as MANAGECONNECTION,
   pingRemote as PINGREMOTE,

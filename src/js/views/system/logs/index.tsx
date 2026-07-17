@@ -59,10 +59,6 @@ const Log: Function = ({ tabQuery, logs }: Props) => (
           <ExpandableItem title="Jobs default logger" show>
             {() => <DefaultLogger name="Logger data" defaultOnly resource="jobs" />}
           </ExpandableItem>
-          <br />
-          <ExpandableItem title="Datasources default logger" show>
-            {() => <DefaultLogger name="Logger data" defaultOnly resource="remotes" />}
-          </ExpandableItem>
         </Box>
       </SimpleTab>
     </SimpleTabs>

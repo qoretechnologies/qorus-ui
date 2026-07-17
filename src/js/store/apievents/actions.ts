@@ -991,10 +991,6 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'LOGGER_CREATED':
       case 'LOGGER_UPDATED': {
         const newInfo: any = { ...info };
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
-        newInfo.interface =
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
-          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         const reversedLevels: any = invert(state.api.system.data.loggerParams.logger_levels);
 
         // @ts-ignore ts-migrate(2339) FIXME: Property 'params' does not exist on type 'Object'.
@@ -1030,10 +1026,6 @@ const handleEvent = (url, data, dispatch, state) => {
       case 'LOGGER_DELETED': {
         // Modify the levels
         const newInfo: any = { ...info };
-        // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
-        newInfo.interface =
-          // @ts-ignore ts-migrate(2339) FIXME: Property 'interface' does not exist on type 'Objec... Remove this comment to see the full error message
-          newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Check if default logger was deleted
         // @ts-ignore ts-migrate(2339) FIXME: Property 'isDefault' does not exist on type 'Objec... Remove this comment to see the full error message
         if (newInfo.isDefault) {
@@ -1069,7 +1061,6 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'APPENDER_CREATED': {
         const newInfo = { ...info };
-        newInfo.interface = newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Create default appender
         if (info.isDefault) {
           pipeline('APPENDER_ACTIONS', system.addDefaultAppender, newInfo, dispatch);
@@ -1093,7 +1084,6 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'APPENDER_UPDATED': {
         const newInfo = { ...info };
-        newInfo.interface = newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
         // Create default appender
         if (info.isDefault) {
           pipeline('APPENDER_ACTIONS', system.editDefaultAppender, newInfo, dispatch);
@@ -1117,7 +1107,6 @@ const handleEvent = (url, data, dispatch, state) => {
       }
       case 'APPENDER_DELETED': {
         const newInfo = { ...info };
-        newInfo.interface = newInfo.interface === 'qdsp' ? 'remotes' : newInfo.interface;
 
         // Create default appender
         if (newInfo.isDefault) {

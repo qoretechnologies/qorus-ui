@@ -16,12 +16,10 @@ import { createSelector } from 'reselect';
 import NameColumn from '../../../components/NameColumn';
 import { SimpleTab, SimpleTabs } from '../../../components/SimpleTabs';
 import AlertsTable from '../../../components/alerts_table';
-import Box from '../../../components/box';
 import { Table, Tbody, Tr } from '../../../components/new_table';
 import NoData from '../../../components/nodata';
 import Pane from '../../../components/pane';
 import PaneItem from '../../../components/pane_item';
-import LogContainer from '../../../containers/log';
 import { attrsSelector } from '../../../helpers/remotes';
 import { getDependencyObjectLink } from '../../../helpers/system';
 import queryControl from '../../../hocomponents/queryControl';
@@ -159,7 +157,7 @@ class ConnectionsPane extends Component {
     // @ts-ignore ts-migrate(2339) FIXME: Property 'deps' does not exist on type 'Object'.
     const { deps, alerts, locked, url_hash } = this.props.remote;
     // @ts-ignore ts-migrate(2339) FIXME: Property 'paneTab' does not exist on type '{ remot... Remove this comment to see the full error message
-    const { paneTab, paneId, remoteType, dispatchAction } = this.props;
+    const { paneTab, remoteType, dispatchAction } = this.props;
     const { isPassLoaded, status, message, messageTitle, messageDuration } = this.state;
 
     const canEdit = !locked && this.props.canEdit;
@@ -170,7 +168,6 @@ class ConnectionsPane extends Component {
       'Detail',
       { title: 'Options', suffix: size(this.props.remote.opts) },
       { title: 'Alerts', suffix: size(alerts) },
-      'Log',
     ];
 
     if (remoteType === 'datasources') {
@@ -336,18 +333,6 @@ class ConnectionsPane extends Component {
               )}
             </PaneItem>
           </SimpleTab>
-          {remoteType === 'datasources' && (
-            <SimpleTab name="log">
-              <Box top fill scrollY>
-                <LogContainer
-                  id={paneId}
-                  intfc="remotes"
-                  url="remote/datasources"
-                  resource={`qdsp/${paneId}`}
-                />
-              </Box>
-            </SimpleTab>
-          )}
         </SimpleTabs>
       </Pane>
     );
