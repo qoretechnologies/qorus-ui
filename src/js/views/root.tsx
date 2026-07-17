@@ -296,8 +296,6 @@ export default class Root extends Component {
       this.props.fetchDefaultLogger('workflows'),
       // @ts-ignore ts-migrate(2339) FIXME: Property 'fetchDefaultLogger' does not exist on ty... Remove this comment to see the full error message
       this.props.fetchDefaultLogger('jobs'),
-      // @ts-ignore ts-migrate(2339) FIXME: Property 'fetchDefaultLogger' does not exist on ty... Remove this comment to see the full error message
-      this.props.fetchDefaultLogger('remotes', 'remote/datasources'),
     ]);
 
     this.props.fetchSystemOptions();
